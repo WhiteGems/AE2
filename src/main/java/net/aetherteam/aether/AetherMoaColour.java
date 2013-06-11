@@ -97,9 +97,9 @@ public class AetherMoaColour
 
     static
     {
-        new AetherMoaColour(0, 7829503, 3, 100, "Blue");
-        new AetherMoaColour(1, 16777215, 4, 20, "White");
-        new AetherMoaColour(2, 2236962, 8, 5, "Black");
+        new AetherMoaColour(0, 7829503, 3, 100, "蓝色");
+        new AetherMoaColour(1, 16777215, 4, 20, "白色");
+        new AetherMoaColour(2, 2236962, 8, 5, "黑色");
     }
 }
 
