@@ -98,7 +98,7 @@ public class GuiEditPartyName extends GuiScreen
 
                         boolean nameChanged = PartyController.instance().changePartyName(party, this.dialogueInput.getText(), true);
 
-                        this.mc.displayGuiScreen(new GuiDialogueBox(this.parent, "Party name was changed to '" + this.dialogueInput.getText() + "'!", "That party name is already taken. Sorry :(", nameChanged));
+                        this.mc.displayGuiScreen(new GuiDialogueBox(this.parent, "公会重命名为 " + this.dialogueInput.getText() + "'!", "抱歉，已有重名。:(", nameChanged));
                     }
                 }
                 break;
@@ -136,7 +136,7 @@ public class GuiEditPartyName extends GuiScreen
         GL11.glBindTexture(3553, this.dialogueTexture);
         drawTexturedModalRect(centerX - 30, centerY + 71, 0, 0, 201, this.hParty - 201);
         this.dialogueInput.drawTextBox();
-        this.fontRenderer.drawString("Change Party Name", (int) ((centerX + this.height) / 0.75F), (int) ((centerY + 12.0F) / 0.75F), -10066330);
+        this.fontRenderer.drawString("重命名公会", (int) ((centerX + this.height) / 0.75F), (int) ((centerY + 12.0F) / 0.75F), -10066330);
         super.drawScreen(x, y, partialTick);
     }
 
