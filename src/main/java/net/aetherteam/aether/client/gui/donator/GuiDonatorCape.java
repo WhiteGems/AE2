@@ -123,7 +123,7 @@ public class GuiDonatorCape extends GuiScreen
         ScaledResolution sr = new ScaledResolution(this.mc.gameSettings, this.mc.displayWidth, this.mc.displayHeight);
         drawTexturedModalRect(centerX, centerY, 0, 0, 194, this.hParty);
 
-        this.buttonList.add(new GuiButton(0, this.xParty + 10, this.yParty + 27, 80, 20, "Back"));
+        this.buttonList.add(new GuiButton(0, this.xParty + 10, this.yParty + 27, 80, 20, "返回"));
 
         GuiButton typeButton = null;
         GuiButton overrideButton = null;
@@ -143,7 +143,7 @@ public class GuiDonatorCape extends GuiScreen
                 this.backgroundTexture = this.mc.renderEngine.getTexture("/net/aetherteam/aether/client/sprites/gui/choiceMenu2.png");
             }
 
-            typeButton = new GuiButton(1, this.xParty + 10, this.yParty - 35, 80, 20, choice != null ? choice.name : "Off");
+            typeButton = new GuiButton(1, this.xParty + 10, this.yParty - 35, 80, 20, choice != null ? choice.name : "关闭");
         }
 
         if (this.donator == null)
