@@ -600,7 +600,7 @@ public class MenuBaseMinecraft extends MenuBase
 
     public String getVersion()
     {
-        return "我的世界";
+        return "我的世界!";
     }
 
     public String getIconPath()

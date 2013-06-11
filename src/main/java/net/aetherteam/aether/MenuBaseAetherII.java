@@ -848,7 +848,7 @@ public class MenuBaseAetherII extends MenuBase
 
     public String getVersion()
     {
-        return "虚空起源";
+        return "虚空起源!";
     }
 
     public String getMusicFileName()
