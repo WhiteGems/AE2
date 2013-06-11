@@ -521,7 +521,9 @@ public class MenuBaseMinecraft extends MenuBase
         }
 
         String s1 = "Copyright Mojang AB. Do not distribute!";
+        String info="白宝石小组荣誉出品！";
         drawString(this.fontRenderer, s1, this.width - this.fontRenderer.getStringWidth(s1) - 2, this.height - 10, 16777215);
+        drawString(this.fontRenderer, info, this.width - this.fontRenderer.getStringWidth(info) - 2, this.height - 20, 16777215);
 
         if ((this.field_92025_p != null) && (this.field_92025_p.length() > 0))
         {
@@ -598,7 +600,7 @@ public class MenuBaseMinecraft extends MenuBase
 
     public String getVersion()
     {
-        return "1.5.1";
+        return "原版风格";
     }
 
     public String getIconPath()
