@@ -3,14 +3,12 @@ package net.aetherteam.aether.blocks;
 import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
-
 import net.aetherteam.aether.entities.EntityBlueFX;
 import net.aetherteam.aether.items.AetherItems;
 import net.aetherteam.aether.util.Loc;
@@ -27,9 +25,9 @@ import net.minecraft.world.World;
 
 public class BlockCrystalLeaves extends BlockAether implements IAetherBlock
 {
-    private HashMap icons = new HashMap();
-    public static final String[] names = new String[]{"Crystal Leaves", "Crystal Fruit Leaves"};
-
+    private Icon crystalleaves;
+    private Icon crystalfruitleaves;
+    
     public BlockCrystalLeaves(int var1)
     {
         super(var1, Material.leaves);
@@ -51,22 +49,29 @@ public class BlockCrystalLeaves extends BlockAether implements IAetherBlock
      * When this method is called, your block should register all the icons it needs with the given IconRegister. This
      * is the only chance you get to register icons.
      */
-    public void registerIcons(IconRegister var1)
+    @Override
+    @SideOnly(Side.CLIENT)
+    public void registerIcons(IconRegister ir)
     {
-        for (int var2 = 0; var2 < names.length; ++var2)
-        {
-            this.icons.put(names[var2], var1.registerIcon("Aether:" + names[var2]));
-        }
+    	crystalleaves = ir.registerIcon("Aether:Crystal Leaves" );
+    	crystalfruitleaves =ir.registerIcon("Aether:Crystal Fruit Leaves");
     }
 
     /**
      * From the specified side and block metadata retrieves the blocks texture. Args: side, metadata
      */
-    public Icon getIcon(int var1, int var2)
+    @Override
+	@SideOnly(Side.CLIENT)
+    public Icon getIcon(int side, int meta)
     {
-        ItemStack var3 = new ItemStack(AetherBlocks.CrystalLeaves, 1, var2);
-        String var4 = var3.getItem().getItemDisplayName(var3);
-        return (Icon) this.icons.get(var4);
+    	switch(meta)
+    	{
+    	case 0:
+    		return this.crystalleaves;
+    	case 1:
+    		return this.crystalfruitleaves;
+    	}
+        return this.crystalleaves;
     }
 
     /**
@@ -103,7 +108,7 @@ public class BlockCrystalLeaves extends BlockAether implements IAetherBlock
 
         while (!var6.isEmpty())
         {
-            Loc var9 = (Loc) var6.poll();
+            Loc var9 = (Loc)var6.poll();
 
             if (!var7.contains(var9))
             {
@@ -151,15 +156,15 @@ public class BlockCrystalLeaves extends BlockAether implements IAetherBlock
         {
             for (int var6 = 0; var6 < 15; ++var6)
             {
-                double var7 = (double) var2 + ((double) var5.nextFloat() - 0.5D) * 6.0D;
-                double var9 = (double) var3 + ((double) var5.nextFloat() - 0.5D) * 6.0D;
-                double var11 = (double) var4 + ((double) var5.nextFloat() - 0.5D) * 6.0D;
+                double var7 = (double)var2 + ((double)var5.nextFloat() - 0.5D) * 6.0D;
+                double var9 = (double)var3 + ((double)var5.nextFloat() - 0.5D) * 6.0D;
+                double var11 = (double)var4 + ((double)var5.nextFloat() - 0.5D) * 6.0D;
                 double var13 = 0.0D;
                 double var15 = 0.0D;
                 double var17 = 0.0D;
-                var13 = ((double) var5.nextFloat() - 0.5D) * 0.5D;
-                var15 = ((double) var5.nextFloat() - 0.5D) * 0.5D;
-                var17 = ((double) var5.nextFloat() - 0.5D) * 0.5D;
+                var13 = ((double)var5.nextFloat() - 0.5D) * 0.5D;
+                var15 = ((double)var5.nextFloat() - 0.5D) * 0.5D;
+                var17 = ((double)var5.nextFloat() - 0.5D) * 0.5D;
                 EntityBlueFX var19 = new EntityBlueFX(var1, var7, var9, var11, var13, var15, var17);
                 FMLClientHandler.instance().getClient().effectRenderer.addEffect(var19);
             }
