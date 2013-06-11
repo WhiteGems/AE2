@@ -240,7 +240,7 @@ public class GuiJoinParty extends GuiScreen
         }
 
         this.mc.renderEngine.resetBoundTexture();
-        drawString(this.fontRenderer, "Party List", centerX + 70 - this.fontRenderer.getStringWidth("Party List") / 2, centerY + 10, 16777215);
+        drawString(this.fontRenderer, "公会列表", centerX + 70 - this.fontRenderer.getStringWidth("Party List") / 2, centerY + 10, 16777215);
 
         if ((partyList.size() == 0) || (showNoParties))
         {
@@ -258,7 +258,7 @@ public class GuiJoinParty extends GuiScreen
             GL11.glPopMatrix();
             this.mc.renderEngine.resetBoundTexture();
 
-            String warningLabel = "There are no parties to display at this time.";
+            String warningLabel = "当前无人建立公会。";
 
             drawString(this.fontRenderer, warningLabel, centerX + 70 - this.fontRenderer.getStringWidth(warningLabel) / 2, centerY + 75, 16777215);
         }
