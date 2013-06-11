@@ -90,7 +90,7 @@ public class MenuBase extends GuiScreen
         this.jukeButtonList.clear();
 
         this.jukeButton = new GuiButtonItemStack(this.fontRenderer, mc, 0, getJukeboxButtonX(), getJukeboxButtonY(), new ItemStack(Block.jukebox));
-        this.menuButton = new GuiMenuButton(0, getListButtonX(), getListButtonY(), 58, 20, "Menu List");
+        this.menuButton = new GuiMenuButton(0, getListButtonX(), getListButtonY(), 58, 20, "菜单列表");
 
         this.menuButton.drawButton(this.mc, x, y);
 
@@ -122,10 +122,10 @@ public class MenuBase extends GuiScreen
 
             if ((!this.jukebox.isMusicPlaying()) && (!MenuBaseConfig.muteMusic))
             {
-                this.fontRenderer.drawStringWithShadow("Loading Song...", centerX + 76 - this.fontRenderer.getStringWidth("Loading Song...") / 2, centerY - 11, 16777215);
+                this.fontRenderer.drawStringWithShadow("载入音乐中...", centerX + 76 - this.fontRenderer.getStringWidth("载入音乐中...") / 2, centerY - 11, 16777215);
             }
-            this.jukeButtonList.add(new GuiButton(0, centerX + 12, centerY + 42, 58, 20, "Music: " + (MenuBaseConfig.muteMusic ? "Off" : "On")));
-            this.jukeButtonList.add(new GuiButton(1, centerX + 83, centerY + 42, 58, 20, "Loop: " + (MenuBaseConfig.loopMusic ? "On" : "Off")));
+            this.jukeButtonList.add(new GuiButton(0, centerX + 12, centerY + 42, 58, 20, "音乐: " + (MenuBaseConfig.muteMusic ? "关" : "开")));
+            this.jukeButtonList.add(new GuiButton(1, centerX + 83, centerY + 42, 58, 20, "循环: " + (MenuBaseConfig.loopMusic ? "开" : "关")));
             this.jukeButtonList.add(new GuiButton(2, centerX + 125, centerY + 8, 20, 20, ">"));
             this.jukeButtonList.add(new GuiButton(3, centerX + 7, centerY + 8, 20, 20, "<"));
 
