@@ -30,7 +30,7 @@ public class MenuBaseLoaderWithSlider extends GuiScreen
     private GuiTextField dialogueInput;
     private GuiYSlider sbar;
     private float sbarVal = 0.0F;
-    private String description = "Choose A Main Menu";
+    private String description = "   请选择主界面菜单";
     private int backgroundTexture;
     private int loaderX;
     private int loaderY;
@@ -67,7 +67,7 @@ public class MenuBaseLoaderWithSlider extends GuiScreen
         this.sbar = new GuiYSlider(-1, this.loaderX + 46, this.loaderY - 54, 10, 103);
         this.sbar.sliderValue = this.sbarVal;
 
-        this.launchMenu = new GuiButton(0, this.loaderX - 36, this.loaderY + 85 - 28, 72, 20, "Launch Menu");
+        this.launchMenu = new GuiButton(0, this.loaderX - 36, this.loaderY + 85 - 28, 72, 20, "启动！");
 
         this.launchMenu.enabled = false;
 
