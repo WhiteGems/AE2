@@ -605,7 +605,7 @@ public class MenuBaseLeftMinecraft extends MenuBase
 
     public String getVersion()
     {
-        return "居左原版风格";
+        return "向左看齐";
     }
 
     public String getIconPath()

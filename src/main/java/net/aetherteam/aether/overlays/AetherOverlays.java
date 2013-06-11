@@ -149,7 +149,7 @@ public class AetherOverlays
 
             mc.renderEngine.resetBoundTexture();
 
-            String dungeonQueue = "Dungeon Queue: " + dungeon.getAmountQueued() + "/" + party.getMembers().size();
+            String dungeonQueue = "地牢队列: " + dungeon.getAmountQueued() + "/" + party.getMembers().size();
 
             mc.fontRenderer.drawStringWithShadow(dungeonQueue, width / 2 - mc.fontRenderer.getStringWidth(dungeonQueue) / 2, 16 + ((player.ridingEntity instanceof Mount) ? 16 : 0), -1);
         }
@@ -177,7 +177,7 @@ public class AetherOverlays
                 int seconds = dungeon.getTimerLength() - dungeon.getTimerSeconds() - minutes * 60;
 
                 String timer = String.valueOf(minutes + ":" + String.format("%02d", new Object[]{Integer.valueOf(seconds)}));
-                String dungeonTimer = "Dungeon Ends In: " + timer;
+                String dungeonTimer = "地牢队列将结束: " + timer;
 
                 mc.fontRenderer.drawStringWithShadow(dungeonTimer, width / 2 - mc.fontRenderer.getStringWidth(dungeonTimer) / 2, 16 + ((player.ridingEntity instanceof Mount) ? 16 : 0), -1);
             }
@@ -428,7 +428,7 @@ public class AetherOverlays
                 int serverPlayerAmount = mc.thePlayer.sendQueue.playerInfoList.size();
 
                 if ((showName) && (serverPlayerAmount > 1))
-                    mc.fontRenderer.drawStringWithShadow("§n" + (inDungeon ? "Dungeon Group" : "Party") + ":§r " + party.getName(), 2, 59, 15066597);
+                    mc.fontRenderer.drawStringWithShadow("§n" + (inDungeon ? "地牢小队" : "公会") + ":§r " + party.getName(), 2, 59, 15066597);
                 GL11.glPopMatrix();
 
                 int count = 0;
@@ -700,7 +700,7 @@ public class AetherOverlays
                 drawTexturedModalRect(width / 2 - 49, 10.0F, 1.0F, 57.0F, 96.0F, 58.0F);
             }
 
-            bossTypeString = "§o" + (isFinal ? "Final" : "Mini") + " Boss";
+            bossTypeString = "§o" + (isFinal ? "最终" : "迷你") + " Boss";
 
             offset1 = isFinal ? 45 : 24;
             offset2 = isFinal ? -10 : 11;
