@@ -618,7 +618,7 @@ public class MenuBaseAether extends MenuBase
 
     public String getVersion()
     {
-        return "Sequel Released!";
+        return "王者归来!";
     }
 
     public String getMusicFileName()
