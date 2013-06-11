@@ -2,11 +2,9 @@ package net.aetherteam.aether.blocks;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
-
 import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
-
 import net.aetherteam.aether.Aether;
 import net.aetherteam.aether.AetherGuiHandler;
 import net.aetherteam.aether.dungeons.Dungeon;
@@ -25,8 +23,8 @@ import net.minecraft.world.World;
 public class BlockEntranceDoor extends BlockAether implements IAetherBlock
 {
     private Random rand = new Random();
-    private HashMap icons = new HashMap();
-    public static final String[] names = new String[]{"Dungeon Entrance", "Dungeon Entrance Lock"};
+
+    private Icon door,lock;
 
     protected BlockEntranceDoor(int var1)
     {
@@ -43,20 +41,20 @@ public class BlockEntranceDoor extends BlockAether implements IAetherBlock
     /**
      * returns a list of blocks with the same ID, but different meta (eg: wood returns 4 blocks)
      */
-    public void getSubBlocks(int var1, CreativeTabs var2, List var3)
-    {}
+    public void getSubBlocks(int var1, CreativeTabs var2, List var3) {}
 
     /**
      * Called whenever the block is added into the world. Args: world, x, y, z
      */
     public void onBlockAdded(World var1, int var2, int var3, int var4)
     {
-        Dungeon var5 = DungeonHandler.instance().getInstanceAt(MathHelper.floor_double((double) var2), MathHelper.floor_double((double) var3), MathHelper.floor_double((double) var4));
+        Dungeon var5 = DungeonHandler.instance().getInstanceAt(MathHelper.floor_double((double)var2), MathHelper.floor_double((double)var3), MathHelper.floor_double((double)var4));
 
         if (var5 != null)
         {
             super.onBlockAdded(var1, var2, var3, var4);
-        } else
+        }
+        else
         {
             var1.setBlock(var2, var3, var4, 0);
         }
@@ -77,29 +75,30 @@ public class BlockEntranceDoor extends BlockAether implements IAetherBlock
     {
         return var1;
     }
-
+    
     /**
      * From the specified side and block metadata retrieves the blocks texture. Args: side, metadata
      */
-    public Icon getIcon(int var1, int var2)
+    public Icon getIcon(int side, int meta)
     {
-        ItemStack var3 = new ItemStack(AetherBlocks.DungeonEntrance, 1, var2);
-        String var4 = var3.getItem().getItemDisplayName(var3);
-        return (Icon) this.icons.get(var4);
+        switch(meta)
+    	{
+    	case 0:return this.door;
+    	case 1:return this.lock;
+    	}
+       return this.door;
     }
-
+    
     @SideOnly(Side.CLIENT)
 
     /**
      * When this method is called, your block should register all the icons it needs with the given IconRegister. This
      * is the only chance you get to register icons.
      */
-    public void registerIcons(IconRegister var1)
+    public void registerIcons(IconRegister ir)
     {
-        for (int var2 = 0; var2 < names.length; ++var2)
-        {
-            this.icons.put(names[var2], var1.registerIcon("Aether:" + names[var2]));
-        }
+        door = ir.registerIcon("Aether:Dungeon Entrance");
+        lock = ir.registerIcon("Aether:Dungeon Entrance Lock");
     }
 
     /**
@@ -115,7 +114,7 @@ public class BlockEntranceDoor extends BlockAether implements IAetherBlock
                 {
                     if (var1.getBlockId(var10, var11, var12) == AetherBlocks.DungeonEntranceController.blockID)
                     {
-                        TileEntityEntranceController var13 = (TileEntityEntranceController) var1.getBlockTileEntity(var10, var11, var12);
+                        TileEntityEntranceController var13 = (TileEntityEntranceController)var1.getBlockTileEntity(var10, var11, var12);
 
                         if (var13 != null && var13.hasDungeon() && var13.getDungeon() != null)
                         {
