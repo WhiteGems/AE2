@@ -29,7 +29,7 @@ public class GuiAetherIIButton extends GuiButton
 
     public GuiAetherIIButton(int i, int j, int k, int color, int color2)
     {
-        super(i, j, k, "Official Aether Servers");
+        super(i, j, k, "以太官方服务器");
         this.color = color;
         this.color2 = color;
     }

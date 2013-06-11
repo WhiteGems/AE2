@@ -58,8 +58,8 @@ public class GuiEditPartyName extends GuiScreen
         this.dialogueInput.setFocused(true);
         this.dialogueInput.setMaxStringLength(22);
         this.dialogueInput.setCanLoseFocus(false);
-        this.buttonList.add(new GuiButton(0, this.xParty - 1, this.yParty + 14, 50, 20, "Confirm"));
-        this.buttonList.add(new GuiButton(1, this.xParty + 52, this.yParty + 14, 45, 20, "Cancel"));
+        this.buttonList.add(new GuiButton(0, this.xParty - 1, this.yParty + 14, 50, 20, "确认"));
+        this.buttonList.add(new GuiButton(1, this.xParty + 52, this.yParty + 14, 45, 20, "取消"));
     }
 
     protected void keyTyped(char charTyped, int keyTyped)
@@ -98,7 +98,7 @@ public class GuiEditPartyName extends GuiScreen
 
                         boolean nameChanged = PartyController.instance().changePartyName(party, this.dialogueInput.getText(), true);
 
-                        this.mc.displayGuiScreen(new GuiDialogueBox(this.parent, "Party name was changed to '" + this.dialogueInput.getText() + "'!", "That party name is already taken. Sorry :(", nameChanged));
+                        this.mc.displayGuiScreen(new GuiDialogueBox(this.parent, "公会重命名为 " + this.dialogueInput.getText() + "'!", "抱歉，已有重名。:(", nameChanged));
                     }
                 }
                 break;
@@ -136,7 +136,7 @@ public class GuiEditPartyName extends GuiScreen
         GL11.glBindTexture(3553, this.dialogueTexture);
         drawTexturedModalRect(centerX - 30, centerY + 71, 0, 0, 201, this.hParty - 201);
         this.dialogueInput.drawTextBox();
-        this.fontRenderer.drawString("Change Party Name", (int) ((centerX + this.height) / 0.75F), (int) ((centerY + 12.0F) / 0.75F), -10066330);
+        this.fontRenderer.drawString("重命名公会", (int) ((centerX + this.height) / 0.75F), (int) ((centerY + 12.0F) / 0.75F), -10066330);
         super.drawScreen(x, y, partialTick);
     }
 

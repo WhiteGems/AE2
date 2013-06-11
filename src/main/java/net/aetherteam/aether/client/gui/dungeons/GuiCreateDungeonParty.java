@@ -63,9 +63,9 @@ public class GuiCreateDungeonParty extends GuiScreen
     {
         this.parent = parent;
 
-        this.partyType.add("Open");
-        this.partyType.add("Closed");
-        this.partyType.add("Private");
+        this.partyType.add("打开");
+        this.partyType.add("关闭");
+        this.partyType.add("私人");
 
         this.player = player;
         this.mc = FMLClientHandler.instance().getClient();
@@ -83,8 +83,8 @@ public class GuiCreateDungeonParty extends GuiScreen
         this.buttonList.clear();
 
         this.typeButton = new GuiButton(1, this.partyX - 60, this.partyY - 16 - 28, 120, 20, "Type: " + (String) this.partyType.get(this.typeIndex));
-        this.finishButton = new GuiButton(2, this.partyX - 60, this.partyY + 6 - 28, 120, 20, "Start Dungeon");
-        this.backButton = new GuiButton(0, this.partyX - 60, this.partyY + 81 - 28, 120, 20, "Back");
+        this.finishButton = new GuiButton(2, this.partyX - 60, this.partyY + 6 - 28, 120, 20, "开始冒险");
+        this.backButton = new GuiButton(0, this.partyX - 60, this.partyY + 81 - 28, 120, 20, "返回");
 
         this.buttonList.add(this.typeButton);
         this.buttonList.add(this.finishButton);
@@ -117,7 +117,7 @@ public class GuiCreateDungeonParty extends GuiScreen
 
                 if (!created)
                 {
-                    this.mc.displayGuiScreen(new GuiDialogueBox(this, "Your party was successfully created!", "Your party name is already taken. Try again.", created));
+                    this.mc.displayGuiScreen(new GuiDialogueBox(this, "你成功创建公会!", "你的公会名称已经被占用，请换一个。", created));
                 } else if ((this.controller != null) && (this.controller.getDungeon() != null) && (!this.controller.getDungeon().hasQueuedParty()))
                 {
                     int x = MathHelper.floor_double(this.controller.xCoord);
@@ -145,7 +145,7 @@ public class GuiCreateDungeonParty extends GuiScreen
             this.typeIndex = 0;
         }
         this.typeButton = new GuiButton(1, this.partyX - 60, this.partyY - 16 - 28, 120, 20, "Type: " + (String) this.partyType.get(this.typeIndex));
-        this.finishButton = new GuiButton(2, this.partyX - 60, this.partyY + 6 - 28, 120, 20, "Start Dungeon");
+        this.finishButton = new GuiButton(2, this.partyX - 60, this.partyY + 6 - 28, 120, 20, "开始冒险！");
 
         if (this.partyName.isEmpty())
         {
