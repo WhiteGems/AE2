@@ -58,8 +58,8 @@ public class GuiEditPartyName extends GuiScreen
         this.dialogueInput.setFocused(true);
         this.dialogueInput.setMaxStringLength(22);
         this.dialogueInput.setCanLoseFocus(false);
-        this.buttonList.add(new GuiButton(0, this.xParty - 1, this.yParty + 14, 50, 20, "Confirm"));
-        this.buttonList.add(new GuiButton(1, this.xParty + 52, this.yParty + 14, 45, 20, "Cancel"));
+        this.buttonList.add(new GuiButton(0, this.xParty - 1, this.yParty + 14, 50, 20, "确认"));
+        this.buttonList.add(new GuiButton(1, this.xParty + 52, this.yParty + 14, 45, 20, "取消"));
     }
 
     protected void keyTyped(char charTyped, int keyTyped)
