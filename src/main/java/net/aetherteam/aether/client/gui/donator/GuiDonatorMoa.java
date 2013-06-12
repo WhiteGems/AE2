@@ -169,7 +169,7 @@ public class GuiDonatorMoa extends GuiScreen
             this.moaEntity = new EntityMoa(Aether.proxy.getClientWorld(), true, false, false, AetherMoaColour.pickRandomMoa(), Aether.proxy.getClientPlayer(), hasChoice ? this.choice.textureFile.localURL : null);
 
             typeButton = new GuiButton(1, this.xParty + 10, this.yParty - 35, 80, 20, this.choice != null ? this.choice.name : "关");
-            overrideButton = new GuiButton(2, this.xParty + 10, this.yParty, 80, 20, this.choice != null ? "无" : this.choice.getOverridingColour() != null ? this.choice.getOverridingColour().name + " 恐鸟皮肤" : this.choice.getOverrideAll() ? "全部" : "无");
+            overrideButton = new GuiButton(2, this.xParty + 10, this.yParty, 80, 20, this.choice != null ? "无" : this.choice.getOverridingColour() != null ? this.choice.getOverridingColour().name + "恐鸟皮肤" : this.choice.getOverrideAll() ? "全部" : "无");
         }
 
         if (this.donator == null)

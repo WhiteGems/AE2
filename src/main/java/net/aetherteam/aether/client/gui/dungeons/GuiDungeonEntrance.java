@@ -192,10 +192,10 @@ public class GuiDungeonEntrance extends GuiScreen
                 this.description[0] = "你试图独闯滑行者";
                 this.description[1] = "的迷宫. 这个迷宫危险";
                 this.description[2] = "无比, 你随时可能付出生命";
-                this.description[3] = "并且损失掉全部的物品.";
-                this.description[4] = "你将因此失去一切.";
+                this.description[3] = "并且损失掉全部的物品";
+                this.description[4] = "你将因此失去一切";
                 this.description[5] = "但地牢深处有值得探索的";
-                this.description[6] = "宝藏.";
+                this.description[6] = "宝藏";
                 this.description[7] = "";
                 this.description[8] = "那么, 你是否已经准备好";
                 this.description[9] = "进入地牢?";
@@ -227,12 +227,12 @@ public class GuiDungeonEntrance extends GuiScreen
 
                     if ((this.controller.getDungeon().isQueuedParty(party)) && (!this.controller.getDungeon().hasMember(PartyController.instance().getMember(this.player))))
                     {
-                        this.description[2] = "你的公会.";
-                    } else this.description[2] = "其他公会.";
+                        this.description[2] = "你的公会";
+                    } else this.description[2] = "其他公会";
 
                     this.description[3] = "";
                     this.description[4] = "请稍等一会";
-                    this.description[5] = "儿再来试试.";
+                    this.description[5] = "儿再来试试";
                 } else if ((this.controller.getDungeon().isQueuedParty(party)) && (this.controller.getDungeon().hasMember(PartyController.instance().getMember(this.player))))
                 {
                     if (this.controller.getDungeon().isActive())
@@ -246,18 +246,18 @@ public class GuiDungeonEntrance extends GuiScreen
                         this.description[4] = "";
                         this.description[5] = "在彻底重置之前";
                         this.description[6] = "每个地牢仅仅允许";
-                        this.description[7] = "离开三次.";
+                        this.description[7] = "离开三次";
                     } else
                     {
                         this.description = new String[7];
 
                         this.description[0] = "你的公会正排队";
-                        this.description[1] = "进入地牢中.";
+                        this.description[1] = "进入地牢中";
                         this.description[2] = "";
                         this.description[3] = "";
                         this.description[4] = "请等待你的其他队友";
                         this.description[5] = "接受组队探险的";
-                        this.description[6] = "邀请.";
+                        this.description[6] = "邀请";
                     }
                 } else if (this.controller.getDungeon().hasAnyConqueredDungeon(members))
                 {
@@ -265,12 +265,12 @@ public class GuiDungeonEntrance extends GuiScreen
 
                     this.description[0] = "抱歉, 该地牢正";
                     this.description[1] = "被你的公会成员";
-                    this.description[2] = "努力攻略中.";
+                    this.description[2] = "努力攻略中";
                     this.description[3] = "";
                     this.description[4] = "";
                     this.description[5] = "";
                     this.description[6] = "请你去其他地方探索或者等待";
-                    this.description[7] = "队友凯旋而归.";
+                    this.description[7] = "队友凯旋而归";
                 } else if (isLeader)
                 {
                     this.description = new String[7];
@@ -281,7 +281,7 @@ public class GuiDungeonEntrance extends GuiScreen
                     this.description[3] = "";
                     this.description[4] = "";
                     this.description[5] = "如果是这样的话, 请发送";
-                    this.description[6] = "邀请给你的队友.";
+                    this.description[6] = "邀请给你的队友";
                 } else
                 {
                     this.description = new String[8];
@@ -293,7 +293,7 @@ public class GuiDungeonEntrance extends GuiScreen
                     this.description[4] = "";
                     this.description[5] = "如果是这样的话, 请发送";
                     this.description[6] = "邀请给你的队长, ";
-                    this.description[7] = "让他申请进入地牢.";
+                    this.description[7] = "让他申请进入地牢";
                 }
 
                 int count = 0;
