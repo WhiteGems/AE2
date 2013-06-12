@@ -113,7 +113,7 @@ public class GuiMenu extends GuiScreen
         if ((playerList.size() > 1) || (playerList.size() == 0))
         {
             this.buttonList.add(new GuiButton(5, this.xParty - 60, this.yParty - 36 - 28, 120, 20, "公会"));
-            this.buttonList.add(new GuiButton(1, this.xParty - 60, this.yParty - 14 - 28, 120, 20, "通告"));
+            this.buttonList.add(new GuiButton(1, this.xParty - 60, this.yParty - 14 - 28, 120, 20, "消息"));
             this.buttonList.add(new GuiButton(3, this.xParty - 60, this.yParty + 8 - 28, 120, 20, "玩家列表"));
             this.buttonList.add(new GuiButton(2, this.xParty - 60, this.yParty + 30 - 28, 120, 20, "选项"));
             this.buttonList.add(new GuiButton(4, this.xParty - 60, this.yParty + 52 - 28, 120, 20, "好友列表"));
@@ -131,8 +131,8 @@ public class GuiMenu extends GuiScreen
             drawTexturedModalRect(centerX + 13, centerY + 40, 141, 131, 115, 125);
 
             this.mc.renderEngine.resetBoundTexture();
-            drawString(this.fontRenderer, "孤独以终老 :(", centerX + 26, centerY + 10, 15658734);
-            drawString(this.fontRenderer, "(单机游戏)", centerX + 31, centerY + 22, 15658734);
+            drawString(this.fontRenderer, "注定孤独一生 :(", centerX + 26, centerY + 10, 15658734);
+            drawString(this.fontRenderer, "(单人游戏)", centerX + 31, centerY + 22, 15658734);
         } else
         {
             this.mc.renderEngine.resetBoundTexture();

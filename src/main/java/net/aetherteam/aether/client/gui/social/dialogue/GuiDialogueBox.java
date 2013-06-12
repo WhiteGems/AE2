@@ -59,7 +59,7 @@ public class GuiDialogueBox extends GuiScreen
         updateScreen();
         this.buttonList.clear();
 
-        this.buttonList.add(new GuiButton(0, this.xParty - 58, this.yParty, 120, 20, "Okay"));
+        this.buttonList.add(new GuiButton(0, this.xParty - 58, this.yParty, 120, 20, "确认"));
     }
 
     protected void actionPerformed(GuiButton btn)
