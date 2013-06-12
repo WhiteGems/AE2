@@ -61,15 +61,15 @@ public class GuiPartyEdit extends GuiScreen
 
         String name = PartyController.instance().getParty(player).getType().name();
 
-        if (name == "公开")
+        if (name == "OPEN")
         {
             this.typeIndex = 0;
         }
-        if (name == "关闭")
+        if (name == "CLOSE")
         {
             this.typeIndex = 1;
         }
-        if (name == "私有")
+        if (name == "PRIVATE")
         {
             this.typeIndex = 2;
         }
@@ -103,7 +103,7 @@ public class GuiPartyEdit extends GuiScreen
 
         if (party != null)
         {
-            this.typeButton = new GuiButton(4, this.xParty - 60, this.yParty + 30 - 28, 120, 20, "类型: " + PartyController.instance().getParty(this.player).getType().name());
+            this.typeButton = new GuiButton(4, this.xParty - 60, this.yParty + 30 - 28, 120, 20, "类型: " + PartyController.instance().getParty(this.player).getType().realname);
         }
 
         this.buttonList.add(this.typeButton);
@@ -159,7 +159,7 @@ public class GuiPartyEdit extends GuiScreen
 
         this.buttonList.clear();
 
-        this.typeButton = new GuiButton(4, this.xParty - 60, this.yParty + 30 - 28, 120, 20, "类型: " + PartyController.instance().getParty(this.player).getType().name());
+        this.typeButton = new GuiButton(4, this.xParty - 60, this.yParty + 30 - 28, 120, 20, "类型: " + PartyController.instance().getParty(this.player).getType().realname);
 
         this.buttonList.add(this.typeButton);
 
@@ -172,7 +172,7 @@ public class GuiPartyEdit extends GuiScreen
         for (int i = 0; i < partyList.size(); i++)
         {
             if ((!((Party) partyList.get(i)).getLeader().username.equals(this.player.username)) ||
-                    (((Party) partyList.get(i)).getType().name() == this.partyType.get(this.typeIndex)) || (((Party) partyList.get(i)).getName() != this.newPartyName))
+                    (((Party) partyList.get(i)).getType().realname == this.partyType.get(this.typeIndex)) || (((Party) partyList.get(i)).getName() != this.newPartyName))
                 ;
         }
 

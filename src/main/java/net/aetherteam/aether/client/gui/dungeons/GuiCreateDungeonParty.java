@@ -109,11 +109,11 @@ public class GuiCreateDungeonParty extends GuiScreen
                 this.typeIndex += 1;
                 break;
             case 2:
-                Party party = new Party(this.partyName, new PartyMember(this.player)).setType(PartyType.getTypeFromString((String) this.partyType.get(this.typeIndex)));
+                Party party = new Party(this.partyName, new PartyMember(this.player)).setType(PartyType.getTypeFromName((String) this.partyType.get(this.typeIndex)));
                 boolean created = PartyController.instance().addParty(party, true);
 
                 PacketDispatcher.sendPacketToServer(AetherPacketHandler.sendPartyChange(true, this.partyName, this.player.username, this.player.skinUrl));
-                PacketDispatcher.sendPacketToServer(AetherPacketHandler.sendPartyTypeChange(this.partyName, PartyType.getTypeFromString((String) this.partyType.get(this.typeIndex))));
+                PacketDispatcher.sendPacketToServer(AetherPacketHandler.sendPartyTypeChange(this.partyName, PartyType.getTypeFromName((String) this.partyType.get(this.typeIndex))));
 
                 if (!created)
                 {

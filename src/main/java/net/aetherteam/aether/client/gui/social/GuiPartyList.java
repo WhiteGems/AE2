@@ -189,13 +189,8 @@ public class GuiPartyList extends GuiScreen
         this.fontRenderer.drawStringWithShadow(party.getName(), x + height - 19, y + 2, 15066597);
         GL11.glPushMatrix();
         GL11.glScalef(0.75F, 0.75F, 1.0F);
-        this.fontRenderer.drawString(party.getLeader().username, (int) ((x + height) / 0.75F - 22.0F + party.getType().name().length() * 6), (int) ((y + 12.0F) / 0.75F), 26367);
-        this.fontRenderer.drawString(party.getType().name(), (int) ((x + height) / 0.75F) - 25, (int) ((y + 12.0F) / 0.75F), party.getType().getDisplayColor());
+        this.fontRenderer.drawString(party.getLeader().username, (int) ((x + height) / 0.75F - 22.0F + party.getType().realname.length() * 6), (int) ((y + 12.0F) / 0.75F), 26367);
+        this.fontRenderer.drawString(party.getType().realname, (int) ((x + height) / 0.75F) - 25, (int) ((y + 12.0F) / 0.75F), party.getType().getDisplayColor());
         GL11.glPopMatrix();
     }
 }
-
-/* Location:           D:\Dev\Mc\forge_orl\mcp\jars\bin\aether.jar
- * Qualified Name:     net.aetherteam.aether.client.gui.social.GuiPartyList
- * JD-Core Version:    0.6.2
- */

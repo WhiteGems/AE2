@@ -243,7 +243,7 @@ public class PartyController
             {
                 if (party.hasMember(getMember(ClientNotificationHandler.clientUsername())))
                 {
-                    ClientNotificationHandler.createGeneric("公会类型改变!", "现在是: " + newType.name(), "");
+                    ClientNotificationHandler.createGeneric("公会类型改变!", "现在是: " + newType.realname, "");
                 }
             }
 
