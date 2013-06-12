@@ -23,8 +23,8 @@ import org.lwjgl.opengl.GL11;
 
 public class GuiManageMembers extends GuiScreen
 {
-    protected static final String ONLINE_TEXT = "ONLINE";
-    protected static final String OFFLINE_TEXT = "OFFLINE";
+    protected static final String ONLINE_TEXT = "在线";
+    protected static final String OFFLINE_TEXT = "离线";
     private static final int ONLINE_TEXT_COLOR = 6750054;
     private static final int OFFLINE_TEXT_COLOR = 16711680;
     private GuiYSlider sbar;
@@ -238,12 +238,12 @@ public class GuiManageMembers extends GuiScreen
             this.sbar.drawButton(this.mc, x, y);
         }
 
-        drawString(this.fontRenderer, "Player List", centerX + 40, centerY + 10, 16777215);
+        drawString(this.fontRenderer, "玩家列表", centerX + 40, centerY + 10, 16777215);
         String kickName;
         if ((this.selectedPlayerSlot != null) && (!PartyController.instance().isLeader(this.selectedPlayerSlot.username)))
         {
-            kickName = "Manage";
-        } else kickName = "Disband";
+            kickName = "管理";
+        } else kickName = "解散";
 
         this.kickButton = new GuiButton(1, this.xMember + 3, this.yMember + 85 - 28, 58, 20, kickName);
 
