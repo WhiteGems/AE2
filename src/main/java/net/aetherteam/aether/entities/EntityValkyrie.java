@@ -484,10 +484,10 @@ public class EntityValkyrie extends EntityDungeonMob implements IAetherBoss
 
                 if (var3 == 2)
                 {
-                    this.chatItUp("抱歉, 我不和柔弱的人战斗.");
+                    this.chatItUp("抱歉, 强者从不欺凌弱小");
                 } else
                 {
-                    this.chatItUp("尝试击败一些较弱的女武神.");
+                    this.chatItUp("尝试先打败一些喽啰证明自己的实力");
                 }
 
                 return false;
@@ -585,19 +585,19 @@ public class EntityValkyrie extends EntityDungeonMob implements IAetherBoss
 
                     if (this.boss)
                     {
-                        this.chatItUp("正如大家所期许之人.");
+                        this.chatItUp("正如大家所期许之人");
                         this.unlockDoor();
                     } else if (var4 == 2)
                     {
-                        this.chatItUp("你想要勋章? 别抱着这么可悲的想法了.");
+                        this.chatItUp("你想要勋章? 别抱着这么可悲的想法了");
                     } else if (var4 == 1 && var3 instanceof EntityPlayer)
                     {
                         EntityPlayer var5 = (EntityPlayer) var3;
                         String var6 = var5.username;
-                        this.chatItUp("也许有一天, " + var6 + "... 也许会有那么一天.");
+                        this.chatItUp("也许有一天, " + var6 + "... 也许会有那么一天");
                     } else
                     {
-                        this.chatItUp("将死之际, 人类这可爱的小苹果也要腐烂了啊.");
+                        this.chatItUp("将死之际, 人类这可爱的小苹果也要腐烂了啊");
                     }
                 }
             }
@@ -697,7 +697,7 @@ public class EntityValkyrie extends EntityDungeonMob implements IAetherBoss
 
     public String getBossTitle()
     {
-        return "瓦尔基里女王" + this.name;
+        return "瓦尔基里女王:" + this.name;
     }
 
     public int getBossStage()
