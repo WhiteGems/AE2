@@ -236,7 +236,7 @@ public class GuiNotificationList extends GuiScreen
             GL11.glPopMatrix();
             this.mc.renderEngine.resetBoundTexture();
 
-            String warningLabel = "没有要在这个时候显示的消息.";
+            String warningLabel = "没有要在这个时候显示的消息";
 
             drawString(this.fontRenderer, warningLabel, centerX + 70 - this.fontRenderer.getStringWidth(warningLabel) / 2, (int) (this.yParty - (this.hParty - 241) / 2 * scaleFactorY), 16777215);
         }
