@@ -210,7 +210,7 @@ public class AetherItems
     )
     public static Item ZanitePendant;
     @net.aetherteam.aether.interfaces.AEItem(
-            name = "以太史莱姆披风"
+            name = "史维特披风"
     )
     public static Item SwetCape;
     @net.aetherteam.aether.interfaces.AEItem(
@@ -402,7 +402,7 @@ public class AetherItems
     )
     public static Item WhiteApple;
     @net.aetherteam.aether.interfaces.AEItem(
-            name = "蓝色史莱姆球"
+            name = "蓝色史维特球"
     )
     public static Item SwettyBall;
     @net.aetherteam.aether.interfaces.AEItem(
@@ -438,7 +438,7 @@ public class AetherItems
     )
     public static Item DexterityCape;
     @net.aetherteam.aether.interfaces.AEItem(
-            name = "蓝色史莱姆吊坠"
+            name = "蓝色史维特吊坠"
     )
     public static Item SwettyPendant;
     @net.aetherteam.aether.interfaces.AEItem(

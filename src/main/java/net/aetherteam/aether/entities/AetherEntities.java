@@ -150,7 +150,7 @@ public class AetherEntities
         LanguageRegistry.instance().addStringLocalization("entity.CloudSentry.name", "zh_CN", "云之哨兵");
         LanguageRegistry.instance().addStringLocalization("entity.TNTPresent.name", "zh_CN", "TNT礼物");
         LanguageRegistry.instance().addStringLocalization("entity.AetherLightning.name", "zh_CN", "以太雷霆");
-        LanguageRegistry.instance().addStringLocalization("entity.Swet.name", "zh_CN", "以太史莱姆");
+        LanguageRegistry.instance().addStringLocalization("entity.Swet.name", "zh_CN", "史维特");
         LanguageRegistry.instance().addStringLocalization("entity.SentryGolem.name", "zh_CN", "追踪傀儡");
         LanguageRegistry.instance().addStringLocalization("entity.SentryGolemRanged.name", "zh_CN", "哨卫傀儡");
         LanguageRegistry.instance().addStringLocalization("entity.PhoenixDart.name", "zh_CN", "凤凰飞镖");
