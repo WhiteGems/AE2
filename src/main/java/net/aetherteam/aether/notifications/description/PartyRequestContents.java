@@ -21,10 +21,10 @@ public class PartyRequestContents extends NotificationContents
 
         if (party != null)
         {
-            description = "你想加入我的公会吗?" + " 我的公会是 " + new StringBuilder().append('"').append(party.getName()).append('"').toString() + ".";
+            description = "你想加入我的公会吗?" + " 我的公会是 " + new StringBuilder().append('"').append(party.getName()).append('"').toString() + "";
         } else
         {
-            description = "很抱歉, 我已退出公会. 你可以拒绝此请求.";
+            description = "很抱歉, 我已退出公会, 你可以拒绝此请求";
         }
 
         return description;

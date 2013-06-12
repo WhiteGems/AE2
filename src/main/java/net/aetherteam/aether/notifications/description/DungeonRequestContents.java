@@ -21,10 +21,10 @@ public class DungeonRequestContents extends NotificationContents
 
         if (party != null)
         {
-            description = "你想和我们一起入侵地牢吗?" + " 我的公会是 " + new StringBuilder().append('"').append(party.getName()).append('"').toString() + ". 警告: 地牢是一个非常危险的地方, 注意贵重物品的丢失.";
+            description = "你想和我们一起入侵地牢吗?" + " 我的公会是 " + new StringBuilder().append('"').append(party.getName()).append('"').toString() + " 警告: 地牢是一个非常危险的地方, 注意贵重物品的丢失";
         } else
         {
-            description = "很抱歉, 我已退出公会. 你可以拒绝此请求.";
+            description = "很抱歉, 我已退出公会, 你可以拒绝此请求";
         }
 
         return description;
