@@ -29,13 +29,13 @@ public class GuiCreateParty extends GuiScreen
 
     /** Reference to the Minecraft object. */
     Minecraft mc;
-    private ArrayList partyType;
-    private int typeIndex;
+    private ArrayList partyType = new ArrayList();
+    private int typeIndex = 0;
     private GuiButton typeButton;
     private GuiButton finishButton;
     private GuiButton backButton;
     private GuiTextField partyNameField;
-    private String partyName;
+    private String partyName = "";
     private EntityPlayer player;
     private GuiScreen parent;
 
@@ -47,13 +47,12 @@ public class GuiCreateParty extends GuiScreen
     public GuiCreateParty(PartyData pm, EntityPlayer player, GuiScreen parent)
     {
         this.parent = parent;
-        this.partyType = new ArrayList();
+
         this.partyType.add("打开");
         this.partyType.add("关闭");
         this.partyType.add("私人");
         this.player = player;
-        this.typeIndex = 0;
-        this.partyName = "";
+
         this.mc = FMLClientHandler.instance().getClient();
         this.pm = pm;
         this.backgroundTexture = this.mc.renderEngine.getTexture("/net/aetherteam/aether/client/sprites/gui/createParty.png");

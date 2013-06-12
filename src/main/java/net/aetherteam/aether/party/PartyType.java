@@ -4,7 +4,7 @@ import java.io.Serializable;
 
 public enum PartyType implements Serializable
 {
-    OPEN(6750054), CLOSED(16711680), PRIVATE(0);
+    打开(6750054), 关闭(16711680), 私人(0);
 
     public int displayColor;
 
@@ -31,8 +31,3 @@ public enum PartyType implements Serializable
         return null;
     }
 }
-
-/* Location:           D:\Dev\Mc\forge_orl\mcp\jars\bin\aether.jar
- * Qualified Name:     net.aetherteam.aether.party.PartyType
- * JD-Core Version:    0.6.2
- */
