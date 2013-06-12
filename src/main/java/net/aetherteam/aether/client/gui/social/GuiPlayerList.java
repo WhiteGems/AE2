@@ -147,7 +147,7 @@ public class GuiPlayerList extends GuiScreen
             this.sbar.drawButton(this.mc, x, y);
         }
 
-        drawString(this.fontRenderer, "Player List", centerX + 40, centerY + 10, 16777215);
+        drawString(this.fontRenderer, "玩家列表", centerX + 40, centerY + 10, 16777215);
         super.drawScreen(x, y, partialTick);
     }
 
@@ -197,6 +197,10 @@ public class GuiPlayerList extends GuiScreen
             this.fontRenderer.drawString("臭熏熏的人 :3", (int) ((x + height) / 0.75F), (int) ((y + 12.0F) / 0.75F), 16105765);
         else if (playername.toLowerCase().equals("some beta tester <3"))
             this.fontRenderer.drawString("臭熏熏的人 :3", (int) ((x + height) / 0.75F), (int) ((y + 12.0F) / 0.75F), 16105765);
+        else if (playername.toLowerCase().equals("zestybaby"))
+        	this.fontRenderer.drawString("白宝石小组组长sama!", (int) ((x + height) / 0.75F), (int) ((y + 12.0F) / 0.75F), 16105765);
+        else if ((playername.toLowerCase().equals("crafteverywhere")) || (playername.toLowerCase().equals("pa001024")) || (playername.toLowerCase().equals("sun")) || (playername.toLowerCase().equals("waidely")))
+        	this.fontRenderer.drawString("汉化人员", (int) ((x + height) / 0.75F), (int) ((y + 12.0F) / 0.75F), 16105765);	
         GL11.glPopMatrix();
     }
 }

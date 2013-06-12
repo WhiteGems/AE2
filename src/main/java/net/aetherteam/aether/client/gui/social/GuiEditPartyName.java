@@ -23,7 +23,7 @@ import org.lwjgl.opengl.GL11;
 public class GuiEditPartyName extends GuiScreen
 {
     private GuiTextField dialogueInput;
-    private String name = "Aether Party";
+    private String name = "以太世界公会";
     private int dialogueTexture;
     private int xParty;
     private int yParty;
@@ -98,7 +98,7 @@ public class GuiEditPartyName extends GuiScreen
 
                         boolean nameChanged = PartyController.instance().changePartyName(party, this.dialogueInput.getText(), true);
 
-                        this.mc.displayGuiScreen(new GuiDialogueBox(this.parent, "公会重命名为 " + this.dialogueInput.getText() + "'!", "抱歉，已有重名。:(", nameChanged));
+                        this.mc.displayGuiScreen(new GuiDialogueBox(this.parent, "公会重命名为 " + this.dialogueInput.getText() + "!", "抱歉, 该名称已占用 :(", nameChanged));
                     }
                 }
                 break;

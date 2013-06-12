@@ -54,7 +54,7 @@ public class GuiPartyList extends GuiScreen
         if (this.sbar != null) this.sbarVal = this.sbar.sliderValue;
         this.sbar = new GuiYSlider(-1, this.xParty + 46, this.yParty - 54, 10, 103);
         this.sbar.sliderValue = this.sbarVal;
-        this.buttonList.add(new GuiButton(0, this.xParty - 58, this.yParty + 85 - 28, 120, 20, "Back"));
+        this.buttonList.add(new GuiButton(0, this.xParty - 58, this.yParty + 85 - 28, 120, 20, "返回"));
     }
 
     protected void keyTyped(char charTyped, int keyTyped)
@@ -150,7 +150,7 @@ public class GuiPartyList extends GuiScreen
         }
 
         this.mc.renderEngine.resetBoundTexture();
-        drawString(this.fontRenderer, "公会列表", centerX + 70 - this.fontRenderer.getStringWidth("Party List") / 2, centerY + 10, 16777215);
+        drawString(this.fontRenderer, "公会列表", centerX + 70 - this.fontRenderer.getStringWidth("公会列表") / 2, centerY + 10, 16777215);
 
         if ((partyList.size() == 0) || (showNoParties))
         {
@@ -168,7 +168,7 @@ public class GuiPartyList extends GuiScreen
             GL11.glPopMatrix();
             this.mc.renderEngine.resetBoundTexture();
 
-            String warningLabel = "当前无人创建公会。";
+            String warningLabel = "当前无人创建公会";
 
             drawString(this.fontRenderer, warningLabel, centerX + 70 - this.fontRenderer.getStringWidth(warningLabel) / 2, centerY + 75, 16777215);
         }

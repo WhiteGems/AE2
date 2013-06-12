@@ -77,7 +77,7 @@ public class GuiManagePartyMember extends GuiScreen
 
         this.transferButton = new GuiButton(5, this.xParty - 60, this.yParty - 36 - 28, 120, 20, "移交队长");
         this.moderatorButton = new GuiButton(4, this.xParty - 60, this.yParty - 14 - 28, 120, 20, "添加管理");
-        this.kickButton = new GuiButton(5, this.xParty - 60, this.yParty + 8 - 28, 120, 20, "踢人");
+        this.kickButton = new GuiButton(5, this.xParty - 60, this.yParty + 8 - 28, 120, 20, "踢出");
         this.banButton = new GuiButton(6, this.xParty - 60, this.yParty + 30 - 28, 120, 20, "封禁");
 
         this.transferButton.enabled = false;

@@ -277,8 +277,8 @@ public class GuiAetherContainerCreative extends AetherInventoryEffectRenderer
             GuiButton var3 = new GuiButton(5, this.guiLeft + 8, this.guiTop + 132, 72, 20, StringTranslate.getInstance().translateKey("Book of Lore"));
             var3.enabled = false;
             this.buttonList.add(var3);
-            this.buttonList.add(new GuiButton(6, this.guiLeft + 85, this.guiTop + 132, 48, 20, "Social"));
-            this.buttonList.add(new GuiButton(7, this.guiLeft + 138, this.guiTop + 132, 50, 20, "Donator"));
+            this.buttonList.add(new GuiButton(6, this.guiLeft + 85, this.guiTop + 132, 48, 20, "社交"));
+            this.buttonList.add(new GuiButton(7, this.guiLeft + 138, this.guiTop + 132, 50, 20, "捐赠"));
         } else
         {
             this.mc.displayGuiScreen(new GuiInventory(this.mc.thePlayer));

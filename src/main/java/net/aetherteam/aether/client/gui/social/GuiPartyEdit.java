@@ -103,7 +103,7 @@ public class GuiPartyEdit extends GuiScreen
 
         if (party != null)
         {
-            this.typeButton = new GuiButton(4, this.xParty - 60, this.yParty + 30 - 28, 120, 20, "Type: " + PartyController.instance().getParty(this.player).getType().name());
+            this.typeButton = new GuiButton(4, this.xParty - 60, this.yParty + 30 - 28, 120, 20, "类型: " + PartyController.instance().getParty(this.player).getType().name());
         }
 
         this.buttonList.add(this.typeButton);
@@ -159,7 +159,7 @@ public class GuiPartyEdit extends GuiScreen
 
         this.buttonList.clear();
 
-        this.typeButton = new GuiButton(4, this.xParty - 60, this.yParty + 30 - 28, 120, 20, "Type: " + PartyController.instance().getParty(this.player).getType().name());
+        this.typeButton = new GuiButton(4, this.xParty - 60, this.yParty + 30 - 28, 120, 20, "类型: " + PartyController.instance().getParty(this.player).getType().name());
 
         this.buttonList.add(this.typeButton);
 
