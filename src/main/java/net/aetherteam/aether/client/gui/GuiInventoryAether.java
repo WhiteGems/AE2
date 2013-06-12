@@ -58,9 +58,9 @@ public class GuiInventoryAether extends AetherInventoryEffectRenderer
         bookOfLore.enabled = false;
 
         this.buttonList.add(bookOfLore);
-        this.buttonList.add(new GuiButton(3, this.guiLeft + 84, this.guiTop + 162, 34, 20, string.translateKey("社交菜单")));
+        this.buttonList.add(new GuiButton(3, this.guiLeft + 84, this.guiTop + 162, 34, 20, string.translateKey("社区")));
 
-        this.buttonList.add(new GuiButton(4, this.guiLeft + 123, this.guiTop + 162, 46, 20, string.translateKey("捐赠我们")));
+        this.buttonList.add(new GuiButton(4, this.guiLeft + 123, this.guiTop + 162, 46, 20, string.translateKey("捐赠特区")));
     }
 
     protected void drawGuiContainerForegroundLayer(int par1, int par2)
