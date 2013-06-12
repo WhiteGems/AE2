@@ -327,8 +327,8 @@ public class AetherHooks
         double var9 = par2EntityPlayer.prevPosY + (par2EntityPlayer.posY - par2EntityPlayer.prevPosY) * var4 + 1.62D - par2EntityPlayer.yOffset;
         double var11 = par2EntityPlayer.prevPosZ + (par2EntityPlayer.posZ - par2EntityPlayer.prevPosZ) * var4;
         Vec3 var13 = par1World.getWorldVec3Pool().getVecFromPool(var7, var9, var11);
-        float var14 = MathHelper.cos(-var6 * 0.01745329F - 3.141593F);
-        float var15 = MathHelper.sin(-var6 * 0.01745329F - 3.141593F);
+        float var14 = MathHelper.cos(-var6 * 0.01745329F - (float)Math.PI);
+        float var15 = MathHelper.sin(-var6 * 0.01745329F - (float)Math.PI);
         float var16 = -MathHelper.cos(-var5 * 0.01745329F);
         float var17 = MathHelper.sin(-var5 * 0.01745329F);
         float var18 = var15 * var16;

@@ -197,7 +197,7 @@ public class GuiParty extends GuiScreen
     {
         drawDefaultBackground();
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-        GL11.glBindTexture(3553, this.backgroundTexture);
+        GL11.glBindTexture(GL11.GL_TEXTURE_2D, this.backgroundTexture);
         int dmsy = Mouse.getDWheel();
         this.sbar.sliderValue -= dmsy / 1000.0F;
         if (this.sbar.sliderValue > 1.0F) this.sbar.sliderValue = 1.0F;
@@ -211,7 +211,7 @@ public class GuiParty extends GuiScreen
         int slotW = 100;
         int slotH = 20;
         int gutter = 2;
-        GL11.glEnable(3089);
+        GL11.glEnable(GL11.GL_SCISSOR_TEST);
         GL11.glScissor((centerX + 14) * sr.getScaleFactor(), (centerY + 35) * sr.getScaleFactor(), slotW * sr.getScaleFactor(), 103 * sr.getScaleFactor());
         GL11.glPushMatrix();
         totalHeight = (this.pm.pList_offline.size() + this.pm.pList_online.size()) * (slotH + gutter);
@@ -234,9 +234,9 @@ public class GuiParty extends GuiScreen
             drawPlayerSlot(p, centerX + 15, centerY + totalHeight + 30, slotW, slotH, false);
             totalHeight += slotH + gutter;
         }
-        GL11.glPopMatrix();
-        GL11.glDisable(3089);
 
+        GL11.glPopMatrix();
+        GL11.glDisable(GL11.GL_SCISSOR_TEST);
         this.partyNameField.drawTextBox();
 
         if (totalHeight > 103)
@@ -248,7 +248,7 @@ public class GuiParty extends GuiScreen
         {
             drawGradientRect(0, 0, this.width, this.height, -1728053248, -1728053248);
             GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-            GL11.glBindTexture(3553, this.dialogueTexture);
+            GL11.glBindTexture(GL11.GL_TEXTURE_2D, this.dialogueTexture);
             drawTexturedModalRect(centerX - 30, centerY + 71, 0, 0, 201, this.hParty - 201);
             this.dialogueInput.drawTextBox();
             this.fontRenderer.drawStringWithShadow(getDialogueOption() + ":", centerX - 24, centerY + 80, 16777215);
@@ -282,14 +282,14 @@ public class GuiParty extends GuiScreen
         int icon = this.mc.renderEngine.getTextureForDownloadableImage(p.skinUrl, "/mob/char.png");
 
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-        GL11.glBindTexture(3553, icon);
-        GL11.glEnable(3553);
+        GL11.glBindTexture(GL11.GL_TEXTURE_2D, icon);
+        GL11.glEnable(GL11.GL_TEXTURE_2D);
 
         float u = 0.125F;
         float v = 0.25F;
         float u1 = 0.25F;
         float v1 = 0.5F;
-        GL11.glBegin(7);
+        GL11.glBegin(GL11.GL_QUADS);
         GL11.glTexCoord2f(u, v);
         GL11.glVertex2f(x + 2, y + 2);
         GL11.glTexCoord2f(u, v1);

@@ -85,7 +85,7 @@ public class GuiDialogueBox extends GuiScreen
 
         GL11.glPushMatrix();
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-        GL11.glBindTexture(3553, this.dialogueTexture);
+        GL11.glBindTexture(GL11.GL_TEXTURE_2D, this.dialogueTexture);
 
         float scaleFactor = 1.3F;
 

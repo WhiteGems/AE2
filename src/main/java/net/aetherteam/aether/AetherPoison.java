@@ -34,7 +34,7 @@ public class AetherPoison
     public static final int poisonDmg = 1;
     public static final int poisonHurts = 10;
     public static final int maxPoisonTime = 500;
-    public static double rotDFac = 0.7853981633974483D;
+    public static double rotDFac = (Math.PI / 4D);
     public static double rotD;
     public static double rotTaper = 0.125D;
     public static double motTaper = 0.2D;
@@ -154,13 +154,13 @@ public class AetherPoison
         ScaledResolution scaledresolution = new ScaledResolution(mc.gameSettings, mc.displayWidth, mc.displayHeight);
         int width = scaledresolution.getScaledWidth();
         int height = scaledresolution.getScaledHeight();
-        GL11.glEnable(3042);
-        GL11.glDisable(2929);
+        GL11.glEnable(GL11.GL_BLEND);
+        GL11.glDisable(GL11.GL_DEPTH_TEST);
         GL11.glDepthMask(false);
-        GL11.glBlendFunc(770, 771);
+        GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
         GL11.glColor4f(1.0F, 1.0F, 1.0F, a);
-        GL11.glDisable(3008);
-        GL11.glBindTexture(3553, mc.renderEngine.getTexture(file));
+        GL11.glDisable(GL11.GL_ALPHA_TEST);
+        GL11.glBindTexture(GL11.GL_TEXTURE_2D, mc.renderEngine.getTexture(file));
         Tessellator tessellator = Tessellator.instance;
         tessellator.startDrawingQuads();
         tessellator.addVertexWithUV(0.0D, height, -90.0D, 0.0D, 1.0D);
@@ -169,8 +169,8 @@ public class AetherPoison
         tessellator.addVertexWithUV(0.0D, 0.0D, -90.0D, 0.0D, 0.0D);
         tessellator.draw();
         GL11.glDepthMask(true);
-        GL11.glEnable(2929);
-        GL11.glEnable(3008);
+        GL11.glEnable(GL11.GL_DEPTH_TEST);
+        GL11.glEnable(GL11.GL_ALPHA_TEST);
         GL11.glColor4f(1.0F, 1.0F, 1.0F, a);
     }
 }

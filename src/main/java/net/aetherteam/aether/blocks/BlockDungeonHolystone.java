@@ -62,11 +62,11 @@ public class BlockDungeonHolystone extends BlockAether implements IAetherBlock
      * is the only chance you get to register icons.
      */
     @Override
-	@SideOnly(Side.CLIENT)
+    @SideOnly(Side.CLIENT)
     public void registerIcons(IconRegister ir)
     {
-    	dungeonholystone = ir.registerIcon("Aether:Dungeon Holystone");
-    	dungeonholymossystone = ir.registerIcon("Aether:Dungeon Mossy Holystone");
+        dungeonholystone = ir.registerIcon("Aether:Dungeon Holystone");
+        dungeonholymossystone = ir.registerIcon("Aether:Dungeon Mossy Holystone");
     }
 
     /**

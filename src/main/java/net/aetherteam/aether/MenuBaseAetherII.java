@@ -682,7 +682,7 @@ public class MenuBaseAetherII extends MenuBase
         if (!this.TUGopen)
         {
             String var22 = "Copyright Mojang AB. Do not distribute!";
-            String info="白宝石小组荣誉出品！";
+            String info = "白宝石小组荣誉出品！";
             this.drawString(this.fontRenderer, var22, 2, this.height - 10, 16777215);
             this.drawString(this.fontRenderer, info, 2, this.height - 20, 16777215);
         }

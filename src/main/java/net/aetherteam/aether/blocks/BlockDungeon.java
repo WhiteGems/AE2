@@ -137,15 +137,15 @@ public class BlockDungeon extends BlockAether implements IAetherBlock
      * is the only chance you get to register icons.
      */
     @Override
-	@SideOnly(Side.CLIENT)
+    @SideOnly(Side.CLIENT)
     public void registerIcons(IconRegister ir)
     {
-    	carved = ir.registerIcon("Aether:Carved Stone");
-    	angelic = ir.registerIcon("Aether:Angelic Stone");
-    	hellfire = ir.registerIcon("Aether:Hellfire Stone");
-    	sentry = ir.registerIcon("Aether:Sentry Stone");
-    	lightangelic = ir.registerIcon("Aether:Light Angelic Stone");
-    	lighthellfire = ir.registerIcon("Aether:Light Hellfire Stone");  
+        carved = ir.registerIcon("Aether:Carved Stone");
+        angelic = ir.registerIcon("Aether:Angelic Stone");
+        hellfire = ir.registerIcon("Aether:Hellfire Stone");
+        sentry = ir.registerIcon("Aether:Sentry Stone");
+        lightangelic = ir.registerIcon("Aether:Light Angelic Stone");
+        lighthellfire = ir.registerIcon("Aether:Light Hellfire Stone");
     }
 
     private boolean isLit()

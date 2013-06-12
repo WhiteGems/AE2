@@ -177,13 +177,13 @@ public class GuiPartyEdit extends GuiScreen
         }
 
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-        GL11.glBindTexture(3553, this.backgroundTexture);
+        GL11.glBindTexture(GL11.GL_TEXTURE_2D, this.backgroundTexture);
         int centerX = this.xParty - 70;
         int centerY = this.yParty - 84;
 
         ScaledResolution sr = new ScaledResolution(this.mc.gameSettings, this.mc.displayWidth, this.mc.displayHeight);
         drawTexturedModalRect(centerX, centerY, 0, 0, 141, this.hParty);
-        GL11.glBindTexture(3553, this.backgroundTexture);
+        GL11.glBindTexture(GL11.GL_TEXTURE_2D, this.backgroundTexture);
 
         this.mc.renderEngine.resetBoundTexture();
 

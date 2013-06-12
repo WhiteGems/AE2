@@ -77,14 +77,14 @@ public class GuiPlayerRequestSlot extends Gui
         int icon = mc.renderEngine.getTextureForDownloadableImage("http://skins.minecraft.net/MinecraftSkins/" + StringUtils.stripControlCodes(this.username) + ".png", "/mob/char.png");
 
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-        GL11.glBindTexture(3553, icon);
-        GL11.glEnable(3553);
+        GL11.glBindTexture(GL11.GL_TEXTURE_2D, icon);
+        GL11.glEnable(GL11.GL_TEXTURE_2D);
 
         float u = 0.125F;
         float v = 0.25F;
         float u1 = 0.25F;
         float v1 = 0.5F;
-        GL11.glBegin(7);
+        GL11.glBegin(GL11.GL_QUADS);
         GL11.glTexCoord2f(u, v);
         GL11.glVertex2f(x + 2, y + 2);
         GL11.glTexCoord2f(u, v1);

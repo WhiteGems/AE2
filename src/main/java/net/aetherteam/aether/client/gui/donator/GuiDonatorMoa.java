@@ -32,6 +32,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.player.EntityPlayer;
 import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL12;
 
 public class GuiDonatorMoa extends GuiScreen
 {
@@ -139,7 +140,7 @@ public class GuiDonatorMoa extends GuiScreen
 
         drawDefaultBackground();
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-        GL11.glBindTexture(3553, this.backgroundTexture);
+        GL11.glBindTexture(GL11.GL_TEXTURE_2D, this.backgroundTexture);
         int centerX = this.xParty - 97;
         int centerY = this.yParty - 56;
 
@@ -204,7 +205,7 @@ public class GuiDonatorMoa extends GuiScreen
 
     public void drawPlayerOnGui(Minecraft par0Minecraft, int par1, int par2, int par3, float par4, float par5, boolean lighting)
     {
-        GL11.glEnable(2903);
+        GL11.glEnable(GL11.GL_COLOR_MATERIAL);
         GL11.glPushMatrix();
         GL11.glTranslatef(par1, par2, 50.0F);
         GL11.glScalef(20.5F, 20.5F, 50.5F);
@@ -235,9 +236,9 @@ public class GuiDonatorMoa extends GuiScreen
         par0Minecraft.thePlayer.rotationPitch = f4;
         GL11.glPopMatrix();
         RenderHelper.disableStandardItemLighting();
-        GL11.glDisable(32826);
+        GL11.glDisable(GL12.GL_RESCALE_NORMAL);
         OpenGlHelper.setActiveTexture(OpenGlHelper.lightmapTexUnit);
-        GL11.glDisable(3553);
+        GL11.glDisable(GL11.GL_TEXTURE_2D);
         OpenGlHelper.setActiveTexture(OpenGlHelper.defaultTexUnit);
     }
 
@@ -253,7 +254,7 @@ public class GuiDonatorMoa extends GuiScreen
 
         this.rotationY += this.dif;
 
-        GL11.glEnable(2903);
+        GL11.glEnable(GL11.GL_COLOR_MATERIAL);
         GL11.glPushMatrix();
         GL11.glTranslatef(x, y, 100.0F);
         GL11.glScalef(-scale, scale, scale);
@@ -273,9 +274,9 @@ public class GuiDonatorMoa extends GuiScreen
 
         GL11.glPopMatrix();
         RenderHelper.disableStandardItemLighting();
-        GL11.glDisable(32826);
+        GL11.glDisable(GL12.GL_RESCALE_NORMAL);
         OpenGlHelper.setActiveTexture(OpenGlHelper.lightmapTexUnit);
-        GL11.glDisable(3553);
+        GL11.glDisable(GL11.GL_TEXTURE_2D);
         OpenGlHelper.setActiveTexture(OpenGlHelper.defaultTexUnit);
     }
 

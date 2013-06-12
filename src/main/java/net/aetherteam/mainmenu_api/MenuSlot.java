@@ -43,15 +43,15 @@ public class MenuSlot extends Gui
         int icon = mc.renderEngine.getTexture(this.menu.getIconPath());
 
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-        GL11.glBindTexture(3553, icon);
-        GL11.glEnable(3553);
+        GL11.glBindTexture(GL11.GL_TEXTURE_2D, icon);
+        GL11.glEnable(GL11.GL_TEXTURE_2D);
 
         float u = 0.0F;
         float v = 0.0F;
         float u1 = 1.0F;
         float v1 = 1.0F;
 
-        GL11.glBegin(7);
+        GL11.glBegin(GL11.GL_QUADS);
         GL11.glTexCoord2f(u, v);
         GL11.glVertex2f(xPosition + 2, yPosition + 2);
         GL11.glTexCoord2f(u, v1);

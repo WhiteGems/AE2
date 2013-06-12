@@ -144,7 +144,7 @@ public class GuiDungeonEntrance extends GuiScreen
 
         drawDefaultBackground();
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-        GL11.glBindTexture(3553, this.backgroundTexture);
+        GL11.glBindTexture(GL11.GL_TEXTURE_2D, this.backgroundTexture);
         int centerX = this.xParty - 70;
         int centerY = this.yParty - 84;
 
@@ -183,7 +183,7 @@ public class GuiDungeonEntrance extends GuiScreen
         {
             if (((party == null) && (!isLeader)) || ((isLeader) && (party.getSize() <= 1) && (party != null) && (!this.controller.getDungeon().hasAnyConqueredDungeon(party.getMembers())) && (!this.controller.getDungeon().hasQueuedParty())))
             {
-                GL11.glBindTexture(3553, this.backgroundTexture);
+                GL11.glBindTexture(GL11.GL_TEXTURE_2D, this.backgroundTexture);
 
                 this.mc.renderEngine.resetBoundTexture();
 

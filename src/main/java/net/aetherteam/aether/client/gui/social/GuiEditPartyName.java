@@ -124,16 +124,16 @@ public class GuiEditPartyName extends GuiScreen
         int slotW = 100;
         int slotH = 20;
         int gutter = 2;
-        GL11.glEnable(3089);
+        GL11.glEnable(GL11.GL_SCISSOR_TEST);
         GL11.glScissor((centerX + 14) * sr.getScaleFactor(), (centerY + 35) * sr.getScaleFactor(), slotW * sr.getScaleFactor(), 103 * sr.getScaleFactor());
         GL11.glPushMatrix();
 
         totalHeight = 0;
         GL11.glPopMatrix();
-        GL11.glDisable(3089);
+        GL11.glDisable(GL11.GL_SCISSOR_TEST);
         drawGradientRect(0, 0, this.width, this.height, -1728053248, -1728053248);
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-        GL11.glBindTexture(3553, this.dialogueTexture);
+        GL11.glBindTexture(GL11.GL_TEXTURE_2D, this.dialogueTexture);
         drawTexturedModalRect(centerX - 30, centerY + 71, 0, 0, 201, this.hParty - 201);
         this.dialogueInput.drawTextBox();
         this.fontRenderer.drawString("重命名公会", (int) ((centerX + this.height) / 0.75F), (int) ((centerY + 12.0F) / 0.75F), -10066330);

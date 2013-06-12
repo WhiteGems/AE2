@@ -25,7 +25,7 @@ public enum AetherRanks
         Aether.translator.add("pa001024");
         Aether.translator.add("sun");
         Aether.translator.add("waidely233");
-        Aether.translator.add("zestybaby");	
+        Aether.translator.add("zestybaby");
     }
 
     private AetherRanks(String description, ArrayList members, int descriptionColor)

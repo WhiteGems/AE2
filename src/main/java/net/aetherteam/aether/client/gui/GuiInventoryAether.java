@@ -23,6 +23,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.stats.AchievementList;
 import net.minecraft.util.StringTranslate;
 import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL12;
 
 @SideOnly(Side.CLIENT)
 public class GuiInventoryAether extends AetherInventoryEffectRenderer
@@ -76,7 +77,7 @@ public class GuiInventoryAether extends AetherInventoryEffectRenderer
 
     public void func_74223_a(Minecraft par0Minecraft, int par1, int par2, int par3, float par4, float par5)
     {
-        GL11.glEnable(2903);
+        GL11.glEnable(GL11.GL_COLOR_MATERIAL);
         GL11.glPushMatrix();
         GL11.glTranslatef(par1, par2, 50.0F);
         GL11.glScalef(-par3, par3, par3);
@@ -104,9 +105,9 @@ public class GuiInventoryAether extends AetherInventoryEffectRenderer
         par0Minecraft.thePlayer.rotationPitch = var8;
         GL11.glPopMatrix();
         RenderHelper.disableStandardItemLighting();
-        GL11.glDisable(32826);
+        GL11.glDisable(GL12.GL_RESCALE_NORMAL);
         OpenGlHelper.setActiveTexture(OpenGlHelper.lightmapTexUnit);
-        GL11.glDisable(3553);
+        GL11.glDisable(GL11.GL_TEXTURE_2D);
         OpenGlHelper.setActiveTexture(OpenGlHelper.defaultTexUnit);
     }
 

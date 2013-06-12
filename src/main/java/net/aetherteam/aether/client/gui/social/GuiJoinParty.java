@@ -177,7 +177,7 @@ public class GuiJoinParty extends GuiScreen
 
         drawDefaultBackground();
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-        GL11.glBindTexture(3553, this.backgroundTexture);
+        GL11.glBindTexture(GL11.GL_TEXTURE_2D, this.backgroundTexture);
         int dmsy = Mouse.getDWheel();
         this.sbar.sliderValue -= dmsy / 1000.0F;
         if (this.sbar.sliderValue > 1.0F) this.sbar.sliderValue = 1.0F;
@@ -191,7 +191,7 @@ public class GuiJoinParty extends GuiScreen
         int slotW = 100;
         int slotH = 20;
         int gutter = 2;
-        GL11.glEnable(3089);
+        GL11.glEnable(GL11.GL_SCISSOR_TEST);
         GL11.glScissor((centerX + 14) * sr.getScaleFactor(), (centerY + 35) * sr.getScaleFactor(), slotW * sr.getScaleFactor(), 103 * sr.getScaleFactor());
         GL11.glPushMatrix();
         this.totalHeight = (partyList.size() * (slotH + gutter));
@@ -232,7 +232,7 @@ public class GuiJoinParty extends GuiScreen
         }
 
         GL11.glPopMatrix();
-        GL11.glDisable(3089);
+        GL11.glDisable(GL11.GL_SCISSOR_TEST);
 
         if (this.totalHeight > 103)
         {
@@ -246,7 +246,7 @@ public class GuiJoinParty extends GuiScreen
         {
             GL11.glPushMatrix();
             GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-            GL11.glBindTexture(3553, this.dialogueTexture);
+            GL11.glBindTexture(GL11.GL_TEXTURE_2D, this.dialogueTexture);
 
             float scaleFactor = 1.3F;
 

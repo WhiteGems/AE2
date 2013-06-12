@@ -101,7 +101,7 @@ public class GuiMenu extends GuiScreen
 
         drawDefaultBackground();
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-        GL11.glBindTexture(3553, this.backgroundTexture);
+        GL11.glBindTexture(GL11.GL_TEXTURE_2D, this.backgroundTexture);
         int centerX = this.xParty - 70;
         int centerY = this.yParty - 84;
 
@@ -127,7 +127,7 @@ public class GuiMenu extends GuiScreen
 
         if ((playerList.size() <= 1) && (playerList.size() != 0))
         {
-            GL11.glBindTexture(3553, this.backgroundTexture);
+            GL11.glBindTexture(GL11.GL_TEXTURE_2D, this.backgroundTexture);
             drawTexturedModalRect(centerX + 13, centerY + 40, 141, 131, 115, 125);
 
             this.mc.renderEngine.resetBoundTexture();

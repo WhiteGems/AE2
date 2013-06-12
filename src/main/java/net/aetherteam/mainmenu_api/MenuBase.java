@@ -55,8 +55,8 @@ public class MenuBase extends GuiScreen
 
     public void drawJukeboxBackground(int i)
     {
-        GL11.glDisable(2896);
-        GL11.glDisable(2912);
+        GL11.glDisable(GL11.GL_LIGHTING);
+        GL11.glDisable(GL11.GL_FOG);
         Tessellator tessellator = Tessellator.instance;
 
         this.mc.renderEngine.bindTexture(getJukeboxBackgroundPath());
@@ -106,9 +106,9 @@ public class MenuBase extends GuiScreen
             this.menuButton.drawButton(this.mc, x, y);
 
             GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-            GL11.glEnable(3042);
-            GL11.glBlendFunc(770, 771);
-            GL11.glBindTexture(3553, this.jukeboxTexture);
+            GL11.glEnable(GL11.GL_BLEND);
+            GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+            GL11.glBindTexture(GL11.GL_TEXTURE_2D, this.jukeboxTexture);
 
             int centerX = width - width / 2 - 75;
             int centerY = height - height / 2 - 37;

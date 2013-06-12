@@ -282,9 +282,9 @@ public class PlayerBaseAetherClient extends PlayerBase
             this.sinage += 0.15F;
         }
 
-        if (this.sinage > 6.283186F)
+        if (this.sinage > ((float)Math.PI * 2F))
         {
-            this.sinage -= 6.283186F;
+            this.sinage -= ((float)Math.PI * 2F);
         }
 
         if ((wearingAccessory(AetherItems.SwettyPendant.itemID)) && (isBesideClimbableBlock()))

@@ -34,7 +34,7 @@ public class BlockAercloud extends BlockAether implements IAetherBlock
     private Icon bluecloud;
     private Icon goldencloud;
     private Icon greencloud;
-    private Icon stormcloud; 
+    private Icon stormcloud;
     public static final int bouncingMeta = 1;
     public static final int sinkingMeta = 2;
     public static final int randomMeta = 3;
@@ -370,27 +370,31 @@ public class BlockAercloud extends BlockAether implements IAetherBlock
     /**
      * From the specified side and block metadata retrieves the blocks texture. Args: side, metadata
      */
-    
+
     @Override
     @SideOnly(Side.CLIENT)
-	public Icon getIcon(int side, int meta)
-	{
 	
-    	switch(meta)
-    	{
-    	case 0:
-    		return this.coldcloud;
-    	case 1:
-    		return this.bluecloud;
-    	case 2:
-    		return this.goldencloud;
-    	case 3:
-    		return this.greencloud;
-    	case 4:
-    		return this.stormcloud;
+    public Icon getIcon(int side, int meta)
+    {
+        switch (meta)
+        {
+            case 0:
+                return this.coldcloud;
+
+            case 1:
+                return this.bluecloud;
+
+            case 2:
+                return this.goldencloud;
+
+            case 3:
+                return this.greencloud;
+
+            case 4:
+                return this.stormcloud;
         }
-    	
-    	if (meta == 5)
+
+        if (meta == 5)
         {
             switch (side)
             {
@@ -412,10 +416,10 @@ public class BlockAercloud extends BlockAether implements IAetherBlock
                 case 5:
                     return this.rightArrow;
             }
-        } 
-        
+        }
+
         return this.bluecloud;
-	} 
+    }
 
     /**
      * Called upon block activation (right click on the block.)
@@ -431,7 +435,7 @@ public class BlockAercloud extends BlockAether implements IAetherBlock
      * is the only chance you get to register icons.
      */
     @Override
-	@SideOnly(Side.CLIENT)
+    @SideOnly(Side.CLIENT)
     public void registerIcons(IconRegister ir)
     {
         this.frontTexture = ir.registerIcon("Aether:Purple Aercloud Front");

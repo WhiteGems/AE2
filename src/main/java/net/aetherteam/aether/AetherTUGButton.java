@@ -22,9 +22,9 @@ public class AetherTUGButton extends GuiButton
 
             GL11.glPushMatrix();
 
-            GL11.glEnable(3042);
-            GL11.glBlendFunc(770, 771);
 
+            GL11.glEnable(GL11.GL_BLEND);
+            GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
             Minecraft mc = Minecraft.getMinecraft();
             ScaledResolution scaledresolution = new ScaledResolution(mc.gameSettings, mc.displayWidth, mc.displayHeight);
             int width = scaledresolution.getScaledWidth();
@@ -50,8 +50,8 @@ public class AetherTUGButton extends GuiButton
             par1Minecraft.renderEngine.bindTexture("/net/aetherteam/aether/client/sprites/menu/tug.png");
             drawTexturedModalRect(0, 0, 0, 0, 195, 184);
 
-            GL11.glDisable(3042);
 
+            GL11.glDisable(GL11.GL_BLEND);
             GL11.glPopMatrix();
 
             this.field_82253_i = ((mouseX >= this.xPosition) && (mouseY >= this.yPosition) && (mouseX < this.xPosition + this.width) && (mouseY < this.yPosition + this.height));

@@ -51,7 +51,7 @@ public class GuiYSlider extends GuiButton
     public void drawButton(Minecraft par1Minecraft, int par2, int par3)
     {
         mouseDragged(par1Minecraft, par2, par3);
-        GL11.glDisable(3553);
+        GL11.glDisable(GL11.GL_TEXTURE_2D);
         drawGradientRect(this.xPosition, this.yPosition, this.xPosition + this.width, this.yPosition + this.height, -8947849, -8947849);
 
         this.field_82253_i = ((par2 >= this.xPosition) && (par3 >= this.yPosition + (int) (this.sliderValue * (this.height - 20))) && (par2 < this.xPosition + this.width) && (par3 < this.yPosition + 20 + (int) (this.sliderValue * (this.height - 20))));

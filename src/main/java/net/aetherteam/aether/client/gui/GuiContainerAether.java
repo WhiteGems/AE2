@@ -32,6 +32,7 @@ import net.minecraft.util.Icon;
 import net.minecraft.util.MathHelper;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL12;
 
 @SideOnly(Side.CLIENT)
 public abstract class GuiContainerAether extends GuiScreen
@@ -90,16 +91,16 @@ public abstract class GuiContainerAether extends GuiScreen
         int k = this.guiLeft;
         int l = this.guiTop;
         drawGuiContainerBackgroundLayer(par3, par1, par2);
-        GL11.glDisable(32826);
+        GL11.glDisable(GL12.GL_RESCALE_NORMAL);
         RenderHelper.disableStandardItemLighting();
-        GL11.glDisable(2896);
-        GL11.glDisable(2929);
+        GL11.glDisable(GL11.GL_LIGHTING);
+        GL11.glDisable(GL11.GL_DEPTH_TEST);
         super.drawScreen(par1, par2, par3);
         RenderHelper.enableGUIStandardItemLighting();
         GL11.glPushMatrix();
         GL11.glTranslatef(k, l, 0.0F);
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-        GL11.glEnable(32826);
+        GL11.glEnable(GL12.GL_RESCALE_NORMAL);
         this.theSlot = null;
         short short1 = 240;
         short short2 = 240;
@@ -114,13 +115,13 @@ public abstract class GuiContainerAether extends GuiScreen
             if (isMouseOverSlot(slot, par1, par2))
             {
                 this.theSlot = slot;
-                GL11.glDisable(2896);
-                GL11.glDisable(2929);
+                GL11.glDisable(GL11.GL_LIGHTING);
+                GL11.glDisable(GL11.GL_DEPTH_TEST);
                 int k1 = slot.xDisplayPosition;
                 int i1 = slot.yDisplayPosition;
                 drawGradientRect(k1, i1, k1 + 16, i1 + 16, -2130706433, -2130706433);
-                GL11.glEnable(2896);
-                GL11.glEnable(2929);
+                GL11.glEnable(GL11.GL_LIGHTING);
+                GL11.glEnable(GL11.GL_DEPTH_TEST);
             }
         }
 
@@ -177,8 +178,8 @@ public abstract class GuiContainerAether extends GuiScreen
             drawItemStackTooltip(itemstack1, par1, par2);
         }
 
-        GL11.glEnable(2896);
-        GL11.glEnable(2929);
+        GL11.glEnable(GL11.GL_LIGHTING);
+        GL11.glEnable(GL11.GL_DEPTH_TEST);
         RenderHelper.enableStandardItemLighting();
     }
 
@@ -220,10 +221,10 @@ public abstract class GuiContainerAether extends GuiScreen
     {
         if (!par1List.isEmpty())
         {
-            GL11.glDisable(32826);
+            GL11.glDisable(GL12.GL_RESCALE_NORMAL);
             RenderHelper.disableStandardItemLighting();
-            GL11.glDisable(2896);
-            GL11.glDisable(2929);
+            GL11.glDisable(GL11.GL_LIGHTING);
+            GL11.glDisable(GL11.GL_DEPTH_TEST);
             int k = 0;
             Iterator iterator = par1List.iterator();
 
@@ -287,10 +288,10 @@ public abstract class GuiContainerAether extends GuiScreen
 
             this.zLevel = 0.0F;
             itemRenderer.zLevel = 0.0F;
-            GL11.glEnable(2896);
-            GL11.glEnable(2929);
+            GL11.glEnable(GL11.GL_LIGHTING);
+            GL11.glEnable(GL11.GL_DEPTH_TEST);
             RenderHelper.enableStandardItemLighting();
-            GL11.glEnable(32826);
+            GL11.glEnable(GL12.GL_RESCALE_NORMAL);
         }
     }
 
@@ -354,10 +355,10 @@ public abstract class GuiContainerAether extends GuiScreen
 
             if (icon != null)
             {
-                GL11.glDisable(2896);
+                GL11.glDisable(GL11.GL_LIGHTING);
                 this.mc.renderEngine.bindTexture("/gui/items.png");
                 drawTexturedModelRectFromIcon(i, j, icon, 16, 16);
-                GL11.glEnable(2896);
+                GL11.glEnable(GL11.GL_LIGHTING);
                 flag1 = true;
             }
         }
@@ -369,7 +370,7 @@ public abstract class GuiContainerAether extends GuiScreen
                 drawRect(i, j, i + 16, j + 16, -2130706433);
             }
 
-            GL11.glEnable(2929);
+            GL11.glEnable(GL11.GL_DEPTH_TEST);
             itemRenderer.renderItemAndEffectIntoGUI(this.fontRenderer, this.mc.renderEngine, itemstack, i, j);
             itemRenderer.renderItemOverlayIntoGUI(this.fontRenderer, this.mc.renderEngine, itemstack, i, j, s);
         }

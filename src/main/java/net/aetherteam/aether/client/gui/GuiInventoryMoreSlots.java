@@ -26,6 +26,7 @@ import net.minecraft.stats.AchievementList;
 import net.minecraft.util.StatCollector;
 import net.minecraft.util.StringTranslate;
 import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL12;
 
 public class GuiInventoryMoreSlots extends GuiContainer
 {
@@ -76,8 +77,8 @@ public class GuiInventoryMoreSlots extends GuiContainer
         this.buttonList.clear();
         this.buttonList.add(new GuiButton(2, var5 - 20, var6, 20, 20, string.translateKey("?")));
         displayDebuffEffects();
-        GL11.glEnable(32826);
-        GL11.glEnable(2903);
+        GL11.glEnable(GL12.GL_RESCALE_NORMAL);
+        GL11.glEnable(GL11.GL_COLOR_MATERIAL);
         GL11.glPushMatrix();
         GL11.glTranslatef(var5 + 33, var6 + 75, 50.0F);
         float var7 = 30.0F;
@@ -104,7 +105,7 @@ public class GuiInventoryMoreSlots extends GuiContainer
         this.mc.thePlayer.rotationPitch = var10;
         GL11.glPopMatrix();
         RenderHelper.disableStandardItemLighting();
-        GL11.glDisable(32826);
+        GL11.glDisable(GL12.GL_RESCALE_NORMAL);
     }
 
     protected void actionPerformed(GuiButton var1)

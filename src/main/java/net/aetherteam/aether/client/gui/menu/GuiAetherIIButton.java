@@ -83,19 +83,19 @@ public class GuiAetherIIButton extends GuiButton
             return;
         }
 
-        GL11.glEnable(3042);
-        GL11.glBlendFunc(770, 771);
+        GL11.glEnable(GL11.GL_BLEND);
+        GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
 
         FontRenderer fontrenderer = minecraft.fontRenderer;
-        GL11.glBindTexture(3553, minecraft.renderEngine.getTexture("/net/aetherteam/aether/client/sprites/menu/aether2_buttons.png"));
+        GL11.glBindTexture(GL11.GL_TEXTURE_2D, minecraft.renderEngine.getTexture("/net/aetherteam/aether/client/sprites/menu/aether2_buttons.png"));
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
         boolean flag = (i >= this.xPosition) && (j >= this.yPosition) && (i < this.xPosition + this.width) && (j < this.yPosition + this.height);
         int k = getHoverState(flag);
         drawTexturedModalRect(this.xPosition + this.scrollHeight - 90, this.yPosition, 0, 46 + k * 20, this.width / 2, this.height);
         drawTexturedModalRect(this.xPosition + this.scrollHeight + this.width / 2 - 90, this.yPosition, 200 - this.width / 2, 46 + k * 20, this.width / 2, this.height);
         mouseDragged(minecraft, i, j);
+        GL11.glDisable(GL11.GL_BLEND);
 
-        GL11.glDisable(3042);
 
         minecraft.renderEngine.resetBoundTexture();
 

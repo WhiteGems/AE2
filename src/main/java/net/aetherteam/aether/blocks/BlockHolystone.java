@@ -45,14 +45,15 @@ public class BlockHolystone extends BlockAether implements IAetherBlock
     @SideOnly(Side.CLIENT)
     public Icon getIcon(int side, int meta)
     {
-    	switch(meta)
-    	{
-    	case 1:
-    		return this.holystone;
-    	case 3:
-    		return this.holystone;
-    	}
     	
+        switch (meta)
+        {
+            case 1:
+                return this.holystone;
+
+            case 3:
+                return this.holystone;
+        }
         return this.holystone;
     }
 
@@ -61,11 +62,11 @@ public class BlockHolystone extends BlockAether implements IAetherBlock
      * is the only chance you get to register icons.
      */
     @Override
-	@SideOnly(Side.CLIENT)
+    @SideOnly(Side.CLIENT)
     public void registerIcons(IconRegister ir)
     {
-    	holystone = ir.registerIcon("Aether:Holystone");
-    	holymossystone = ir.registerIcon("Aether:Mossy Holystone");
+        holystone = ir.registerIcon("Aether:Holystone");
+        holymossystone = ir.registerIcon("Aether:Mossy Holystone");
     }
 
     /**

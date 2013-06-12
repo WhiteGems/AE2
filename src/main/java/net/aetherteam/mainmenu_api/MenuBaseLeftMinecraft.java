@@ -325,20 +325,20 @@ public class MenuBaseLeftMinecraft extends MenuBase
     private void drawPanorama(int par1, int par2, float par3)
     {
         Tessellator tessellator = Tessellator.instance;
-        GL11.glMatrixMode(5889);
+        GL11.glMatrixMode(GL11.GL_PROJECTION);
         GL11.glPushMatrix();
         GL11.glLoadIdentity();
         GLU.gluPerspective(120.0F, 1.0F, 0.05F, 10.0F);
-        GL11.glMatrixMode(5888);
+        GL11.glMatrixMode(GL11.GL_MODELVIEW);
         GL11.glPushMatrix();
         GL11.glLoadIdentity();
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
         GL11.glRotatef(180.0F, 1.0F, 0.0F, 0.0F);
-        GL11.glEnable(3042);
-        GL11.glDisable(3008);
-        GL11.glDisable(2884);
+        GL11.glEnable(GL11.GL_BLEND);
+        GL11.glDisable(GL11.GL_ALPHA_TEST);
+        GL11.glDisable(GL11.GL_CULL_FACE);
         GL11.glDepthMask(false);
-        GL11.glBlendFunc(770, 771);
+        GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
         byte b0 = 8;
 
         for (int k = 0; k < b0 * b0; k++)
@@ -398,23 +398,23 @@ public class MenuBaseLeftMinecraft extends MenuBase
 
         tessellator.setTranslation(0.0D, 0.0D, 0.0D);
         GL11.glColorMask(true, true, true, true);
-        GL11.glMatrixMode(5889);
+        GL11.glMatrixMode(GL11.GL_PROJECTION);
         GL11.glPopMatrix();
-        GL11.glMatrixMode(5888);
+        GL11.glMatrixMode(GL11.GL_MODELVIEW);
         GL11.glPopMatrix();
         GL11.glDepthMask(true);
-        GL11.glEnable(2884);
-        GL11.glEnable(3008);
-        GL11.glEnable(2929);
+        GL11.glEnable(GL11.GL_CULL_FACE);
+        GL11.glEnable(GL11.GL_ALPHA_TEST);
+        GL11.glEnable(GL11.GL_DEPTH_TEST);
     }
 
     private void rotateAndBlurSkybox(float par1)
     {
-        GL11.glBindTexture(3553, this.viewportTexture);
+        GL11.glBindTexture(GL11.GL_TEXTURE_2D, this.viewportTexture);
         this.mc.renderEngine.resetBoundTexture();
-        GL11.glCopyTexSubImage2D(3553, 0, 0, 0, 0, 0, 256, 256);
-        GL11.glEnable(3042);
-        GL11.glBlendFunc(770, 771);
+        GL11.glCopyTexSubImage2D(GL11.GL_TEXTURE_2D, 0, 0, 0, 0, 0, 256, 256);
+        GL11.glEnable(GL11.GL_BLEND);
+        GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
         GL11.glColorMask(true, true, true, false);
         Tessellator tessellator = Tessellator.instance;
         tessellator.startDrawingQuads();
@@ -441,8 +441,8 @@ public class MenuBaseLeftMinecraft extends MenuBase
     {
         GL11.glViewport(0, 0, 256, 256);
         drawPanorama(par1, par2, par3);
-        GL11.glDisable(3553);
-        GL11.glEnable(3553);
+        GL11.glDisable(GL11.GL_TEXTURE_2D);
+        GL11.glEnable(GL11.GL_TEXTURE_2D);
         rotateAndBlurSkybox(par3);
         rotateAndBlurSkybox(par3);
         rotateAndBlurSkybox(par3);
@@ -457,8 +457,8 @@ public class MenuBaseLeftMinecraft extends MenuBase
         float f1 = this.width > this.height ? 120.0F / this.width : 120.0F / this.height;
         float f2 = this.height * f1 / 256.0F;
         float f3 = this.width * f1 / 256.0F;
-        GL11.glTexParameteri(3553, 10241, 9729);
-        GL11.glTexParameteri(3553, 10240, 9729);
+        GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MIN_FILTER, GL11.GL_LINEAR);
+        GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MAG_FILTER, GL11.GL_LINEAR);
         tessellator.setColorRGBA_F(1.0F, 1.0F, 1.0F, 1.0F);
         int k = this.width;
         int l = this.height;
@@ -508,7 +508,7 @@ public class MenuBaseLeftMinecraft extends MenuBase
         GL11.glPushMatrix();
         GL11.glTranslatef(215.0F, 50.0F, 0.0F);
         GL11.glRotatef(-20.0F, 0.0F, 0.0F, 1.0F);
-        float f1 = 1.4F - MathHelper.abs(MathHelper.sin((float) (Minecraft.getSystemTime() % 1000L) / 1000.0F * 3.141593F * 2.0F) * 0.1F);
+        float f1 = 1.4F - MathHelper.abs(MathHelper.sin((float) (Minecraft.getSystemTime() % 1000L) / 1000.0F * (float)Math.PI * 2.0F) * 0.1F);
         f1 = f1 * 100.0F / (this.fontRenderer.getStringWidth(this.splashText) + 32);
         GL11.glScalef(f1, f1, f1);
         drawCenteredString(this.fontRenderer, this.splashText, 0, -8, 16776960);

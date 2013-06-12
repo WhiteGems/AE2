@@ -64,7 +64,7 @@ public class PartyView extends GuiScreen
     public void drawScreen(int x, int y, float partialTick)
     {
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-        GL11.glBindTexture(3553, this.backgroundTexture);
+        GL11.glBindTexture(GL11.GL_TEXTURE_2D, this.backgroundTexture);
 
         int centerX = this.xParty - 70;
         int centerY = this.yParty - 84;
@@ -107,15 +107,15 @@ public class PartyView extends GuiScreen
 
         int icon = this.mc.renderEngine.getTextureForDownloadableImage(p.skinUrl, "/mob/char.png");
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-        GL11.glBindTexture(3553, icon);
-        GL11.glEnable(3553);
+        GL11.glBindTexture(GL11.GL_TEXTURE_2D, icon);
+        GL11.glEnable(GL11.GL_TEXTURE_2D);
 
         float u = 0.125F;
         float v = 0.25F;
         float u1 = 0.25F;
         float v1 = 0.5F;
+        GL11.glBegin(GL11.GL_QUADS);
 
-        GL11.glBegin(7);
 
         GL11.glTexCoord2f(u, v);
         GL11.glVertex2f(x + 2, y + 2);

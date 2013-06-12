@@ -33,6 +33,7 @@ import net.minecraft.src.RenderPlayerAPI;
 import net.minecraft.src.RenderPlayerBase;
 import net.minecraft.util.MathHelper;
 import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL12;
 
 public class RenderPlayerBaseAether extends RenderPlayerBase
 {
@@ -55,15 +56,15 @@ public class RenderPlayerBaseAether extends RenderPlayerBase
         if ((AetherRanks.getRankFromMember(entityplayer.username).equals(AetherRanks.DEVELOPER)) || (AetherRanks.getRankFromMember(entityplayer.username).equals(AetherRanks.HELPER)))
         {
             GL11.glPushMatrix();
-            GL11.glDisable(2896);
+            GL11.glDisable(GL11.GL_LIGHTING);
             GL11.glScalef(1.02171F, 1.0271F, 1.0271F);
-            GL11.glEnable(3042);
+            GL11.glEnable(GL11.GL_BLEND);
             GL11.glDepthMask(true);
             float var4 = 1.0F;
-            GL11.glDisable(3042);
-            GL11.glBlendFunc(1, 1);
+            GL11.glDisable(GL11.GL_BLEND);
+            GL11.glBlendFunc(GL11.GL_ONE, GL11.GL_ONE);
             renderCape(entityplayer, f);
-            GL11.glEnable(2896);
+            GL11.glEnable(GL11.GL_LIGHTING);
             GL11.glDepthMask(false);
             GL11.glPopMatrix();
         }
@@ -78,15 +79,15 @@ public class RenderPlayerBaseAether extends RenderPlayerBase
 
     public void renderMount(Entity entity, double x, double y, double z, float rotationYaw, float partialTickTime)
     {
-        GL11.glEnable(2903);
+        GL11.glEnable(GL11.GL_COLOR_MATERIAL);
         GL11.glPushMatrix();
 
         RenderManager.instance.renderEntityWithPosYaw(entity, x, y, z, rotationYaw, partialTickTime);
 
         GL11.glPopMatrix();
-        GL11.glDisable(32826);
+        GL11.glDisable(GL12.GL_RESCALE_NORMAL);
         OpenGlHelper.setActiveTexture(OpenGlHelper.lightmapTexUnit);
-        GL11.glDisable(3553);
+        GL11.glDisable(GL11.GL_TEXTURE_2D);
         OpenGlHelper.setActiveTexture(OpenGlHelper.defaultTexUnit);
     }
 
@@ -104,13 +105,13 @@ public class RenderPlayerBaseAether extends RenderPlayerBase
         if (AetherRanks.getRankFromMember(player.username).equals(AetherRanks.DEVELOPER))
         {
             GL11.glPushMatrix();
-            GL11.glDisable(2896);
+            GL11.glDisable(GL11.GL_LIGHTING);
             GL11.glScalef(0.921F, 0.921F, 0.921F);
-            GL11.glEnable(3042);
+            GL11.glEnable(GL11.GL_BLEND);
             GL11.glDepthMask(true);
             float var4 = 1.0F;
-            GL11.glEnable(3042);
-            GL11.glBlendFunc(1, 1);
+            GL11.glEnable(GL11.GL_BLEND);
+            GL11.glBlendFunc(GL11.GL_ONE, GL11.GL_ONE);
             GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 
             this.renderPlayer.localLoadDownloadableImageTexture("http://skins.minecraft.net/MinecraftSkins/" + player.username + ".png", "/mob/char.png");
@@ -125,8 +126,8 @@ public class RenderPlayerBaseAether extends RenderPlayerBase
             GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
             GL11.glColor4f(1.0F, 1.0F, 1.0F, var4);
             GL11.glDepthMask(false);
-            GL11.glDisable(3042);
-            GL11.glEnable(2896);
+            GL11.glDisable(GL11.GL_BLEND);
+            GL11.glEnable(GL11.GL_LIGHTING);
             GL11.glPopMatrix();
         }
     }
@@ -218,8 +219,8 @@ public class RenderPlayerBaseAether extends RenderPlayerBase
             double d1 = entityplayer.field_71096_bN + (entityplayer.field_71095_bQ - entityplayer.field_71096_bN) * f - (entityplayer.prevPosY + (entityplayer.posY - entityplayer.prevPosY) * f);
             double d2 = entityplayer.field_71097_bO + (entityplayer.field_71085_bR - entityplayer.field_71097_bO) * f - (entityplayer.prevPosZ + (entityplayer.posZ - entityplayer.prevPosZ) * f);
             float f8 = entityplayer.prevRenderYawOffset + (entityplayer.renderYawOffset - entityplayer.prevRenderYawOffset) * f;
-            double d3 = MathHelper.sin(f8 * 3.141593F / 180.0F);
-            double d4 = -MathHelper.cos(f8 * 3.141593F / 180.0F);
+            double d3 = MathHelper.sin(f8 * (float)Math.PI / 180.0F);
+            double d4 = -MathHelper.cos(f8 * (float)Math.PI / 180.0F);
             float f9 = (float) d1 * 10.0F;
             if (f9 < -6.0F)
             {
@@ -287,7 +288,7 @@ public class RenderPlayerBaseAether extends RenderPlayerBase
             return;
         }
         GL11.glPushMatrix();
-        GL11.glEnable(2884);
+        GL11.glEnable(GL11.GL_CULL_FACE);
         this.modelMisc.onGround = this.renderPlayer.localRenderSwingProgress(player, f1);
         this.modelMisc.isRiding = player.isRiding();
         this.modelWings.onGround = this.renderPlayer.localRenderSwingProgress(player, f1);
@@ -301,7 +302,7 @@ public class RenderPlayerBaseAether extends RenderPlayerBase
             float f5 = this.renderPlayer.realHandleRotationFloat(player, f1);
             this.renderPlayer.realRotateCorpse(player, f5, f2, f1);
             float f6 = 0.0625F;
-            GL11.glEnable(32826);
+            GL11.glEnable(GL12.GL_RESCALE_NORMAL);
             GL11.glScalef(-1.0F, -1.0F, 1.0F);
             this.renderPlayer.realPreRenderCallback(player, f1);
             GL11.glTranslatef(0.0F, -24.0F * f6 - 0.007813F, 0.0F);
@@ -312,7 +313,7 @@ public class RenderPlayerBaseAether extends RenderPlayerBase
                 f7 = 1.0F;
             }
 
-            GL11.glEnable(3008);
+            GL11.glEnable(GL11.GL_ALPHA_TEST);
 
             this.modelMisc.setRotationAngles(f8, f7, f5, f3 - f2, f4, f6, player);
             this.modelWings.setRotationAngles(f8, f7, f5, f3 - f2, f4, f6, player);
@@ -355,13 +356,13 @@ public class RenderPlayerBaseAether extends RenderPlayerBase
             if ((AetherRanks.getRankFromMember(player.username).equals(AetherRanks.DEVELOPER)) || (AetherRanks.getRankFromMember(player.username).equals(AetherRanks.HELPER)))
             {
                 GL11.glPushMatrix();
-                GL11.glDisable(2896);
+                GL11.glDisable(GL11.GL_LIGHTING);
                 GL11.glScalef(0.951F, 0.951F, 0.951F);
-                GL11.glEnable(3042);
+                GL11.glEnable(GL11.GL_BLEND);
                 GL11.glDepthMask(true);
                 float var4 = 1.0F;
-                GL11.glEnable(3042);
-                GL11.glBlendFunc(1, 1);
+                GL11.glEnable(GL11.GL_BLEND);
+                GL11.glBlendFunc(GL11.GL_ONE, GL11.GL_ONE);
 
                 this.renderPlayer.localLoadDownloadableImageTexture("http://skins.minecraft.net/MinecraftSkins/" + player.username + ".png", "/mob/char.png");
                 this.modelMisc.bipedBody.render(f6);
@@ -382,8 +383,8 @@ public class RenderPlayerBaseAether extends RenderPlayerBase
                 GL11.glPopMatrix();
             }
 
-            GL11.glDisable(3042);
-            GL11.glDisable(32826);
+            GL11.glDisable(GL11.GL_BLEND);
+            GL11.glDisable(GL12.GL_RESCALE_NORMAL);
         } catch (Exception exception)
         {
             exception.printStackTrace();

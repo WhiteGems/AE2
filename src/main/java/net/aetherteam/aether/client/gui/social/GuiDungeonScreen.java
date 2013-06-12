@@ -39,7 +39,7 @@ public class GuiDungeonScreen extends GuiScreen
     public void drawScreen(int par1, int par2, float par3)
     {
         drawBackground(0);
-        GL11.glBindTexture(3553, this.background);
+        GL11.glBindTexture(GL11.GL_TEXTURE_2D, this.background);
         drawTexturedModalRect(14, 14, 7, 7, 162, 152);
         drawParty();
         this.mc.renderEngine.resetBoundTexture();
@@ -59,7 +59,7 @@ public class GuiDungeonScreen extends GuiScreen
 
     public void drawParty()
     {
-        GL11.glBindTexture(3553, this.background);
+        GL11.glBindTexture(GL11.GL_TEXTURE_2D, this.background);
         Party party = PartyController.instance().getParty(this.mc.thePlayer);
         ArrayList<PartyMember> members = party != null ? party.getMembers() : null;
         int count = 0;
@@ -96,8 +96,8 @@ public class GuiDungeonScreen extends GuiScreen
         int icon = this.mc.renderEngine.getTextureForDownloadableImage("http://skins.minecraft.net/MinecraftSkins/" + StringUtils.stripControlCodes(playername) + ".png", "/mob/char.png");
 
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-        GL11.glBindTexture(3553, icon);
-        GL11.glEnable(3553);
+        GL11.glBindTexture(GL11.GL_TEXTURE_2D, icon);
+        GL11.glEnable(GL11.GL_TEXTURE_2D);
 
         GL11.glPushMatrix();
         float u = 0.125F;
@@ -105,7 +105,7 @@ public class GuiDungeonScreen extends GuiScreen
         float u1 = 0.25F;
         float v1 = 0.5F;
         GL11.glScalef(0.8F, 0.8F, 1.0F);
-        GL11.glBegin(7);
+        GL11.glBegin(GL11.GL_QUADS);
         GL11.glTexCoord2f(u, v);
         GL11.glVertex2f(x + 2, y + 2);
         GL11.glTexCoord2f(u, v1);
@@ -120,8 +120,8 @@ public class GuiDungeonScreen extends GuiScreen
 
     public void drawBackground(int par1)
     {
-        GL11.glDisable(2896);
-        GL11.glDisable(2912);
+        GL11.glDisable(GL11.GL_LIGHTING);
+        GL11.glDisable(GL11.GL_FOG);
         Tessellator tessellator = Tessellator.instance;
         this.mc.renderEngine.bindTexture("/net/aetherteam/aether/client/sprites/gui/loadingScreenBackground.png");
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);

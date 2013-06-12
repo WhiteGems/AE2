@@ -92,7 +92,7 @@ public class GuiOptionsNotification extends GuiScreen
 
         drawDefaultBackground();
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-        GL11.glBindTexture(3553, this.backgroundTexture);
+        GL11.glBindTexture(GL11.GL_TEXTURE_2D, this.backgroundTexture);
         int centerX = this.xParty - 70;
         int centerY = this.yParty - 84;
 
@@ -118,7 +118,7 @@ public class GuiOptionsNotification extends GuiScreen
             drawString(this.fontRenderer, title, centerX + 70 - this.fontRenderer.getStringWidth(title) / 2, centerY + 5, 16777215);
         } else
         {
-            GL11.glBindTexture(3553, this.backgroundTexture);
+            GL11.glBindTexture(GL11.GL_TEXTURE_2D, this.backgroundTexture);
             drawTexturedModalRect(centerX + 13, centerY + 40, 141, 131, 115, 125);
 
             this.mc.renderEngine.resetBoundTexture();

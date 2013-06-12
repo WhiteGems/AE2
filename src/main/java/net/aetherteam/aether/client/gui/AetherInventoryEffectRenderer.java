@@ -57,7 +57,7 @@ public abstract class AetherInventoryEffectRenderer extends GuiContainerAether
         if (!var4.isEmpty())
         {
             GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-            GL11.glDisable(2896);
+            GL11.glDisable(GL11.GL_LIGHTING);
             int var6 = 33;
 
             if (var4.size() > 5)

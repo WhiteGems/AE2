@@ -166,9 +166,9 @@ public class MenuBaseLoaderWithSlider extends GuiScreen
         drawBackground(0);
 
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 0.7F);
-        GL11.glEnable(3042);
-        GL11.glBlendFunc(770, 771);
-        GL11.glBindTexture(3553, this.backgroundTexture);
+        GL11.glEnable(GL11.GL_BLEND);
+        GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+        GL11.glBindTexture(GL11.GL_TEXTURE_2D, this.backgroundTexture);
         int dmsy = Mouse.getDWheel();
         this.sbar.sliderValue -= (this.totalHeight > 103 ? dmsy : 0) / 1000.0F;
         if (this.sbar.sliderValue > 1.0F) this.sbar.sliderValue = 1.0F;
@@ -182,7 +182,7 @@ public class MenuBaseLoaderWithSlider extends GuiScreen
         int slotW = 100;
         int slotH = 20;
         int gutter = 2;
-        GL11.glEnable(3089);
+        GL11.glEnable(GL11.GL_SCISSOR_TEST);
         GL11.glScissor((centerX + 14) * sr.getScaleFactor(), (centerY + 35) * sr.getScaleFactor(), slotW * sr.getScaleFactor(), 103 * sr.getScaleFactor());
         GL11.glPushMatrix();
 
@@ -233,7 +233,7 @@ public class MenuBaseLoaderWithSlider extends GuiScreen
         }
 
         GL11.glPopMatrix();
-        GL11.glDisable(3089);
+        GL11.glDisable(GL11.GL_SCISSOR_TEST);
 
         this.descriptionField.drawTextBox();
 
@@ -262,8 +262,8 @@ public class MenuBaseLoaderWithSlider extends GuiScreen
 
     public void drawBackground(int i)
     {
-        GL11.glDisable(2896);
-        GL11.glDisable(2912);
+        GL11.glDisable(GL11.GL_LIGHTING);
+        GL11.glDisable(GL11.GL_FOG);
         Tessellator tessellator = Tessellator.instance;
 
         this.mc.renderEngine.bindTexture("/net/aetherteam/mainmenu_api/icons/dirt.png");
