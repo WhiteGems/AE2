@@ -218,7 +218,7 @@ public class GuiNotificationList extends GuiScreen
         }
 
         this.mc.renderEngine.resetBoundTexture();
-        drawString(this.fontRenderer, "Notification List", centerX + 70 - this.fontRenderer.getStringWidth("Notification List") / 2, centerY + 10, 16777215);
+        drawString(this.fontRenderer, "消息列表", centerX + 70 - this.fontRenderer.getStringWidth("消息列表") / 2, centerY + 10, 16777215);
         if (this.notificationSlots.size() == 0)
         {
             GL11.glPushMatrix();
@@ -236,19 +236,19 @@ public class GuiNotificationList extends GuiScreen
             GL11.glPopMatrix();
             this.mc.renderEngine.resetBoundTexture();
 
-            String warningLabel = "There are no notifications to display at this time.";
+            String warningLabel = "没有要在这个时候显示的消息.";
 
             drawString(this.fontRenderer, warningLabel, centerX + 70 - this.fontRenderer.getStringWidth(warningLabel) / 2, (int) (this.yParty - (this.hParty - 241) / 2 * scaleFactorY), 16777215);
         }
 
-        this.joinButton = new GuiButton(1, this.xParty + 3, this.yParty + 85 - 28, 58, 20, "View");
+        this.joinButton = new GuiButton(1, this.xParty + 3, this.yParty + 85 - 28, 58, 20, "查看");
 
         if ((this.selectedNotificationSlot != null) && (this.slotIsSelected))
         {
             this.joinButton.enabled = true;
         } else this.joinButton.enabled = false;
 
-        this.buttonList.add(new GuiButton(0, this.xParty - 60, this.yParty + 85 - 28, 58, 20, "Back"));
+        this.buttonList.add(new GuiButton(0, this.xParty - 60, this.yParty + 85 - 28, 58, 20, "返回"));
         this.buttonList.add(this.joinButton);
 
         super.drawScreen(x, y, partialTick);

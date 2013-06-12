@@ -17,9 +17,9 @@ import org.lwjgl.opengl.GL11;
 
 public class GuiPlayerRequestSlot extends Gui
 {
-    protected static final String AVAILABLE_TEXT = "AVAILABLE";
-    protected static final String INPARTY_TEXT = "ALREADY IN PARTY";
-    protected static final String PENDING_TEXT = "REQUEST PENDING";
+    protected static final String AVAILABLE_TEXT = "可用";
+    protected static final String INPARTY_TEXT = "已加入公会";
+    protected static final String PENDING_TEXT = "请求审理中";
     private static final int AVAILABLE_COLOUR = 6750054;
     private static final int INPARTY_COLOUR = 16711680;
     private static final int PENDING_COLOUR = 16756516;
@@ -113,15 +113,15 @@ public class GuiPlayerRequestSlot extends Gui
 
         if (inParty)
         {
-            subText = "ALREADY IN PARTY";
+            subText = "已加入公会";
             textColour = 16711680;
         } else if (pending)
         {
-            subText = "REQUEST PENDING";
+            subText = "请求审理中";
             textColour = 16756516;
         } else
         {
-            subText = "AVAILABLE";
+            subText = "可用";
             textColour = 6750054;
         }
 

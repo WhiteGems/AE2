@@ -9,7 +9,7 @@ public class DungeonRequestContents extends NotificationContents
 {
     public String getTitle(Notification notification)
     {
-        return "§r§n" + notification.getTypeName() + "§r - " + new StringBuilder().append("§r§ofrom ").append(notification.getSenderName()).toString();
+        return "§r§n" + notification.getTypeName() + "§r - " + new StringBuilder().append("§r§o来自于 ").append(notification.getSenderName()).toString();
     }
 
     public String getDescription(Notification notification)
@@ -21,10 +21,10 @@ public class DungeonRequestContents extends NotificationContents
 
         if (party != null)
         {
-            description = "Would you like to raid a dungeon with us?" + " My party is called " + new StringBuilder().append('"').append(party.getName()).append('"').toString() + ". WARNING: Dungeons can be a very dangerous place, resulting in the loss of precious items.";
+            description = "你想和我们一起入侵地牢吗?" + " 我的公会是 " + new StringBuilder().append('"').append(party.getName()).append('"').toString() + ". 警告: 地牢是一个非常危险的地方, 注意贵重物品的丢失.";
         } else
         {
-            description = "Sorry, but I am no longer in a party. You can deny this dungeon raid request.";
+            description = "很抱歉, 我已退出公会. 你可以拒绝此请求.";
         }
 
         return description;
