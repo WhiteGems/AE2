@@ -380,7 +380,7 @@ public class EntityFireMonster extends EntityFlying implements IAetherBoss
                 this.chatCount = 100;
             } else if (this.chatLog == 5)
             {
-                this.chatLine("\u00a7c我是太阳神, 代表着Aether永恒的太阳");
+                this.chatLine("\u00a7c我是太阳神, 代表着以太世界永恒的太阳");
                 this.chatLine("\u00a7c只要我还活着, 这个世界的太阳永远不会落下");
                 this.chatLog = 6;
                 this.chatCount = 100;
