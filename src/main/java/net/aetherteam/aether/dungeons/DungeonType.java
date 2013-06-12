@@ -2,7 +2,7 @@ package net.aetherteam.aether.dungeons;
 
 public enum DungeonType
 {
-    BRONZE("Slider's Labyrinth", 6), SILVER("Valkyrie Temple", 6), GOLD("Fortress of the Sun Spirit", 6);
+    BRONZE("滑行者迷宫", 6), SILVER("女武神殿堂", 6), GOLD("太阳神堡垒", 6);
 
     String dungeonName;
     int keepCap;
