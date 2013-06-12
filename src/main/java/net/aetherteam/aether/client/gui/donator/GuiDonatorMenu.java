@@ -136,19 +136,19 @@ public class GuiDonatorMenu extends GuiScreen
             ((GuiButton) this.buttonList.get(1)).enabled = false;
             ((GuiButton) this.buttonList.get(2)).enabled = false;
 
-            text[0] = "你并非权限者.";
+            text[0] = "你并非权限者";
             text[1] = "该菜单用于激活";
-            text[2] = "捐助者的特殊功能, ";
-            text[3] = "这些功能不会影响实际游戏.";
+            text[2] = "捐助者的特殊功能";
+            text[3] = "这些功能不会影响实际游戏";
         } else
         {
             ((GuiButton) this.buttonList.get(1)).enabled = true;
             ((GuiButton) this.buttonList.get(2)).enabled = true;
 
-            text[0] = ("亲爱的" + this.player.username + ",");
+            text[0] = ("亲爱的" + this.player.username);
             text[1] = "我们无比感谢您的";
             text[2] = "慷慨捐助, 你将拥有";
-            text[3] = "独特的披风和恐鸟皮肤.";
+            text[3] = "独特的披风和恐鸟皮肤";
         }
 
         super.drawScreen(x, y, partialTick);

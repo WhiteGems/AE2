@@ -73,7 +73,7 @@ public class GuiCreateParty extends GuiScreen
         updateScreen();
         this.buttonList.clear();
 
-        this.typeButton = new GuiButton(1, this.partyX - 60, this.partyY - 16 - 28, 120, 20, "Type: " + (String) this.partyType.get(this.typeIndex));
+        this.typeButton = new GuiButton(1, this.partyX - 60, this.partyY - 16 - 28, 120, 20, "类型: " + (String) this.partyType.get(this.typeIndex));
         this.finishButton = new GuiButton(2, this.partyX - 60, this.partyY + 6 - 28, 120, 20, "建立公会");
         this.backButton = new GuiButton(0, this.partyX - 60, this.partyY + 81 - 28, 120, 20, "返回");
 
@@ -123,7 +123,7 @@ public class GuiCreateParty extends GuiScreen
         {
             this.typeIndex = 0;
         }
-        this.typeButton = new GuiButton(1, this.partyX - 60, this.partyY - 16 - 28, 120, 20, "Type: " + (String) this.partyType.get(this.typeIndex));
+        this.typeButton = new GuiButton(1, this.partyX - 60, this.partyY - 16 - 28, 120, 20, "类型: " + (String) this.partyType.get(this.typeIndex));
         this.finishButton = new GuiButton(2, this.partyX - 60, this.partyY + 6 - 28, 120, 20, "建立公会");
 
         if (this.partyName.isEmpty())
@@ -145,7 +145,7 @@ public class GuiCreateParty extends GuiScreen
         GL11.glBindTexture(3553, this.backgroundTexture);
 
         this.mc.renderEngine.resetBoundTexture();
-        drawString(this.fontRenderer, "输入公会名称", centerX + 68 - this.fontRenderer.getStringWidth("Insert Party Name") / 2, centerY + 5, 16777215);
+        drawString(this.fontRenderer, "输入公会名称", centerX + 68 - this.fontRenderer.getStringWidth("输入公会名称") / 2, centerY + 5, 16777215);
 
         this.partyNameField.drawTextBox();
 

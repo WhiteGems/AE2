@@ -105,15 +105,15 @@ public class GuiOptionsNotification extends GuiScreen
 
         if (online)
         {
-            String showNotificationString = AetherOptions.getShowNotifications() ? "真" : "假";
+            String showNotificationString = AetherOptions.getShowNotifications() ? "是" : "否";
 
-            GuiButton showNotification = new GuiButton(1, this.xParty - 60, this.yParty - 36 - 28, 120, 20, "显示收信: " + showNotificationString);
+            GuiButton showNotification = new GuiButton(1, this.xParty - 60, this.yParty - 36 - 28, 120, 20, "显示收到的信息: " + showNotificationString);
 
             this.buttonList.add(showNotification);
 
             this.mc.renderEngine.resetBoundTexture();
 
-            String title = "通告";
+            String title = "消息";
 
             drawString(this.fontRenderer, title, centerX + 70 - this.fontRenderer.getStringWidth(title) / 2, centerY + 5, 16777215);
         } else
@@ -122,8 +122,8 @@ public class GuiOptionsNotification extends GuiScreen
             drawTexturedModalRect(centerX + 13, centerY + 40, 141, 131, 115, 125);
 
             this.mc.renderEngine.resetBoundTexture();
-            drawString(this.fontRenderer, "孤独以终老:(", centerX + 26, centerY + 10, 15658734);
-            drawString(this.fontRenderer, "(单机游戏)", centerX + 31, centerY + 22, 15658734);
+            drawString(this.fontRenderer, "注定孤独一生 :(", centerX + 26, centerY + 10, 15658734);
+            drawString(this.fontRenderer, "(单人游戏)", centerX + 31, centerY + 22, 15658734);
         }
 
         this.buttonList.add(new GuiButton(0, this.xParty - 60, this.yParty + 81 - 28, 120, 20, online ? "返回" : "退出"));
