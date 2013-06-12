@@ -2,6 +2,7 @@ package net.aetherteam.aether;
 
 import java.io.*;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 public class AetherNameGen
@@ -30,7 +31,7 @@ public class AetherNameGen
         if (temp != null) valkNameSuffix = temp;
     }
     private static String[] loadNames(String resname){
-        ArrayList<String> result = new ArrayList();
+        List<String> result = new ArrayList();
         InputStreamReader reader;
         try
         {
@@ -45,8 +46,9 @@ public class AetherNameGen
         } catch (IOException e)
         {
             e.printStackTrace();
+            return null;
         }
-        return (String[]) result.toArray();
+        return result.toArray(new String[0]);
     }
     public static String gen()
     {
@@ -63,8 +65,3 @@ public class AetherNameGen
         return result;
     }
 }
-
-/* Location:           D:\Dev\Mc\forge_orl\mcp\jars\bin\aether.jar
- * Qualified Name:     net.aetherteam.aether.AetherNameGen
- * JD-Core Version:    0.6.2
- */
