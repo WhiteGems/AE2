@@ -1022,7 +1022,7 @@ public class EntitySlider extends EntityBossMob implements IAetherBoss
             {
                 if (!(var4.getItem() instanceof ItemPickaxe) && !(var4.getItem() instanceof ItemTool))
                 {
-                    this.chatItUp(var3, "Hmm. It\'s a rock-solid block. A " + var4.getItem().getItemDisplayName(var4) + " wouldn\'t work on this.");
+                    this.chatItUp(var3, "嗯~，一个石头一样的怪家伙。用" + var4.getItem().getItemDisplayName(var4) + "估计对付不了这玩意儿！");
                     return false;
                 } else
                 {
