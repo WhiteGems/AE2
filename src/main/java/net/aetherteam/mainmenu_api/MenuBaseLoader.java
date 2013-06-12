@@ -60,7 +60,7 @@ public class MenuBaseLoader extends GuiScreen
         updateScreen();
         this.buttonList.clear();
 
-        this.launchMenu = new GuiButton(0, this.x2 - 35, this.y2 + 85 - 28, 72, 20, "Launch Menu");
+        this.launchMenu = new GuiButton(0, this.x2 - 35, this.y2 + 85 - 28, 72, 20, "启动菜单");
 
         this.launchMenu.enabled = false;
 
