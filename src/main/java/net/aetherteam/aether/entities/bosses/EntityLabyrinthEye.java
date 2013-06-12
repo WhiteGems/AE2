@@ -310,7 +310,7 @@ public class EntityLabyrinthEye extends EntityMiniBoss implements IAetherBoss, I
         {
             if (var4 instanceof EntityPlayer && ((EntityPlayer) var4).getCurrentEquippedItem() != null)
             {
-                this.chatItUp((EntityPlayer) var4, "Better switch to a sword, my " + ((EntityPlayer) var4).getCurrentEquippedItem().getItem().getItemDisplayName(((EntityPlayer) var4).getCurrentEquippedItem()) + " doesn\'t seem to affect it.");
+                this.chatItUp((EntityPlayer) var4, "也许该换成剑来攻击，我的" + ((EntityPlayer) var4).getCurrentEquippedItem().getItem().getItemDisplayName(((EntityPlayer) var4).getCurrentEquippedItem()) + "对付不了这玩意儿！");
                 this.chatTime = 60;
             }
 
