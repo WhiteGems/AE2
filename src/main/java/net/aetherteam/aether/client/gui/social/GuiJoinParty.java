@@ -3,21 +3,15 @@ package net.aetherteam.aether.client.gui.social;
 import cpw.mods.fml.client.FMLClientHandler;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import net.aetherteam.aether.party.Party;
 import net.aetherteam.aether.party.PartyController;
 import net.aetherteam.aether.party.PartyType;
 import net.aetherteam.aether.party.members.PartyMember;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.audio.SoundManager;
-import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.ScaledResolution;
-import net.minecraft.client.renderer.RenderEngine;
-import net.minecraft.client.settings.GameSettings;
-import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.entity.player.EntityPlayer;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
@@ -91,7 +85,7 @@ public class GuiJoinParty extends GuiScreen
 
                 if ((partySlot.mousePressed(this.mc, par1, y)) && (par2 < this.yParty + 50))
                 {
-                    if (partySlot.party.getType() != PartyType.打开)
+                    if (partySlot.party.getType() != PartyType.OPEN)
                     {
                         this.mc.sndManager.playSoundFX("random.click", 1.0F, 1.5F);
                         return;
@@ -156,7 +150,7 @@ public class GuiJoinParty extends GuiScreen
 
         for (Party party : properList)
         {
-            if (party.getType() != PartyType.私人)
+            if (party.getType() != PartyType.PRIVATE)
             {
                 partyList.add(party);
             }
@@ -168,7 +162,7 @@ public class GuiJoinParty extends GuiScreen
             this.slotsCreated = false;
         }
 
-        if ((this.selectedPartySlot != null) && (this.selectedPartySlot.party.getType() != PartyType.打开))
+        if ((this.selectedPartySlot != null) && (this.selectedPartySlot.party.getType() != PartyType.OPEN))
         {
             this.selectedPartySlot.selected = false;
             this.slotIsSelected = false;
@@ -206,7 +200,7 @@ public class GuiJoinParty extends GuiScreen
         {
             for (int i = 0; i < partyList.size(); i++)
             {
-                if (((Party) partyList.get(i)).getType() != PartyType.私人)
+                if (((Party) partyList.get(i)).getType() != PartyType.PRIVATE)
                 {
                     this.partySlots.add(new GuiPartySlot((Party) partyList.get(i), this.partySlots.size(), centerX + 15, centerY + this.totalHeight + 30, slotW, slotH));
 
@@ -221,7 +215,7 @@ public class GuiJoinParty extends GuiScreen
 
         for (int i = 0; i < this.partySlots.size(); i++)
         {
-            if (((GuiPartySlot) this.partySlots.get(i)).party.getType() != PartyType.私人)
+            if (((GuiPartySlot) this.partySlots.get(i)).party.getType() != PartyType.PRIVATE)
             {
                 showNoParties = false;
 

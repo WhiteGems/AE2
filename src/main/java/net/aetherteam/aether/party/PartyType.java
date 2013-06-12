@@ -4,13 +4,15 @@ import java.io.Serializable;
 
 public enum PartyType implements Serializable
 {
-    打开(6750054), 关闭(16711680), 私人(0);
+    OPEN(6750054, "公开"), CLOSE(16711680, "关闭"), PRIVATE(0, "私有");
 
     public int displayColor;
+    public transient String name;
 
-    private PartyType(int displayColor)
+    private PartyType(int displayColor, String name)
     {
         this.displayColor = displayColor;
+        this.name = name;
     }
 
     public int getDisplayColor()
@@ -22,7 +24,7 @@ public enum PartyType implements Serializable
     {
         for (PartyType type : values())
         {
-            if (type.name().equalsIgnoreCase(name))
+            if (type.name.equalsIgnoreCase(name))
             {
                 return type;
             }

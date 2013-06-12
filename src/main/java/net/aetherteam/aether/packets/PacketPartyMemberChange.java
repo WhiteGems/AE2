@@ -9,7 +9,6 @@ import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.DataInputStream;
 import java.io.InputStreamReader;
-import java.io.PrintStream;
 
 import net.aetherteam.aether.dungeons.Dungeon;
 import net.aetherteam.aether.dungeons.DungeonHandler;
@@ -72,7 +71,7 @@ public class PacketPartyMemberChange extends AetherPacket
 
                 if (party != null)
                 {
-                    if ((party.isLeader(potentialLeader)) || (party.getType() == PartyType.打开) || ((potentialLeader != null) && (potentialLeader.username.toLowerCase().equalsIgnoreCase(affectedMember.username)) && (!adding)) || (party.isRequestedPlayer(username)))
+                    if ((party.isLeader(potentialLeader)) || (party.getType() == PartyType.OPEN) || ((potentialLeader != null) && (potentialLeader.username.toLowerCase().equalsIgnoreCase(affectedMember.username)) && (!adding)) || (party.isRequestedPlayer(username)))
                     {
                         if ((adding) && (affectedMember == null))
                         {

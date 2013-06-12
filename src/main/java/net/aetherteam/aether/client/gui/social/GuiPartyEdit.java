@@ -61,7 +61,7 @@ public class GuiPartyEdit extends GuiScreen
 
         String name = PartyController.instance().getParty(player).getType().name();
 
-        if (name == "打开")
+        if (name == "公开")
         {
             this.typeIndex = 0;
         }
@@ -69,13 +69,13 @@ public class GuiPartyEdit extends GuiScreen
         {
             this.typeIndex = 1;
         }
-        if (name == "私人")
+        if (name == "私有")
         {
             this.typeIndex = 2;
         }
-        this.partyType.add("打开");
+        this.partyType.add("公开");
         this.partyType.add("关闭");
-        this.partyType.add("私人");
+        this.partyType.add("私有");
 
         this.player = player;
         this.mc = FMLClientHandler.instance().getClient();

@@ -63,9 +63,9 @@ public class GuiCreateDungeonParty extends GuiScreen
     {
         this.parent = parent;
         this.partyType = new ArrayList();
-        this.partyType.add("打开");
+        this.partyType.add("公开");
         this.partyType.add("关闭");
-        this.partyType.add("私人");
+        this.partyType.add("私有");
 
         this.player = player;
         this.mc = FMLClientHandler.instance().getClient();
