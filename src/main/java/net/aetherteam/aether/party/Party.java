@@ -17,7 +17,7 @@ public class Party implements Serializable
 
     private int memberSizeLimit = 20;
 
-    private PartyType TYPE = PartyType.OPEN;
+    private PartyType TYPE = PartyType.打开;
 
     public Party(String name, PartyMember leader)
     {

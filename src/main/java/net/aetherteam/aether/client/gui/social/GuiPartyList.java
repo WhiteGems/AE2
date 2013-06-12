@@ -132,7 +132,7 @@ public class GuiPartyList extends GuiScreen
 
         for (int i = 0; i < partyList.size(); i++)
         {
-            if (((Party) partyList.get(i)).getType() != PartyType.PRIVATE)
+            if (((Party) partyList.get(i)).getType() != PartyType.私人)
             {
                 showNoParties = false;
 

@@ -91,7 +91,7 @@ public class GuiJoinParty extends GuiScreen
 
                 if ((partySlot.mousePressed(this.mc, par1, y)) && (par2 < this.yParty + 50))
                 {
-                    if (partySlot.party.getType() != PartyType.OPEN)
+                    if (partySlot.party.getType() != PartyType.打开)
                     {
                         this.mc.sndManager.playSoundFX("random.click", 1.0F, 1.5F);
                         return;
@@ -156,7 +156,7 @@ public class GuiJoinParty extends GuiScreen
 
         for (Party party : properList)
         {
-            if (party.getType() != PartyType.PRIVATE)
+            if (party.getType() != PartyType.私人)
             {
                 partyList.add(party);
             }
@@ -168,7 +168,7 @@ public class GuiJoinParty extends GuiScreen
             this.slotsCreated = false;
         }
 
-        if ((this.selectedPartySlot != null) && (this.selectedPartySlot.party.getType() != PartyType.OPEN))
+        if ((this.selectedPartySlot != null) && (this.selectedPartySlot.party.getType() != PartyType.打开))
         {
             this.selectedPartySlot.selected = false;
             this.slotIsSelected = false;
@@ -206,7 +206,7 @@ public class GuiJoinParty extends GuiScreen
         {
             for (int i = 0; i < partyList.size(); i++)
             {
-                if (((Party) partyList.get(i)).getType() != PartyType.PRIVATE)
+                if (((Party) partyList.get(i)).getType() != PartyType.私人)
                 {
                     this.partySlots.add(new GuiPartySlot((Party) partyList.get(i), this.partySlots.size(), centerX + 15, centerY + this.totalHeight + 30, slotW, slotH));
 
@@ -221,7 +221,7 @@ public class GuiJoinParty extends GuiScreen
 
         for (int i = 0; i < this.partySlots.size(); i++)
         {
-            if (((GuiPartySlot) this.partySlots.get(i)).party.getType() != PartyType.PRIVATE)
+            if (((GuiPartySlot) this.partySlots.get(i)).party.getType() != PartyType.私人)
             {
                 showNoParties = false;
 

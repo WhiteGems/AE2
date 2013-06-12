@@ -72,7 +72,7 @@ public class PacketPartyMemberChange extends AetherPacket
 
                 if (party != null)
                 {
-                    if ((party.isLeader(potentialLeader)) || (party.getType() == PartyType.OPEN) || ((potentialLeader != null) && (potentialLeader.username.toLowerCase().equalsIgnoreCase(affectedMember.username)) && (!adding)) || (party.isRequestedPlayer(username)))
+                    if ((party.isLeader(potentialLeader)) || (party.getType() == PartyType.打开) || ((potentialLeader != null) && (potentialLeader.username.toLowerCase().equalsIgnoreCase(affectedMember.username)) && (!adding)) || (party.isRequestedPlayer(username)))
                     {
                         if ((adding) && (affectedMember == null))
                         {
