@@ -102,8 +102,3 @@ public class AetherMoaColour
         new AetherMoaColour(2, 2236962, 8, 5, "黑色");
     }
 }
-
-/* Location:           D:\Dev\Mc\forge_orl\mcp\jars\bin\aether.jar
- * Qualified Name:     net.aetherteam.aether.AetherMoaColour
- * JD-Core Version:    0.6.2
- */
