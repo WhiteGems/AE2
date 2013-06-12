@@ -36,7 +36,7 @@ public class MenuBaseLoaderWithSlider extends GuiScreen
     private int loaderY;
     private int loaderW;
     private int loaderH;
-    Minecraft f;
+    Minecraft mc;
     private MenuSlot selectedMenuSlot;
     private List menuSlotList = new ArrayList();
     HashMap menuSlotToString = new HashMap();

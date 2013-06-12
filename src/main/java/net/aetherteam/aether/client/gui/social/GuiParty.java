@@ -52,7 +52,7 @@ public class GuiParty extends GuiScreen
     private int yParty;
     private int wParty;
     private int hParty;
-    Minecraft f;
+    Minecraft mc;
 
     public GuiParty()
     {

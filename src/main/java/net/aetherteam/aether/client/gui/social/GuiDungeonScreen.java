@@ -20,7 +20,7 @@ import org.lwjgl.opengl.GL11;
 public class GuiDungeonScreen extends GuiScreen
 {
     private int background;
-    private Minecraft f;
+    private Minecraft mc;
     private GuiButton readyUpButton;
     private boolean isPlayerReady;
     private String readyString;

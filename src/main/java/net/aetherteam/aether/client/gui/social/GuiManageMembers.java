@@ -35,7 +35,7 @@ public class GuiManageMembers extends GuiScreen
     private int yMember;
     private int wMember;
     private int hMember;
-    Minecraft f;
+    Minecraft mc;
     private int totalHeight;
     private ArrayList playerSlots = new ArrayList();
     private GuiPlayerSlot selectedPlayerSlot;
@@ -77,8 +77,8 @@ public class GuiManageMembers extends GuiScreen
         this.sbar = new GuiYSlider(-1, this.xMember + 46, this.yMember - 54, 10, 103);
         this.sbar.sliderValue = this.sbarVal;
 
-        this.buttonList.add(new GuiButton(0, this.xMember - 58, this.yMember + 85 - 28, 120, 20, "返回"));
-        this.buttonList.add(new GuiButton(0, this.xMember - 58, this.yMember + 85 - 28, 120, 20, "返回"));
+        this.buttonList.add(new GuiButton(0, this.xMember - 58, this.yMember + 85 - 28, 120, 20, "Back"));
+        this.buttonList.add(new GuiButton(0, this.xMember - 58, this.yMember + 85 - 28, 120, 20, "Back"));
     }
 
     protected void mouseClicked(int par1, int par2, int par3)
@@ -252,7 +252,7 @@ public class GuiManageMembers extends GuiScreen
             this.kickButton.enabled = true;
         } else this.kickButton.enabled = false;
 
-        this.buttonList.add(new GuiButton(0, this.xMember - 60, this.yMember + 85 - 28, 58, 20, "返回"));
+        this.buttonList.add(new GuiButton(0, this.xMember - 60, this.yMember + 85 - 28, 58, 20, "Back"));
         this.buttonList.add(this.kickButton);
 
         super.drawScreen(x, y, partialTick);

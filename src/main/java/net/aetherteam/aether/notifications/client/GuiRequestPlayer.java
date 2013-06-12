@@ -43,7 +43,7 @@ public class GuiRequestPlayer extends GuiScreen
     private int yMember;
     private int wMember;
     private int hMember;
-    Minecraft f;
+    Minecraft mc;
     private int totalHeight;
     private ArrayList playerSlots = new ArrayList();
     private GuiPlayerRequestSlot selectedPlayerSlot;

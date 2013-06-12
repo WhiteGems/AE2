@@ -33,7 +33,7 @@ public class GuiViewNotification extends GuiScreen
     private int yParty;
     private int wParty;
     private int hParty;
-    Minecraft f;
+    Minecraft mc;
     private Notification notification;
     private GuiScreen parent;
     private EntityPlayer player;

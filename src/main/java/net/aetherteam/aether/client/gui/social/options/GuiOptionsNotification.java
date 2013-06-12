@@ -26,7 +26,7 @@ public class GuiOptionsNotification extends GuiScreen
     private int yParty;
     private int wParty;
     private int hParty;
-    Minecraft f;
+    Minecraft mc;
     private EntityPlayer player;
     private GuiScreen parent;
 

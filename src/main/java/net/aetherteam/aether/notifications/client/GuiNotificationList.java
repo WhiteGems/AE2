@@ -35,7 +35,7 @@ public class GuiNotificationList extends GuiScreen
     private int hParty;
     private GuiScreen parent;
     private ArrayList notificationSlots = new ArrayList();
-    Minecraft f;
+    Minecraft mc;
     private int totalHeight;
     private GuiNotificationSlot selectedNotificationSlot;
     private boolean slotsCreated = false;

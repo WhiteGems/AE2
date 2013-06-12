@@ -34,7 +34,7 @@ public class GuiDungeonEntrance extends GuiScreen
     private int yParty;
     private int wParty;
     private int hParty;
-    Minecraft f;
+    Minecraft mc;
     public String[] description;
     private GuiTextField partyNameField;
     private EntityPlayer player;

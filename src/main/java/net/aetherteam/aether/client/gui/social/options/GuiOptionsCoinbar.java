@@ -26,7 +26,7 @@ public class GuiOptionsCoinbar extends GuiScreen
     private int yParty;
     private int wParty;
     private int hParty;
-    Minecraft f;
+    Minecraft mc;
     private EntityPlayer player;
     private GuiScreen parent;
 
@@ -105,7 +105,7 @@ public class GuiOptionsCoinbar extends GuiScreen
 
         if (online)
         {
-            String slideCoinbarString = AetherOptions.getSlideCoinbar() ? "是" : "否";
+            String slideCoinbarString = AetherOptions.getSlideCoinbar() ? "真" : "假";
 
             GuiButton showNotification = new GuiButton(1, this.xParty - 60, this.yParty - 36 - 28, 120, 20, "滑动以太币界面: " + slideCoinbarString);
 
@@ -122,8 +122,8 @@ public class GuiOptionsCoinbar extends GuiScreen
             drawTexturedModalRect(centerX + 13, centerY + 40, 141, 131, 115, 125);
 
             this.mc.renderEngine.resetBoundTexture();
-            drawString(this.fontRenderer, "注定孤独一生 :(", centerX + 26, centerY + 10, 15658734);
-            drawString(this.fontRenderer, "(单人游戏)", centerX + 31, centerY + 22, 15658734);
+            drawString(this.fontRenderer, "孤独以终老:(", centerX + 26, centerY + 10, 15658734);
+            drawString(this.fontRenderer, "(单机游戏)", centerX + 31, centerY + 22, 15658734);
         }
 
         this.buttonList.add(new GuiButton(0, this.xParty - 60, this.yParty + 81 - 28, 120, 20, online ? "返回" : "退出"));
