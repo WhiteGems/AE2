@@ -64,8 +64,8 @@ public class GuiDungeonEntrance extends GuiScreen
 
         if ((playerList.size() > 1) || (playerList.size() == 0))
         {
-            this.buttonList.add(new GuiButton(0, this.xParty - 60, this.yParty + 8 - 28, 120, 20, "Enter"));
-            this.buttonList.add(new GuiButton(1, this.xParty - 60, this.yParty + 8 - 28, 120, 20, "Leave"));
+            this.buttonList.add(new GuiButton(0, this.xParty - 60, this.yParty + 8 - 28, 120, 20, "加入"));
+            this.buttonList.add(new GuiButton(1, this.xParty - 60, this.yParty + 8 - 28, 120, 20, "离开"));
         }
     }
 
@@ -154,8 +154,8 @@ public class GuiDungeonEntrance extends GuiScreen
         Party party = PartyController.instance().getParty(this.player);
         boolean isLeader = PartyController.instance().isLeader(this.player);
 
-        GuiButton sendButton = new GuiButton(0, this.xParty - 59, this.yParty + 55, 55, 20, (party == null) || (party.getSize() <= 1) ? "Enter" : "Send");
-        GuiButton leaveButton = new GuiButton(1, this.xParty + 6 - (hasQueuedParty() ? 32 : 0), this.yParty + 55, 55, 20, "Leave");
+        GuiButton sendButton = new GuiButton(0, this.xParty - 59, this.yParty + 55, 55, 20, (party == null) || (party.getSize() <= 1) ? "进入" : "发送");
+        GuiButton leaveButton = new GuiButton(1, this.xParty + 6 - (hasQueuedParty() ? 32 : 0), this.yParty + 55, 55, 20, "离开");
 
         if ((this.controller.getDungeon() != null) && (!this.controller.getDungeon().isActive()) && (this.controller != null))
         {
@@ -190,14 +190,14 @@ public class GuiDungeonEntrance extends GuiScreen
                 this.description = new String[10];
 
                 this.description[0] = "你试图独闯滑行者";
-                this.description[1] = "的迷宫。这个迷宫危险";
-                this.description[2] = "无比，你随时可能付出生命";
-                this.description[3] = "并且损失掉全部的物品。";
-                this.description[4] = "你将因此失去一切。";
+                this.description[1] = "的迷宫. 这个迷宫危险";
+                this.description[2] = "无比, 你随时可能付出生命";
+                this.description[3] = "并且损失掉全部的物品.";
+                this.description[4] = "你将因此失去一切.";
                 this.description[5] = "但地牢深处有值得探索的";
-                this.description[6] = "宝藏。";
+                this.description[6] = "宝藏.";
                 this.description[7] = "";
-                this.description[8] = "那么，你是否已经准备好";
+                this.description[8] = "那么, 你是否已经准备好";
                 this.description[9] = "进入地牢?";
 
                 int count = 0;
@@ -222,17 +222,17 @@ public class GuiDungeonEntrance extends GuiScreen
                 {
                     this.description = new String[6];
 
-                    this.description[0] = "抱歉，此时此刻，地牢";
-                    this.description[1] = "已经被人闯入，攻略者来自";
+                    this.description[0] = "抱歉, 此时此刻, 地牢";
+                    this.description[1] = "已经被人闯入, 攻略者来自";
 
                     if ((this.controller.getDungeon().isQueuedParty(party)) && (!this.controller.getDungeon().hasMember(PartyController.instance().getMember(this.player))))
                     {
-                        this.description[2] = "你的公会。";
-                    } else this.description[2] = "其他公会。";
+                        this.description[2] = "你的公会.";
+                    } else this.description[2] = "其他公会.";
 
                     this.description[3] = "";
                     this.description[4] = "请稍等一会";
-                    this.description[5] = "儿再来试试。";
+                    this.description[5] = "儿再来试试.";
                 } else if ((this.controller.getDungeon().isQueuedParty(party)) && (this.controller.getDungeon().hasMember(PartyController.instance().getMember(this.player))))
                 {
                     if (this.controller.getDungeon().isActive())
@@ -242,58 +242,58 @@ public class GuiDungeonEntrance extends GuiScreen
                         this.description[0] = "你真的想要离开";
                         this.description[1] = "这个地牢?";
                         this.description[2] = "你还有";
-                        this.description[3] = (3 - this.controller.getDungeon().getMemberLeaves(PartyController.instance().getMember(this.player)) + "/3 次离开机会。");
+                        this.description[3] = (3 - this.controller.getDungeon().getMemberLeaves(PartyController.instance().getMember(this.player)) + "/3 次离开机会.");
                         this.description[4] = "";
                         this.description[5] = "在彻底重置之前";
                         this.description[6] = "每个地牢仅仅允许";
-                        this.description[7] = "离开三次。";
+                        this.description[7] = "离开三次.";
                     } else
                     {
                         this.description = new String[7];
 
                         this.description[0] = "你的公会正排队";
-                        this.description[1] = "进入地牢中。";
+                        this.description[1] = "进入地牢中.";
                         this.description[2] = "";
                         this.description[3] = "";
                         this.description[4] = "请等待你的其他队友";
                         this.description[5] = "接受组队探险的";
-                        this.description[6] = "邀请。";
+                        this.description[6] = "邀请.";
                     }
                 } else if (this.controller.getDungeon().hasAnyConqueredDungeon(members))
                 {
                     this.description = new String[8];
 
-                    this.description[0] = "抱歉，该地牢正";
+                    this.description[0] = "抱歉, 该地牢正";
                     this.description[1] = "被你的公会成员";
-                    this.description[2] = "努力攻略中。";
+                    this.description[2] = "努力攻略中.";
                     this.description[3] = "";
                     this.description[4] = "";
                     this.description[5] = "";
                     this.description[6] = "请你去其他地方探索或者等待";
-                    this.description[7] = "队友凯旋而归。";
+                    this.description[7] = "队友凯旋而归.";
                 } else if (isLeader)
                 {
                     this.description = new String[7];
 
                     this.description[0] = "你是否想要和你的公会";
-                    this.description[1] = "一起勇闯滑行者的迷宫？";
+                    this.description[1] = "一起勇闯滑行者的迷宫?";
                     this.description[2] = "";
                     this.description[3] = "";
                     this.description[4] = "";
-                    this.description[5] = "如果是这样的话，请发送";
-                    this.description[6] = "邀请给你的队友。";
+                    this.description[5] = "如果是这样的话, 请发送";
+                    this.description[6] = "邀请给你的队友.";
                 } else
                 {
                     this.description = new String[8];
 
                     this.description[0] = "你是否想要和你的公会";
-                    this.description[1] = "一起勇闯滑行者的迷宫？";
+                    this.description[1] = "一起勇闯滑行者的迷宫?";
                     this.description[2] = "";
                     this.description[3] = "";
                     this.description[4] = "";
-                    this.description[5] = "如果是这样的话，请发送";
-                    this.description[6] = "邀请给你的队长，";
-                    this.description[7] = "让他申请进入地牢。";
+                    this.description[5] = "如果是这样的话, 请发送";
+                    this.description[6] = "邀请给你的队长, ";
+                    this.description[7] = "让他申请进入地牢.";
                 }
 
                 int count = 0;

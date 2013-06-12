@@ -82,7 +82,7 @@ public class GuiCreateDungeonParty extends GuiScreen
         updateScreen();
         this.buttonList.clear();
 
-        this.typeButton = new GuiButton(1, this.partyX - 60, this.partyY - 16 - 28, 120, 20, "Type: " + (String) this.partyType.get(this.typeIndex));
+        this.typeButton = new GuiButton(1, this.partyX - 60, this.partyY - 16 - 28, 120, 20, "类型: " + (String) this.partyType.get(this.typeIndex));
         this.finishButton = new GuiButton(2, this.partyX - 60, this.partyY + 6 - 28, 120, 20, "开始冒险");
         this.backButton = new GuiButton(0, this.partyX - 60, this.partyY + 81 - 28, 120, 20, "返回");
 
@@ -144,7 +144,7 @@ public class GuiCreateDungeonParty extends GuiScreen
         {
             this.typeIndex = 0;
         }
-        this.typeButton = new GuiButton(1, this.partyX - 60, this.partyY - 16 - 28, 120, 20, "Type: " + (String) this.partyType.get(this.typeIndex));
+        this.typeButton = new GuiButton(1, this.partyX - 60, this.partyY - 16 - 28, 120, 20, "类型: " + (String) this.partyType.get(this.typeIndex));
         this.finishButton = new GuiButton(2, this.partyX - 60, this.partyY + 6 - 28, 120, 20, "开始冒险！");
 
         if (this.partyName.isEmpty())
@@ -167,7 +167,7 @@ public class GuiCreateDungeonParty extends GuiScreen
 
         this.mc.renderEngine.resetBoundTexture();
 
-        String headerName = "Dungeon Raid Name";
+        String headerName = "地牢入侵名称";
 
         drawString(this.fontRenderer, headerName, centerX + 68 - this.fontRenderer.getStringWidth(headerName) / 2, centerY + 5, 16777215);
 

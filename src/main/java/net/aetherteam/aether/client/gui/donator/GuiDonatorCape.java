@@ -157,7 +157,7 @@ public class GuiDonatorCape extends GuiScreen
 
         this.mc.renderEngine.resetBoundTexture();
 
-        String header = "Donator Cape";
+        String header = "捐赠者披风";
 
         drawString(this.fontRenderer, header, sr.getScaledWidth() / 2 - this.fontRenderer.getStringWidth(header) / 2 + 49, centerY + 10, 15658734);
 

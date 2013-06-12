@@ -122,10 +122,10 @@ public class GuiDonatorMenu extends GuiScreen
         ScaledResolution sr = new ScaledResolution(this.mc.gameSettings, this.mc.displayWidth, this.mc.displayHeight);
         drawTexturedModalRect(centerX, centerY, 0, 0, 194, this.hParty);
 
-        this.buttonList.add(new GuiButton(0, this.xParty - 80, this.yParty - 4, 160, 20, "Back"));
+        this.buttonList.add(new GuiButton(0, this.xParty - 80, this.yParty - 4, 160, 20, "返回"));
 
-        this.buttonList.add(new GuiButton(1, this.xParty - 30, this.yParty + 27, 60, 20, this.donator != null ? "Moa" : "Moa: Off"));
-        this.buttonList.add(new GuiButton(2, this.xParty - 30, this.yParty + 52, 60, 20, this.donator != null ? "Cape" : "Cape: Off"));
+        this.buttonList.add(new GuiButton(1, this.xParty - 30, this.yParty + 27, 60, 20, this.donator != null ? "恐鸟皮肤" : "恐鸟皮肤: 关"));
+        this.buttonList.add(new GuiButton(2, this.xParty - 30, this.yParty + 52, 60, 20, this.donator != null ? "披风" : "披风: 关"));
 
         String[] text = new String[4];
 
@@ -136,10 +136,10 @@ public class GuiDonatorMenu extends GuiScreen
             ((GuiButton) this.buttonList.get(1)).enabled = false;
             ((GuiButton) this.buttonList.get(2)).enabled = false;
 
-            text[0] = "你并非权限者。";
+            text[0] = "你并非权限者.";
             text[1] = "该菜单用于激活";
-            text[2] = "捐助者的特殊功能，";
-            text[3] = "这些功能不会影响实际游戏。";
+            text[2] = "捐助者的特殊功能, ";
+            text[3] = "这些功能不会影响实际游戏.";
         } else
         {
             ((GuiButton) this.buttonList.get(1)).enabled = true;
@@ -147,8 +147,8 @@ public class GuiDonatorMenu extends GuiScreen
 
             text[0] = ("亲爱的" + this.player.username + ",");
             text[1] = "我们无比感谢您的";
-            text[2] = "慷慨捐助，你将拥有";
-            text[3] = "独特的披风和恐鸟皮肤。";
+            text[2] = "慷慨捐助, 你将拥有";
+            text[3] = "独特的披风和恐鸟皮肤.";
         }
 
         super.drawScreen(x, y, partialTick);

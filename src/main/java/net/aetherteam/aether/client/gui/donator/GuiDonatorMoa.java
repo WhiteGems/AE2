@@ -146,7 +146,7 @@ public class GuiDonatorMoa extends GuiScreen
         ScaledResolution sr = new ScaledResolution(this.mc.gameSettings, this.mc.displayWidth, this.mc.displayHeight);
         drawTexturedModalRect(centerX, centerY, 0, 0, 194, this.hParty);
 
-        this.buttonList.add(new GuiButton(0, this.xParty + 10, this.yParty + 27, 80, 20, "Back"));
+        this.buttonList.add(new GuiButton(0, this.xParty + 10, this.yParty + 27, 80, 20, "返回"));
 
         GuiButton typeButton = null;
         GuiButton overrideButton = null;
@@ -168,8 +168,8 @@ public class GuiDonatorMoa extends GuiScreen
 
             this.moaEntity = new EntityMoa(Aether.proxy.getClientWorld(), true, false, false, AetherMoaColour.pickRandomMoa(), Aether.proxy.getClientPlayer(), hasChoice ? this.choice.textureFile.localURL : null);
 
-            typeButton = new GuiButton(1, this.xParty + 10, this.yParty - 35, 80, 20, this.choice != null ? this.choice.name : "Off");
-            overrideButton = new GuiButton(2, this.xParty + 10, this.yParty, 80, 20, this.choice != null ? "None" : this.choice.getOverridingColour() != null ? this.choice.getOverridingColour().name + " Moa" : this.choice.getOverrideAll() ? "All" : "None");
+            typeButton = new GuiButton(1, this.xParty + 10, this.yParty - 35, 80, 20, this.choice != null ? this.choice.name : "关");
+            overrideButton = new GuiButton(2, this.xParty + 10, this.yParty, 80, 20, this.choice != null ? "无" : this.choice.getOverridingColour() != null ? this.choice.getOverridingColour().name + " 恐鸟皮肤" : this.choice.getOverrideAll() ? "全部" : "无");
         }
 
         if (this.donator == null)
@@ -190,11 +190,11 @@ public class GuiDonatorMoa extends GuiScreen
 
         this.mc.renderEngine.resetBoundTexture();
 
-        String header = "Donator Moa";
-        String override = "Override";
+        String header = "捐助特有恐鸟皮肤";
+        //String override = "Override";
 
         drawString(this.fontRenderer, header, sr.getScaledWidth() / 2 - this.fontRenderer.getStringWidth(header) / 2 + 49, centerY + 10, 15658734);
-        drawString(this.fontRenderer, override, sr.getScaledWidth() / 2 - this.fontRenderer.getStringWidth(override) / 2 + 49, centerY + 45, 15658734);
+        //drawString(this.fontRenderer, override, sr.getScaledWidth() / 2 - this.fontRenderer.getStringWidth(override) / 2 + 49, centerY + 45, 15658734);
 
         if (this.choice != null)
         {
