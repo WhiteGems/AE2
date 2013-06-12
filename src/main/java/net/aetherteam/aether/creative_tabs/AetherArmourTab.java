@@ -18,7 +18,7 @@ public class AetherArmourTab extends CreativeTabs
 
     public String getTabLabel()
     {
-        return "Aether Armour";
+        return "以太II|装甲";
     }
 
     public String getTranslatedTabLabel()
