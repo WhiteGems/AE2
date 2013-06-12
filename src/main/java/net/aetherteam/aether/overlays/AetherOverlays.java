@@ -112,7 +112,7 @@ public class AetherOverlays
 
             mc.renderEngine.resetBoundTexture();
 
-            mc.fontRenderer.drawStringWithShadow(Aether.proxy.getClientCooldownName().get(player.username) + " Cooldown", width / 2 - mc.fontRenderer.getStringWidth(Aether.proxy.getClientCooldownName().get(player.username) + " Cooldown") / 2, 32 + (handler.getCurrentBoss() != null ? 20 : 0), -1);
+            mc.fontRenderer.drawStringWithShadow(Aether.proxy.getClientCooldownName().get(player.username) + " 冷却", width / 2 - mc.fontRenderer.getStringWidth(Aether.proxy.getClientCooldownName().get(player.username) + " 冷却") / 2, 32 + (handler.getCurrentBoss() != null ? 20 : 0), -1);
 
             GL11.glEnable(3042);
             GL11.glDisable(2929);
