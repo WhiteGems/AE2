@@ -62,7 +62,7 @@ public class GuiCreateDungeonParty extends GuiScreen
     public GuiCreateDungeonParty(PartyData pm, EntityPlayer player, GuiScreen parent)
     {
         this.parent = parent;
-
+        this.partyType = new ArrayList();
         this.partyType.add("打开");
         this.partyType.add("关闭");
         this.partyType.add("私人");
