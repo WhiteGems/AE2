@@ -116,6 +116,12 @@ public class BlockBronzeDoor extends BlockAether implements IAetherBlock
 
                                 if (var1.isRemote)
                                 {
+                                	// 修复显示负数钥匙bug
+                                	if(var16 > 5)
+                                	{
+                                		var16 = 5;
+                                	}
+                                	
                                     if (var16 <= 0)
                                     {
                                         var13.chatItUp(var5, "这个门似乎需要 " + (5 - var13.getKeyAmount()) + (5 - var16 < 5 ? " 更多 " : " ") + (5 - var16 > 1 ? "个钥匙" : "钥匙") + ". 在地牢的某处能找到这些钥匙?");
