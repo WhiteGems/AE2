@@ -55,7 +55,7 @@ public class AetherSoundLoader
         registerSound(event.manager, "aemob/sentryGolem/creepySeen.wav", "/resources/newsound/aemob/sentryGolem/creepySeen.wav");
         registerSound(event.manager, "aemob/sentryGolem/say1.wav", "/resources/newsound/aemob/sentryGolem/say1.wav");
         registerSound(event.manager, "aemob/sentryGolem/say2.wav", "/resources/newsound/aemob/sentryGolem/say2.wav");
-        registerSound(event.manager, "aemob/sentryGolem/death.ogg", "/resources/newsound/aemob/sentryGolem/death.ogg");
+        registerSound(event.manager, "aemob/sentryGolem/death.wav", "/resources/newsound/aemob/sentryGolem/death.wav");
         registerSound(event.manager, "aemob/sentryGolem/hit1.wav", "/resources/newsound/aemob/sentryGolem/hit1.wav");
         registerSound(event.manager, "aemob/sentryGolem/hit2.wav", "/resources/newsound/aemob/sentryGolem/hit2.wav");
 
