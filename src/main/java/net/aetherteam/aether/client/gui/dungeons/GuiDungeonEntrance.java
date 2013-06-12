@@ -195,6 +195,7 @@ public class GuiDungeonEntrance extends GuiScreen
                 this.description[3] = "并且损失掉全部的物品";
                 this.description[4] = "你将因此失去一切";
                 this.description[5] = "但地牢深处有值得探索的宝藏";
+                this.description[6] = "";
                 this.description[7] = "";
                 this.description[8] = "那么, ";
                 this.description[9] = "你是否已经准备好进入地牢?";
