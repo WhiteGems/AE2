@@ -495,7 +495,7 @@ public class EntitySliderHostMimic extends EntityMiniBoss implements IAetherBoss
 
     public String getBossTitle()
     {
-        return "拟态滑行主宰" + this.bossName;
+        return "拟态滑行主宰:" + this.bossName;
     }
 
     public Entity getBossEntity()

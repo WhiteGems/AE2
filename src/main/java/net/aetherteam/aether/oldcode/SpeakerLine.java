@@ -68,6 +68,6 @@ public class SpeakerLine
             var1.append(this.content);
         }
 
-        return var1.length() > 0 ? var1.toString() : "无法读取该行.";
+        return var1.length() > 0 ? var1.toString() : "无法读取该行";
     }
 }

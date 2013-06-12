@@ -224,7 +224,7 @@ public class EntityFireMonster extends EntityFlying implements IAetherBoss
                 this.motionY = 0.0D;
                 this.motionZ = 0.0D;
                 this.target = null;
-                this.chatLine("\u00a7c这就是反对太阳神的命运.");
+                this.chatLine("\u00a7c这就是反对太阳神的命运");
                 this.setDoor(0);
                 this.gotTarget = false;
             }
@@ -355,12 +355,12 @@ public class EntityFireMonster extends EntityFlying implements IAetherBoss
         {
             if (this.chatLog == 0)
             {
-                this.chatLine("\u00a7c进入到此房间说明你一定拥有一个勇敢的灵魂.");
+                this.chatLine("\u00a7c进入到此房间说明你一定拥有一个勇敢的灵魂");
                 this.chatLog = 1;
                 this.chatCount = 100;
             } else if (this.chatLog == 1)
             {
-                this.chatLine("\u00a7c离开! 人类! 这里不需要你.");
+                this.chatLine("\u00a7c离开! 人类! 这里不需要你");
                 this.chatLog = 2;
                 this.chatCount = 100;
             } else if (this.chatLog == 2)
@@ -370,42 +370,42 @@ public class EntityFireMonster extends EntityFlying implements IAetherBoss
                 this.chatCount = 100;
             } else if (this.chatLog == 3)
             {
-                this.chatLine("\u00a7c我有什么可以给你的捏, 傻瓜. 让我静一静.");
+                this.chatLine("\u00a7c我有什么可以给你的捏, 傻瓜! 让我静一静");
                 this.chatLog = 4;
                 this.chatCount = 100;
             } else if (this.chatLog == 4)
             {
-                this.chatLine("\u00a7c你或许太无知了. 你不知道我是谁吗?");
+                this.chatLine("\u00a7c你或许太无知了, 你不知道我是谁吗?");
                 this.chatLog = 5;
                 this.chatCount = 100;
             } else if (this.chatLog == 5)
             {
-                this.chatLine("\u00a7c我是太阳神, 代表着Aether永恒的太阳.");
-                this.chatLine("\u00a7c只要我还活着, 这个世界的太阳永远不会落下.");
+                this.chatLine("\u00a7c我是太阳神, 代表着Aether永恒的太阳");
+                this.chatLine("\u00a7c只要我还活着, 这个世界的太阳永远不会落下");
                 this.chatLog = 6;
                 this.chatCount = 100;
             } else if (this.chatLog == 6)
             {
-                this.chatLine("\u00a7c我的身体里燃烧着一千头愤怒的野兽.");
-                this.chatLine("\u00a7c没有任何人, 任何英雄, 或者恶魂能伤害我. 你也不例外.");
+                this.chatLine("\u00a7c我的身体里燃烧着一千头愤怒的野兽");
+                this.chatLine("\u00a7c没有任何人, 任何英雄, 或者恶魂能伤害我, 你也不例外");
                 this.chatLog = 7;
                 this.chatCount = 100;
             } else if (this.chatLog == 7)
             {
-                this.chatLine("\u00a7c你想挑战太阳的威力? 你会抓狂的.");
-                this.chatLine("\u00a7c不要试图攻击我, 你将感受到我的愤怒.");
+                this.chatLine("\u00a7c你想挑战太阳的威力? 你会抓狂的");
+                this.chatLine("\u00a7c不要试图攻击我, 你将感受到我的愤怒");
                 this.chatLog = 8;
                 this.chatCount = 100;
             } else if (this.chatLog == 8)
             {
-                this.chatLine("\u00a7c这是最后一次警告. 赶紧离开, 否则准备燃烧吧.");
+                this.chatLine("\u00a7c这是最后一次警告! 赶紧离开, 否则准备燃烧吧");
                 this.chatLog = 9;
                 this.chatCount = 100;
             } else
             {
                 if (this.chatLog == 9)
                 {
-                    this.chatLine("\u00a76如你所愿, 你将缓慢而痛苦的死亡.");
+                    this.chatLine("\u00a76如你所愿, 你将缓慢而痛苦的死亡");
                     this.chatLog = 10;
                     return true;
                 }
@@ -585,7 +585,7 @@ public class EntityFireMonster extends EntityFlying implements IAetherBoss
 
     public String getBossTitle()
     {
-        return "太阳神" + this.bossName;
+        return "太阳神:" + this.bossName;
     }
 
     public Entity getBossEntity()

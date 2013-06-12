@@ -597,7 +597,7 @@ public class AetherOverlays
                     drawTexturedModalRect((float)(var6 / 2 - 49), 10.0F, 1.0F, 57.0F, 96.0F, 58.0F);
                 }
 
-                var10 = "\u00a7o" + (var20 ? "最终" : "迷你") + " Boss";
+                var10 = "\u00a7o" + (var20 ? "最终" : "迷你") + "Boss";
                 var12 = var20 ? 45 : 24;
                 var13 = var20 ? -10 : 11;
                 var14 = var20;

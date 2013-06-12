@@ -409,7 +409,7 @@ public class EntityLabyrinthEye extends EntityMiniBoss implements IAetherBoss, I
 
     public String getBossTitle()
     {
-        return "迷宫之眼" + this.bossName;
+        return "迷宫之眼:" + this.bossName;
     }
 
     /**

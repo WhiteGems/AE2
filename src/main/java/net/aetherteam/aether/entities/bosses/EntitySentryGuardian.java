@@ -386,7 +386,7 @@ public class EntitySentryGuardian extends EntityMiniBoss implements IAetherBoss
 
     public String getBossTitle()
     {
-        return "守卫者" + this.bossName;
+        return "守卫者:" + this.bossName;
     }
 
     public Entity getBossEntity()

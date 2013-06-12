@@ -1325,7 +1325,7 @@ public class EntitySlider extends EntityBossMob implements IAetherBoss
 
     public String getBossTitle()
     {
-        return "滑行者" + this.getBossName();
+        return "滑行者:" + this.getBossName();
     }
 
     public Entity getBossEntity()
