@@ -177,7 +177,7 @@ public class GuiDungeonEntrance extends GuiScreen
 
         this.partyNameField.drawTextBox();
 
-        drawString(this.fontRenderer, "警告!!!", centerX + 46, centerY + 10, 15658734);
+        drawString(this.fontRenderer, "警告!!!", centerX + 70 - this.fontRenderer.getStringWidth("警告!!!") / 2, centerY + 10, 15658734);
 
         if ((this.controller != null) && (this.controller.hasDungeon()))
         {
@@ -189,16 +189,15 @@ public class GuiDungeonEntrance extends GuiScreen
 
                 this.description = new String[10];
 
-                this.description[0] = "你试图独闯滑行者";
-                this.description[1] = "的迷宫. 这个迷宫危险";
-                this.description[2] = "无比, 你随时可能付出生命";
+                this.description[0] = "你试图独闯滑行者的迷宫. ";
+                this.description[1] = "这个迷宫危险无比, ";
+                this.description[2] = "你随时可能付出生命";
                 this.description[3] = "并且损失掉全部的物品";
                 this.description[4] = "你将因此失去一切";
-                this.description[5] = "但地牢深处有值得探索的";
-                this.description[6] = "宝藏";
+                this.description[5] = "但地牢深处有值得探索的宝藏";
                 this.description[7] = "";
-                this.description[8] = "那么, 你是否已经准备好";
-                this.description[9] = "进入地牢?";
+                this.description[8] = "那么, ";
+                this.description[9] = "你是否已经准备好进入地牢?";
 
                 int count = 0;
 
