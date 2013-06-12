@@ -61,11 +61,11 @@ public class GuiPartyRequest extends GuiScreen
     {
         updateScreen();
         this.buttonList.clear();
-        this.buttonList.add(new GuiButton(5, this.xParty - 60, this.yParty - 36 - 28, 120, 20, "Ownership"));
-        this.buttonList.add(new GuiButton(4, this.xParty - 60, this.yParty - 14 - 28, 120, 20, "Operator"));
-        this.buttonList.add(new GuiButton(3, this.xParty - 60, this.yParty + 8 - 28, 120, 20, "Leave"));
-        this.buttonList.add(new GuiButton(2, this.xParty - 60, this.yParty + 30 - 28, 120, 20, "Disband"));
-        this.buttonList.add(new GuiButton(0, this.xParty - 60, this.yParty + 81 - 28, 120, 20, "Back"));
+        this.buttonList.add(new GuiButton(5, this.xParty - 60, this.yParty - 36 - 28, 120, 20, "队长"));
+        this.buttonList.add(new GuiButton(4, this.xParty - 60, this.yParty - 14 - 28, 120, 20, "管理"));
+        this.buttonList.add(new GuiButton(3, this.xParty - 60, this.yParty + 8 - 28, 120, 20, "离开"));
+        this.buttonList.add(new GuiButton(2, this.xParty - 60, this.yParty + 30 - 28, 120, 20, "解散"));
+        this.buttonList.add(new GuiButton(0, this.xParty - 60, this.yParty + 81 - 28, 120, 20, "返回"));
     }
 
     protected void actionPerformed(GuiButton btn)
