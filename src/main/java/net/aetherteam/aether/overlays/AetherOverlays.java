@@ -700,7 +700,7 @@ public class AetherOverlays
                 drawTexturedModalRect(width / 2 - 49, 10.0F, 1.0F, 57.0F, 96.0F, 58.0F);
             }
 
-            bossTypeString = "§o" + (isFinal ? "最终" : "迷你") + " Boss";
+            bossTypeString = "§o" + (isFinal ? "最终" : "迷你") + "Boss";
 
             offset1 = isFinal ? 45 : 24;
             offset2 = isFinal ? -10 : 11;
