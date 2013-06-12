@@ -136,7 +136,7 @@ public class GuiMenu extends GuiScreen
         } else
         {
             this.mc.renderEngine.resetBoundTexture();
-            drawString(this.fontRenderer, "社交菜单", centerX + 40, centerY + 5, 16777215);
+            drawString(this.fontRenderer, "社交菜单", centerX + 40 - this.fontRenderer.getStringWidth("社交菜单") / 2, centerY + 5, 16777215);
         }
 
         super.drawScreen(x, y, partialTick);
