@@ -99,7 +99,7 @@ public class GuiPartyRequest extends GuiScreen
 
         this.mc.renderEngine.resetBoundTexture();
 
-        String name = "Request Party Position";
+        String name = "请求公会位置";
 
         drawString(this.fontRenderer, name, centerX + 69 - this.fontRenderer.getStringWidth(name) / 2, centerY + 5, 16777215);
         super.drawScreen(x, y, partialTick);
