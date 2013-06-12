@@ -47,11 +47,11 @@ public class GuiCreateParty extends GuiScreen
     public GuiCreateParty(PartyData pm, EntityPlayer player, GuiScreen parent)
     {
         this.parent = parent;
+        this.partyType = new ArrayList();
         this.partyType.add("打开");
         this.partyType.add("关闭");
         this.partyType.add("私人");
         this.player = player;
-        this.partyType = new ArrayList();
         this.typeIndex = 0;
         this.partyName = "";
         this.mc = FMLClientHandler.instance().getClient();
