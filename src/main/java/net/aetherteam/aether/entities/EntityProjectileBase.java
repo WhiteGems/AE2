@@ -275,10 +275,10 @@ public abstract class EntityProjectileBase extends Entity
 
                     if (this.shooter == null)
                     {
-                        var25 = (new CustomDamageSource("dart", this, this)).setDeathMessage(" 膝盖中了一飞镖.").setProjectile();
+                        var25 = (new CustomDamageSource("dart", this, this)).setDeathMessage(" 膝盖中了一飞镖").setProjectile();
                     } else
                     {
-                        var25 = (new CustomDamageSource("dart", this, this.shooter)).setDeathMessage(" 死于 " + this.shooter.getEntityName() + " 的飞镖.").setProjectile();
+                        var25 = (new CustomDamageSource("dart", this, this.shooter)).setDeathMessage(" 死于 " + this.shooter.getEntityName() + " 的飞镖").setProjectile();
                     }
 
                     if (this.isBurning())
