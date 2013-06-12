@@ -665,7 +665,7 @@ public class AetherItems
 
         for (var1 = 0; var1 < AetherMoaColour.colours.size(); ++var1)
         {
-            LanguageRegistry.addName(new ItemStack(MoaEgg, 1, var1), var9[var1] + "恐龙蛋");
+            LanguageRegistry.addName(new ItemStack(MoaEgg, 1, var1), var9[var1] + "恐鸟蛋");
         }
 
         LanguageRegistry.addName(new ItemStack(SkyrootBucket, 1, Block.waterMoving.blockID), "天根木水桶");
