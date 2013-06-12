@@ -12,29 +12,24 @@ public class AetherNameGen
 
     public static String[] name2 = {"pa001023","sun","waidely","zestybaby","craft","zesty","crafteverywhere","Azanor","RichardG","zlainsama","pahimar","Alblaka","鸡排","脆饼","kingbdogz","indeed","fanhua","HyperX","Player_Kuso","木是伊","direwolf20","12dora","郝先生","重生是希望","景景","升天的猫","苍生","comeheres","szszss","希特勒","元首","和尚","籽岷","stevefan","dawn","banner","闪耀之灵","sy","SF","wzp","CaptainSparklez","邦莫","米二","zero","ztcjohn","某猫","蓝色铁卷门","大作之月","disco","黑桐谷歌","敖厂长","CovertJaguar","SirSengir","eloraam","大刘","当风过时","小木","kitune","Lawrence","yuxuanchiadm","Qrox","johnbanq","爱丽丝","hendyzone","jcku","tesso","华子","随风澈","WJMZ8MR","天命小猪","卧室小强","矮人","Littlebear","powercrystals","鳄鱼软趴趴","Forever_小树","719823597","outsidero","miguo","DJXGAME"};
 
-    public static String[] name3 = {"pa001023","sun","waidely","zestybaby","craft","zesty","crafteverywhere","Azanor","RichardG","zlainsama","pahimar","Alblaka","鸡排","脆饼","kingbdogz","indeed","fanhua","HyperX","Player_Kuso","木是伊","direwolf20","12dora","郝先生","重生是希望","景景","升天的猫","苍生","comeheres","szszss","希特勒","元首","和尚","籽岷","stevefan","dawn","banner","闪耀之灵","sy","SF","wzp","CaptainSparklez","邦莫","米二","zero","ztcjohn","某猫","蓝色铁卷门","大作之月","disco","黑桐谷歌","敖厂长","CovertJaguar","SirSengir","eloraam","大刘","当风过时","小木","kitune","Lawrence","yuxuanchiadm","Qrox","johnbanq","爱丽丝","hendyzone","jcku","tesso","华子","随风澈","WJMZ8MR","天命小猪","卧室小强","矮人","Littlebear","powercrystals","鳄鱼软趴趴","Forever_小树","719823597","outsidero","miguo","DJXGAME"};
-
 
     public static String gen()
     {
         Random rand = new Random();
         String name = name1[rand.nextInt(name1.length)];
-
-        int middle = 2 + rand.nextInt(2);
-        for (int i = 0; i < middle; i++)
-        {
-            name = name + name2[rand.nextInt(name2.length)];
-        }
-        return name + name3[rand.nextInt(name3.length)];
+        return name + name2[rand.nextInt(name2.length)];
     }
 
     public static String valkGen()
     {
         Random rand = new Random();
         String result = "";
-        result = result + valkNamePrefix[rand.nextInt(valkNamePrefix.length)];
-        result = result + valkNameMiddix[rand.nextInt(valkNameMiddix.length)];
-        result = result + valkNameSuffix[rand.nextInt(valkNameSuffix.length)];
+        // result = result + valkNamePrefix[rand.nextInt(valkNamePrefix.length)];
+        // result = result + valkNameMiddix[rand.nextInt(valkNameMiddix.length)];
+        // result = result + valkNameSuffix[rand.nextInt(valkNameSuffix.length)];
+
+        result = name1[rand.nextInt(name1.length)];
+        result += name2[rand.nextInt(name2.length)];
         return result;
     }
 }
