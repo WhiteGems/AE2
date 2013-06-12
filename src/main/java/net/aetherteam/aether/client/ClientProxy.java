@@ -178,8 +178,8 @@ public class ClientProxy extends CommonProxy
         installSound("music/aether3.ogg");
         installSound("music/aether4.ogg");
         installSound("music/aether5.ogg");
-        installSound("music/Approaches.ogg");
-
+        
+        installSound("streaming/Approaches.ogg");
         installSound("streaming/Aether Menu.ogg");
         installSound("streaming/Aether Menu Two.wav");
         installSound("streaming/Spectrum.ogg");
@@ -234,7 +234,7 @@ public class ClientProxy extends CommonProxy
         installSound("newsound/aemob/sentryGolem/hit1.wav");
         installSound("newsound/aemob/sentryGolem/hit2.wav");
 
-        installSound("newsound/aemob/sentryGuardian/death.wav");
+        installSound("newsound/aemob/sentryGuardian/death.ogg");
         installSound("newsound/aemob/sentryGuardian/spawn.ogg");
         installSound("newsound/aemob/sentryGuardian/hit.ogg");
         installSound("newsound/aemob/sentryGuardian/living.ogg");
