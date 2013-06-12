@@ -779,7 +779,7 @@ public class MenuBaseAetherII extends MenuBase
             GL11.glScalef(var26, var26 * 0.35F, var26);
             this.drawTexturedModalRect(0, 0, 0, 0, 255, 255);
             GL11.glPopMatrix();
-            var23 = "以太团队将加入TUG世界!";
+            var23 = "以太团队参与了沙盒游戏TUG的开发!";
             String var27 = "请帮助我们支持这个酷毙的游戏 :)";
             this.drawString(this.fontRenderer, var23, this.width / 2 - this.fontRenderer.getStringWidth(var23) / 2, this.height - 40, 16777215);
             this.drawString(this.fontRenderer, var27, this.width / 2 - this.fontRenderer.getStringWidth(var27) / 2, this.height - 27, 16777215);
