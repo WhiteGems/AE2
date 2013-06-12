@@ -23,7 +23,7 @@ public class GuiIncubator extends GuiContainer
     protected void drawGuiContainerForegroundLayer()
     {
         this.fontRenderer.drawString("Incubator", 60, 6, 4210752);
-        this.fontRenderer.drawString("Inventory", 8, this.ySize - 96 + 2, 4210752);
+        this.fontRenderer.drawString("物品栏", 8, this.ySize - 96 + 2, 4210752);
     }
 
     protected void drawGuiContainerBackgroundLayer(float f, int ia, int ib)

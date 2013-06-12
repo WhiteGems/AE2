@@ -136,7 +136,7 @@ public class GuiDonatorMenu extends GuiScreen
             ((GuiButton) this.buttonList.get(1)).enabled = false;
             ((GuiButton) this.buttonList.get(2)).enabled = false;
 
-            text[0] = "你并非权限者";
+            text[0] = "你并非捐赠者";
             text[1] = "该菜单用于激活";
             text[2] = "捐助者的特殊功能";
             text[3] = "这些功能不会影响实际游戏";
