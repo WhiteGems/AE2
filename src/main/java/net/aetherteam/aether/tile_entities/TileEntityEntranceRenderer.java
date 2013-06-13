@@ -35,7 +35,7 @@ public class TileEntityEntranceRenderer extends TileEntitySpecialRenderer
         {
             PartyMember var10 = PartyController.instance().getMember(Minecraft.getMinecraft().thePlayer.username.toLowerCase());
             Party var11 = PartyController.instance().getParty(var10);
-            String var12 = (var11 == null || !var9.hasAnyConqueredDungeon(var11.getMembers())) && !var9.hasConqueredDungeon((EntityPlayer) Minecraft.getMinecraft().thePlayer) ? (!var9.isActive() && !var9.hasQueuedParty() ? "Available" : "Occupied") : "Conquered";
+            String var12 = (var11 == null || !var9.hasAnyConqueredDungeon(var11.getMembers())) && !var9.hasConqueredDungeon((EntityPlayer) Minecraft.getMinecraft().thePlayer) ? (!var9.isActive() && !var9.hasQueuedParty() ? "未攻略" : "攻略中") : "已攻略";
             int var13 = (var11 == null || !var9.hasAnyConqueredDungeon(var11.getMembers())) && !var9.hasConqueredDungeon((EntityPlayer) Minecraft.getMinecraft().thePlayer) ? (!var9.isActive() && !var9.hasQueuedParty() ? 6750054 : 16756516) : 10688793;
             GL11.glPushMatrix();
             this.renderLabel(var1, var12, var2, var4 + 5.0D, var6, 24, 2.0F, var13);
