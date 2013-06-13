@@ -22,7 +22,7 @@ public class RenderZephyroo extends RenderLiving
 
             if (var10.isLovingClash())
             {
-                this.func_96449_a(var1, var2, var4, var6, "pls lov me clashy <3", var9, 1.0D);
+                this.func_96449_a(var1, var2, var4, var6, "请疼爱我, 喔:-O 亲~", var9, 1.0D);
             }
         }
     }
