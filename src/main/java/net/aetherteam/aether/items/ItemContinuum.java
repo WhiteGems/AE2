@@ -21,7 +21,7 @@ public class ItemContinuum extends ItemAether
     private static WeightedRandom rand;
     static short[] whitelist_id = {};
     static short[] whitelist_data = {};
-    static int[] whitelist_exp = {};
+    static double[] whitelist_exp = {};
 
     protected ItemContinuum(int var1)
     {
@@ -39,17 +39,17 @@ public class ItemContinuum extends ItemAether
             {
                 whitelist_id = new short[temp.length];
                 whitelist_data = new short[temp.length];
-                whitelist_exp = new int[temp.length];
+                whitelist_exp = new double[temp.length];
                 for (int i = 0; i < temp.length; i++)
                 {
                     String[] ht = temp[i].split(":");
                     if (ht.length >= 1) whitelist_id[i] = Short.valueOf(ht[0]);
                     if (ht.length >= 2) whitelist_data[i] = Short.valueOf(ht[1]);
-                    if (ht.length >= 3) whitelist_exp[i] = Integer.valueOf(ht[2]);
+                    if (ht.length >= 3) whitelist_exp[i] = Double.valueOf(ht[2]);
                 }
             }
             long total = 0;
-            for(int cur : whitelist_exp) total += cur;
+            for(double cur : whitelist_exp) total += cur;
             double[] probablity = new double[temp.length];
             for(int i = 0; i < whitelist_exp.length; ++ i) {
                 probablity[i] = whitelist_exp[i] * 1.0D / total;
@@ -61,7 +61,6 @@ public class ItemContinuum extends ItemAether
 
     public static int getRandomIndex()
     {
-        // return random.nextInt(whitelist_exp.length);
         return rand.nextRand();
     }
 
@@ -71,14 +70,16 @@ public class ItemContinuum extends ItemAether
     public ItemStack onItemRightClick(ItemStack var1, World var2, EntityPlayer var3)
     {
         int var4;
+        int rindex;
 
         do
         {
-            var4 = whitelist_id[getRandomIndex()];
+            rindex = getRandomIndex();
+            var4 = whitelist_id[rindex];
         } while (Item.itemsList[var4] == null || banList.contains(Integer.valueOf(var4)));
 
         var1.itemID = var4;
-        if (whitelist_data[getRandomIndex()] != 0) var1.setItemDamage(whitelist_data[getRandomIndex()]);
+        if (whitelist_data[rindex] != 0) var1.setItemDamage(whitelist_data[rindex]);
         return var1;
     }
 
