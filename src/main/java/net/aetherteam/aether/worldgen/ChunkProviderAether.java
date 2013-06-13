@@ -347,6 +347,11 @@ public class ChunkProviderAether implements IChunkProvider
 
     public void recreateStructures(int var1, int var2) {}
 
+    @Override
+    public void func_104112_b()
+    {
+    }
+
     public int getLoadedChunkCount()
     {
         return 0;

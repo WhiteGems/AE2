@@ -549,7 +549,7 @@ public class MenuBaseLeftMinecraft extends MenuBase
 
         if ((this.field_92025_p.length() > 0) && (par1 >= this.field_92022_t) && (par1 <= this.field_92020_v) && (par2 >= this.field_92021_u) && (par2 <= this.field_92019_w))
         {
-            GuiConfirmOpenLink guiconfirmopenlink = new GuiConfirmOpenLink(this, "http://tinyurl.com/javappc", 13);
+            GuiConfirmOpenLink guiconfirmopenlink = new GuiConfirmOpenLink(this, "http://tinyurl.com/javappc", 13, true);
             guiconfirmopenlink.func_92026_h();
             this.mc.displayGuiScreen(guiconfirmopenlink);
         }

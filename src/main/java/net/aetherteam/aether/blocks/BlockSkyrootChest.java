@@ -27,12 +27,14 @@ import net.minecraftforge.common.ForgeDirection;
 public class BlockSkyrootChest extends BlockContainer
 {
     private final Random random = new Random();
-    public final int field_94443_a;
+
+    /** Determines whether of not the chest is trapped. */
+    public final int isTrapped;
 
     protected BlockSkyrootChest(int var1, int var2)
     {
         super(var1, Material.wood);
-        this.field_94443_a = var2;
+        this.isTrapped = var2;
         this.setCreativeTab(CreativeTabs.tabDecorations);
         this.setBlockBounds(0.0625F, 0.0F, 0.0625F, 0.9375F, 0.875F, 0.9375F);
     }
@@ -482,7 +484,7 @@ public class BlockSkyrootChest extends BlockContainer
      */
     public boolean canProvidePower()
     {
-        return this.field_94443_a == 1;
+        return this.isTrapped == 1;
     }
 
     /**
@@ -543,6 +545,6 @@ public class BlockSkyrootChest extends BlockContainer
      */
     public int getComparatorInputOverride(World var1, int var2, int var3, int var4, int var5)
     {
-        return Container.func_94526_b(this.getInventory(var1, var2, var3, var4));
+        return Container.calcRedstoneFromInventory(this.getInventory(var1, var2, var3, var4));
     }
 }

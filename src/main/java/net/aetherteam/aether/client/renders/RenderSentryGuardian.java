@@ -34,7 +34,7 @@ public class RenderSentryGuardian extends RenderLiving
             GL11.glEnable(GL11.GL_BLEND);
             GL11.glBlendFunc(GL11.GL_ONE, GL11.GL_ONE);
 
-            if (var1.getHasActivePotion())
+            if (!var1.getActivePotionEffects().isEmpty())
             {
                 GL11.glDepthMask(false);
             } else

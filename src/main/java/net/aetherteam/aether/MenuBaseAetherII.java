@@ -793,7 +793,7 @@ public class MenuBaseAetherII extends MenuBase
 
         if (this.field_92025_p.length() > 0 && var1 >= this.field_92022_t && var1 <= this.field_92020_v && var2 >= this.field_92021_u && var2 <= this.field_92019_w)
         {
-            GuiConfirmOpenLink var4 = new GuiConfirmOpenLink(this, "http://tinyurl.com/javappc", 13);
+            GuiConfirmOpenLink var4 = new GuiConfirmOpenLink(this, "http://tinyurl.com/javappc", 13, true);
             var4.func_92026_h();
             this.mc.displayGuiScreen(var4);
         }

@@ -48,7 +48,7 @@ public class GuiInventoryAether extends AetherInventoryEffectRenderer
         int var6 = this.guiTop;
         drawTexturedModalRect(var5, var6, 0, 0, this.xSize, this.ySize + 21);
 
-        func_74223_a(this.mc, var5 + 34, var6 + 75, 30, var5 + 51 - this.xSize_lo, var6 + 75 - 50 - this.ySize_lo);
+        drawPlayerOnGui(this.mc, var5 + 34, var6 + 75, 30, var5 + 51 - this.xSize_lo, var6 + 75 - 50 - this.ySize_lo);
 
         StringTranslate string = StringTranslate.getInstance();
         this.buttonList.clear();
@@ -74,7 +74,7 @@ public class GuiInventoryAether extends AetherInventoryEffectRenderer
         this.ySize_lo = par2;
     }
 
-    public void func_74223_a(Minecraft par0Minecraft, int par1, int par2, int par3, float par4, float par5)
+    public void drawPlayerOnGui(Minecraft par0Minecraft, int par1, int par2, int par3, float par4, float par5)
     {
         GL11.glEnable(2903);
         GL11.glPushMatrix();

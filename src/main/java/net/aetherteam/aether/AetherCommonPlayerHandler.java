@@ -33,7 +33,7 @@ public class AetherCommonPlayerHandler
     public float timeInPortal;
     public float prevTimeInPortal;
     public EntityPlayer player;
-    protected int field_82152_aq;
+    protected int teleportDirection;
     public Random rand = new Random();
     public World worldObj;
     public int jrem;

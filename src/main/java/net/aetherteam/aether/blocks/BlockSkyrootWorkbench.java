@@ -13,9 +13,9 @@ import net.minecraft.world.World;
 public class BlockSkyrootWorkbench extends BlockWorkbench
 {
     @SideOnly(Side.CLIENT)
-    private Icon field_94385_a;
+    private Icon workbenchIconTop;
     @SideOnly(Side.CLIENT)
-    private Icon field_94384_b;
+    private Icon workbenchIconFront;
 
     protected BlockSkyrootWorkbench(int var1)
     {
@@ -29,7 +29,7 @@ public class BlockSkyrootWorkbench extends BlockWorkbench
      */
     public Icon getIcon(int var1, int var2)
     {
-        return var1 == 1 ? this.field_94385_a : (var1 == 0 ? AetherBlocks.SkyrootPlank.getBlockTextureFromSide(var1) : (var1 != 2 && var1 != 4 ? this.blockIcon : this.field_94384_b));
+        return var1 == 1 ? this.workbenchIconTop : (var1 == 0 ? AetherBlocks.SkyrootPlank.getBlockTextureFromSide(var1) : (var1 != 2 && var1 != 4 ? this.blockIcon : this.workbenchIconFront));
     }
 
     @SideOnly(Side.CLIENT)
@@ -41,8 +41,8 @@ public class BlockSkyrootWorkbench extends BlockWorkbench
     public void registerIcons(IconRegister var1)
     {
         this.blockIcon = var1.registerIcon("Aether:Skyroot Workbench Side");
-        this.field_94385_a = var1.registerIcon("Aether:Skyroot Workbench Top");
-        this.field_94384_b = var1.registerIcon("Aether:Skyroot Workbench Front");
+        this.workbenchIconTop = var1.registerIcon("Aether:Skyroot Workbench Top");
+        this.workbenchIconFront = var1.registerIcon("Aether:Skyroot Workbench Front");
     }
 
     /**

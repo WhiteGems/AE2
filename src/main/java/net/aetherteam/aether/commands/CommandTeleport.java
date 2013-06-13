@@ -153,7 +153,7 @@ public class CommandTeleport extends CommandBase
                 var4 = var4.substring(1);
             }
 
-            var8 += func_82363_b(var1, var4);
+            var8 += parseDouble(var1, var4);
 
             if (!var10 && !var7)
             {

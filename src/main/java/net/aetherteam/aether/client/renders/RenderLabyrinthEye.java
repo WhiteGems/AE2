@@ -20,7 +20,7 @@ public class RenderLabyrinthEye extends RenderLiving
      */
     protected void renderModel(EntityLiving var1, float var2, float var3, float var4, float var5, float var6, float var7)
     {
-        if (!var1.getHasActivePotion())
+        if (!var1.getActivePotionEffects().isEmpty())
         {
             GL11.glTranslatef(0.0F, 0.0F, 0.0F);
             this.loadDownloadableImageTexture(var1.skinUrl, var1.getTexture());
@@ -60,7 +60,7 @@ public class RenderLabyrinthEye extends RenderLiving
             GL11.glRotatef((float) (var1.ticksExisted * 10), 0.0F, 1.0F, 0.0F);
             GL11.glBlendFunc(GL11.GL_ONE, GL11.GL_ONE);
 
-            if (var1.getHasActivePotion())
+            if (!var1.getActivePotionEffects().isEmpty())
             {
                 GL11.glDepthMask(false);
             } else
