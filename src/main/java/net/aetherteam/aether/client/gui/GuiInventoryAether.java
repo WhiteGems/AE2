@@ -53,7 +53,7 @@ public class GuiInventoryAether extends AetherInventoryEffectRenderer
         StringTranslate string = StringTranslate.getInstance();
         this.buttonList.clear();
 
-        GuiButton bookOfLore = new GuiButton(2, this.guiLeft + 7, this.guiTop + 162, 72, 20, string.translateKey("知识手册"));
+        GuiButton bookOfLore = new GuiButton(2, this.guiLeft + 7, this.guiTop + 162, 72, 20, string.translateKey("以太Ⅱ物品百科"));
 
         bookOfLore.enabled = false;
 

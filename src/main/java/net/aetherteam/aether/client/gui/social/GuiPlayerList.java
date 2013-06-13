@@ -200,7 +200,7 @@ public class GuiPlayerList extends GuiScreen
         else if (playername.toLowerCase().equals("zestybaby"))
         	this.fontRenderer.drawString("白宝石小组组长sama!", (int) ((x + height) / 0.75F), (int) ((y + 12.0F) / 0.75F), 16105765);
         else if ((playername.toLowerCase().equals("crafteverywhere")) || (playername.toLowerCase().equals("pa001024")) || (playername.toLowerCase().equals("sun")) || (playername.toLowerCase().equals("waidely")))
-        	this.fontRenderer.drawString("汉化人员", (int) ((x + height) / 0.75F), (int) ((y + 12.0F) / 0.75F), 16105765);	
+        	this.fontRenderer.drawString("以太II 汉化人员", (int) ((x + height) / 0.75F), (int) ((y + 12.0F) / 0.75F), 16105765);	
         GL11.glPopMatrix();
     }
 }

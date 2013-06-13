@@ -106,7 +106,7 @@ public class GuiCreateParty extends GuiScreen
                 PacketDispatcher.sendPacketToServer(AetherPacketHandler.sendPartyChange(true, this.partyName, this.player.username, this.player.skinUrl));
                 PacketDispatcher.sendPacketToServer(AetherPacketHandler.sendPartyTypeChange(this.partyName, PartyType.getTypeFromName((String) this.partyType.get(this.typeIndex))));
 
-                this.mc.displayGuiScreen(new GuiDialogueBox(this.parent, "你已经成功建立公会!", "抱歉，你的公会名称已经被占用:(", created));
+                this.mc.displayGuiScreen(new GuiDialogueBox(this.parent, "你已经成功建立公会!", "抱歉，你的公会名称已经被占用 :(", created));
         }
     }
 

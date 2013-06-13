@@ -35,7 +35,7 @@ public class AetherItems
     )
     public static Item AetherMusicDisk;
     @AEItem(
-            name = "金珀"
+            name = "金色琥珀"
     )
     public static Item GoldenAmber;
     @AEItem(
@@ -455,7 +455,7 @@ public class AetherItems
     )
     public static Item Strawberry;
     @AEItem(
-            name = "命运之球"
+            name = "命运之珠"
     )
     public static Item ContinuumOrb;
     @AEItem(

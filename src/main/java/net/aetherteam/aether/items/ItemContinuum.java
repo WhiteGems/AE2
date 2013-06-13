@@ -92,7 +92,12 @@ public class ItemContinuum extends ItemAether
             reader = new InputStreamReader(ItemContinuum.class.getResourceAsStream(resname), "UTF8");
             BufferedReader buf = new BufferedReader(reader);
             String line;
-            while ((line = buf.readLine()) != null) result.add(line);
+            while ((line = buf.readLine()) != null)
+            {
+                if (line.charAt(0) == '#') continue;
+                if (line.isEmpty()) continue;
+                result.add(line);
+            }
             buf.close();
             reader.close();
         } catch (IOException e)
