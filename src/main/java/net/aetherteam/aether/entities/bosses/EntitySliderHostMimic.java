@@ -283,6 +283,7 @@ public class EntitySliderHostMimic extends EntityMiniBoss implements IAetherBoss
      */
     protected void attackEntity(Entity var1, float var2)
     {
+        if (!(var1 instanceof EntityLiving)) return;
         EntityLiving var3 = (EntityLiving) var1;
 
         if (var2 < 8.5F && this.canEntityBeSeen(var3))
