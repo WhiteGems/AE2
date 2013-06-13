@@ -19,17 +19,22 @@ public class AetherNameGen
 
     static
     {
-        String[] temp;
-        temp = loadNames("/names/perfix.txt");
-        if (temp != null) name1 = temp;
-        temp = loadNames("/names/suffix.txt");
-        if (temp != null) name2 = temp;
-        temp = loadNames("/names/valkperfix.txt");
-        if (temp != null) valkNamePrefix = temp;
-        temp = loadNames("/names/valkmiddix.txt");
-        if (temp != null) valkNameMiddix = temp;
-        temp = loadNames("/names/valksuffix.txt");
-        if (temp != null) valkNameSuffix = temp;
+        try
+        {
+            String[] temp;
+            temp = loadNames("/names/perfix.txt");
+            if (temp != null) name1 = temp;
+            temp = loadNames("/names/suffix.txt");
+            if (temp != null) name2 = temp;
+            temp = loadNames("/names/valkperfix.txt");
+            if (temp != null) valkNamePrefix = temp;
+            temp = loadNames("/names/valkmiddix.txt");
+            if (temp != null) valkNameMiddix = temp;
+            temp = loadNames("/names/valksuffix.txt");
+            if (temp != null) valkNameSuffix = temp;
+        }
+        catch (Exception e)
+        {}
     }
 
     private static String[] loadNames(String resname)
