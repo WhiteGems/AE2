@@ -137,6 +137,9 @@ public class AetherRecipes
         ModLoader.addRecipe(new ItemStack(AetherBlocks.HellfireWall, 6), new Object[]{"UUU", "UUU", Character.valueOf('U'), new ItemStack(AetherBlocks.DungeonStone, 1, 2)});
 
         ModLoader.addRecipe(new ItemStack(AetherBlocks.HolystoneBrick, 2), new Object[]{"UU", "UU", Character.valueOf('U'), AetherBlocks.Holystone});
+    
+        ModLoader.addRecipe(new ItemStack(AetherItems.GoldenCloudParachute, 1), new Object[]{"ZZ", "ZZ", Character.valueOf('Z'), AetherBlocks.Aercloud});
+
     }
 }
 
