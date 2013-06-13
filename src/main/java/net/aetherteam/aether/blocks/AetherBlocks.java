@@ -144,7 +144,7 @@ public class AetherBlocks
     public static Block Trap;
     public static int TrapID = 186;
     @net.aetherteam.aether.interfaces.AEBlock(
-            name = "箱子怪"
+            name = "宝箱怪"
     )
     public static Block SkyrootChestMimic;
     public static int SkyrootChestMimicID = 187;
@@ -383,7 +383,7 @@ public class AetherBlocks
     public static Block DungeonEntrance;
     public static int DungeonEntranceID = 232;
     @net.aetherteam.aether.interfaces.AEBlock(
-            name = "地牢入口控制器"
+            name = "地牢入口机关"
     )
     public static Block DungeonEntranceController;
     public static int DungeonEntranceControllerID = 233;
