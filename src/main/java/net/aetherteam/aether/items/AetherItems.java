@@ -38,7 +38,7 @@ public class AetherItems
     )
     public static Item GoldenAmber;
     @net.aetherteam.aether.interfaces.AEItem(
-            name = "以太传送门"
+            name = "毒箭草花瓣"
     )
     public static Item AechorPetal;
     @net.aetherteam.aether.interfaces.AEItem(
