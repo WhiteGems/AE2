@@ -122,15 +122,20 @@ public class BlockBronzeDoor extends BlockAether implements IAetherBlock
                                 		var16 = 5;
                                 	}
                                 	
-                                    if (var16 <= 0)
+                                	if(var16 < 0)
+                                	{
+                                		var16 = 0;
+                                	}
+                                	
+                                    if (var16 == 0)
                                     {
-                                        var13.chatItUp(var5, "这个门似乎需要" + (5 - var13.getKeyAmount()) + (5 - var16 < 5 ? "更多的" : "") + (5 - var16 > 1 ? "把钥匙" : "钥匙") + ". 在地牢的深处能找到这些钥匙?");
+                                        var13.chatItUp(var5, "这个门看起来需要" + (5 - var13.getKeyAmount()) + "把钥匙, 在地牢的深处能找到这些钥匙?");
                                         return true;
                                     }
 
                                     if (var13.getKeyAmount() < 5)
                                     {
-                                        var13.chatItUp(var5, "您已经插入" + var16 + "把钥匙. 似乎还需要" + (5 - var16) + (5 - var16 < 5 ? "更多的" : "") + (5 - var16 > 1 ? "把钥匙" : "钥匙") + "");
+                                        var13.chatItUp(var5, "您已经插入" + var16 + "把钥匙, 还需要" + (5 - var16) + "把钥匙");
                                         return true;
                                     }
                                 }
