@@ -24,7 +24,7 @@ public class ItemBlockDungeonHolystone extends ItemBlock
     public String getUnlocalizedName(ItemStack var1)
     {
         int var2 = var1.getItemDamage();
-        return var2 >= 2 ? "地牢神圣苔石" : (var2 >= 0 ? "地牢神圣石头" : this.getUnlocalizedName() + var2);
+        return var2 >= 2 ? "Dungeon Mossy Holystone" : (var2 >= 0 ? "Dungeon Holystone" : this.getUnlocalizedName() + var2);
     }
 
     /**
