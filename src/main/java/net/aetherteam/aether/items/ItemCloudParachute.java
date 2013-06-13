@@ -1,10 +1,12 @@
 package net.aetherteam.aether.items;
 
 import net.aetherteam.aether.entities.EntityCloudParachute;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
+import net.minecraft.creativetab.CreativeTabs;
 
 public class ItemCloudParachute extends ItemAether
 {
@@ -13,26 +15,51 @@ public class ItemCloudParachute extends ItemAether
         super(var1);
         this.maxStackSize = 1;
         this.setMaxDamage(var2);
+        this.setCreativeTab(CreativeTabs.tabTransport);
     }
-
+    
     public Item setIconName(String var1)
     {
         return this.setUnlocalizedName("Aether:" + var1);
     }
+    
+    
+    /**
+     * Called each tick as long the item is on a player inventory. Uses by maps to check if is on a player hand and
+     * update it's contents.
+     */
+    public void onUpdate(ItemStack par1ItemStack, World par2World, Entity par3Entity, int par4, boolean par5) 
+    {       
+    	if (par3Entity instanceof EntityPlayer)
+        {
+            EntityPlayer player = (EntityPlayer)par3Entity;
+            if(player.fallDistance > 20){
+            	player.fallDistance = 0;
+            	if (!par2World.isRemote)
+                {
+                	EntityCloudParachute entityCloudParachute = new EntityCloudParachute(par2World, player, this.itemID == AetherItems.GoldenCloudParachute.itemID);
+                	par2World.spawnEntityInWorld(entityCloudParachute);
+                }
+
+            	par1ItemStack.damageItem(1, player);         	
+            } 
+        }
+    }
+    
+    
 
     /**
      * Called whenever this item is equipped and the right mouse button is pressed. Args: itemStack, world, entityPlayer
      */
-    public ItemStack onItemRightClick(ItemStack var1, World var2, EntityPlayer var3)
+    public ItemStack onItemRightClick(ItemStack var1, World world, EntityPlayer player)
     {
-        EntityCloudParachute var4 = new EntityCloudParachute(var2, var3, this.itemID == AetherItems.GoldenCloudParachute.itemID);
-
-        if (!var2.isRemote)
+        if (!world.isRemote)
         {
-            var2.spawnEntityInWorld(var4);
+        	EntityCloudParachute entityCloudParachute = new EntityCloudParachute(world, player, this.itemID == AetherItems.GoldenCloudParachute.itemID);
+        	world.spawnEntityInWorld(entityCloudParachute);
         }
 
-        var1.damageItem(1, var3);
+        var1.damageItem(1, player);
         return var1;
     }
 }
