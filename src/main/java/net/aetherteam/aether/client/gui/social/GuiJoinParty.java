@@ -3,21 +3,15 @@ package net.aetherteam.aether.client.gui.social;
 import cpw.mods.fml.client.FMLClientHandler;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import net.aetherteam.aether.party.Party;
 import net.aetherteam.aether.party.PartyController;
 import net.aetherteam.aether.party.PartyType;
 import net.aetherteam.aether.party.members.PartyMember;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.audio.SoundManager;
-import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.ScaledResolution;
-import net.minecraft.client.renderer.RenderEngine;
-import net.minecraft.client.settings.GameSettings;
-import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.entity.player.EntityPlayer;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
@@ -35,7 +29,7 @@ public class GuiJoinParty extends GuiScreen
     private int hParty;
     private GuiScreen parent;
     private ArrayList partySlots = new ArrayList();
-    Minecraft f;
+    Minecraft mc;
     private int totalHeight;
     private GuiPartySlot selectedPartySlot;
     private boolean slotsCreated = false;
@@ -240,7 +234,7 @@ public class GuiJoinParty extends GuiScreen
         }
 
         this.mc.renderEngine.resetBoundTexture();
-        drawString(this.fontRenderer, "Party List", centerX + 70 - this.fontRenderer.getStringWidth("Party List") / 2, centerY + 10, 16777215);
+        drawString(this.fontRenderer, "公会列表", centerX + 70 - this.fontRenderer.getStringWidth("公会列表") / 2, centerY + 10, 16777215);
 
         if ((partyList.size() == 0) || (showNoParties))
         {
@@ -258,19 +252,19 @@ public class GuiJoinParty extends GuiScreen
             GL11.glPopMatrix();
             this.mc.renderEngine.resetBoundTexture();
 
-            String warningLabel = "There are no parties to display at this time.";
+            String warningLabel = "当前无人建立公会";
 
             drawString(this.fontRenderer, warningLabel, centerX + 70 - this.fontRenderer.getStringWidth(warningLabel) / 2, centerY + 75, 16777215);
         }
 
-        this.joinButton = new GuiButton(1, this.xParty + 3, this.yParty + 85 - 28, 58, 20, "Join");
+        this.joinButton = new GuiButton(1, this.xParty + 3, this.yParty + 85 - 28, 58, 20, "加入");
 
         if ((this.selectedPartySlot != null) && (this.slotIsSelected))
         {
             this.joinButton.enabled = true;
         } else this.joinButton.enabled = false;
 
-        this.buttonList.add(new GuiButton(0, this.xParty - 60, this.yParty + 85 - 28, 58, 20, "Back"));
+        this.buttonList.add(new GuiButton(0, this.xParty - 60, this.yParty + 85 - 28, 58, 20, "返回"));
         this.buttonList.add(this.joinButton);
 
         super.drawScreen(x, y, partialTick);

@@ -12,7 +12,7 @@ public class FrostDamageSource extends DamageSource
 
     public String getDeathMessage(EntityLiving par1EntityLiving)
     {
-        return par1EntityLiving.getEntityName() + " was frost bitten";
+        return par1EntityLiving.getEntityName() + "被冻伤";
     }
 
     public boolean isUnblockable()

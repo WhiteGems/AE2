@@ -109,7 +109,7 @@ public class EntityColdLightningBolt extends EntityWeatherEffect
                 for (int var4 = 0; var4 < var6.size(); ++var4)
                 {
                     Entity var5 = (Entity) var6.get(var4);
-                    this.damageSource = (new CustomDamageSource(" has been struck with frost bite", var5, this)).setDeathMessage(" has been struck with frost bite");
+                    this.damageSource = (new CustomDamageSource("无福消受风暴怪冰冷的吻", var5, this)).setDeathMessage("无福消受风暴怪冰冷的吻");
 
                     if (!(var5 instanceof EntityTempest) && !(var5 instanceof EntityItem))
                     {

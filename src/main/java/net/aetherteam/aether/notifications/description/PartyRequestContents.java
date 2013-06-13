@@ -9,7 +9,7 @@ public class PartyRequestContents extends NotificationContents
 {
     public String getTitle(Notification notification)
     {
-        return "§r§n" + notification.getTypeName() + "§r - " + new StringBuilder().append("§r§ofrom ").append(notification.getSenderName()).toString();
+        return "§r§n" + notification.getTypeName() + "§r - " + new StringBuilder().append("§r§o来自于 ").append(notification.getSenderName()).toString();
     }
 
     public String getDescription(Notification notification)
@@ -21,10 +21,10 @@ public class PartyRequestContents extends NotificationContents
 
         if (party != null)
         {
-            description = "Would you like to join my party?" + " My party is called " + new StringBuilder().append('"').append(party.getName()).append('"').toString() + ".";
+            description = "你想加入我的公会吗?" + " 我的公会是 " + new StringBuilder().append('"').append(party.getName()).append('"').toString() + "";
         } else
         {
-            description = "Sorry, but I am no longer in a party. You can deny this party request.";
+            description = "很抱歉, 我已退出公会, 你可以拒绝此请求";
         }
 
         return description;

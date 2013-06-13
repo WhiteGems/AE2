@@ -18,7 +18,7 @@ public class AetherFoodTab extends CreativeTabs
 
     public String getTabLabel()
     {
-        return "Aether Food";
+        return "以太II|食物";
     }
 
     public String getTranslatedTabLabel()

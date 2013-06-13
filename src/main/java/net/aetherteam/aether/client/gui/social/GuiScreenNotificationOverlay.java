@@ -49,15 +49,15 @@ public class GuiScreenNotificationOverlay extends GuiScreen
     {
         if (this.guiType == this.REQUEST)
         {
-            drawCenteredString(this.fontRenderer, this.party.getLeader().username + " has invited you to join their party!", this.centerX, this.centerY, 56281239);
+            drawCenteredString(this.fontRenderer, this.party.getLeader().username + "邀请你加入他们的团队!", this.centerX, this.centerY, 56281239);
         }
         if (this.guiType == this.DENY)
         {
-            drawCenteredString(this.fontRenderer, this.party.getLeader().username + " has invited you to join their party!", this.centerX, this.centerY, 56281239);
+            drawCenteredString(this.fontRenderer, this.party.getLeader().username + "邀请你加入他们的团队!", this.centerX, this.centerY, 56281239);
         }
         if (this.guiType == this.ACCEPT)
         {
-            drawCenteredString(this.fontRenderer, this.party.getLeader().username + " has invited you to join their party!", this.centerX, this.centerY, 56281239);
+            drawCenteredString(this.fontRenderer, this.party.getLeader().username + "邀请你加入他们的团队!", this.centerX, this.centerY, 56281239);
         }
         drawDefaultBackground();
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);

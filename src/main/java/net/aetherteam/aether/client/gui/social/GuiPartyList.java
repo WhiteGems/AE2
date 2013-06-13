@@ -3,20 +3,14 @@ package net.aetherteam.aether.client.gui.social;
 import cpw.mods.fml.client.FMLClientHandler;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import net.aetherteam.aether.party.Party;
 import net.aetherteam.aether.party.PartyController;
 import net.aetherteam.aether.party.PartyType;
-import net.aetherteam.aether.party.members.PartyMember;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.ScaledResolution;
-import net.minecraft.client.renderer.RenderEngine;
-import net.minecraft.client.settings.GameSettings;
-import net.minecraft.client.settings.KeyBinding;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;
@@ -54,7 +48,7 @@ public class GuiPartyList extends GuiScreen
         if (this.sbar != null) this.sbarVal = this.sbar.sliderValue;
         this.sbar = new GuiYSlider(-1, this.xParty + 46, this.yParty - 54, 10, 103);
         this.sbar.sliderValue = this.sbarVal;
-        this.buttonList.add(new GuiButton(0, this.xParty - 58, this.yParty + 85 - 28, 120, 20, "Back"));
+        this.buttonList.add(new GuiButton(0, this.xParty - 58, this.yParty + 85 - 28, 120, 20, "返回"));
     }
 
     protected void keyTyped(char charTyped, int keyTyped)
@@ -150,7 +144,7 @@ public class GuiPartyList extends GuiScreen
         }
 
         this.mc.renderEngine.resetBoundTexture();
-        drawString(this.fontRenderer, "Party List", centerX + 70 - this.fontRenderer.getStringWidth("Party List") / 2, centerY + 10, 16777215);
+        drawString(this.fontRenderer, "公会列表", centerX + 70 - this.fontRenderer.getStringWidth("公会列表") / 2, centerY + 10, 16777215);
 
         if ((partyList.size() == 0) || (showNoParties))
         {
@@ -168,7 +162,7 @@ public class GuiPartyList extends GuiScreen
             GL11.glPopMatrix();
             this.mc.renderEngine.resetBoundTexture();
 
-            String warningLabel = "There are no parties to display at this time.";
+            String warningLabel = "当前无人创建公会";
 
             drawString(this.fontRenderer, warningLabel, centerX + 70 - this.fontRenderer.getStringWidth(warningLabel) / 2, centerY + 75, 16777215);
         }
@@ -195,13 +189,8 @@ public class GuiPartyList extends GuiScreen
         this.fontRenderer.drawStringWithShadow(party.getName(), x + height - 19, y + 2, 15066597);
         GL11.glPushMatrix();
         GL11.glScalef(0.75F, 0.75F, 1.0F);
-        this.fontRenderer.drawString(party.getLeader().username, (int) ((x + height) / 0.75F - 22.0F + party.getType().name().length() * 6), (int) ((y + 12.0F) / 0.75F), 26367);
-        this.fontRenderer.drawString(party.getType().name(), (int) ((x + height) / 0.75F) - 25, (int) ((y + 12.0F) / 0.75F), party.getType().getDisplayColor());
+        this.fontRenderer.drawString(party.getLeader().username, (int) ((x + height) / 0.75F - 18.0F + party.getType().realname.length() * 6), (int) ((y + 12.0F) / 0.75F), 26367);
+        this.fontRenderer.drawString(party.getType().realname, (int) ((x + height) / 0.75F) - 25, (int) ((y + 12.0F) / 0.75F), party.getType().getDisplayColor());
         GL11.glPopMatrix();
     }
 }
-
-/* Location:           D:\Dev\Mc\forge_orl\mcp\jars\bin\aether.jar
- * Qualified Name:     net.aetherteam.aether.client.gui.social.GuiPartyList
- * JD-Core Version:    0.6.2
- */

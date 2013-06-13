@@ -20,12 +20,13 @@ public class AetherMoaColour
     public int jumps;
     public int chance;
     public String name;
+    public String texturename;
     public static List names = new ArrayList();
     private static int totalChance;
     public static List colours = new ArrayList();
     private static Random random = new Random();
 
-    public AetherMoaColour(int i, int j, int k, int l, String s)
+    public AetherMoaColour(int i, int j, int k, int l, String s, String texture)
     {
         this.ID = i;
         this.colour = j;
@@ -33,13 +34,14 @@ public class AetherMoaColour
         this.chance = l;
         totalChance += l;
         this.name = s;
+        this.texturename = texture;
         colours.add(this);
         names.add(this.name);
     }
 
     public String getTexture(boolean saddled)
     {
-        return "/net/aetherteam/aether/client/sprites/moa/" + (saddled ? "saddle_" : "moa_") + this.name + ".png";
+        return "/net/aetherteam/aether/client/sprites/moa/" + (saddled ? "saddle_" : "moa_") + this.texturename + ".png";
     }
 
     public String getTexture(boolean saddled, EntityPlayer player)
@@ -97,13 +99,8 @@ public class AetherMoaColour
 
     static
     {
-        new AetherMoaColour(0, 7829503, 3, 100, "Blue");
-        new AetherMoaColour(1, 16777215, 4, 20, "White");
-        new AetherMoaColour(2, 2236962, 8, 5, "Black");
+        new AetherMoaColour(0, 7829503, 3, 100, "蓝色", "Blue");
+        new AetherMoaColour(1, 16777215, 4, 20, "白色", "White");
+        new AetherMoaColour(2, 2236962, 8, 5, "黑色", "Black");
     }
 }
-
-/* Location:           D:\Dev\Mc\forge_orl\mcp\jars\bin\aether.jar
- * Qualified Name:     net.aetherteam.aether.AetherMoaColour
- * JD-Core Version:    0.6.2
- */

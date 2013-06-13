@@ -2,6 +2,7 @@ package net.aetherteam.aether.client.renders;
 
 import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.common.ObfuscationReflectionHelper;
+import cpw.mods.fml.relauncher.ReflectionHelper;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.Minecraft;
@@ -29,13 +30,30 @@ public class AetherSkyProvider extends IRenderHandler
 
         try
         {
-            this.starGLCallList = ObfuscationReflectionHelper.getPrivateValue(RenderGlobal.class, var2, new String[]{"starGLCallList"});
-            this.glSkyList = ObfuscationReflectionHelper.getPrivateValue(RenderGlobal.class, var2, new String[]{"glSkyList"});
-            this.glSkyList2 = ObfuscationReflectionHelper.getPrivateValue(RenderGlobal.class, var2, new String[]{"glSkyList2"});
+            this.starGLCallList = getPrivateValue(RenderGlobal.class, var2, new String[]{"starGLCallList"});
+            this.glSkyList = getPrivateValue(RenderGlobal.class, var2, new String[]{"glSkyList"});
+            this.glSkyList2 = getPrivateValue(RenderGlobal.class, var2, new String[]{"glSkyList2"});
             this.inited = true;
         } catch (Exception var4)
         {
             this.inited = false;
+        }
+    }
+
+    @SuppressWarnings("unchecked")
+    public static <T, E> T getPrivateValue(Class <? super E > classToAccess, E instance, String... fieldNames)
+    {
+        try
+        {
+            return ReflectionHelper.getPrivateValue(classToAccess, instance, ObfuscationReflectionHelper.remapFieldNames(classToAccess.getName(), fieldNames));
+        }
+        catch (ReflectionHelper.UnableToFindFieldException e)
+        {
+            throw e;
+        }
+        catch (ReflectionHelper.UnableToAccessFieldException e)
+        {
+            throw e;
         }
     }
 

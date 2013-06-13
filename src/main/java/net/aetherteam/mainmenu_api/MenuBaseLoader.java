@@ -28,7 +28,7 @@ public class MenuBaseLoader extends GuiScreen
     private int y2;
     private int loaderWidth;
     private int loaderHeight;
-    Minecraft f;
+    Minecraft mc;
     private MenuSlot selectedMenuSlot;
     private List menuSlotList = new ArrayList();
     HashMap menuSlotToString = new HashMap();
@@ -60,7 +60,7 @@ public class MenuBaseLoader extends GuiScreen
         updateScreen();
         this.buttonList.clear();
 
-        this.launchMenu = new GuiButton(0, this.x2 - 35, this.y2 + 85 - 28, 72, 20, "Launch Menu");
+        this.launchMenu = new GuiButton(0, this.x2 - 35, this.y2 + 85 - 28, 72, 20, "启动菜单");
 
         this.launchMenu.enabled = false;
 

@@ -78,7 +78,7 @@ public class PartyController
             {
                 if (party.hasMember(getMember(ClientNotificationHandler.clientUsername())))
                 {
-                    ClientNotificationHandler.createGeneric("Party Disbanded!", "", "");
+                    ClientNotificationHandler.createGeneric("公会已解散!", "", "");
                 }
             }
 
@@ -163,7 +163,7 @@ public class PartyController
             {
                 if (party.hasMember(getMember(ClientNotificationHandler.clientUsername())))
                 {
-                    ClientNotificationHandler.createGeneric("Member joined!", member.username, "");
+                    ClientNotificationHandler.createGeneric("新成员加入!", member.username, "");
                 }
             }
 
@@ -193,7 +193,7 @@ public class PartyController
             {
                 if ((party.hasMember(getMember(ClientNotificationHandler.clientUsername()))) && (!member.username.equalsIgnoreCase(ClientNotificationHandler.clientUsername())))
                 {
-                    ClientNotificationHandler.createGeneric("Member left!", member.username, "");
+                    ClientNotificationHandler.createGeneric("成员离开!", member.username, "");
                 }
             }
 
@@ -216,7 +216,7 @@ public class PartyController
             {
                 if (party.hasMember(getMember(ClientNotificationHandler.clientUsername())))
                 {
-                    ClientNotificationHandler.createGeneric("Party Name Changed!", "To: " + newName, "");
+                    ClientNotificationHandler.createGeneric("公会名称改变!", "新名称为: " + newName, "");
                 }
             }
 
@@ -243,7 +243,7 @@ public class PartyController
             {
                 if (party.hasMember(getMember(ClientNotificationHandler.clientUsername())))
                 {
-                    ClientNotificationHandler.createGeneric("Party Changed!", "Now: " + newType.name(), "");
+                    ClientNotificationHandler.createGeneric("公会类型改变!", "现在是: " + newType.realname, "");
                 }
             }
 

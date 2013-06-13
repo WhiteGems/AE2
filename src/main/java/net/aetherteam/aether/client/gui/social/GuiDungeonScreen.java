@@ -20,7 +20,7 @@ import org.lwjgl.opengl.GL11;
 public class GuiDungeonScreen extends GuiScreen
 {
     private int background;
-    private Minecraft f;
+    private Minecraft mc;
     private GuiButton readyUpButton;
     private boolean isPlayerReady;
     private String readyString;
@@ -31,8 +31,8 @@ public class GuiDungeonScreen extends GuiScreen
     {
         this.mc = mc;
         this.isPlayerReady = false;
-        this.notReadyString = "CANCEL READY";
-        this.readyString = "READY UP";
+        this.notReadyString = "取消准备";
+        this.readyString = "已准备";
         this.background = mc.renderEngine.getTexture("/net/aetherteam/aether/client/sprites/gui/loadingScreen.png");
     }
 

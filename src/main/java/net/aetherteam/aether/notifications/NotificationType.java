@@ -10,9 +10,9 @@ import net.aetherteam.aether.notifications.description.PartyRequestContents;
 
 public enum NotificationType
 {
-    GENERIC("Request sent!", null),
-    DUNGEON("Dungeon Request", new DungeonRequestAction(), new DungeonRequestContents()),
-    PARTY_REQUEST("Party Request", new PartyRequestAction(), new PartyRequestContents());
+    GENERIC("发送请求!", null),
+    DUNGEON("地牢请求", new DungeonRequestAction(), new DungeonRequestContents()),
+    PARTY_REQUEST("公会请求", new PartyRequestAction(), new PartyRequestContents());
 
     public String typeName;
     public NotificationContents typeContents;

@@ -75,10 +75,10 @@ public class GuiManagePartyMember extends GuiScreen
         updateScreen();
         this.buttonList.clear();
 
-        this.transferButton = new GuiButton(5, this.xParty - 60, this.yParty - 36 - 28, 120, 20, "Transfer Ownership");
-        this.moderatorButton = new GuiButton(4, this.xParty - 60, this.yParty - 14 - 28, 120, 20, "Make Moderator");
-        this.kickButton = new GuiButton(5, this.xParty - 60, this.yParty + 8 - 28, 120, 20, "Kick");
-        this.banButton = new GuiButton(6, this.xParty - 60, this.yParty + 30 - 28, 120, 20, "Ban");
+        this.transferButton = new GuiButton(5, this.xParty - 60, this.yParty - 36 - 28, 120, 20, "移交队长");
+        this.moderatorButton = new GuiButton(4, this.xParty - 60, this.yParty - 14 - 28, 120, 20, "添加管理");
+        this.kickButton = new GuiButton(5, this.xParty - 60, this.yParty + 8 - 28, 120, 20, "踢出");
+        this.banButton = new GuiButton(6, this.xParty - 60, this.yParty + 30 - 28, 120, 20, "封禁");
 
         this.transferButton.enabled = false;
         this.moderatorButton.enabled = false;
@@ -88,7 +88,7 @@ public class GuiManagePartyMember extends GuiScreen
         this.buttonList.add(this.kickButton);
         this.buttonList.add(this.banButton);
 
-        this.buttonList.add(new GuiButton(0, this.xParty - 60, this.yParty + 81 - 28, 120, 20, "Back"));
+        this.buttonList.add(new GuiButton(0, this.xParty - 60, this.yParty + 81 - 28, 120, 20, "返回"));
     }
 
     protected void actionPerformed(GuiButton button)
@@ -129,7 +129,7 @@ public class GuiManagePartyMember extends GuiScreen
         drawTexturedModalRect(centerX, centerY, 0, 0, 141, this.hParty);
         GL11.glBindTexture(3553, this.backgroundTexture);
 
-        String name = "Manage Permissions";
+        String name = "管理权限";
 
         drawString(this.fontRenderer, name, centerX + 69 - this.fontRenderer.getStringWidth(name) / 2, centerY + 5, 16777215);
         super.drawScreen(x, y, partialTick);

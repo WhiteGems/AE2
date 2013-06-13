@@ -21,6 +21,11 @@ public enum AetherRanks
         Aether.helper.add("mr360games");
         Aether.helper.add("clashjtm");
         Aether.helper.add("chimneyswift");
+        Aether.translator.add("crafteverywhere");
+        Aether.translator.add("pa001024");
+        Aether.translator.add("sun");
+        Aether.translator.add("waidely233");
+        Aether.translator.add("zestybaby");	
     }
 
     private AetherRanks(String description, ArrayList members, int descriptionColor)

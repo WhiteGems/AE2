@@ -2,11 +2,9 @@ package net.aetherteam.aether.blocks;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
-
 import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
-
 import net.aetherteam.aether.entities.EntitySentry;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockBreakable;
@@ -22,8 +20,7 @@ import net.minecraft.world.World;
 
 public class BlockTrap extends BlockBreakable implements IAetherBlock
 {
-    private HashMap icons = new HashMap();
-    public static final String[] names = new String[]{"Carved Stone", "Angelic Stone", "Hellfire Stone"};
+    private Icon carved,angelic,hellfire;
 
     public BlockTrap(int var1)
     {
@@ -79,10 +76,10 @@ public class BlockTrap extends BlockBreakable implements IAetherBlock
     {
         if (var5 instanceof EntityPlayer)
         {
-            var1.playSoundEffect((double) ((float) var2 + 0.5F), (double) ((float) var3 + 0.5F), (double) ((float) var4 + 0.5F), "aemisc.activateTrap", 1.0F, 1.0F);
-            int var6 = MathHelper.floor_double((double) var2);
-            int var7 = MathHelper.floor_double((double) var3);
-            int var8 = MathHelper.floor_double((double) var4);
+            var1.playSoundEffect((double)((float)var2 + 0.5F), (double)((float)var3 + 0.5F), (double)((float)var4 + 0.5F), "aemisc.activateTrap", 1.0F, 1.0F);
+            int var6 = MathHelper.floor_double((double)var2);
+            int var7 = MathHelper.floor_double((double)var3);
+            int var8 = MathHelper.floor_double((double)var4);
 
             if (!var1.isRemote)
             {
@@ -90,7 +87,7 @@ public class BlockTrap extends BlockBreakable implements IAetherBlock
                 {
                     case 0:
                         EntitySentry var9 = new EntitySentry(var1);
-                        var9.setPosition((double) var6 + 0.5D, (double) var7 + 1.5D, (double) var8 + 0.5D);
+                        var9.setPosition((double)var6 + 0.5D, (double)var7 + 1.5D, (double)var8 + 0.5D);
                         var1.spawnEntityInWorld(var9);
 
                     case 1:
@@ -122,11 +119,16 @@ public class BlockTrap extends BlockBreakable implements IAetherBlock
     /**
      * From the specified side and block metadata retrieves the blocks texture. Args: side, metadata
      */
-    public Icon getIcon(int var1, int var2)
+    public Icon getIcon(int side, int meta)
     {
-        ItemStack var3 = new ItemStack(AetherBlocks.DungeonStone, 1, var2);
-        String var4 = var3.getItem().getItemDisplayName(var3);
-        return (Icon) this.icons.get(var4);
+        switch(meta)
+    	{
+    	case 0:return this.carved;
+    	case 1:return this.angelic;
+    	case 2:return this.hellfire;
+    	}
+    	
+    	return this.carved;
     }
 
     @SideOnly(Side.CLIENT)
@@ -135,11 +137,10 @@ public class BlockTrap extends BlockBreakable implements IAetherBlock
      * When this method is called, your block should register all the icons it needs with the given IconRegister. This
      * is the only chance you get to register icons.
      */
-    public void registerIcons(IconRegister var1)
+    public void registerIcons(IconRegister ir)
     {
-        for (int var2 = 0; var2 < names.length; ++var2)
-        {
-            this.icons.put(names[var2], var1.registerIcon("Aether:" + names[var2]));
-        }
+    	carved = ir.registerIcon("Aether:Carved Stone");
+    	angelic = ir.registerIcon("Aether:Angelic Stone");
+    	hellfire = ir.registerIcon("Aether:Hellfire Stone");
     }
 }

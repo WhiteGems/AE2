@@ -24,7 +24,7 @@ public class GuiDialogueBox extends GuiScreen
     private int wParty;
     private int hParty;
     private GuiScreen parent;
-    Minecraft f;
+    Minecraft mc;
     private boolean created;
     private String createdText;
     private String failureText;
@@ -59,7 +59,7 @@ public class GuiDialogueBox extends GuiScreen
         updateScreen();
         this.buttonList.clear();
 
-        this.buttonList.add(new GuiButton(0, this.xParty - 58, this.yParty, 120, 20, "Okay"));
+        this.buttonList.add(new GuiButton(0, this.xParty - 58, this.yParty, 120, 20, "确认"));
     }
 
     protected void actionPerformed(GuiButton btn)

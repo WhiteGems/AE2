@@ -23,9 +23,9 @@ import org.lwjgl.opengl.GL11;
 
 public class GuiPlayerList extends GuiScreen
 {
-    protected static final String DEV_TEXT = "Aether II Developer";
-    protected static final String DOUBLE_TEXT = "Smelly Person :3";
-    protected static final String BETA_TEXT = "Aether II Beta Tester";
+    protected static final String DEV_TEXT = "以太II开发人员";
+    protected static final String DOUBLE_TEXT = "臭熏熏的人 :3";
+    protected static final String BETA_TEXT = "以太IIBeta测试人员";
     private static final int DEV_TEXT_COLOR = 16105765;
     private GuiYSlider sbar;
     private float sbarVal = 0.0F;
@@ -70,7 +70,7 @@ public class GuiPlayerList extends GuiScreen
         if (this.sbar != null) this.sbarVal = this.sbar.sliderValue;
         this.sbar = new GuiYSlider(-1, this.xParty + 46, this.yParty - 54, 10, 103);
         this.sbar.sliderValue = this.sbarVal;
-        this.buttonList.add(new GuiButton(0, this.xParty - 58, this.yParty + 85 - 28, 120, 20, "Back"));
+        this.buttonList.add(new GuiButton(0, this.xParty - 58, this.yParty + 85 - 28, 120, 20, "返回"));
     }
 
     protected void mouseClicked(int par1, int par2, int par3)
@@ -147,7 +147,7 @@ public class GuiPlayerList extends GuiScreen
             this.sbar.drawButton(this.mc, x, y);
         }
 
-        drawString(this.fontRenderer, "Player List", centerX + 40, centerY + 10, 16777215);
+        drawString(this.fontRenderer, "玩家列表", centerX + 40, centerY + 10, 16777215);
         super.drawScreen(x, y, partialTick);
     }
 
@@ -192,11 +192,15 @@ public class GuiPlayerList extends GuiScreen
         GL11.glPushMatrix();
         GL11.glScalef(0.75F, 0.75F, 1.0F);
         if ((playername.toLowerCase().equals("ijaryt23")) || (playername.toLowerCase().equals("kingbdogz")) || (playername.toLowerCase().equals("saspiron")))
-            this.fontRenderer.drawString("Aether II Developer", (int) ((x + height) / 0.75F), (int) ((y + 12.0F) / 0.75F), 16105765);
+            this.fontRenderer.drawString("以太II 开发人员", (int) ((x + height) / 0.75F), (int) ((y + 12.0F) / 0.75F), 16105765);
         else if (playername.toLowerCase().equals("mr360games"))
-            this.fontRenderer.drawString("Smelly Person :3", (int) ((x + height) / 0.75F), (int) ((y + 12.0F) / 0.75F), 16105765);
+            this.fontRenderer.drawString("臭熏熏的人 :3", (int) ((x + height) / 0.75F), (int) ((y + 12.0F) / 0.75F), 16105765);
         else if (playername.toLowerCase().equals("some beta tester <3"))
-            this.fontRenderer.drawString("Smelly Person :3", (int) ((x + height) / 0.75F), (int) ((y + 12.0F) / 0.75F), 16105765);
+            this.fontRenderer.drawString("臭熏熏的人 :3", (int) ((x + height) / 0.75F), (int) ((y + 12.0F) / 0.75F), 16105765);
+        else if (playername.toLowerCase().equals("zestybaby"))
+        	this.fontRenderer.drawString("白宝石小组组长sama!", (int) ((x + height) / 0.75F), (int) ((y + 12.0F) / 0.75F), 16105765);
+        else if ((playername.toLowerCase().equals("crafteverywhere")) || (playername.toLowerCase().equals("pa001024")) || (playername.toLowerCase().equals("sun")) || (playername.toLowerCase().equals("waidely")))
+        	this.fontRenderer.drawString("汉化人员", (int) ((x + height) / 0.75F), (int) ((y + 12.0F) / 0.75F), 16105765);	
         GL11.glPopMatrix();
     }
 }

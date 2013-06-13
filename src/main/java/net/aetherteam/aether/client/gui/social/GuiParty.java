@@ -23,12 +23,12 @@ import org.lwjgl.opengl.GL11;
 
 public class GuiParty extends GuiScreen
 {
-    private static final String ONLINE_TEXT = "Online";
-    private static final String OFFLINE_TEXT = "Offline";
-    private static final String BUTTON_INVITE_TEXT = "Invite";
-    private static final String BUTTON_REMOVE_TEXT = "Remove";
-    private static final String BUTTON_CONFIRM_TEXT = "Confirm";
-    private static final String BUTTON_CANCEL_TEXT = "Cancel";
+    private static final String ONLINE_TEXT = "在线";
+    private static final String OFFLINE_TEXT = "离线";
+    private static final String BUTTON_INVITE_TEXT = "邀请";
+    private static final String BUTTON_REMOVE_TEXT = "移除";
+    private static final String BUTTON_CONFIRM_TEXT = "确认";
+    private static final String BUTTON_CANCEL_TEXT = "取消";
     private static final int ONLINE_FONT_COLOR = 7859831;
     private static final int OFFLINE_FONT_COLOR = 15628151;
     private static final int BUTTON_INVITE = 0;
@@ -45,14 +45,14 @@ public class GuiParty extends GuiScreen
     private GuiTextField dialogueInput;
     private GuiYSlider sbar;
     private float sbarVal = 0.0F;
-    private String name = "Aether Party";
+    private String name = "以太公会";
     private int backgroundTexture;
     private int dialogueTexture;
     private int xParty;
     private int yParty;
     private int wParty;
     private int hParty;
-    Minecraft f;
+    Minecraft mc;
 
     public GuiParty()
     {
@@ -83,8 +83,8 @@ public class GuiParty extends GuiScreen
         if (this.sbar != null) this.sbarVal = this.sbar.sliderValue;
         this.sbar = new GuiYSlider(-1, this.xParty + 46, this.yParty - 54, 10, 103);
         this.sbar.sliderValue = this.sbarVal;
-        this.buttonList.add(new GuiButton(0, this.xParty - 58, this.yParty + 85 - 28, 52, 20, "Invite"));
-        this.buttonList.add(new GuiButton(1, this.xParty - 1, this.yParty + 85 - 28, 60, 20, "Remove"));
+        this.buttonList.add(new GuiButton(0, this.xParty - 58, this.yParty + 85 - 28, 52, 20, "邀请"));
+        this.buttonList.add(new GuiButton(1, this.xParty - 1, this.yParty + 85 - 28, 60, 20, "移除"));
         this.partyNameField = new GuiTextField(this.fontRenderer, this.xParty - 55, this.yParty - 73, 107, 16);
         this.partyNameField.setFocused(true);
         this.partyNameField.setMaxStringLength(16);
@@ -171,9 +171,9 @@ public class GuiParty extends GuiScreen
         switch (this.dialogueState)
         {
             case 5:
-                return "Invite";
+                return "邀请";
             case 6:
-                return "Remove";
+                return "移除";
         }
         return "";
     }
@@ -184,8 +184,8 @@ public class GuiParty extends GuiScreen
         this.dialogueInput = new GuiTextField(this.fontRenderer, this.xParty - 88 + this.fontRenderer.getStringWidth(getDialogueOption()), this.yParty - 7, 193 - this.fontRenderer.getStringWidth(getDialogueOption()) - 10, 16);
         this.dialogueInput.setFocused(true);
         this.dialogueInput.setCanLoseFocus(false);
-        this.buttonList.add(new GuiButton(2, this.xParty - 1, this.yParty + 14, 50, 20, "Confirm"));
-        this.buttonList.add(new GuiButton(3, this.xParty + 52, this.yParty + 14, 45, 20, "Cancel"));
+        this.buttonList.add(new GuiButton(2, this.xParty - 1, this.yParty + 14, 50, 20, "确认"));
+        this.buttonList.add(new GuiButton(3, this.xParty + 52, this.yParty + 14, 45, 20, "取消"));
     }
 
     public boolean doesGuiPauseGame()
@@ -305,7 +305,7 @@ public class GuiParty extends GuiScreen
         this.fontRenderer.drawStringWithShadow(p.username, x + height, y + 2, 15066597);
         GL11.glPushMatrix();
         GL11.glScalef(0.75F, 0.75F, 1.0F);
-        this.fontRenderer.drawString(online ? "Online" : "Offline", (int) ((x + height) / 0.75F), (int) ((y + 12.0F) / 0.75F), online ? 7859831 : 15628151);
+        this.fontRenderer.drawString(online ? "在线" : "离线", (int) ((x + height) / 0.75F), (int) ((y + 12.0F) / 0.75F), online ? 7859831 : 15628151);
         GL11.glPopMatrix();
     }
 }

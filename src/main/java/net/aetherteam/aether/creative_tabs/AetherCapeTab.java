@@ -18,7 +18,7 @@ public class AetherCapeTab extends CreativeTabs
 
     public String getTabLabel()
     {
-        return "Aether Capes";
+        return "以太II|披风";
     }
 
     public String getTranslatedTabLabel()

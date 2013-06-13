@@ -18,7 +18,7 @@ public class AetherMaterialsTab extends CreativeTabs
 
     public String getTabLabel()
     {
-        return "Aether Materials";
+        return "以太II|材料";
     }
 
     public String getTranslatedTabLabel()

@@ -26,7 +26,7 @@ public class GuiOptionsParty extends GuiScreen
     private int yParty;
     private int wParty;
     private int hParty;
-    Minecraft f;
+    Minecraft mc;
     private EntityPlayer player;
     private GuiScreen parent;
 
@@ -47,7 +47,7 @@ public class GuiOptionsParty extends GuiScreen
         updateScreen();
         this.buttonList.clear();
 
-        this.buttonList.add(new GuiButton(0, this.xParty - 60, this.yParty + 81 - 28, 120, 20, "Back"));
+        this.buttonList.add(new GuiButton(0, this.xParty - 60, this.yParty + 81 - 28, 120, 20, "返回"));
     }
 
     protected void keyTyped(char charTyped, int keyTyped)
@@ -114,16 +114,16 @@ public class GuiOptionsParty extends GuiScreen
 
         if (online)
         {
-            String renderHeadString = AetherOptions.getRenderHead() ? "True" : "False";
-            String showHUDString = AetherOptions.getShowPartyHUD() ? "True" : "False";
+            String renderHeadString = AetherOptions.getRenderHead() ? "是" : "否";
+            String showHUDString = AetherOptions.getShowPartyHUD() ? "是" : "否";
 
-            String showNameString = AetherOptions.getShowPartyName() ? "On" : "Off";
+            String showNameString = AetherOptions.getShowPartyName() ? "开" : "关";
 
-            GuiButton minimalHUD = new GuiButton(2, this.xParty - 60, this.yParty - 14 - 28, 120, 20, "HUD Style: " + (AetherOptions.getMinimalPartyHUD() ? "Minimal" : "Heavy"));
-            GuiButton renderHead = new GuiButton(3, this.xParty - 60, this.yParty + 8 - 28, 120, 20, "Render Head: " + renderHeadString);
-            GuiButton showName = new GuiButton(4, this.xParty - 60, this.yParty + 30 - 28, 120, 20, "Party Name: " + showNameString);
+            GuiButton minimalHUD = new GuiButton(2, this.xParty - 60, this.yParty - 14 - 28, 120, 20, "HUD风格: " + (AetherOptions.getMinimalPartyHUD() ? "简约" : "华丽"));
+            GuiButton renderHead = new GuiButton(3, this.xParty - 60, this.yParty + 8 - 28, 120, 20, "头像渲染: " + renderHeadString);
+            GuiButton showName = new GuiButton(4, this.xParty - 60, this.yParty + 30 - 28, 120, 20, "公会名称: " + showNameString);
 
-            this.buttonList.add(new GuiButton(1, this.xParty - 60, this.yParty - 36 - 28, 120, 20, "Show HUD: " + showHUDString));
+            this.buttonList.add(new GuiButton(1, this.xParty - 60, this.yParty - 36 - 28, 120, 20, "显示HUD: " + showHUDString));
             this.buttonList.add(minimalHUD);
             this.buttonList.add(renderHead);
             this.buttonList.add(showName);
@@ -142,7 +142,7 @@ public class GuiOptionsParty extends GuiScreen
 
             this.mc.renderEngine.resetBoundTexture();
 
-            String title = "Party HUD";
+            String title = "公会HUD";
 
             drawString(this.fontRenderer, title, centerX + 70 - this.fontRenderer.getStringWidth(title) / 2, centerY + 5, 16777215);
         } else
@@ -151,11 +151,11 @@ public class GuiOptionsParty extends GuiScreen
             drawTexturedModalRect(centerX + 13, centerY + 40, 141, 131, 115, 125);
 
             this.mc.renderEngine.resetBoundTexture();
-            drawString(this.fontRenderer, "Forever Alone :(", centerX + 26, centerY + 10, 15658734);
-            drawString(this.fontRenderer, "(Single Player)", centerX + 31, centerY + 22, 15658734);
+            drawString(this.fontRenderer, "注定孤独一生 :(", centerX + 26, centerY + 10, 15658734);
+            drawString(this.fontRenderer, "(单人游戏)", centerX + 31, centerY + 22, 15658734);
         }
 
-        this.buttonList.add(new GuiButton(0, this.xParty - 60, this.yParty + 81 - 28, 120, 20, online ? "Back" : "Exit"));
+        this.buttonList.add(new GuiButton(0, this.xParty - 60, this.yParty + 81 - 28, 120, 20, online ? "返回" : "退出"));
 
         super.drawScreen(x, y, partialTick);
     }

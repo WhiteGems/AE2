@@ -18,7 +18,7 @@ public class AetherBlockTab extends CreativeTabs
 
     public String getTabLabel()
     {
-        return "Aether Blocks";
+        return "以太II|方块";
     }
 
     public String getTranslatedTabLabel()

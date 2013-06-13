@@ -43,7 +43,7 @@ public class NotificationHandler
             if (side.isClient())
             {
                 PacketDispatcher.sendPacketToServer(AetherPacketHandler.sendNotificationChange(notification, true));
-                ClientNotificationHandler.queueReceivedNotification(new Notification(NotificationType.GENERIC, "Request Sent!", "", notification.getReceiverName()));
+                ClientNotificationHandler.queueReceivedNotification(new Notification(NotificationType.GENERIC, "发送请求!", "", notification.getReceiverName()));
             }
         }
     }
