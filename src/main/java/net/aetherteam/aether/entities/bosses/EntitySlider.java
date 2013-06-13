@@ -49,6 +49,7 @@ import net.minecraft.world.World;
 
 public class EntitySlider extends EntityBossMob implements IAetherBoss
 {
+    private String bossName = AetherNameGen.valkGen();
     public String dir;
     private boolean[] stageDone;
     public Random random;
@@ -199,14 +200,14 @@ public class EntitySlider extends EntityBossMob implements IAetherBoss
 
     public String getBossName()
     {
-        return this.dataWatcher.getWatchableObjectString(18);
+        return bossName;
     }
 
     public void setBossName(String var1)
     {
         if (!this.worldObj.isRemote)
         {
-            this.dataWatcher.updateObject(18, String.valueOf(var1));
+            this.bossName = var1;
         }
     }
 
