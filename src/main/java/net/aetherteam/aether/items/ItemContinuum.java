@@ -42,6 +42,8 @@ public class ItemContinuum extends ItemAether
                 whitelist_exp = new double[temp.length];
                 for (int i = 0; i < temp.length; i++)
                 {
+                    if (temp[i].charAt(0) == '#') continue;
+                    if (temp[i].isEmpty()) continue;
                     String[] ht = temp[i].split(":");
                     if (ht.length >= 1) whitelist_id[i] = Short.valueOf(ht[0]);
                     if (ht.length >= 2) whitelist_data[i] = Short.valueOf(ht[1]);
