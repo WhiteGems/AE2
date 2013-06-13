@@ -98,7 +98,7 @@ public class AetherItems
     )
     public static Item GravititeShovel;
     @net.aetherteam.aether.interfaces.AEItem(
-            name = "天根木铲"
+            name = "天根木斧"
     )
     public static Item SkyrootAxe;
     @net.aetherteam.aether.interfaces.AEItem(
