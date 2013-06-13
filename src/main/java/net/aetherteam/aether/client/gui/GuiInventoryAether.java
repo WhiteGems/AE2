@@ -55,7 +55,7 @@ public class GuiInventoryAether extends AetherInventoryEffectRenderer
 
         GuiButton bookOfLore = new GuiButton(2, this.guiLeft + 7, this.guiTop + 162, 72, 20, string.translateKey("以太Ⅱ物品百科"));
 
-        bookOfLore.enabled = false;
+        // bookOfLore.enabled = false;
 
         this.buttonList.add(bookOfLore);
         this.buttonList.add(new GuiButton(3, this.guiLeft + 84, this.guiTop + 162, 34, 20, string.translateKey("社区")));
