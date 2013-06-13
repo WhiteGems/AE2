@@ -15,9 +15,9 @@ import org.lwjgl.opengl.GL11;
 
 public class TileEntityEntranceRenderer extends TileEntitySpecialRenderer
 {
-    protected static final String AVAILABLE = "Available";
-    protected static final String OCCUPIED = "Occupied";
-    protected static final String CONQUERED = "Conquered";
+    protected static final String AVAILABLE = "未攻略";
+    protected static final String OCCUPIED = "攻略中";
+    protected static final String CONQUERED = "已攻略";
     private static final int AVAILABLE_COLOUR = 6750054;
     private static final int OCCUPIED_COLOUR = 16756516;
     private static final int CONQUERED_COLOUR = 10688793;
