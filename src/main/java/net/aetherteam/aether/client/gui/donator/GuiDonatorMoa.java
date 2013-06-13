@@ -190,11 +190,11 @@ public class GuiDonatorMoa extends GuiScreen
 
         this.mc.renderEngine.resetBoundTexture();
 
-        String header = "捐助特有恐鸟皮肤";
-        //String override = "Override";
+        String header = "捐助者";
+        String override = "特有恐鸟皮肤";
 
         drawString(this.fontRenderer, header, sr.getScaledWidth() / 2 - this.fontRenderer.getStringWidth(header) / 2 + 49, centerY + 10, 15658734);
-        //drawString(this.fontRenderer, override, sr.getScaledWidth() / 2 - this.fontRenderer.getStringWidth(override) / 2 + 49, centerY + 45, 15658734);
+        drawString(this.fontRenderer, override, sr.getScaledWidth() / 2 - this.fontRenderer.getStringWidth(override) / 2 + 49, centerY + 45, 15658734);
 
         if (this.choice != null)
         {

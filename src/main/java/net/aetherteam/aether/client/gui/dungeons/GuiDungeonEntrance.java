@@ -189,15 +189,15 @@ public class GuiDungeonEntrance extends GuiScreen
 
                 this.description = new String[10];
 
-                this.description[0] = "你试图独闯滑行者的迷宫. ";
-                this.description[1] = "这个迷宫危险无比, ";
+                this.description[0] = "你试图独闯滑行者的迷宫";
+                this.description[1] = "这个迷宫危险无比";
                 this.description[2] = "你随时可能付出生命";
                 this.description[3] = "并且损失掉全部的物品";
                 this.description[4] = "你将因此失去一切";
                 this.description[5] = "但地牢深处有值得探索的宝藏";
                 this.description[6] = "";
                 this.description[7] = "";
-                this.description[8] = "那么, ";
+                this.description[8] = "那么";
                 this.description[9] = "你是否已经准备好进入地牢?";
 
                 int count = 0;
@@ -242,7 +242,7 @@ public class GuiDungeonEntrance extends GuiScreen
                         this.description[0] = "你真的想要离开";
                         this.description[1] = "这个地牢?";
                         this.description[2] = "你还有";
-                        this.description[3] = (3 - this.controller.getDungeon().getMemberLeaves(PartyController.instance().getMember(this.player)) + "/3 次离开机会.");
+                        this.description[3] = (3 - this.controller.getDungeon().getMemberLeaves(PartyController.instance().getMember(this.player)) + "/3 次离开机会");
                         this.description[4] = "";
                         this.description[5] = "在彻底重置之前";
                         this.description[6] = "每个地牢仅仅允许";
