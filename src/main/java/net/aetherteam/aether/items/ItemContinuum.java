@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Random;
 import java.util.TreeMap;
 
+import net.aetherteam.aether.util.WeightedRandom;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -16,7 +17,8 @@ import net.minecraft.world.World;
 public class ItemContinuum extends ItemAether
 {
     private static ArrayList banList = new ArrayList();
-    private static Random random = new Random();
+    //private static Random random = new Random();
+    private static WeightedRandom rand;
     static short[] whitelist_id = {};
     static short[] whitelist_data = {};
     static int[] whitelist_exp = {};
@@ -46,14 +48,21 @@ public class ItemContinuum extends ItemAether
                     if (ht.length >= 3) whitelist_exp[i] = Integer.valueOf(ht[2]);
                 }
             }
+            long total = 0;
+            for(int cur : whitelist_exp) total += cur;
+            double[] probablity = new double[temp.length];
+            for(int i = 0; i < whitelist_exp.length; ++ i) {
+                probablity[i] = whitelist_exp[i] * 1.0D / total;
+            }
+            rand = new WeightedRandom(probablity);
         } catch (Exception e)
         { }
     }
 
     public static int getRandomIndex()
     {
-        // TODO: 添加几率
-        return random.nextInt(whitelist_exp.length);
+        // return random.nextInt(whitelist_exp.length);
+        return rand.nextRand();
     }
 
     /**
