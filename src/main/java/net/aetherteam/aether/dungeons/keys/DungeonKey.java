@@ -1,6 +1,8 @@
 package net.aetherteam.aether.dungeons.keys;
 
-public class DungeonKey
+import java.io.Serializable;
+
+public class DungeonKey implements Serializable
 {
     EnumKeyType type;
 
@@ -14,8 +16,3 @@ public class DungeonKey
         return this.type;
     }
 }
-
-/* Location:           D:\Dev\Mc\forge_orl\mcp\jars\bin\aether.jar
- * Qualified Name:     net.aetherteam.aether.dungeons.keys.DungeonKey
- * JD-Core Version:    0.6.2
- */

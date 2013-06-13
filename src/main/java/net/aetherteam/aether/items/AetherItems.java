@@ -8,6 +8,7 @@ import net.aetherteam.aether.AetherMoaColour;
 import net.aetherteam.aether.CommonProxy;
 import net.aetherteam.aether.blocks.AetherBlocks;
 import net.aetherteam.aether.enums.AetherEnumElement;
+import net.aetherteam.aether.interfaces.AEItem;
 import net.minecraft.block.Block;
 import net.minecraft.item.EnumArmorMaterial;
 import net.minecraft.item.EnumToolMaterial;
@@ -17,455 +18,455 @@ import net.minecraft.potion.Potion;
 
 public class AetherItems
 {
-    @net.aetherteam.aether.interfaces.AEItem(
+    @AEItem(
             name = "胜利勋章"
     )
     public static Item VictoryMedal;
-    @net.aetherteam.aether.interfaces.AEItem(
+    @AEItem(
             names = {"青铜钥匙", "白银钥匙", "黄金钥匙", "守卫钥匙", "主宰钥匙", "齿轮钥匙"}
     )
     public static Item Key;
-    @net.aetherteam.aether.interfaces.AEItem(
+    @AEItem(
             name = "恐鸟蛋"
     )
     public static Item MoaEgg;
-    @net.aetherteam.aether.interfaces.AEItem(
+    @AEItem(
             name = "以太唱片"
     )
     public static Item AetherMusicDisk;
-    @net.aetherteam.aether.interfaces.AEItem(
+    @AEItem(
             name = "金珀"
     )
     public static Item GoldenAmber;
-    @net.aetherteam.aether.interfaces.AEItem(
+    @AEItem(
             name = "毒箭草花瓣"
     )
     public static Item AechorPetal;
-    @net.aetherteam.aether.interfaces.AEItem(
+    @AEItem(
             name = "天根木木棍"
     )
     public static Item SkyrootStick;
-    @net.aetherteam.aether.interfaces.AEItem(
+    @AEItem(
             names = {"黄金飞镖", "剧毒飞镖", "魔力飞镖"}
     )
     public static Item Dart;
-    @net.aetherteam.aether.interfaces.AEItem(
+    @AEItem(
             names = {"黄金吹筒", "剧毒吹筒", "魔力吹筒", "凤凰吹筒"}
     )
     public static Item DartShooter;
-    @net.aetherteam.aether.interfaces.AEItem(
+    @AEItem(
             name = "以太碳"
     )
     public static Item AmbrosiumShard;
-    @net.aetherteam.aether.interfaces.AEItem(
+    @AEItem(
             name = "紫晶宝石"
     )
     public static Item ZaniteGemstone;
-    @net.aetherteam.aether.interfaces.AEItem(
+    @AEItem(
             names = {"天根木木桶", "天根木牛奶桶", "天根木毒液桶", "天根木药剂桶"}
     )
     public static Item SkyrootBucket;
-    @net.aetherteam.aether.interfaces.AEItem(
+    @AEItem(
             name = "天根木镐"
     )
     public static Item SkyrootPickaxe;
-    @net.aetherteam.aether.interfaces.AEItem(
+    @AEItem(
             name = "神圣石镐"
     )
     public static Item HolystonePickaxe;
-    @net.aetherteam.aether.interfaces.AEItem(
+    @AEItem(
             name = "紫晶镐"
     )
     public static Item ZanitePickaxe;
-    @net.aetherteam.aether.interfaces.AEItem(
+    @AEItem(
             name = "重力镐"
     )
     public static Item GravititePickaxe;
-    @net.aetherteam.aether.interfaces.AEItem(
+    @AEItem(
             name = "天根木铲"
     )
     public static Item SkyrootShovel;
-    @net.aetherteam.aether.interfaces.AEItem(
+    @AEItem(
             name = "神圣石铲"
     )
     public static Item HolystoneShovel;
-    @net.aetherteam.aether.interfaces.AEItem(
+    @AEItem(
             name = "紫晶铲"
     )
     public static Item ZaniteShovel;
-    @net.aetherteam.aether.interfaces.AEItem(
+    @AEItem(
             name = "重力铲"
     )
     public static Item GravititeShovel;
-    @net.aetherteam.aether.interfaces.AEItem(
+    @AEItem(
             name = "天根木斧"
     )
     public static Item SkyrootAxe;
-    @net.aetherteam.aether.interfaces.AEItem(
+    @AEItem(
             name = "神圣石斧"
     )
     public static Item HolystoneAxe;
-    @net.aetherteam.aether.interfaces.AEItem(
+    @AEItem(
             name = "紫晶斧"
     )
     public static Item ZaniteAxe;
-    @net.aetherteam.aether.interfaces.AEItem(
+    @AEItem(
             name = "重力斧"
     )
     public static Item GravititeAxe;
-    @net.aetherteam.aether.interfaces.AEItem(
+    @AEItem(
             name = "天根木剑"
     )
     public static Item SkyrootSword;
-    @net.aetherteam.aether.interfaces.AEItem(
+    @AEItem(
             name = "神圣石剑"
     )
     public static Item HolystoneSword;
-    @net.aetherteam.aether.interfaces.AEItem(
+    @AEItem(
             name = "紫晶剑"
     )
     public static Item ZaniteSword;
-    @net.aetherteam.aether.interfaces.AEItem(
+    @AEItem(
             name = "重力剑"
     )
     public static Item GravititeSword;
-    @net.aetherteam.aether.interfaces.AEItem(
+    @AEItem(
             name = "铁泡泡"
     )
     public static Item IronBubble;
-    @net.aetherteam.aether.interfaces.AEItem(
+    @AEItem(
             name = "杀猪刀"
     )
     public static Item PigSlayer;
-    @net.aetherteam.aether.interfaces.AEItem(
+    @AEItem(
             name = "吸血鬼之刃"
     )
     public static Item VampireBlade;
-    @net.aetherteam.aether.interfaces.AEItem(
+    @AEItem(
             name = "烈焰之刃"
     )
     public static Item FlamingSword;
-    @net.aetherteam.aether.interfaces.AEItem(
+    @AEItem(
             name = "圣剑"
     )
     public static Item HolySword;
-    @net.aetherteam.aether.interfaces.AEItem(
+    @AEItem(
             name = "雷霆之剑"
     )
     public static Item LightningSword;
-    @net.aetherteam.aether.interfaces.AEItem(
+    @AEItem(
             name = "雷动飞刀"
     )
     public static Item LightningKnife;
-    @net.aetherteam.aether.interfaces.AEItem(
+    @AEItem(
             names = {"蓝色凝胶", "金色凝胶"}
     )
     public static Item GummieSwet;
-    @net.aetherteam.aether.interfaces.AEItem(
+    @AEItem(
             name = "Notch之锤"
     )
     public static Item HammerOfNotch;
-    @net.aetherteam.aether.interfaces.AEItem(
+    @AEItem(
             name = "浮云"
     )
     public static Item CloudParachute;
-    @net.aetherteam.aether.interfaces.AEItem(
+    @AEItem(
             name = "金色浮云"
     )
     public static Item GoldenCloudParachute;
-    @net.aetherteam.aether.interfaces.AEItem(
+    @AEItem(
             name = "生命碎片"
     )
     public static Item ShardOfLife;
-    @net.aetherteam.aether.interfaces.AEItem(
+    @AEItem(
             name = "女武神披风"
     )
     public static Item ValkyrieCape;
-    @net.aetherteam.aether.interfaces.AEItem(
+    @AEItem(
             name = "女武神之枪"
     )
     public static Item ValkyrieLance;
-    @net.aetherteam.aether.interfaces.AEItem(
+    @AEItem(
             name = "铁指环"
     )
     public static Item IronRing;
-    @net.aetherteam.aether.interfaces.AEItem(
+    @AEItem(
             name = "金指环"
     )
     public static Item GoldenRing;
-    @net.aetherteam.aether.interfaces.AEItem(
+    @AEItem(
             name = "紫晶指环"
     )
     public static Item ZaniteRing;
-    @net.aetherteam.aether.interfaces.AEItem(
+    @AEItem(
             name = "铁吊坠"
     )
     public static Item IronPendant;
-    @net.aetherteam.aether.interfaces.AEItem(
+    @AEItem(
             name = "金吊坠"
     )
     public static Item GoldenPendant;
-    @net.aetherteam.aether.interfaces.AEItem(
+    @AEItem(
             name = "紫晶吊坠"
     )
     public static Item ZanitePendant;
-    @net.aetherteam.aether.interfaces.AEItem(
+    @AEItem(
             name = "史维特披风"
     )
     public static Item SwetCape;
-    @net.aetherteam.aether.interfaces.AEItem(
+    @AEItem(
             name = "皮革手套"
     )
     public static Item LeatherGloves;
-    @net.aetherteam.aether.interfaces.AEItem(
+    @AEItem(
             name = "铁手套"
     )
     public static Item IronGloves;
-    @net.aetherteam.aether.interfaces.AEItem(
+    @AEItem(
             name = "金手套"
     )
     public static Item GoldenGloves;
-    @net.aetherteam.aether.interfaces.AEItem(
+    @AEItem(
             name = "钻石手套"
     )
     public static Item DiamondGloves;
-    @net.aetherteam.aether.interfaces.AEItem(
+    @AEItem(
             name = "紫晶手套"
     )
     public static Item ZaniteGloves;
-    @net.aetherteam.aether.interfaces.AEItem(
+    @AEItem(
             name = "紫晶头盔"
     )
     public static Item ZaniteHelmet;
-    @net.aetherteam.aether.interfaces.AEItem(
+    @AEItem(
             name = "紫晶胸甲"
     )
     public static Item ZaniteChestplate;
-    @net.aetherteam.aether.interfaces.AEItem(
+    @AEItem(
             name = "紫晶护腿"
     )
     public static Item ZaniteLeggings;
-    @net.aetherteam.aether.interfaces.AEItem(
+    @AEItem(
             name = "紫晶靴子"
     )
     public static Item ZaniteBoots;
-    @net.aetherteam.aether.interfaces.AEItem(
+    @AEItem(
             name = "重力手套"
     )
     public static Item GravititeGloves;
-    @net.aetherteam.aether.interfaces.AEItem(
+    @AEItem(
             name = "重力头盔"
     )
     public static Item GravititeHelmet;
-    @net.aetherteam.aether.interfaces.AEItem(
+    @AEItem(
             name = "重力胸甲"
     )
     public static Item GravititeChestplate;
-    @net.aetherteam.aether.interfaces.AEItem(
+    @AEItem(
             name = "重力护腿"
     )
     public static Item GravititeLeggings;
-    @net.aetherteam.aether.interfaces.AEItem(
+    @AEItem(
             name = "重力靴子"
     )
     public static Item GravititeBoots;
-    @net.aetherteam.aether.interfaces.AEItem(
+    @AEItem(
             name = "凤凰手套"
     )
     public static Item PhoenixGloves;
-    @net.aetherteam.aether.interfaces.AEItem(
+    @AEItem(
             name = "凤凰头盔"
     )
     public static Item PhoenixHelmet;
-    @net.aetherteam.aether.interfaces.AEItem(
+    @AEItem(
             name = "凤凰胸甲"
     )
     public static Item PhoenixChestplate;
-    @net.aetherteam.aether.interfaces.AEItem(
+    @AEItem(
             name = "凤凰护腿"
     )
     public static Item PhoenixLeggings;
-    @net.aetherteam.aether.interfaces.AEItem(
+    @AEItem(
             name = "凤凰靴子"
     )
     public static Item PhoenixBoots;
-    @net.aetherteam.aether.interfaces.AEItem(
+    @AEItem(
             name = "黑曜石手套"
     )
     public static Item ObsidianGloves;
-    @net.aetherteam.aether.interfaces.AEItem(
+    @AEItem(
             name = "黑曜石胸甲"
     )
     public static Item ObsidianChestplate;
-    @net.aetherteam.aether.interfaces.AEItem(
+    @AEItem(
             name = "黑曜石头盔"
     )
     public static Item ObsidianHelmet;
-    @net.aetherteam.aether.interfaces.AEItem(
+    @AEItem(
             name = "黑曜石护腿"
     )
     public static Item ObsidianLeggings;
-    @net.aetherteam.aether.interfaces.AEItem(
+    @AEItem(
             name = "黑曜石靴子"
     )
     public static Item ObsidianBoots;
-    @net.aetherteam.aether.interfaces.AEItem(
+    @AEItem(
             name = "海神手套"
     )
     public static Item NeptuneGloves;
-    @net.aetherteam.aether.interfaces.AEItem(
+    @AEItem(
             name = "海神头盔"
     )
     public static Item NeptuneHelmet;
-    @net.aetherteam.aether.interfaces.AEItem(
+    @AEItem(
             name = "海神胸甲"
     )
     public static Item NeptuneChestplate;
-    @net.aetherteam.aether.interfaces.AEItem(
+    @AEItem(
             name = "海神护腿"
     )
     public static Item NeptuneLeggings;
-    @net.aetherteam.aether.interfaces.AEItem(
+    @AEItem(
             name = "海神靴子"
     )
     public static Item NeptuneBoots;
-    @net.aetherteam.aether.interfaces.AEItem(
+    @AEItem(
             name = "重生之石"
     )
     public static Item RegenerationStone;
-    @net.aetherteam.aether.interfaces.AEItem(
+    @AEItem(
             name = "隐形斗篷"
     )
     public static Item InvisibilityCloak;
-    @net.aetherteam.aether.interfaces.AEItem(
+    @AEItem(
             name = "敏捷披风"
     )
     public static Item AgilityCape;
-    @net.aetherteam.aether.interfaces.AEItem(
+    @AEItem(
             name = "白色披风"
     )
     public static Item WhiteCape;
-    @net.aetherteam.aether.interfaces.AEItem(
+    @AEItem(
             name = "红色披风"
     )
     public static Item RedCape;
-    @net.aetherteam.aether.interfaces.AEItem(
+    @AEItem(
             name = "黄色披风"
     )
     public static Item YellowCape;
-    @net.aetherteam.aether.interfaces.AEItem(
+    @AEItem(
             name = "蓝色披风"
     )
     public static Item BlueCape;
-    @net.aetherteam.aether.interfaces.AEItem(
+    @AEItem(
             name = "女武神镐"
     )
     public static Item ValkyriePickaxe;
-    @net.aetherteam.aether.interfaces.AEItem(
+    @AEItem(
             name = "女武神斧"
     )
     public static Item ValkyrieAxe;
-    @net.aetherteam.aether.interfaces.AEItem(
+    @AEItem(
             name = "女武神铲"
     )
     public static Item ValkyrieShovel;
-    @net.aetherteam.aether.interfaces.AEItem(
+    @AEItem(
             name = "治愈之石"
     )
     public static Item HealingStone;
-    @net.aetherteam.aether.interfaces.AEItem(
+    @AEItem(
             name = "冰冻指环"
     )
     public static Item IceRing;
-    @net.aetherteam.aether.interfaces.AEItem(
+    @AEItem(
             name = "冰冻吊坠"
     )
     public static Item IcePendant;
-    @net.aetherteam.aether.interfaces.AEItem(
+    @AEItem(
             name = "蓝莓"
     )
     public static Item BlueBerry;
-    @net.aetherteam.aether.interfaces.AEItem(
+    @AEItem(
             name = "姜饼人"
     )
     public static Item GingerBreadMan;
-    @net.aetherteam.aether.interfaces.AEItem(
+    @AEItem(
             name = "拐杖糖"
     )
     public static Item CandyCane;
-    @net.aetherteam.aether.interfaces.AEItem(
+    @AEItem(
             name = "拐杖糖剑"
     )
     public static Item CandyCaneSword;
-    @net.aetherteam.aether.interfaces.AEItem(
+    @AEItem(
             name = "白苹果"
     )
     public static Item WhiteApple;
-    @net.aetherteam.aether.interfaces.AEItem(
+    @AEItem(
             name = "蓝色史维特球"
     )
     public static Item SwettyBall;
-    @net.aetherteam.aether.interfaces.AEItem(
+    @AEItem(
             name = "哨卫靴子"
     )
     public static Item SentryBoots;
-    @net.aetherteam.aether.interfaces.AEItem(
+    @AEItem(
             name = "女武神唱片"
     )
     public static Item ValkyrieMusicDisk;
-    @net.aetherteam.aether.interfaces.AEItem(
+    @AEItem(
             name = "女武神头盔"
     )
     public static Item ValkyrieHelmet;
-    @net.aetherteam.aether.interfaces.AEItem(
+    @AEItem(
             name = "女武神胸甲"
     )
     public static Item ValkyrieChestplate;
-    @net.aetherteam.aether.interfaces.AEItem(
+    @AEItem(
             name = "女武神护腿"
     )
     public static Item ValkyrieLeggings;
-    @net.aetherteam.aether.interfaces.AEItem(
+    @AEItem(
             name = "女武神靴子"
     )
     public static Item ValkyrieBoots;
-    @net.aetherteam.aether.interfaces.AEItem(
+    @AEItem(
             name = "女武神手套"
     )
     public static Item ValkyrieGloves;
-    @net.aetherteam.aether.interfaces.AEItem(
+    @AEItem(
             name = "灵巧披风"
     )
     public static Item DexterityCape;
-    @net.aetherteam.aether.interfaces.AEItem(
+    @AEItem(
             name = "蓝色史维特吊坠"
     )
     public static Item SwettyPendant;
-    @net.aetherteam.aether.interfaces.AEItem(
+    @AEItem(
             name = "Deadmau5之耳 "
     )
     public static Item Deadmau5Ears;
-    @net.aetherteam.aether.interfaces.AEItem(
+    @AEItem(
             name = "魔莓"
     )
     public static Item EnchantedBerry;
-    @net.aetherteam.aether.interfaces.AEItem(
+    @AEItem(
             name = "彩虹草莓"
     )
     public static Item Strawberry;
-    @net.aetherteam.aether.interfaces.AEItem(
+    @AEItem(
             name = "命运之球"
     )
     public static Item ContinuumOrb;
-    @net.aetherteam.aether.interfaces.AEItem(
+    @AEItem(
             name = "橙子"
     )
     public static Item Orange;
-    @net.aetherteam.aether.interfaces.AEItem(
+    @AEItem(
             name = "迷宫唱片"
     )
     public static Item LabyrinthMusicDisk;
-    @net.aetherteam.aether.interfaces.AEItem(
+    @AEItem(
             name = "恐鸟唱片"
     )
     public static Item MoaMusicDisk;
@@ -629,7 +630,7 @@ public class AetherItems
         for (int var2 = 0; var2 < var1; ++var2)
         {
             Field var3 = var0[var2];
-            net.aetherteam.aether.interfaces.AEItem var4 = (net.aetherteam.aether.interfaces.AEItem)var3.getAnnotation(net.aetherteam.aether.interfaces.AEItem.class);
+            AEItem var4 = var3.getAnnotation(AEItem.class);
 
             if (var4 != null && Item.class.isAssignableFrom(var3.getType()))
             {

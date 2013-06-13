@@ -2,7 +2,9 @@ package net.aetherteam.aether.dungeons.keys;
 
 import net.aetherteam.aether.entities.bosses.EntityKey;
 
-public enum EnumKeyType
+import java.io.Serializable;
+
+public enum EnumKeyType implements Serializable
 {
     Host("主宰", "Host"), Guardian("守卫者", "Guardian"), Eye("之眼", "Eye");
 
@@ -50,8 +52,3 @@ public enum EnumKeyType
         return null;
     }
 }
-
-/* Location:           D:\Dev\Mc\forge_orl\mcp\jars\bin\aether.jar
- * Qualified Name:     net.aetherteam.aether.dungeons.keys.EnumKeyType
- * JD-Core Version:    0.6.2
- */
