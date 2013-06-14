@@ -66,16 +66,16 @@ public class AetherNameGen
 
     public static String gen()
     {
-        String name = name1[rand.nextInt(name1.length - 1)];
-        return name + name2[rand.nextInt(name2.length - 1)];
+        String name = name1[rand.nextInt(name1.length)];
+        return name + name2[rand.nextInt(name2.length)];
     }
 
     public static String valkGen()
     {
         String result;
-        result = valkNamePrefix[rand.nextInt(valkNamePrefix.length - 1)];
-        result += valkNameSuffix[rand.nextInt(valkNameMiddix.length - 1)];
-        result += valkNameSuffix[rand.nextInt(valkNameSuffix.length - 1)];
+        result = valkNamePrefix[rand.nextInt(valkNamePrefix.length)];
+        result += valkNameMiddix[rand.nextInt(valkNameMiddix.length)];
+        result += valkNameSuffix[rand.nextInt(valkNameSuffix.length)];
         return result;
     }
 }
