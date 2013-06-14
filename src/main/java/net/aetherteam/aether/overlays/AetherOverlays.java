@@ -125,7 +125,7 @@ public class AetherOverlays
             int var6 = var5.getScaledWidth();
             int var7 = var5.getScaledHeight();
             var0.renderEngine.resetBoundTexture();
-            String var8 = "地牢队列: " + var3.getAmountQueued() + "/" + var2.getMembers().size();
+            String var8 = "已准备成员: " + var3.getAmountQueued() + "/" + var2.getMembers().size();
             var0.fontRenderer.drawStringWithShadow(var8, var6 / 2 - var0.fontRenderer.getStringWidth(var8) / 2, 16 + (var4.ridingEntity instanceof Mount ? 16 : 0), -1);
         }
     }
@@ -149,7 +149,7 @@ public class AetherOverlays
                 int var8 = (var3.getTimerLength() - var3.getTimerSeconds()) / 60;
                 int var9 = var3.getTimerLength() - var3.getTimerSeconds() - var8 * 60;
                 String var10 = String.valueOf(var8 + ":" + String.format("%02d", new Object[] {Integer.valueOf(var9)}));
-                String var11 = "地牢队列将结束于: " + var10;
+                String var11 = "地牢即将关闭,倒计时: " + var10;
                 var0.fontRenderer.drawStringWithShadow(var11, var6 / 2 - var0.fontRenderer.getStringWidth(var11) / 2, 16 + (var4.ridingEntity instanceof Mount ? 16 : 0), -1);
             }
         }
