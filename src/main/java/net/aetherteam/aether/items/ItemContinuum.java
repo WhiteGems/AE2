@@ -35,6 +35,7 @@ public class ItemContinuum extends ItemAether
         {
             String[] temp;
             temp = loadItems("/names/item_whitelist.txt");
+            double[] probablity = {};
             if (temp != null)
             {
                 whitelist_id = new short[temp.length];
@@ -47,16 +48,18 @@ public class ItemContinuum extends ItemAether
                     if (ht.length >= 2) whitelist_data[i] = Short.valueOf(ht[1]);
                     if (ht.length >= 3) whitelist_exp[i] = Double.valueOf(ht[2]);
                 }
-            }
-            long total = 0;
-            for(double cur : whitelist_exp) total += cur;
-            double[] probablity = new double[temp.length];
-            for(int i = 0; i < whitelist_exp.length; ++ i) {
-                probablity[i] = whitelist_exp[i] * 1.0D / total;
+                long total = 0;
+                for(double cur : whitelist_exp) total += cur;
+                probablity = new double[temp.length];
+                for(int i = 0; i < whitelist_exp.length; ++ i) {
+                    probablity[i] = whitelist_exp[i] * 1.0D / total;
+                }
             }
             rand = new WeightedRandom(probablity);
         } catch (Exception e)
-        { }
+        {
+            e.printStackTrace();
+        }
     }
 
     public static int getRandomIndex()
