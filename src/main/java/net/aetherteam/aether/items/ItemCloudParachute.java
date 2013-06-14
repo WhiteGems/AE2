@@ -1,12 +1,12 @@
 package net.aetherteam.aether.items;
 
+import net.aetherteam.aether.Aether;
 import net.aetherteam.aether.entities.EntityCloudParachute;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
-import net.minecraft.creativetab.CreativeTabs;
 
 public class ItemCloudParachute extends ItemAether
 {
@@ -15,7 +15,7 @@ public class ItemCloudParachute extends ItemAether
         super(var1);
         this.maxStackSize = 1;
         this.setMaxDamage(var2);
-        this.setCreativeTab(CreativeTabs.tabTransport);
+        this.setCreativeTab(Aether.tools);
     }
     
     public Item setIconName(String var1)
