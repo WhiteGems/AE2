@@ -110,7 +110,7 @@ public class MenuBaseConfig
             Minecraft.getMinecraft();
             menuProps.store(new FileOutputStream(Minecraft.getMinecraftDir() + "/MenuAPI.properties"), null);
 
-            FileInputStream in = new FileInputStream("MenuAPI.properties");
+            FileInputStream in = new FileInputStream(Minecraft.getMinecraftDir() + "/MenuAPI.properties");
 
             menuProps.load(in);
         } catch (FileNotFoundException e)
@@ -131,7 +131,7 @@ public class MenuBaseConfig
             Minecraft.getMinecraft();
             menuProps.store(new FileOutputStream(Minecraft.getMinecraftDir() + "/MenuAPI.properties"), null);
 
-            FileInputStream in = new FileInputStream("MenuAPI.properties");
+            FileInputStream in = new FileInputStream(Minecraft.getMinecraftDir() + "/MenuAPI.properties");
 
             menuProps.load(in);
         } catch (FileNotFoundException e)
@@ -148,8 +148,3 @@ public class MenuBaseConfig
         Minecraft.getMinecraft();
     }
 }
-
-/* Location:           D:\Dev\Mc\forge_orl\mcp\jars\bin\aether.jar
- * Qualified Name:     net.aetherteam.mainmenu_api.MenuBaseConfig
- * JD-Core Version:    0.6.2
- */
