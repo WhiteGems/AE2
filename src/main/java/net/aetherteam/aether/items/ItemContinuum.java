@@ -21,7 +21,7 @@ public class ItemContinuum extends ItemAether
     private static WeightedRandom rand;
     static short[] whitelist_id = {};
     static short[] whitelist_data = {};
-    static double[] whitelist_exp = {};
+    static int[] whitelist_exp = {};
 
     protected ItemContinuum(int var1)
     {
@@ -40,18 +40,19 @@ public class ItemContinuum extends ItemAether
             {
                 whitelist_id = new short[temp.length];
                 whitelist_data = new short[temp.length];
-                whitelist_exp = new double[temp.length];
+                whitelist_exp = new int[temp.length];
                 for (int i = 0; i < temp.length; i++)
                 {
                     String[] ht = temp[i].split(":");
                     if (ht.length >= 1) whitelist_id[i] = Short.valueOf(ht[0]);
                     if (ht.length >= 2) whitelist_data[i] = Short.valueOf(ht[1]);
-                    if (ht.length >= 3) whitelist_exp[i] = Double.valueOf(ht[2]);
+                    if (ht.length >= 3) whitelist_exp[i] = (int) (Double.valueOf(ht[2]) * 10000D);
                 }
                 long total = 0;
-                for(double cur : whitelist_exp) total += cur;
+                for (int cur : whitelist_exp) total += cur;
                 probablity = new double[temp.length];
-                for(int i = 0; i < whitelist_exp.length; ++ i) {
+                for (int i = 0; i < whitelist_exp.length; ++i)
+                {
                     probablity[i] = whitelist_exp[i] * 1.0D / total;
                 }
             }
@@ -64,7 +65,8 @@ public class ItemContinuum extends ItemAether
 
     public static int getRandomIndex()
     {
-        return rand.nextRand();
+        if (rand != null) return rand.nextRand();
+        return 0;
     }
 
     /**
