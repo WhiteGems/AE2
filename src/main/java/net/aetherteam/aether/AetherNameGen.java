@@ -34,7 +34,9 @@ public class AetherNameGen
             if (temp != null) valkNameSuffix = temp;
         }
         catch (Exception e)
-        {}
+        {
+            e.printStackTrace();
+        }
     }
 
     private static String[] loadNames(String resname)
@@ -64,16 +66,16 @@ public class AetherNameGen
 
     public static String gen()
     {
-        String name = name1[rand.nextInt(name1.length)];
-        return name + name2[rand.nextInt(name2.length)];
+        String name = name1[rand.nextInt(name1.length - 1)];
+        return name + name2[rand.nextInt(name2.length - 1)];
     }
 
     public static String valkGen()
     {
         String result;
-        result = valkNamePrefix[rand.nextInt(valkNamePrefix.length)];
-        result += valkNameSuffix[rand.nextInt(valkNameMiddix.length)];
-        result += valkNameSuffix[rand.nextInt(valkNameSuffix.length)];
+        result = valkNamePrefix[rand.nextInt(valkNamePrefix.length - 1)];
+        result += valkNameSuffix[rand.nextInt(valkNameMiddix.length - 1)];
+        result += valkNameSuffix[rand.nextInt(valkNameSuffix.length - 1)];
         return result;
     }
 }
