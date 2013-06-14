@@ -61,7 +61,7 @@ public class AetherMoaColour
             }
         }
 
-        return "/net/aetherteam/aether/client/sprites/moa/" + ((saddled) && (!player.isPotionActive(Potion.invisibility)) ? "saddle_" : "moa_") + this.name + ".png";
+        return "/net/aetherteam/aether/client/sprites/moa/" + ((saddled) && (!player.isPotionActive(Potion.invisibility)) ? "saddle_" : "moa_") + this.texturename + ".png";
     }
 
     public static AetherMoaColour pickRandomMoa()
