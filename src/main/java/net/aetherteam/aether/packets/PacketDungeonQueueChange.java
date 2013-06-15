@@ -84,10 +84,8 @@ public class PacketDungeonQueueChange extends AetherPacket
                 TileEntityEntranceController controller = (TileEntityEntranceController) entityPlayer.worldObj.getBlockTileEntity(MathHelper.floor_double(tileX), MathHelper.floor_double(tileY), MathHelper.floor_double(tileZ));
                 MinecraftServer server = FMLCommonHandler.instance().getMinecraftServerInstance();
                 ServerConfigurationManager configManager = server.getConfigurationManager();
-                for (Iterator i$ = configManager.playerEntityList.iterator(); i$.hasNext(); )
+                for (Object obj : configManager.playerEntityList)
                 {
-                    Object obj = i$.next();
-
                     if ((obj instanceof EntityPlayer))
                     {
                         EntityPlayer entityPlayer1 = (EntityPlayer) obj;
