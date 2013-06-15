@@ -121,7 +121,8 @@ public class BlockBronzeDoor extends BlockAether implements IAetherBlock
 
                                     if (var16 <= 0)
                                     {
-                                        var13.chatItUp(var5, "这个门似乎需要 " + (5 - var13.getKeyAmount()) + " 把钥匙, 在地牢的深处能找到这些钥匙?");
+                                        var16 = 0;
+                                        var13.chatItUp(var5, "这个门似乎需要 5 把钥匙, 在地牢的深处能找到这些钥匙?");
                                         return true;
                                     }
 
