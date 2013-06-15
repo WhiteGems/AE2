@@ -355,50 +355,50 @@ public class EntityFireMonster extends EntityFlying implements IAetherBoss
         {
             if (this.chatLog == 0)
             {
-                this.chatLine("\u00a7c进入到此房间说明你一定拥有一个勇敢的灵魂");
+                this.chatLine("\u00a7c胆敢踏进此地说明你一定拥有一个勇敢的灵魂");
                 this.chatLog = 1;
                 this.chatCount = 100;
             } else if (this.chatLog == 1)
             {
-                this.chatLine("\u00a7c离开! 人类! 这里不需要你");
+                this.chatLine("\u00a7c离开! 人类! 渺小的生物!");
                 this.chatLog = 2;
                 this.chatCount = 100;
             } else if (this.chatLog == 2)
             {
-                this.chatLine("\u00a7c你的存在让我很生气 你难道不害怕我燃烧的怒火?");
+                this.chatLine("\u00a7c你晃来晃去的太招人厌烦了, 你难道不害怕本尊燃烧的怒火?");
                 this.chatLog = 3;
                 this.chatCount = 100;
             } else if (this.chatLog == 3)
             {
-                this.chatLine("\u00a7c我有什么可以给你的捏, 傻瓜! 让我静一静");
+                this.chatLine("\u00a7c你不会得到赏赐的, 愚蠢的凡人! 让本尊安静一会儿");
                 this.chatLog = 4;
                 this.chatCount = 100;
             } else if (this.chatLog == 4)
             {
-                this.chatLine("\u00a7c你或许太无知了, 你不知道我是谁吗?");
+                this.chatLine("\u00a7c你或许太无知了, 你不知道本尊是谁吗?");
                 this.chatLog = 5;
                 this.chatCount = 100;
             } else if (this.chatLog == 5)
             {
-                this.chatLine("\u00a7c我是太阳神, 代表着以太世界永恒的太阳");
-                this.chatLine("\u00a7c只要我还活着, 这个世界的太阳永远不会落下");
+                this.chatLine("\u00a7c本尊就是太阳神, 以太世界永恒的太阳");
+                this.chatLine("\u00a7c本尊安在, 这个世界永无落日");
                 this.chatLog = 6;
                 this.chatCount = 100;
             } else if (this.chatLog == 6)
             {
-                this.chatLine("\u00a7c我的身体里燃烧着一千头愤怒的野兽");
-                this.chatLine("\u00a7c没有任何人, 任何英雄, 或者恶魂能伤害我, 你也不例外");
+                this.chatLine("\u00a7c本尊体内的烈焰已经熊熊燃烧了千年");
+                this.chatLine("\u00a7c没有任何人, 无论是英雄或者恶棍能伤害到本尊, 你也不例外");
                 this.chatLog = 7;
                 this.chatCount = 100;
             } else if (this.chatLog == 7)
             {
-                this.chatLine("\u00a7c你想挑战太阳的威力? 你会抓狂的");
-                this.chatLine("\u00a7c不要试图攻击我, 你将感受到我的愤怒");
+                this.chatLine("\u00a7c你居然藐视太阳神的权威? 你真是疯子");
+                this.chatLine("\u00a7c不要试图冒犯本尊, 你将会被本尊的怒火化为灰烬");
                 this.chatLog = 8;
                 this.chatCount = 100;
             } else if (this.chatLog == 8)
             {
-                this.chatLine("\u00a7c这是最后一次警告! 赶紧离开, 否则准备燃烧吧");
+                this.chatLine("\u00a7c这是最后一次警告! 离开这里, 否则准备燃烧吧");
                 this.chatLog = 9;
                 this.chatCount = 100;
             } else
