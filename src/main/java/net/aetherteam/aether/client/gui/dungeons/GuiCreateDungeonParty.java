@@ -117,7 +117,7 @@ public class GuiCreateDungeonParty extends GuiScreen
 
                 if (!created)
                 {
-                    this.mc.displayGuiScreen(new GuiDialogueBox(this, "你成功创建公会!", "你的公会名称已经被占用, 请换一个", created));
+                    this.mc.displayGuiScreen(new GuiDialogueBox(this, "你已成功建立公会!", "抱歉, 你的公会名称已经被占用 :(", created));
                 } else if ((this.controller != null) && (this.controller.getDungeon() != null) && (!this.controller.getDungeon().hasQueuedParty()))
                 {
                     int x = MathHelper.floor_double(this.controller.xCoord);
