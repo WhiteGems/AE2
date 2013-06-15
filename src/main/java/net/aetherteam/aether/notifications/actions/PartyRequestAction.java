@@ -51,7 +51,7 @@ public class PartyRequestAction extends NotificationAction
         PartyMember recruiter = PartyController.instance().getMember(notification.getSenderName());
         Party party = PartyController.instance().getParty(recruiter);
 
-        return "欢迎你加入 " + (party != null ? '"' + party.getName() + '"' + "的" : "") + "公会!";
+        return "欢迎你加入 " + (party != null ? '"' + party.getName() + '"' + "" : "") + "公会!";
     }
 
     public String failedMessage(Notification notification)

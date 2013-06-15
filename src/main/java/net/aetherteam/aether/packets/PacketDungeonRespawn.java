@@ -43,7 +43,7 @@ public class PacketDungeonRespawn extends AetherPacket
 
                 if ((party != null) && (dungeon != null))
                 {
-                    ClientNotificationHandler.openDialogueBox("您已重生!");
+                    ClientNotificationHandler.openDialogueBox("你已重生!");
                 }
             }
         } catch (Exception ex)
