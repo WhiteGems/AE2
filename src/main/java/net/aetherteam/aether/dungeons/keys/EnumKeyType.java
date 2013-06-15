@@ -6,7 +6,7 @@ import java.io.Serializable;
 
 public enum EnumKeyType implements Serializable
 {
-    Host("主宰", "Host"), Guardian("守卫者", "Guardian"), Eye("之眼", "Eye");
+    Host("主宰", "Host"), Guardian("守卫者", "Guardian"), Eye("迷宫之眼", "Eye");
 
     private String texture;
     private String keyName;

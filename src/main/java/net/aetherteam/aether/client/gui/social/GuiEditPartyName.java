@@ -98,7 +98,7 @@ public class GuiEditPartyName extends GuiScreen
 
                         boolean nameChanged = PartyController.instance().changePartyName(party, this.dialogueInput.getText(), true);
 
-                        this.mc.displayGuiScreen(new GuiDialogueBox(this.parent, "公会重命名为 " + this.dialogueInput.getText() + "!", "抱歉, 该名称已占用 :(", nameChanged));
+                        this.mc.displayGuiScreen(new GuiDialogueBox(this.parent, "公会重命名为 " + this.dialogueInput.getText() + " !", "抱歉, 该名称已占用 :(", nameChanged));
                     }
                 }
                 break;
