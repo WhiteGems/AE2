@@ -23,9 +23,9 @@ import org.lwjgl.opengl.GL11;
 
 public class GuiPlayerList extends GuiScreen
 {
-    protected static final String DEV_TEXT = "以太II开发人员";
+    protected static final String DEV_TEXT = "以太II 开发人员";
     protected static final String DOUBLE_TEXT = "臭熏熏的人 :3";
-    protected static final String BETA_TEXT = "以太IIBeta测试人员";
+    protected static final String BETA_TEXT = "以太IIBeta 测试人员";
     private static final int DEV_TEXT_COLOR = 16105765;
     private GuiYSlider sbar;
     private float sbarVal = 0.0F;
