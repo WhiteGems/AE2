@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 public enum AetherRanks
 {
-    DEVELOPER("Aether II Developer", Aether.developers, 2342342), HELPER("Aether II Helper", Aether.helper, 2344), DEFAULT("", new ArrayList(), 0);
+    DEVELOPER("Aether II Developer", Aether.developers, 2342342), HELPER("Aether II Helper", Aether.helper, 2344), TRANSLATOR("以太 Ⅱ 汉化人员", Aether.translator, 2342342), DEFAULT("", new ArrayList(), 0);
 
     private ArrayList members = new ArrayList();
 
