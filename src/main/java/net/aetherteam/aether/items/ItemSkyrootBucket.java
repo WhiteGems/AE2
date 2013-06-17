@@ -265,7 +265,7 @@ public boolean tryPlaceContainedLiquid(World par1World, double par2, double par4
         {
         	if(par1World.getBlockMaterial(par8, par9, par10) == Material.air)
         	{
-        		par1World.setBlock(par8, par9, par10, 9, 0, 1);
+        		par1World.setBlock(par8, par9, par10, 9, 0, 3);
         	}
         	else
         	{
