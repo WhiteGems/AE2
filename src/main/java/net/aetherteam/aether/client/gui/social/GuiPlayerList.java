@@ -23,9 +23,9 @@ import org.lwjgl.opengl.GL11;
 
 public class GuiPlayerList extends GuiScreen
 {
-    protected static final String DEV_TEXT = "以太II开发人员";
+    protected static final String DEV_TEXT = "以太II 开发人员";
     protected static final String DOUBLE_TEXT = "臭熏熏的人 :3";
-    protected static final String BETA_TEXT = "以太IIBeta测试人员";
+    protected static final String BETA_TEXT = "以太IIBeta 测试人员";
     private static final int DEV_TEXT_COLOR = 16105765;
     private GuiYSlider sbar;
     private float sbarVal = 0.0F;
@@ -199,7 +199,7 @@ public class GuiPlayerList extends GuiScreen
             this.fontRenderer.drawString("臭熏熏的人 :3", (int) ((x + height) / 0.75F), (int) ((y + 12.0F) / 0.75F), 16105765);
         else if (playername.toLowerCase().equals("zestybaby"))
         	this.fontRenderer.drawString("白宝石小组组长sama!", (int) ((x + height) / 0.75F), (int) ((y + 12.0F) / 0.75F), 16105765);
-        else if ((playername.toLowerCase().equals("crafteverywhere")) || (playername.toLowerCase().equals("pa001024")) || (playername.toLowerCase().equals("sun")) || (playername.toLowerCase().equals("waidely")))
+        else if ((playername.toLowerCase().equals("crafteverywhere")) || (playername.toLowerCase().equals("pa001024")) || (playername.toLowerCase().equals("sun")) || (playername.toLowerCase().equals("waidely")) || (playername.toLowerCase().equals("wjmz8mr")))
         	this.fontRenderer.drawString("以太II 汉化人员", (int) ((x + height) / 0.75F), (int) ((y + 12.0F) / 0.75F), 16105765);	
         GL11.glPopMatrix();
     }

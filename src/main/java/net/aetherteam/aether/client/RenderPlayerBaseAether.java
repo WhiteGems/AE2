@@ -52,7 +52,7 @@ public class RenderPlayerBaseAether extends RenderPlayerBase
     public void afterRenderSpecials(EntityPlayer entityplayer, float f)
     {
         renderCape(entityplayer, f);
-        if ((AetherRanks.getRankFromMember(entityplayer.username).equals(AetherRanks.DEVELOPER)) || (AetherRanks.getRankFromMember(entityplayer.username).equals(AetherRanks.HELPER)))
+        if ((AetherRanks.getRankFromMember(entityplayer.username).equals(AetherRanks.DEVELOPER)) || (AetherRanks.getRankFromMember(entityplayer.username).equals(AetherRanks.HELPER)) || (AetherRanks.getRankFromMember(entityplayer.username).equals(AetherRanks.TRANSLATOR)))
         {
             GL11.glPushMatrix();
             GL11.glDisable(2896);
@@ -101,7 +101,7 @@ public class RenderPlayerBaseAether extends RenderPlayerBase
 
     public void renderFirstPersonGlow(EntityPlayer player)
     {
-        if (AetherRanks.getRankFromMember(player.username).equals(AetherRanks.DEVELOPER))
+        if (AetherRanks.getRankFromMember(player.username).equals(AetherRanks.DEVELOPER) || AetherRanks.getRankFromMember(player.username).equals(AetherRanks.TRANSLATOR))
         {
             GL11.glPushMatrix();
             GL11.glDisable(2896);
@@ -352,7 +352,7 @@ public class RenderPlayerBaseAether extends RenderPlayerBase
                 this.modelWings.wingLeft.render(f6);
                 this.modelWings.wingRight.render(f6);
             }
-            if ((AetherRanks.getRankFromMember(player.username).equals(AetherRanks.DEVELOPER)) || (AetherRanks.getRankFromMember(player.username).equals(AetherRanks.HELPER)))
+            if ((AetherRanks.getRankFromMember(player.username).equals(AetherRanks.DEVELOPER)) || (AetherRanks.getRankFromMember(player.username).equals(AetherRanks.HELPER)) || (AetherRanks.getRankFromMember(player.username).equals(AetherRanks.TRANSLATOR)))
             {
                 GL11.glPushMatrix();
                 GL11.glDisable(2896);

@@ -1208,7 +1208,7 @@ public class EntitySlider extends EntityBossMob implements IAetherBoss
                 }
             } else
             {
-                this.chatItUp(var3, "呣. 这块坚硬的石头. 我的拳头对付不了啊!");
+                this.chatItUp(var3, "呣, 这块坚硬的石头, 我的拳头对付不了啊!");
                 return false;
             }
         } else

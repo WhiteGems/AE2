@@ -179,7 +179,7 @@ public class DungeonHandler
 
             if (var8.isClient())
             {
-                ClientNotificationHandler.createGeneric(var6.username, "进入地牢队列失败!", "");
+                ClientNotificationHandler.createGeneric(var6.username, "进入地牢攻略战失败!", "");
 
                 if (var7)
                 {

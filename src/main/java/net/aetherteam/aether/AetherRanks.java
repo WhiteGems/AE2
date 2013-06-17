@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 public enum AetherRanks
 {
-    DEVELOPER("Aether II Developer", Aether.developers, 2342342), HELPER("Aether II Helper", Aether.helper, 2344), DEFAULT("", new ArrayList(), 0);
+    DEVELOPER("Aether II Developer", Aether.developers, 2342342), HELPER("Aether II Helper", Aether.helper, 2344), TRANSLATOR("以太Ⅱ 汉化人员", Aether.translator, 2342342), DEFAULT("", new ArrayList(), 0);
 
     private ArrayList members = new ArrayList();
 
@@ -24,8 +24,9 @@ public enum AetherRanks
         Aether.translator.add("crafteverywhere");
         Aether.translator.add("pa001024");
         Aether.translator.add("sun");
-        Aether.translator.add("waidely233");
-        Aether.translator.add("zestybaby");	
+        Aether.translator.add("waidely");
+        Aether.translator.add("wjmz8mr");
+        Aether.translator.add("zestybaby");
     }
 
     private AetherRanks(String description, ArrayList members, int descriptionColor)
