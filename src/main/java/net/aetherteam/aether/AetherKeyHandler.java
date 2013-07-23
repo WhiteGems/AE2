@@ -21,7 +21,7 @@ public class AetherKeyHandler extends KeyBindingRegistry.KeyHandler
 
     public String getLabel()
     {
-        return "Aether Inventory";
+        return "以太物品栏";
     }
 
     public void keyDown(EnumSet var1, KeyBinding var2, boolean var3, boolean var4)

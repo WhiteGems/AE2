@@ -16,8 +16,8 @@ import org.lwjgl.opengl.GL11;
 
 public class GuiManageMembers extends GuiScreen
 {
-    protected static final String ONLINE_TEXT = "ONLINE";
-    protected static final String OFFLINE_TEXT = "OFFLINE";
+    protected static final String ONLINE_TEXT = "在线";
+    protected static final String OFFLINE_TEXT = "离线";
     private static final int ONLINE_TEXT_COLOR = 6750054;
     private static final int OFFLINE_TEXT_COLOR = 16711680;
     private GuiYSlider sbar;
@@ -82,8 +82,9 @@ public class GuiManageMembers extends GuiScreen
 
         this.sbar = new GuiYSlider(-1, this.xMember + 46, this.yMember - 54, 10, 103);
         this.sbar.sliderValue = this.sbarVal;
-        this.buttonList.add(new GuiButton(0, this.xMember - 58, this.yMember + 85 - 28, 120, 20, "Back"));
-        this.buttonList.add(new GuiButton(0, this.xMember - 58, this.yMember + 85 - 28, 120, 20, "Back"));
+
+        this.buttonList.add(new GuiButton(0, this.xMember - 58, this.yMember + 85 - 28, 120, 20, "返回"));
+        this.buttonList.add(new GuiButton(0, this.xMember - 58, this.yMember + 85 - 28, 120, 20, "返回"));
     }
 
     /**
@@ -217,16 +218,16 @@ public class GuiManageMembers extends GuiScreen
             this.sbar.sliderValue = 0.0F;
         }
 
-        int var7 = this.xMember - 70;
-        int var8 = this.yMember - 84;
+        int centerX = this.xMember - 70;
+        int centerY = this.yMember - 84;
         ScaledResolution var9 = new ScaledResolution(this.mc.gameSettings, this.mc.displayWidth, this.mc.displayHeight);
-        this.drawTexturedModalRect(var7, var8, 0, 0, 141, this.hMember);
+        this.drawTexturedModalRect(centerX, centerY, 0, 0, 141, this.hMember);
         this.totalHeight = 0;
         byte var10 = 100;
         byte var11 = 20;
         byte var12 = 2;
         GL11.glEnable(GL11.GL_SCISSOR_TEST);
-        GL11.glScissor((var7 + 14) * var9.getScaleFactor(), (var8 + 35) * var9.getScaleFactor(), var10 * var9.getScaleFactor(), 103 * var9.getScaleFactor());
+        GL11.glScissor((centerX + 14) * var9.getScaleFactor(), (centerY + 35) * var9.getScaleFactor(), var10 * var9.getScaleFactor(), 103 * var9.getScaleFactor());
         GL11.glPushMatrix();
         this.totalHeight = var5.size() * (var11 + var12);
         float var13 = -this.sbar.sliderValue * (float)(this.totalHeight - 105);
@@ -245,7 +246,7 @@ public class GuiManageMembers extends GuiScreen
             {
                 String var15 = ((PartyMember)var5.get(var14)).username;
                 String var16 = ((PartyMember)var5.get(var14)).skinUrl;
-                this.playerSlots.add(new GuiPlayerSlot(var15, var16, this.playerSlots.size(), var7 + 15, var8 + this.totalHeight + 30, var10, var11));
+                this.playerSlots.add(new GuiPlayerSlot(var15, var16, this.playerSlots.size(), centerX + 15, centerY + this.totalHeight + 30, var10, var11));
                 this.totalHeight += var11 + var12;
             }
 
@@ -254,7 +255,7 @@ public class GuiManageMembers extends GuiScreen
 
         for (var14 = 0; var14 < this.playerSlots.size(); ++var14)
         {
-            ((GuiPlayerSlot)this.playerSlots.get(var14)).drawPlayerSlot(var7 + 15, var8 + this.totalHeight + 30, var10, var11);
+            ((GuiPlayerSlot)this.playerSlots.get(var14)).drawPlayerSlot(centerX + 15, centerY + this.totalHeight + 30, var10, var11);
             this.totalHeight += var11 + var12;
         }
 
@@ -266,19 +267,14 @@ public class GuiManageMembers extends GuiScreen
             this.sbar.drawButton(this.mc, var1, var2);
         }
 
-        this.drawString(this.fontRenderer, "Player List", var7 + 40, var8 + 10, 16777215);
-        String var17;
-
-        if (this.selectedPlayerSlot != null && !PartyController.instance().isLeader(this.selectedPlayerSlot.username))
+        drawString(this.fontRenderer, "玩家列表", centerX + 40, centerY + 10, 16777215);
+        String kickName;
+        if ((this.selectedPlayerSlot != null) && (!PartyController.instance().isLeader(this.selectedPlayerSlot.username)))
         {
-            var17 = "Manage";
-        }
-        else
-        {
-            var17 = "Disband";
-        }
+            kickName = "管理";
+        } else kickName = "解散";
 
-        this.kickButton = new GuiButton(1, this.xMember + 3, this.yMember + 85 - 28, 58, 20, var17);
+        this.kickButton = new GuiButton(1, this.xMember + 3, this.yMember + 85 - 28, 58, 20, kickName);
 
         if (this.selectedPlayerSlot != null && this.slotIsSelected && (!PartyController.instance().isLeader(this.selectedPlayerSlot.username) || this.playerSlots.size() == 1))
         {
@@ -289,7 +285,7 @@ public class GuiManageMembers extends GuiScreen
             this.kickButton.enabled = false;
         }
 
-        this.buttonList.add(new GuiButton(0, this.xMember - 60, this.yMember + 85 - 28, 58, 20, "Back"));
+        this.buttonList.add(new GuiButton(0, this.xMember - 60, this.yMember + 85 - 28, 58, 20, "返回"));
         this.buttonList.add(this.kickButton);
         super.drawScreen(var1, var2, var3);
     }

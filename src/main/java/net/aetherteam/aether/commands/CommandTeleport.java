@@ -116,19 +116,19 @@ public class CommandTeleport extends CommandBase
         {
             if (var9 != null && var10 != null && var10.hasMember(PartyController.instance().getMember((EntityPlayer)var1)) && var11 == null)
             {
-                notifyAdmins(var2, "You cannot teleport " + var1.username + " out side of a dungeon!", new Object[0]);
+                notifyAdmins(var2, "你不能传送 " + var1.username + " 到地牢外面!", new Object[0]);
                 return false;
             }
 
             if (var11 != null && var11.getQueuedParty() != null && var11.getQueuedParty() != var9)
             {
-                notifyAdmins(var2, "You cannot teleport " + var1.username + " into another dungeon!", new Object[0]);
+                notifyAdmins(var2, "你不能传送 " + var1.username + " 进入其他地牢!", new Object[0]);
                 return false;
             }
 
             if (var11 != null)
             {
-                notifyAdmins(var2, "You cannot teleport " + var1.username + " into a dungeon!", new Object[0]);
+                notifyAdmins(var2, "你不能传送 " + var1.username + " 进入地牢!", new Object[0]);
                 return false;
             }
         }

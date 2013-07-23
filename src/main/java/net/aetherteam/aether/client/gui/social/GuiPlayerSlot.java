@@ -12,8 +12,8 @@ import org.lwjgl.opengl.GL11;
 
 public class GuiPlayerSlot extends Gui
 {
-    protected static final String ONLINE_TEXT = "ONLINE";
-    protected static final String OFFLINE_TEXT = "OFFLINE";
+    protected static final String ONLINE_TEXT = "在线";
+    protected static final String OFFLINE_TEXT = "离线";
     private static final int ONLINE_TEXT_COLOR = 6750054;
     private static final int OFFLINE_TEXT_COLOR = 16711680;
     protected int width;
@@ -44,15 +44,15 @@ public class GuiPlayerSlot extends Gui
         this.yPosition = var5;
     }
 
-    public void drawPlayerSlot(int var1, int var2, int var3, int var4)
+    public void drawPlayerSlot(int x, int y, int var3, int height)
     {
-        this.xPosition = var1;
-        this.yPosition = var2;
-        this.drawGradientRect(this.xPosition, this.yPosition, this.xPosition + var3, this.yPosition + var4, this.selected ? -10439830 : -13421773, this.selected ? -11563178 : -11184811);
+        this.xPosition = x;
+        this.yPosition = y;
+        this.drawGradientRect(this.xPosition, this.yPosition, this.xPosition + var3, this.yPosition + height, this.selected ? -10439830 : -13421773, this.selected ? -11563178 : -11184811);
         Minecraft var5 = Minecraft.getMinecraft();
-        FontRenderer var6 = var5.fontRenderer;
+        FontRenderer fontRenderer = var5.fontRenderer;
         ArrayList var7 = PartyController.instance().getParties();
-        ArrayList var8 = new ArrayList();
+        ArrayList playerStringList = new ArrayList();
         int var9;
 
         for (var9 = 0; var9 < var7.size(); ++var9)
@@ -61,7 +61,7 @@ public class GuiPlayerSlot extends Gui
 
             if (((Party)var7.get(var9)).hasMember(var10))
             {
-                var8.add(this.username);
+                playerStringList.add(this.username);
             }
         }
 
@@ -75,28 +75,21 @@ public class GuiPlayerSlot extends Gui
         float var13 = 0.5F;
         GL11.glBegin(GL11.GL_QUADS);
         GL11.glTexCoord2f(var14, var11);
-        GL11.glVertex2f((float)(var1 + 2), (float)(var2 + 2));
+        GL11.glVertex2f((float)(x + 2), (float)(y + 2));
         GL11.glTexCoord2f(var14, var13);
-        GL11.glVertex2f((float)(var1 + 2), (float)(var2 + 18));
+        GL11.glVertex2f((float)(x + 2), (float)(y + 18));
         GL11.glTexCoord2f(var12, var13);
-        GL11.glVertex2f((float)(var1 + 18), (float)(var2 + 18));
+        GL11.glVertex2f((float)(x + 18), (float)(y + 18));
         GL11.glTexCoord2f(var12, var11);
-        GL11.glVertex2f((float)(var1 + 18), (float)(var2 + 2));
+        GL11.glVertex2f((float)(x + 18), (float)(y + 2));
         GL11.glEnd();
         var5.renderEngine.resetBoundTexture();
-        var6.drawStringWithShadow(this.username, var1 + var4, var2 + 2, 15066597);
+        fontRenderer.drawStringWithShadow(this.username, x + height, y + 2, 15066597);
         GL11.glPushMatrix();
         GL11.glScalef(0.75F, 0.75F, 1.0F);
-
-        if (var8.contains(this.username))
-        {
-            var6.drawString("ONLINE", (int)(((float)var1 + (float)var4) / 0.75F), (int)(((float)var2 + 12.0F) / 0.75F), 6750054);
-        }
-        else
-        {
-            var6.drawString("OFFLINE", (int)(((float)var1 + (float)var4) / 0.75F), (int)(((float)var2 + 12.0F) / 0.75F), 16711680);
-        }
-
+        if (playerStringList.contains(this.username))
+            fontRenderer.drawString("在线", (int) ((x + this.height) / 0.75F), (int) ((y + 12.0F) / 0.75F), 6750054);
+        else fontRenderer.drawString("离线", (int) ((x + this.height) / 0.75F), (int) ((y + 12.0F) / 0.75F), 16711680);
         GL11.glPopMatrix();
     }
 

@@ -29,8 +29,8 @@ public class GuiCreateParty extends GuiScreen
 
     /** Reference to the Minecraft object. */
     Minecraft mc;
-    private ArrayList partyType;
-    private int typeIndex;
+    private ArrayList partyType = new ArrayList();
+    private int typeIndex = 0;
     private GuiButton typeButton;
     private GuiButton finishButton;
     private GuiButton backButton;
@@ -44,16 +44,15 @@ public class GuiCreateParty extends GuiScreen
         this(new PartyData(), var1, var2);
     }
 
-    public GuiCreateParty(PartyData var1, EntityPlayer var2, GuiScreen var3)
+    public GuiCreateParty(PartyData var1, EntityPlayer player, GuiScreen parent)
     {
-        this.partyType = new ArrayList();
-        this.typeIndex = 0;
-        this.partyName = "";
-        this.parent = var3;
-        this.partyType.add("Open");
-        this.partyType.add("Closed");
-        this.partyType.add("Private");
-        this.player = var2;
+        this.parent = parent;
+
+        this.partyType.add("公开");
+        this.partyType.add("关闭");
+        this.partyType.add("私有");
+        this.player = player;
+
         this.mc = FMLClientHandler.instance().getClient();
         this.pm = var1;
         this.backgroundTexture = this.mc.renderEngine.getTexture("/net/aetherteam/aether/client/sprites/gui/createParty.png");
@@ -70,9 +69,11 @@ public class GuiCreateParty extends GuiScreen
     {
         this.updateScreen();
         this.buttonList.clear();
-        this.typeButton = new GuiButton(1, this.partyX - 60, this.partyY - 16 - 28, 120, 20, "Type: " + (String)this.partyType.get(this.typeIndex));
-        this.finishButton = new GuiButton(2, this.partyX - 60, this.partyY + 6 - 28, 120, 20, "Finish Party");
-        this.backButton = new GuiButton(0, this.partyX - 60, this.partyY + 81 - 28, 120, 20, "Back");
+
+        this.typeButton = new GuiButton(1, this.partyX - 60, this.partyY - 16 - 28, 120, 20, "类型: " + (String) this.partyType.get(this.typeIndex));
+        this.finishButton = new GuiButton(2, this.partyX - 60, this.partyY + 6 - 28, 120, 20, "建立公会");
+        this.backButton = new GuiButton(0, this.partyX - 60, this.partyY + 81 - 28, 120, 20, "返回");
+
         this.buttonList.add(this.typeButton);
         this.buttonList.add(this.finishButton);
         this.buttonList.add(this.backButton);
@@ -86,9 +87,9 @@ public class GuiCreateParty extends GuiScreen
     /**
      * Fired when a control is clicked. This is the equivalent of ActionListener.actionPerformed(ActionEvent e).
      */
-    protected void actionPerformed(GuiButton var1)
+    protected void actionPerformed(GuiButton button)
     {
-        switch (var1.id)
+        switch (button.id)
         {
             case 0:
                 this.mc.displayGuiScreen(this.parent);
@@ -97,13 +98,13 @@ public class GuiCreateParty extends GuiScreen
             case 1:
                 ++this.typeIndex;
                 break;
-
             case 2:
-                Party var2 = (new Party(this.partyName, new PartyMember(this.player))).setType(PartyType.getTypeFromString((String)this.partyType.get(this.typeIndex)));
-                boolean var3 = PartyController.instance().addParty(var2, true);
+                Party party = new Party(this.partyName, new PartyMember(this.player)).setType(PartyType.getTypeFromName((String)this.partyType.get(this.typeIndex)));
+                boolean created = PartyController.instance().addParty(party, true);
                 PacketDispatcher.sendPacketToServer(AetherPacketHandler.sendPartyChange(true, this.partyName, this.player.username, this.player.skinUrl));
-                PacketDispatcher.sendPacketToServer(AetherPacketHandler.sendPartyTypeChange(this.partyName, PartyType.getTypeFromString((String)this.partyType.get(this.typeIndex))));
-                this.mc.displayGuiScreen(new GuiDialogueBox(this.parent, "Your party was successfully created!", "Your party name is already taken. Sorry :(", var3));
+                PacketDispatcher.sendPacketToServer(AetherPacketHandler.sendPartyTypeChange(this.partyName, PartyType.getTypeFromName((String) this.partyType.get(this.typeIndex))));
+
+                this.mc.displayGuiScreen(new GuiDialogueBox(this.parent, "你已成功建立公会!", "抱歉, 你的公会名称已经被占用 :(", created));
         }
     }
 
@@ -118,7 +119,7 @@ public class GuiCreateParty extends GuiScreen
     /**
      * Draws the screen and all the components in it.
      */
-    public void drawScreen(int var1, int var2, float var3)
+    public void drawScreen(int x, int y, float partialTick)
     {
         this.buttonList.clear();
 
@@ -126,9 +127,8 @@ public class GuiCreateParty extends GuiScreen
         {
             this.typeIndex = 0;
         }
-
-        this.typeButton = new GuiButton(1, this.partyX - 60, this.partyY - 16 - 28, 120, 20, "Type: " + (String)this.partyType.get(this.typeIndex));
-        this.finishButton = new GuiButton(2, this.partyX - 60, this.partyY + 6 - 28, 120, 20, "Finish Party");
+        this.typeButton = new GuiButton(1, this.partyX - 60, this.partyY - 16 - 28, 120, 20, "类型: " + (String) this.partyType.get(this.typeIndex));
+        this.finishButton = new GuiButton(2, this.partyX - 60, this.partyY + 6 - 28, 120, 20, "建立公会");
 
         if (this.partyName.isEmpty())
         {
@@ -141,34 +141,35 @@ public class GuiCreateParty extends GuiScreen
         this.drawDefaultBackground();
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
         GL11.glBindTexture(GL11.GL_TEXTURE_2D, this.backgroundTexture);
-        int var4 = this.partyX - 70;
-        int var5 = this.partyY - 84;
+        int centerX = this.partyX - 70;
+        int centerY = this.partyY - 84;
         new ScaledResolution(this.mc.gameSettings, this.mc.displayWidth, this.mc.displayHeight);
-        this.drawTexturedModalRect(var4, var5, 0, 0, 141, this.partyH);
+        this.drawTexturedModalRect(centerX, centerY, 0, 0, 141, this.partyH);
         GL11.glBindTexture(GL11.GL_TEXTURE_2D, this.backgroundTexture);
         this.mc.renderEngine.resetBoundTexture();
-        this.drawString(this.fontRenderer, "Insert Party Name", var4 + 68 - this.fontRenderer.getStringWidth("Insert Party Name") / 2, var5 + 5, 16777215);
+        drawString(this.fontRenderer, "输入公会名称", centerX + 68 - this.fontRenderer.getStringWidth("输入公会名称") / 2, centerY + 5, 16777215);
+
         this.partyNameField.drawTextBox();
-        super.drawScreen(var1, var2, var3);
+        super.drawScreen(x, y, partialTick);
     }
 
     /**
      * Fired when a key is typed. This is the equivalent of KeyListener.keyTyped(KeyEvent e).
      */
-    protected void keyTyped(char var1, int var2)
+    protected void keyTyped(char charTyped, int keyTyped)
     {
         if (this.partyNameField.isFocused())
         {
-            this.partyNameField.textboxKeyTyped(var1, var2);
+            this.partyNameField.textboxKeyTyped(charTyped, keyTyped);
             this.partyName = this.partyNameField.getText();
         }
-        else if (var2 == Minecraft.getMinecraft().gameSettings.keyBindInventory.keyCode)
+        else if (keyTyped == Minecraft.getMinecraft().gameSettings.keyBindInventory.keyCode)
         {
             this.mc.displayGuiScreen((GuiScreen)null);
             this.mc.setIngameFocus();
         }
 
-        super.keyTyped(var1, var2);
+        super.keyTyped(charTyped, keyTyped);
     }
 
     /**

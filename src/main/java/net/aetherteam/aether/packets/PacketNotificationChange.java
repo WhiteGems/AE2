@@ -36,26 +36,26 @@ public class PacketNotificationChange extends AetherPacket
         try
         {
             byte var5 = var3.readByte();
-            boolean var6 = var3.readBoolean();
+            boolean adding = var3.readBoolean();
             String var7 = var3.readUTF();
             String var8 = var3.readUTF();
-            String var9 = var3.readUTF();
-            String var10 = var3.readUTF();
-            NotificationType var11 = NotificationType.getTypeFromString(var7);
+            String sendingPlayer = var3.readUTF();
+            String receivingPlayer = var3.readUTF();
+            NotificationType type = NotificationType.getTypeFromString(var7);
             EntityPlayer var12 = (EntityPlayer)var2;
             Side var13 = FMLCommonHandler.instance().getEffectiveSide();
 
             if (var13.isClient())
             {
-                Notification var14 = new Notification(var11, "Notification Received!", var9, var10);
+                Notification notification = new Notification(type, "收到消息!", sendingPlayer, receivingPlayer);
 
-                if (!NotificationHandler.instance().hasReceivedFromBefore(var9, var11) && var6)
+                if (!NotificationHandler.instance().hasReceivedFromBefore(sendingPlayer, type) && adding)
                 {
-                    NotificationHandler.instance().receiveNotification(var14);
+                    NotificationHandler.instance().receiveNotification(notification);
                 }
-                else if (!var6)
+                else if (!adding)
                 {
-                    NotificationHandler.instance().removeSentNotification(var14, false);
+                    NotificationHandler.instance().removeSentNotification(notification, false);
                 }
             }
             else
@@ -75,16 +75,16 @@ public class PacketNotificationChange extends AetherPacket
                     }
                 }
 
-                EntityPlayer var23 = null;
+                EntityPlayer realReceivingPlayer = null;
                 Iterator var26 = var16.iterator();
 
                 while (var26.hasNext())
                 {
                     EntityPlayer var19 = (EntityPlayer)var26.next();
 
-                    if (var19.username.toLowerCase().equalsIgnoreCase(var6 ? var10 : var9))
+                    if (var19.username.toLowerCase().equalsIgnoreCase(adding ? receivingPlayer : sendingPlayer))
                     {
-                        var23 = var19;
+                        realReceivingPlayer = var19;
                     }
                 }
 
@@ -100,7 +100,7 @@ public class PacketNotificationChange extends AetherPacket
 
                 Notification var20;
 
-                if (!NotificationHandler.instance().hasSentToBefore(var10, var11, var9) && var12.username.toLowerCase().equalsIgnoreCase(var9) && var23 != null)
+                if (!NotificationHandler.instance().hasSentToBefore(receivingPlayer, type, sendingPlayer) && var12.username.toLowerCase().equalsIgnoreCase(sendingPlayer) && realReceivingPlayer != null)
                 {
                     System.out.println("Validated!");
 
@@ -109,16 +109,18 @@ public class PacketNotificationChange extends AetherPacket
                         System.out.println("Oops! :(");
                         return;
                     }
+                    Notification notification = new Notification(type, "收到消息!", sendingPlayer, receivingPlayer);
 
-                    var20 = new Notification(var11, "Notification Received!", var9, var10);
-                    NotificationHandler.instance().receiveNotification(var20);
-                    PacketDispatcher.sendPacketToPlayer(AetherPacketHandler.sendNotificationChange(var20, var6), (Player)var23);
-                }
-                else if (!var6)
+                    NotificationHandler.instance().receiveNotification(notification);
+
+                    PacketDispatcher.sendPacketToPlayer(AetherPacketHandler.sendNotificationChange(notification, adding), (Player) realReceivingPlayer);
+                } else if (!adding)
                 {
-                    var20 = new Notification(var11, "Notification Received!", var9, var10);
-                    NotificationHandler.instance().removeSentNotification(var20, false);
-                    PacketDispatcher.sendPacketToPlayer(AetherPacketHandler.sendNotificationChange(var20, var6), (Player)var23);
+                    Notification notification = new Notification(type, "收到消息!", sendingPlayer, receivingPlayer);
+
+                    NotificationHandler.instance().removeSentNotification(notification, false);
+
+                    PacketDispatcher.sendPacketToPlayer(AetherPacketHandler.sendNotificationChange(notification, adding), (Player) realReceivingPlayer);
                 }
             }
         }

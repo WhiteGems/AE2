@@ -24,18 +24,18 @@ public class NotificationHandler
         return var0.isClient() ? clientNotifications : serverNotifications;
     }
 
-    public void sendNotification(Notification var1)
+    public void sendNotification(Notification notification)
     {
         Side var2 = FMLCommonHandler.instance().getEffectiveSide();
 
-        if (!this.hasSentToBefore(var1.getReceiverName(), var1.getType(), var1.getSenderName()))
+        if (!this.hasSentToBefore(notification.getReceiverName(), notification.getType(), notification.getSenderName()))
         {
-            this.sentList.add(var1);
+            this.sentList.add(notification);
 
             if (var2.isClient())
             {
-                PacketDispatcher.sendPacketToServer(AetherPacketHandler.sendNotificationChange(var1, true));
-                ClientNotificationHandler.queueReceivedNotification(new Notification(NotificationType.GENERIC, "Request Sent!", "", var1.getReceiverName()));
+                PacketDispatcher.sendPacketToServer(AetherPacketHandler.sendNotificationChange(notification, true));
+                ClientNotificationHandler.queueReceivedNotification(new Notification(NotificationType.GENERIC, "发送请求!", "", notification.getReceiverName()));
             }
         }
     }

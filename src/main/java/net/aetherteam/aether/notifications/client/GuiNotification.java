@@ -32,24 +32,24 @@ public class GuiNotification extends Gui
         this.itemRender = new RenderItem();
     }
 
-    public void queueReceivedNotification(Notification var1)
+    public void queueReceivedNotification(Notification notification)
     {
         if (AetherOptions.getShowNotifications())
         {
-            this.headerText = var1.getHeaderText();
-            this.senderName = var1.getType() == NotificationType.GENERIC ? var1.getSenderName() : (var1.getSenderName().isEmpty() ? "To " + var1.getReceiverName() : "From " + var1.getSenderName());
+            this.headerText = notification.getHeaderText();
+            this.senderName = ("来自 " + notification.getSenderName());
             this.notificationTime = Minecraft.getSystemTime();
-            this.theNotification = var1;
+            this.theNotification = notification;
             this.haveNotification = false;
         }
     }
 
-    public void queueAchievementInformation(Notification var1)
+    public void queueAchievementInformation(Notification notification)
     {
-        this.headerText = var1.getHeaderText();
-        this.senderName = var1.getType() == NotificationType.GENERIC ? var1.getSenderName() : (var1.getSenderName().isEmpty() ? "To " + var1.getReceiverName() : "From " + var1.getSenderName());
+        this.headerText = notification.getHeaderText();
+        this.senderName = notification.getType() == NotificationType.GENERIC ? notification.getSenderName() : (notification.getSenderName().isEmpty() ? "To " + notification.getReceiverName() : "From " + notification.getSenderName());
         this.notificationTime = Minecraft.getSystemTime() - 2500L;
-        this.theNotification = var1;
+        this.theNotification = notification;
         this.haveNotification = true;
     }
 

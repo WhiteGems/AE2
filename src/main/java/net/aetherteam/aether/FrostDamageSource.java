@@ -13,9 +13,9 @@ public class FrostDamageSource extends DamageSource
     /**
      * Returns the message to be displayed on player death.
      */
-    public String getDeathMessage(EntityLiving var1)
+    public String getDeathMessage(EntityLiving par1EntityLiving)
     {
-        return var1.getEntityName() + " was frost bitten";
+        return par1EntityLiving.getEntityName() + "被冻伤";
     }
 
     public boolean isUnblockable()

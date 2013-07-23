@@ -16,34 +16,36 @@ public class AetherMoaColour
     public int jumps;
     public int chance;
     public String name;
+    public String texturename;
     public static List names = new ArrayList();
     private static int totalChance;
     public static List colours = new ArrayList();
     private static Random random = new Random();
 
-    public AetherMoaColour(int var1, int var2, int var3, int var4, String var5)
+    public AetherMoaColour(int i, int j, int k, int l, String s,String texture)
     {
-        this.ID = var1;
-        this.colour = var2;
-        this.jumps = var3;
-        this.chance = var4;
-        totalChance += var4;
-        this.name = var5;
+        this.ID = i;
+        this.colour = j;
+        this.jumps = k;
+        this.chance = l;
+        totalChance += l;
+        this.name = s;
+        this.texturename = texture;
         colours.add(this);
         names.add(this.name);
     }
 
-    public String getTexture(boolean var1)
+    public String getTexture(boolean saddled)
     {
-        return "/net/aetherteam/aether/client/sprites/moa/" + (var1 ? "saddle_" : "moa_") + this.name + ".png";
+        return "/net/aetherteam/aether/client/sprites/moa/" + (saddled ? "saddle_" : "moa_") + this.texturename + ".png";
     }
 
-    public String getTexture(boolean var1, EntityPlayer var2)
+    public String getTexture(boolean saddled, EntityPlayer player)
     {
-        if (Aether.syncDonatorList.isDonator(var2.username) && var1)
+        if (Aether.syncDonatorList.isDonator(player.username) && saddled)
         {
             Aether.getInstance();
-            Donator var3 = Aether.syncDonatorList.getDonator(var2.username);
+            Donator var3 = Aether.syncDonatorList.getDonator(player.username);
             boolean var4 = var3.containsChoiceType(EnumChoiceType.MOA);
             MoaChoice var5 = null;
 
@@ -54,7 +56,7 @@ public class AetherMoaColour
             }
         }
 
-        return "/net/aetherteam/aether/client/sprites/moa/" + (var1 && !var2.isPotionActive(Potion.invisibility) ? "saddle_" : "moa_") + this.name + ".png";
+        return "/net/aetherteam/aether/client/sprites/moa/" + ((saddled) && (!player.isPotionActive(Potion.invisibility)) ? "saddle_" : "moa_") + this.texturename + ".png";
     }
 
     public static AetherMoaColour pickRandomMoa()
@@ -96,8 +98,8 @@ public class AetherMoaColour
 
     static
     {
-        new AetherMoaColour(0, 7829503, 3, 100, "Blue");
-        new AetherMoaColour(1, 16777215, 4, 20, "White");
-        new AetherMoaColour(2, 2236962, 8, 5, "Black");
+        new AetherMoaColour(0, 7829503, 3, 100, "蓝色", "Blue");
+        new AetherMoaColour(1, 16777215, 4, 20, "白色", "White");
+        new AetherMoaColour(2, 2236962, 8, 5, "黑色", "Black");
     }
 }

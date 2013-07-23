@@ -151,21 +151,25 @@ public class GuiDonatorMoa extends GuiScreen
         this.buttonList.clear();
         this.drawDefaultBackground();
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-        GL11.glBindTexture(GL11.GL_TEXTURE_2D, this.backgroundTexture);
-        int var4 = this.xParty - 97;
-        int var5 = this.yParty - 56;
-        ScaledResolution var6 = new ScaledResolution(this.mc.gameSettings, this.mc.displayWidth, this.mc.displayHeight);
-        this.drawTexturedModalRect(var4, var5, 0, 0, 194, this.hParty);
-        this.buttonList.add(new GuiButton(0, this.xParty + 10, this.yParty + 27, 80, 20, "Back"));
-        GuiButton var7 = null;
-        GuiButton var8 = null;
-        boolean var9 = this.donator.containsChoiceType(EnumChoiceType.MOA);
+        GL11.glBindTexture(3553, this.backgroundTexture);
+        int centerX = this.xParty - 97;
+        int centerY = this.yParty - 56;
+
+        ScaledResolution sr = new ScaledResolution(this.mc.gameSettings, this.mc.displayWidth, this.mc.displayHeight);
+        drawTexturedModalRect(centerX, centerY, 0, 0, 194, this.hParty);
+
+        this.buttonList.add(new GuiButton(0, this.xParty + 10, this.yParty + 27, 80, 20, "返回"));
+
+        GuiButton typeButton = null;
+        GuiButton overrideButton = null;
+
+        boolean hasChoice = this.donator.containsChoiceType(EnumChoiceType.MOA);
 
         if (this.donator != null)
         {
             this.choice = null;
 
-            if (var9)
+            if (hasChoice)
             {
                 this.backgroundTexture = this.mc.renderEngine.getTexture("/net/aetherteam/aether/client/sprites/gui/choiceMenu.png");
                 this.choice = (MoaChoice)this.donator.getChoiceFromType(EnumChoiceType.MOA);
@@ -175,30 +179,33 @@ public class GuiDonatorMoa extends GuiScreen
                 this.backgroundTexture = this.mc.renderEngine.getTexture("/net/aetherteam/aether/client/sprites/gui/choiceMenu2.png");
             }
 
-            this.moaEntity = new EntityMoa(Aether.proxy.getClientWorld(), true, false, false, AetherMoaColour.pickRandomMoa(), Aether.proxy.getClientPlayer(), var9 ? this.choice.textureFile.localURL : null);
-            var7 = new GuiButton(1, this.xParty + 10, this.yParty - 35, 80, 20, this.choice != null ? this.choice.name : "Off");
-            var8 = new GuiButton(2, this.xParty + 10, this.yParty, 80, 20, this.choice != null ? (this.choice.getOverrideAll() ? "All" : (this.choice.getOverridingColour() != null ? this.choice.getOverridingColour().name + " Moa" : "None")) : "None");
+            this.moaEntity = new EntityMoa(Aether.proxy.getClientWorld(), true, false, false, AetherMoaColour.pickRandomMoa(), Aether.proxy.getClientPlayer(), hasChoice ? this.choice.textureFile.localURL : null);
+
+            typeButton = new GuiButton(1, this.xParty + 10, this.yParty - 35, 80, 20, this.choice != null ? this.choice.name : "关");
+            overrideButton = new GuiButton(2, this.xParty + 10, this.yParty, 80, 20, this.choice != null ? "无" : this.choice.getOverridingColour() != null ? this.choice.getOverridingColour().name + "恐鸟皮肤" : this.choice.getOverrideAll() ? "全部" : "无");
         }
 
         if (this.donator == null)
         {
-            var7.enabled = false;
-            var8.enabled = false;
+            typeButton.enabled = false;
+            overrideButton.enabled = false;
         }
 
         if (this.donator != null && !this.donator.containsChoiceType(EnumChoiceType.MOA))
         {
-            var8.enabled = false;
+            overrideButton.enabled = false;
         }
 
-        this.buttonList.add(var7);
-        this.buttonList.add(var8);
+        this.buttonList.add(typeButton);
+        this.buttonList.add(overrideButton);
         super.drawScreen(var1, var2, var3);
         this.mc.renderEngine.resetBoundTexture();
-        String var10 = "Donator Moa";
-        String var11 = "Override";
-        this.drawString(this.fontRenderer, var10, var6.getScaledWidth() / 2 - this.fontRenderer.getStringWidth(var10) / 2 + 49, var5 + 10, 15658734);
-        this.drawString(this.fontRenderer, var11, var6.getScaledWidth() / 2 - this.fontRenderer.getStringWidth(var11) / 2 + 49, var5 + 45, 15658734);
+
+        String header = "捐助者";
+        String override = "特有恐鸟皮肤";
+
+        drawString(this.fontRenderer, header, sr.getScaledWidth() / 2 - this.fontRenderer.getStringWidth(header) / 2 + 49, centerY + 10, 15658734);
+        drawString(this.fontRenderer, override, sr.getScaledWidth() / 2 - this.fontRenderer.getStringWidth(override) / 2 + 49, centerY + 45, 15658734);
 
         if (this.choice != null)
         {

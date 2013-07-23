@@ -6,11 +6,11 @@ public class GenericContents extends NotificationContents
 {
     public String getTitle(Notification var1)
     {
-        return "Generic Request:";
+        return "普通请求:";
     }
 
     public String getDescription(Notification var1)
     {
-        return "This is a generic description!";
+        return "这只是一个描述信息!";
     }
 }

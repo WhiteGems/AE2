@@ -73,9 +73,11 @@ public class GuiViewNotification extends GuiScreen
     {
         this.updateScreen();
         this.buttonList.clear();
-        this.acceptButton = new GuiButton(0, this.xParty - 30, this.yParty + 34, 60, 20, "Accept");
-        this.denyButton = new GuiButton(1, this.xParty - 100, this.yParty + 34, 60, 20, "Decline");
-        this.backButton = new GuiButton(2, this.xParty + 40, this.yParty + 34, 60, 20, "Back");
+
+        this.acceptButton = new GuiButton(0, this.xParty - 30, this.yParty + 34, 60, 20, "接受");
+        this.denyButton = new GuiButton(1, this.xParty - 100, this.yParty + 34, 60, 20, "拒绝");
+        this.backButton = new GuiButton(2, this.xParty + 40, this.yParty + 34, 60, 20, "返回");
+
         this.buttonList.add(this.acceptButton);
         this.buttonList.add(this.denyButton);
         this.buttonList.add(this.backButton);
@@ -121,18 +123,21 @@ public class GuiViewNotification extends GuiScreen
     {
         this.drawDefaultBackground();
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-        GL11.glBindTexture(GL11.GL_TEXTURE_2D, this.backgroundTexture);
-        int var4 = this.xParty - 128;
-        int var5 = this.yParty - 63;
-        new ScaledResolution(this.mc.gameSettings, this.mc.displayWidth, this.mc.displayHeight);
-        this.drawTexturedModalRect(var4, var5, 0, 0, 256, this.hParty);
-        GL11.glBindTexture(GL11.GL_TEXTURE_2D, this.backgroundTexture);
-        String var7 = "Viewing Notification";
+        GL11.glBindTexture(3553, this.backgroundTexture);
+        int centerX = this.xParty - 128;
+        int centerY = this.yParty - 63;
+
+        ScaledResolution sr = new ScaledResolution(this.mc.gameSettings, this.mc.displayWidth, this.mc.displayHeight);
+        drawTexturedModalRect(centerX, centerY, 0, 0, 256, this.hParty);
+        GL11.glBindTexture(3553, this.backgroundTexture);
+
+        String name = "查看通知";
+
         this.mc.renderEngine.resetBoundTexture();
-        this.drawString(this.fontRenderer, var7, this.width / 2 - this.fontRenderer.getStringWidth(var7) / 2, var5 + 7, 16777215);
+        this.drawString(this.fontRenderer, name, this.width / 2 - this.fontRenderer.getStringWidth(name) / 2, centerX + 7, 16777215);
         String var8 = this.notification.getTypeContents().getTitle(this.notification);
         this.mc.renderEngine.resetBoundTexture();
-        this.drawString(this.fontRenderer, var8, this.width / 2 - this.fontRenderer.getStringWidth(var8) / 2, var5 + 27, 16777215);
+        this.drawString(this.fontRenderer, var8, this.width / 2 - this.fontRenderer.getStringWidth(var8) / 2, centerX + 27, 16777215);
         String var9 = this.notification.getTypeContents().getDescription(this.notification);
         ArrayList var10 = (new StringBox(var9, 45)).getStringList();
 
@@ -140,7 +145,7 @@ public class GuiViewNotification extends GuiScreen
         {
             String var12 = (String)var10.get(var11);
             this.mc.renderEngine.resetBoundTexture();
-            this.drawString(this.fontRenderer, var12, this.width / 2 - this.fontRenderer.getStringWidth(var12) / 2, var5 + 45 + var11 * 10, 16777215);
+            this.drawString(this.fontRenderer, var12, this.width / 2 - this.fontRenderer.getStringWidth(var12) / 2, centerX + 45 + var11 * 10, 16777215);
         }
 
         super.drawScreen(var1, var2, var3);

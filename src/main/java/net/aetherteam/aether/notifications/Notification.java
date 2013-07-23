@@ -9,12 +9,12 @@ public class Notification
     private String receiverName;
     private NotificationType type;
 
-    public Notification(NotificationType var1, String var2, String var3)
+    public Notification(NotificationType type, String senderName, String receiverName)
     {
-        this.headerText = "Notification Received!";
-        this.senderName = var2;
-        this.receiverName = var3;
-        this.type = var1;
+        this.headerText = "收到信息!";
+        this.senderName = senderName;
+        this.receiverName = receiverName;
+        this.type = type;
     }
 
     public Notification(NotificationType var1, String var2, String var3, String var4)

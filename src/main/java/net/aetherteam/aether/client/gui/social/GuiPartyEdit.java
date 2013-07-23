@@ -26,8 +26,8 @@ public class GuiPartyEdit extends GuiScreen
 
     /** Reference to the Minecraft object. */
     Minecraft mc;
-    private ArrayList partyType;
-    private int typeIndex;
+    private ArrayList partyType = new ArrayList();
+    private int typeIndex = 0;
     private EntityPlayer player;
     private GuiButton typeButton;
     private String newPartyName;
@@ -57,27 +57,25 @@ public class GuiPartyEdit extends GuiScreen
         this.partyType = new ArrayList();
         this.typeIndex = 0;
         this.parent = var3;
-        String var4 = PartyController.instance().getParty(var2).getType().name();
+        String name = PartyController.instance().getParty(var2).getType().name();
 
-        if (var4 == "Open")
+        if (name.equals("OPEN"))
         {
             this.typeIndex = 0;
         }
-
-        if (var4 == "Closed")
+        if (name.equals("CLOSE"))
         {
             this.typeIndex = 1;
         }
-
-        if (var4 == "Private")
+        if (name.equals("PRIVATE"))
         {
             this.typeIndex = 2;
         }
+        this.partyType.add("公开");
+        this.partyType.add("关闭");
+        this.partyType.add("私有");
 
-        this.partyType.add("Open");
-        this.partyType.add("Closed");
-        this.partyType.add("Private");
-        this.player = var2;
+        this.player = player;
         this.mc = FMLClientHandler.instance().getClient();
         this.pm = var1;
         this.backgroundTexture = this.mc.renderEngine.getTexture("/net/aetherteam/aether/client/sprites/gui/partyMain.png");
@@ -108,20 +106,20 @@ public class GuiPartyEdit extends GuiScreen
 
         if (var1 != null)
         {
-            this.typeButton = new GuiButton(4, this.xParty - 60, this.yParty + 30 - 28, 120, 20, "Type: " + PartyController.instance().getParty(this.player).getType().name());
+            this.typeButton = new GuiButton(4, this.xParty - 60, this.yParty + 30 - 28, 120, 20, "类型: " + PartyController.instance().getParty(this.player).getType().realname);
         }
 
         this.buttonList.add(this.typeButton);
-        this.buttonList.add(new GuiButton(5, this.xParty - 60, this.yParty + 12 - 28, 120, 20, "Save"));
-        this.buttonList.add(new GuiButton(3, this.xParty - 60, this.yParty - 36 - 28, 120, 20, "Change Name"));
-        this.buttonList.add(new GuiButton(2, this.xParty - 60, this.yParty - 14 - 28, 120, 20, "Manage Permissions"));
-        this.buttonList.add(new GuiButton(1, this.xParty - 60, this.yParty + 8 - 28, 120, 20, "Manage Members"));
-        this.buttonList.add(new GuiButton(0, this.xParty - 60, this.yParty + 81 - 28, 120, 20, "Back"));
+        this.buttonList.add(new GuiButton(5, this.xParty - 60, this.yParty + 12 - 28, 120, 20, "保存"));
+        this.buttonList.add(new GuiButton(3, this.xParty - 60, this.yParty - 36 - 28, 120, 20, "重命名"));
+        this.buttonList.add(new GuiButton(2, this.xParty - 60, this.yParty - 14 - 28, 120, 20, "管理权限"));
+        this.buttonList.add(new GuiButton(1, this.xParty - 60, this.yParty + 8 - 28, 120, 20, "管理会员"));
+        this.buttonList.add(new GuiButton(0, this.xParty - 60, this.yParty + 81 - 28, 120, 20, "返回"));
         ArrayList var2 = new ArrayList();
 
-        for (int var3 = 0; var3 < var2.size(); ++var3)
+        for (int i = 0; i < var2.size(); ++i)
         {
-            if (((Party)var2.get(var3)).getLeader().username == this.player.username)
+            if (((Party)var2.get(i)).getLeader().username == this.player.username)
             {
                 ((GuiButton)this.buttonList.get(1)).enabled = false;
             }
@@ -174,21 +172,24 @@ public class GuiPartyEdit extends GuiScreen
     /**
      * Draws the screen and all the components in it.
      */
-    public void drawScreen(int var1, int var2, float var3)
+    public void drawScreen(int x, int y, float partialTick)
     {
         this.drawDefaultBackground();
         this.buttonList.clear();
-        this.typeButton = new GuiButton(4, this.xParty - 60, this.yParty + 30 - 28, 120, 20, "Type: " + PartyController.instance().getParty(this.player).getType().name());
-        this.buttonList.add(this.typeButton);
-        this.buttonList.add(new GuiButton(3, this.xParty - 60, this.yParty - 36 - 28, 120, 20, "Change Name"));
-        this.buttonList.add(new GuiButton(1, this.xParty - 60, this.yParty - 14 - 28, 120, 20, "Manage Members"));
-        this.buttonList.add(new GuiButton(0, this.xParty - 60, this.yParty + 81 - 28, 120, 20, "Back"));
-        ArrayList var4 = PartyController.instance().getParties();
-        int var5;
 
-        for (var5 = 0; var5 < var4.size(); ++var5)
+        this.typeButton = new GuiButton(4, this.xParty - 60, this.yParty + 30 - 28, 120, 20, "类型: " + PartyController.instance().getParty(this.player).getType().realname);
+
+        this.buttonList.add(this.typeButton);
+
+        this.buttonList.add(new GuiButton(3, this.xParty - 60, this.yParty - 36 - 28, 120, 20, "重命名"));
+        this.buttonList.add(new GuiButton(1, this.xParty - 60, this.yParty - 14 - 28, 120, 20, "管理会员"));
+        this.buttonList.add(new GuiButton(0, this.xParty - 60, this.yParty + 81 - 28, 120, 20, "返回"));
+        ArrayList partyList = PartyController.instance().getParties();
+        int centerX;
+
+        for (centerX = 0; centerX < partyList.size(); ++centerX)
         {
-            if (((Party)var4.get(var5)).getLeader().username.equals(this.player.username) && ((Party)var4.get(var5)).getType().name() != this.partyType.get(this.typeIndex) && ((Party)var4.get(var5)).getName() == this.newPartyName)
+            if (((Party)partyList.get(centerX)).getLeader().username.equals(this.player.username) && ((Party)partyList.get(centerX)).getType().name() != this.partyType.get(this.typeIndex) && ((Party)partyList.get(centerX)).getName() == this.newPartyName)
             {
                 ;
             }
@@ -196,15 +197,17 @@ public class GuiPartyEdit extends GuiScreen
 
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
         GL11.glBindTexture(GL11.GL_TEXTURE_2D, this.backgroundTexture);
-        var5 = this.xParty - 70;
-        int var6 = this.yParty - 84;
+        centerX = this.xParty - 70;
+        int centerY = this.yParty - 84;
         new ScaledResolution(this.mc.gameSettings, this.mc.displayWidth, this.mc.displayHeight);
-        this.drawTexturedModalRect(var5, var6, 0, 0, 141, this.hParty);
+        this.drawTexturedModalRect(centerX, centerY, 0, 0, 141, this.hParty);
         GL11.glBindTexture(GL11.GL_TEXTURE_2D, this.backgroundTexture);
         this.mc.renderEngine.resetBoundTexture();
-        String var8 = "Manage Party";
-        this.drawString(this.fontRenderer, var8, var5 + 69 - this.fontRenderer.getStringWidth(var8) / 2, var6 + 5, 16777215);
-        super.drawScreen(var1, var2, var3);
+
+        String name = "管理公会";
+
+        drawString(this.fontRenderer, name, centerX + 69 - this.fontRenderer.getStringWidth(name) / 2, centerY + 5, 16777215);
+        super.drawScreen(x, y, partialTick);
     }
 
     /**

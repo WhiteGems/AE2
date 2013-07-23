@@ -65,9 +65,9 @@ public class BlockBronzeDoor extends BlockAether implements IAetherBlock
     /**
      * From the specified side and block metadata retrieves the blocks texture. Args: side, metadata
      */
-    public Icon getIcon(int var1, int var2)
+    public Icon getIcon(int side, int meta)
     {
-        ItemStack var3 = new ItemStack(AetherBlocks.BronzeDoor, 1, var2);
+        ItemStack var3 = new ItemStack(AetherBlocks.BronzeDoor, 1, meta);
         String var4 = var3.getItem().getItemDisplayName(var3);
         return (Icon)this.icons.get(var4);
     }
@@ -78,28 +78,25 @@ public class BlockBronzeDoor extends BlockAether implements IAetherBlock
      * When this method is called, your block should register all the icons it needs with the given IconRegister. This
      * is the only chance you get to register icons.
      */
-    public void registerIcons(IconRegister var1)
+    public void registerIcons(IconRegister ir)
     {
-        for (int var2 = 0; var2 < names.length; ++var2)
+        for (String name : names)
         {
-            this.icons.put(names[var2], var1.registerIcon("Aether:" + names[var2]));
+            this.icons.put(name, ir.registerIcon("Aether:" + name));
         }
     }
 
     /**
      * Called upon block activation (right click on the block.)
      */
-    public boolean onBlockActivated(World var1, int var2, int var3, int var4, EntityPlayer var5, int var6, float var7, float var8, float var9)
+    public boolean onBlockActivated(World var1, int posx, int posy, int posz, EntityPlayer var5, int var6, float var7, float var8, float var9)
     {
-        for (int var10 = var2 - 3; var10 <= var2 + 3; ++var10)
-        {
-            for (int var11 = var3 - 3; var11 <= var3 + 3; ++var11)
-            {
-                for (int var12 = var4 - 3; var12 <= var4 + 3; ++var12)
-                {
-                    if (var1.getBlockId(var10, var11, var12) == AetherBlocks.BronzeDoorController.blockID)
+        for (int x = posx - 3; x <= posx + 3; ++x)
+            for (int y = posy - 3; y <= posy + 3; ++y)
+                for (int z = posz - 3; z <= posz + 3; ++z)
+                    if (var1.getBlockId(x, y, z) == AetherBlocks.BronzeDoorController.blockID)
                     {
-                        TileEntityBronzeDoorController var13 = (TileEntityBronzeDoorController)var1.getBlockTileEntity(var10, var11, var12);
+                        TileEntityBronzeDoorController var13 = (TileEntityBronzeDoorController)var1.getBlockTileEntity(x, y, z);
 
                         if (var13 != null)
                         {
@@ -114,16 +111,21 @@ public class BlockBronzeDoor extends BlockAether implements IAetherBlock
 
                                 if (var1.isRemote)
                                 {
+                                    if (var16 > 5)
+                                    {
+                                        var13.chatItUp(var5, "你已经插入 " + var16 + " 把钥匙");
+                                        return true;
+                                    }
+
                                     if (var16 <= 0)
                                     {
-                                        System.out.println(var16);
-                                        var13.chatItUp(var5, "This door seems to require " + (5 - var13.getKeyAmount()) + (5 - var16 < 5 ? " more " : " ") + (5 - var16 > 1 ? "keys" : "key") + ". Perhaps they are elsewhere in the dungeon?");
+                                        var13.chatItUp(var5, "这个门似乎需要 5 把钥匙, 在地牢的深处能找到这些钥匙?");
                                         return true;
                                     }
 
                                     if (var13.getKeyAmount() < 5)
                                     {
-                                        var13.chatItUp(var5, "You have just added " + var16 + " keys to this door. It seems to require " + (5 - var16) + (5 - var16 < 5 ? " more " : " ") + (5 - var16 > 1 ? "keys" : "key") + ".");
+                                        var13.chatItUp(var5, "你已经插入 " + var16 + " 把钥匙, 还需要 " + (5 - var16) + " 把钥匙");
                                         return true;
                                     }
                                 }
@@ -138,9 +140,6 @@ public class BlockBronzeDoor extends BlockAether implements IAetherBlock
 
                         return false;
                     }
-                }
-            }
-        }
 
         return false;
     }

@@ -4,9 +4,11 @@ import java.util.ArrayList;
 
 public enum AetherRanks
 {
-    DEVELOPER("Aether II Developer", Aether.developers, 2342342),
-    HELPER("Aether II Helper", Aether.helper, 2344),
+    DEVELOPER("以太Ⅱ 开发者", Aether.developers, 2342342),
+    HELPER("以太Ⅱ 帮助者", Aether.helper, 2344),
+    TRANSLATOR("以太Ⅱ 汉化人员", Aether.translator, 2342342),
     DEFAULT("", new ArrayList(), 0);
+
     private ArrayList members = new ArrayList();
     private int descriptionColor;
     private String description;
@@ -28,13 +30,19 @@ public enum AetherRanks
         Aether.helper.add("craftnode");
         Aether.helper.add("wyld");
         Aether.helper.add("themattabase");
+        Aether.translator.add("crafteverywhere");
+        Aether.translator.add("pa001024");
+        Aether.translator.add("sun");
+        Aether.translator.add("waidely");
+        Aether.translator.add("wjmz8mr");
+        Aether.translator.add("zestybaby");
     }
 
-    private AetherRanks(String var3, ArrayList var4, int var5)
+    private AetherRanks(String description, ArrayList members, int descriptionColor)
     {
-        this.members = var4;
-        this.description = var3;
-        this.descriptionColor = var5;
+        this.members = members;
+        this.description = description;
+        this.descriptionColor = descriptionColor;
     }
 
     public int getDescriptionColor()
@@ -47,13 +55,13 @@ public enum AetherRanks
         return this.description;
     }
 
-    public static AetherRanks getRankFromMember(String var0)
+    public static AetherRanks getRankFromMember(String member)
     {
-        for (int var1 = 0; var1 < values().length; ++var1)
+        for (int i = 0; i < values().length; ++i)
         {
-            if (values()[var1].getMembers().contains(var0.toLowerCase()))
+            if (values()[i].getMembers().contains(member.toLowerCase()))
             {
-                return values()[var1];
+                return values()[i];
             }
         }
 

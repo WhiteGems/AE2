@@ -72,7 +72,7 @@ public class PartyController
 
             if (var3.isClient() && var1.hasMember(this.getMember(ClientNotificationHandler.clientUsername())))
             {
-                ClientNotificationHandler.createGeneric("Party Disbanded!", "", "");
+                ClientNotificationHandler.createGeneric("公会已解散!", "", "");
             }
 
             this.parties.remove(var1);
@@ -157,7 +157,7 @@ public class PartyController
         {
             if (var4.isClient() && var1.hasMember(this.getMember(ClientNotificationHandler.clientUsername())))
             {
-                ClientNotificationHandler.createGeneric("Member joined!", var2.username, "");
+                ClientNotificationHandler.createGeneric("新成员加入!", var2.username, "");
             }
 
             var1.join(var2);
@@ -184,7 +184,7 @@ public class PartyController
 
             if (var4.isClient() && var1.hasMember(this.getMember(ClientNotificationHandler.clientUsername())) && !var2.username.equalsIgnoreCase(ClientNotificationHandler.clientUsername()))
             {
-                ClientNotificationHandler.createGeneric("Member left!", var2.username, "");
+                ClientNotificationHandler.createGeneric("成员离开!", var2.username, "");
             }
 
             if (var3 && var4.isClient())
@@ -204,7 +204,7 @@ public class PartyController
         {
             if (var4.isClient() && var1.hasMember(this.getMember(ClientNotificationHandler.clientUsername())))
             {
-                ClientNotificationHandler.createGeneric("Party Name Changed!", "To: " + var2, "");
+                ClientNotificationHandler.createGeneric("公会名称改变!", "新名称为: " + var2, "");
             }
 
             if (var3 && var4.isClient())
@@ -221,22 +221,22 @@ public class PartyController
         }
     }
 
-    public void changePartyType(Party var1, PartyType var2, boolean var3)
+    public void changePartyType(Party party, PartyType type, boolean var3)
     {
         Side var4 = FMLCommonHandler.instance().getEffectiveSide();
 
-        if (this.parties.contains(var1) && var1 != null && var2 != null)
+        if (this.parties.contains(party) && party != null && type != null)
         {
-            if (var4.isClient() && var1.hasMember(this.getMember(ClientNotificationHandler.clientUsername())))
+            if (var4.isClient() && party.hasMember(this.getMember(ClientNotificationHandler.clientUsername())))
             {
-                ClientNotificationHandler.createGeneric("Party Changed!", "Now: " + var2.name(), "");
+                ClientNotificationHandler.createGeneric("公会类型改变!", "现在是: " + type.name(), "");
             }
 
-            var1.setType(var2);
+            party.setType(type);
 
             if (var3 && var4 == Side.CLIENT)
             {
-                PacketDispatcher.sendPacketToServer(AetherPacketHandler.sendPartyTypeChange(var1.getName(), var2));
+                PacketDispatcher.sendPacketToServer(AetherPacketHandler.sendPartyTypeChange(party.getName(), type));
             }
         }
     }

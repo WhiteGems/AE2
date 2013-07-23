@@ -135,16 +135,19 @@ public class GuiPartyMenu extends GuiScreen
     public void drawScreen(int var1, int var2, float var3)
     {
         this.buttonList.clear();
-        boolean var4 = PartyController.instance().isLeader(this.player);
-        boolean var5 = PartyController.instance().inParty(this.player);
-        this.createPartyButton = new GuiButton(5, this.xMenu - 60, this.yMenu - 36 - 28, 120, 20, "Create Party");
-        this.joinPartyButton = new GuiButton(4, this.xMenu - 60, this.yMenu - 14 - 28, 120, 20, "Join Existing Party");
-        this.membersButton = new GuiButton(7, this.xMenu - 60, this.yMenu + 30 - (var5 ? 53 : 28), 120, 20, "Members");
-        this.editPartyButton = new GuiButton(3, this.xMenu - 60, this.yMenu + 30 - (var5 ? 53 : 28), 120, 20, "Manage Party");
-        this.leavePartyButton = new GuiButton(6, this.xMenu - 60, this.yMenu + 74 - (var5 ? 53 : 28), 120, 20, (var4 ? "Disband" : "Leave") + " Party");
-        this.addMemberButton = new GuiButton(8, this.xMenu - 60, this.yMenu + 52 - (var5 ? 53 : 28), 120, 20, var4 ? "Add Member" : "Make Request");
 
-        if (!var5)
+        boolean isLeader = PartyController.instance().isLeader(this.player);
+        boolean inParty = PartyController.instance().inParty(this.player);
+
+        this.createPartyButton = new GuiButton(5, this.xMenu - 60, this.yMenu - 36 - 28, 120, 20, "创建公会");
+        this.joinPartyButton = new GuiButton(4, this.xMenu - 60, this.yMenu - 14 - 28, 120, 20, "加入已有公会");
+        this.membersButton = new GuiButton(7, this.xMenu - 60, this.yMenu + 30 - (inParty ? 53 : 28), 120, 20, "会员");
+
+        this.editPartyButton = new GuiButton(3, this.xMenu - 60, this.yMenu + 30 - (inParty ? 53 : 28), 120, 20, "管理公会");
+        this.leavePartyButton = new GuiButton(6, this.xMenu - 60, this.yMenu + 74 - (inParty ? 53 : 28), 120, 20, (isLeader ? "解散" : "离开") + "公会");
+        this.addMemberButton = new GuiButton(8, this.xMenu - 60, this.yMenu + 52 - (inParty ? 53 : 28), 120, 20, isLeader ? "增加成员" : "发送请求");
+
+        if (!inParty)
         {
             this.leavePartyButton.enabled = false;
             this.createPartyButton.enabled = true;
@@ -169,7 +172,7 @@ public class GuiPartyMenu extends GuiScreen
         {
             this.addMemberButton.enabled = false;
         }
-        else if (var4)
+        else if (isLeader)
         {
             this.editPartyButton.enabled = true;
             this.addMemberButton.enabled = true;
@@ -180,42 +183,44 @@ public class GuiPartyMenu extends GuiScreen
             this.addMemberButton.enabled = false;
         }
 
-        this.buttonList.add(new GuiButton(2, this.xMenu - 60, this.yMenu + 8 - (var5 ? 53 : 28), 120, 20, "Party List"));
+        this.buttonList.add(new GuiButton(2, this.xMenu - 60, this.yMenu + 8 - (inParty ? 53 : 28), 120, 20, "公会列表"));
 
-        if (var4)
+        if (isLeader)
         {
             this.buttonList.add(this.editPartyButton);
         }
 
-        this.buttonList.add(new GuiButton(0, this.xMenu - 60, this.yMenu + 81 - 28, 120, 20, "Back"));
-        this.drawDefaultBackground();
+        this.buttonList.add(new GuiButton(0, this.xMenu - 60, this.yMenu + 81 - 28, 120, 20, "返回"));
+
+        drawDefaultBackground();
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-        GL11.glBindTexture(GL11.GL_TEXTURE_2D, var5 ? this.partyCreatedTexture : this.backgroundTexture);
+        GL11.glBindTexture(GL11.GL_TEXTURE_2D, inParty ? this.partyCreatedTexture : this.backgroundTexture);
         int var7 = this.xMenu - 70;
         int var8 = this.yMenu - 84;
         new ScaledResolution(this.mc.gameSettings, this.mc.displayWidth, this.mc.displayHeight);
         this.drawTexturedModalRect(var7, var8, 0, 0, 141, this.hMenu);
         GL11.glBindTexture(GL11.GL_TEXTURE_2D, this.backgroundTexture);
         this.mc.renderEngine.resetBoundTexture();
-        String var10 = "";
+        String name = "";
 
-        if (var5)
+        if (inParty)
         {
-            var10 = "Your Party:";
-        }
-        else
-        {
-            var10 = "Party Menu";
-        }
+            name = "你的公会:";
+        } else name = "公会菜单";
 
-        if (!var4)
+        if (!isLeader)
         {
-            var10 = "Joined Party:";
+            name = "加入公会:";
         }
 
-        this.drawString(this.fontRenderer, var10, var7 + 69 - this.fontRenderer.getStringWidth(var10) / 2, var8 + 5, 16777215);
+        if (!isLeader)
+        {
+            name = "Joined Party:";
+        }
 
-        if (var5 && var6 != null)
+        this.drawString(this.fontRenderer, name, var7 + 69 - this.fontRenderer.getStringWidth(name) / 2, var8 + 5, 16777215);
+
+        if (inParty && var6 != null)
         {
             String var11 = var6.getName();
             this.drawString(this.fontRenderer, var11, var7 + 70 - this.fontRenderer.getStringWidth(var11) / 2, var8 + 20, 16777215);

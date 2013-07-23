@@ -47,6 +47,7 @@ import net.minecraft.world.World;
 
 public class EntitySlider extends EntityBossMob implements IAetherBoss
 {
+    private String bossName = AetherNameGen.valkGen();
     public String dir;
     private boolean[] stageDone;
     public Random random;
@@ -199,14 +200,14 @@ public class EntitySlider extends EntityBossMob implements IAetherBoss
 
     public String getBossName()
     {
-        return this.dataWatcher.getWatchableObjectString(18);
+        return bossName;
     }
 
     public void setBossName(String var1)
     {
         if (!this.worldObj.isRemote)
         {
-            this.dataWatcher.updateObject(18, String.valueOf(var1));
+            this.bossName = var1;
         }
     }
 
@@ -1042,7 +1043,7 @@ public class EntitySlider extends EntityBossMob implements IAetherBoss
             {
                 if (!(var4.getItem() instanceof ItemPickaxe) && !(var4.getItem() instanceof ItemTool))
                 {
-                    this.chatItUp(var3, "Hmm. It\'s a rock-solid block. A " + var4.getItem().getItemDisplayName(var4) + " wouldn\'t work on this.");
+                    this.chatItUp(var3, "嗯~, 一个石头一样的怪家伙! 用" + var4.getItem().getItemDisplayName(var4) + "估计对付不了这玩意儿!");
                     return false;
                 }
                 else
@@ -1234,7 +1235,7 @@ public class EntitySlider extends EntityBossMob implements IAetherBoss
             }
             else
             {
-                this.chatItUp(var3, "Hmm. It\'s a rock-solid block. My fist wouldn\'t work on this.");
+                this.chatItUp(var3, "呣, 这块坚硬的石头, 我的拳头对付不了啊!");
                 return false;
             }
         }
@@ -1351,7 +1352,7 @@ public class EntitySlider extends EntityBossMob implements IAetherBoss
 
     public String getBossTitle()
     {
-        return this.getBossName() + ", the Slider";
+        return "滑行者:" + this.getBossName();
     }
 
     public Entity getBossEntity()

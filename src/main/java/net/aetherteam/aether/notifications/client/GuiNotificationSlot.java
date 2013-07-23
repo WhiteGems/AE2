@@ -33,19 +33,20 @@ public class GuiNotificationSlot extends Gui
         this.notification = var1;
     }
 
-    public void drawPartySlot(int var1, int var2, int var3, int var4)
+    public void drawPartySlot(int x, int y, int var3, int var4)
     {
-        this.xPosition = var1;
-        this.yPosition = var2;
+        this.xPosition = x;
+        this.yPosition = y;
         Minecraft var5 = Minecraft.getMinecraft();
         this.drawGradientRect(this.xPosition, this.yPosition, this.xPosition + var3, this.yPosition + var4, this.selected ? -10439830 : -13421773, this.selected ? -11563178 : -11184811);
-        FontRenderer var6 = var5.fontRenderer;
+        FontRenderer fontRenderer = var5.fontRenderer;
         var5.renderEngine.resetBoundTexture();
-        var6.drawStringWithShadow(this.notification.getTypeName(), var1 + var4 - 19, var2 + 2, 15066597);
+        fontRenderer.drawStringWithShadow(this.notification.getTypeName(), x + var4 - 19, y + 2, 15066597);
         GL11.glPushMatrix();
         GL11.glScalef(0.75F, 0.75F, 1.0F);
-        var6.drawString("From: ", (int)(((float)var1 + (float)var4) / 0.75F - 36.0F + (float)this.notification.getTypeName().length()), (int)(((float)var2 + 12.0F) / 0.75F), 16777215);
-        var6.drawString(this.notification.getSenderName(), (int)(((float)var1 + (float)var4) / 0.75F - 6.0F + (float)this.notification.getTypeName().length()), (int)(((float)var2 + 12.0F) / 0.75F), 9430585);
+        fontRenderer.drawString("来自:", (int) ((x + height) / 0.75F - 29.0F + this.notification.getTypeName().length()), (int) ((y + 12.0F) / 0.75F), 16777215);
+        fontRenderer.drawString(this.notification.getSenderName(), (int) ((x + height) / 0.75F - 6.0F + this.notification.getTypeName().length()), (int) ((y + 12.0F) / 0.75F), 9430585);
+
         GL11.glPopMatrix();
     }
 

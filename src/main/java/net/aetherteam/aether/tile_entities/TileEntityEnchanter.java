@@ -241,7 +241,7 @@ public class TileEntityEnchanter extends TileEntity implements IInventory, ISide
                 {
                     if (this.worldObj.isRemote)
                     {
-                        FMLClientHandler.instance().getClient().ingameGUI.getChatGUI().printChatMessage("Altar is at full capacity.");
+                        FMLClientHandler.instance().getClient().ingameGUI.getChatGUI().printChatMessage("祭坛上放不下更多的以太炭了");
                     }
                 }
                 else

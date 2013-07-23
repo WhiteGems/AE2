@@ -134,7 +134,7 @@ public class MenuBaseAetherII extends MenuBase
     private void addServer(int var1)
     {
         int var2 = this.serverdata.size();
-        String var3 = "Aether Server " + (var2 + 1);
+        String var3 = "Aether服务器 " + (var2 + 1);
         this.serverdata.add(new ServerData(var3, "109.72.82.220:" + var1));
         this.serverButtons.add(new GuiAetherIIButton(15 + var2 + 1, 2 + (var2 >= 8 ? 140 : 0), 30 + 25 * (var2 - 1 - (var2 >= 8 ? 8 : 0)), 120, 20, var3));
         this.buttonList.add(this.serverButtons.get(var2));
@@ -212,7 +212,7 @@ public class MenuBaseAetherII extends MenuBase
         this.addServer(25730);
         this.addServer(25741);
         this.addServer(25752);
-        this.backButton = new GuiAetherIIButton(13, 3, this.height - 35, 180, 20, "Back To Menu");
+        this.backButton = new GuiAetherIIButton(13, 3, this.height - 35, 180, 20, "返回主界面");
         this.buttonList.add(this.backButton);
         Iterator var4 = this.serverdata.iterator();
 
@@ -302,7 +302,7 @@ public class MenuBaseAetherII extends MenuBase
         this.singleplayerButton = new GuiAetherIIButton(1, 30, var1 - 45, var3.translateKey("menu.singleplayer"));
         this.multiplayerButton = new GuiAetherIIButton(2, 30, var1 - 45 + var2 * 1, var3.translateKey("menu.multiplayer"));
         this.officialServerButton = new GuiAetherIIButton(13, 30, var1 - 45 + var2 * 3, 7851212, 7851212);
-        this.exploreTUG = new GuiButton(15, this.width / 2 - 40, this.height / 2, 80, 20, "Explore TUG!");
+        this.exploreTUG = new GuiButton(15, this.width / 2 - 40, this.height / 2, 80, 20, "浏览TUG!");
         this.buttonList.add(this.singleplayerButton);
         this.buttonList.add(this.multiplayerButton);
         this.buttonList.add(this.officialServerButton);
@@ -695,7 +695,9 @@ public class MenuBaseAetherII extends MenuBase
         if (!this.TUGopen)
         {
             String var25 = "Copyright Mojang AB. Do not distribute!";
+            String info="白宝石小组荣誉出品！";
             this.drawString(this.fontRenderer, var25, 2, this.height - 10, 16777215);
+            this.drawString(this.fontRenderer, info, 2, this.height - 20, 16777215);
         }
 
         if (this.field_92025_p != null && this.field_92025_p.length() > 0)
@@ -794,8 +796,8 @@ public class MenuBaseAetherII extends MenuBase
             GL11.glScalef(var26, var26 * 0.35F, var26);
             this.drawTexturedModalRect(0, 0, 0, 0, 255, 255);
             GL11.glPopMatrix();
-            var22 = "The Aether realm will be coming to the world of TUG!";
-            String var27 = "Please help us support this amazing game :)";
+            var22 = "以太团队参与了沙盒游戏TUG的开发!";
+            String var27 = "请帮助我们支持这个酷毙的游戏 :)";
             this.drawString(this.fontRenderer, var22, this.width / 2 - this.fontRenderer.getStringWidth(var22) / 2, this.height - 40, 16777215);
             this.drawString(this.fontRenderer, var27, this.width / 2 - this.fontRenderer.getStringWidth(var27) / 2, this.height - 27, 16777215);
         }
@@ -863,7 +865,7 @@ public class MenuBaseAetherII extends MenuBase
 
     public String getVersion()
     {
-        return "Genesis of the Void";
+        return "虚空起源!";
     }
 
     public String getMusicFileName()

@@ -122,45 +122,51 @@ public class GuiDonatorMenu extends GuiScreen
         this.drawDefaultBackground();
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
         GL11.glBindTexture(GL11.GL_TEXTURE_2D, this.backgroundTexture);
-        int var4 = this.xParty - 97;
-        int var5 = this.yParty - 84;
+        int centerX = this.xParty - 97;
+        int centerY = this.yParty - 84;
         this.partyNameField = new GuiTextField(this.fontRenderer, this.xParty - 80, this.yParty - 64, 160, 50);
         this.partyNameField.setFocused(false);
         this.partyNameField.setMaxStringLength(5000);
-        ScaledResolution var6 = new ScaledResolution(this.mc.gameSettings, this.mc.displayWidth, this.mc.displayHeight);
-        this.drawTexturedModalRect(var4, var5, 0, 0, 194, this.hParty);
-        this.buttonList.add(new GuiButton(0, this.xParty - 80, this.yParty - 4, 160, 20, "Back"));
-        this.buttonList.add(new GuiButton(1, this.xParty - 30, this.yParty + 27, 60, 20, this.donator != null ? "Moa" : "Moa: Off"));
-        this.buttonList.add(new GuiButton(2, this.xParty - 30, this.yParty + 52, 60, 20, this.donator != null ? "Cape" : "Cape: Off"));
-        String[] var7 = new String[4];
+
+        ScaledResolution sr = new ScaledResolution(this.mc.gameSettings, this.mc.displayWidth, this.mc.displayHeight);
+        drawTexturedModalRect(centerX, centerY, 0, 0, 194, this.hParty);
+
+        this.buttonList.add(new GuiButton(0, this.xParty - 80, this.yParty - 4, 160, 20, "返回"));
+
+        this.buttonList.add(new GuiButton(1, this.xParty - 30, this.yParty + 27, 60, 20, this.donator != null ? "恐鸟皮肤" : "恐鸟皮肤: 关"));
+        this.buttonList.add(new GuiButton(2, this.xParty - 30, this.yParty + 52, 60, 20, this.donator != null ? "披风" : "披风: 关"));
+
+        String[] text = new String[4];
 
         if (!Aether.syncDonatorList.isDonator(this.player.username))
         {
-            this.moaEntity = new EntityMoa(Aether.proxy.getClientWorld(), true, false, false, AetherMoaColour.pickRandomMoa(), Aether.proxy.getClientPlayer(), this.donator != null && this.donator.containsChoiceType(EnumChoiceType.MOA) ? this.donator.getChoiceFromType(EnumChoiceType.MOA).textureFile.localURL : null);
-            ((GuiButton)this.buttonList.get(1)).enabled = false;
-            ((GuiButton)this.buttonList.get(2)).enabled = false;
-            var7[0] = "You are not a donator.";
-            var7[1] = "This menu is for donators to";
-            var7[2] = "activate unique visuals that";
-            var7[3] = "do not affect gameplay.";
-        }
-        else
+            this.moaEntity = new EntityMoa(Aether.proxy.getClientWorld(), true, false, false, AetherMoaColour.pickRandomMoa(), Aether.proxy.getClientPlayer(), (this.donator != null) && (this.donator.containsChoiceType(EnumChoiceType.MOA)) ? this.donator.getChoiceFromType(EnumChoiceType.MOA).textureFile.localURL : null);
+
+            ((GuiButton) this.buttonList.get(1)).enabled = false;
+            ((GuiButton) this.buttonList.get(2)).enabled = false;
+
+            text[0] = "您并非捐赠者";
+            text[1] = "该菜单用于激活";
+            text[2] = "捐助者的特殊功能";
+            text[3] = "这些功能不会影响实际游戏";
+        } else
         {
-            ((GuiButton)this.buttonList.get(1)).enabled = true;
-            ((GuiButton)this.buttonList.get(2)).enabled = true;
-            var7[0] = "Dear " + this.player.username + ",";
-            var7[1] = "We cannot thank you enough";
-            var7[2] = "for your contribution. Here,";
-            var7[3] = "have some fancy visuals!";
+            ((GuiButton) this.buttonList.get(1)).enabled = true;
+            ((GuiButton) this.buttonList.get(2)).enabled = true;
+
+            text[0] = ("亲爱的" + this.player.username);
+            text[1] = "我们无比感谢您的";
+            text[2] = "慷慨捐助, 您将拥有";
+            text[3] = "独特的披风和恐鸟皮肤";
         }
 
         super.drawScreen(var1, var2, var3);
         this.partyNameField.drawTextBox();
         this.mc.renderEngine.resetBoundTexture();
-        this.drawString(this.fontRenderer, var7[0], var6.getScaledWidth() / 2 - this.fontRenderer.getStringWidth(var7[0]) / 2, var5 + 24, 15658734);
-        this.drawString(this.fontRenderer, var7[1], var6.getScaledWidth() / 2 - this.fontRenderer.getStringWidth(var7[1]) / 2, var5 + 37, 15658734);
-        this.drawString(this.fontRenderer, var7[2], var6.getScaledWidth() / 2 - this.fontRenderer.getStringWidth(var7[2]) / 2, var5 + 47, 15658734);
-        this.drawString(this.fontRenderer, var7[3], var6.getScaledWidth() / 2 - this.fontRenderer.getStringWidth(var7[3]) / 2, var5 + 57, 15658734);
+        this.drawString(this.fontRenderer, text[0], sr.getScaledWidth() / 2 - this.fontRenderer.getStringWidth(text[0]) / 2, centerY + 24, 15658734);
+        this.drawString(this.fontRenderer, text[1], sr.getScaledWidth() / 2 - this.fontRenderer.getStringWidth(text[1]) / 2, centerY + 37, 15658734);
+        this.drawString(this.fontRenderer, text[2], sr.getScaledWidth() / 2 - this.fontRenderer.getStringWidth(text[2]) / 2, centerY + 47, 15658734);
+        this.drawString(this.fontRenderer, text[3], sr.getScaledWidth() / 2 - this.fontRenderer.getStringWidth(text[3]) / 2, centerY + 57, 15658734);
         this.renderMoa(this.moaEntity, Minecraft.getMinecraft(), this.xParty + 62, this.yParty + 68, 16, 1.0F, 1.0F, this.donator != null && this.donator.containsChoiceType(EnumChoiceType.MOA));
         this.drawPlayerOnGui(this.mc, this.xParty - 60, this.yParty + 69, 30, 0.0F, 0.0F, this.donator != null && this.donator.containsChoiceType(EnumChoiceType.CAPE));
     }

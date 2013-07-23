@@ -48,11 +48,11 @@ public class DungeonRequestAction extends NotificationAction
 
     public String acceptMessage(Notification var1)
     {
-        return "You have been queued into the Dungeon raid!";
+        return "你已进入地牢入侵队列!";
     }
 
     public String failedMessage(Notification var1)
     {
-        return "Sorry, the dungeon raid request no longer exists :(";
+        return "很抱歉, 地牢入侵请求不存在 :(";
     }
 }

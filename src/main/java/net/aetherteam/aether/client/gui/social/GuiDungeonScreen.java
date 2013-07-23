@@ -29,9 +29,9 @@ public class GuiDungeonScreen extends GuiScreen
     {
         this.mc = var1;
         this.isPlayerReady = false;
-        this.notReadyString = "CANCEL READY";
-        this.readyString = "READY UP";
-        this.background = var1.renderEngine.getTexture("/net/aetherteam/aether/client/sprites/gui/loadingScreen.png");
+        this.notReadyString = "取消准备";
+        this.readyString = "已准备";
+        this.background = mc.renderEngine.getTexture("/net/aetherteam/aether/client/sprites/gui/loadingScreen.png");
     }
 
     /**

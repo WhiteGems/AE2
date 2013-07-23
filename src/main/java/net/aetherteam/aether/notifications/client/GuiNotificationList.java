@@ -198,16 +198,16 @@ public class GuiNotificationList extends GuiScreen
             this.sbar.sliderValue = 0.0F;
         }
 
-        int var6 = this.xParty - 70;
-        int var7 = this.yParty - 84;
+        int centerX = this.xParty - 70;
+        int centerY = this.yParty - 84;
         ScaledResolution var8 = new ScaledResolution(this.mc.gameSettings, this.mc.displayWidth, this.mc.displayHeight);
-        this.drawTexturedModalRect(var6, var7, 0, 0, 141, this.hParty);
+        this.drawTexturedModalRect(centerX, centerY, 0, 0, 141, this.hParty);
         this.totalHeight = 0;
         byte var9 = 100;
         byte var10 = 20;
         byte var11 = 2;
         GL11.glEnable(GL11.GL_SCISSOR_TEST);
-        GL11.glScissor((var6 + 14) * var8.getScaleFactor(), (var7 + 35) * var8.getScaleFactor(), var9 * var8.getScaleFactor(), 103 * var8.getScaleFactor());
+        GL11.glScissor((centerX + 14) * var8.getScaleFactor(), (centerY + 35) * var8.getScaleFactor(), var9 * var8.getScaleFactor(), 103 * var8.getScaleFactor());
         GL11.glPushMatrix();
         this.totalHeight = var4.size() * (var10 + var11);
         float var12 = -this.sbar.sliderValue * (float)(this.totalHeight - 105);
@@ -224,7 +224,7 @@ public class GuiNotificationList extends GuiScreen
         {
             for (var13 = 0; var13 < var4.size(); ++var13)
             {
-                this.notificationSlots.add(new GuiNotificationSlot((Notification)var4.get(var13), this.notificationSlots.size(), var6 + 15, var7 + this.totalHeight + 30, var9, var10));
+                this.notificationSlots.add(new GuiNotificationSlot((Notification)var4.get(var13), this.notificationSlots.size(), centerX + 15, centerY + this.totalHeight + 30, var9, var10));
                 this.totalHeight += var10 + var11;
             }
 
@@ -233,7 +233,7 @@ public class GuiNotificationList extends GuiScreen
 
         for (var13 = 0; var13 < this.notificationSlots.size(); ++var13)
         {
-            ((GuiNotificationSlot)this.notificationSlots.get(var13)).drawPartySlot(var6 + 15, var7 + this.totalHeight + 30, var9, var10);
+            ((GuiNotificationSlot)this.notificationSlots.get(var13)).drawPartySlot(centerX + 15, centerY + this.totalHeight + 30, var9, var10);
             this.totalHeight += var10 + var11;
         }
 
@@ -246,25 +246,26 @@ public class GuiNotificationList extends GuiScreen
         }
 
         this.mc.renderEngine.resetBoundTexture();
-        this.drawString(this.fontRenderer, "Notification List", var6 + 70 - this.fontRenderer.getStringWidth("Notification List") / 2, var7 + 10, 16777215);
-
+        drawString(this.fontRenderer, "消息列表", centerX + 70 - this.fontRenderer.getStringWidth("消息列表") / 2, centerY + 10, 16777215);
         if (this.notificationSlots.size() == 0)
         {
             GL11.glPushMatrix();
             GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
             GL11.glBindTexture(GL11.GL_TEXTURE_2D, this.dialogueTexture);
             float var16 = 1.3F;
-            float var14 = var16 - 0.4F;
-            GL11.glTranslatef((float)this.xParty - 100.0F * var16, (float)this.yParty - (float)((this.hParty - 201) / 2) * var14, 0.0F);
-            GL11.glScalef(var16, var14, var16);
+            float scaleFactorY = var16 - 0.4F;
+            GL11.glTranslatef((float)this.xParty - 100.0F * var16, (float)this.yParty - (float)((this.hParty - 201) / 2) * scaleFactorY, 0.0F);
+            GL11.glScalef(var16, scaleFactorY, var16);
             this.drawTexturedModalRect(0, 0, 0, 0, 201, this.hParty - 201);
             GL11.glPopMatrix();
             this.mc.renderEngine.resetBoundTexture();
-            String var15 = "There are no notifications to display at this time.";
-            this.drawString(this.fontRenderer, var15, var6 + 70 - this.fontRenderer.getStringWidth(var15) / 2, (int)((float)this.yParty - (float)((this.hParty - 241) / 2) * var14), 16777215);
+
+            String warningLabel = "没有要在这个时候显示的消息";
+
+            drawString(this.fontRenderer, warningLabel, centerX + 70 - this.fontRenderer.getStringWidth(warningLabel) / 2, (int) (this.yParty - (this.hParty - 241) / 2 * scaleFactorY), 16777215);
         }
 
-        this.joinButton = new GuiButton(1, this.xParty + 3, this.yParty + 85 - 28, 58, 20, "View");
+        this.joinButton = new GuiButton(1, this.xParty + 3, this.yParty + 85 - 28, 58, 20, "查看");
 
         if (this.selectedNotificationSlot != null && this.slotIsSelected)
         {
@@ -275,7 +276,7 @@ public class GuiNotificationList extends GuiScreen
             this.joinButton.enabled = false;
         }
 
-        this.buttonList.add(new GuiButton(0, this.xParty - 60, this.yParty + 85 - 28, 58, 20, "Back"));
+        this.buttonList.add(new GuiButton(0, this.xParty - 60, this.yParty + 85 - 28, 58, 20, "返回"));
         this.buttonList.add(this.joinButton);
         super.drawScreen(var1, var2, var3);
     }

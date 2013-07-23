@@ -44,8 +44,8 @@ public class PartyView extends GuiScreen
     public void initGui()
     {
         this.buttonList.clear();
-        this.buttonList.add(new GuiButton(0, this.xParty - 58, this.yParty + 85 - 28, 52, 20, "Invite"));
-        this.buttonList.add(new GuiButton(0, this.xParty - 1, this.yParty + 85 - 28, 60, 20, "Remove"));
+        this.buttonList.add(new GuiButton(0, this.xParty - 58, this.yParty + 85 - 28, 52, 20, "邀请"));
+        this.buttonList.add(new GuiButton(0, this.xParty - 1, this.yParty + 85 - 28, 60, 20, "移除"));
         super.initGui();
     }
 
@@ -72,9 +72,9 @@ public class PartyView extends GuiScreen
     {
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
         GL11.glBindTexture(GL11.GL_TEXTURE_2D, this.backgroundTexture);
-        int var4 = this.xParty - 70;
-        int var5 = this.yParty - 84;
-        this.drawTexturedModalRect(var4, var5, 0, 0, 141, this.hParty);
+        int centerX = this.xParty - 70;
+        int centerY = this.yParty - 84;
+        this.drawTexturedModalRect(centerX, centerY, 0, 0, 141, this.hParty);
         int var6 = 0;
         byte var7 = 111;
         byte var8 = 20;
@@ -85,7 +85,7 @@ public class PartyView extends GuiScreen
         for (var10 = 0; var10 < this.pm.pList_online.size(); ++var10)
         {
             var11 = (EntityPlayer)this.pm.pList_online.get(var10);
-            this.drawPlayerSlot(var11, var4 + 15, var5 + var6 + 30, var7, var8);
+            this.drawPlayerSlot(var11, centerX + 15, centerY + var6 + 30, var7, var8);
             var6 += var8 + var9;
         }
 
@@ -95,8 +95,7 @@ public class PartyView extends GuiScreen
             this.drawPlayerSlot(var11, this.xParty, this.yParty + var6, var7, var8);
             var6 += var8 + var9;
         }
-
-        this.fontRenderer.drawStringWithShadow("Kingbdogz\' party", var4 + 16, var5 + 11, 16777215);
+        this.fontRenderer.drawStringWithShadow("Kingbdogz的公会", centerX + 16, centerY + 11, 16777215);
         super.drawScreen(var1, var2, var3);
     }
 
@@ -113,9 +112,9 @@ public class PartyView extends GuiScreen
         this.yParty = var3 / 2;
     }
 
-    public void drawPlayerSlot(EntityPlayer var1, int var2, int var3, int var4, int var5)
+    public void drawPlayerSlot(EntityPlayer var1, int x, int y, int var4, int height)
     {
-        this.drawGradientRect(var2, var3, var2 + var4, var3 + var5, -5592406, -11184811);
+        this.drawGradientRect(x, y, x + var4, y + height, -5592406, -11184811);
         int var6 = this.mc.renderEngine.getTextureForDownloadableImage(var1.skinUrl, "/mob/char.png");
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
         GL11.glBindTexture(GL11.GL_TEXTURE_2D, var6);
@@ -126,18 +125,18 @@ public class PartyView extends GuiScreen
         float var10 = 0.5F;
         GL11.glBegin(GL11.GL_QUADS);
         GL11.glTexCoord2f(var7, var8);
-        GL11.glVertex2f((float)(var2 + 2), (float)(var3 + 2));
+        GL11.glVertex2f((float)(x + 2), (float)(y + 2));
         GL11.glTexCoord2f(var7, var10);
-        GL11.glVertex2f((float)(var2 + 2), (float)(var3 + 18));
+        GL11.glVertex2f((float)(x + 2), (float)(y + 18));
         GL11.glTexCoord2f(var9, var10);
-        GL11.glVertex2f((float)(var2 + 18), (float)(var3 + 18));
+        GL11.glVertex2f((float)(x + 18), (float)(y + 18));
         GL11.glTexCoord2f(var9, var8);
-        GL11.glVertex2f((float)(var2 + 18), (float)(var3 + 2));
+        GL11.glVertex2f((float)(x + 18), (float)(y + 2));
         GL11.glEnd();
-        this.fontRenderer.drawStringWithShadow(var1.username, var2 + var5, var3 + 2, 15066597);
+        this.fontRenderer.drawStringWithShadow(var1.username, x + height, y + 2, 15066597);
         GL11.glPushMatrix();
         GL11.glScalef(0.75F, 0.75F, 1.0F);
-        this.fontRenderer.drawString("Online", (int)(((float)var2 + (float)var5) / 0.75F), (int)(((float)var3 + 12.0F) / 0.75F), 7859831);
+        this.fontRenderer.drawString("在线", (int) ((x + this.height) / 0.75F), (int) ((y + 12.0F) / 0.75F), 7859831);
         GL11.glPopMatrix();
     }
 }
