@@ -25,6 +25,8 @@ public class GuiOptions extends GuiScreen
     private int yParty;
     private int wParty;
     private int hParty;
+    
+    /** Reference to the Minecraft object. */
     Minecraft mc;
     private EntityPlayer player;
     private GuiScreen parent;
@@ -38,12 +40,12 @@ public class GuiOptions extends GuiScreen
         this.easterTexture = this.mc.renderEngine.getTexture("/net/aetherteam/aether/client/sprites/gui/partyMain.png");
         this.wParty = 256;
         this.hParty = 256;
-        updateScreen();
+        this.updateScreen();
     }
 
     public void initGui()
     {
-        updateScreen();
+        this.updateScreen();
         this.buttonList.clear();
 
         this.buttonList.add(new GuiButton(0, this.xParty - 60, this.yParty + 81 - 28, 120, 20, "返回"));
@@ -60,37 +62,43 @@ public class GuiOptions extends GuiScreen
         }
     }
 
+    /**
+     * Fired when a control is clicked. This is the equivalent of ActionListener.actionPerformed(ActionEvent e).
+     */
     protected void actionPerformed(GuiButton button)
     {
-        List playerList = this.mc.thePlayer.sendQueue.playerInfoList;
-
-        boolean online = playerList.size() > 1;
-
         switch (button.id)
         {
             case 0:
-                if (online)
-                {
-                    this.mc.displayGuiScreen(this.parent);
-                } else this.mc.displayGuiScreen(null);
-
+                this.mc.displayGuiScreen(this.parent);
                 break;
+                
             case 1:
                 this.mc.displayGuiScreen(new GuiOptionsParty(this.player, this));
                 break;
+                
             case 2:
                 this.mc.displayGuiScreen(new GuiOptionsNotification(this.player, this));
                 break;
+                
             case 3:
                 this.mc.displayGuiScreen(new GuiOptionsCoinbar(this.player, this));
         }
     }
 
+    /**
+     * Returns true if this GUI should pause the game when it is displayed in single-player
+     */
     public boolean doesGuiPauseGame()
     {
         return false;
     }
 
+
+
+    /**
+     * Draws the screen and all the components in it.
+     */
     public void drawScreen(int x, int y, float partialTick)
     {
         this.buttonList.clear();
@@ -103,35 +111,19 @@ public class GuiOptions extends GuiScreen
 
         ScaledResolution sr = new ScaledResolution(this.mc.gameSettings, this.mc.displayWidth, this.mc.displayHeight);
         drawTexturedModalRect(centerX, centerY, 0, 0, 141, this.hParty);
+        
+        this.buttonList.add(new GuiButton(1, this.xParty - 60, this.yParty - 36 - 28, 120, 20, "公会HUD"));
+        this.buttonList.add(new GuiButton(2, this.xParty - 60, this.yParty - 14 - 28, 120, 20, "信息"));
+        this.buttonList.add(new GuiButton(3, this.xParty - 60, this.yParty + 8 - 28, 120, 20, "以太币界面"));
 
-        List playerList = this.mc.thePlayer.sendQueue.playerInfoList;
+        this.mc.renderEngine.resetBoundTexture();
 
-        boolean online = playerList.size() > 1;
-
-        if (online)
-        {
-            this.buttonList.add(new GuiButton(1, this.xParty - 60, this.yParty - 36 - 28, 120, 20, "公会HUD"));
-            this.buttonList.add(new GuiButton(2, this.xParty - 60, this.yParty - 14 - 28, 120, 20, "信息"));
-            this.buttonList.add(new GuiButton(3, this.xParty - 60, this.yParty + 8 - 28, 120, 20, "以太币界面"));
-
-            this.mc.renderEngine.resetBoundTexture();
-
-            String title = "选项";
-
-            drawString(this.fontRenderer, title, centerX + 70 - this.fontRenderer.getStringWidth(title) / 2, centerY + 5, 16777215);
-        } else
-        {
-            GL11.glBindTexture(3553, this.backgroundTexture);
-            drawTexturedModalRect(centerX + 13, centerY + 40, 141, 131, 115, 125);
-
-            this.mc.renderEngine.resetBoundTexture();
-            drawString(this.fontRenderer, "注定孤独一生 :(", centerX + 26, centerY + 10, 15658734);
-            drawString(this.fontRenderer, "(单人游戏)", centerX + 31, centerY + 22, 15658734);
-        }
-
-        this.buttonList.add(new GuiButton(0, this.xParty - 60, this.yParty + 81 - 28, 120, 20, online ? "后退" : "退出"));
-
+        String title = "选项";
+        
+        this.drawString(this.fontRenderer, var9, var4 + 70 - this.fontRenderer.getStringWidth(title) / 2, var5 + 5, 16777215);
+        this.buttonList.add(new GuiButton(0, this.xParty - 60, this.yParty + 81 - 28, 120, 20, "后退"));
         super.drawScreen(x, y, partialTick);
+        
     }
 
     public void updateScreen()
