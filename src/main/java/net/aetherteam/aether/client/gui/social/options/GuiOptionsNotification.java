@@ -26,6 +26,7 @@ public class GuiOptionsNotification extends GuiScreen
     private int yParty;
     private int wParty;
     private int hParty;
+    
     Minecraft mc;
     private EntityPlayer player;
     private GuiScreen parent;
@@ -63,18 +64,10 @@ public class GuiOptionsNotification extends GuiScreen
 
     protected void actionPerformed(GuiButton button)
     {
-        List playerList = this.mc.thePlayer.sendQueue.playerInfoList;
-
-        boolean online = playerList.size() > 1;
-
         switch (button.id)
         {
             case 0:
-                if (online)
-                {
-                    this.mc.displayGuiScreen(this.parent);
-                } else this.mc.displayGuiScreen(null);
-
+                this.mc.displayGuiScreen(this.parent);
                 break;
             case 1:
                 AetherOptions.setShowNotifications(!AetherOptions.getShowNotifications());
@@ -98,35 +91,13 @@ public class GuiOptionsNotification extends GuiScreen
 
         ScaledResolution sr = new ScaledResolution(this.mc.gameSettings, this.mc.displayWidth, this.mc.displayHeight);
         drawTexturedModalRect(centerX, centerY, 0, 0, 141, this.hParty);
-
-        List playerList = this.mc.thePlayer.sendQueue.playerInfoList;
-
-        boolean online = playerList.size() > 1;
-
-        if (online)
-        {
-            String showNotificationString = AetherOptions.getShowNotifications() ? "是" : "否";
-
-            GuiButton showNotification = new GuiButton(1, this.xParty - 60, this.yParty - 36 - 28, 120, 20, "显示收到的信息: " + showNotificationString);
-
-            this.buttonList.add(showNotification);
-
-            this.mc.renderEngine.resetBoundTexture();
-
-            String title = "消息";
-
-            drawString(this.fontRenderer, title, centerX + 70 - this.fontRenderer.getStringWidth(title) / 2, centerY + 5, 16777215);
-        } else
-        {
-            GL11.glBindTexture(3553, this.backgroundTexture);
-            drawTexturedModalRect(centerX + 13, centerY + 40, 141, 131, 115, 125);
-
-            this.mc.renderEngine.resetBoundTexture();
-            drawString(this.fontRenderer, "注定孤独一生 :(", centerX + 26, centerY + 10, 15658734);
-            drawString(this.fontRenderer, "(单人游戏)", centerX + 31, centerY + 22, 15658734);
-        }
-
-        this.buttonList.add(new GuiButton(0, this.xParty - 60, this.yParty + 81 - 28, 120, 20, online ? "返回" : "退出"));
+        
+        String showNotificationString = AetherOptions.getShowNotifications() ? "是" : "否";
+        GuiButton showNotification = new GuiButton(1, this.xParty - 60, this.yParty - 36 - 28, 120, 20, "显示收到的信息: " + showNotificationString);            this.buttonList.add(showNotification);
+        this.mc.renderEngine.resetBoundTexture();
+        String title = "消息";
+        drawString(this.fontRenderer, title, centerX + 70 - this.fontRenderer.getStringWidth(title) / 2, centerY + 5, 16777215);
+        this.buttonList.add(new GuiButton(0, this.xParty - 60, this.yParty + 81 - 28, 120, 20, "返回");
 
         super.drawScreen(x, y, partialTick);
     }
