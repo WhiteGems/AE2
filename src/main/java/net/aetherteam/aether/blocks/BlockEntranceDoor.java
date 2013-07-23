@@ -88,13 +88,12 @@ public class BlockEntranceDoor extends BlockAether implements IAetherBlock
     	}
        return this.door;
     }
-    
-    @SideOnly(Side.CLIENT)
 
     /**
      * When this method is called, your block should register all the icons it needs with the given IconRegister. This
      * is the only chance you get to register icons.
      */
+    @SideOnly(Side.CLIENT)
     public void registerIcons(IconRegister ir)
     {
         door = ir.registerIcon("Aether:Dungeon Entrance");
