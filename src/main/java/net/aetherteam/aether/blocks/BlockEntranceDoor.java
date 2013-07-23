@@ -23,8 +23,8 @@ import net.minecraft.world.World;
 public class BlockEntranceDoor extends BlockAether implements IAetherBlock
 {
     private Random rand = new Random();
-    private HashMap icons = new HashMap();
-    public static final String[] names = new String[] {"Dungeon Entrance", "Dungeon Entrance Lock"};
+
+    private Icon door,lock;
 
     protected BlockEntranceDoor(int var1)
     {
@@ -75,29 +75,30 @@ public class BlockEntranceDoor extends BlockAether implements IAetherBlock
     {
         return var1;
     }
-
+    
     /**
      * From the specified side and block metadata retrieves the blocks texture. Args: side, metadata
      */
-    public Icon getIcon(int var1, int var2)
+    public Icon getIcon(int side, int meta)
     {
-        ItemStack var3 = new ItemStack(AetherBlocks.DungeonEntrance, 1, var2);
-        String var4 = var3.getItem().getItemDisplayName(var3);
-        return (Icon)this.icons.get(var4);
+        switch(meta)
+        {
+    	case 0:return this.door;
+    	case 1:return this.lock;
+    	}
+       return this.door;
     }
-
+    
     @SideOnly(Side.CLIENT)
 
     /**
      * When this method is called, your block should register all the icons it needs with the given IconRegister. This
      * is the only chance you get to register icons.
      */
-    public void registerIcons(IconRegister var1)
+    public void registerIcons(IconRegister ir)
     {
-        for (int var2 = 0; var2 < names.length; ++var2)
-        {
-            this.icons.put(names[var2], var1.registerIcon("Aether:" + names[var2]));
-        }
+        door = ir.registerIcon("Aether:Dungeon Entrance");
+        lock = ir.registerIcon("Aether:Dungeon Entrance Lock");
     }
 
     /**
