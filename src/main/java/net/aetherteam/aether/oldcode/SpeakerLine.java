@@ -2,10 +2,10 @@ package net.aetherteam.aether.oldcode;
 
 public class SpeakerLine
 {
-    public static final String AUTHOR_COLOR = "\u00a77";
-    public static final String RECIPIENT_COLOR = "\u00a77";
-    public static final String MESSAGE_COLOR = "\u00a7r";
-    public static final String DEFAULT_COLOR = "\u00a7r";
+    public static final String AUTHOR_COLOR = "§7";
+    public static final String RECIPIENT_COLOR = "§7";
+    public static final String MESSAGE_COLOR = "§r";
+    public static final String DEFAULT_COLOR = "§r";
     public boolean hasAuthor;
     public boolean hasRecipient;
     public boolean hasContent;
@@ -14,60 +14,61 @@ public class SpeakerLine
     public String content;
     public long duration;
 
-    public SpeakerLine(String var1, String var2, String var3, long var4)
+    public SpeakerLine(String author, String recipient, String content, long duration)
     {
-        this.author = String.format("[%s%s%s] ", new Object[] {"\u00a77", var1, "\u00a7r"});
+        this.author = String.format("[%s%s%s] ", new Object[] { "§7", author, "§r" });
         this.hasAuthor = true;
-        this.recipient = String.format("%s%s%s: ", new Object[] {"\u00a77", var2, "\u00a7r"});
+        this.recipient = String.format("%s%s%s: ", new Object[] { "§7", recipient, "§r" });
         this.hasRecipient = true;
-        this.content = String.format("%s%s%s", new Object[] {"\u00a7r", var3, "\u00a7r"});
+        this.content = String.format("%s%s%s", new Object[] { "§r", content, "§r" });
         this.hasContent = true;
-        this.duration = var4;
+        this.duration = duration;
     }
 
-    public SpeakerLine(String var1, String var2, String var3)
+    public SpeakerLine(String author, String recipient, String content)
     {
-        this.author = String.format("[%s%s%s] ", new Object[] {"\u00a77", var1, "\u00a7r"});
+        this.author = String.format("[%s%s%s] ", new Object[] { "§7", author, "§r" });
         this.hasAuthor = true;
-        this.recipient = String.format("%s%s%s: ", new Object[] {"\u00a77", var2, "\u00a7r"});
+        this.recipient = String.format("%s%s%s: ", new Object[] { "§7", recipient, "§r" });
         this.hasRecipient = true;
-        this.content = String.format("%s%s%s", new Object[] {"\u00a7r", var3, "\u00a7r"});
+        this.content = String.format("%s%s%s", new Object[] { "§r", content, "§r" });
         this.hasContent = true;
     }
 
-    public SpeakerLine(String var1, String var2)
+    public SpeakerLine(String author, String content)
     {
-        this.author = String.format("[%s%s%s] ", new Object[] {"\u00a77", var1, "\u00a7r"});
+        this.author = String.format("[%s%s%s] ", new Object[] { "§7", author, "§r" });
         this.hasAuthor = true;
-        this.content = String.format("%s%s%s", new Object[] {"\u00a7r", var2, "\u00a7r"});
+        this.content = String.format("%s%s%s", new Object[] { "§r", content, "§r" });
         this.hasContent = true;
     }
 
-    public SpeakerLine(String var1)
+    public SpeakerLine(String content)
     {
-        this.content = String.format("%s%s%s", new Object[] {"\u00a7r", var1, "\u00a7r"});
+        this.content = String.format("%s%s%s", new Object[] { "§r", content, "§r" });
         this.hasContent = true;
     }
 
     public String getLine()
     {
-        StringBuilder var1 = new StringBuilder();
+        StringBuilder sb = new StringBuilder();
 
         if (this.hasAuthor)
         {
-            var1.append(this.author);
+            sb.append(this.author);
         }
 
         if (this.hasRecipient)
         {
-            var1.append(this.recipient);
+            sb.append(this.recipient);
         }
 
         if (this.hasContent)
         {
-            var1.append(this.content);
+            sb.append(this.content);
         }
 
-        return var1.length() > 0 ? var1.toString() : "Unable to fetch line.";
+        return sb.length() > 0 ? sb.toString() : "Unable to fetch line.";
     }
 }
+

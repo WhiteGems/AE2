@@ -7,22 +7,20 @@ import net.minecraft.item.ItemStack;
 
 public class ItemHealingStone extends ItemAppleGold
 {
-    public ItemHealingStone(int var1, int var2, float var3, boolean var4)
+    public ItemHealingStone(int i, int j, float f, boolean flag)
     {
-        super(var1, var2, var3, var4);
+        super(i, j, f, flag);
     }
 
-    /**
-     * returns a list of items with the same ID, but different meta (eg: dye returns 16 items)
-     */
-    public void getSubItems(int var1, CreativeTabs var2, List var3)
+    public void getSubItems(int par1, CreativeTabs par2CreativeTabs, List par3List)
     {
-        var3.add(new ItemStack(var1, 1, 0));
+        par3List.add(new ItemStack(par1, 1, 0));
     }
 
-    public ItemAppleGold setIconName(String var1)
+    public ItemAppleGold setIconName(String name)
     {
-        this.setUnlocalizedName("Aether:" + var1);
+        setUnlocalizedName("Aether:" + name);
         return this;
     }
 }
+

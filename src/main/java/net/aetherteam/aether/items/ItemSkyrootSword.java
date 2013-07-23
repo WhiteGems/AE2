@@ -6,13 +6,14 @@ import net.minecraft.item.ItemSword;
 
 public class ItemSkyrootSword extends ItemSword
 {
-    public ItemSkyrootSword(int var1, EnumToolMaterial var2)
+    public ItemSkyrootSword(int itemID, EnumToolMaterial mat)
     {
-        super(var1, var2);
+        super(itemID, mat);
     }
 
-    public Item setIconName(String var1)
+    public Item setIconName(String name)
     {
-        return this.setUnlocalizedName("Aether:" + var1);
+        return setUnlocalizedName("Aether:" + name);
     }
 }
+

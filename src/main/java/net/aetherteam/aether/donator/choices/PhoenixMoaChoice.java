@@ -10,3 +10,4 @@ public class PhoenixMoaChoice extends MoaChoice
         super("Phoenix Moa", EnumChoiceType.MOA, new DonatorTexture("saddle_Phoenix.png", "Phoenix.png", 256, 128));
     }
 }
+

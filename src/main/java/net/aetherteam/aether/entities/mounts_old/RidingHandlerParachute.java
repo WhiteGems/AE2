@@ -1,21 +1,23 @@
 package net.aetherteam.aether.entities.mounts_old;
 
 import net.aetherteam.aether.entities.EntityCloudParachute;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLiving;
 
 public class RidingHandlerParachute extends RidingHandler
 {
-    public RidingHandlerParachute(EntityCloudParachute var1)
+    public RidingHandlerParachute(EntityCloudParachute entityParachute)
     {
-        super(var1);
+        super(entityParachute);
     }
 
     public void update()
     {
-        if (this.isBeingRidden())
+        if (isBeingRidden())
         {
             this.rider.fallDistance = 0.0F;
 
-            if (this.rider.motionY < -0.2D && !this.rider.isSneaking())
+            if ((this.rider.motionY < -0.2D) && (!this.rider.isSneaking()))
             {
                 this.rider.motionY = -0.2D;
             }
@@ -26,7 +28,7 @@ public class RidingHandlerParachute extends RidingHandler
 
     public boolean shouldBeSitting()
     {
-        return this.isBeingRidden();
+        return isBeingRidden();
     }
 
     public boolean animateSitting()
@@ -39,3 +41,4 @@ public class RidingHandlerParachute extends RidingHandler
         return false;
     }
 }
+

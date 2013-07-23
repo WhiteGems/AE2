@@ -2,6 +2,7 @@ package net.aetherteam.aether.client;
 
 import cpw.mods.fml.common.ITickHandler;
 import cpw.mods.fml.common.TickType;
+import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.Iterator;
 import net.aetherteam.aether.client.gui.GuiAetherContainerCreative;
@@ -14,43 +15,39 @@ import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.inventory.GuiContainerCreative;
 import net.minecraft.client.gui.inventory.GuiInventory;
 
-public class ClientTickHandler implements ITickHandler
+public class ClientTickHandler
+    implements ITickHandler
 {
     public String getLabel()
     {
         return null;
     }
 
-    public void tickEnd(EnumSet var1, Object ... var2)
+    public void tickEnd(EnumSet type, Object[] tickData)
     {
-        if (var1.equals(EnumSet.of(TickType.CLIENT)))
+        Dungeon dungeon;
+
+        if (type.equals(EnumSet.of(TickType.CLIENT)))
         {
-            Minecraft var3 = Minecraft.getMinecraft();
+            Minecraft mc = Minecraft.getMinecraft();
 
-            if (Minecraft.getMinecraft().getIntegratedServer() != null)
+            if (Minecraft.getMinecraft().D() != null);
+
+            GuiScreen guiscreen = mc.currentScreen;
+
+            if ((guiscreen instanceof GuiInventory))
             {
-                ;
+                Minecraft.getMinecraft().displayGuiScreen(new GuiInventoryAether(mc.thePlayer));
             }
 
-            GuiScreen var4 = var3.currentScreen;
-
-            if (var4 instanceof GuiInventory)
+            if ((guiscreen instanceof GuiContainerCreative))
             {
-                Minecraft.getMinecraft().displayGuiScreen(new GuiInventoryAether(var3.thePlayer));
-            }
-
-            if (var4 instanceof GuiContainerCreative)
-            {
-                Minecraft.getMinecraft().displayGuiScreen(new GuiAetherContainerCreative(var3.thePlayer));
+                Minecraft.getMinecraft().displayGuiScreen(new GuiAetherContainerCreative(mc.thePlayer));
             }
 
             MountSystem.processDirections();
-            Dungeon var6;
 
-            for (Iterator var5 = DungeonHandler.instance().getInstances().iterator(); var5.hasNext(); var6 = (Dungeon)var5.next())
-            {
-                ;
-            }
+            for (Iterator i$ = DungeonHandler.instance().getInstances().iterator(); i$.hasNext(); dungeon = (Dungeon)i$.next());
         }
     }
 
@@ -59,11 +56,9 @@ public class ClientTickHandler implements ITickHandler
         return EnumSet.of(TickType.CLIENT);
     }
 
-    public void tickStart(EnumSet var1, Object ... var2)
+    public void tickStart(EnumSet type, Object[] tickData)
     {
-        if (var1.equals(EnumSet.of(TickType.CLIENT)))
-        {
-            ;
-        }
+        if (type.equals(EnumSet.of(TickType.CLIENT)));
     }
 }
+

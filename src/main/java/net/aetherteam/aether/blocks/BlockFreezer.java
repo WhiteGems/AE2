@@ -3,11 +3,13 @@ package net.aetherteam.aether.blocks;
 import java.util.Random;
 import net.aetherteam.aether.Aether;
 import net.aetherteam.aether.AetherGuiHandler;
+import net.aetherteam.aether.CommonProxy;
 import net.aetherteam.aether.tile_entities.TileEntityFreezer;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IconRegister;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
@@ -18,63 +20,55 @@ import net.minecraft.util.Icon;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 
-public class BlockFreezer extends BlockContainer implements IAetherBlock
+public class BlockFreezer extends BlockContainer
+    implements IAetherBlock
 {
-    private Random FrozenRand = new Random();
+    private Random FrozenRand;
     private Icon sideIcon;
     private Icon topIcon;
 
-    public static void updateFreezerBlockState(boolean var0, World var1, int var2, int var3, int var4)
+    public static void updateFreezerBlockState(boolean flag, World world, int i, int j, int k)
     {
-        int var5 = var1.getBlockMetadata(var2, var3, var4);
-        TileEntity var6 = var1.getBlockTileEntity(var2, var3, var4);
-        var1.setBlockMetadataWithNotify(var2, var3, var4, var5, 4);
-        var1.setBlockTileEntity(var2, var3, var4, var6);
+        int l = world.getBlockMetadata(i, j, k);
+        TileEntity tileentity = world.getBlockTileEntity(i, j, k);
+        world.setBlockMetadataWithNotify(i, j, k, l, 4);
+        world.setBlockTileEntity(i, j, k, tileentity);
     }
 
-    /**
-     * When this method is called, your block should register all the icons it needs with the given IconRegister. This
-     * is the only chance you get to register icons.
-     */
-    public void registerIcons(IconRegister var1)
+    public void registerIcons(IconRegister par1IconRegister)
     {
-        this.topIcon = var1.registerIcon("Aether:Freezer Top");
-        this.sideIcon = var1.registerIcon("Aether:Freezer Side");
-        super.registerIcons(var1);
+        this.topIcon = par1IconRegister.registerIcon("Aether:Freezer Top");
+        this.sideIcon = par1IconRegister.registerIcon("Aether:Freezer Side");
+        super.registerIcons(par1IconRegister);
     }
 
-    protected BlockFreezer(int var1)
+    protected BlockFreezer(int blockID)
     {
-        super(var1, Material.rock);
-        this.setHardness(2.5F);
-        this.setStepSound(Block.soundStoneFootstep);
+        super(blockID, Material.rock);
+        this.FrozenRand = new Random();
+        setHardness(2.5F);
+        setStepSound(Block.soundStoneFootstep);
     }
 
-    public Block setIconName(String var1)
+    public Block setIconName(String name)
     {
-        return this.setUnlocalizedName("Aether:" + var1);
+        return setUnlocalizedName("Aether:" + name);
     }
 
-    /**
-     * Called upon block activation (right click on the block.)
-     */
-    public boolean onBlockActivated(World var1, int var2, int var3, int var4, EntityPlayer var5, int var6, float var7, float var8, float var9)
+    public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer entityplayer, int par6, float par7, float par8, float par9)
     {
-        TileEntityFreezer var10 = (TileEntityFreezer)var1.getBlockTileEntity(var2, var3, var4);
-        int var11 = AetherGuiHandler.freezerID;
-        var5.openGui(Aether.instance, var11, var1, var2, var3, var4);
+        TileEntityFreezer freezer = (TileEntityFreezer)world.getBlockTileEntity(x, y, z);
+        int guiID = AetherGuiHandler.freezerID;
+        entityplayer.openGui(Aether.instance, guiID, world, x, y, z);
         return true;
     }
 
-    public boolean hasTileEntity(int var1)
+    public boolean hasTileEntity(int metadata)
     {
         return true;
     }
 
-    /**
-     * Returns a new instance of a block's tile entity class. Called on placing the block.
-     */
-    public TileEntity createNewTileEntity(World var1)
+    public TileEntity createNewTileEntity(World par1World)
     {
         try
         {
@@ -86,61 +80,59 @@ public class BlockFreezer extends BlockContainer implements IAetherBlock
         }
     }
 
-    /**
-     * From the specified side and block metadata retrieves the blocks texture. Args: side, metadata
-     */
-    public Icon getIcon(int var1, int var2)
+    public Icon getIcon(int i, int meta)
     {
-        return var1 == 1 ? this.topIcon : (var1 == 0 ? this.topIcon : this.sideIcon);
+        if (i == 1)
+        {
+            return this.topIcon;
+        }
+
+        if (i == 0)
+        {
+            return this.topIcon;
+        }
+
+        return this.sideIcon;
     }
 
-    /**
-     * Called whenever the block is added into the world. Args: world, x, y, z
-     */
-    public void onBlockAdded(World var1, int var2, int var3, int var4)
+    public void onBlockAdded(World world, int i, int j, int k)
     {
-        super.onBlockAdded(var1, var2, var3, var4);
-        this.setDefaultDirection(var1, var2, var3, var4);
+        super.onBlockAdded(world, i, j, k);
+        setDefaultDirection(world, i, j, k);
     }
 
-    /**
-     * Called when the block is placed in the world.
-     */
-    public void onBlockPlacedBy(World var1, int var2, int var3, int var4, EntityLiving var5, ItemStack var6)
+    public void onBlockPlacedBy(World world, int i, int j, int k, EntityLiving entityliving, ItemStack stack)
     {
-        int var7 = MathHelper.floor_double((double)(var5.rotationYaw * 4.0F / 360.0F) + 0.5D) & 3;
+        int l = MathHelper.floor_double(entityliving.rotationYaw * 4.0F / 360.0F + 0.5D) & 0x3;
 
-        if (var7 == 0)
+        if (l == 0)
         {
-            var1.setBlockMetadataWithNotify(var2, var3, var4, 2, 4);
+            world.setBlockMetadataWithNotify(i, j, k, 2, 4);
         }
 
-        if (var7 == 1)
+        if (l == 1)
         {
-            var1.setBlockMetadataWithNotify(var2, var3, var4, 5, 4);
+            world.setBlockMetadataWithNotify(i, j, k, 5, 4);
         }
 
-        if (var7 == 2)
+        if (l == 2)
         {
-            var1.setBlockMetadataWithNotify(var2, var3, var4, 3, 4);
+            world.setBlockMetadataWithNotify(i, j, k, 3, 4);
         }
 
-        if (var7 == 3)
+        if (l == 3)
         {
-            var1.setBlockMetadataWithNotify(var2, var3, var4, 4, 4);
+            world.setBlockMetadataWithNotify(i, j, k, 4, 4);
         }
     }
 
-    /**
-     * ejects contained items into the world, and notifies neighbours of an update, as appropriate
-     */
-    public void breakBlock(World var1, int var2, int var3, int var4, int var5, int var6)
+    public void breakBlock(World par1World, int par2, int par3, int par4, int par5, int par6)
     {
-        TileEntityFreezer var7 = (TileEntityFreezer)var1.getBlockTileEntity(var2, var3, var4);
+        TileEntityFreezer var7 = (TileEntityFreezer)par1World.getBlockTileEntity(par2, par3, par4);
 
         if (var7 != null)
         {
-            for (int var8 = 0; var8 < var7.getSizeInventory(); ++var8)
+            for (int var8 = 0; var8 < var7.getSizeInventory(); var8++)
             {
                 ItemStack var9 = var7.getStackInSlot(var8);
 
@@ -160,7 +152,7 @@ public class BlockFreezer extends BlockContainer implements IAetherBlock
                         }
 
                         var9.stackSize -= var13;
-                        EntityItem var14 = new EntityItem(var1, (double)((float)var2 + var10), (double)((float)var3 + var11), (double)((float)var4 + var12), new ItemStack(var9.itemID, var13, var9.getItemDamage()));
+                        EntityItem var14 = new EntityItem(par1World, par2 + var10, par3 + var11, par4 + var12, new ItemStack(var9.itemID, var13, var9.getItemDamage()));
 
                         if (var9.hasTagCompound())
                         {
@@ -168,68 +160,68 @@ public class BlockFreezer extends BlockContainer implements IAetherBlock
                         }
 
                         float var15 = 0.05F;
-                        var14.motionX = (double)((float)this.FrozenRand.nextGaussian() * var15);
-                        var14.motionY = (double)((float)this.FrozenRand.nextGaussian() * var15 + 0.2F);
-                        var14.motionZ = (double)((float)this.FrozenRand.nextGaussian() * var15);
-                        var1.spawnEntityInWorld(var14);
+                        var14.motionX = ((float)this.FrozenRand.nextGaussian() * var15);
+                        var14.motionY = ((float)this.FrozenRand.nextGaussian() * var15 + 0.2F);
+                        var14.motionZ = ((float)this.FrozenRand.nextGaussian() * var15);
+                        par1World.spawnEntityInWorld(var14);
                     }
                 }
             }
         }
 
-        super.breakBlock(var1, var2, var3, var4, var5, var6);
+        super.breakBlock(par1World, par2, par3, par4, par5, par6);
     }
 
-    /**
-     * A randomly called display update to be able to add particles or other items for display
-     */
-    public void randomDisplayTick(World var1, int var2, int var3, int var4, Random var5)
+    public void randomDisplayTick(World world, int i, int j, int k, Random random)
     {
-        TileEntityFreezer var6 = (TileEntityFreezer)var1.getBlockTileEntity(var2, var3, var4);
+        TileEntityFreezer tileentity = (TileEntityFreezer)world.getBlockTileEntity(i, j, k);
 
-        if (var6.isBurning())
+        if (tileentity.isBurning())
         {
-            for (int var7 = 0; var7 < 5; ++var7)
+            for (int multiply = 0; multiply < 5; multiply++)
             {
-                double var8 = (double)var2 + var5.nextDouble();
-                double var10 = (double)var3 + 1.0D + var5.nextDouble() * 0.75D * 2.0D - 0.75D;
-                double var12 = (double)var4 + var5.nextDouble();
-                Aether.proxy.spawnCloudSmoke(var1, (double)var2 + 0.5D, (double)var3 + 1.0D, (double)var4 + 0.5D, var5, Double.valueOf(0.75D));
+                double x = i + random.nextDouble();
+                double y = j + 1.0D + random.nextDouble() * 0.75D * 2.0D - 0.75D;
+                double z = k + random.nextDouble();
+                Aether.proxy.spawnCloudSmoke(world, i + 0.5D, j + 1.0D, k + 0.5D, random, Double.valueOf(0.75D));
             }
         }
     }
 
-    private void setDefaultDirection(World var1, int var2, int var3, int var4)
+    private void setDefaultDirection(World world, int i, int j, int k)
     {
-        if (!var1.isRemote)
+        if (world.isRemote)
         {
-            int var5 = var1.getBlockId(var2, var3, var4 - 1);
-            int var6 = var1.getBlockId(var2, var3, var4 + 1);
-            int var7 = var1.getBlockId(var2 - 1, var3, var4);
-            int var8 = var1.getBlockId(var2 + 1, var3, var4);
-            byte var9 = 3;
-
-            if (Block.opaqueCubeLookup[var5] && !Block.opaqueCubeLookup[var6])
-            {
-                var9 = 3;
-            }
-
-            if (Block.opaqueCubeLookup[var6] && !Block.opaqueCubeLookup[var5])
-            {
-                var9 = 2;
-            }
-
-            if (Block.opaqueCubeLookup[var7] && !Block.opaqueCubeLookup[var8])
-            {
-                var9 = 5;
-            }
-
-            if (Block.opaqueCubeLookup[var8] && !Block.opaqueCubeLookup[var7])
-            {
-                var9 = 4;
-            }
-
-            var1.setBlockMetadataWithNotify(var2, var3, var4, var9, 4);
+            return;
         }
+
+        int l = world.getBlockId(i, j, k - 1);
+        int i1 = world.getBlockId(i, j, k + 1);
+        int j1 = world.getBlockId(i - 1, j, k);
+        int k1 = world.getBlockId(i + 1, j, k);
+        byte byte0 = 3;
+
+        if ((Block.opaqueCubeLookup[l] != 0) && (Block.opaqueCubeLookup[i1] == 0))
+        {
+            byte0 = 3;
+        }
+
+        if ((Block.opaqueCubeLookup[i1] != 0) && (Block.opaqueCubeLookup[l] == 0))
+        {
+            byte0 = 2;
+        }
+
+        if ((Block.opaqueCubeLookup[j1] != 0) && (Block.opaqueCubeLookup[k1] == 0))
+        {
+            byte0 = 5;
+        }
+
+        if ((Block.opaqueCubeLookup[k1] != 0) && (Block.opaqueCubeLookup[j1] == 0))
+        {
+            byte0 = 4;
+        }
+
+        world.setBlockMetadataWithNotify(i, j, k, byte0, 4);
     }
 }
+

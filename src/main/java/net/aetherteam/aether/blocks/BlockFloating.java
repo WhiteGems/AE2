@@ -7,117 +7,115 @@ import net.minecraft.block.material.Material;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 
-public class BlockFloating extends BlockAether implements IAetherBlock
+public class BlockFloating extends BlockAether
+    implements IAetherBlock
 {
     public static boolean fallInstantly = false;
     private boolean enchanted;
 
-    public BlockFloating(int var1, boolean var2)
+    public BlockFloating(int i, boolean bool)
     {
-        super(var1, Material.rock);
-        this.enchanted = var2;
-        this.setHardness(5.0F);
-        this.setStepSound(Block.soundStoneFootstep);
+        super(i, Material.rock);
+        this.enchanted = bool;
+        setHardness(5.0F);
+        setStepSound(Block.soundStoneFootstep);
     }
 
-    /**
-     * Called whenever the block is added into the world. Args: world, x, y, z
-     */
-    public void onBlockAdded(World var1, int var2, int var3, int var4)
+    public void onBlockAdded(World world, int i, int j, int k)
     {
-        var1.scheduleBlockUpdate(var2, var3, var4, this.blockID, this.tickRate());
+        world.scheduleBlockUpdate(i, j, k, this.blockID, tickRate());
     }
 
-    /**
-     * Lets the block know when one of its neighbor changes. Doesn't know which neighbor changed (coordinates passed are
-     * their own) Args: x, y, z, neighbor blockID
-     */
-    public void onNeighborBlockChange(World var1, int var2, int var3, int var4, int var5)
+    public void onNeighborBlockChange(World world, int i, int j, int k, int l)
     {
-        var1.scheduleBlockUpdate(var2, var3, var4, this.blockID, this.tickRate());
+        world.scheduleBlockUpdate(i, j, k, this.blockID, tickRate());
     }
 
-    /**
-     * Ticks the block if it's been scheduled
-     */
-    public void updateTick(World var1, int var2, int var3, int var4, Random var5)
+    public void updateTick(World world, int i, int j, int k, Random random)
     {
-        if (!this.enchanted || this.enchanted && var1.isBlockIndirectlyGettingPowered(var2, var3, var4))
+        if ((!this.enchanted) || ((this.enchanted) && (world.isBlockIndirectlyGettingPowered(i, j, k))))
         {
-            this.tryToFall(var1, var2, var3, var4);
+            tryToFall(world, i, j, k);
         }
     }
 
-    private void tryToFall(World var1, int var2, int var3, int var4)
+    private void tryToFall(World world, int i, int j, int k)
     {
-        int var8 = MathHelper.floor_double((double)var2);
-        int var9 = MathHelper.floor_double((double)var3);
-        int var10 = MathHelper.floor_double((double)var4);
-        int var11 = var1.getBlockId(var2, var3, var4);
-        int var12 = var1.getBlockMetadata(var2, var3, var4);
+        int l = i;
+        int i1 = j;
+        int j1 = k;
+        int x = MathHelper.floor_double(i);
+        int y = MathHelper.floor_double(j);
+        int z = MathHelper.floor_double(k);
+        int id = world.getBlockId(i, j, k);
+        int meta = world.getBlockMetadata(i, j, k);
 
-        if (canFallAbove(var1, var2, var3 + 1, var4) && var3 < var1.getHeight())
+        if ((canFallAbove(world, l, i1 + 1, j1)) && (i1 < world.getActualHeight()))
         {
-            byte var13 = 32;
+            byte byte0 = 32;
 
-            if (!fallInstantly && var1.checkChunksExist(var2 - var13, var3 - var13, var4 - var13, var2 + var13, var3 + var13, var4 + var13))
+            if ((fallInstantly) || (!world.checkChunksExist(i - byte0, j - byte0, k - byte0, i + byte0, j + byte0, k + byte0)))
             {
-                var1.setBlockToAir(var2, var3, var4);
-                EntityFloatingBlock var14 = new EntityFloatingBlock(var1, (double)((float)var8 + 0.5F), (double)((float)var9 + 0.5F), (double)((float)var10 + 0.5F), this.blockID, var12);
+                world.setBlockToAir(i, j, k);
 
-                if (!var1.isRemote)
+                while ((canFallAbove(world, i, j + 1, k)) && (j < 128))
                 {
-                    var1.spawnEntityInWorld(var14);
+                    j++;
+                }
+
+                if (j > 0)
+                {
+                    world.setBlock(i, j, k, id, meta, 2);
                 }
             }
             else
             {
-                var1.setBlockToAir(var2, var3, var4);
+                world.setBlockToAir(i, j, k);
+                EntityFloatingBlock floating = new EntityFloatingBlock(world, x + 0.5F, y + 0.5F, z + 0.5F, this.blockID, meta);
 
-                while (canFallAbove(var1, var2, var3 + 1, var4) && var3 < 128)
+                if (!world.isRemote)
                 {
-                    ++var3;
-                }
-
-                if (var3 > 0)
-                {
-                    var1.setBlock(var2, var3, var4, var11, var12, 2);
+                    world.spawnEntityInWorld(floating);
                 }
             }
         }
     }
 
-    /**
-     * Called when the falling block entity for this block is created
-     */
-    protected void onStartFalling(EntityFloatingBlock var1) {}
+    protected void func_82520_a(EntityFloatingBlock floatingBlock)
+    {
+    }
 
-    /**
-     * Called when the falling block entity for this block hits the ground and turns back into a block
-     */
-    public void onFinishFalling(World var1, int var2, int var3, int var4, int var5) {}
+    public void func_82519_a_(World par1World, int par2, int par3, int par4, int par5)
+    {
+    }
 
     public int tickRate()
     {
         return 3;
     }
 
-    public static boolean canFallAbove(World var0, int var1, int var2, int var3)
+    public static boolean canFallAbove(World world, int i, int j, int k)
     {
-        int var4 = var0.getBlockId(var1, var2, var3);
+        int l = world.getBlockId(i, j, k);
 
-        if (var4 == 0)
+        if (l == 0)
         {
             return true;
         }
-        else if (var4 == Block.fire.blockID)
+
+        if (l == Block.fire.blockID)
         {
             return true;
         }
-        else
+
+        Material material = Block.blocksList[l].blockMaterial;
+
+        if (material == Material.water)
         {
-            Material var5 = Block.blocksList[var4].blockMaterial;
-            return var5 == Material.water ? true : var5 == Material.lava;
+            return true;
         }
+
+        return material == Material.lava;
     }
 }
+

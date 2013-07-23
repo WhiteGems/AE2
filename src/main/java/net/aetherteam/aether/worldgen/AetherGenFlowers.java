@@ -2,7 +2,6 @@ package net.aetherteam.aether.worldgen;
 
 import java.util.Random;
 import net.aetherteam.aether.blocks.BlockAetherFlower;
-import net.minecraft.block.Block;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.feature.WorldGenerator;
 
@@ -11,26 +10,27 @@ public class AetherGenFlowers extends WorldGenerator
     private int plantBlockId;
     private int placementChance;
 
-    public AetherGenFlowers(int var1, int var2)
+    public AetherGenFlowers(int i, int chance)
     {
-        this.plantBlockId = var1;
-        this.placementChance = var2;
+        this.plantBlockId = i;
+        this.placementChance = chance;
     }
 
-    public boolean generate(World var1, Random var2, int var3, int var4, int var5)
+    public boolean generate(World world, Random random, int i, int j, int k)
     {
-        for (int var6 = 0; var6 < this.placementChance; ++var6)
+        for (int l = 0; l < this.placementChance; l++)
         {
-            int var7 = var3 + var2.nextInt(8) - var2.nextInt(8);
-            int var8 = var4 + var2.nextInt(4) - var2.nextInt(4);
-            int var9 = var5 + var2.nextInt(8) - var2.nextInt(8);
+            int i1 = i + random.nextInt(8) - random.nextInt(8);
+            int j1 = j + random.nextInt(4) - random.nextInt(4);
+            int k1 = k + random.nextInt(8) - random.nextInt(8);
 
-            if (var1.isAirBlock(var7, var8, var9) && ((BlockAetherFlower)Block.blocksList[this.plantBlockId]).canBlockStay(var1, var7, var8, var9))
+            if ((world.isAirBlock(i1, j1, k1)) && (((BlockAetherFlower)net.minecraft.block.Block.blocksList[this.plantBlockId]).canBlockStay(world, i1, j1, k1)))
             {
-                var1.setBlock(var7, var8, var9, this.plantBlockId);
+                world.setBlock(i1, j1, k1, this.plantBlockId);
             }
         }
 
         return true;
     }
 }
+

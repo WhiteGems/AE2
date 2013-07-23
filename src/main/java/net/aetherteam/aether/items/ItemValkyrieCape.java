@@ -1,45 +1,47 @@
 package net.aetherteam.aether.items;
 
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 
 public class ItemValkyrieCape extends ItemAccessory
 {
-    public ItemValkyrieCape(int var1, int var2, int var3, int var4)
+    public ItemValkyrieCape(int i, int j, int k, int l)
     {
-        super(var1, var2, var3, var4, 16777215);
+        super(i, j, k, l, 16777215);
     }
 
-    public ItemValkyrieCape(int var1, int var2, String var3, int var4)
+    public ItemValkyrieCape(int i, int j, String path, int l)
     {
-        super(var1, var2, 0, var4);
-        this.texture = var3;
+        super(i, j, 0, l);
+        this.texture = path;
     }
 
-    public Item setIconName(String var1)
+    public Item setIconName(String name)
     {
-        return this.setUnlocalizedName("Aether:" + var1);
+        return setUnlocalizedName("Aether:" + name);
     }
 
-    public ItemValkyrieCape(int var1, int var2, String var3, int var4, int var5)
+    public ItemValkyrieCape(int i, int j, String path, int l, int m)
     {
-        super(var1, var2, 0, var4, var5);
-        this.texture = var3;
+        super(i, j, 0, l, m);
+        this.texture = path;
     }
 
-    public ItemValkyrieCape(int var1, int var2, String var3, int var4, int var5, boolean var6)
+    public ItemValkyrieCape(int i, int j, String path, int l, int m, boolean flag)
     {
-        super(var1, var2, var3, var4, var5);
-        this.colouriseRender = var6;
+        super(i, j, path, l, m);
+        this.colouriseRender = flag;
     }
 
-    public void activatePassive(EntityPlayer var1)
+    public void activatePassive(EntityPlayer player)
     {
-        if (!var1.onGround && var1.motionY < 0.0D && !var1.isInWater() && !var1.isSneaking())
+        if ((!player.onGround) && (player.motionY < 0.0D) && (!player.isInWater()) && (!player.isSneaking()))
         {
-            var1.motionY *= 0.6D;
+            player.motionY *= 0.6D;
         }
 
-        var1.fallDistance = -1.0F;
+        player.fallDistance = -1.0F;
     }
 }
+

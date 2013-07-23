@@ -2,124 +2,116 @@ package net.aetherteam.aether.client.renders;
 
 import net.aetherteam.aether.entities.EntityLightningKnife;
 import net.aetherteam.aether.items.AetherItems;
-import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.entity.Render;
+import net.minecraft.client.renderer.entity.RenderManager;
+import net.minecraft.client.renderer.texture.Rect2i;
 import net.minecraft.entity.Entity;
+import net.minecraft.item.Item;
 import net.minecraft.util.Icon;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
 
-public class RenderLightningKnife extends Render
+public class RenderLightningKnife extends RenderManager
 {
-    /**
-     * Actually renders the given argument. This is a synthetic bridge method, always casting down its argument and then
-     * handing it off to a worker function which does the actual work. In all probabilty, the class Render is generic
-     * (Render<T extends Entity) and this method has signature public void doRender(T entity, double d, double d1,
-     * double d2, float f, float f1). But JAD is pre 1.5 so doesn't do that.
-     */
-    public void doRender(Entity var1, double var2, double var4, double var6, float var8, float var9)
+    public void renderEntityWithPosYaw(Entity var1, double var2, double var4, double var6, float var8, float var9)
     {
-        this.doRenderKnife((EntityLightningKnife)var1, var2, var4, var6, var8, var9);
+        doRenderKnife((EntityLightningKnife)var1, var2, var4, var6, var8, var9);
     }
 
-    public void doRenderKnife(EntityLightningKnife var1, double var2, double var4, double var6, float var8, float var9)
+    public void doRenderKnife(EntityLightningKnife arr, double d, double d1, double d2, float yaw, float time)
     {
-        String var10 = "/gui/items.png";
-        Icon var11 = AetherItems.LightningKnife.getIconFromDamage(0);
-        float var12 = var11.getMinU();
-        float var13 = var11.getMaxU();
-        float var14 = var11.getMinV();
-        float var15 = var11.getMaxV();
+        String texture = "/gui/items.png";
+        Icon icon = AetherItems.LightningKnife.getIconFromDamage(0);
+        float texMinX = icon.getMinU();
+        float texMaxX = icon.getMaxU();
+        float texMinY = icon.getMinV();
+        float texMaxY = icon.getMaxV();
         GL11.glPushMatrix();
-        GL11.glTranslatef((float)var2, (float)var4, (float)var6);
-        GL11.glRotatef(var8, 0.0F, 1.0F, 0.0F);
-        GL11.glRotatef(-(var1.prevRotationPitch + (var1.rotationPitch - var1.prevRotationPitch) * var9), 1.0F, 0.0F, 0.0F);
+        GL11.glTranslatef((float)d, (float)d1, (float)d2);
+        GL11.glRotatef(yaw, 0.0F, 1.0F, 0.0F);
+        GL11.glRotatef(-(arr.prevRotationPitch + (arr.rotationPitch - arr.prevRotationPitch) * time), 1.0F, 0.0F, 0.0F);
         GL11.glRotatef(45.0F, 0.0F, 1.0F, 0.0F);
-        this.loadTexture(var10);
-        Tessellator var16 = Tessellator.instance;
-        float var17 = 1.0F;
+        a(texture);
+        Rect2i tessellator = Rect2i.rectX;
+        float f4 = 1.0F;
         GL11.glEnable(GL12.GL_RESCALE_NORMAL);
-        float var18 = 0.0625F;
+        float f8 = 0.0625F;
         GL11.glTranslatef(-0.5F, 0.0F, -0.5F);
-        var16.startDrawingQuads();
-        var16.setNormal(0.0F, 0.0F, 1.0F);
-        var16.addVertexWithUV(0.0D, 0.0D, 0.0D, (double)var13, (double)var15);
-        var16.addVertexWithUV((double)var17, 0.0D, 0.0D, (double)var12, (double)var15);
-        var16.addVertexWithUV((double)var17, 0.0D, 1.0D, (double)var12, (double)var14);
-        var16.addVertexWithUV(0.0D, 0.0D, 1.0D, (double)var13, (double)var14);
-        var16.draw();
-        var16.startDrawingQuads();
-        var16.setNormal(0.0F, 0.0F, -1.0F);
-        var16.addVertexWithUV(0.0D, (double)(0.0F - var18), 1.0D, (double)var13, (double)var14);
-        var16.addVertexWithUV((double)var17, (double)(0.0F - var18), 1.0D, (double)var12, (double)var14);
-        var16.addVertexWithUV((double)var17, (double)(0.0F - var18), 0.0D, (double)var12, (double)var15);
-        var16.addVertexWithUV(0.0D, (double)(0.0F - var18), 0.0D, (double)var13, (double)var15);
-        var16.draw();
-        var16.startDrawingQuads();
-        var16.setNormal(-1.0F, 0.0F, 0.0F);
-        int var19;
-        float var21;
-        float var20;
-        float var22;
+        tessellator.b();
+        tessellator.b(0.0F, 0.0F, 1.0F);
+        tessellator.a(0.0D, 0.0D, 0.0D, texMaxX, texMaxY);
+        tessellator.a(f4, 0.0D, 0.0D, texMinX, texMaxY);
+        tessellator.a(f4, 0.0D, 1.0D, texMinX, texMinY);
+        tessellator.a(0.0D, 0.0D, 1.0D, texMaxX, texMinY);
+        tessellator.getRectX();
+        tessellator.b();
+        tessellator.b(0.0F, 0.0F, -1.0F);
+        tessellator.a(0.0D, 0.0F - f8, 1.0D, texMaxX, texMinY);
+        tessellator.a(f4, 0.0F - f8, 1.0D, texMinX, texMinY);
+        tessellator.a(f4, 0.0F - f8, 0.0D, texMinX, texMaxY);
+        tessellator.a(0.0D, 0.0F - f8, 0.0D, texMaxX, texMaxY);
+        tessellator.getRectX();
+        tessellator.b();
+        tessellator.b(-1.0F, 0.0F, 0.0F);
 
-        for (var19 = 0; var19 < 16; ++var19)
+        for (int i = 0; i < 16; i++)
         {
-            var20 = (float)var19 / 16.0F;
-            var21 = var13 + (var12 - var13) * var20 - 0.001953125F;
-            var22 = var17 * var20;
-            var16.addVertexWithUV((double)var22, (double)(0.0F - var18), 0.0D, (double)var21, (double)var15);
-            var16.addVertexWithUV((double)var22, 0.0D, 0.0D, (double)var21, (double)var15);
-            var16.addVertexWithUV((double)var22, 0.0D, 1.0D, (double)var21, (double)var14);
-            var16.addVertexWithUV((double)var22, (double)(0.0F - var18), 1.0D, (double)var21, (double)var14);
+            float f9 = i / 16.0F;
+            float f13 = texMaxX + (texMinX - texMaxX) * f9 - 0.00195313F;
+            float f17 = f4 * f9;
+            tessellator.a(f17, 0.0F - f8, 0.0D, f13, texMaxY);
+            tessellator.a(f17, 0.0D, 0.0D, f13, texMaxY);
+            tessellator.a(f17, 0.0D, 1.0D, f13, texMinY);
+            tessellator.a(f17, 0.0F - f8, 1.0D, f13, texMinY);
         }
 
-        var16.draw();
-        var16.startDrawingQuads();
-        var16.setNormal(1.0F, 0.0F, 0.0F);
+        tessellator.getRectX();
+        tessellator.b();
+        tessellator.b(1.0F, 0.0F, 0.0F);
 
-        for (var19 = 0; var19 < 16; ++var19)
+        for (int j = 0; j < 16; j++)
         {
-            var20 = (float)var19 / 16.0F;
-            var21 = var13 + (var12 - var13) * var20 - 0.001953125F;
-            var22 = var17 * var20 + 0.0625F;
-            var16.addVertexWithUV((double)var22, (double)(0.0F - var18), 1.0D, (double)var21, (double)var14);
-            var16.addVertexWithUV((double)var22, 0.0D, 1.0D, (double)var21, (double)var14);
-            var16.addVertexWithUV((double)var22, 0.0D, 0.0D, (double)var21, (double)var15);
-            var16.addVertexWithUV((double)var22, (double)(0.0F - var18), 0.0D, (double)var21, (double)var15);
+            float f10 = j / 16.0F;
+            float f14 = texMaxX + (texMinX - texMaxX) * f10 - 0.00195313F;
+            float f18 = f4 * f10 + 0.0625F;
+            tessellator.a(f18, 0.0F - f8, 1.0D, f14, texMinY);
+            tessellator.a(f18, 0.0D, 1.0D, f14, texMinY);
+            tessellator.a(f18, 0.0D, 0.0D, f14, texMaxY);
+            tessellator.a(f18, 0.0F - f8, 0.0D, f14, texMaxY);
         }
 
-        var16.draw();
-        var16.startDrawingQuads();
-        var16.setNormal(0.0F, 1.0F, 0.0F);
+        tessellator.getRectX();
+        tessellator.b();
+        tessellator.b(0.0F, 1.0F, 0.0F);
 
-        for (var19 = 0; var19 < 16; ++var19)
+        for (int k = 0; k < 16; k++)
         {
-            var20 = (float)var19 / 16.0F;
-            var21 = var15 + (var14 - var15) * var20 - 0.001953125F;
-            var22 = var17 * var20 + 0.0625F;
-            var16.addVertexWithUV(0.0D, 0.0D, (double)var22, (double)var13, (double)var21);
-            var16.addVertexWithUV((double)var17, 0.0D, (double)var22, (double)var12, (double)var21);
-            var16.addVertexWithUV((double)var17, (double)(0.0F - var18), (double)var22, (double)var12, (double)var21);
-            var16.addVertexWithUV(0.0D, (double)(0.0F - var18), (double)var22, (double)var13, (double)var21);
+            float f11 = k / 16.0F;
+            float f15 = texMaxY + (texMinY - texMaxY) * f11 - 0.00195313F;
+            float f19 = f4 * f11 + 0.0625F;
+            tessellator.a(0.0D, 0.0D, f19, texMaxX, f15);
+            tessellator.a(f4, 0.0D, f19, texMinX, f15);
+            tessellator.a(f4, 0.0F - f8, f19, texMinX, f15);
+            tessellator.a(0.0D, 0.0F - f8, f19, texMaxX, f15);
         }
 
-        var16.draw();
-        var16.startDrawingQuads();
-        var16.setNormal(0.0F, -1.0F, 0.0F);
+        tessellator.getRectX();
+        tessellator.b();
+        tessellator.b(0.0F, -1.0F, 0.0F);
 
-        for (var19 = 0; var19 < 16; ++var19)
+        for (int l = 0; l < 16; l++)
         {
-            var20 = (float)var19 / 16.0F;
-            var21 = var15 + (var14 - var15) * var20 - 0.001953125F;
-            var22 = var17 * var20;
-            var16.addVertexWithUV((double)var17, 0.0D, (double)var22, (double)var12, (double)var21);
-            var16.addVertexWithUV(0.0D, 0.0D, (double)var22, (double)var13, (double)var21);
-            var16.addVertexWithUV(0.0D, (double)(0.0F - var18), (double)var22, (double)var13, (double)var21);
-            var16.addVertexWithUV((double)var17, (double)(0.0F - var18), (double)var22, (double)var12, (double)var21);
+            float f12 = l / 16.0F;
+            float f16 = texMaxY + (texMinY - texMaxY) * f12 - 0.00195313F;
+            float f20 = f4 * f12;
+            tessellator.a(f4, 0.0D, f20, texMinX, f16);
+            tessellator.a(0.0D, 0.0D, f20, texMaxX, f16);
+            tessellator.a(0.0D, 0.0F - f8, f20, texMaxX, f16);
+            tessellator.a(f4, 0.0F - f8, f20, texMinX, f16);
         }
 
-        var16.draw();
+        tessellator.getRectX();
         GL11.glDisable(GL12.GL_RESCALE_NORMAL);
         GL11.glPopMatrix();
     }
 }
+

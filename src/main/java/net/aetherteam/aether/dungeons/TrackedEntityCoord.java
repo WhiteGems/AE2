@@ -5,24 +5,25 @@ import net.minecraft.entity.EntityList;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.world.World;
 
-public class TrackedEntityCoord implements Serializable
+public class TrackedEntityCoord
+    implements Serializable
 {
     private String entityName;
     private float x;
     private float y;
     private float z;
 
-    public TrackedEntityCoord(float var1, float var2, float var3, String var4)
+    public TrackedEntityCoord(float x, float y, float z, String entityName)
     {
-        this.x = var1;
-        this.y = var2;
-        this.z = var3;
-        this.entityName = var4;
+        this.x = x;
+        this.y = y;
+        this.z = z;
+        this.entityName = entityName;
     }
 
-    public EntityLiving getTrackedEntity(World var1)
+    public EntityLiving getTrackedEntity(World world)
     {
-        return (EntityLiving)EntityList.createEntityByName(this.entityName, var1);
+        return (EntityLiving)EntityList.createEntityByName(this.entityName, world);
     }
 
     public float getX()
@@ -40,3 +41,4 @@ public class TrackedEntityCoord implements Serializable
         return this.z;
     }
 }
+

@@ -7,28 +7,29 @@ public class StringBox
     String text = new String();
     int boxCharWidth = 10;
 
-    public StringBox(String var1, int var2)
+    public StringBox(String text, int boxCharWidth)
     {
-        this.text = var1;
-        this.boxCharWidth = var2;
+        this.text = text;
+        this.boxCharWidth = boxCharWidth;
     }
 
     public ArrayList getStringList()
     {
-        ArrayList var1 = new ArrayList();
+        ArrayList strings = new ArrayList();
 
         while (this.text.length() > this.boxCharWidth)
         {
-            String var2 = this.text.substring(0, this.boxCharWidth);
+            String subDescription = this.text.substring(0, this.boxCharWidth);
             this.text = this.text.replace(this.text.substring(0, this.boxCharWidth), "");
-            var1.add(var2);
+            strings.add(subDescription);
         }
 
-        if (this.text.length() > 0 && this.text.length() <= this.boxCharWidth)
+        if ((this.text.length() > 0) && (this.text.length() <= this.boxCharWidth))
         {
-            var1.add(this.text);
+            strings.add(this.text);
         }
 
-        return var1;
+        return strings;
     }
 }
+

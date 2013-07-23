@@ -1,23 +1,23 @@
 package net.aetherteam.aether.client.models;
 
-import net.minecraft.client.model.ModelBase;
-import net.minecraft.client.model.ModelRenderer;
+import net.minecraft.client.model.ModelMinecart;
 import net.minecraft.entity.Entity;
+import net.minecraft.src.bdi;
 import org.lwjgl.opengl.GL11;
 
-public class ModelCarrionSprout extends ModelBase
+public class ModelCarrionSprout extends ModelMinecart
 {
-    ModelRenderer Pedal4;
-    ModelRenderer Pedal3;
-    ModelRenderer Pedal2;
-    ModelRenderer Pedal1;
-    ModelRenderer TopStem;
-    ModelRenderer BottomStem;
-    ModelRenderer HeadRoof;
-    ModelRenderer Teeth;
-    ModelRenderer Jaw;
-    ModelRenderer Head;
-    private ModelRenderer[] petal;
+    bdi Pedal4;
+    bdi Pedal3;
+    bdi Pedal2;
+    bdi Pedal1;
+    bdi TopStem;
+    bdi BottomStem;
+    bdi HeadRoof;
+    bdi Teeth;
+    bdi Jaw;
+    bdi Head;
+    private bdi[] petal;
     private static int petals = 8;
     public float sinage;
     public float sinage2;
@@ -27,119 +27,112 @@ public class ModelCarrionSprout extends ModelBase
     {
         this.textureWidth = 64;
         this.textureHeight = 64;
-        this.petal = new ModelRenderer[petals];
+        this.petal = new bdi[petals];
 
-        for (int var1 = 0; var1 < petals; ++var1)
+        for (int i = 0; i < petals; i++)
         {
-            this.petal[var1] = new ModelRenderer(this, 43, 49);
+            this.petal[i] = new bdi(this, 43, 49);
 
-            if (var1 % 2 == 0)
+            if (i % 2 == 0)
             {
-                this.petal[var1] = new ModelRenderer(this, 43, 49);
-                this.petal[var1].addBox(-2.8F, -1.0F, -10.8F, 6, 0, 9);
-                this.petal[var1].setRotationPoint(0.0F, 1.0F, 0.0F);
+                this.petal[i] = new bdi(this, 43, 49);
+                this.petal[i].a(-2.8F, -1.0F, -10.8F, 6, 0, 9);
+                this.petal[i].a(0.0F, 1.0F, 0.0F);
             }
             else
             {
-                this.petal[var1].addBox(-2.8F, -1.0F, -11.8F, 6, 0, 9);
-                this.petal[var1].setRotationPoint(0.0F, 1.0F, 0.0F);
+                this.petal[i].a(-2.8F, -1.0F, -11.8F, 6, 0, 9);
+                this.petal[i].a(0.0F, 1.0F, 0.0F);
             }
         }
 
-        this.Head = new ModelRenderer(this, 0, 0);
-        this.Head.addBox(-3.0F, -3.0F, -3.0F, 6, 2, 6);
-        this.Head.setRotationPoint(0.0F, 0.0F, 0.0F);
-        this.TopStem = new ModelRenderer(this, 8, 25);
-        this.TopStem.addBox(0.0F, 0.0F, 0.0F, 2, 6, 2);
-        this.TopStem.setRotationPoint(-1.0F, 14.0F, -3.0F);
-        this.TopStem.setTextureSize(64, 64);
-        this.TopStem.mirror = true;
-        this.setRotation(this.TopStem, 0.3490659F, 0.0F, 0.0F);
-        this.BottomStem = new ModelRenderer(this, 0, 25);
-        this.BottomStem.addBox(0.0F, 0.0F, 0.0F, 2, 5, 2);
-        this.BottomStem.setRotationPoint(-1.0F, 19.0F, -1.0F);
-        this.BottomStem.setTextureSize(64, 64);
-        this.BottomStem.mirror = true;
-        this.setRotation(this.BottomStem, 0.0F, 0.0F, 0.0F);
-        this.HeadRoof = new ModelRenderer(this, 20, 16);
-        this.HeadRoof.addBox(0.0F, 0.0F, 0.0F, 11, 5, 11);
-        this.HeadRoof.setRotationPoint(-5.5F, 4.0F, -7.5F);
-        this.HeadRoof.setTextureSize(64, 64);
-        this.HeadRoof.mirror = true;
-        this.setRotation(this.HeadRoof, -0.3490659F, 0.0F, 0.0F);
-        this.Teeth = new ModelRenderer(this, 0, 33);
-        this.Teeth.addBox(0.0F, 0.0F, 0.0F, 9, 1, 9);
-        this.Teeth.setRotationPoint(-4.5F, 8.5F, -8.5F);
-        this.Teeth.setTextureSize(64, 64);
-        this.Teeth.mirror = true;
-        this.setRotation(this.Teeth, -0.3490659F, 0.0F, 0.0F);
-        this.Jaw = new ModelRenderer(this, 24, 1);
-        this.Jaw.addBox(0.0F, 0.0F, -9.0F, 10, 2, 10);
-        this.Jaw.setRotationPoint(-5.0F, 12.0F, 0.0F);
-        this.Jaw.setTextureSize(64, 64);
-        this.Jaw.mirror = true;
-        this.setRotation(this.Jaw, 0.0F, 0.0F, 0.0F);
+        this.Head = new bdi(this, 0, 0);
+        this.Head.a(-3.0F, -3.0F, -3.0F, 6, 2, 6);
+        this.Head.a(0.0F, 0.0F, 0.0F);
+        this.TopStem = new bdi(this, 8, 25);
+        this.TopStem.a(0.0F, 0.0F, 0.0F, 2, 6, 2);
+        this.TopStem.a(-1.0F, 14.0F, -3.0F);
+        this.TopStem.b(64, 64);
+        this.TopStem.i = true;
+        setRotation(this.TopStem, 0.349066F, 0.0F, 0.0F);
+        this.BottomStem = new bdi(this, 0, 25);
+        this.BottomStem.a(0.0F, 0.0F, 0.0F, 2, 5, 2);
+        this.BottomStem.a(-1.0F, 19.0F, -1.0F);
+        this.BottomStem.b(64, 64);
+        this.BottomStem.i = true;
+        setRotation(this.BottomStem, 0.0F, 0.0F, 0.0F);
+        this.HeadRoof = new bdi(this, 20, 16);
+        this.HeadRoof.a(0.0F, 0.0F, 0.0F, 11, 5, 11);
+        this.HeadRoof.a(-5.5F, 4.0F, -7.5F);
+        this.HeadRoof.b(64, 64);
+        this.HeadRoof.i = true;
+        setRotation(this.HeadRoof, -0.349066F, 0.0F, 0.0F);
+        this.Teeth = new bdi(this, 0, 33);
+        this.Teeth.a(0.0F, 0.0F, 0.0F, 9, 1, 9);
+        this.Teeth.a(-4.5F, 8.5F, -8.5F);
+        this.Teeth.b(64, 64);
+        this.Teeth.i = true;
+        setRotation(this.Teeth, -0.349066F, 0.0F, 0.0F);
+        this.Jaw = new bdi(this, 24, 1);
+        this.Jaw.a(0.0F, 0.0F, -9.0F, 10, 2, 10);
+        this.Jaw.a(-5.0F, 12.0F, 0.0F);
+        this.Jaw.b(64, 64);
+        this.Jaw.i = true;
+        setRotation(this.Jaw, 0.0F, 0.0F, 0.0F);
     }
 
-    /**
-     * Sets the models various rotation angles then renders the model.
-     */
-    public void render(Entity var1, float var2, float var3, float var4, float var5, float var6, float var7)
+    public void render(Entity entity, float f, float f1, float f2, float f3, float f4, float f5)
     {
-        super.render(var1, var2, var3, var4, var5, var6, var7);
-        this.setRotationAngles(var2, var3, var4, var5, var6, var7, var1);
+        super.render(entity, f, f1, f2, f3, f4, f5);
+        setRotationAngles(f, f1, f2, f3, f4, f5, entity);
 
-        for (int var8 = 0; var8 < petals; ++var8)
+        for (int i = 0; i < petals; i++)
         {
-            this.petal[var8].render(var7);
+            this.petal[i].a(f5);
         }
 
-        this.TopStem.render(var7);
-        this.BottomStem.render(var7);
-        this.HeadRoof.render(var7);
-        this.Teeth.render(var7);
-        this.Jaw.render(var7);
-        this.Head.render(var7);
+        this.TopStem.a(f5);
+        this.BottomStem.a(f5);
+        this.HeadRoof.a(f5);
+        this.Teeth.a(f5);
+        this.Jaw.a(f5);
+        this.Head.a(f5);
         GL11.glPushMatrix();
         GL11.glTranslatef(0.0F, 0.3F, 0.0F);
-        this.BottomStem.render(var7);
+        this.BottomStem.a(f5);
         GL11.glPopMatrix();
     }
 
-    private void setRotation(ModelRenderer var1, float var2, float var3, float var4)
+    private void setRotation(bdi model, float x, float y, float z)
     {
-        var1.rotateAngleX = var2;
-        var1.rotateAngleY = var3;
-        var1.rotateAngleZ = var4;
+        model.f = x;
+        model.g = y;
+        model.h = z;
     }
 
-    /**
-     * Sets the model's various rotation angles. For bipeds, par1 and par2 are used for animating the movement of arms
-     * and legs, where par1 represents the time(so that arms and legs swing back and forth) and par2 represents how
-     * "far" arms and legs can swing at most.
-     */
-    public void setRotationAngles(float var1, float var2, float var3, float var4, float var5, float var6, Entity var7)
+    public void setRotationAngles(float f, float f1, float f2, float f3, float f4, float f5, Entity entity)
     {
-        super.setRotationAngles(var1, var2, var3, var4, var5, var6, var7);
-        float var8 = this.sinage2;
-        float var9 = 21.0F;
+        super.setRotationAngles(f, f1, f2, f3, f4, f5, entity);
+        float boff = this.sinage2;
+        float yOffset = 21.0F;
 
-        for (int var10 = 0; var10 < petals; ++var10)
+        for (int i = 0; i < petals; i++)
         {
-            this.petal[var10].rotateAngleX = var10 % 2 == 0 ? -0.25F : -0.4125F;
-            this.petal[var10].rotateAngleX += this.sinage;
-            this.petal[var10].rotateAngleY = 17.0F;
-            this.petal[var10].rotateAngleY += this.pie / (float)petals * (float)var10;
-            this.petal[var10].rotationPointY = var8 + var9;
+            this.petal[i].f = (i % 2 == 0 ? -0.25F : -0.4125F);
+            this.petal[i].f += this.sinage;
+            this.petal[i].g = 17.0F;
+            this.petal[i].g += this.pie / petals * i;
+            this.petal[i].d = (boff + yOffset);
         }
 
-        this.Jaw.rotateAngleX = 0.08F;
-        this.Jaw.rotateAngleX += this.sinage;
-        this.Head.rotationPointY = var8 + var9 + this.sinage * 2.0F;
-        this.Jaw.rotationPointY = var8 + 8.0F + this.sinage * 2.0F;
-        this.BottomStem.rotationPointY = var8 + 15.0F + this.sinage * 2.0F;
-        this.TopStem.rotationPointY = var8 + 10.0F + this.sinage * 2.0F;
-        this.HeadRoof.rotationPointY = var8 + this.sinage * 2.0F;
-        this.Teeth.rotationPointY = var8 + 4.5F + this.sinage * 2.0F;
+        this.Jaw.f = 0.08F;
+        this.Jaw.f += this.sinage;
+        this.Head.d = (boff + yOffset + this.sinage * 2.0F);
+        this.Jaw.d = (boff + 8.0F + this.sinage * 2.0F);
+        this.BottomStem.d = (boff + 15.0F + this.sinage * 2.0F);
+        this.TopStem.d = (boff + 10.0F + this.sinage * 2.0F);
+        this.HeadRoof.d = (boff + this.sinage * 2.0F);
+        this.Teeth.d = (boff + 4.5F + this.sinage * 2.0F);
     }
 }
+

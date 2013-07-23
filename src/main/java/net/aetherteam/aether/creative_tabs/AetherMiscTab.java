@@ -21,11 +21,9 @@ public class AetherMiscTab extends CreativeTabs
         return "Aether Miscellaneous";
     }
 
-    /**
-     * Gets the translated Label.
-     */
     public String getTranslatedTabLabel()
     {
-        return this.getTabLabel();
+        return getTabLabel();
     }
 }
+

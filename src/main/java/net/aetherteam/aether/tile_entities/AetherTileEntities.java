@@ -16,3 +16,4 @@ public class AetherTileEntities
         GameRegistry.registerTileEntity(TileEntityBronzeSpawner.class, "Bronze Spawner");
     }
 }
+

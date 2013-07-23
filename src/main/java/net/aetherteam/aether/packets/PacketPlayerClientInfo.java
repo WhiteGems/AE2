@@ -7,52 +7,54 @@ import java.io.DataInputStream;
 import java.io.InputStreamReader;
 import java.util.HashMap;
 import net.aetherteam.aether.Aether;
+import net.aetherteam.aether.CommonProxy;
 import net.aetherteam.aether.data.PlayerClientInfo;
 import net.minecraft.network.packet.Packet250CustomPayload;
 
 public class PacketPlayerClientInfo extends AetherPacket
 {
-    public PacketPlayerClientInfo(int var1)
+    public PacketPlayerClientInfo(int packetID)
     {
-        super(var1);
+        super(packetID);
     }
 
-    public void onPacketReceived(Packet250CustomPayload var1, Player var2)
+    public void onPacketReceived(Packet250CustomPayload packet, Player player)
     {
-        DataInputStream var3 = new DataInputStream(new ByteArrayInputStream(var1.data));
-        new BufferedReader(new InputStreamReader(var3));
+        DataInputStream dat = new DataInputStream(new ByteArrayInputStream(packet.data));
+        BufferedReader buf = new BufferedReader(new InputStreamReader(dat));
 
         try
         {
-            byte var5 = var3.readByte();
-            boolean var6 = var3.readBoolean();
-            boolean var7 = var3.readBoolean();
-            String var8 = var3.readUTF();
-            short var9 = var3.readShort();
-            short var10 = var3.readShort();
-            short var11 = var3.readShort();
-            short var12 = var3.readShort();
-            int var13 = var3.readInt();
-            HashMap var14 = Aether.proxy.getPlayerClientInfo();
+            byte packetType = dat.readByte();
+            boolean clearFirst = dat.readBoolean();
+            boolean adding = dat.readBoolean();
+            String username = dat.readUTF();
+            short halfHearts = dat.readShort();
+            short maxHealth = dat.readShort();
+            short hunger = dat.readShort();
+            short armourValue = dat.readShort();
+            int aetherCoins = dat.readInt();
+            HashMap playerClientInfo = Aether.proxy.getPlayerClientInfo();
 
-            if (var6)
+            if (clearFirst)
             {
-                var14.clear();
+                playerClientInfo.clear();
             }
 
-            if (var7)
+            if (adding)
             {
-                PlayerClientInfo var15 = new PlayerClientInfo(var9, var10, var11, var12, var13);
-                var14.put(var8, var15);
+                PlayerClientInfo playerInfo = new PlayerClientInfo(halfHearts, maxHealth, hunger, armourValue, aetherCoins);
+                playerClientInfo.put(username, playerInfo);
             }
             else
             {
-                var14.remove(var8);
+                playerClientInfo.remove(username);
             }
         }
-        catch (Exception var16)
+        catch (Exception ex)
         {
-            var16.printStackTrace();
+            ex.printStackTrace();
         }
     }
 }
+

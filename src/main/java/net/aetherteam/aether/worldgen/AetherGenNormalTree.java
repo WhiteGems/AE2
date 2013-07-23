@@ -12,115 +12,104 @@ public class AetherGenNormalTree extends WorldGenerator
     private int logBlock;
     private int logMetadata;
 
-    public AetherGenNormalTree(int var1, int var2, int var3)
+    public AetherGenNormalTree(int leafID, int logID, int logMeta)
     {
-        this.leafBlock = var1;
-        this.logBlock = var2;
-        this.logMetadata = var3;
+        this.leafBlock = leafID;
+        this.logBlock = logID;
+        this.logMetadata = logMeta;
     }
 
-    public boolean generate(World var1, Random var2, int var3, int var4, int var5)
+    public boolean generate(World world, Random random, int i, int j, int k)
     {
-        int var6 = var2.nextInt(3) + 4;
-        boolean var7 = true;
+        int l = random.nextInt(3) + 4;
+        boolean flag = true;
 
-        if (var4 >= 1 && var4 + var6 + 1 <= 128)
-        {
-            int var8;
-            int var10;
-            int var11;
-            int var12;
-
-            for (var8 = var4; var8 <= var4 + 1 + var6; ++var8)
-            {
-                byte var9 = 1;
-
-                if (var8 == var4)
-                {
-                    var9 = 0;
-                }
-
-                if (var8 >= var4 + 1 + var6 - 2)
-                {
-                    var9 = 2;
-                }
-
-                for (var10 = var3 - var9; var10 <= var3 + var9 && var7; ++var10)
-                {
-                    for (var11 = var5 - var9; var11 <= var5 + var9 && var7; ++var11)
-                    {
-                        if (var8 >= 0 && var8 < 128)
-                        {
-                            var12 = var1.getBlockId(var10, var8, var11);
-
-                            if (var12 != 0 && var12 != this.leafBlock)
-                            {
-                                var7 = false;
-                            }
-                        }
-                        else
-                        {
-                            var7 = false;
-                        }
-                    }
-                }
-            }
-
-            if (!var7)
-            {
-                return false;
-            }
-            else
-            {
-                var8 = var1.getBlockId(var3, var4 - 1, var5);
-
-                if ((var8 == AetherBlocks.AetherGrass.blockID || var8 == AetherBlocks.AetherDirt.blockID) && var4 < 128 - var6 - 1)
-                {
-                    var1.setBlock(var3, var4 - 1, var5, AetherBlocks.AetherDirt.blockID);
-                    int var16;
-
-                    for (var16 = var4 - 3 + var6; var16 <= var4 + var6; ++var16)
-                    {
-                        var10 = var16 - (var4 + var6);
-                        var11 = 1 - var10 / 2;
-
-                        for (var12 = var3 - var11; var12 <= var3 + var11; ++var12)
-                        {
-                            int var13 = var12 - var3;
-
-                            for (int var14 = var5 - var11; var14 <= var5 + var11; ++var14)
-                            {
-                                int var15 = var14 - var5;
-
-                                if ((Math.abs(var13) != var11 || Math.abs(var15) != var11 || var2.nextInt(2) != 0 && var10 != 0) && !Block.opaqueCubeLookup[var1.getBlockId(var12, var16, var14)])
-                                {
-                                    var1.setBlock(var12, var16, var14, this.leafBlock);
-                                }
-                            }
-                        }
-                    }
-
-                    for (var16 = 0; var16 < var6; ++var16)
-                    {
-                        var10 = var1.getBlockId(var3, var4 + var16, var5);
-
-                        if (var10 == 0 || var10 == this.leafBlock)
-                        {
-                            var1.setBlock(var3, var4 + var16, var5, this.logBlock, this.logMetadata, ChunkProviderAether.placementFlagType);
-                        }
-                    }
-
-                    return true;
-                }
-                else
-                {
-                    return false;
-                }
-            }
-        }
-        else
+        if ((j < 1) || (j + l + 1 > 128))
         {
             return false;
         }
+
+        for (int i1 = j; i1 <= j + 1 + l; i1++)
+        {
+            byte byte0 = 1;
+
+            if (i1 == j)
+            {
+                byte0 = 0;
+            }
+
+            if (i1 >= j + 1 + l - 2)
+            {
+                byte0 = 2;
+            }
+
+            for (int i2 = i - byte0; (i2 <= i + byte0) && (flag); i2++)
+            {
+                for (int l2 = k - byte0; (l2 <= k + byte0) && (flag); l2++)
+                {
+                    if ((i1 >= 0) && (i1 < 128))
+                    {
+                        int j3 = world.getBlockId(i2, i1, l2);
+
+                        if ((j3 != 0) && (j3 != this.leafBlock))
+                        {
+                            flag = false;
+                        }
+                    }
+                    else
+                    {
+                        flag = false;
+                    }
+                }
+            }
+        }
+
+        if (!flag)
+        {
+            return false;
+        }
+
+        int j1 = world.getBlockId(i, j - 1, k);
+
+        if (((j1 != AetherBlocks.AetherGrass.blockID) && (j1 != AetherBlocks.AetherDirt.blockID)) || (j >= 128 - l - 1))
+        {
+            return false;
+        }
+
+        world.setBlock(i, j - 1, k, AetherBlocks.AetherDirt.blockID);
+
+        for (int k1 = j - 3 + l; k1 <= j + l; k1++)
+        {
+            int j2 = k1 - (j + l);
+            int i3 = 1 - j2 / 2;
+
+            for (int k3 = i - i3; k3 <= i + i3; k3++)
+            {
+                int l3 = k3 - i;
+
+                for (int i4 = k - i3; i4 <= k + i3; i4++)
+                {
+                    int j4 = i4 - k;
+
+                    if (((Math.abs(l3) != i3) || (Math.abs(j4) != i3) || ((random.nextInt(2) != 0) && (j2 != 0))) && (Block.opaqueCubeLookup[world.getBlockId(k3, k1, i4)] == 0))
+                    {
+                        world.setBlock(k3, k1, i4, this.leafBlock);
+                    }
+                }
+            }
+        }
+
+        for (int l1 = 0; l1 < l; l1++)
+        {
+            int k2 = world.getBlockId(i, j + l1, k);
+
+            if ((k2 == 0) || (k2 == this.leafBlock))
+            {
+                world.setBlock(i, j + l1, k, this.logBlock, this.logMetadata, ChunkProviderAether.placementFlagType);
+            }
+        }
+
+        return true;
     }
 }
+

@@ -1,63 +1,53 @@
 package net.aetherteam.aether.client.renders;
 
-import net.aetherteam.aether.client.models.ModelPhyg2;
 import net.aetherteam.aether.entities.mounts.EntityPhyg;
-import net.minecraft.client.model.ModelBase;
-import net.minecraft.client.renderer.entity.RenderLiving;
+import net.minecraft.client.entity.render.RenderMinecartMobSpawner;
+import net.minecraft.client.model.ModelMinecart;
 import net.minecraft.entity.EntityLiving;
 
-public class RenderPhyg extends RenderLiving
+public class RenderPhyg extends RenderMinecartMobSpawner
 {
-    private ModelBase wingmodel;
+    private ModelMinecart wingmodel;
 
-    public RenderPhyg(ModelBase var1, ModelBase var2, float var3)
+    public RenderPhyg(ModelMinecart modelbase, ModelMinecart modelbase1, float f)
     {
-        super(var1, var3);
-        this.setRenderPassModel(var2);
-        this.wingmodel = var2;
+        super(modelbase, f);
+        a(modelbase1);
+        this.wingmodel = modelbase1;
     }
 
-    protected int setWoolColorAndRender(EntityPhyg var1, int var2, float var3)
+    protected int setWoolColorAndRender(EntityPhyg pig, int i, float f)
     {
-        if (var2 == 0)
+        if (i == 0)
         {
-            this.loadTexture("/net/aetherteam/aether/client/sprites/mobs/phyg/wings.png");
-            ModelPhyg2.pig = var1;
+            loadTexture("/net/aetherteam/aether/client/sprites/mobs/phyg/wings.png");
+            net.aetherteam.aether.client.models.ModelPhyg2.pig = pig;
             return 1;
         }
-        else
-        {
-            return -1;
-        }
+
+        return -1;
     }
 
-    /**
-     * Queries whether should render the specified pass or not.
-     */
-    protected int shouldRenderPass(EntityLiving var1, int var2, float var3)
+    protected int a(EntityLiving entityliving, int i, float f)
     {
-        return this.setWoolColorAndRender((EntityPhyg)var1, var2, var3);
+        return setWoolColorAndRender((EntityPhyg)entityliving, i, f);
     }
 
-    private float interpolateRotation(float var1, float var2, float var3)
+    private float interpolateRotation(float par1, float par2, float par3)
     {
-        float var4;
-
-        for (var4 = var2 - var1; var4 < -180.0F; var4 += 360.0F)
-        {
-            ;
-        }
+        for (float var4 = par2 - par1; var4 < -180.0F; var4 += 360.0F);
 
         while (var4 >= 180.0F)
         {
             var4 -= 360.0F;
         }
 
-        return var1 + var3 * var4;
+        return par1 + par3 * var4;
     }
 
-    public void doRender(EntityLiving var1, double var2, double var4, double var6, float var8, float var9)
+    public void doRender(EntityLiving entity, double d, double d1, double d2, float f, float f1)
     {
-        this.doRenderLiving(var1, var2, var4, var6, var8, var9);
+        a(entity, d, d1, d2, f, f1);
     }
 }
+

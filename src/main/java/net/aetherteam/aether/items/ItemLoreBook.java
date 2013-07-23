@@ -12,52 +12,57 @@ import net.minecraft.world.World;
 
 public class ItemLoreBook extends ItemAether
 {
-    public static final String[] names = new String[] {"Golden Gummie Swet", "Blue Gummie Swet"};
+    public static final String[] names = { "Golden Gummie Swet", "Blue Gummie Swet" };
+
     @SideOnly(Side.CLIENT)
     private Icon[] icons;
 
-    public ItemLoreBook(int var1)
+    public ItemLoreBook(int i)
     {
-        super(var1);
+        super(i);
         this.maxStackSize = 1;
-        this.setHasSubtypes(true);
-        this.setMaxDamage(0);
+        setHasSubtypes(true);
+        setMaxDamage(0);
     }
 
-    public void addCreativeItems(ArrayList var1)
+    public void addCreativeItems(ArrayList itemList)
     {
-        var1.add(new ItemStack(this, 1, 0));
-        var1.add(new ItemStack(this, 1, 1));
-        var1.add(new ItemStack(this, 1, 2));
+        itemList.add(new ItemStack(this, 1, 0));
+        itemList.add(new ItemStack(this, 1, 1));
+        itemList.add(new ItemStack(this, 1, 2));
     }
 
-    public int getColorFromDamage(int var1, int var2)
+    public int getColorFromDamage(int i, int j)
     {
-        return var1 == 0 ? 8388479 : (var1 == 1 ? 16744319 : 8355839);
-    }
-
-    /**
-     * Returns the unlocalized name of this item. This version accepts an ItemStack so different stacks can have
-     * different names based on their damage or NBT.
-     */
-    public String getUnlocalizedName(ItemStack var1)
-    {
-        int var2 = var1.getItemDamage();
-
-        if (var2 > 2)
+        if (i == 0)
         {
-            var2 = 2;
+            return 8388479;
         }
 
-        return super.getUnlocalizedName() + "." + var2;
+        if (i == 1)
+        {
+            return 16744319;
+        }
+
+        return 8355839;
     }
 
-    /**
-     * Called whenever this item is equipped and the right mouse button is pressed. Args: itemStack, world, entityPlayer
-     */
-    public ItemStack onItemRightClick(ItemStack var1, World var2, EntityPlayer var3)
+    public String getUnlocalizedName(ItemStack itemstack)
     {
-        ModLoader.openGUI(var3, new GuiLore(var3.inventory, var3, var1.getItemDamage()));
-        return var1;
+        int i = itemstack.getItemDamage();
+
+        if (i > 2)
+        {
+            i = 2;
+        }
+
+        return super.getUnlocalizedName() + "." + i;
+    }
+
+    public ItemStack onItemRightClick(ItemStack itemstack, World world, EntityPlayer entityplayer)
+    {
+        ModLoader.openGUI(entityplayer, new GuiLore(entityplayer.inventory, entityplayer, itemstack.getItemDamage()));
+        return itemstack;
     }
 }
+

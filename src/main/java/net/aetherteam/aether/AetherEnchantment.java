@@ -9,16 +9,17 @@ public class AetherEnchantment
     public int enchantAmbrosiumNeeded;
     public boolean limitStackToOne;
 
-    public AetherEnchantment(ItemStack var1, ItemStack var2, int var3)
+    public AetherEnchantment(ItemStack from, ItemStack to, int i)
     {
-        this(var1, var2, var3, false);
+        this(from, to, i, false);
     }
 
-    public AetherEnchantment(ItemStack var1, ItemStack var2, int var3, boolean var4)
+    public AetherEnchantment(ItemStack from, ItemStack to, int i, boolean limit)
     {
-        this.enchantFrom = var1;
-        this.enchantTo = var2;
-        this.enchantAmbrosiumNeeded = var3;
-        this.limitStackToOne = var4;
+        this.enchantFrom = from;
+        this.enchantTo = to;
+        this.enchantAmbrosiumNeeded = i;
+        this.limitStackToOne = limit;
     }
 }
+

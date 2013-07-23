@@ -1,13 +1,16 @@
 package net.aetherteam.aether.client.models;
 
-import net.minecraft.client.model.ModelPig;
+import net.minecraft.client.model.ModelOcelot;
 
-public class ModelPhyg1 extends ModelPig
+public class ModelPhyg1 extends ModelOcelot
 {
-    public ModelPhyg1() {}
-
-    public ModelPhyg1(float var1)
+    public ModelPhyg1()
     {
-        super(var1);
+    }
+
+    public ModelPhyg1(float f)
+    {
+        super(f);
     }
 }
+

@@ -1,10 +1,12 @@
 package net.aetherteam.aether.oldcode;
 
+import java.util.Random;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityFlying;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.DamageSource;
 import net.minecraft.world.World;
 
@@ -18,20 +20,20 @@ public class EntityHomeShot extends EntityFlying
     private static final double topSpeed = 0.125D;
     private static final float sponge = (180F / (float)Math.PI);
 
-    public EntityHomeShot(World var1)
+    public EntityHomeShot(World world)
     {
-        super(var1);
+        super(world);
         this.texture = "/aether/mobs/electroball.png";
         this.lifeSpan = 200;
         this.life = this.lifeSpan;
-        this.setSize(0.7F, 0.7F);
+        setSize(0.7F, 0.7F);
         this.firstRun = true;
         this.sinage = new float[3];
         this.isImmuneToFire = true;
 
-        for (int var2 = 0; var2 < 3; ++var2)
+        for (int i = 0; i < 3; i++)
         {
-            this.sinage[var2] = this.rand.nextFloat() * 6.0F;
+            this.sinage[i] = (this.rand.nextFloat() * 6.0F);
         }
     }
 
@@ -40,170 +42,160 @@ public class EntityHomeShot extends EntityFlying
         return 20;
     }
 
-    public EntityHomeShot(World var1, double var2, double var4, double var6, EntityLiving var8)
+    public EntityHomeShot(World world, double x, double y, double z, EntityLiving ep)
     {
-        super(var1);
+        super(world);
         this.texture = "/aether/mobs/electroball.png";
         this.lifeSpan = 200;
         this.life = this.lifeSpan;
-        this.setSize(0.7F, 0.7F);
-        this.setPosition(var2, var4, var6);
-        this.target = var8;
+        setSize(0.7F, 0.7F);
+        setPosition(x, y, z);
+        this.target = ep;
         this.sinage = new float[3];
         this.isImmuneToFire = true;
 
-        for (int var9 = 0; var9 < 3; ++var9)
+        for (int i = 0; i < 3; i++)
         {
-            this.sinage[var9] = this.rand.nextFloat() * 6.0F;
+            this.sinage[i] = (this.rand.nextFloat() * 6.0F);
         }
     }
 
-    /**
-     * Called to update the entity's position/logic.
-     */
     public void onUpdate()
     {
         super.onUpdate();
-        --this.life;
+        this.life -= 1;
 
-        if (this.firstRun && this.target == null)
+        if ((this.firstRun) && (this.target == null))
         {
-            this.target = (EntityLiving)this.findPlayerToAttack();
+            this.target = ((EntityLiving)findPlayerToAttack());
             this.firstRun = false;
         }
 
-        if (this.target != null && !this.target.isDead && this.target.getHealth() > 0)
-        {
-            if (this.life <= 0)
-            {
-                this.isDead = true;
-            }
-            else
-            {
-                this.updateAnims();
-                this.faceIt();
-                this.moveIt(this.target, 0.02D);
-            }
-        }
-        else
+        if ((this.target == null) || (this.target.isDead) || (this.target.getHealth() <= 0))
         {
             this.isDead = true;
         }
-    }
-
-    public void moveIt(Entity var1, double var2)
-    {
-        double var4 = (double)(this.rotationYaw / (180F / (float)Math.PI));
-        this.motionX -= Math.sin(var4) * var2;
-        this.motionZ += Math.cos(var4) * var2;
-        double var6 = var1.posY - 0.75D;
-
-        if (var6 < this.boundingBox.minY - 0.5D)
+        else if (this.life <= 0)
         {
-            this.motionY -= var2 / 2.0D;
-        }
-        else if (var6 > this.boundingBox.minY + 0.5D)
-        {
-            this.motionY += var2 / 2.0D;
+            this.isDead = true;
         }
         else
         {
-            this.motionY += (var6 - this.boundingBox.minY) * (var2 / 2.0D);
+            updateAnims();
+            faceIt();
+            moveIt(this.target, 0.02D);
+        }
+    }
+
+    public void moveIt(Entity e1, double sped)
+    {
+        double angle1 = this.rotationYaw / (180F / (float)Math.PI);
+        this.motionX -= Math.sin(angle1) * sped;
+        this.motionZ += Math.cos(angle1) * sped;
+        double a = e1.posY - 0.75D;
+
+        if (a < this.boundingBox.minY - 0.5D)
+        {
+            this.motionY -= sped / 2.0D;
+        }
+        else if (a > this.boundingBox.minY + 0.5D)
+        {
+            this.motionY += sped / 2.0D;
+        }
+        else
+        {
+            this.motionY += (a - this.boundingBox.minY) * (sped / 2.0D);
         }
 
         if (this.onGround)
         {
             this.onGround = false;
-            this.motionY = 0.10000000149011612D;
+            this.motionY = 0.1000000014901161D;
         }
     }
 
     public void faceIt()
     {
-        this.faceEntity(this.target, 10.0F, 10.0F);
+        faceEntity(this.target, 10.0F, 10.0F);
     }
 
     public void updateAnims()
     {
-        for (int var1 = 0; var1 < 3; ++var1)
+        for (int i = 0; i < 3; i++)
         {
-            this.sinage[var1] += 0.3F + (float)var1 * 0.13F;
+            this.sinage[i] += 0.3F + i * 0.13F;
 
-            if (this.sinage[var1] > ((float)Math.PI * 2F))
+            if (this.sinage[i] > ((float)Math.PI * 2F))
             {
-                this.sinage[var1] -= ((float)Math.PI * 2F);
+                this.sinage[i] -= ((float)Math.PI * 2F);
             }
         }
     }
 
-    /**
-     * (abstract) Protected helper method to write subclass entity data to NBT.
-     */
-    public void writeEntityToNBT(NBTTagCompound var1)
+    public void writeEntityToNBT(NBTTagCompound nbttagcompound)
     {
-        super.writeEntityToNBT(var1);
-        var1.setShort("LifeLeft", (short)this.life);
+        super.writeEntityToNBT(nbttagcompound);
+        nbttagcompound.setShort("LifeLeft", (short)this.life);
     }
 
-    /**
-     * (abstract) Protected helper method to read subclass entity data from NBT.
-     */
-    public void readEntityFromNBT(NBTTagCompound var1)
+    public void readEntityFromNBT(NBTTagCompound nbttagcompound)
     {
-        super.readEntityFromNBT(var1);
-        this.life = var1.getShort("LifeLeft");
+        super.readEntityFromNBT(nbttagcompound);
+        this.life = nbttagcompound.getShort("LifeLeft");
     }
 
     public void checkOverLimit()
     {
-        double var1 = this.target.posX - this.posX;
-        double var3 = this.target.posY - this.posY;
-        double var5 = this.target.posZ - this.posZ;
-        double var7 = Math.sqrt(var1 * var1 + var3 * var3 + var5 * var5);
+        double a = this.target.posX - this.posX;
+        double b = this.target.posY - this.posY;
+        double c = this.target.posZ - this.posZ;
+        double d = Math.sqrt(a * a + b * b + c * c);
 
-        if (var7 > 0.125D)
+        if (d > 0.125D)
         {
-            double var9 = 0.125D / var7;
-            this.motionX *= var9;
-            this.motionY *= var9;
-            this.motionZ *= var9;
+            double e = 0.125D / d;
+            this.motionX *= e;
+            this.motionY *= e;
+            this.motionZ *= e;
         }
     }
 
     public Entity findPlayerToAttack()
     {
-        EntityPlayer var1 = this.worldObj.getClosestPlayerToEntity(this, 16.0D);
-        return var1 != null && this.canEntityBeSeen(var1) ? var1 : null;
+        EntityPlayer entityplayer = this.worldObj.getClosestPlayerToEntity(this, 16.0D);
+
+        if ((entityplayer != null) && (canEntityBeSeen(entityplayer)))
+        {
+            return entityplayer;
+        }
+
+        return null;
     }
 
-    /**
-     * Applies a velocity to each of the entities pushing them away from each other. Args: entity
-     */
-    public void applyEntityCollision(Entity var1)
+    public void applyEntityCollision(Entity entity)
     {
-        super.applyEntityCollision(var1);
+        super.applyEntityCollision(entity);
 
-        if (var1 != null && this.target != null && var1 == this.target)
+        if ((entity != null) && (this.target != null) && (entity == this.target))
         {
-            boolean var2 = var1.attackEntityFrom(DamageSource.causeMobDamage(this), 1);
+            boolean flag = entity.attackEntityFrom(DamageSource.causeMobDamage(this), 1);
 
-            if (var2)
+            if (flag)
             {
-                this.moveIt(var1, -0.1D);
+                moveIt(entity, -0.1D);
             }
         }
     }
 
-    public boolean attackEntityFrom(Entity var1, int var2)
+    public boolean attackEntityFrom(Entity entity, int i)
     {
-        if (var1 != null)
+        if (entity != null)
         {
-            this.moveIt(var1, -0.15D - (double)var2 / 8.0D);
+            moveIt(entity, -0.15D - i / 8.0D);
             return true;
         }
-        else
-        {
-            return false;
-        }
+
+        return false;
     }
 }
+

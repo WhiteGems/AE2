@@ -1,180 +1,174 @@
 package net.aetherteam.aether.client.models;
 
-import net.minecraft.client.model.ModelBase;
-import net.minecraft.client.model.ModelRenderer;
+import net.minecraft.client.model.ModelMinecart;
 import net.minecraft.entity.Entity;
+import net.minecraft.src.bdi;
 import org.lwjgl.opengl.GL11;
 
-public class ModelAechorPlant extends ModelBase
+public class ModelAechorPlant extends ModelMinecart
 {
-    private ModelRenderer[] petal;
-    private ModelRenderer[] leaf;
-    private ModelRenderer[] stamen;
-    private ModelRenderer[] stamen2;
-    private ModelRenderer[] thorn;
-    private ModelRenderer stem;
-    private ModelRenderer head;
+    private bdi[] petal;
+    private bdi[] leaf;
+    private bdi[] stamen;
+    private bdi[] stamen2;
+    private bdi[] thorn;
+    private bdi stem;
+    private bdi head;
     private static int petals = 10;
     private static int thorns = 4;
     private static int stamens = 3;
     public float sinage;
     public float sinage2;
     public float size;
-    private float pie;
+    private float pie = ((float)Math.PI * 2F);
 
     public ModelAechorPlant()
     {
         this(0.0F);
     }
 
-    public ModelAechorPlant(float var1)
+    public ModelAechorPlant(float f)
     {
-        this(var1, 0.0F);
+        this(f, 0.0F);
     }
 
-    public ModelAechorPlant(float var1, float var2)
+    public ModelAechorPlant(float f, float f1)
     {
-        this.pie = ((float)Math.PI * 2F);
         this.size = 1.0F;
-        this.petal = new ModelRenderer[petals];
-        this.leaf = new ModelRenderer[petals];
-        int var3;
+        this.petal = new bdi[petals];
+        this.leaf = new bdi[petals];
 
-        for (var3 = 0; var3 < petals; ++var3)
+        for (int i = 0; i < petals; i++)
         {
-            this.petal[var3] = new ModelRenderer(this, 0, 0);
+            this.petal[i] = new bdi(this, 0, 0);
 
-            if (var3 % 2 == 0)
+            if (i % 2 == 0)
             {
-                this.petal[var3] = new ModelRenderer(this, 29, 3);
-                this.petal[var3].addBox(-4.0F, -1.0F, -12.0F, 8, 1, 9, var1 - 0.25F);
-                this.petal[var3].setRotationPoint(0.0F, 1.0F + var2, 0.0F);
+                this.petal[i] = new bdi(this, 29, 3);
+                this.petal[i].a(-4.0F, -1.0F, -12.0F, 8, 1, 9, f - 0.25F);
+                this.petal[i].a(0.0F, 1.0F + f1, 0.0F);
             }
             else
             {
-                this.petal[var3].addBox(-4.0F, -1.0F, -13.0F, 8, 1, 10, var1 - 0.125F);
-                this.petal[var3].setRotationPoint(0.0F, 1.0F + var2, 0.0F);
+                this.petal[i].a(-4.0F, -1.0F, -13.0F, 8, 1, 10, f - 0.125F);
+                this.petal[i].a(0.0F, 1.0F + f1, 0.0F);
             }
 
-            this.leaf[var3] = new ModelRenderer(this, 38, 13);
-            this.leaf[var3].addBox(-2.0F, -1.0F, -9.5F, 4, 1, 8, var1 - 0.15F);
-            this.leaf[var3].setRotationPoint(0.0F, 1.0F + var2, 0.0F);
+            this.leaf[i] = new bdi(this, 38, 13);
+            this.leaf[i].a(-2.0F, -1.0F, -9.5F, 4, 1, 8, f - 0.15F);
+            this.leaf[i].a(0.0F, 1.0F + f1, 0.0F);
         }
 
-        this.stamen = new ModelRenderer[stamens];
-        this.stamen2 = new ModelRenderer[stamens];
+        this.stamen = new bdi[stamens];
+        this.stamen2 = new bdi[stamens];
 
-        for (var3 = 0; var3 < stamens; ++var3)
+        for (int i = 0; i < stamens; i++)
         {
-            this.stamen[var3] = new ModelRenderer(this, 36, 13);
-            this.stamen[var3].addBox(0.0F, -9.0F, -1.5F, 1, 6, 1, var1 - 0.25F);
-            this.stamen[var3].setRotationPoint(0.0F, 1.0F + var2, 0.0F);
+            this.stamen[i] = new bdi(this, 36, 13);
+            this.stamen[i].a(0.0F, -9.0F, -1.5F, 1, 6, 1, f - 0.25F);
+            this.stamen[i].a(0.0F, 1.0F + f1, 0.0F);
         }
 
-        for (var3 = 0; var3 < stamens; ++var3)
+        for (int i = 0; i < stamens; i++)
         {
-            this.stamen2[var3] = new ModelRenderer(this, 32, 15);
-            this.stamen2[var3].addBox(0.0F, -10.0F, -1.5F, 1, 1, 1, var1 + 0.125F);
-            this.stamen2[var3].setRotationPoint(0.0F, 1.0F + var2, 0.0F);
+            this.stamen2[i] = new bdi(this, 32, 15);
+            this.stamen2[i].a(0.0F, -10.0F, -1.5F, 1, 1, 1, f + 0.125F);
+            this.stamen2[i].a(0.0F, 1.0F + f1, 0.0F);
         }
 
-        this.head = new ModelRenderer(this, 0, 12);
-        this.head.addBox(-3.0F, -3.0F, -3.0F, 6, 2, 6, var1 + 0.75F);
-        this.head.setRotationPoint(0.0F, 1.0F + var2, 0.0F);
-        this.stem = new ModelRenderer(this, 24, 13);
-        this.stem.addBox(-1.0F, 0.0F, -1.0F, 2, 6, 2, var1);
-        this.stem.setRotationPoint(0.0F, 1.0F + var2, 0.0F);
-        this.thorn = new ModelRenderer[thorns];
+        this.head = new bdi(this, 0, 12);
+        this.head.a(-3.0F, -3.0F, -3.0F, 6, 2, 6, f + 0.75F);
+        this.head.a(0.0F, 1.0F + f1, 0.0F);
+        this.stem = new bdi(this, 24, 13);
+        this.stem.a(-1.0F, 0.0F, -1.0F, 2, 6, 2, f);
+        this.stem.a(0.0F, 1.0F + f1, 0.0F);
+        this.thorn = new bdi[thorns];
 
-        for (var3 = 0; var3 < thorns; ++var3)
+        for (int i = 0; i < thorns; i++)
         {
-            this.thorn[var3] = new ModelRenderer(this, 32, 13);
-            this.thorn[var3].setRotationPoint(0.0F, 1.0F + var2, 0.0F);
+            this.thorn[i] = new bdi(this, 32, 13);
+            this.thorn[i].a(0.0F, 1.0F + f1, 0.0F);
         }
 
-        this.thorn[0].addBox(-1.75F, 1.25F, -1.0F, 1, 1, 1, var1 - 0.25F);
-        this.thorn[1].addBox(-1.0F, 2.25F, 0.75F, 1, 1, 1, var1 - 0.25F);
-        this.thorn[2].addBox(0.75F, 1.25F, 0.0F, 1, 1, 1, var1 - 0.25F);
-        this.thorn[3].addBox(0.0F, 2.25F, -1.75F, 1, 1, 1, var1 - 0.25F);
+        this.thorn[0].a(-1.75F, 1.25F, -1.0F, 1, 1, 1, f - 0.25F);
+        this.thorn[1].a(-1.0F, 2.25F, 0.75F, 1, 1, 1, f - 0.25F);
+        this.thorn[2].a(0.75F, 1.25F, 0.0F, 1, 1, 1, f - 0.25F);
+        this.thorn[3].a(0.0F, 2.25F, -1.75F, 1, 1, 1, f - 0.25F);
     }
 
-    /**
-     * Sets the models various rotation angles then renders the model.
-     */
-    public void render(Entity var1, float var2, float var3, float var4, float var5, float var6, float var7)
+    public void render(Entity e, float f, float f1, float f2, float f3, float f4, float f5)
     {
-        this.setRotationAngles(var2, var3, var4, var5, var6, var7);
+        setRotationAngles(f, f1, f2, f3, f4, f5);
         GL11.glPushMatrix();
         GL11.glTranslatef(0.0F, 1.2F, 0.0F);
         GL11.glScalef(this.size, this.size, this.size);
-        int var8;
 
-        for (var8 = 0; var8 < petals; ++var8)
+        for (int i = 0; i < petals; i++)
         {
-            this.petal[var8].render(var7);
-            this.leaf[var8].render(var7);
+            this.petal[i].a(f5);
+            this.leaf[i].a(f5);
         }
 
-        for (var8 = 0; var8 < stamens; ++var8)
+        for (int i = 0; i < stamens; i++)
         {
-            this.stamen[var8].render(var7);
-            this.stamen2[var8].render(var7);
+            this.stamen[i].a(f5);
+            this.stamen2[i].a(f5);
         }
 
-        this.head.render(var7);
-        this.stem.render(var7);
+        this.head.a(f5);
+        this.stem.a(f5);
 
-        for (var8 = 0; var8 < thorns; ++var8)
+        for (int i = 0; i < thorns; i++)
         {
-            this.thorn[var8].render(var7);
+            this.thorn[i].a(f5);
         }
 
         GL11.glPopMatrix();
     }
 
-    public void setRotationAngles(float var1, float var2, float var3, float var4, float var5, float var6)
+    public void setRotationAngles(float f, float f1, float f2, float f3, float f4, float f5)
     {
-        this.head.rotateAngleX = 0.0F;
-        this.head.rotateAngleY = var5 / (180F / (float)Math.PI);
-        float var7 = this.sinage2;
-        this.stem.rotateAngleY = this.head.rotateAngleY;
-        this.stem.rotationPointY = var7 * 0.5F;
-        int var8;
+        this.head.f = 0.0F;
+        this.head.g = (f4 / (180F / (float)Math.PI));
+        float boff = this.sinage2;
+        this.stem.g = this.head.g;
+        this.stem.d = (boff * 0.5F);
 
-        for (var8 = 0; var8 < thorns; ++var8)
+        for (int i = 0; i < thorns; i++)
         {
-            this.thorn[var8].rotateAngleY = this.head.rotateAngleY;
-            this.thorn[var8].rotationPointY = var7 * 0.5F;
+            this.thorn[i].g = this.head.g;
+            this.thorn[i].d = (boff * 0.5F);
         }
 
-        for (var8 = 0; var8 < petals; ++var8)
+        for (int i = 0; i < petals; i++)
         {
-            this.petal[var8].rotateAngleX = var8 % 2 == 0 ? -0.25F : -0.4125F;
-            this.petal[var8].rotateAngleX += this.sinage;
-            this.petal[var8].rotateAngleY = this.head.rotateAngleY;
-            this.petal[var8].rotateAngleY += this.pie / (float)petals * (float)var8;
-            this.leaf[var8].rotateAngleX = var8 % 2 == 0 ? 0.1F : 0.2F;
-            this.leaf[var8].rotateAngleX += this.sinage * 0.75F;
-            this.leaf[var8].rotateAngleY = this.head.rotateAngleY + this.pie / (float)petals / 2.0F;
-            this.leaf[var8].rotateAngleY += this.pie / (float)petals * (float)var8;
-            this.petal[var8].rotationPointY = var7;
-            this.leaf[var8].rotationPointY = var7;
+            this.petal[i].f = (i % 2 == 0 ? -0.25F : -0.4125F);
+            this.petal[i].f += this.sinage;
+            this.petal[i].g = this.head.g;
+            this.petal[i].g += this.pie / petals * i;
+            this.leaf[i].f = (i % 2 == 0 ? 0.1F : 0.2F);
+            this.leaf[i].f += this.sinage * 0.75F;
+            this.leaf[i].g = (this.head.g + this.pie / petals / 2.0F);
+            this.leaf[i].g += this.pie / petals * i;
+            this.petal[i].d = boff;
+            this.leaf[i].d = boff;
         }
 
-        for (var8 = 0; var8 < stamens; ++var8)
+        for (int i = 0; i < stamens; i++)
         {
-            this.stamen[var8].rotateAngleX = 0.2F + (float)var8 / 15.0F;
-            this.stamen[var8].rotateAngleY = this.head.rotateAngleY + 0.1F;
-            this.stamen[var8].rotateAngleY += this.pie / (float)stamens * (float)var8;
-            this.stamen[var8].rotateAngleX += this.sinage * 0.4F;
-            this.stamen2[var8].rotateAngleX = 0.2F + (float)var8 / 15.0F;
-            this.stamen2[var8].rotateAngleY = this.head.rotateAngleY + 0.1F;
-            this.stamen2[var8].rotateAngleY += this.pie / (float)stamens * (float)var8;
-            this.stamen2[var8].rotateAngleX += this.sinage * 0.4F;
-            this.stamen[var8].rotationPointY = var7 + this.sinage * 2.0F;
-            this.stamen2[var8].rotationPointY = var7 + this.sinage * 2.0F;
+            this.stamen[i].f = (0.2F + i / 15.0F);
+            this.stamen[i].g = (this.head.g + 0.1F);
+            this.stamen[i].g += this.pie / stamens * i;
+            this.stamen[i].f += this.sinage * 0.4F;
+            this.stamen2[i].f = (0.2F + i / 15.0F);
+            this.stamen2[i].g = (this.head.g + 0.1F);
+            this.stamen2[i].g += this.pie / stamens * i;
+            this.stamen2[i].f += this.sinage * 0.4F;
+            this.stamen[i].d = (boff + this.sinage * 2.0F);
+            this.stamen2[i].d = (boff + this.sinage * 2.0F);
         }
 
-        this.head.rotationPointY = var7 + this.sinage * 2.0F;
+        this.head.d = (boff + this.sinage * 2.0F);
     }
 }
+

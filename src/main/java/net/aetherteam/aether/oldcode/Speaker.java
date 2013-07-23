@@ -1,44 +1,43 @@
 package net.aetherteam.aether.oldcode;
 
+import java.io.PrintStream;
 import java.util.ArrayList;
 
-public class Speaker implements Runnable
+public class Speaker
+    implements Runnable
 {
-    public ArrayList voiceQueue = new ArrayList();
+    public ArrayList voiceQueue;
     public SpeakerLine voiceLine;
-    public Thread voiceThread = new Thread(this);
+    public Thread voiceThread;
 
     public Speaker()
     {
+        this.voiceQueue = new ArrayList();
+        this.voiceThread = new Thread(this);
         this.voiceThread.start();
     }
 
-    public void say(SpeakerLine var1)
+    public void say(SpeakerLine sl)
     {
-        this.voiceQueue.add(var1);
+        this.voiceQueue.add(sl);
     }
 
     public void run()
     {
         while (true)
-        {
             try
             {
-                while (true)
-                {
-                    this.update();
-                }
+                update();
             }
-            catch (InterruptedException var2)
+            catch (InterruptedException e)
             {
-                var2.printStackTrace();
+                e.printStackTrace();
             }
-        }
     }
 
     public void update() throws InterruptedException
     {
-        this.voiceLine = (SpeakerLine)this.voiceQueue.get(0);
+        this.voiceLine = ((SpeakerLine)this.voiceQueue.get(0));
         this.voiceThread.wait(this.voiceLine.duration);
         this.voiceQueue.remove(this.voiceLine);
     }
@@ -48,3 +47,4 @@ public class Speaker implements Runnable
         System.out.println(this.voiceLine.getLine());
     }
 }
+

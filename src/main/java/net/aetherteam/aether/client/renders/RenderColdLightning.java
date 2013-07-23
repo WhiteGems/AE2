@@ -4,125 +4,124 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import java.util.Random;
 import net.aetherteam.aether.entities.EntityColdLightningBolt;
-import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.entity.Render;
+import net.minecraft.client.renderer.entity.RenderManager;
+import net.minecraft.client.renderer.texture.Rect2i;
 import net.minecraft.entity.Entity;
 import org.lwjgl.opengl.GL11;
 
 @SideOnly(Side.CLIENT)
-public class RenderColdLightning extends Render
+public class RenderColdLightning extends RenderManager
 {
-    public void doRenderLightningBolt(EntityColdLightningBolt var1, double var2, double var4, double var6, float var8, float var9)
+    public void doRenderLightningBolt(EntityColdLightningBolt par1EntityLightningBolt, double par2, double par4, double par6, float par8, float par9)
     {
-        Tessellator var10 = Tessellator.instance;
+        Rect2i tessellator = Rect2i.rectX;
         GL11.glDisable(GL11.GL_TEXTURE_2D);
         GL11.glDisable(GL11.GL_LIGHTING);
         GL11.glEnable(GL11.GL_BLEND);
         GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE);
         GL11.glDepthMask(true);
-        double[] var11 = new double[8];
-        double[] var12 = new double[8];
-        double var13 = 0.0D;
-        double var15 = 0.0D;
-        Random var17 = new Random(var1.boltVertex);
-        int var18;
+        double[] adouble = new double[8];
+        double[] adouble1 = new double[8];
+        double d3 = 0.0D;
+        double d4 = 0.0D;
+        Random random = new Random(par1EntityLightningBolt.boltVertex);
 
-        for (var18 = 7; var18 >= 0; --var18)
+        for (int i = 7; i >= 0; i--)
         {
-            var11[var18] = var13;
-            var12[var18] = var15;
-            var13 += (double)(var17.nextInt(11) - 5);
-            var15 += (double)(var17.nextInt(11) - 5);
+            adouble[i] = d3;
+            adouble1[i] = d4;
+            d3 += random.nextInt(11) - 5;
+            d4 += random.nextInt(11) - 5;
         }
 
-        for (var18 = 0; var18 < 4; ++var18)
+        for (int j = 0; j < 4; j++)
         {
-            Random var19 = new Random(var1.boltVertex);
+            Random random1 = new Random(par1EntityLightningBolt.boltVertex);
 
-            for (int var20 = 0; var20 < 3; ++var20)
+            for (int k = 0; k < 3; k++)
             {
-                int var21 = 7;
-                int var22 = 0;
+                int l = 7;
+                int i1 = 0;
 
-                if (var20 > 0)
+                if (k > 0)
                 {
-                    var21 = 7 - var20;
+                    l = 7 - k;
                 }
 
-                if (var20 > 0)
+                if (k > 0)
                 {
-                    var22 = var21 - 2;
+                    i1 = l - 2;
                 }
 
-                double var23 = var11[var21] - var13;
-                double var25 = var12[var21] - var15;
+                double d5 = adouble[l] - d3;
+                double d6 = adouble1[l] - d4;
 
-                for (int var27 = var21; var27 >= var22; --var27)
+                for (int j1 = l; j1 >= i1; j1--)
                 {
-                    double var28 = var23;
-                    double var30 = var25;
+                    double d7 = d5;
+                    double d8 = d6;
 
-                    if (var20 == 0)
+                    if (k == 0)
                     {
-                        var23 += (double)(var19.nextInt(11) - 5);
-                        var25 += (double)(var19.nextInt(11) - 5);
+                        d5 += random1.nextInt(11) - 5;
+                        d6 += random1.nextInt(11) - 5;
                     }
                     else
                     {
-                        var23 += (double)(var19.nextInt(31) - 15);
-                        var25 += (double)(var19.nextInt(31) - 15);
+                        d5 += random1.nextInt(31) - 15;
+                        d6 += random1.nextInt(31) - 15;
                     }
 
-                    var10.startDrawing(5);
-                    float var32 = 0.5F;
-                    var10.setColorRGBA_F(0.9F * var32, 0.9F * var32, 1.0F * var32, 7.3F);
-                    double var33 = 0.1D + (double)var18 * 0.2D;
+                    tessellator.b(5);
+                    float f2 = 0.5F;
+                    tessellator.a(0.9F * f2, 0.9F * f2, 1.0F * f2, 7.3F);
+                    double d9 = 0.1D + j * 0.2D;
 
-                    if (var20 == 0)
+                    if (k == 0)
                     {
-                        var33 *= (double)var27 * 0.1D + 1.0D;
+                        d9 *= (j1 * 0.1D + 1.0D);
                     }
 
-                    double var35 = 0.1D + (double)var18 * 0.2D;
+                    double d10 = 0.1D + j * 0.2D;
 
-                    if (var20 == 0)
+                    if (k == 0)
                     {
-                        var35 *= (double)(var27 - 1) * 0.1D + 1.0D;
+                        d10 *= ((j1 - 1) * 0.1D + 1.0D);
                     }
 
-                    for (int var37 = 0; var37 < 5; ++var37)
+                    for (int k1 = 0; k1 < 5; k1++)
                     {
-                        double var38 = var2 + 0.5D - var33;
-                        double var40 = var6 + 0.5D - var33;
+                        double d11 = par2 + 0.5D - d9;
+                        double d12 = par6 + 0.5D - d9;
 
-                        if (var37 == 1 || var37 == 2)
+                        if ((k1 == 1) || (k1 == 2))
                         {
-                            var38 += var33 * 2.0D;
+                            d11 += d9 * 2.0D;
                         }
 
-                        if (var37 == 2 || var37 == 3)
+                        if ((k1 == 2) || (k1 == 3))
                         {
-                            var40 += var33 * 2.0D;
+                            d12 += d9 * 2.0D;
                         }
 
-                        double var42 = var2 + 0.5D - var35;
-                        double var44 = var6 + 0.5D - var35;
+                        double d13 = par2 + 0.5D - d10;
+                        double d14 = par6 + 0.5D - d10;
 
-                        if (var37 == 1 || var37 == 2)
+                        if ((k1 == 1) || (k1 == 2))
                         {
-                            var42 += var35 * 2.0D;
+                            d13 += d10 * 2.0D;
                         }
 
-                        if (var37 == 2 || var37 == 3)
+                        if ((k1 == 2) || (k1 == 3))
                         {
-                            var44 += var35 * 2.0D;
+                            d14 += d10 * 2.0D;
                         }
 
-                        var10.addVertex(var42 + var23, var4 + (double)(var27 * 16), var44 + var25);
-                        var10.addVertex(var38 + var28, var4 + (double)((var27 + 1) * 16), var40 + var30);
+                        tessellator.a(d13 + d5, par4 + j1 * 16, d14 + d6);
+                        tessellator.a(d11 + d7, par4 + (j1 + 1) * 16, d12 + d8);
                     }
 
-                    var10.draw();
+                    tessellator.getRectX();
                 }
             }
         }
@@ -133,14 +132,9 @@ public class RenderColdLightning extends Render
         GL11.glEnable(GL11.GL_TEXTURE_2D);
     }
 
-    /**
-     * Actually renders the given argument. This is a synthetic bridge method, always casting down its argument and then
-     * handing it off to a worker function which does the actual work. In all probabilty, the class Render is generic
-     * (Render<T extends Entity) and this method has signature public void doRender(T entity, double d, double d1,
-     * double d2, float f, float f1). But JAD is pre 1.5 so doesn't do that.
-     */
-    public void doRender(Entity var1, double var2, double var4, double var6, float var8, float var9)
+    public void renderEntityWithPosYaw(Entity par1Entity, double par2, double par4, double par6, float par8, float par9)
     {
-        this.doRenderLightningBolt((EntityColdLightningBolt)var1, var2, var4, var6, var8, var9);
+        doRenderLightningBolt((EntityColdLightningBolt)par1Entity, par2, par4, par6, par8, par9);
     }
 }
+

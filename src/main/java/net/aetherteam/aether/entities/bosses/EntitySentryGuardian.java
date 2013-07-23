@@ -4,9 +4,11 @@ import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.network.PacketDispatcher;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import java.util.Random;
 import net.aetherteam.aether.Aether;
 import net.aetherteam.aether.AetherCommonPlayerHandler;
 import net.aetherteam.aether.AetherNameGen;
+import net.aetherteam.aether.CommonProxy;
 import net.aetherteam.aether.dungeons.Dungeon;
 import net.aetherteam.aether.dungeons.DungeonHandler;
 import net.aetherteam.aether.dungeons.keys.DungeonKey;
@@ -18,17 +20,24 @@ import net.aetherteam.aether.packets.AetherPacketHandler;
 import net.aetherteam.aether.party.Party;
 import net.aetherteam.aether.party.PartyController;
 import net.aetherteam.aether.party.members.PartyMember;
+import net.minecraft.entity.DataWatcher;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.ai.EntityAIMoveTwardsRestriction;
+import net.minecraft.entity.ai.EntityAITasks;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
+import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 
-public class EntitySentryGuardian extends EntityMiniBoss implements IAetherBoss
+public class EntitySentryGuardian extends EntityMiniBoss
+    implements IAetherBoss
 {
     private String bossName;
     private int heightOffsetUpdateTime;
@@ -37,18 +46,18 @@ public class EntitySentryGuardian extends EntityMiniBoss implements IAetherBoss
     private int attackTimer;
     private int cappedAmount;
 
-    public EntitySentryGuardian(World var1)
+    public EntitySentryGuardian(World par1World)
     {
-        super(var1);
+        super(par1World);
         this.isImmuneToFire = true;
         this.jumpMovementFactor = 0.0F;
         this.tasks.addTask(1, new EntityAIMoveTwardsRestriction(this, this.moveSpeed));
         this.bossName = AetherNameGen.gen();
-        this.setSize(2.25F, 2.5F);
+        setSize(2.25F, 2.5F);
         this.moveSpeed = 1.6F;
-        this.health = this.getMaxHealth();
+        this.health = getMaxHealth();
 
-        if (!this.getHasBeenAttacked())
+        if (!getHasBeenAttacked())
         {
             this.texture = "/net/aetherteam/aether/client/sprites/mobs/sentrygolemboss/sentryGolemBoss.png";
         }
@@ -58,15 +67,15 @@ public class EntitySentryGuardian extends EntityMiniBoss implements IAetherBoss
         }
     }
 
-    public EntitySentryGuardian(World var1, int var2, int var3, int var4, int var5, int var6)
+    public EntitySentryGuardian(World world, int x, int y, int z, int rad, int dir)
     {
-        super(var1);
+        super(world);
         this.bossName = AetherNameGen.gen();
-        this.setSize(2.25F, 2.5F);
-        this.setPosition((double)var2 + 0.5D, (double)var3, (double)var4 + 0.5D);
+        setSize(2.25F, 2.5F);
+        setPosition(x + 0.5D, y, z + 0.5D);
         this.health = 250;
 
-        if (!this.getHasBeenAttacked())
+        if (!getHasBeenAttacked())
         {
             this.texture = "/net/aetherteam/aether/client/sprites/mobs/sentrygolemboss/sentryGolemBoss.png";
         }
@@ -87,9 +96,9 @@ public class EntitySentryGuardian extends EntityMiniBoss implements IAetherBoss
         return this.dataWatcher.getWatchableObjectByte(16) == 1;
     }
 
-    public void setHasBeenAttacked(boolean var1)
+    public void setHasBeenAttacked(boolean attack)
     {
-        if (var1)
+        if (attack)
         {
             this.texture = "/net/aetherteam/aether/client/sprites/mobs/sentrygolemboss/sentryGolemBoss_red.png";
             this.dataWatcher.updateObject(16, Byte.valueOf((byte)1));
@@ -101,118 +110,103 @@ public class EntitySentryGuardian extends EntityMiniBoss implements IAetherBoss
         }
     }
 
-    /**
-     * Finds the closest player within 16 blocks to attack, or null if this Entity isn't interested in attacking
-     * (Animals, Spiders at day, peaceful PigZombies).
-     */
     protected Entity findPlayerToAttack()
     {
-        if (!this.getHasBeenAttacked())
-        {
-            return null;
-        }
-        else
+        if (getHasBeenAttacked())
         {
             EntityPlayer var1 = this.worldObj.getClosestVulnerablePlayerToEntity(this, 16.0D);
             this.texture = "/net/aetherteam/aether/client/sprites/mobs/sentrygolemboss/sentryGolemBoss_red.png";
-            return var1 != null && this.canEntityBeSeen(var1) ? var1 : null;
+            return (var1 != null) && (canEntityBeSeen(var1)) ? var1 : null;
         }
+
+        return null;
     }
 
     public void spawnSentry()
     {
-        if (!this.worldObj.isRemote && this.cappedAmount < 5)
+        if ((!this.worldObj.isRemote) && (this.cappedAmount < 5))
         {
-            EntitySentry var1 = new EntitySentry(this.worldObj, this.posX, this.posY, this.posZ);
-            this.worldObj.spawnEntityInWorld(var1);
-            var1.motionY = 1.0D;
-            var1.fallDistance = -100.0F;
-            var1.setAttackTarget(this.getAttackTarget());
-            ++this.cappedAmount;
-            var1.setParent(this);
+            EntitySentry sentry = new EntitySentry(this.worldObj, this.posX, this.posY, this.posZ);
+            this.worldObj.spawnEntityInWorld(sentry);
+            sentry.motionY = 1.0D;
+            sentry.fallDistance = -100.0F;
+            sentry.setAttackTarget(getAttackTarget());
+            this.cappedAmount += 1;
+            sentry.setParent(this);
             this.worldObj.playSoundAtEntity(this, "aemob.sentryGuardian.spawn", 2.0F, 1.0F);
         }
     }
 
-    /**
-     * Called when the mob's health reaches 0.
-     */
-    public void onDeath(DamageSource var1)
+    public void onDeath(DamageSource source)
     {
         this.worldObj.createExplosion(this, this.posX, this.posY, this.posZ, 0.3F, false);
-        this.spawnSentry();
+        spawnSentry();
 
-        if (var1.getEntity() instanceof EntityPlayer)
+        if ((source.getEntity() instanceof EntityPlayer))
         {
-            EntityPlayer var2 = (EntityPlayer)var1.getEntity();
-            Party var3 = PartyController.instance().getParty(PartyController.instance().getMember(var2));
-            Dungeon var4 = DungeonHandler.instance().getInstanceAt(MathHelper.floor_double(this.posX), MathHelper.floor_double(this.posY), MathHelper.floor_double(this.posZ));
+            EntityPlayer attackingPlayer = (EntityPlayer)source.getEntity();
+            Party party = PartyController.instance().getParty(PartyController.instance().getMember(attackingPlayer));
+            Dungeon dungeon = DungeonHandler.instance().getInstanceAt(MathHelper.floor_double(this.posX), MathHelper.floor_double(this.posY), MathHelper.floor_double(this.posZ));
 
-            if (var4 != null && var3 != null)
+            if ((dungeon != null) && (party != null))
             {
-                DungeonHandler.instance().addKey(var4, var3, new DungeonKey(EnumKeyType.Guardian));
-                PacketDispatcher.sendPacketToAllPlayers(AetherPacketHandler.sendDungeonKey(var4, var3, EnumKeyType.Guardian));
+                DungeonHandler.instance().addKey(dungeon, party, new DungeonKey(EnumKeyType.Guardian));
+                PacketDispatcher.sendPacketToAllPlayers(AetherPacketHandler.sendDungeonKey(dungeon, party, EnumKeyType.Guardian));
             }
         }
 
         this.boss = new EntitySentryGuardian(this.worldObj);
-        super.onDeath(var1);
+        super.onDeath(source);
     }
 
-    /**
-     * Determines if an entity can be despawned, used on idle far away entities
-     */
     public boolean canDespawn()
     {
         return false;
     }
 
-    /**
-     * Called to update the entity's position/logic.
-     */
     public void onUpdate()
     {
         super.onUpdate();
-        this.extinguish();
+        extinguish();
         this.jumpMovementFactor = 0.0F;
 
         if (this.health > 0)
         {
-            double var1 = (double)(this.rand.nextFloat() - 0.5F);
-            double var3 = (double)this.rand.nextFloat();
-            double var5 = (double)(this.rand.nextFloat() - 0.5F);
-            double var7 = this.posX + var1 * var3;
-            double var9 = this.boundingBox.minY + var3 - 0.30000001192092896D;
-            double var11 = this.posZ + var5 * var3;
+            double a = this.rand.nextFloat() - 0.5F;
+            double b = this.rand.nextFloat();
+            double c = this.rand.nextFloat() - 0.5F;
+            double d = this.posX + a * b;
+            double e = this.boundingBox.minY + b - 0.300000011920929D;
+            double f = this.posZ + c * b;
 
-            if (!this.getHasBeenAttacked())
+            if (!getHasBeenAttacked())
             {
-                this.worldObj.spawnParticle("reddust", var7, var9, var11, -0.30000001192092896D, 0.800000011920929D, 0.8999999761581421D);
+                this.worldObj.spawnParticle("reddust", d, e, f, -0.300000011920929D, 0.800000011920929D, 0.8999999761581421D);
             }
             else
             {
-                this.worldObj.spawnParticle("reddust", var7, var9, var11, 0.0D, 0.0D, 0.0D);
+                this.worldObj.spawnParticle("reddust", d, e, f, 0.0D, 0.0D, 0.0D);
             }
         }
 
         if (this.chatTime > 0)
         {
-            --this.chatTime;
+            this.chatTime -= 1;
         }
     }
 
-    public boolean attackEntityAsMob(Entity var1)
+    public boolean attackEntityAsMob(Entity par1Entity)
     {
         this.attackTimer = 10;
         this.worldObj.setEntityState(this, (byte)4);
-        boolean var2 = var1.attackEntityFrom(DamageSource.causeMobDamage(this), 7 + this.rand.nextInt(15));
+        boolean var2 = par1Entity.attackEntityFrom(DamageSource.causeMobDamage(this), 7 + this.rand.nextInt(15));
 
         if (var2)
         {
-            var1.motionY += 0.4000000059604645D;
-            var1.motionZ += 0.4000000059604645D;
-            var1.motionX += 0.4000000059604645D;
-            var1.velocityChanged = true;
+            par1Entity.motionY += 0.4000000059604645D;
+            par1Entity.motionZ += 0.4000000059604645D;
+            par1Entity.motionX += 0.4000000059604645D;
+            par1Entity.velocityChanged = true;
         }
 
         this.worldObj.playSoundAtEntity(this, "mob.irongolem.throw", 1.0F, 1.0F);
@@ -225,105 +219,93 @@ public class EntitySentryGuardian extends EntityMiniBoss implements IAetherBoss
         return this.attackTimer;
     }
 
-    /**
-     * Returns the amount of damage a mob should deal.
-     */
-    public int getAttackStrength(Entity var1)
+    public int func_82193_c(Entity par1Entity)
     {
         return 10;
     }
 
-    public boolean isPotionApplicable(PotionEffect var1)
+    public boolean isPotionApplicable(PotionEffect par1PotionEffect)
     {
-        return var1.getPotionID() == Potion.poison.id ? false : super.isPotionApplicable(var1);
+        return par1PotionEffect.getPotionID() == Potion.poison.id ? false : super.isPotionApplicable(par1PotionEffect);
     }
 
-    /**
-     * Called when the entity is attacked.
-     */
-    public boolean attackEntityFrom(DamageSource var1, int var2)
+    public boolean attackEntityFrom(DamageSource par1DamageSource, int par2)
     {
-        Entity var3 = var1.getSourceOfDamage();
-        Entity var4 = var1.getEntity();
+        Entity entity = par1DamageSource.getSourceOfDamage();
+        Entity attacker = par1DamageSource.getEntity();
 
-        if (var3 != null && var1.isProjectile())
+        if ((entity != null) && (par1DamageSource.isProjectile()))
         {
-            if (var4 instanceof EntityPlayer && ((EntityPlayer)var4).getCurrentEquippedItem() != null)
+            if (((attacker instanceof EntityPlayer)) && (((EntityPlayer)attacker).cd() != null))
             {
-                this.chatItUp((EntityPlayer)var4, "Better switch to a sword, my " + ((EntityPlayer)var4).getCurrentEquippedItem().getItem().getItemDisplayName(((EntityPlayer)var4).getCurrentEquippedItem()) + " doesn\'t seem to affect it.");
+                chatItUp((EntityPlayer)attacker, "Better switch to a sword, my " + ((EntityPlayer)attacker).cd().getItem().getItemDisplayName(((EntityPlayer)attacker).cd()) + " doesn't seem to affect it.");
                 this.chatTime = 60;
             }
 
             return false;
         }
-        else
+
+        if ((attacker instanceof EntityPlayer))
         {
-            if (var4 instanceof EntityPlayer)
+            EntityPlayer player = (EntityPlayer)attacker;
+            AetherCommonPlayerHandler handler = Aether.getPlayerBase(player);
+            PartyMember member = PartyController.instance().getMember(player);
+            Party party = PartyController.instance().getParty(member);
+            Side side = FMLCommonHandler.instance().getEffectiveSide();
+
+            if (handler != null)
             {
-                EntityPlayer var5 = (EntityPlayer)var4;
-                AetherCommonPlayerHandler var6 = Aether.getPlayerBase(var5);
-                PartyMember var7 = PartyController.instance().getMember(var5);
-                Party var8 = PartyController.instance().getParty(var7);
-                Side var9 = FMLCommonHandler.instance().getEffectiveSide();
+                boolean shouldSetBoss = true;
 
-                if (var6 != null)
+                if ((!player.isDead) && (shouldSetBoss))
                 {
-                    boolean var10 = true;
-
-                    if (!var5.isDead && var10)
-                    {
-                        var6.setCurrentBoss(this);
-                    }
+                    handler.setCurrentBoss(this);
                 }
             }
-
-            this.setHasBeenAttacked(true);
-            return super.attackEntityFrom(var1, var2);
         }
+
+        setHasBeenAttacked(true);
+        return super.attackEntityFrom(par1DamageSource, par2);
     }
 
-    private void chatItUp(EntityPlayer var1, String var2)
+    private void chatItUp(EntityPlayer player, String s)
     {
         if (this.chatTime <= 0)
         {
-            Aether.proxy.displayMessage(var1, var2);
+            Aether.proxy.displayMessage(player, s);
             this.chatTime = 60;
         }
     }
 
-    /**
-     * Called frequently so the entity can update its state every tick as required. For example, zombies and skeletons
-     * use this to react to sunlight and start to burn.
-     */
     public void onLivingUpdate()
     {
         if (this.attackTimer > 0)
         {
-            --this.attackTimer;
+            this.attackTimer -= 1;
         }
 
         if (!this.worldObj.isRemote)
         {
-            if (this.rand.nextInt(100) == 1 && this.getEntityToAttack() != null)
+            if ((this.rand.nextInt(100) == 1) && (getEntityToAttack() != null))
             {
-                this.spawnSentry();
+                spawnSentry();
             }
 
-            --this.heightOffsetUpdateTime;
+            this.heightOffsetUpdateTime -= 1;
 
             if (this.heightOffsetUpdateTime <= 0)
             {
                 this.heightOffsetUpdateTime = 100;
-                this.heightOffset = 0.5F + (float)this.rand.nextGaussian() * 3.0F;
+                this.heightOffset = (0.5F + (float)this.rand.nextGaussian() * 3.0F);
             }
 
-            if (this.getEntityToAttack() != null && this.getEntityToAttack().posY + (double)this.getEntityToAttack().getEyeHeight() > this.posY + (double)this.getEyeHeight() + (double)this.heightOffset)
+            if ((getEntityToAttack() != null) && (getEntityToAttack().posY + getEntityToAttack().getEyeHeight() > this.posY + getEyeHeight() + this.heightOffset))
             {
                 this.motionY += (0.700000011920929D - this.motionY) * 0.700000011920929D;
             }
         }
 
-        if (!this.onGround && this.motionY < 0.0D)
+        if ((!this.onGround) && (this.motionY < 0.0D))
         {
             this.motionY *= 0.8D;
         }
@@ -331,52 +313,36 @@ public class EntitySentryGuardian extends EntityMiniBoss implements IAetherBoss
         super.onLivingUpdate();
     }
 
-    /**
-     * (abstract) Protected helper method to read subclass entity data from NBT.
-     */
-    public void readEntityFromNBT(NBTTagCompound var1)
+    public void readEntityFromNBT(NBTTagCompound par1NBTTagCompound)
     {
-        super.readEntityFromNBT(var1);
-        this.setHasBeenAttacked(var1.getBoolean("HasBeenAttacked"));
+        super.readEntityFromNBT(par1NBTTagCompound);
+        setHasBeenAttacked(par1NBTTagCompound.getBoolean("HasBeenAttacked"));
     }
 
-    /**
-     * (abstract) Protected helper method to write subclass entity data to NBT.
-     */
-    public void writeEntityToNBT(NBTTagCompound var1)
+    public void writeEntityToNBT(NBTTagCompound par1NBTTagCompound)
     {
-        super.writeEntityToNBT(var1);
-        var1.setBoolean("HasBeenAttacked", this.getHasBeenAttacked());
+        super.writeEntityToNBT(par1NBTTagCompound);
+        par1NBTTagCompound.setBoolean("HasBeenAttacked", getHasBeenAttacked());
     }
 
-    /**
-     * Returns the sound this mob makes on death.
-     */
     protected String getDeathSound()
     {
         return "aemob.sentryGuardian.death";
     }
 
-    /**
-     * Returns the sound this mob makes while it's alive.
-     */
     protected String getLivingSound()
     {
         return "aemob.sentryGuardian.living";
     }
 
-    /**
-     * Returns the sound this mob makes when it is hurt.
-     */
     protected String getHurtSound()
     {
         return "aemob.sentryGuardian.hit";
     }
 
-    /**
-     * Called when the mob is falling. Calculates and applies fall damage.
-     */
-    protected void fall(float var1) {}
+    protected void fall(float par1)
+    {
+    }
 
     public int getMaxHealth()
     {
@@ -385,7 +351,7 @@ public class EntitySentryGuardian extends EntityMiniBoss implements IAetherBoss
 
     public int getBossMaxHP()
     {
-        return this.getMaxHealth();
+        return getMaxHealth();
     }
 
     public int getBossEntityID()
@@ -415,6 +381,7 @@ public class EntitySentryGuardian extends EntityMiniBoss implements IAetherBoss
 
     public void failedYou()
     {
-        --this.cappedAmount;
+        this.cappedAmount -= 1;
     }
 }
+

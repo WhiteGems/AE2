@@ -1,6 +1,8 @@
 package net.aetherteam.aether.entities;
 
 import java.util.Random;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.world.World;
 
@@ -8,21 +10,21 @@ public class EntityAetherMob extends EntityMob
 {
     Random random = new Random();
 
-    public EntityAetherMob(World var1)
+    public EntityAetherMob(World world)
     {
-        super(var1);
+        super(world);
     }
 
-    /**
-     * handles entity death timer, experience orb and particle creation
-     */
     protected void onDeathUpdate()
     {
-        if (this.deathTime == 18 && !this.worldObj.isRemote && (this.recentlyHit > 0 || this.isPlayer()) && !this.isChild())
+        if (this.deathTime == 18)
         {
-            for (int var1 = 0; var1 < this.random.nextInt(4); ++var1)
+            if ((!this.worldObj.isRemote) && ((this.recentlyHit > 0) || (isPlayer())) && (!isChild()))
             {
-                this.worldObj.spawnEntityInWorld(new EntityAetherCoin(this.worldObj, this.posX, this.posY, this.posZ, 1));
+                for (int amount = 0; amount < this.random.nextInt(4); amount++)
+                {
+                    this.worldObj.spawnEntityInWorld(new EntityAetherCoin(this.worldObj, this.posX, this.posY, this.posZ, 1));
+                }
             }
         }
 
@@ -34,3 +36,4 @@ public class EntityAetherMob extends EntityMob
         return 10;
     }
 }
+

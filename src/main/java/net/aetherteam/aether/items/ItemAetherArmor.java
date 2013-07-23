@@ -7,28 +7,35 @@ import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.IArmorTextureProvider;
 
-public class ItemAetherArmor extends ItemArmor implements IArmorTextureProvider
+public class ItemAetherArmor extends ItemArmor
+    implements IArmorTextureProvider
 {
     public String armorName;
 
-    public ItemAetherArmor(int var1, EnumArmorMaterial var2, int var3, int var4, String var5)
+    public ItemAetherArmor(int i, EnumArmorMaterial j, int k, int l, String armorname)
     {
-        super(var1, var2, var3, var4);
-        this.armorName = var5;
+        super(i, j, k, l);
+        this.armorName = armorname;
     }
 
-    public void addCreativeItems(ArrayList var1)
+    public void addCreativeItems(ArrayList itemList)
     {
-        var1.add(new ItemStack(this));
+        itemList.add(new ItemStack(this));
     }
 
-    public String getArmorTextureFile(ItemStack var1)
+    public String getArmorTextureFile(ItemStack itemstack)
     {
-        return var1.getItemName().contains(" Leggings") ? "/net/aetherteam/aether/client/sprites/armor/" + this.armorName + "_2.png" : "/net/aetherteam/aether/client/sprites/armor/" + this.armorName + "_1.png";
+        if (itemstack.getItemName().contains(" Leggings"))
+        {
+            return "/net/aetherteam/aether/client/sprites/armor/" + this.armorName + "_2.png";
+        }
+
+        return "/net/aetherteam/aether/client/sprites/armor/" + this.armorName + "_1.png";
     }
 
-    public Item setIconName(String var1)
+    public Item setIconName(String name)
     {
-        return this.setUnlocalizedName("Aether:" + var1);
+        return setUnlocalizedName("Aether:" + name);
     }
 }
+

@@ -9,11 +9,13 @@ import net.aetherteam.aether.blocks.BlockAether;
 import net.aetherteam.aether.dungeons.Dungeon;
 import net.aetherteam.aether.dungeons.DungeonHandler;
 import net.minecraft.block.Block;
+import net.minecraft.block.material.Material;
 import net.minecraft.entity.Entity;
-import net.minecraft.util.Direction;
+import net.minecraft.util.ChunkCoordinates;
 import net.minecraft.util.LongHashMap;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.ChunkCoordIntPair;
+import net.minecraft.world.PortalPosition;
 import net.minecraft.world.Teleporter;
 import net.minecraft.world.WorldServer;
 
@@ -21,108 +23,95 @@ public class TeleporterAether extends Teleporter
 {
     private final WorldServer worldServerInstance;
     private final Random random;
-
-    /** Stores successful portal placement locations for rapid lookup. */
-    private final LongHashMap destinationCoordinateCache = new LongHashMap();
-
-    /**
-     * A list of valid keys for the destinationCoordainteCache. These are based on the X & Z of the players initial
-     * location.
-     */
-    private final List destinationCoordinateKeys = new ArrayList();
+    private final LongHashMap field_85191_c;
+    private final List field_85190_d;
     private boolean createPortal;
 
-    public TeleporterAether(WorldServer var1)
+    public TeleporterAether(WorldServer par1WorldServer)
     {
-        super(var1);
-        this.worldServerInstance = var1;
+        super(par1WorldServer);
+        this.destinationCoordinateCache = new LongHashMap();
+        this.destinationCoordinateKeys = new ArrayList();
+        this.worldServerInstance = par1WorldServer;
         this.worldServerInstance.customTeleporters.add(this);
-        this.random = new Random(var1.getSeed());
+        this.random = new Random(par1WorldServer.getTotalWorldTime());
         this.createPortal = true;
     }
 
-    public TeleporterAether(WorldServer var1, boolean var2)
+    public TeleporterAether(WorldServer par1WorldServer, boolean createPortal)
     {
-        super(var1);
-        this.worldServerInstance = var1;
+        super(par1WorldServer);
+        this.destinationCoordinateCache = new LongHashMap();
+        this.destinationCoordinateKeys = new ArrayList();
+        this.worldServerInstance = par1WorldServer;
         this.worldServerInstance.customTeleporters.add(this);
-        this.random = new Random(var1.getSeed());
+        this.random = new Random(par1WorldServer.getTotalWorldTime());
         this.createPortal = false;
     }
 
-    /**
-     * Place an entity in a nearby portal, creating one if necessary.
-     */
-    public void placeInPortal(Entity var1, double var2, double var4, double var6, float var8)
+    public void placeInPortal(Entity par1Entity, double par2, double par4, double par6, float par8)
     {
-        if (!this.placeInExistingPortal(var1, var2, var4, var6, var8))
+        if (!placeInExistingPortal(par1Entity, par2, par4, par6, par8))
         {
-            if (this.createPortal = true)
+            if ((this.createPortal = 1) != 0)
             {
-                this.makePortal(var1);
+                makePortal(par1Entity);
             }
 
-            this.placeInExistingPortal(var1, var2, var4, var6, var8);
+            placeInExistingPortal(par1Entity, par2, par4, par6, par8);
         }
     }
 
-    /**
-     * Place an entity in a nearby portal which already exists.
-     */
-    public boolean placeInExistingPortal(Entity var1, double var2, double var4, double var6, float var8)
+    public boolean placeInExistingPortal(Entity par1Entity, double par2, double par4, double par6, float par8)
     {
-        short var9 = 128;
-        double var10 = -1.0D;
-        int var12 = 0;
-        int var13 = 0;
-        int var14 = 0;
-        int var15 = MathHelper.floor_double(var1.posX);
-        int var16 = MathHelper.floor_double(var1.posZ);
-        long var17 = ChunkCoordIntPair.chunkXZ2Int(var15, var16);
-        boolean var19 = true;
-        double var20;
-        int var22;
-        int var28;
-        double var46;
+        short short1 = 128;
+        double d3 = -1.0D;
+        int i = 0;
+        int j = 0;
+        int k = 0;
+        int l = MathHelper.floor_double(par1Entity.posX);
+        int i1 = MathHelper.floor_double(par1Entity.posZ);
+        long j1 = ChunkCoordIntPair.chunkXZ2Int(l, i1);
+        boolean flag = true;
 
-        if (this.destinationCoordinateCache.containsItem(var17))
+        if (this.destinationCoordinateCache.containsItem(j1))
         {
-            AetherPortalPosition var23 = (AetherPortalPosition)this.destinationCoordinateCache.getValueByKey(var17);
-            var10 = 0.0D;
-            var12 = var23.posX;
-            var13 = var23.posY;
-            var14 = var23.posZ;
-            var23.lastUpdateTime = this.worldServerInstance.getTotalWorldTime();
-            var19 = false;
+            AetherPortalPosition AetherPortalPosition = (AetherPortalPosition)this.destinationCoordinateCache.getValueByKey(j1);
+            d3 = 0.0D;
+            i = AetherPortalPosition.posX;
+            j = AetherPortalPosition.posY;
+            k = AetherPortalPosition.posZ;
+            AetherPortalPosition.lastUpdateTime = this.worldServerInstance.getWorldTime();
+            flag = false;
         }
         else
         {
-            for (var22 = var15 - var9; var22 <= var15 + var9; ++var22)
+            for (int k1 = l - short1; k1 <= l + short1; k1++)
             {
-                var46 = (double)var22 + 0.5D - var1.posX;
+                double d5 = k1 + 0.5D - par1Entity.posX;
 
-                for (int var25 = var16 - var9; var25 <= var16 + var9; ++var25)
+                for (int l1 = i1 - short1; l1 <= i1 + short1; l1++)
                 {
-                    double var26 = (double)var25 + 0.5D - var1.posZ;
+                    double d6 = l1 + 0.5D - par1Entity.posZ;
 
-                    for (var28 = this.worldServerInstance.getActualHeight() - 1; var28 >= 0; --var28)
+                    for (int i2 = this.worldServerInstance.R() - 1; i2 >= 0; i2--)
                     {
-                        if (this.worldServerInstance.getBlockId(var22, var28, var25) == AetherBlocks.AetherPortal.blockID)
+                        if (this.worldServerInstance.getBlockId(k1, i2, l1) == AetherBlocks.AetherPortal.blockID)
                         {
-                            while (this.worldServerInstance.getBlockId(var22, var28 - 1, var25) == AetherBlocks.AetherPortal.blockID)
+                            while (this.worldServerInstance.getBlockId(k1, i2 - 1, l1) == AetherBlocks.AetherPortal.blockID)
                             {
-                                --var28;
+                                i2--;
                             }
 
-                            var20 = (double)var28 + 0.5D - var1.posY;
-                            double var29 = var46 * var46 + var20 * var20 + var26 * var26;
+                            double d4 = i2 + 0.5D - par1Entity.posY;
+                            double d7 = d5 * d5 + d4 * d4 + d6 * d6;
 
-                            if (var10 < 0.0D || var29 < var10)
+                            if ((d3 < 0.0D) || (d7 < d3))
                             {
-                                var10 = var29;
-                                var12 = var22;
-                                var13 = var28;
-                                var14 = var25;
+                                d3 = d7;
+                                i = k1;
+                                j = i2;
+                                k = l1;
                             }
                         }
                     }
@@ -130,217 +119,198 @@ public class TeleporterAether extends Teleporter
             }
         }
 
-        if (var10 >= 0.0D)
+        if (d3 >= 0.0D)
         {
-            if (var19)
+            if (flag)
             {
-                this.destinationCoordinateCache.add(var17, new AetherPortalPosition(this, var12, var13, var14, this.worldServerInstance.getTotalWorldTime()));
-                this.destinationCoordinateKeys.add(Long.valueOf(var17));
+                this.destinationCoordinateCache.add(j1, new AetherPortalPosition(this, i, j, k, this.worldServerInstance.getWorldTime()));
+                this.destinationCoordinateKeys.add(Long.valueOf(j1));
             }
 
-            var46 = (double)var12 + 0.5D;
-            double var47 = (double)var13 + 0.5D;
-            var20 = (double)var14 + 0.5D;
-            int var27 = -1;
+            double d8 = i + 0.5D;
+            double d9 = j + 0.5D;
+            double d4 = k + 0.5D;
+            int j2 = -1;
 
-            if (this.worldServerInstance.getBlockId(var12 - 1, var13, var14) == AetherBlocks.AetherPortal.blockID)
+            if (this.worldServerInstance.getBlockId(i - 1, j, k) == AetherBlocks.AetherPortal.blockID)
             {
-                var27 = 2;
+                j2 = 2;
             }
 
-            if (this.worldServerInstance.getBlockId(var12 + 1, var13, var14) == AetherBlocks.AetherPortal.blockID)
+            if (this.worldServerInstance.getBlockId(i + 1, j, k) == AetherBlocks.AetherPortal.blockID)
             {
-                var27 = 0;
+                j2 = 0;
             }
 
-            if (this.worldServerInstance.getBlockId(var12, var13, var14 - 1) == AetherBlocks.AetherPortal.blockID)
+            if (this.worldServerInstance.getBlockId(i, j, k - 1) == AetherBlocks.AetherPortal.blockID)
             {
-                var27 = 3;
+                j2 = 3;
             }
 
-            if (this.worldServerInstance.getBlockId(var12, var13, var14 + 1) == AetherBlocks.AetherPortal.blockID)
+            if (this.worldServerInstance.getBlockId(i, j, k + 1) == AetherBlocks.AetherPortal.blockID)
             {
-                var27 = 1;
+                j2 = 1;
             }
 
-            var28 = var1.getTeleportDirection();
+            int k2 = par1Entity.getTeleportDirection();
 
-            if (var27 > -1)
+            if (j2 > -1)
             {
-                int var48 = Direction.rotateLeft[var27];
-                int var30 = Direction.offsetX[var27];
-                int var31 = Direction.offsetZ[var27];
-                int var32 = Direction.offsetX[var48];
-                int var33 = Direction.offsetZ[var48];
-                boolean var34 = !this.invalidSpawn(var12 + var30 + var32, var13, var14 + var31 + var33) || !this.invalidSpawn(var12 + var30 + var32, var13 + 1, var14 + var31 + var33);
-                boolean var35 = !this.invalidSpawn(var12 + var30, var13, var14 + var31) || !this.invalidSpawn(var12 + var30, var13 + 1, var14 + var31);
+                int l2 = net.minecraft.util.Direction.rotateLeft[j2];
+                int i3 = net.minecraft.util.Direction.offsetX[j2];
+                int j3 = net.minecraft.util.Direction.offsetZ[j2];
+                int k3 = net.minecraft.util.Direction.offsetX[l2];
+                int l3 = net.minecraft.util.Direction.offsetZ[l2];
+                boolean flag1 = (!invalidSpawn(i + i3 + k3, j, k + j3 + l3)) || (!invalidSpawn(i + i3 + k3, j + 1, k + j3 + l3));
+                boolean flag2 = (!invalidSpawn(i + i3, j, k + j3)) || (!invalidSpawn(i + i3, j + 1, k + j3));
 
-                if (var34 && var35)
+                if ((flag1) && (flag2))
                 {
-                    var27 = Direction.rotateOpposite[var27];
-                    var48 = Direction.rotateOpposite[var48];
-                    var30 = Direction.offsetX[var27];
-                    var31 = Direction.offsetZ[var27];
-                    var32 = Direction.offsetX[var48];
-                    var33 = Direction.offsetZ[var48];
-                    var22 = var12 - var32;
-                    var46 -= (double)var32;
-                    int var36 = var14 - var33;
-                    var20 -= (double)var33;
-                    var34 = !this.invalidSpawn(var22 + var30 + var32, var13, var36 + var31 + var33) || !this.invalidSpawn(var22 + var30 + var32, var13 + 1, var36 + var31 + var33);
-                    var35 = !this.invalidSpawn(var22 + var30, var13, var36 + var31) || !this.invalidSpawn(var22 + var30, var13 + 1, var36 + var31);
-                }
-
-                float var49 = 0.5F;
-                float var37 = 0.5F;
-
-                if (!var34 && var35)
-                {
-                    var49 = 1.0F;
-                }
-                else if (var34 && !var35)
-                {
-                    var49 = 0.0F;
-                }
-                else if (var34 && var35)
-                {
-                    var37 = 0.0F;
+                    j2 = net.minecraft.util.Direction.rotateOpposite[j2];
+                    l2 = net.minecraft.util.Direction.rotateOpposite[l2];
+                    i3 = net.minecraft.util.Direction.offsetX[j2];
+                    j3 = net.minecraft.util.Direction.offsetZ[j2];
+                    k3 = net.minecraft.util.Direction.offsetX[l2];
+                    l3 = net.minecraft.util.Direction.offsetZ[l2];
+                    int k1 = i - k3;
+                    d8 -= k3;
+                    int i4 = k - l3;
+                    d4 -= l3;
+                    flag1 = (!invalidSpawn(k1 + i3 + k3, j, i4 + j3 + l3)) || (!invalidSpawn(k1 + i3 + k3, j + 1, i4 + j3 + l3));
+                    flag2 = (!invalidSpawn(k1 + i3, j, i4 + j3)) || (!invalidSpawn(k1 + i3, j + 1, i4 + j3));
                 }
 
-                var46 += (double)((float)var32 * var49 + var37 * (float)var30);
-                var20 += (double)((float)var33 * var49 + var37 * (float)var31);
-                float var38 = 0.0F;
-                float var39 = 0.0F;
-                float var40 = 0.0F;
-                float var41 = 0.0F;
+                float f1 = 0.5F;
+                float f2 = 0.5F;
 
-                if (var27 == var28)
+                if ((!flag1) && (flag2))
                 {
-                    var38 = 1.0F;
-                    var39 = 1.0F;
+                    f1 = 1.0F;
                 }
-                else if (var27 == Direction.rotateOpposite[var28])
+                else if ((flag1) && (!flag2))
                 {
-                    var38 = -1.0F;
-                    var39 = -1.0F;
+                    f1 = 0.0F;
                 }
-                else if (var27 == Direction.rotateRight[var28])
+                else if ((flag1) && (flag2))
                 {
-                    var40 = 1.0F;
-                    var41 = -1.0F;
+                    f2 = 0.0F;
+                }
+
+                d8 += k3 * f1 + f2 * i3;
+                d4 += l3 * f1 + f2 * j3;
+                float f3 = 0.0F;
+                float f4 = 0.0F;
+                float f5 = 0.0F;
+                float f6 = 0.0F;
+
+                if (j2 == k2)
+                {
+                    f3 = 1.0F;
+                    f4 = 1.0F;
+                }
+                else if (j2 == net.minecraft.util.Direction.rotateOpposite[k2])
+                {
+                    f3 = -1.0F;
+                    f4 = -1.0F;
+                }
+                else if (j2 == net.minecraft.util.Direction.rotateRight[k2])
+                {
+                    f5 = 1.0F;
+                    f6 = -1.0F;
                 }
                 else
                 {
-                    var40 = -1.0F;
-                    var41 = 1.0F;
+                    f5 = -1.0F;
+                    f6 = 1.0F;
                 }
 
-                double var42 = var1.motionX;
-                double var44 = var1.motionZ;
-                var1.motionX = var42 * (double)var38 + var44 * (double)var41;
-                var1.motionZ = var42 * (double)var40 + var44 * (double)var39;
-                var1.rotationYaw = var8 - (float)(var28 * 90) + (float)(var27 * 90);
+                double d10 = par1Entity.motionX;
+                double d11 = par1Entity.motionZ;
+                par1Entity.motionX = (d10 * f3 + d11 * f6);
+                par1Entity.motionZ = (d10 * f5 + d11 * f4);
+                par1Entity.rotationYaw = (par8 - k2 * 90 + j2 * 90);
             }
             else
             {
-                var1.motionX = var1.motionY = var1.motionZ = 0.0D;
+                par1Entity.motionX = (par1Entity.motionY = par1Entity.motionZ = 0.0D);
             }
 
-            var1.setLocationAndAngles(var46, var47, var20, var1.rotationYaw, var1.rotationPitch);
+            par1Entity.setLocationAndAngles(d8, d9, d4, par1Entity.rotationYaw, par1Entity.rotationPitch);
             return true;
         }
-        else
-        {
-            return false;
-        }
+
+        return false;
     }
 
-    public boolean makePortal(Entity var1)
+    public boolean makePortal(Entity par1Entity)
     {
-        byte var2 = 16;
-        double var3 = -1.0D;
-        int var5 = MathHelper.floor_double(var1.posX);
-        int var6 = MathHelper.floor_double(var1.posY);
-        int var7 = MathHelper.floor_double(var1.posZ);
-        int var8 = var5;
-        int var9 = var6;
-        int var10 = var7;
-        int var11 = 0;
-        int var12 = this.random.nextInt(4);
-        int var13;
-        double var14;
-        double var16;
-        int var19;
-        int var18;
-        int var21;
-        int var20;
-        int var23;
-        int var22;
-        int var25;
-        int var24;
-        int var27;
-        int var26;
-        double var28;
-        double var30;
-        int var32;
+        byte b0 = 16;
+        double d0 = -1.0D;
+        int i = MathHelper.floor_double(par1Entity.posX);
+        int j = MathHelper.floor_double(par1Entity.posY);
+        int k = MathHelper.floor_double(par1Entity.posZ);
+        int l = i;
+        int i1 = j;
+        int j1 = k;
+        int k1 = 0;
+        int l1 = this.random.nextInt(4);
 
-        for (var13 = var5 - var2; var13 <= var5 + var2; ++var13)
+        for (int i2 = i - b0; i2 <= i + b0; i2++)
         {
-            var14 = (double)var13 + 0.5D - var1.posX;
+            double d1 = i2 + 0.5D - par1Entity.posX;
 
-            for (var18 = var7 - var2; var18 <= var7 + var2; ++var18)
+            for (int j2 = k - b0; j2 <= k + b0; j2++)
             {
-                var16 = (double)var18 + 0.5D - var1.posZ;
-                label272:
+                double d2 = j2 + 0.5D - par1Entity.posZ;
 
-                for (var19 = this.worldServerInstance.getActualHeight() - 1; var19 >= 0; --var19)
+                label421: for (int k2 = this.worldServerInstance.R() - 1; k2 >= 0; k2--)
                 {
-                    if (this.invalidSpawn(var13, var19, var18))
+                    if (invalidSpawn(i2, k2, j2))
                     {
-                        while (var19 > 0 && this.invalidSpawn(var13, var19 - 1, var18))
+                        while ((k2 > 0) && (invalidSpawn(i2, k2 - 1, j2)))
                         {
-                            --var19;
+                            k2--;
                         }
 
-                        for (var21 = var12; var21 < var12 + 4; ++var21)
+                        for (int i3 = l1; i3 < l1 + 4; i3++)
                         {
-                            var20 = var21 % 2;
-                            var23 = 1 - var20;
+                            int l2 = i3 % 2;
+                            int k3 = 1 - l2;
 
-                            if (var21 % 4 >= 2)
+                            if (i3 % 4 >= 2)
                             {
-                                var20 = -var20;
-                                var23 = -var23;
+                                l2 = -l2;
+                                k3 = -k3;
                             }
 
-                            for (var22 = 0; var22 < 3; ++var22)
+                            for (int j3 = 0; j3 < 3; j3++)
                             {
-                                for (var25 = 0; var25 < 4; ++var25)
+                                for (int i4 = 0; i4 < 4; i4++)
                                 {
-                                    for (var24 = -1; var24 < 4; ++var24)
+                                    for (int l3 = -1; l3 < 4; l3++)
                                     {
-                                        var27 = var13 + (var25 - 1) * var20 + var22 * var23;
-                                        var26 = var19 + var24;
-                                        var32 = var18 + (var25 - 1) * var23 - var22 * var20;
+                                        int k4 = i2 + (i4 - 1) * l2 + j3 * k3;
+                                        int j4 = k2 + l3;
+                                        int l4 = j2 + (i4 - 1) * k3 - j3 * l2;
 
-                                        if (var24 < 0 && !this.worldServerInstance.getBlockMaterial(var27, var26, var32).isSolid() || var24 >= 0 && !this.invalidSpawn(var27, var26, var32))
+                                        if (((l3 < 0) && (!this.worldServerInstance.getBlockMaterial(k4, j4, l4).isSolid())) || ((l3 >= 0) && (!invalidSpawn(k4, j4, l4))))
                                         {
-                                            continue label272;
+                                            break label421;
                                         }
                                     }
                                 }
                             }
 
-                            var30 = (double)var19 + 0.5D - var1.posY;
-                            var28 = var14 * var14 + var30 * var30 + var16 * var16;
+                            double d4 = k2 + 0.5D - par1Entity.posY;
+                            double d3 = d1 * d1 + d4 * d4 + d2 * d2;
 
-                            if (var3 < 0.0D || var28 < var3)
+                            if ((d0 < 0.0D) || (d3 < d0))
                             {
-                                var3 = var28;
-                                var8 = var13;
-                                var9 = var19;
-                                var10 = var18;
-                                var11 = var21 % 4;
+                                d0 = d3;
+                                l = i2;
+                                i1 = k2;
+                                j1 = j2;
+                                k1 = i3 % 4;
                             }
                         }
                     }
@@ -348,56 +318,55 @@ public class TeleporterAether extends Teleporter
             }
         }
 
-        if (var3 < 0.0D)
+        if (d0 < 0.0D)
         {
-            for (var13 = var5 - var2; var13 <= var5 + var2; ++var13)
+            for (i2 = i - b0; i2 <= i + b0; i2++)
             {
-                var14 = (double)var13 + 0.5D - var1.posX;
+                double d1 = i2 + 0.5D - par1Entity.posX;
 
-                for (var18 = var7 - var2; var18 <= var7 + var2; ++var18)
+                for (int j2 = k - b0; j2 <= k + b0; j2++)
                 {
-                    var16 = (double)var18 + 0.5D - var1.posZ;
-                    label220:
+                    double d2 = j2 + 0.5D - par1Entity.posZ;
 
-                    for (var19 = this.worldServerInstance.getActualHeight() - 1; var19 >= 0; --var19)
+                    label762: for (int k2 = this.worldServerInstance.R() - 1; k2 >= 0; k2--)
                     {
-                        if (this.invalidSpawn(var13, var19, var18))
+                        if (invalidSpawn(i2, k2, j2))
                         {
-                            while (var19 > 0 && this.invalidSpawn(var13, var19 - 1, var18))
+                            while ((k2 > 0) && (invalidSpawn(i2, k2 - 1, j2)))
                             {
-                                --var19;
+                                k2--;
                             }
 
-                            for (var21 = var12; var21 < var12 + 2; ++var21)
+                            for (int i3 = l1; i3 < l1 + 2; i3++)
                             {
-                                var20 = var21 % 2;
-                                var23 = 1 - var20;
+                                int l2 = i3 % 2;
+                                int k3 = 1 - l2;
 
-                                for (var22 = 0; var22 < 4; ++var22)
+                                for (int j3 = 0; j3 < 4; j3++)
                                 {
-                                    for (var25 = -1; var25 < 4; ++var25)
+                                    for (int i4 = -1; i4 < 4; i4++)
                                     {
-                                        var24 = var13 + (var22 - 1) * var20;
-                                        var27 = var19 + var25;
-                                        var26 = var18 + (var22 - 1) * var23;
+                                        int l3 = i2 + (j3 - 1) * l2;
+                                        int k4 = k2 + i4;
+                                        int j4 = j2 + (j3 - 1) * k3;
 
-                                        if (var25 < 0 && !this.worldServerInstance.getBlockMaterial(var24, var27, var26).isSolid() || var25 >= 0 && !this.invalidSpawn(var24, var27, var26))
+                                        if (((i4 < 0) && (!this.worldServerInstance.getBlockMaterial(l3, k4, j4).isSolid())) || ((i4 >= 0) && (!invalidSpawn(l3, k4, j4))))
                                         {
-                                            continue label220;
+                                            break label762;
                                         }
                                     }
                                 }
 
-                                var30 = (double)var19 + 0.5D - var1.posY;
-                                var28 = var14 * var14 + var30 * var30 + var16 * var16;
+                                double d4 = k2 + 0.5D - par1Entity.posY;
+                                double d3 = d1 * d1 + d4 * d4 + d2 * d2;
 
-                                if (var3 < 0.0D || var28 < var3)
+                                if ((d0 < 0.0D) || (d3 < d0))
                                 {
-                                    var3 = var28;
-                                    var8 = var13;
-                                    var9 = var19;
-                                    var10 = var18;
-                                    var11 = var21 % 2;
+                                    d0 = d3;
+                                    l = i2;
+                                    i1 = k2;
+                                    j1 = j2;
+                                    k1 = i3 % 2;
                                 }
                             }
                         }
@@ -406,72 +375,70 @@ public class TeleporterAether extends Teleporter
             }
         }
 
-        var32 = var8;
-        int var33 = var9;
-        var18 = var10;
-        int var34 = var11 % 2;
-        int var35 = 1 - var34;
+        int i5 = l;
+        int j5 = i1;
+        int j2 = j1;
+        int k5 = k1 % 2;
+        int l5 = 1 - k5;
 
-        if (var11 % 4 >= 2)
+        if (k1 % 4 >= 2)
         {
-            var34 = -var34;
-            var35 = -var35;
+            k5 = -k5;
+            l5 = -l5;
         }
 
-        boolean var36;
-
-        if (var3 < 0.0D)
+        if (d0 < 0.0D)
         {
-            if (var9 < 70)
+            if (i1 < 70)
             {
-                var9 = 70;
+                i1 = 70;
             }
 
-            if (var9 > this.worldServerInstance.getActualHeight() - 10)
+            if (i1 > this.worldServerInstance.R() - 10)
             {
-                var9 = this.worldServerInstance.getActualHeight() - 10;
+                i1 = this.worldServerInstance.R() - 10;
             }
 
-            var33 = var9;
+            j5 = i1;
 
-            for (var19 = -1; var19 <= 1; ++var19)
+            for (int k2 = -1; k2 <= 1; k2++)
             {
-                for (var21 = 1; var21 < 3; ++var21)
+                for (int i3 = 1; i3 < 3; i3++)
                 {
-                    for (var20 = -1; var20 < 3; ++var20)
+                    for (int l2 = -1; l2 < 3; l2++)
                     {
-                        var23 = var32 + (var21 - 1) * var34 + var19 * var35;
-                        var22 = var33 + var20;
-                        var25 = var18 + (var21 - 1) * var35 - var19 * var34;
-                        var36 = var20 < 0;
-                        this.worldServerInstance.setBlock(var23, var22, var25, var36 ? Block.glowStone.blockID : 0);
+                        int k3 = i5 + (i3 - 1) * k5 + k2 * l5;
+                        int j3 = j5 + l2;
+                        int i4 = j2 + (i3 - 1) * l5 - k2 * k5;
+                        boolean flag = l2 < 0;
+                        this.worldServerInstance.setBlock(k3, j3, i4, flag ? Block.glowStone.blockID : 0);
                     }
                 }
             }
         }
 
-        for (var19 = 0; var19 < 4; ++var19)
+        for (int k2 = 0; k2 < 4; k2++)
         {
-            for (var21 = 0; var21 < 4; ++var21)
+            for (int i3 = 0; i3 < 4; i3++)
             {
-                for (var20 = -1; var20 < 4; ++var20)
+                for (int l2 = -1; l2 < 4; l2++)
                 {
-                    var23 = var32 + (var21 - 1) * var34;
-                    var22 = var33 + var20;
-                    var25 = var18 + (var21 - 1) * var35;
-                    var36 = var21 == 0 || var21 == 3 || var20 == -1 || var20 == 3;
-                    this.worldServerInstance.setBlock(var23, var22, var25, var36 ? Block.glowStone.blockID : AetherBlocks.AetherPortal.blockID, 0, 2);
+                    int k3 = i5 + (i3 - 1) * k5;
+                    int j3 = j5 + l2;
+                    int i4 = j2 + (i3 - 1) * l5;
+                    boolean flag = (i3 == 0) || (i3 == 3) || (l2 == -1) || (l2 == 3);
+                    this.worldServerInstance.setBlock(k3, j3, i4, flag ? Block.glowStone.blockID : AetherBlocks.AetherPortal.blockID, 0, 2);
                 }
             }
 
-            for (var21 = 0; var21 < 4; ++var21)
+            for (i3 = 0; i3 < 4; i3++)
             {
-                for (var20 = -1; var20 < 4; ++var20)
+                for (int l2 = -1; l2 < 4; l2++)
                 {
-                    var23 = var32 + (var21 - 1) * var34;
-                    var22 = var33 + var20;
-                    var25 = var18 + (var21 - 1) * var35;
-                    this.worldServerInstance.notifyBlocksOfNeighborChange(var23, var22, var25, this.worldServerInstance.getBlockId(var23, var22, var25));
+                    int k3 = i5 + (i3 - 1) * k5;
+                    int j3 = j5 + l2;
+                    int i4 = j2 + (i3 - 1) * l5;
+                    this.worldServerInstance.notifyBlocksOfNeighborChange(k3, j3, i4, this.worldServerInstance.getBlockId(k3, j3, i4));
                 }
             }
         }
@@ -479,35 +446,32 @@ public class TeleporterAether extends Teleporter
         return true;
     }
 
-    private boolean invalidSpawn(int var1, int var2, int var3)
+    private boolean invalidSpawn(int x, int y, int z)
     {
-        int var4 = this.worldServerInstance.getBlockId(var1, var2, var3);
-        Dungeon var5 = DungeonHandler.instance().getInstanceAt(var1, var2, var3);
-        return this.worldServerInstance.isAirBlock(var1, var2, var3) || Block.blocksList[var4] != null && Block.blocksList[var4] instanceof BlockAether && ((BlockAether)Block.blocksList[var4]).isDungeonBlock() || var5 != null || Block.blocksList[var4] != null && !Block.blocksList[var4].isOpaqueCube();
+        int id = this.worldServerInstance.getBlockId(x, y, z);
+        Dungeon dungeon = DungeonHandler.instance().getInstanceAt(x, y, z);
+        return (this.worldServerInstance.isAirBlock(x, y, z)) || ((Block.blocksList[id] != null) && ((Block.blocksList[id] instanceof BlockAether)) && (((BlockAether)Block.blocksList[id]).isDungeonBlock())) || (dungeon != null) || ((Block.blocksList[id] != null) && (!Block.blocksList[id].isOpaqueCube()));
     }
 
-    /**
-     * called periodically to remove out-of-date portal locations from the cache list. Argument par1 is a
-     * WorldServer.getTotalWorldTime() value.
-     */
-    public void removeStalePortalLocations(long var1)
+    public void removeStalePortalLocations(long par1)
     {
-        if (var1 % 100L == 0L)
+        if (par1 % 100L == 0L)
         {
-            Iterator var3 = this.destinationCoordinateKeys.iterator();
-            long var4 = var1 - 600L;
+            Iterator iterator = this.destinationCoordinateKeys.iterator();
+            long j = par1 - 600L;
 
-            while (var3.hasNext())
+            while (iterator.hasNext())
             {
-                Long var6 = (Long)var3.next();
-                AetherPortalPosition var7 = (AetherPortalPosition)this.destinationCoordinateCache.getValueByKey(var6.longValue());
+                Long olong = (Long)iterator.next();
+                AetherPortalPosition AetherPortalPosition = (AetherPortalPosition)this.destinationCoordinateCache.getValueByKey(olong.longValue());
 
-                if (var7 == null || var7.lastUpdateTime < var4)
+                if ((AetherPortalPosition == null) || (AetherPortalPosition.lastUpdateTime < j))
                 {
-                    var3.remove();
-                    this.destinationCoordinateCache.remove(var6.longValue());
+                    iterator.remove();
+                    this.destinationCoordinateCache.remove(olong.longValue());
                 }
             }
         }
     }
 }
+

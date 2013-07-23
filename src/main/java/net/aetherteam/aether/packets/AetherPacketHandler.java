@@ -8,16 +8,17 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.Set;
 import net.aetherteam.aether.data.PlayerClientInfo;
 import net.aetherteam.aether.donator.Donator;
 import net.aetherteam.aether.donator.DonatorChoice;
 import net.aetherteam.aether.donator.EnumChoiceType;
 import net.aetherteam.aether.dungeons.Dungeon;
+import net.aetherteam.aether.dungeons.DungeonType;
 import net.aetherteam.aether.dungeons.keys.EnumKeyType;
 import net.aetherteam.aether.entities.mounts.MountInput;
 import net.aetherteam.aether.notifications.Notification;
+import net.aetherteam.aether.notifications.NotificationType;
 import net.aetherteam.aether.party.Party;
 import net.aetherteam.aether.party.PartyType;
 import net.aetherteam.aether.party.members.MemberType;
@@ -30,863 +31,846 @@ import net.minecraft.nbt.NBTTagList;
 import net.minecraft.network.INetworkManager;
 import net.minecraft.network.packet.Packet;
 import net.minecraft.network.packet.Packet250CustomPayload;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.MathHelper;
 
-public class AetherPacketHandler implements IPacketHandler
+public class AetherPacketHandler
+    implements IPacketHandler
 {
-    public void onPacketData(INetworkManager var1, Packet250CustomPayload var2, Player var3)
+    public void onPacketData(INetworkManager manager, Packet250CustomPayload packet, Player player)
     {
-        DataInputStream var4 = new DataInputStream(new ByteArrayInputStream(var2.data));
+        DataInputStream dat = new DataInputStream(new ByteArrayInputStream(packet.data));
 
         try
         {
-            byte var5 = var4.readByte();
-            ArrayList var6 = RegisteredPackets.getPackets();
-            Iterator var7 = var6.iterator();
+            packetType = dat.readByte();
+            ArrayList packetList = RegisteredPackets.getPackets();
 
-            while (var7.hasNext())
+            for (AetherPacket aetherPacket : packetList)
             {
-                AetherPacket var8 = (AetherPacket)var7.next();
-
-                if (var8.packetID == var5)
+                if (aetherPacket.packetID == packetType)
                 {
-                    var8.onPacketReceived(var2, var3);
+                    aetherPacket.onPacketReceived(packet, player);
                     return;
                 }
             }
         }
-        catch (IOException var9)
+        catch (IOException e)
         {
-            var9.printStackTrace();
+            byte packetType;
+            e.printStackTrace();
         }
     }
 
-    public static Packet sendRidingPacket(Entity var0)
+    public static Packet sendRidingPacket(Entity animal)
     {
-        ByteArrayOutputStream var1 = new ByteArrayOutputStream(8);
-        DataOutputStream var2 = new DataOutputStream(var1);
+        ByteArrayOutputStream bos = new ByteArrayOutputStream(8);
+        DataOutputStream outputStream = new DataOutputStream(bos);
 
         try
         {
-            var2.writeByte(RegisteredPackets.riding.packetID);
-            var2.writeInt(var0 == null ? -1 : var0.entityId);
+            outputStream.writeByte(RegisteredPackets.riding.packetID);
+            outputStream.writeInt(animal == null ? -1 : animal.entityId);
         }
-        catch (Exception var4)
+        catch (Exception ex)
         {
-            var4.printStackTrace();
+            ex.printStackTrace();
         }
 
-        Packet250CustomPayload var3 = new Packet250CustomPayload();
-        var3.channel = "Aether";
-        var3.data = var1.toByteArray();
-        var3.length = var1.size();
-        return var3;
+        Packet250CustomPayload packet = new Packet250CustomPayload();
+        packet.channel = "Aether";
+        packet.data = bos.toByteArray();
+        packet.length = bos.size();
+        return packet;
     }
 
-    public static Packet sendDonatorChange(String var0, Donator var1)
+    public static Packet sendDonatorChange(String name, Donator donator)
     {
-        ByteArrayOutputStream var2 = new ByteArrayOutputStream();
-        DataOutputStream var3 = new DataOutputStream(var2);
+        ByteArrayOutputStream bos = new ByteArrayOutputStream();
+        DataOutputStream dos = new DataOutputStream(bos);
 
         try
         {
-            var3.writeByte(RegisteredPackets.donatorChange.packetID);
-            var3.writeUTF(var0.toLowerCase());
-            var3.writeUTF(var1.getRSA());
+            dos.writeByte(RegisteredPackets.donatorChange.packetID);
+            dos.writeUTF(name.toLowerCase());
+            dos.writeUTF(donator.getRSA());
         }
-        catch (IOException var5)
+        catch (IOException e)
         {
-            var5.printStackTrace();
+            e.printStackTrace();
         }
 
-        Packet250CustomPayload var4 = new Packet250CustomPayload();
-        var4.channel = "Aether";
-        var4.data = var2.toByteArray();
-        var4.length = var2.size();
-        var4.isChunkDataPacket = true;
-        return var4;
+        Packet250CustomPayload pkt = new Packet250CustomPayload();
+        pkt.channel = "Aether";
+        pkt.data = bos.toByteArray();
+        pkt.length = bos.size();
+        pkt.isChunkDataPacket = true;
+        return pkt;
     }
 
-    public static Packet sendDonatorChoice(String var0, DonatorChoice var1, boolean var2, byte var3)
+    public static Packet sendDonatorChoice(String donator, DonatorChoice choice, boolean adding, byte proxy)
     {
-        ByteArrayOutputStream var4 = new ByteArrayOutputStream();
-        DataOutputStream var5 = new DataOutputStream(var4);
+        ByteArrayOutputStream bos = new ByteArrayOutputStream();
+        DataOutputStream dos = new DataOutputStream(bos);
 
         try
         {
-            var5.writeByte(RegisteredPackets.donatorChoice.packetID);
-            var5.writeUTF(var0);
-            var5.writeUTF(var1.name);
-            var5.writeBoolean(var2);
-            var5.writeByte(var3);
+            dos.writeByte(RegisteredPackets.donatorChoice.packetID);
+            dos.writeUTF(donator);
+            dos.writeUTF(choice.name);
+            dos.writeBoolean(adding);
+            dos.writeByte(proxy);
         }
-        catch (IOException var7)
+        catch (IOException e)
         {
-            var7.printStackTrace();
+            e.printStackTrace();
         }
 
-        Packet250CustomPayload var6 = new Packet250CustomPayload();
-        var6.channel = "Aether";
-        var6.data = var4.toByteArray();
-        var6.length = var4.size();
-        var6.isChunkDataPacket = true;
-        return var6;
+        Packet250CustomPayload pkt = new Packet250CustomPayload();
+        pkt.channel = "Aether";
+        pkt.data = bos.toByteArray();
+        pkt.length = bos.size();
+        pkt.isChunkDataPacket = true;
+        return pkt;
     }
 
-    public static Packet sendDonatorTypeRemoval(String var0, EnumChoiceType var1, byte var2)
+    public static Packet sendDonatorTypeRemoval(String donator, EnumChoiceType type, byte proxy)
     {
-        ByteArrayOutputStream var3 = new ByteArrayOutputStream();
-        DataOutputStream var4 = new DataOutputStream(var3);
+        ByteArrayOutputStream bos = new ByteArrayOutputStream();
+        DataOutputStream dos = new DataOutputStream(bos);
 
         try
         {
-            var4.writeByte(RegisteredPackets.donatorTypeRemoval.packetID);
-            var4.writeUTF(var0);
-            var4.writeUTF(var1.name);
-            var4.writeByte(var2);
+            dos.writeByte(RegisteredPackets.donatorTypeRemoval.packetID);
+            dos.writeUTF(donator);
+            dos.writeUTF(type.name);
+            dos.writeByte(proxy);
         }
-        catch (IOException var6)
+        catch (IOException e)
         {
-            var6.printStackTrace();
+            e.printStackTrace();
         }
 
-        Packet250CustomPayload var5 = new Packet250CustomPayload();
-        var5.channel = "Aether";
-        var5.data = var3.toByteArray();
-        var5.length = var3.size();
-        var5.isChunkDataPacket = true;
-        return var5;
+        Packet250CustomPayload pkt = new Packet250CustomPayload();
+        pkt.channel = "Aether";
+        pkt.data = bos.toByteArray();
+        pkt.length = bos.size();
+        pkt.isChunkDataPacket = true;
+        return pkt;
     }
 
-    public static Packet sendAccessoryChange(NBTTagList var0, boolean var1, boolean var2, Set var3, byte var4)
+    public static Packet sendAccessoryChange(NBTTagList nbttaglist, boolean clearFirst, boolean adding, Set inventories, byte proxy)
     {
-        ByteArrayOutputStream var5 = new ByteArrayOutputStream();
-        DataOutputStream var6 = new DataOutputStream(var5);
+        ByteArrayOutputStream bos = new ByteArrayOutputStream();
+        DataOutputStream dos = new DataOutputStream(bos);
 
         try
         {
-            var6.writeByte(RegisteredPackets.accessoryChange.packetID);
-            NBTTagList.writeNamedTag(var0, var6);
-            var6.writeBoolean(var1);
-            var6.writeBoolean(var2);
-            var6.writeShort(var3.size());
-            var6.writeByte(var4);
-            Iterator var7 = var3.iterator();
+            dos.writeByte(RegisteredPackets.accessoryChange.packetID);
+            NBTTagList.writeNamedTag(nbttaglist, dos);
+            dos.writeBoolean(clearFirst);
+            dos.writeBoolean(adding);
+            dos.writeShort(inventories.size());
+            dos.writeByte(proxy);
 
-            while (var7.hasNext())
+            for (String username : inventories)
             {
-                String var8 = (String)var7.next();
-                var6.writeUTF(var8);
+                dos.writeUTF(username);
             }
         }
-        catch (IOException var9)
+        catch (IOException e)
         {
-            var9.printStackTrace();
+            e.printStackTrace();
         }
 
-        Packet250CustomPayload var10 = new Packet250CustomPayload();
-        var10.channel = "Aether";
-        var10.data = var5.toByteArray();
-        var10.length = var5.size();
-        var10.isChunkDataPacket = true;
-        return var10;
+        Packet250CustomPayload pkt = new Packet250CustomPayload();
+        pkt.channel = "Aether";
+        pkt.data = bos.toByteArray();
+        pkt.length = bos.size();
+        pkt.isChunkDataPacket = true;
+        return pkt;
     }
 
-    public static Packet sendHeartChange(boolean var0, boolean var1, int var2, Set var3)
+    public static Packet sendHeartChange(boolean clearFirst, boolean adding, int maxHealth, Set extraHearts)
     {
-        ByteArrayOutputStream var4 = new ByteArrayOutputStream();
-        DataOutputStream var5 = new DataOutputStream(var4);
+        ByteArrayOutputStream bos = new ByteArrayOutputStream();
+        DataOutputStream dos = new DataOutputStream(bos);
 
         try
         {
-            var5.writeByte(RegisteredPackets.heartChange.packetID);
-            var5.writeBoolean(var0);
-            var5.writeBoolean(var1);
-            var5.writeShort(var3.size());
-            var5.writeInt(var2);
-            Iterator var6 = var3.iterator();
+            dos.writeByte(RegisteredPackets.heartChange.packetID);
+            dos.writeBoolean(clearFirst);
+            dos.writeBoolean(adding);
+            dos.writeShort(extraHearts.size());
+            dos.writeInt(maxHealth);
 
-            while (var6.hasNext())
+            for (String username : extraHearts)
             {
-                String var7 = (String)var6.next();
-                var5.writeUTF(var7);
+                dos.writeUTF(username);
             }
         }
-        catch (IOException var8)
+        catch (IOException e)
         {
-            var8.printStackTrace();
+            e.printStackTrace();
         }
 
-        Packet250CustomPayload var9 = new Packet250CustomPayload();
-        var9.channel = "Aether";
-        var9.data = var4.toByteArray();
-        var9.length = var4.size();
-        var9.isChunkDataPacket = true;
-        return var9;
+        Packet250CustomPayload pkt = new Packet250CustomPayload();
+        pkt.channel = "Aether";
+        pkt.data = bos.toByteArray();
+        pkt.length = bos.size();
+        pkt.isChunkDataPacket = true;
+        return pkt;
     }
 
-    public static Packet sendCooldown(boolean var0, boolean var1, int var2, int var3, String var4, Set var5)
+    public static Packet sendCooldown(boolean clearFirst, boolean adding, int cooldown, int cooldownMax, String stackName, Set playerCooldowns)
     {
-        ByteArrayOutputStream var6 = new ByteArrayOutputStream();
-        DataOutputStream var7 = new DataOutputStream(var6);
+        ByteArrayOutputStream bos = new ByteArrayOutputStream();
+        DataOutputStream dos = new DataOutputStream(bos);
 
         try
         {
-            var7.writeByte(RegisteredPackets.cooldown.packetID);
-            var7.writeBoolean(var0);
-            var7.writeBoolean(var1);
-            var7.writeShort(var5.size());
-            var7.writeInt(var2);
-            var7.writeInt(var3);
-            var7.writeUTF(var4);
-            Iterator var8 = var5.iterator();
+            dos.writeByte(RegisteredPackets.cooldown.packetID);
+            dos.writeBoolean(clearFirst);
+            dos.writeBoolean(adding);
+            dos.writeShort(playerCooldowns.size());
+            dos.writeInt(cooldown);
+            dos.writeInt(cooldownMax);
+            dos.writeUTF(stackName);
 
-            while (var8.hasNext())
+            for (String username : playerCooldowns)
             {
-                String var9 = (String)var8.next();
-                var7.writeUTF(var9);
+                dos.writeUTF(username);
             }
         }
-        catch (IOException var10)
+        catch (IOException e)
         {
-            var10.printStackTrace();
+            e.printStackTrace();
         }
 
-        Packet250CustomPayload var11 = new Packet250CustomPayload();
-        var11.channel = "Aether";
-        var11.data = var6.toByteArray();
-        var11.length = var6.size();
-        var11.isChunkDataPacket = true;
-        return var11;
+        Packet250CustomPayload pkt = new Packet250CustomPayload();
+        pkt.channel = "Aether";
+        pkt.data = bos.toByteArray();
+        pkt.length = bos.size();
+        pkt.isChunkDataPacket = true;
+        return pkt;
     }
 
-    public static Packet sendCoinChange(boolean var0, boolean var1, int var2, Set var3)
+    public static Packet sendCoinChange(boolean clearFirst, boolean adding, int coinAmount, Set playerCoins)
     {
-        ByteArrayOutputStream var4 = new ByteArrayOutputStream();
-        DataOutputStream var5 = new DataOutputStream(var4);
+        ByteArrayOutputStream bos = new ByteArrayOutputStream();
+        DataOutputStream dos = new DataOutputStream(bos);
 
         try
         {
-            var5.writeByte(RegisteredPackets.coinChange.packetID);
-            var5.writeBoolean(var0);
-            var5.writeBoolean(var1);
-            var5.writeShort(var3.size());
-            var5.writeInt(var2);
-            Iterator var6 = var3.iterator();
+            dos.writeByte(RegisteredPackets.coinChange.packetID);
+            dos.writeBoolean(clearFirst);
+            dos.writeBoolean(adding);
+            dos.writeShort(playerCoins.size());
+            dos.writeInt(coinAmount);
 
-            while (var6.hasNext())
+            for (String username : playerCoins)
             {
-                String var7 = (String)var6.next();
-                var5.writeUTF(var7);
+                dos.writeUTF(username);
             }
         }
-        catch (IOException var8)
+        catch (IOException e)
         {
-            var8.printStackTrace();
+            e.printStackTrace();
         }
 
-        Packet250CustomPayload var9 = new Packet250CustomPayload();
-        var9.channel = "Aether";
-        var9.data = var4.toByteArray();
-        var9.length = var4.size();
-        var9.isChunkDataPacket = true;
-        return var9;
+        Packet250CustomPayload pkt = new Packet250CustomPayload();
+        pkt.channel = "Aether";
+        pkt.data = bos.toByteArray();
+        pkt.length = bos.size();
+        pkt.isChunkDataPacket = true;
+        return pkt;
     }
 
-    public static Packet sendPartyChange(boolean var0, String var1, String var2, String var3)
+    public static Packet sendPartyChange(boolean adding, String partyName, String potentialLeader, String skinUrl)
     {
-        ByteArrayOutputStream var4 = new ByteArrayOutputStream();
-        DataOutputStream var5 = new DataOutputStream(var4);
+        ByteArrayOutputStream bos = new ByteArrayOutputStream();
+        DataOutputStream dos = new DataOutputStream(bos);
 
         try
         {
-            var5.writeByte(RegisteredPackets.partyChange.packetID);
-            var5.writeBoolean(var0);
-            var5.writeUTF(var1);
-            var5.writeUTF(var2);
-            var5.writeUTF(var3);
+            dos.writeByte(RegisteredPackets.partyChange.packetID);
+            dos.writeBoolean(adding);
+            dos.writeUTF(partyName);
+            dos.writeUTF(potentialLeader);
+            dos.writeUTF(skinUrl);
         }
-        catch (IOException var7)
+        catch (IOException e)
         {
-            var7.printStackTrace();
+            e.printStackTrace();
         }
 
-        Packet250CustomPayload var6 = new Packet250CustomPayload();
-        var6.channel = "Aether";
-        var6.data = var4.toByteArray();
-        var6.length = var4.size();
-        var6.isChunkDataPacket = true;
-        return var6;
+        Packet250CustomPayload pkt = new Packet250CustomPayload();
+        pkt.channel = "Aether";
+        pkt.data = bos.toByteArray();
+        pkt.length = bos.size();
+        pkt.isChunkDataPacket = true;
+        return pkt;
     }
 
-    public static Packet sendPartyNameChange(String var0, String var1)
+    public static Packet sendPartyNameChange(String partyName, String newPartyName)
     {
-        ByteArrayOutputStream var2 = new ByteArrayOutputStream();
-        DataOutputStream var3 = new DataOutputStream(var2);
+        ByteArrayOutputStream bos = new ByteArrayOutputStream();
+        DataOutputStream dos = new DataOutputStream(bos);
 
         try
         {
-            var3.writeByte(RegisteredPackets.partyNameChange.packetID);
-            var3.writeUTF(var0);
-            var3.writeUTF(var1);
+            dos.writeByte(RegisteredPackets.partyNameChange.packetID);
+            dos.writeUTF(partyName);
+            dos.writeUTF(newPartyName);
         }
-        catch (IOException var5)
+        catch (IOException e)
         {
-            var5.printStackTrace();
+            e.printStackTrace();
         }
 
-        Packet250CustomPayload var4 = new Packet250CustomPayload();
-        var4.channel = "Aether";
-        var4.data = var2.toByteArray();
-        var4.length = var2.size();
-        var4.isChunkDataPacket = true;
-        return var4;
+        Packet250CustomPayload pkt = new Packet250CustomPayload();
+        pkt.channel = "Aether";
+        pkt.data = bos.toByteArray();
+        pkt.length = bos.size();
+        pkt.isChunkDataPacket = true;
+        return pkt;
     }
 
-    public static Packet sendPartyMemberChange(boolean var0, String var1, String var2, String var3)
+    public static Packet sendPartyMemberChange(boolean adding, String partyName, String username, String skinURL)
     {
-        ByteArrayOutputStream var4 = new ByteArrayOutputStream();
-        DataOutputStream var5 = new DataOutputStream(var4);
+        ByteArrayOutputStream bos = new ByteArrayOutputStream();
+        DataOutputStream dos = new DataOutputStream(bos);
 
         try
         {
-            var5.writeByte(RegisteredPackets.memberChange.packetID);
-            var5.writeBoolean(var0);
-            var5.writeUTF(var1);
-            var5.writeUTF(var2);
-            var5.writeUTF(var3);
+            dos.writeByte(RegisteredPackets.memberChange.packetID);
+            dos.writeBoolean(adding);
+            dos.writeUTF(partyName);
+            dos.writeUTF(username);
+            dos.writeUTF(skinURL);
         }
-        catch (IOException var7)
+        catch (IOException e)
         {
-            var7.printStackTrace();
+            e.printStackTrace();
         }
 
-        Packet250CustomPayload var6 = new Packet250CustomPayload();
-        var6.channel = "Aether";
-        var6.data = var4.toByteArray();
-        var6.length = var4.size();
-        var6.isChunkDataPacket = true;
-        return var6;
+        Packet250CustomPayload pkt = new Packet250CustomPayload();
+        pkt.channel = "Aether";
+        pkt.data = bos.toByteArray();
+        pkt.length = bos.size();
+        pkt.isChunkDataPacket = true;
+        return pkt;
     }
 
-    public static Packet sendPartyTypeChange(String var0, PartyType var1)
+    public static Packet sendPartyTypeChange(String partyName, PartyType type)
     {
-        ByteArrayOutputStream var2 = new ByteArrayOutputStream();
-        DataOutputStream var3 = new DataOutputStream(var2);
+        ByteArrayOutputStream bos = new ByteArrayOutputStream();
+        DataOutputStream dos = new DataOutputStream(bos);
 
         try
         {
-            var3.writeByte(RegisteredPackets.partyTypeChange.packetID);
-            var3.writeUTF(var0);
-            var3.writeUTF(var1.name());
+            dos.writeByte(RegisteredPackets.partyTypeChange.packetID);
+            dos.writeUTF(partyName);
+            dos.writeUTF(type.name());
         }
-        catch (IOException var5)
+        catch (IOException e)
         {
-            var5.printStackTrace();
+            e.printStackTrace();
         }
 
-        Packet250CustomPayload var4 = new Packet250CustomPayload();
-        var4.channel = "Aether";
-        var4.data = var2.toByteArray();
-        var4.length = var2.size();
-        var4.isChunkDataPacket = true;
-        return var4;
+        Packet250CustomPayload pkt = new Packet250CustomPayload();
+        pkt.channel = "Aether";
+        pkt.data = bos.toByteArray();
+        pkt.length = bos.size();
+        pkt.isChunkDataPacket = true;
+        return pkt;
     }
 
-    public static Packet sendNotificationChange(Notification var0, boolean var1)
+    public static Packet sendNotificationChange(Notification notification, boolean adding)
     {
-        ByteArrayOutputStream var2 = new ByteArrayOutputStream();
-        DataOutputStream var3 = new DataOutputStream(var2);
+        ByteArrayOutputStream bos = new ByteArrayOutputStream();
+        DataOutputStream dos = new DataOutputStream(bos);
 
         try
         {
-            var3.writeByte(RegisteredPackets.notification.packetID);
-            var3.writeBoolean(var1);
-            var3.writeUTF(var0.getType().name());
-            var3.writeUTF(var0.getHeaderText());
-            var3.writeUTF(var0.getSenderName());
-            var3.writeUTF(var0.getReceiverName());
+            dos.writeByte(RegisteredPackets.notification.packetID);
+            dos.writeBoolean(adding);
+            dos.writeUTF(notification.getType().name());
+            dos.writeUTF(notification.getHeaderText());
+            dos.writeUTF(notification.getSenderName());
+            dos.writeUTF(notification.getReceiverName());
         }
-        catch (IOException var5)
+        catch (IOException e)
         {
-            var5.printStackTrace();
+            e.printStackTrace();
         }
 
-        Packet250CustomPayload var4 = new Packet250CustomPayload();
-        var4.channel = "Aether";
-        var4.data = var2.toByteArray();
-        var4.length = var2.size();
-        var4.isChunkDataPacket = true;
-        return var4;
+        Packet250CustomPayload pkt = new Packet250CustomPayload();
+        pkt.channel = "Aether";
+        pkt.data = bos.toByteArray();
+        pkt.length = bos.size();
+        pkt.isChunkDataPacket = true;
+        return pkt;
     }
 
-    public static Packet sendPlayerInput(String var0, ArrayList var1, boolean var2)
+    public static Packet sendPlayerInput(String username, ArrayList directions, boolean isJumping)
     {
-        ByteArrayOutputStream var3 = new ByteArrayOutputStream();
-        DataOutputStream var4 = new DataOutputStream(var3);
+        ByteArrayOutputStream bos = new ByteArrayOutputStream();
+        DataOutputStream dos = new DataOutputStream(bos);
 
         try
         {
-            var4.writeByte(RegisteredPackets.playerInput.packetID);
-            var4.writeUTF(var0);
-            var4.writeInt(var1.size());
-            Iterator var5 = var1.iterator();
+            dos.writeByte(RegisteredPackets.playerInput.packetID);
+            dos.writeUTF(username);
+            dos.writeInt(directions.size());
 
-            while (var5.hasNext())
+            for (MountInput direction : directions)
             {
-                MountInput var6 = (MountInput)var5.next();
-                var4.writeUTF(var6.name());
+                dos.writeUTF(direction.name());
             }
 
-            var4.writeBoolean(var2);
+            dos.writeBoolean(isJumping);
         }
-        catch (IOException var7)
+        catch (IOException e)
         {
-            var7.printStackTrace();
+            e.printStackTrace();
         }
 
-        Packet250CustomPayload var8 = new Packet250CustomPayload();
-        var8.channel = "Aether";
-        var8.data = var3.toByteArray();
-        var8.length = var3.size();
-        var8.isChunkDataPacket = true;
-        return var8;
+        Packet250CustomPayload pkt = new Packet250CustomPayload();
+        pkt.channel = "Aether";
+        pkt.data = bos.toByteArray();
+        pkt.length = bos.size();
+        pkt.isChunkDataPacket = true;
+        return pkt;
     }
 
-    public static Packet sendAllParties(ArrayList var0)
+    public static Packet sendAllParties(ArrayList parties)
     {
-        ByteArrayOutputStream var1 = new ByteArrayOutputStream();
-        DataOutputStream var2 = new DataOutputStream(var1);
+        ByteArrayOutputStream bos = new ByteArrayOutputStream();
+        DataOutputStream dos = new DataOutputStream(bos);
 
         try
         {
-            var2.writeByte(RegisteredPackets.allParties.packetID);
-            var2.writeInt(var0.size());
-            Iterator var3 = var0.iterator();
+            dos.writeByte(RegisteredPackets.allParties.packetID);
+            dos.writeInt(parties.size());
 
-            while (var3.hasNext())
+            for (Party party : parties)
             {
-                Party var4 = (Party)var3.next();
-                var2.writeUTF(var4.getName());
-                var2.writeUTF(var4.getLeader().username);
-                var2.writeUTF(var4.getType().name());
-                var2.writeInt(var4.getMemberSizeLimit());
-                var2.writeInt(var4.getMembers().size());
-                Iterator var5 = var4.getMembers().iterator();
+                dos.writeUTF(party.getName());
+                dos.writeUTF(party.getLeader().username);
+                dos.writeUTF(party.getType().name());
+                dos.writeInt(party.getMemberSizeLimit());
+                dos.writeInt(party.getMembers().size());
 
-                while (var5.hasNext())
+                for (PartyMember member : party.getMembers())
                 {
-                    PartyMember var6 = (PartyMember)var5.next();
-                    var2.writeUTF(var6.username);
-                    var2.writeUTF(var6.getType().name());
+                    dos.writeUTF(member.username);
+                    dos.writeUTF(member.getType().name());
                 }
             }
         }
-        catch (IOException var7)
+        catch (IOException e)
         {
-            var7.printStackTrace();
+            e.printStackTrace();
         }
 
-        Packet250CustomPayload var8 = new Packet250CustomPayload();
-        var8.channel = "Aether";
-        var8.data = var1.toByteArray();
-        var8.length = var1.size();
-        var8.isChunkDataPacket = true;
-        return var8;
+        Packet250CustomPayload pkt = new Packet250CustomPayload();
+        pkt.channel = "Aether";
+        pkt.data = bos.toByteArray();
+        pkt.length = bos.size();
+        pkt.isChunkDataPacket = true;
+        return pkt;
     }
 
-    public static Packet sendRequestPlayer(boolean var0, String var1, String var2, String var3, String var4)
+    public static Packet sendRequestPlayer(boolean adding, String partyName, String leaderName, String leaderSkinUrl, String requestedPlayer)
     {
-        ByteArrayOutputStream var5 = new ByteArrayOutputStream();
-        DataOutputStream var6 = new DataOutputStream(var5);
+        ByteArrayOutputStream bos = new ByteArrayOutputStream();
+        DataOutputStream dos = new DataOutputStream(bos);
 
         try
         {
-            var6.writeByte(RegisteredPackets.requestPlayer.packetID);
-            var6.writeBoolean(var0);
-            var6.writeUTF(var1);
-            var6.writeUTF(var2);
-            var6.writeUTF(var3);
-            var6.writeUTF(var4);
+            dos.writeByte(RegisteredPackets.requestPlayer.packetID);
+            dos.writeBoolean(adding);
+            dos.writeUTF(partyName);
+            dos.writeUTF(leaderName);
+            dos.writeUTF(leaderSkinUrl);
+            dos.writeUTF(requestedPlayer);
         }
-        catch (IOException var8)
+        catch (IOException e)
         {
-            var8.printStackTrace();
+            e.printStackTrace();
         }
 
-        Packet250CustomPayload var7 = new Packet250CustomPayload();
-        var7.channel = "Aether";
-        var7.data = var5.toByteArray();
-        var7.length = var5.size();
-        var7.isChunkDataPacket = true;
-        return var7;
+        Packet250CustomPayload pkt = new Packet250CustomPayload();
+        pkt.channel = "Aether";
+        pkt.data = bos.toByteArray();
+        pkt.length = bos.size();
+        pkt.isChunkDataPacket = true;
+        return pkt;
     }
 
-    public static Packet sendPlayerClientInfo(boolean var0, boolean var1, String var2, PlayerClientInfo var3)
+    public static Packet sendPlayerClientInfo(boolean clearFirst, boolean adding, String username, PlayerClientInfo playerClientInfo)
     {
-        ByteArrayOutputStream var4 = new ByteArrayOutputStream();
-        DataOutputStream var5 = new DataOutputStream(var4);
+        ByteArrayOutputStream bos = new ByteArrayOutputStream();
+        DataOutputStream dos = new DataOutputStream(bos);
 
         try
         {
-            var5.writeByte(RegisteredPackets.playerClientInfo.packetID);
-            var5.writeBoolean(var0);
-            var5.writeBoolean(var1);
-            var5.writeUTF(var2);
-            var5.writeShort(var3.getHalfHearts());
-            var5.writeShort(var3.getMaxHealth());
-            var5.writeShort(var3.getHunger());
-            var5.writeShort(var3.getArmourValue());
-            var5.writeInt(var3.getAetherCoins());
+            dos.writeByte(RegisteredPackets.playerClientInfo.packetID);
+            dos.writeBoolean(clearFirst);
+            dos.writeBoolean(adding);
+            dos.writeUTF(username);
+            dos.writeShort(playerClientInfo.getHalfHearts());
+            dos.writeShort(playerClientInfo.getMaxHealth());
+            dos.writeShort(playerClientInfo.getHunger());
+            dos.writeShort(playerClientInfo.getArmourValue());
+            dos.writeInt(playerClientInfo.getAetherCoins());
         }
-        catch (IOException var7)
+        catch (IOException e)
         {
-            var7.printStackTrace();
+            e.printStackTrace();
         }
 
-        Packet250CustomPayload var6 = new Packet250CustomPayload();
-        var6.channel = "Aether";
-        var6.data = var4.toByteArray();
-        var6.length = var4.size();
-        var6.isChunkDataPacket = true;
-        return var6;
+        Packet250CustomPayload pkt = new Packet250CustomPayload();
+        pkt.channel = "Aether";
+        pkt.data = bos.toByteArray();
+        pkt.length = bos.size();
+        pkt.isChunkDataPacket = true;
+        return pkt;
     }
 
-    public static Packet sendMemberTypeChange(String var0, MemberType var1)
+    public static Packet sendMemberTypeChange(String username, MemberType type)
     {
-        ByteArrayOutputStream var2 = new ByteArrayOutputStream();
-        DataOutputStream var3 = new DataOutputStream(var2);
+        ByteArrayOutputStream bos = new ByteArrayOutputStream();
+        DataOutputStream dos = new DataOutputStream(bos);
 
         try
         {
-            var3.writeByte(RegisteredPackets.memberTypeChange.packetID);
-            var3.writeUTF(var0);
-            var3.writeUTF(var1.name());
+            dos.writeByte(RegisteredPackets.memberTypeChange.packetID);
+            dos.writeUTF(username);
+            dos.writeUTF(type.name());
         }
-        catch (IOException var5)
+        catch (IOException e)
         {
-            var5.printStackTrace();
+            e.printStackTrace();
         }
 
-        Packet250CustomPayload var4 = new Packet250CustomPayload();
-        var4.channel = "Aether";
-        var4.data = var2.toByteArray();
-        var4.length = var2.size();
-        var4.isChunkDataPacket = true;
-        return var4;
+        Packet250CustomPayload pkt = new Packet250CustomPayload();
+        pkt.channel = "Aether";
+        pkt.data = bos.toByteArray();
+        pkt.length = bos.size();
+        pkt.isChunkDataPacket = true;
+        return pkt;
     }
 
-    public static Packet sendDungeonQueueChange(boolean var0, Dungeon var1, int var2, int var3, int var4, Party var5)
+    public static Packet sendDungeonQueueChange(boolean adding, Dungeon dungeon, int tileX, int tileY, int tileZ, Party party)
     {
-        ByteArrayOutputStream var6 = new ByteArrayOutputStream();
-        DataOutputStream var7 = new DataOutputStream(var6);
+        ByteArrayOutputStream bos = new ByteArrayOutputStream();
+        DataOutputStream dos = new DataOutputStream(bos);
 
         try
         {
-            var7.writeByte(RegisteredPackets.dungeonQueueChange.packetID);
-            var7.writeBoolean(var0);
-            var7.writeInt(var1.getID());
-            var7.writeUTF(var5.getName());
-            var7.writeInt(var2);
-            var7.writeInt(var3);
-            var7.writeInt(var4);
+            dos.writeByte(RegisteredPackets.dungeonQueueChange.packetID);
+            dos.writeBoolean(adding);
+            dos.writeInt(dungeon.getID());
+            dos.writeUTF(party.getName());
+            dos.writeInt(tileX);
+            dos.writeInt(tileY);
+            dos.writeInt(tileZ);
         }
-        catch (IOException var9)
+        catch (IOException e)
         {
-            var9.printStackTrace();
+            e.printStackTrace();
         }
 
-        Packet250CustomPayload var8 = new Packet250CustomPayload();
-        var8.channel = "Aether";
-        var8.data = var6.toByteArray();
-        var8.length = var6.size();
-        var8.isChunkDataPacket = true;
-        return var8;
+        Packet250CustomPayload pkt = new Packet250CustomPayload();
+        pkt.channel = "Aether";
+        pkt.data = bos.toByteArray();
+        pkt.length = bos.size();
+        pkt.isChunkDataPacket = true;
+        return pkt;
     }
 
-    public static Packet sendDungeonChange(boolean var0, Dungeon var1)
+    public static Packet sendDungeonChange(boolean adding, Dungeon dungeon)
     {
-        ByteArrayOutputStream var2 = new ByteArrayOutputStream();
-        DataOutputStream var3 = new DataOutputStream(var2);
+        ByteArrayOutputStream bos = new ByteArrayOutputStream();
+        DataOutputStream dos = new DataOutputStream(bos);
 
         try
         {
-            var3.writeByte(RegisteredPackets.dungeonChange.packetID);
-            var3.writeBoolean(var0);
-            var3.writeInt(var1.getID());
+            dos.writeByte(RegisteredPackets.dungeonChange.packetID);
+            dos.writeBoolean(adding);
+            dos.writeInt(dungeon.getID());
 
-            if (var0)
+            if (adding)
             {
-                var3.writeUTF(var1.getType().name());
-                var3.writeInt(var1.centerX);
-                var3.writeInt(var1.centerZ);
-                var3.writeInt(var1.boundingBoxes.size());
-                var3.writeInt(var1.boundingBox.minX);
-                var3.writeInt(var1.boundingBox.minY);
-                var3.writeInt(var1.boundingBox.minZ);
-                var3.writeInt(var1.boundingBox.maxX);
-                var3.writeInt(var1.boundingBox.maxY);
-                var3.writeInt(var1.boundingBox.maxZ);
-                Iterator var4 = var1.boundingBoxes.iterator();
+                dos.writeUTF(dungeon.getType().name());
+                dos.writeInt(dungeon.centerX);
+                dos.writeInt(dungeon.centerZ);
+                dos.writeInt(dungeon.boundingBoxes.size());
+                dos.writeInt(dungeon.boundingBox.minX);
+                dos.writeInt(dungeon.boundingBox.minY);
+                dos.writeInt(dungeon.boundingBox.minZ);
+                dos.writeInt(dungeon.boundingBox.maxX);
+                dos.writeInt(dungeon.boundingBox.maxY);
+                dos.writeInt(dungeon.boundingBox.maxZ);
 
-                while (var4.hasNext())
+                for (StructureBoundingBoxSerial box : dungeon.boundingBoxes)
                 {
-                    StructureBoundingBoxSerial var5 = (StructureBoundingBoxSerial)var4.next();
-                    var3.writeInt(var5.minX);
-                    var3.writeInt(var5.minY);
-                    var3.writeInt(var5.minZ);
-                    var3.writeInt(var5.maxX);
-                    var3.writeInt(var5.maxY);
-                    var3.writeInt(var5.maxZ);
+                    dos.writeInt(box.minX);
+                    dos.writeInt(box.minY);
+                    dos.writeInt(box.minZ);
+                    dos.writeInt(box.maxX);
+                    dos.writeInt(box.maxY);
+                    dos.writeInt(box.maxZ);
                 }
             }
         }
-        catch (IOException var6)
+        catch (IOException e)
         {
-            var6.printStackTrace();
+            e.printStackTrace();
         }
 
-        Packet250CustomPayload var7 = new Packet250CustomPayload();
-        var7.channel = "Aether";
-        var7.data = var2.toByteArray();
-        var7.length = var2.size();
-        var7.isChunkDataPacket = true;
-        return var7;
+        Packet250CustomPayload pkt = new Packet250CustomPayload();
+        pkt.channel = "Aether";
+        pkt.data = bos.toByteArray();
+        pkt.length = bos.size();
+        pkt.isChunkDataPacket = true;
+        return pkt;
     }
 
-    public static Packet sendDungeonMemberQueue(Dungeon var0, PartyMember var1)
+    public static Packet sendDungeonMemberQueue(Dungeon dungeon, PartyMember queuedMember)
     {
-        ByteArrayOutputStream var2 = new ByteArrayOutputStream();
-        DataOutputStream var3 = new DataOutputStream(var2);
+        ByteArrayOutputStream bos = new ByteArrayOutputStream();
+        DataOutputStream dos = new DataOutputStream(bos);
 
         try
         {
-            var3.writeByte(RegisteredPackets.dungeonMemberQueue.packetID);
-            var3.writeInt(var0.getID());
-            var3.writeUTF(var1.username);
+            dos.writeByte(RegisteredPackets.dungeonMemberQueue.packetID);
+            dos.writeInt(dungeon.getID());
+            dos.writeUTF(queuedMember.username);
         }
-        catch (IOException var5)
+        catch (IOException e)
         {
-            var5.printStackTrace();
+            e.printStackTrace();
         }
 
-        Packet250CustomPayload var4 = new Packet250CustomPayload();
-        var4.channel = "Aether";
-        var4.data = var2.toByteArray();
-        var4.length = var2.size();
-        var4.isChunkDataPacket = true;
-        return var4;
+        Packet250CustomPayload pkt = new Packet250CustomPayload();
+        pkt.channel = "Aether";
+        pkt.data = bos.toByteArray();
+        pkt.length = bos.size();
+        pkt.isChunkDataPacket = true;
+        return pkt;
     }
 
-    public static Packet sendDungeonFinish(Dungeon var0, TileEntityEntranceController var1, Party var2)
+    public static Packet sendDungeonFinish(Dungeon dungeon, TileEntityEntranceController controller, Party party)
     {
-        ByteArrayOutputStream var3 = new ByteArrayOutputStream();
-        DataOutputStream var4 = new DataOutputStream(var3);
+        ByteArrayOutputStream bos = new ByteArrayOutputStream();
+        DataOutputStream dos = new DataOutputStream(bos);
 
         try
         {
-            var4.writeByte(RegisteredPackets.dungeonFinish.packetID);
-            var4.writeInt(var0.getID());
-            var4.writeUTF(var2.getName());
-            var4.writeInt(var1.xCoord);
-            var4.writeInt(var1.yCoord);
-            var4.writeInt(var1.zCoord);
+            dos.writeByte(RegisteredPackets.dungeonFinish.packetID);
+            dos.writeInt(dungeon.getID());
+            dos.writeUTF(party.getName());
+            dos.writeInt(controller.xCoord);
+            dos.writeInt(controller.yCoord);
+            dos.writeInt(controller.zCoord);
         }
-        catch (IOException var6)
+        catch (IOException e)
         {
-            var6.printStackTrace();
+            e.printStackTrace();
         }
 
-        Packet250CustomPayload var5 = new Packet250CustomPayload();
-        var5.channel = "Aether";
-        var5.data = var3.toByteArray();
-        var5.length = var3.size();
-        var5.isChunkDataPacket = true;
-        return var5;
+        Packet250CustomPayload pkt = new Packet250CustomPayload();
+        pkt.channel = "Aether";
+        pkt.data = bos.toByteArray();
+        pkt.length = bos.size();
+        pkt.isChunkDataPacket = true;
+        return pkt;
     }
 
-    public static Packet sendDungeonTimerStart(Dungeon var0, Party var1, int var2)
+    public static Packet sendDungeonTimerStart(Dungeon dungeon, Party party, int timerLength)
     {
-        ByteArrayOutputStream var3 = new ByteArrayOutputStream();
-        DataOutputStream var4 = new DataOutputStream(var3);
+        ByteArrayOutputStream bos = new ByteArrayOutputStream();
+        DataOutputStream dos = new DataOutputStream(bos);
 
         try
         {
-            var4.writeByte(RegisteredPackets.dungeonTimerStart.packetID);
-            var4.writeInt(var0.getID());
-            var4.writeUTF(var1.getName());
-            var4.writeInt(var2);
+            dos.writeByte(RegisteredPackets.dungeonTimerStart.packetID);
+            dos.writeInt(dungeon.getID());
+            dos.writeUTF(party.getName());
+            dos.writeInt(timerLength);
         }
-        catch (IOException var6)
+        catch (IOException e)
         {
-            var6.printStackTrace();
+            e.printStackTrace();
         }
 
-        Packet250CustomPayload var5 = new Packet250CustomPayload();
-        var5.channel = "Aether";
-        var5.data = var3.toByteArray();
-        var5.length = var3.size();
-        var5.isChunkDataPacket = true;
-        return var5;
+        Packet250CustomPayload pkt = new Packet250CustomPayload();
+        pkt.channel = "Aether";
+        pkt.data = bos.toByteArray();
+        pkt.length = bos.size();
+        pkt.isChunkDataPacket = true;
+        return pkt;
     }
 
-    public static Packet removeDungeonKey(Dungeon var0, Party var1, EnumKeyType var2, TileEntityBronzeDoorController var3)
+    public static Packet removeDungeonKey(Dungeon dungeon, Party party, EnumKeyType keyType, TileEntityBronzeDoorController bronzeDoor)
     {
-        ByteArrayOutputStream var4 = new ByteArrayOutputStream();
-        DataOutputStream var5 = new DataOutputStream(var4);
+        ByteArrayOutputStream bos = new ByteArrayOutputStream();
+        DataOutputStream dos = new DataOutputStream(bos);
 
         try
         {
-            var5.writeByte(RegisteredPackets.dungeonKey.packetID);
-            var5.writeBoolean(false);
-            var5.writeInt(var0.getID());
-            var5.writeUTF(var1.getName());
-            var5.writeUTF(var2.name());
-            var5.writeInt(MathHelper.floor_double((double)var3.xCoord));
-            var5.writeInt(MathHelper.floor_double((double)var3.yCoord));
-            var5.writeInt(MathHelper.floor_double((double)var3.zCoord));
+            dos.writeByte(RegisteredPackets.dungeonKey.packetID);
+            dos.writeBoolean(false);
+            dos.writeInt(dungeon.getID());
+            dos.writeUTF(party.getName());
+            dos.writeUTF(keyType.name());
+            dos.writeInt(MathHelper.floor_double(bronzeDoor.xCoord));
+            dos.writeInt(MathHelper.floor_double(bronzeDoor.yCoord));
+            dos.writeInt(MathHelper.floor_double(bronzeDoor.zCoord));
         }
-        catch (IOException var7)
+        catch (IOException e)
         {
-            var7.printStackTrace();
+            e.printStackTrace();
         }
 
-        Packet250CustomPayload var6 = new Packet250CustomPayload();
-        var6.channel = "Aether";
-        var6.data = var4.toByteArray();
-        var6.length = var4.size();
-        var6.isChunkDataPacket = true;
-        return var6;
+        Packet250CustomPayload pkt = new Packet250CustomPayload();
+        pkt.channel = "Aether";
+        pkt.data = bos.toByteArray();
+        pkt.length = bos.size();
+        pkt.isChunkDataPacket = true;
+        return pkt;
     }
 
-    public static Packet sendDungeonKey(Dungeon var0, Party var1, EnumKeyType var2)
+    public static Packet sendDungeonKey(Dungeon dungeon, Party party, EnumKeyType keyType)
     {
-        ByteArrayOutputStream var3 = new ByteArrayOutputStream();
-        DataOutputStream var4 = new DataOutputStream(var3);
+        ByteArrayOutputStream bos = new ByteArrayOutputStream();
+        DataOutputStream dos = new DataOutputStream(bos);
 
         try
         {
-            var4.writeByte(RegisteredPackets.dungeonKey.packetID);
-            var4.writeBoolean(true);
-            var4.writeInt(var0.getID());
-            var4.writeUTF(var1.getName());
-            var4.writeUTF(var2.name());
+            dos.writeByte(RegisteredPackets.dungeonKey.packetID);
+            dos.writeBoolean(true);
+            dos.writeInt(dungeon.getID());
+            dos.writeUTF(party.getName());
+            dos.writeUTF(keyType.name());
         }
-        catch (IOException var6)
+        catch (IOException e)
         {
-            var6.printStackTrace();
+            e.printStackTrace();
         }
 
-        Packet250CustomPayload var5 = new Packet250CustomPayload();
-        var5.channel = "Aether";
-        var5.data = var3.toByteArray();
-        var5.length = var3.size();
-        var5.isChunkDataPacket = true;
-        return var5;
+        Packet250CustomPayload pkt = new Packet250CustomPayload();
+        pkt.channel = "Aether";
+        pkt.data = bos.toByteArray();
+        pkt.length = bos.size();
+        pkt.isChunkDataPacket = true;
+        return pkt;
     }
 
-    public static Packet sendDungeonRespawn(Dungeon var0, Party var1)
+    public static Packet sendDungeonRespawn(Dungeon dungeon, Party party)
     {
-        ByteArrayOutputStream var2 = new ByteArrayOutputStream();
-        DataOutputStream var3 = new DataOutputStream(var2);
+        ByteArrayOutputStream bos = new ByteArrayOutputStream();
+        DataOutputStream dos = new DataOutputStream(bos);
 
         try
         {
-            var3.writeByte(RegisteredPackets.dungeonRespawn.packetID);
-            var3.writeInt(var0.getID());
-            var3.writeUTF(var1.getName());
+            dos.writeByte(RegisteredPackets.dungeonRespawn.packetID);
+            dos.writeInt(dungeon.getID());
+            dos.writeUTF(party.getName());
         }
-        catch (IOException var5)
+        catch (IOException e)
         {
-            var5.printStackTrace();
+            e.printStackTrace();
         }
 
-        Packet250CustomPayload var4 = new Packet250CustomPayload();
-        var4.channel = "Aether";
-        var4.data = var2.toByteArray();
-        var4.length = var2.size();
-        var4.isChunkDataPacket = true;
-        return var4;
+        Packet250CustomPayload pkt = new Packet250CustomPayload();
+        pkt.channel = "Aether";
+        pkt.data = bos.toByteArray();
+        pkt.length = bos.size();
+        pkt.isChunkDataPacket = true;
+        return pkt;
     }
 
-    public static Packet sendDungeonDisbandMember(Dungeon var0, PartyMember var1)
+    public static Packet sendDungeonDisbandMember(Dungeon dungeon, PartyMember member)
     {
-        ByteArrayOutputStream var2 = new ByteArrayOutputStream();
-        DataOutputStream var3 = new DataOutputStream(var2);
+        ByteArrayOutputStream bos = new ByteArrayOutputStream();
+        DataOutputStream dos = new DataOutputStream(bos);
 
         try
         {
-            var3.writeByte(RegisteredPackets.dungeonDisbandMember.packetID);
-            var3.writeInt(var0.getID());
-            var3.writeUTF(var1.username);
+            dos.writeByte(RegisteredPackets.dungeonDisbandMember.packetID);
+            dos.writeInt(dungeon.getID());
+            dos.writeUTF(member.username);
         }
-        catch (IOException var5)
+        catch (IOException e)
         {
-            var5.printStackTrace();
+            e.printStackTrace();
         }
 
-        Packet250CustomPayload var4 = new Packet250CustomPayload();
-        var4.channel = "Aether";
-        var4.data = var2.toByteArray();
-        var4.length = var2.size();
-        var4.isChunkDataPacket = true;
-        return var4;
+        Packet250CustomPayload pkt = new Packet250CustomPayload();
+        pkt.channel = "Aether";
+        pkt.data = bos.toByteArray();
+        pkt.length = bos.size();
+        pkt.isChunkDataPacket = true;
+        return pkt;
     }
 
-    public static Packet sendDungeonQueueCheck(Dungeon var0)
+    public static Packet sendDungeonQueueCheck(Dungeon dungeon)
     {
-        ByteArrayOutputStream var1 = new ByteArrayOutputStream();
-        DataOutputStream var2 = new DataOutputStream(var1);
+        ByteArrayOutputStream bos = new ByteArrayOutputStream();
+        DataOutputStream dos = new DataOutputStream(bos);
 
         try
         {
-            var2.writeByte(RegisteredPackets.dungeonQueueCheck.packetID);
-            var2.writeInt(var0.getID());
+            dos.writeByte(RegisteredPackets.dungeonQueueCheck.packetID);
+            dos.writeInt(dungeon.getID());
         }
-        catch (IOException var4)
+        catch (IOException e)
         {
-            var4.printStackTrace();
+            e.printStackTrace();
         }
 
-        Packet250CustomPayload var3 = new Packet250CustomPayload();
-        var3.channel = "Aether";
-        var3.data = var1.toByteArray();
-        var3.length = var1.size();
-        var3.isChunkDataPacket = true;
-        return var3;
+        Packet250CustomPayload pkt = new Packet250CustomPayload();
+        pkt.channel = "Aether";
+        pkt.data = bos.toByteArray();
+        pkt.length = bos.size();
+        pkt.isChunkDataPacket = true;
+        return pkt;
     }
 
-    public static Packet sendParachuteCheck(boolean var0, boolean var1, boolean var2, int var3, Set var4)
+    public static Packet sendParachuteCheck(boolean clearFirst, boolean adding, boolean isParachuting, int parachuteType, Set playerParachuting)
     {
-        ByteArrayOutputStream var5 = new ByteArrayOutputStream();
-        DataOutputStream var6 = new DataOutputStream(var5);
+        ByteArrayOutputStream bos = new ByteArrayOutputStream();
+        DataOutputStream dos = new DataOutputStream(bos);
 
         try
         {
-            var6.writeByte(RegisteredPackets.parachute.packetID);
-            var6.writeBoolean(var0);
-            var6.writeBoolean(var1);
-            var6.writeShort(var4.size());
-            var6.writeBoolean(var2);
-            var6.writeInt(var3);
-            Iterator var7 = var4.iterator();
+            dos.writeByte(RegisteredPackets.parachute.packetID);
+            dos.writeBoolean(clearFirst);
+            dos.writeBoolean(adding);
+            dos.writeShort(playerParachuting.size());
+            dos.writeBoolean(isParachuting);
+            dos.writeInt(parachuteType);
 
-            while (var7.hasNext())
+            for (String username : playerParachuting)
             {
-                String var8 = (String)var7.next();
-                var6.writeUTF(var8);
+                dos.writeUTF(username);
             }
         }
-        catch (IOException var9)
+        catch (IOException e)
         {
-            var9.printStackTrace();
+            e.printStackTrace();
         }
 
-        Packet250CustomPayload var10 = new Packet250CustomPayload();
-        var10.channel = "Aether";
-        var10.data = var5.toByteArray();
-        var10.length = var5.size();
-        var10.isChunkDataPacket = true;
-        return var10;
+        Packet250CustomPayload pkt = new Packet250CustomPayload();
+        pkt.channel = "Aether";
+        pkt.data = bos.toByteArray();
+        pkt.length = bos.size();
+        pkt.isChunkDataPacket = true;
+        return pkt;
     }
 }
+

@@ -9,54 +9,57 @@ import java.io.DataInputStream;
 import java.io.InputStreamReader;
 import java.util.HashMap;
 import net.aetherteam.aether.Aether;
-import net.minecraft.client.entity.EntityPlayerSP;
+import net.aetherteam.aether.CommonProxy;
+import net.aetherteam.aether.client.PlayerBaseAetherClient;
 import net.minecraft.network.packet.Packet250CustomPayload;
+import net.minecraft.util.MovementInputFromOptions;
 
 public class PacketCoinChange extends AetherPacket
 {
-    public PacketCoinChange(int var1)
+    public PacketCoinChange(int packetID)
     {
-        super(var1);
+        super(packetID);
     }
 
     @SideOnly(Side.CLIENT)
-    public void onPacketReceived(Packet250CustomPayload var1, Player var2)
+    public void onPacketReceived(Packet250CustomPayload packet, Player player)
     {
-        DataInputStream var3 = new DataInputStream(new ByteArrayInputStream(var1.data));
-        new BufferedReader(new InputStreamReader(var3));
+        DataInputStream dat = new DataInputStream(new ByteArrayInputStream(packet.data));
+        BufferedReader buf = new BufferedReader(new InputStreamReader(dat));
 
         try
         {
-            byte var5 = var3.readByte();
-            boolean var6 = var3.readBoolean();
-            boolean var7 = var3.readBoolean();
-            short var8 = var3.readShort();
-            int var9 = var3.readInt();
-            HashMap var10 = Aether.proxy.getClientCoins();
+            byte packetType = dat.readByte();
+            boolean clearFirst = dat.readBoolean();
+            boolean adding = dat.readBoolean();
+            short length = dat.readShort();
+            int coinAmount = dat.readInt();
+            HashMap playerCoins = Aether.proxy.getClientCoins();
 
-            if (var6)
+            if (clearFirst)
             {
-                var10.clear();
+                playerCoins.clear();
             }
 
-            for (int var11 = 0; var11 < var8; ++var11)
+            for (int i = 0; i < length; i++)
             {
-                String var12 = var3.readUTF();
+                String username = dat.readUTF();
 
-                if (var7)
+                if (adding)
                 {
-                    var10.put(var12, Integer.valueOf(var9));
-                    Aether.getClientPlayer((EntityPlayerSP)var2).updateCoinAmount();
+                    playerCoins.put(username, Integer.valueOf(coinAmount));
+                    Aether.getClientPlayer((MovementInputFromOptions)player).updateCoinAmount();
                 }
                 else
                 {
-                    var10.remove(var12);
+                    playerCoins.remove(username);
                 }
             }
         }
-        catch (Exception var13)
+        catch (Exception ex)
         {
-            var13.printStackTrace();
+            ex.printStackTrace();
         }
     }
 }
+

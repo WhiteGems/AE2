@@ -12,14 +12,15 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.Icon;
 import net.minecraft.world.World;
 
-public class BlockPresent extends BlockAether implements IAetherBlock
+public class BlockPresent extends BlockAether
+    implements IAetherBlock
 {
     public static Icon sprTop;
     public static Icon sprSide;
     int rarity;
     int randStart = 6;
     int randEnd = 9;
-    long range;
+    long range = this.randEnd - this.randStart + 1L;
     long fraction;
     int randomNumber;
     int crateType;
@@ -27,105 +28,84 @@ public class BlockPresent extends BlockAether implements IAetherBlock
     public BlockPresent(int var1)
     {
         super(var1, Material.wood);
-        this.range = (long)this.randEnd - (long)this.randStart + 1L;
-        this.setHardness(0.1F);
-        this.setStepSound(Block.soundGrassFootstep);
+        setHardness(0.1F);
+        setStepSound(Block.soundGrassFootstep);
     }
 
-    /**
-     * From the specified side and block metadata retrieves the blocks texture. Args: side, metadata
-     */
-    public Icon getIcon(int var1, int var2)
+    public Icon getIcon(int var1, int meta)
     {
-        return var1 == 0 ? sprTop : (var1 == 1 ? sprTop : sprSide);
+        return var1 == 1 ? sprTop : var1 == 0 ? sprTop : sprSide;
     }
 
-    /**
-     * Called when the player destroys a block with an item that can harvest it. (i, j, k) are the coordinates of the
-     * block and l is the block's subtype/damage.
-     */
-    public void harvestBlock(World var1, EntityPlayer var2, int var3, int var4, int var5, int var6)
+    public void harvestBlock(World world, EntityPlayer entityplayer, int i, int j, int k, int l)
     {
-        Random var7 = new Random();
-        byte var8 = 6;
-        byte var9 = 9;
-        long var10 = (long)var9 - (long)var8 + 1L;
-        long var12 = (long)((double)var10 * var7.nextDouble());
-        int var14 = (int)(var12 + (long)var8);
-        int var15 = var7.nextInt(4);
-        int var16;
+        Random random = new Random();
+        int randStart = 6;
+        int randEnd = 9;
+        long range = randEnd - randStart + 1L;
+        long fraction = (long)(range * random.nextDouble());
+        int randomNumber = (int)(fraction + randStart);
+        int crateType = random.nextInt(4);
 
-        if (var15 == 0)
+        if (crateType == 0)
         {
-            for (var16 = 1; var16 <= var14; ++var16)
+            for (int index = 1; index <= randomNumber; index++)
             {
-                var1.spawnEntityInWorld(new EntityXPOrb(var1, (double)var3, (double)var4, (double)var5, 1));
+                world.spawnEntityInWorld(new EntityXPOrb(world, i, j, k, 1));
             }
         }
-        else if (var15 == 1)
+        else if (crateType == 1)
         {
-            if (var7.nextInt(9) == 0)
+            if (random.nextInt(9) == 0)
             {
-                this.dropBlockAsItem_do(var1, var3, var4, var5, new ItemStack(AetherItems.CandyCaneSword, 1));
+                dropBlockAsItem_do(world, i, j, k, new ItemStack(AetherItems.CandyCaneSword, 1));
             }
             else
             {
-                for (var16 = 1; var16 <= var14; ++var16)
+                for (int index = 1; index <= randomNumber; index++)
                 {
-                    this.dropBlockAsItem_do(var1, var3, var4, var5, new ItemStack(AetherItems.GingerBreadMan, 1));
+                    dropBlockAsItem_do(world, i, j, k, new ItemStack(AetherItems.GingerBreadMan, 1));
                 }
             }
         }
-        else if (!var1.isRemote)
+        else if (!world.isRemote)
         {
-            EntityTNTPresent var17 = new EntityTNTPresent(var1, (double)((float)var3 + 0.5F), (double)((float)var4 + 0.5F), (double)((float)var5 + 0.5F));
-            var17.fuse = var1.rand.nextInt(var17.fuse / 4) + var17.fuse / 8;
-            var1.spawnEntityInWorld(var17);
-            var1.playSoundAtEntity(var17, "random.fuse", 1.0F, 1.0F);
+            EntityTNTPresent entitytntprimed = new EntityTNTPresent(world, i + 0.5F, j + 0.5F, k + 0.5F);
+            entitytntprimed.fuse = (world.rand.nextInt(entitytntprimed.fuse / 4) + entitytntprimed.fuse / 8);
+            world.spawnEntityInWorld(entitytntprimed);
+            world.playSoundAtEntity(entitytntprimed, "random.fuse", 1.0F, 1.0F);
         }
     }
 
-    /**
-     * Returns the ID of the items to drop on destruction.
-     */
-    public int idDropped(int var1, Random var2, int var3)
+    public int idDropped(int i, Random random, int k)
     {
         return 0;
     }
 
-    public void onBlockPlaced(World var1, int var2, int var3, int var4, int var5)
+    public void onBlockPlaced(World world, int i, int j, int k, int l)
     {
-        Random var6 = new Random();
-        this.fraction = (long)((double)this.range * var6.nextDouble());
-        this.randomNumber = (int)(this.fraction + (long)this.randStart);
-        this.crateType = var6.nextInt(4);
-        this.rarity = var6.nextInt(9);
+        Random random = new Random();
+        this.fraction = ((long)(this.range * random.nextDouble()));
+        this.randomNumber = ((int)(this.fraction + this.randStart));
+        this.crateType = random.nextInt(4);
+        this.rarity = random.nextInt(9);
     }
 
-    /**
-     * Returns the quantity of items to drop on block destruction.
-     */
-    public int quantityDropped(Random var1)
+    public int quantityDropped(Random random)
     {
         return 0;
     }
 
-    /**
-     * Returns the usual quantity dropped by the block plus a bonus of 1 to 'i' (inclusive).
-     */
-    public int quantityDroppedWithBonus(int var1, Random var2)
+    public int quantityDroppedWithBonus(int i, Random random)
     {
-        return this.quantityDropped(var2);
+        return quantityDropped(random);
     }
 
-    /**
-     * When this method is called, your block should register all the icons it needs with the given IconRegister. This
-     * is the only chance you get to register icons.
-     */
-    public void registerIcons(IconRegister var1)
+    public void registerIcons(IconRegister par1IconRegister)
     {
-        sprTop = var1.registerIcon("Aether:Present Top");
-        sprSide = var1.registerIcon("Aether:Present Side");
-        super.registerIcons(var1);
+        sprTop = par1IconRegister.registerIcon("Aether:Present Top");
+        sprSide = par1IconRegister.registerIcon("Aether:Present Side");
+        super.registerIcons(par1IconRegister);
     }
 }
+

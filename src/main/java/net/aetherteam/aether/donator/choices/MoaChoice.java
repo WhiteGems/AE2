@@ -12,14 +12,14 @@ public class MoaChoice extends DonatorChoice
     AetherMoaColour colour = null;
     boolean overrideAll = true;
 
-    public MoaChoice(String var1, EnumChoiceType var2, DonatorTexture var3)
+    public MoaChoice(String name, EnumChoiceType type, DonatorTexture texture)
     {
-        super(var1, var2, var3);
+        super(name, type, texture);
     }
 
-    public void setOverrideAll(boolean var1)
+    public void setOverrideAll(boolean all)
     {
-        this.overrideAll = var1;
+        this.overrideAll = all;
     }
 
     public boolean getOverrideAll()
@@ -32,10 +32,13 @@ public class MoaChoice extends DonatorChoice
         return this.colour;
     }
 
-    public void setOverridingColour(AetherMoaColour var1)
+    public void setOverridingColour(AetherMoaColour colour)
     {
-        this.colour = var1;
+        this.colour = colour;
     }
 
-    public void spawnParticleEffects(Random var1, EntityPlayer var2) {}
+    public void spawnParticleEffects(Random random, EntityPlayer player)
+    {
+    }
 }
+

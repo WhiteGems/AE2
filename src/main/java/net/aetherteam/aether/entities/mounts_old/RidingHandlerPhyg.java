@@ -1,33 +1,35 @@
 package net.aetherteam.aether.entities.mounts_old;
 
+import java.util.List;
 import net.aetherteam.aether.AetherCommonPlayerHandler;
 import net.aetherteam.aether.entities.mounts.EntityPhyg;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityCreature;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.ai.EntityAILookIdle;
 import net.minecraft.entity.ai.EntityAIPanic;
 import net.minecraft.entity.ai.EntityAISwimming;
+import net.minecraft.entity.ai.EntityAITasks;
 import net.minecraft.entity.ai.EntityAIWander;
 import net.minecraft.entity.ai.EntityAIWatchClosest;
 import net.minecraft.entity.player.EntityPlayer;
 
 public class RidingHandlerPhyg extends RidingHandler
 {
-    protected EntityLiving animal;
+    protected EntityLiving animal = (EntityLiving)this.mount;
 
-    public RidingHandlerPhyg(EntityPhyg var1)
+    public RidingHandlerPhyg(EntityPhyg entityPhyg)
     {
-        super(var1);
-        this.animal = (EntityLiving)this.mount;
+        super(entityPhyg);
     }
 
     public void update()
     {
-        if (this.isBeingRidden())
+        if (isBeingRidden())
         {
             this.rider.fallDistance = 0.0F;
 
-            if (this.rider.motionY < -0.2D && !this.rider.isSneaking())
+            if ((this.rider.motionY < -0.2D) && (!this.rider.isSneaking()))
             {
                 this.rider.motionY = -0.2D;
             }
@@ -55,9 +57,9 @@ public class RidingHandlerPhyg extends RidingHandler
         super.onUnMount();
     }
 
-    public boolean jump(AetherCommonPlayerHandler var1, EntityPlayer var2)
+    public boolean jump(AetherCommonPlayerHandler aetherCommonPlayerHandler, EntityPlayer player)
     {
-        if (this.isBeingRidden())
+        if (isBeingRidden())
         {
             this.rider.motionY = 1.600000023841858D;
         }
@@ -67,7 +69,7 @@ public class RidingHandlerPhyg extends RidingHandler
 
     public boolean shouldBeSitting()
     {
-        return this.isBeingRidden();
+        return isBeingRidden();
     }
 
     public double getRiderYOffset()
@@ -75,3 +77,4 @@ public class RidingHandlerPhyg extends RidingHandler
         return 0.15D;
     }
 }
+

@@ -1,18 +1,22 @@
 package net.aetherteam.mainmenu_api;
 
 import cpw.mods.fml.client.FMLClientHandler;
+import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.audio.SoundManager;
+import net.minecraft.client.audio.SoundPoolEntry;
+import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.texture.Rect2i;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;
+import paulscode.sound.SoundSystem;
 
 public class MenuBaseLoader extends GuiScreen
 {
@@ -22,9 +26,7 @@ public class MenuBaseLoader extends GuiScreen
     private int y2;
     private int loaderWidth;
     private int loaderHeight;
-
-    /** Reference to the Minecraft object. */
-    Minecraft mc = FMLClientHandler.instance().getClient();
+    Minecraft g;
     private MenuSlot selectedMenuSlot;
     private List menuSlotList = new ArrayList();
     HashMap menuSlotToString = new HashMap();
@@ -39,132 +41,113 @@ public class MenuBaseLoader extends GuiScreen
 
     public MenuBaseLoader()
     {
-        this.backgroundTexture = this.mc.renderEngine.getTexture("/net/aetherteam/mainmenu_api/gui/menulist.png");
+        this.g = FMLClientHandler.instance().getClient();
+        this.backgroundTexture = this.g.renderEngine.f("/net/aetherteam/mainmenu_api/gui/menulist.png");
         this.loaderWidth = 256;
         this.loaderHeight = 256;
-        this.updateScreen();
+        updateScreen();
     }
 
-    /**
-     * Adds the buttons (and other controls) to the screen in question.
-     */
     public void initGui()
     {
         MenuBaseConfig.ticks = 0;
         MenuBaseConfig.endMusic = true;
-        this.muteMusic();
+        muteMusic();
         Keyboard.enableRepeatEvents(true);
-        this.updateScreen();
-        this.buttonList.clear();
+        updateScreen();
+        this.k.clear();
         this.launchMenu = new GuiButton(0, this.x2 - 35, this.y2 + 85 - 28, 72, 20, "Launch Menu");
         this.launchMenu.enabled = false;
-        this.buttonList.add(this.launchMenu);
+        this.k.add(this.launchMenu);
         this.rightPage = new GuiButton(1, this.x2 + 44, this.y2 + 57, 20, 20, ">");
         this.leftPage = new GuiButton(2, this.x2 - 62, this.y2 + 57, 20, 20, "<");
-        this.buttonList.add(this.rightPage);
-        this.buttonList.add(this.leftPage);
+        this.k.add(this.rightPage);
+        this.k.add(this.leftPage);
         MenuBaseConfig.loadConfig();
-        MenuBase var1 = null;
+        MenuBase menu = null;
 
-        if (MenuBaseConfig.selectedMenuName != null && !MenuBaseConfig.selectedMenuName.isEmpty())
+        if ((MenuBaseConfig.selectedMenuName != null) && (!MenuBaseConfig.selectedMenuName.isEmpty()))
         {
-            var1 = MenuBaseSorter.createMenuBaseObject(MenuBaseConfig.selectedMenuName);
+            menu = MenuBaseSorter.createMenuBaseObject(MenuBaseConfig.selectedMenuName);
         }
 
-        if (var1 == null)
+        if (menu == null)
         {
-            System.out.println("The Menu Base \'" + MenuBaseConfig.selectedMenuName + "\' failed to initialize! Reverting to Menu selection.");
+            System.out.println("The Menu Base '" + MenuBaseConfig.selectedMenuName + "' failed to initialize! Reverting to Menu selection.");
         }
         else
         {
-            this.mc.displayGuiScreen(var1);
-            this.mc.displayGuiScreen(var1);
-            this.mc.displayGuiScreen(var1);
+            this.g.displayGuiScreen(menu);
+            this.g.displayGuiScreen(menu);
+            this.g.displayGuiScreen(menu);
         }
     }
 
-    /**
-     * Fired when a key is typed. This is the equivalent of KeyListener.keyTyped(KeyEvent e).
-     */
-    protected void keyTyped(char var1, int var2) {}
-
-    /**
-     * Called when the mouse is clicked.
-     */
-    protected void mouseClicked(int var1, int var2, int var3)
+    protected void keyTyped(char par1, int par2)
     {
-        if (var3 == 0)
-        {
-            for (int var4 = 0; var4 < this.menuSlotList.size(); ++var4)
-            {
-                MenuSlot var5 = (MenuSlot)this.menuSlotList.get(var4);
+    }
 
-                if (var5.mousePressed(this.mc, var1, var2))
+    protected void mouseClicked(int par1, int par2, int par3)
+    {
+        if (par3 == 0)
+        {
+            for (int l = 0; l < this.menuSlotList.size(); l++)
+            {
+                MenuSlot menuSlot = (MenuSlot)this.menuSlotList.get(l);
+
+                if (menuSlot.mousePressed(this.g, par1, par2))
                 {
-                    var5.selected = true;
+                    menuSlot.selected = true;
                     this.launchMenu.enabled = true;
-                    this.selectedMenuSlot = var5;
-                    this.mc.sndManager.playSoundFX("random.click", 1.0F, 1.0F);
+                    this.selectedMenuSlot = menuSlot;
+                    this.g.sndManager.a("random.click", 1.0F, 1.0F);
                 }
                 else
                 {
-                    var5.selected = false;
+                    menuSlot.selected = false;
                 }
             }
         }
 
-        super.mouseClicked(var1, var2, var3);
+        super.mouseClicked(par1, par2, par3);
     }
 
-    /**
-     * Called when the mouse is moved or a mouse button is released.  Signature: (mouseX, mouseY, which) which==-1 is
-     * mouseMove, which==0 or which==1 is mouseUp
-     */
-    protected void mouseMovedOrUp(int var1, int var2, int var3)
+    protected void mouseMovedOrUp(int par1, int par2, int par3)
     {
-        super.mouseMovedOrUp(var1, var2, var3);
+        super.mouseMovedOrUp(par1, par2, par3);
     }
 
-    /**
-     * Fired when a control is clicked. This is the equivalent of ActionListener.actionPerformed(ActionEvent e).
-     */
-    protected void actionPerformed(GuiButton var1)
+    protected void actionPerformed(GuiButton button)
     {
-        if (var1.id == 0 && this.selectedMenuSlot != null)
+        if ((button.id == 0) && (this.selectedMenuSlot != null))
         {
-            String var2 = (String)this.menuSlotToString.get(this.selectedMenuSlot);
+            String menuName = (String)this.menuSlotToString.get(this.selectedMenuSlot);
 
-            if (var2 != null)
+            if (menuName != null)
             {
-                MenuBaseConfig.setProperty("selectedMenu", var2);
+                MenuBaseConfig.setProperty("selectedMenu", menuName);
             }
 
-            this.mc.displayGuiScreen(this.selectedMenuSlot.menu);
+            this.g.displayGuiScreen(this.selectedMenuSlot.menu);
         }
 
-        if (var1.id == 1)
+        if (button.id == 1)
         {
-            ++this.pageNumber;
+            this.pageNumber += 1;
         }
 
-        if (var1.id == 2)
+        if (button.id == 2)
         {
-            --this.pageNumber;
+            this.pageNumber -= 1;
         }
     }
 
-    /**
-     * Returns true if this GUI should pause the game when it is displayed in single-player
-     */
     public boolean doesGuiPauseGame()
     {
         return false;
     }
 
-    /**
-     * Draws the screen and all the components in it.
-     */
-    public void drawScreen(int var1, int var2, float var3)
+    public void drawScreen(int x, int y, float partialTick)
     {
         if (this.menuPages.size() == 1)
         {
@@ -187,51 +170,47 @@ public class MenuBaseLoader extends GuiScreen
             this.rightPage.enabled = true;
         }
 
-        this.drawBackground(0);
+        drawBackground(0);
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 0.7F);
         GL11.glEnable(GL11.GL_BLEND);
         GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
         GL11.glBindTexture(GL11.GL_TEXTURE_2D, this.backgroundTexture);
-        int var4 = Mouse.getDWheel();
-        int var5 = this.x2 - 70;
-        int var6 = this.y2 - 84;
-        ScaledResolution var7 = new ScaledResolution(this.mc.gameSettings, this.mc.displayWidth, this.mc.displayHeight);
-        this.drawTexturedModalRect(var5, var6, 0, 0, 141, this.loaderHeight);
+        int dmsy = Mouse.getDWheel();
+        int centerX = this.x2 - 70;
+        int centerY = this.y2 - 84;
+        ScaledResolution sr = new ScaledResolution(this.g.gameSettings, this.g.displayWidth, this.g.displayHeight);
+        drawTexturedModalRect(centerX, centerY, 0, 0, 141, this.loaderHeight);
         this.totalHeight = 0;
-        byte var8 = 100;
-        byte var9 = 20;
-        byte var10 = 2;
+        int slotW = 100;
+        int slotH = 20;
+        int gutter = 2;
         GL11.glEnable(GL11.GL_SCISSOR_TEST);
-        GL11.glScissor((var5 + 14) * var7.getScaleFactor(), (var6 + 35) * var7.getScaleFactor(), var8 * var7.getScaleFactor(), 103 * var7.getScaleFactor());
+        GL11.glScissor((centerX + 14) * sr.getScaleFactor(), (centerY + 35) * sr.getScaleFactor(), slotW * sr.getScaleFactor(), 103 * sr.getScaleFactor());
         GL11.glPushMatrix();
-        this.totalHeight = MenuBaseSorter.getSize() * (var9 + var10);
+        this.totalHeight = (MenuBaseSorter.getSize() * (slotH + gutter));
 
-        if (this.totalHeight > 103)
-        {
-            ;
-        }
+        if (this.totalHeight > 103);
 
         this.totalHeight = 0;
-        int var11;
 
         if (!this.slotsCreated)
         {
-            for (var11 = 0; var11 < MenuBaseSorter.getSize(); ++var11)
+            for (int i = 0; i < MenuBaseSorter.getSize(); i++)
             {
-                HashMap var12 = MenuBaseSorter.getMenuHashMap();
-                ArrayList var13 = new ArrayList(var12.keySet());
-                MenuBase var14 = MenuBaseSorter.createMenuBaseObject((String)var13.get(var11));
-                System.out.println(var14);
+                HashMap map = MenuBaseSorter.getMenuHashMap();
+                List keys = new ArrayList(map.keySet());
+                MenuBase menu = MenuBaseSorter.createMenuBaseObject((String)keys.get(i));
+                System.out.println(menu);
 
-                if (var14 != null)
+                if (menu != null)
                 {
-                    this.totalHeight += var9 + var10;
-                    MenuSlot var15 = new MenuSlot(var14, this.menuSlotList.size(), var5 + 15, var6 + this.totalHeight + 30, var8, var9);
-                    this.menuSlotList.add(var15);
-                    this.menuSlotToString.put(var15, (String)var13.get(var11));
-                    this.menuSlotFromString.put((String)var13.get(var11), var15);
-                    MenuSlot var16 = (MenuSlot)this.menuSlotList.get(var11);
-                    System.out.println(var16.menu);
+                    this.totalHeight += slotH + gutter;
+                    MenuSlot menuSlot = new MenuSlot(menu, this.menuSlotList.size(), centerX + 15, centerY + this.totalHeight + 30, slotW, slotH);
+                    this.menuSlotList.add(menuSlot);
+                    this.menuSlotToString.put(menuSlot, (String)keys.get(i));
+                    this.menuSlotFromString.put((String)keys.get(i), menuSlot);
+                    MenuSlot menuSlotButton = (MenuSlot)this.menuSlotList.get(i);
+                    System.out.println(menuSlotButton.menu);
                 }
 
                 if (this.totalHeight > 83)
@@ -243,38 +222,35 @@ public class MenuBaseLoader extends GuiScreen
             this.slotsCreated = true;
         }
 
-        MenuPage var17;
-        int var19;
-
         if (!this.pagesCreated)
         {
-            var11 = 0;
+            int slotCount = 0;
 
-            while (var11 < this.menuSlotList.size() - 2)
+            while (slotCount < this.menuSlotList.size() - 2)
             {
-                var17 = new MenuPage();
+                MenuPage page = new MenuPage();
 
-                for (var19 = 0; var19 < var17.getPageAmount(); ++var19)
+                for (int count = 0; count < page.getPageAmount(); count++)
                 {
-                    var17.addMenuSlot((MenuSlot)this.menuSlotList.get(var11));
-                    ++var11;
+                    page.addMenuSlot((MenuSlot)this.menuSlotList.get(slotCount));
+                    slotCount++;
                 }
 
-                this.menuPages.add(var17);
+                this.menuPages.add(page);
             }
 
             this.pagesCreated = true;
         }
 
-        for (var11 = 0; var11 < this.menuPages.size(); ++var11)
+        for (int pageCount = 0; pageCount < this.menuPages.size(); pageCount++)
         {
-            var17 = (MenuPage)this.menuPages.get(this.pageNumber);
+            MenuPage currentPage = (MenuPage)this.menuPages.get(this.pageNumber);
 
-            for (var19 = 0; var19 < var17.getPageAmount(); ++var19)
+            for (int count = 0; count < currentPage.getPageAmount(); count++)
             {
-                MenuSlot var20 = var17.getMenuSlot(var19);
-                var20.drawMenuSlot(this.mc, var5 + 15, var6 + this.totalHeight + 30);
-                this.totalHeight += var9 + var10;
+                MenuSlot menuSlotButton = currentPage.getMenuSlot(count);
+                menuSlotButton.drawMenuSlot(this.g, centerX + 15, centerY + this.totalHeight + 30);
+                this.totalHeight += slotH + gutter;
 
                 if (this.totalHeight > 83)
                 {
@@ -285,49 +261,43 @@ public class MenuBaseLoader extends GuiScreen
 
         GL11.glPopMatrix();
         GL11.glDisable(GL11.GL_SCISSOR_TEST);
-        this.mc.renderEngine.resetBoundTexture();
-        String var18 = "Pages: " + (this.pageNumber + 1) + "/" + this.menuPages.size();
-        this.fontRenderer.drawStringWithShadow(var18, var5 + 69 - this.fontRenderer.getStringWidth(var18) / 2, var6 + 11, 16777215);
-        super.drawScreen(var1, var2, var3);
+        this.g.renderEngine.a();
+        String name = "Pages: " + (this.pageNumber + 1) + "/" + this.menuPages.size();
+        this.m.drawStringWithShadow(name, centerX + 69 - this.m.getStringWidth(name) / 2, centerY + 11, 16777215);
+        super.drawScreen(x, y, partialTick);
     }
 
-    /**
-     * Called from the main game loop to update the screen.
-     */
     public void updateScreen()
     {
         super.updateScreen();
-        ScaledResolution var1 = new ScaledResolution(this.mc.gameSettings, this.mc.displayWidth, this.mc.displayHeight);
-        int var2 = var1.getScaledWidth();
-        int var3 = var1.getScaledHeight();
-        this.x2 = var2 / 2;
-        this.y2 = var3 / 2;
+        ScaledResolution scaledresolution = new ScaledResolution(this.g.gameSettings, this.g.displayWidth, this.g.displayHeight);
+        int width = scaledresolution.getScaledWidth();
+        int height = scaledresolution.getScaledHeight();
+        this.x2 = (width / 2);
+        this.y2 = (height / 2);
     }
 
-    /**
-     * Draws the background (i is always 0 as of 1.2.2)
-     */
-    public void drawBackground(int var1)
+    public void drawBackground(int i)
     {
-        super.drawBackground(var1);
+        super.drawBackground(i);
         GL11.glDisable(GL11.GL_LIGHTING);
         GL11.glDisable(GL11.GL_FOG);
-        Tessellator var2 = Tessellator.instance;
-        this.mc.renderEngine.bindTexture("/net/aetherteam/mainmenu_api/icons/dirt.png");
+        Rect2i tessellator = Rect2i.rectX;
+        this.g.renderEngine.b("/net/aetherteam/mainmenu_api/icons/dirt.png");
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-        float var3 = 32.0F;
-        var2.startDrawingQuads();
-        var2.setColorOpaque_I(10066329);
-        var2.addVertexWithUV(0.0D, (double)this.height, 0.0D, 0.0D, (double)((float)this.height / var3 + (float)var1));
-        var2.addVertexWithUV((double)this.width, (double)this.height, 0.0D, (double)((float)this.width / var3), (double)((float)this.height / var3 + (float)var1));
-        var2.addVertexWithUV((double)this.width, 0.0D, 0.0D, (double)((float)this.width / var3), (double)(0 + var1));
-        var2.addVertexWithUV(0.0D, 0.0D, 0.0D, 0.0D, (double)(0 + var1));
-        var2.draw();
+        float f = 32.0F;
+        tessellator.b();
+        tessellator.d(10066329);
+        tessellator.a(0.0D, this.i, 0.0D, 0.0D, this.i / f + i);
+        tessellator.a(this.height, this.i, 0.0D, this.height / f, this.i / f + i);
+        tessellator.a(this.height, 0.0D, 0.0D, this.height / f, 0 + i);
+        tessellator.a(0.0D, 0.0D, 0.0D, 0.0D, 0 + i);
+        tessellator.getRectX();
     }
 
     private void muteMusic()
     {
-        SoundManager var10000 = MainMenuAPI.proxy.getClient().sndManager;
-        SoundManager.sndSystem.stop("streaming");
+        SoundPoolEntry.soundName.stop("streaming");
     }
 }
+

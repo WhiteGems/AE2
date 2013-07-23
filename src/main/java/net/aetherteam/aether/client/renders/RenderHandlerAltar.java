@@ -6,24 +6,25 @@ import cpw.mods.fml.relauncher.SideOnly;
 import net.aetherteam.aether.blocks.AetherBlocks;
 import net.aetherteam.aether.tile_entities.TileEntityAltar;
 import net.minecraft.block.Block;
-import net.minecraft.client.renderer.RenderBlocks;
-import net.minecraft.client.renderer.tileentity.TileEntityRenderer;
+import net.minecraft.client.renderer.RenderEngine;
+import net.minecraft.client.renderer.tileentity.RenderEndPortal;
 import net.minecraft.world.IBlockAccess;
 
 @SideOnly(Side.CLIENT)
-public class RenderHandlerAltar implements ISimpleBlockRenderingHandler
+public class RenderHandlerAltar
+    implements ISimpleBlockRenderingHandler
 {
     public TileEntityAltar dummyAltar = new TileEntityAltar();
 
-    public void renderInventoryBlock(Block var1, int var2, int var3, RenderBlocks var4)
+    public void renderInventoryBlock(Block block, int metadata, int modelID, RenderEngine renderer)
     {
-        if (var3 == this.getRenderId())
+        if (modelID == getRenderId())
         {
-            TileEntityRenderer.instance.renderTileEntityAt(this.dummyAltar, 0.0D, -0.1D, 0.0D, 0.0F);
+            RenderEndPortal.field_76908_a.renderTileEntityAt(this.dummyAltar, 0.0D, -0.1D, 0.0D, 0.0F);
         }
     }
 
-    public boolean renderWorldBlock(IBlockAccess var1, int var2, int var3, int var4, Block var5, int var6, RenderBlocks var7)
+    public boolean renderWorldBlock(IBlockAccess world, int x, int y, int z, Block block, int modelId, RenderEngine renderer)
     {
         return false;
     }
@@ -38,3 +39,4 @@ public class RenderHandlerAltar implements ISimpleBlockRenderingHandler
         return AetherBlocks.altarRenderId;
     }
 }
+

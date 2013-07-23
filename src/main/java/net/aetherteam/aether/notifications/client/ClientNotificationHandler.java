@@ -6,7 +6,8 @@ import net.aetherteam.aether.client.gui.social.dialogue.GuiDialogueBox;
 import net.aetherteam.aether.notifications.Notification;
 import net.aetherteam.aether.notifications.NotificationType;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.client.multiplayer.CallableMPL2;
+import net.minecraft.server.integrated.IntegratedPlayerList;
 
 public class ClientNotificationHandler
 {
@@ -20,38 +21,39 @@ public class ClientNotificationHandler
     }
 
     @SideOnly(Side.CLIENT)
-    public static void queueReceivedNotification(Notification var0)
+    public static void queueReceivedNotification(Notification notification)
     {
-        notificationGui.queueReceivedNotification(var0);
+        notificationGui.queueReceivedNotification(notification);
     }
 
     @SideOnly(Side.CLIENT)
-    public static void createGeneric(String var0, String var1, String var2)
+    public static void createGeneric(String header, String lower, String toPlayer)
     {
-        queueReceivedNotification(new Notification(NotificationType.GENERIC, var0, var1, var2));
+        queueReceivedNotification(new Notification(NotificationType.GENERIC, header, lower, toPlayer));
     }
 
     @SideOnly(Side.CLIENT)
     public static String clientUsername()
     {
-        return Minecraft.getMinecraft().thePlayer.username;
+        return Minecraft.getMinecraft().thePlayer.bS;
     }
 
     @SideOnly(Side.CLIENT)
-    public static void openDialogueBox(String var0, String var1, boolean var2)
+    public static void openDialogueBox(String trueText, String falseText, boolean flag)
     {
-        Minecraft.getMinecraft().displayGuiScreen(new GuiDialogueBox((GuiScreen)null, var0, var1, var2));
+        Minecraft.getMinecraft().displayGuiScreen(new GuiDialogueBox(null, trueText, falseText, flag));
     }
 
     @SideOnly(Side.CLIENT)
-    public static void openDialogueBox(String var0)
+    public static void openDialogueBox(String text)
     {
-        Minecraft.getMinecraft().displayGuiScreen(new GuiDialogueBox((GuiScreen)null, var0, "", true));
+        Minecraft.getMinecraft().displayGuiScreen(new GuiDialogueBox(null, text, "", true));
     }
 
     @SideOnly(Side.CLIENT)
     public static boolean isOpenToLAN()
     {
-        return Minecraft.getMinecraft().getIntegratedServer() != null && Minecraft.getMinecraft().getIntegratedServer().getPublic();
+        return (Minecraft.getMinecraft().D() != null) && (Minecraft.getMinecraft().D().an());
     }
 }
+

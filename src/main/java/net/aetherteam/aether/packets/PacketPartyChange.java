@@ -7,6 +7,7 @@ import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.DataInputStream;
 import java.io.InputStreamReader;
+import java.io.PrintStream;
 import net.aetherteam.aether.party.Party;
 import net.aetherteam.aether.party.PartyController;
 import net.aetherteam.aether.party.members.PartyMember;
@@ -15,58 +16,57 @@ import net.minecraft.network.packet.Packet250CustomPayload;
 
 public class PacketPartyChange extends AetherPacket
 {
-    public PacketPartyChange(int var1)
+    public PacketPartyChange(int packetID)
     {
-        super(var1);
+        super(packetID);
     }
 
-    public void onPacketReceived(Packet250CustomPayload var1, Player var2)
+    public void onPacketReceived(Packet250CustomPayload packet, Player player)
     {
-        DataInputStream var3 = new DataInputStream(new ByteArrayInputStream(var1.data));
-        new BufferedReader(new InputStreamReader(var3));
+        DataInputStream dat = new DataInputStream(new ByteArrayInputStream(packet.data));
+        BufferedReader buf = new BufferedReader(new InputStreamReader(dat));
 
         try
         {
-            byte var5 = var3.readByte();
-            boolean var6 = var3.readBoolean();
-            String var7 = var3.readUTF();
-            String var8 = var3.readUTF();
-            String var9 = var3.readUTF();
-            Side var10 = FMLCommonHandler.instance().getEffectiveSide();
-            Party var11;
+            byte packetType = dat.readByte();
+            boolean adding = dat.readBoolean();
+            String partyName = dat.readUTF();
+            String potentialLeaderName = dat.readUTF();
+            String skinUrl = dat.readUTF();
+            Side side = FMLCommonHandler.instance().getEffectiveSide();
 
-            if (var10.isClient())
+            if (side.isClient())
             {
-                var11 = PartyController.instance().getParty(var7);
+                Party party = PartyController.instance().getParty(partyName);
 
-                if (var6 && var11 == null)
+                if ((adding) && (party == null))
                 {
-                    PartyController.instance().addParty(new Party(var7, new PartyMember(var8, var9)), false);
-                    System.out.println(var7 + " created!");
+                    PartyController.instance().addParty(new Party(partyName, new PartyMember(potentialLeaderName, skinUrl)), false);
+                    System.out.println(partyName + " created!");
                 }
                 else
                 {
-                    PartyController.instance().removeParty(var11, false);
-                    System.out.println(var7 + " removed!");
+                    PartyController.instance().removeParty(party, false);
+                    System.out.println(partyName + " removed!");
                 }
             }
             else
             {
-                var11 = PartyController.instance().getParty(var7);
-                PartyMember var12 = PartyController.instance().getMember((EntityPlayer)var2);
-                EntityPlayer var13 = (EntityPlayer)var2;
+                Party party = PartyController.instance().getParty(partyName);
+                PartyMember potentialLeader = PartyController.instance().getMember((EntityPlayer)player);
+                EntityPlayer entityPlayer = (EntityPlayer)player;
 
-                if (var6 && var11 == null && var12 == null)
+                if ((adding) && (party == null) && (potentialLeader == null))
                 {
-                    System.out.println("No validation needed, creating and adding party " + var7);
-                    PartyController.instance().addParty(new Party(var7, new PartyMember((EntityPlayer)var2)), false);
-                    this.sendPacketToAllExcept(AetherPacketHandler.sendPartyChange(var6, var7, var8, var9), var2);
+                    System.out.println("No validation needed, creating and adding party " + partyName);
+                    PartyController.instance().addParty(new Party(partyName, new PartyMember((EntityPlayer)player)), false);
+                    sendPacketToAllExcept(AetherPacketHandler.sendPartyChange(adding, partyName, potentialLeaderName, skinUrl), player);
                 }
-                else if (var12 != null && var11 != null && var11.isLeader(var12) && var13.username.equalsIgnoreCase(var8) && !var6)
+                else if ((potentialLeader != null) && (party != null) && (party.isLeader(potentialLeader)) && (entityPlayer.username.equalsIgnoreCase(potentialLeaderName)) && (!adding))
                 {
-                    System.out.println("Leader was validated, removing the party " + var11.getName());
-                    PartyController.instance().removeParty(var11, false);
-                    this.sendPacketToAllExcept(AetherPacketHandler.sendPartyChange(var6, var7, var8, var9), var2);
+                    System.out.println("Leader was validated, removing the party " + party.getName());
+                    PartyController.instance().removeParty(party, false);
+                    sendPacketToAllExcept(AetherPacketHandler.sendPartyChange(adding, partyName, potentialLeaderName, skinUrl), player);
                 }
                 else
                 {
@@ -74,9 +74,10 @@ public class PacketPartyChange extends AetherPacket
                 }
             }
         }
-        catch (Exception var14)
+        catch (Exception ex)
         {
-            var14.printStackTrace();
+            ex.printStackTrace();
         }
     }
 }
+

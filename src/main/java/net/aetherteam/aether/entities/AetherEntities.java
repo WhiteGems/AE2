@@ -19,19 +19,21 @@ import net.aetherteam.aether.entities.mounts.EntityPhyg;
 import net.aetherteam.aether.entities.mounts.EntitySwet;
 import net.aetherteam.aether.entities.npc.EntityBasicNPC;
 import net.aetherteam.aether.oldcode.EntityMiniCloud;
-import net.minecraft.client.renderer.entity.Render;
+import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.entity.EnumCreatureType;
 import net.minecraft.src.ModLoader;
 import net.minecraft.world.biome.BiomeGenBase;
+import net.minecraftforge.common.Configuration;
+import net.minecraftforge.common.Property;
 
 public class AetherEntities
 {
     public static Aether mod;
     private static int entityId = 1;
 
-    public static void addSpawn(String var0, int var1, int var2, EnumCreatureType var3)
+    public static void addSpawn(String name, int weight, int groupSize, EnumCreatureType spawnlist)
     {
-        EntityRegistry.addSpawn(var0, makeWeight(var0, var1), makeGroupSize(var0, var2), makeGroupSize(var0, var2), var3, new BiomeGenBase[] {Aether.biome});
+        EntityRegistry.addSpawn(name, makeWeight(name, weight), makeGroupSize(name, groupSize), makeGroupSize(name, groupSize), spawnlist, new BiomeGenBase[] { Aether.biome });
     }
 
     public static void addMappings()
@@ -122,7 +124,7 @@ public class AetherEntities
         LanguageRegistry.instance().addStringLocalization("entity.MiniSlider.name", "en_US", "Mini Slider");
         LanguageRegistry.instance().addStringLocalization("entity.Slider.name", "en_US", "Slider");
         LanguageRegistry.instance().addStringLocalization("entity.Cog.name", "en_US", "Loose Cog");
-        LanguageRegistry.instance().addStringLocalization("entity.LabyrinthEye.name", "en_US", "Labyrinth\'s Eye");
+        LanguageRegistry.instance().addStringLocalization("entity.LabyrinthEye.name", "en_US", "Labyrinth's Eye");
         LanguageRegistry.instance().addStringLocalization("entity.CarrionSprout.name", "en_US", "Carrion Sprout");
         LanguageRegistry.instance().addStringLocalization("entity.Zephyr.name", "en_US", "Zephyr");
         LanguageRegistry.instance().addStringLocalization("entity.Zephyroo.name", "en_US", "Zephyroo");
@@ -143,46 +145,47 @@ public class AetherEntities
         addSpawn("CarrionSprout", 10, 3, EnumCreatureType.creature);
     }
 
-    public static int makeGroupSize(String var0, int var1)
+    public static int makeGroupSize(String name, int def)
     {
         Aether.getInstance();
-        return Aether.getConfig().get("GroupSize" + var0, "general", var1).getInt(var1);
+        return Aether.getConfig().get("GroupSize" + name, "general", def).getInt(def);
     }
 
-    public static int makeWeight(String var0, int var1)
+    public static int makeWeight(String name, int def)
     {
         Aether.getInstance();
-        return Aether.getConfig().get("Weight" + var0, "general", var1).getInt(var1);
+        return Aether.getConfig().get("Weight" + name, "general", def).getInt(def);
     }
 
-    public static void registerEntity(Class var0, String var1, int var2, Render var3, int var4, int var5, boolean var6)
+    public static void registerEntity(Class cls, String name, int id, RenderManager render, int trackingRange, int updateFrequency, boolean sendsVelocityUpdates)
     {
-        EntityRegistry.registerModEntity(var0, var1, var2, Aether.getInstance(), var4, var5, var6);
-        RenderingRegistry.registerEntityRenderingHandler(var0, var3);
+        EntityRegistry.registerModEntity(cls, name, id, Aether.getInstance(), trackingRange, updateFrequency, sendsVelocityUpdates);
+        RenderingRegistry.registerEntityRenderingHandler(cls, render);
     }
 
-    public static void addMapping(Class var0, String var1, int var2, int var3)
+    public static void addMapping(Class entityClass, String entityName, int trackingRange, int updateFrequency)
     {
-        ++entityId;
-        EntityRegistry.registerModEntity(var0, var1, entityId, mod, var2, var3, false);
+        entityId += 1;
+        EntityRegistry.registerModEntity(entityClass, entityName, entityId, mod, trackingRange, updateFrequency, false);
     }
 
-    public static void addMapping(Class var0, String var1, int var2, int var3, boolean var4, boolean var5)
+    public static void addMapping(Class entityClass, String entityName, int trackingRange, int updateFrequency, boolean sendsVelocityUpdates, boolean spawnerOrEgg)
     {
-        if (var5)
+        if (spawnerOrEgg)
         {
-            EntityRegistry.registerModEntity(var0, var1, EntityRegistry.findGlobalUniqueEntityId(), mod, var2, var3, var4);
+            EntityRegistry.registerModEntity(entityClass, entityName, EntityRegistry.findGlobalUniqueEntityId(), mod, trackingRange, updateFrequency, sendsVelocityUpdates);
         }
         else
         {
-            ++entityId;
-            EntityRegistry.registerModEntity(var0, var1, entityId, mod, var2, var3, var4);
+            entityId += 1;
+            EntityRegistry.registerModEntity(entityClass, entityName, entityId, mod, trackingRange, updateFrequency, sendsVelocityUpdates);
         }
     }
 
-    public static void init(Aether var0)
+    public static void init(Aether mod)
     {
-        mod = var0;
+        mod = mod;
         addMappings();
     }
 }
+

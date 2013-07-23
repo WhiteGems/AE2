@@ -1,6 +1,9 @@
 package net.aetherteam.aether.entities;
 
+import java.util.List;
+import java.util.Random;
 import net.aetherteam.aether.blocks.AetherBlocks;
+import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityFlying;
 import net.minecraft.entity.monster.IMob;
@@ -8,10 +11,12 @@ import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 
-public class EntityZephyr extends EntityFlying implements IMob
+public class EntityZephyr extends EntityFlying
+    implements IMob
 {
     public String dir = "/net/aetherteam/aether/client/sprites";
     public float sinage = 0.0F;
+
     private long checkTime = 0L;
     private final long checkTimeInterval = 3000L;
     private double checkX = 0.0D;
@@ -19,20 +24,25 @@ public class EntityZephyr extends EntityFlying implements IMob
     private double checkZ = 0.0D;
     private final double minTraversalDist = 3.0D;
     private boolean isStuckWarning = false;
-    public int courseChangeCooldown = 0;
+    public int courseChangeCooldown;
     public double waypointX;
     public double waypointY;
     public double waypointZ;
-    private Entity targetedEntity = null;
-    private int aggroCooldown = 0;
-    public int prevAttackCounter = 0;
-    public int attackCounter = 0;
+    private Entity targetedEntity;
+    private int aggroCooldown;
+    public int prevAttackCounter;
+    public int attackCounter;
 
-    public EntityZephyr(World var1)
+    public EntityZephyr(World world)
     {
-        super(var1);
-        this.texture = this.dir + "/mobs/zephyr/zephyr.png";
-        this.setSize(4.0F, 4.0F);
+        super(world);
+        this.courseChangeCooldown = 0;
+        this.targetedEntity = null;
+        this.aggroCooldown = 0;
+        this.prevAttackCounter = 0;
+        this.attackCounter = 0;
+        this.texture = (this.dir + "/mobs/zephyr/zephyr.png");
+        setSize(4.0F, 4.0F);
     }
 
     public int getMaxHealth()
@@ -42,35 +52,35 @@ public class EntityZephyr extends EntityFlying implements IMob
 
     protected void updateEntityActionState()
     {
-        if (this.posY < -2.0D || this.posY > 130.0D)
+        if ((this.posY < -2.0D) || (this.posY > 130.0D))
         {
-            this.despawnEntity();
+            despawnEntity();
         }
 
         this.prevAttackCounter = this.attackCounter;
-        double var1 = this.waypointX - this.posX;
-        double var3 = this.waypointY - this.posY;
-        double var5 = this.waypointZ - this.posZ;
-        double var7 = (double)MathHelper.sqrt_double(var1 * var1 + var3 * var3 + var5 * var5);
+        double d = this.waypointX - this.posX;
+        double d1 = this.waypointY - this.posY;
+        double d2 = this.waypointZ - this.posZ;
+        double d3 = MathHelper.sqrt_double(d * d + d1 * d1 + d2 * d2);
 
-        if (var7 < 4.0D || var7 > 30.0D)
+        if ((d3 < 4.0D) || (d3 > 30.0D))
         {
-            this.waypointX = this.posX + (double)((this.rand.nextFloat() * 2.0F - 1.0F) * 16.0F);
-            this.waypointY = this.posY + (double)(this.rand.nextFloat() * 2.0F * 16.0F);
-            this.waypointZ = this.posZ + (double)((this.rand.nextFloat() * 2.0F - 1.0F) * 16.0F);
+            this.waypointX = (this.posX + (this.rand.nextFloat() * 2.0F - 1.0F) * 16.0F);
+            this.waypointY = (this.posY + this.rand.nextFloat() * 2.0F * 16.0F);
+            this.waypointZ = (this.posZ + (this.rand.nextFloat() * 2.0F - 1.0F) * 16.0F);
         }
 
-        if (this.isCourseTraversable(this.waypointX, this.waypointY, this.waypointZ, var7))
+        if (isCourseTraversable(this.waypointX, this.waypointY, this.waypointZ, d3))
         {
-            this.motionX += var1 / var7 * 0.1D;
-            this.motionY += var3 / var7 * 0.1D;
-            this.motionZ += var5 / var7 * 0.1D;
+            this.motionX += d / d3 * 0.1D;
+            this.motionY += d1 / d3 * 0.1D;
+            this.motionZ += d2 / d3 * 0.1D;
         }
         else
         {
-            this.waypointX = this.posX + (double)((this.rand.nextFloat() * 2.0F - 1.0F) * 16.0F);
-            this.waypointY = this.posY + (double)((this.rand.nextFloat() * 2.0F - 1.0F) * 16.0F);
-            this.waypointZ = this.posZ + (double)((this.rand.nextFloat() * 2.0F - 1.0F) * 16.0F);
+            this.waypointX = (this.posX + (this.rand.nextFloat() * 2.0F - 1.0F) * 16.0F);
+            this.waypointY = (this.posY + (this.rand.nextFloat() * 2.0F - 1.0F) * 16.0F);
+            this.waypointZ = (this.posZ + (this.rand.nextFloat() * 2.0F - 1.0F) * 16.0F);
         }
 
         if (this.courseChangeCooldown-- <= 0)
@@ -79,18 +89,18 @@ public class EntityZephyr extends EntityFlying implements IMob
         }
     }
 
-    private boolean isCourseTraversable(double var1, double var3, double var5, double var7)
+    private boolean isCourseTraversable(double d, double d1, double d2, double d3)
     {
-        double var9 = (this.waypointX - this.posX) / var7;
-        double var11 = (this.waypointY - this.posY) / var7;
-        double var13 = (this.waypointZ - this.posZ) / var7;
-        AxisAlignedBB var15 = this.boundingBox.copy();
+        double d4 = (this.waypointX - this.posX) / d3;
+        double d5 = (this.waypointY - this.posY) / d3;
+        double d6 = (this.waypointZ - this.posZ) / d3;
+        AxisAlignedBB axisalignedbb = this.boundingBox.copy();
 
-        for (int var16 = 1; (double)var16 < var7; ++var16)
+        for (int i = 1; i < d3; i++)
         {
-            var15.offset(var9, var11, var13);
+            axisalignedbb.offset(d4, d5, d6);
 
-            if (this.worldObj.getCollidingBoundingBoxes(this, var15).size() > 0)
+            if (this.worldObj.getCollidingBoundingBoxes(this, axisalignedbb).size() > 0)
             {
                 return false;
             }
@@ -99,41 +109,26 @@ public class EntityZephyr extends EntityFlying implements IMob
         return true;
     }
 
-    /**
-     * Returns the sound this mob makes while it's alive.
-     */
     protected String getLivingSound()
     {
         return "aemob.zephyr.say";
     }
 
-    /**
-     * Returns the sound this mob makes when it is hurt.
-     */
     protected String getHurtSound()
     {
         return "aemob.zephyr.say";
     }
 
-    /**
-     * Returns the sound this mob makes on death.
-     */
     protected String getDeathSound()
     {
         return "aemob.zephyr.say";
     }
 
-    /**
-     * Determines if an entity can be despawned, used on idle far away entities
-     */
     public boolean canDespawn()
     {
         return true;
     }
 
-    /**
-     * Returns the volume for the sounds this mob makes.
-     */
     protected float getSoundVolume()
     {
         return 3.0F;
@@ -141,16 +136,16 @@ public class EntityZephyr extends EntityFlying implements IMob
 
     private void checkForBeingStuck()
     {
-        long var1 = System.currentTimeMillis();
+        long curtime = System.currentTimeMillis();
 
-        if (var1 > this.checkTime + 3000L)
+        if (curtime > this.checkTime + 3000L)
         {
-            double var3 = this.posX - this.checkX;
-            double var5 = this.posY - this.checkY;
-            double var7 = this.posZ - this.checkZ;
-            double var9 = Math.sqrt(var3 * var3 + var5 * var5 + var7 * var7);
+            double diffx = this.posX - this.checkX;
+            double diffy = this.posY - this.checkY;
+            double diffz = this.posZ - this.checkZ;
+            double distanceTravelled = Math.sqrt(diffx * diffx + diffy * diffy + diffz * diffz);
 
-            if (var9 < 3.0D)
+            if (distanceTravelled < 3.0D)
             {
                 if (!this.isStuckWarning)
                 {
@@ -158,33 +153,28 @@ public class EntityZephyr extends EntityFlying implements IMob
                 }
                 else
                 {
-                    this.setDead();
+                    setDead();
                 }
             }
 
             this.checkX = this.posX;
             this.checkY = this.posY;
             this.checkZ = this.posZ;
-            this.checkTime = var1;
+            this.checkTime = curtime;
         }
     }
 
-    /**
-     * Checks if the entity's current position is a valid location to spawn this entity.
-     */
     public boolean getCanSpawnHere()
     {
-        int var1 = MathHelper.floor_double(this.posX);
-        int var2 = MathHelper.floor_double(this.boundingBox.minY);
-        int var3 = MathHelper.floor_double(this.posZ);
-        return this.rand.nextInt(65) == 0 && this.worldObj.checkNoEntityCollision(this.boundingBox) && this.worldObj.getCollidingBoundingBoxes(this, this.boundingBox).size() == 0 && !this.worldObj.isAnyLiquid(this.boundingBox) && this.worldObj.getBlockId(var1, var2 - 1, var3) == AetherBlocks.AetherGrass.blockID && this.worldObj.getBlockId(var1, var2 - 1, var3) != AetherBlocks.Holystone.blockID && this.worldObj.difficultySetting > 0;
+        int i = MathHelper.floor_double(this.posX);
+        int j = MathHelper.floor_double(this.boundingBox.minY);
+        int k = MathHelper.floor_double(this.posZ);
+        return (this.rand.nextInt(65) == 0) && (this.worldObj.checkNoEntityCollision(this.boundingBox)) && (this.worldObj.getCollidingBoundingBoxes(this, this.boundingBox).size() == 0) && (!this.worldObj.isAnyLiquid(this.boundingBox)) && (this.worldObj.getBlockId(i, j - 1, k) == AetherBlocks.AetherGrass.blockID) && (this.worldObj.getBlockId(i, j - 1, k) != AetherBlocks.Holystone.blockID) && (this.worldObj.difficultySetting > 0);
     }
 
-    /**
-     * Will return how many at most can spawn in a chunk at once.
-     */
     public int getMaxSpawnedInChunk()
     {
         return 1;
     }
 }
+

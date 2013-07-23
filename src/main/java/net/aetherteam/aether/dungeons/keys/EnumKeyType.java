@@ -4,16 +4,15 @@ import net.aetherteam.aether.entities.bosses.EntityKey;
 
 public enum EnumKeyType
 {
-    Host("Host"),
-    Guardian("Guardian"),
-    Eye("Eye");
+    Host("Host"), Guardian("Guardian"), Eye("Eye");
+
     private String texture;
     private String keyName;
 
-    private EnumKeyType(String var3)
+    private EnumKeyType(String keyName)
     {
-        this.texture = "/net/aetherteam/aether/client/sprites/gui/key/" + var3 + ".png";
-        this.keyName = var3;
+        this.texture = ("/net/aetherteam/aether/client/sprites/gui/key/" + keyName + ".png");
+        this.keyName = keyName;
     }
 
     public String getTexture()
@@ -26,34 +25,30 @@ public enum EnumKeyType
         return this.keyName;
     }
 
-    public static EnumKeyType getEnumFromItem(EntityKey var0)
+    public static EnumKeyType getEnumFromItem(EntityKey key)
     {
-        for (int var1 = 0; var1 < values().length; ++var1)
+        for (int i = 0; i < values().length; i++)
         {
-            if (var0.getKeyName().contains(values()[var1].keyName))
+            if (key.getKeyName().contains(values()[i].keyName))
             {
-                return values()[var1];
+                return values()[i];
             }
         }
 
         return null;
     }
 
-    public static EnumKeyType getTypeFromString(String var0)
+    public static EnumKeyType getTypeFromString(String name)
     {
-        EnumKeyType[] var1 = values();
-        int var2 = var1.length;
-
-        for (int var3 = 0; var3 < var2; ++var3)
+        for (EnumKeyType type : values())
         {
-            EnumKeyType var4 = var1[var3];
-
-            if (var4.name().equalsIgnoreCase(var0))
+            if (type.name().equalsIgnoreCase(name))
             {
-                return var4;
+                return type;
             }
         }
 
         return null;
     }
 }
+

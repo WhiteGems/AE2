@@ -1,8 +1,11 @@
 package net.aetherteam.aether.entities;
 
+import java.util.List;
+import java.util.Random;
 import net.aetherteam.aether.blocks.AetherBlocks;
 import net.aetherteam.aether.items.AetherItems;
 import net.minecraft.block.Block;
+import net.minecraft.entity.DataWatcher;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.item.EntityItem;
@@ -16,7 +19,8 @@ import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
 
-public class EntityAerwhale extends EntityLiving implements IMob
+public class EntityAerwhale extends EntityLiving
+    implements IMob
 {
     public String dir = "/net/aetherteam/aether/client/sprites";
     private int aboveBelow;
@@ -28,29 +32,31 @@ public class EntityAerwhale extends EntityLiving implements IMob
     private double checkZ = 0.0D;
     private final double minTraversalDist = 3.0D;
     private boolean isStuckWarning = false;
-    public int courseChangeCooldown = 0;
+    public int courseChangeCooldown;
     public double waypointX;
     public double waypointZ;
-    private Entity targetedEntity = null;
+    private Entity targetedEntity;
     private int aggroCooldown;
     public int prevAttackCounter;
     public int attackCounter;
     public double motionYaw;
     public double motionPitch;
 
-    public EntityAerwhale(World var1)
+    public EntityAerwhale(World world)
     {
-        super(var1);
+        super(world);
+        this.courseChangeCooldown = 0;
+        this.targetedEntity = null;
         this.isImmuneToFire = true;
         this.aggroCooldown = 0;
         this.prevAttackCounter = 0;
         this.attackCounter = 0;
-        this.texture = this.dir + "/mobs/aerwhale/aerwhale.png";
-        this.setSize(2.0F, 2.0F);
+        this.texture = (this.dir + "/mobs/aerwhale/aerwhale.png");
+        setSize(2.0F, 2.0F);
         this.moveSpeed = 0.5F;
         this.health = 20;
-        this.rotationYaw = 360.0F * this.rand.nextFloat();
-        this.rotationPitch = 90.0F * this.rand.nextFloat() - 45.0F;
+        this.rotationYaw = (360.0F * this.rand.nextFloat());
+        this.rotationPitch = (90.0F * this.rand.nextFloat() - 45.0F);
         this.ignoreFrustumCheck = true;
         this.aboveBelow = this.rand.nextInt(2);
     }
@@ -66,93 +72,83 @@ public class EntityAerwhale extends EntityLiving implements IMob
         this.dataWatcher.addObject(16, Byte.valueOf((byte)0));
     }
 
-    /**
-     * Called frequently so the entity can update its state every tick as required. For example, zombies and skeletons
-     * use this to react to sunlight and start to burn.
-     */
     public void onLivingUpdate()
     {
-        if (!this.hasSpawnedDisk && this.worldObj.rand.nextInt(10000) == 1)
+        if ((!this.hasSpawnedDisk) && (this.worldObj.rand.nextInt(10000) == 1))
         {
             this.worldObj.spawnEntityInWorld(new EntityItem(this.worldObj, this.posX, this.posY, this.posZ, new ItemStack(AetherItems.AerwhaleMusicDisk)));
             this.hasSpawnedDisk = true;
         }
     }
 
-    /**
-     * Moves the entity based on the specified heading.  Args: strafe, forward
-     */
-    public void moveEntityWithHeading(float var1, float var2)
+    public void moveEntityWithHeading(float par1, float par2)
     {
-        if (this.isInWater())
+        if (isInWater())
         {
-            this.moveFlying(var1, var2, 0.02F);
-            this.moveEntity(this.motionX, this.motionY, this.motionZ);
+            moveFlying(par1, par2, 0.02F);
+            moveEntity(this.motionX, this.motionY, this.motionZ);
             this.motionX *= 0.800000011920929D;
             this.motionY *= 0.800000011920929D;
             this.motionZ *= 0.800000011920929D;
         }
-        else if (this.handleLavaMovement())
+        else if (handleLavaMovement())
         {
-            this.moveFlying(var1, var2, 0.02F);
-            this.moveEntity(this.motionX, this.motionY, this.motionZ);
+            moveFlying(par1, par2, 0.02F);
+            moveEntity(this.motionX, this.motionY, this.motionZ);
             this.motionX *= 0.5D;
             this.motionY *= 0.5D;
             this.motionZ *= 0.5D;
         }
         else
         {
-            float var3 = 0.91F;
+            float f2 = 0.91F;
 
             if (this.onGround)
             {
-                var3 = 0.54600006F;
-                int var4 = this.worldObj.getBlockId(MathHelper.floor_double(this.posX), MathHelper.floor_double(this.boundingBox.minY) - 1, MathHelper.floor_double(this.posZ));
+                f2 = 0.5460001F;
+                int i = this.worldObj.getBlockId(MathHelper.floor_double(this.posX), MathHelper.floor_double(this.boundingBox.minY) - 1, MathHelper.floor_double(this.posZ));
 
-                if (var4 > 0)
+                if (i > 0)
                 {
-                    var3 = Block.blocksList[var4].slipperiness * 0.91F;
+                    f2 = Block.blocksList[i].slipperiness * 0.91F;
                 }
             }
 
-            float var8 = 0.16277136F / (var3 * var3 * var3);
-            this.moveFlying(var1, var2, this.onGround ? 0.1F * var8 : 0.02F);
-            var3 = 0.91F;
+            float f3 = 0.1627714F / (f2 * f2 * f2);
+            moveFlying(par1, par2, this.onGround ? 0.1F * f3 : 0.02F);
+            f2 = 0.91F;
 
             if (this.onGround)
             {
-                var3 = 0.54600006F;
-                int var5 = this.worldObj.getBlockId(MathHelper.floor_double(this.posX), MathHelper.floor_double(this.boundingBox.minY) - 1, MathHelper.floor_double(this.posZ));
+                f2 = 0.5460001F;
+                int j = this.worldObj.getBlockId(MathHelper.floor_double(this.posX), MathHelper.floor_double(this.boundingBox.minY) - 1, MathHelper.floor_double(this.posZ));
 
-                if (var5 > 0)
+                if (j > 0)
                 {
-                    var3 = Block.blocksList[var5].slipperiness * 0.91F;
+                    f2 = Block.blocksList[j].slipperiness * 0.91F;
                 }
             }
 
-            this.moveEntity(this.motionX, this.motionY, this.motionZ);
-            this.motionX *= (double)var3;
-            this.motionY *= (double)var3;
-            this.motionZ *= (double)var3;
+            moveEntity(this.motionX, this.motionY, this.motionZ);
+            this.motionX *= f2;
+            this.motionY *= f2;
+            this.motionZ *= f2;
         }
 
         this.prevLimbYaw = this.limbYaw;
-        double var10 = this.posX - this.prevPosX;
-        double var9 = this.posZ - this.prevPosZ;
-        float var7 = MathHelper.sqrt_double(var10 * var10 + var9 * var9) * 4.0F;
+        double d0 = this.posX - this.prevPosX;
+        double d1 = this.posZ - this.prevPosZ;
+        float f4 = MathHelper.sqrt_double(d0 * d0 + d1 * d1) * 4.0F;
 
-        if (var7 > 1.0F)
+        if (f4 > 1.0F)
         {
-            var7 = 1.0F;
+            f4 = 1.0F;
         }
 
-        this.limbYaw += (var7 - this.limbYaw) * 0.4F;
+        this.limbYaw += (f4 - this.limbYaw) * 0.4F;
         this.limbSwing += this.limbYaw;
     }
 
-    /**
-     * Called to update the entity's position/logic.
-     */
     public void onUpdate()
     {
         super.onUpdate();
@@ -160,29 +156,33 @@ public class EntityAerwhale extends EntityLiving implements IMob
 
         if (this.aboveBelow == 0)
         {
-            this.setPosition(this.posX, 1.0D, this.posZ);
+            setPosition(this.posX, 1.0D, this.posZ);
         }
         else
         {
-            this.setPosition(this.posX, 128.0D, this.posZ);
+            setPosition(this.posX, 128.0D, this.posZ);
         }
 
-        double[] var1 = new double[] {this.openSpace(0.0F, 0.0F), this.openSpace(45.0F, 0.0F), this.openSpace(0.0F, 45.0F), this.openSpace(-45.0F, 0.0F), this.openSpace(0.0F, -45.0F)};
-        int var2 = 0;
-        int var3;
+        double[] distances = new double[5];
+        distances[0] = openSpace(0.0F, 0.0F);
+        distances[1] = openSpace(45.0F, 0.0F);
+        distances[2] = openSpace(0.0F, 45.0F);
+        distances[3] = openSpace(-45.0F, 0.0F);
+        distances[4] = openSpace(0.0F, -45.0F);
+        int longest = 0;
 
-        for (var3 = 1; var3 < 5; ++var3)
+        for (int i = 1; i < 5; i++)
         {
-            if (var1[var3] > var1[var2])
+            if (distances[i] > distances[longest])
             {
-                var2 = var3;
+                longest = i;
             }
         }
 
-        switch (var2)
+        switch (longest)
         {
             case 0:
-                if (var1[0] == 50.0D)
+                if (distances[0] == 50.0D)
                 {
                     this.motionYaw *= 0.8999999761581421D;
                     this.motionPitch *= 0.8999999761581421D;
@@ -199,8 +199,8 @@ public class EntityAerwhale extends EntityLiving implements IMob
                 }
                 else
                 {
-                    this.rotationPitch = -this.rotationPitch;
-                    this.rotationYaw = -this.rotationYaw;
+                    this.rotationPitch = (-this.rotationPitch);
+                    this.rotationYaw = (-this.rotationYaw);
                 }
 
                 break;
@@ -221,10 +221,10 @@ public class EntityAerwhale extends EntityLiving implements IMob
                 this.motionPitch += 5.0D;
         }
 
-        this.motionYaw += (double)(2.0F * this.rand.nextFloat() - 1.0F);
-        this.motionPitch += (double)(2.0F * this.rand.nextFloat() - 1.0F);
-        this.rotationPitch = (float)((double)this.rotationPitch + 0.1D * this.motionPitch);
-        this.rotationYaw = (float)((double)this.rotationYaw + 0.1D * this.motionYaw);
+        this.motionYaw += 2.0F * this.rand.nextFloat() - 1.0F;
+        this.motionPitch += 2.0F * this.rand.nextFloat() - 1.0F;
+        this.rotationPitch = ((float)(this.rotationPitch + 0.1D * this.motionPitch));
+        this.rotationYaw = ((float)(this.rotationYaw + 0.1D * this.motionYaw));
 
         if (this.rotationPitch < -60.0F)
         {
@@ -236,53 +236,53 @@ public class EntityAerwhale extends EntityLiving implements IMob
             this.rotationPitch = 60.0F;
         }
 
-        this.rotationPitch = (float)((double)this.rotationPitch * 0.99D);
-        this.motionX += 0.005D * Math.cos((double)this.rotationYaw / 180.0D * Math.PI) * Math.cos((double)this.rotationPitch / 180.0D * Math.PI);
-        this.motionY += 0.005D * Math.sin((double)this.rotationPitch / 180.0D * Math.PI);
-        this.motionZ += 0.005D * Math.sin((double)this.rotationYaw / 180.0D * Math.PI) * Math.cos((double)this.rotationPitch / 180.0D * Math.PI);
+        this.rotationPitch = ((float)(this.rotationPitch * 0.99D));
+        this.motionX += 0.005D * Math.cos(this.rotationYaw / 180.0D * Math.PI) * Math.cos(this.rotationPitch / 180.0D * Math.PI);
+        this.motionY += 0.005D * Math.sin(this.rotationPitch / 180.0D * Math.PI);
+        this.motionZ += 0.005D * Math.sin(this.rotationYaw / 180.0D * Math.PI) * Math.cos(this.rotationPitch / 180.0D * Math.PI);
         this.motionX *= 0.98D;
         this.motionY *= 0.98D;
         this.motionZ *= 0.98D;
-        var3 = MathHelper.floor_double(this.posX);
-        int var4 = MathHelper.floor_double(this.boundingBox.minY);
-        int var5 = MathHelper.floor_double(this.posZ);
+        int i = MathHelper.floor_double(this.posX);
+        int j = MathHelper.floor_double(this.boundingBox.minY);
+        int k = MathHelper.floor_double(this.posZ);
 
-        if (this.motionX > 0.0D && this.worldObj.getBlockId(var3 + 1, var4, var5) != 0)
+        if ((this.motionX > 0.0D) && (this.worldObj.getBlockId(i + 1, j, k) != 0))
         {
-            this.motionX = -this.motionX;
+            this.motionX = (-this.motionX);
             this.motionYaw -= 10.0D;
         }
-        else if (this.motionX < 0.0D && this.worldObj.getBlockId(var3 - 1, var4, var5) != 0)
+        else if ((this.motionX < 0.0D) && (this.worldObj.getBlockId(i - 1, j, k) != 0))
         {
-            this.motionX = -this.motionX;
+            this.motionX = (-this.motionX);
             this.motionYaw += 10.0D;
         }
 
-        if (this.motionY > 0.0D && this.worldObj.getBlockId(var3, var4 + 1, var5) != 0)
+        if ((this.motionY > 0.0D) && (this.worldObj.getBlockId(i, j + 1, k) != 0))
         {
-            this.motionY = -this.motionY;
+            this.motionY = (-this.motionY);
             this.motionPitch -= 10.0D;
         }
-        else if (this.motionY < 0.0D && this.worldObj.getBlockId(var3, var4 - 1, var5) != 0)
+        else if ((this.motionY < 0.0D) && (this.worldObj.getBlockId(i, j - 1, k) != 0))
         {
-            this.motionY = -this.motionY;
+            this.motionY = (-this.motionY);
             this.motionPitch += 10.0D;
         }
 
-        if (this.motionZ > 0.0D && this.worldObj.getBlockId(var3, var4, var5 + 1) != 0)
+        if ((this.motionZ > 0.0D) && (this.worldObj.getBlockId(i, j, k + 1) != 0))
         {
-            this.motionZ = -this.motionZ;
+            this.motionZ = (-this.motionZ);
             this.motionYaw -= 10.0D;
         }
-        else if (this.motionZ < 0.0D && this.worldObj.getBlockId(var3, var4, var5 - 1) != 0)
+        else if ((this.motionZ < 0.0D) && (this.worldObj.getBlockId(i, j, k - 1) != 0))
         {
-            this.motionZ = -this.motionZ;
+            this.motionZ = (-this.motionZ);
             this.motionYaw += 10.0D;
         }
 
-        this.extinguish();
-        this.moveEntity(this.motionX, this.motionY, this.motionZ);
-        this.checkForBeingStuck();
+        extinguish();
+        moveEntity(this.motionX, this.motionY, this.motionZ);
+        checkForBeingStuck();
     }
 
     public double getSpeed()
@@ -290,72 +290,75 @@ public class EntityAerwhale extends EntityLiving implements IMob
         return Math.sqrt(this.motionX * this.motionX + this.motionY * this.motionY + this.motionZ * this.motionZ);
     }
 
-    private double openSpace(float var1, float var2)
+    private double openSpace(float rotationYawOffset, float rotationPitchOffset)
     {
-        float var3 = this.rotationYaw + var1;
-        float var4 = this.rotationYaw + var1;
-        Vec3 var5 = Vec3.createVectorHelper(this.posX, this.posY, this.posZ);
-        float var6 = MathHelper.cos(-var3 * 0.01745329F - (float)Math.PI);
-        float var7 = MathHelper.sin(-var3 * 0.01745329F - (float)Math.PI);
-        float var8 = MathHelper.cos(-var4 * 0.01745329F);
-        float var9 = MathHelper.sin(-var4 * 0.01745329F);
-        float var10 = var7 * var8;
-        float var12 = var6 * var8;
-        double var13 = 50.0D;
-        Vec3 var15 = var5.addVector((double)var10 * var13, (double)var9 * var13, (double)var12 * var13);
-        MovingObjectPosition var16 = this.worldObj.rayTraceBlocks_do(var5, var15, true);
+        float yaw = this.rotationYaw + rotationYawOffset;
+        float pitch = this.rotationYaw + rotationYawOffset;
+        Vec3 vec3d = Vec3.createVectorHelper(this.posX, this.posY, this.posZ);
+        float f3 = MathHelper.cos(-yaw * 0.01745329F - (float)Math.PI);
+        float f4 = MathHelper.sin(-yaw * 0.01745329F - (float)Math.PI);
+        float f5 = MathHelper.cos(-pitch * 0.01745329F);
+        float f6 = MathHelper.sin(-pitch * 0.01745329F);
+        float f7 = f4 * f5;
+        float f8 = f6;
+        float f9 = f3 * f5;
+        double d3 = 50.0D;
+        Vec3 vec3d1 = vec3d.addVector(f7 * d3, f8 * d3, f9 * d3);
+        MovingObjectPosition movingobjectposition = this.worldObj.rayTraceBlocks_do(vec3d, vec3d1, true);
 
-        if (var16 == null)
+        if (movingobjectposition == null)
         {
             return 50.0D;
         }
-        else if (var16.typeOfHit == EnumMovingObjectType.TILE)
+
+        if (movingobjectposition.typeOfHit == EnumMovingObjectType.TILE)
         {
-            double var17 = (double)var16.blockX - this.posX;
-            double var19 = (double)var16.blockY - this.posY;
-            double var21 = (double)var16.blockZ - this.posZ;
-            return Math.sqrt(var17 * var17 + var19 * var19 + var21 * var21);
+            double i = movingobjectposition.blockX - this.posX;
+            double j = movingobjectposition.blockY - this.posY;
+            double k = movingobjectposition.blockZ - this.posZ;
+            return Math.sqrt(i * i + j * j + k * k);
         }
-        else
-        {
-            return 50.0D;
-        }
+
+        return 50.0D;
     }
 
     private void checkForBeingStuck()
     {
-        long var1 = System.currentTimeMillis();
+        long curtime = System.currentTimeMillis();
 
-        if (var1 > this.checkTime + 3000L)
+        if (curtime > this.checkTime + 3000L)
         {
-            double var3 = this.posX - this.checkX;
-            double var5 = this.posY - this.checkY;
-            double var7 = this.posZ - this.checkZ;
-            double var9 = Math.sqrt(var3 * var3 + var5 * var5 + var7 * var7);
+            double diffx = this.posX - this.checkX;
+            double diffy = this.posY - this.checkY;
+            double diffz = this.posZ - this.checkZ;
+            double distanceTravelled = Math.sqrt(diffx * diffx + diffy * diffy + diffz * diffz);
 
-            if (var9 < 3.0D && !this.isStuckWarning)
+            if (distanceTravelled < 3.0D)
             {
-                this.isStuckWarning = true;
+                if (!this.isStuckWarning)
+                {
+                    this.isStuckWarning = true;
+                }
             }
 
             this.checkX = this.posX;
             this.checkY = this.posY;
             this.checkZ = this.posZ;
-            this.checkTime = var1;
+            this.checkTime = curtime;
         }
     }
 
-    private boolean isCourseTraversable(double var1, double var3, double var5, double var7)
+    private boolean isCourseTraversable(double d, double d1, double d2, double d3)
     {
-        double var9 = (this.waypointX - this.posX) / var7;
-        double var11 = (this.waypointZ - this.posZ) / var7;
-        AxisAlignedBB var13 = this.boundingBox.copy();
+        double d4 = (this.waypointX - this.posX) / d3;
+        double d6 = (this.waypointZ - this.posZ) / d3;
+        AxisAlignedBB axisalignedbb = this.boundingBox.copy();
 
-        for (int var14 = 1; (double)var14 < var7; ++var14)
+        for (int i = 1; i < d3; i++)
         {
-            var13.offset(var9, this.posY, var11);
+            axisalignedbb.offset(d4, this.posY, d6);
 
-            if (this.worldObj.getCollidingBoundingBoxes(this, var13).size() > 0)
+            if (this.worldObj.getCollidingBoundingBoxes(this, axisalignedbb).size() > 0)
             {
                 return false;
             }
@@ -364,83 +367,56 @@ public class EntityAerwhale extends EntityLiving implements IMob
         return true;
     }
 
-    /**
-     * Returns the sound this mob makes while it's alive.
-     */
     protected String getLivingSound()
     {
         return "aemob.aerwhale.say";
     }
 
-    /**
-     * Returns the sound this mob makes when it is hurt.
-     */
     protected String getHurtSound()
     {
         return "aemob.aerwhale.die";
     }
 
-    /**
-     * Returns the sound this mob makes on death.
-     */
     protected String getDeathSound()
     {
         return "aemob.aerwhale.die";
     }
 
-    /**
-     * Returns the volume for the sounds this mob makes.
-     */
     protected float getSoundVolume()
     {
         return 3.0F;
     }
 
-    /**
-     * Will return how many at most can spawn in a chunk at once.
-     */
     public int getMaxSpawnedInChunk()
     {
         return 1;
     }
 
-    /**
-     * Determines if an entity can be despawned, used on idle far away entities
-     */
     public boolean canDespawn()
     {
         return true;
     }
 
-    /**
-     * Returns true if other Entities should be prevented from moving through this Entity.
-     */
     public boolean canBeCollidedWith()
     {
         return true;
     }
 
-    /**
-     * returns the bounding box for this entity
-     */
     public AxisAlignedBB getBoundingBox()
     {
         return this.boundingBox;
     }
 
-    /**
-     * Called by a player entity when they collide with an entity
-     */
-    public void onCollideWithPlayer(EntityPlayer var1) {}
+    public void onCollideWithPlayer(EntityPlayer entityplayer)
+    {
+    }
 
-    /**
-     * Checks if the entity's current position is a valid location to spawn this entity.
-     */
     public boolean getCanSpawnHere()
     {
-        int var1 = MathHelper.floor_double(this.posX);
-        int var2 = MathHelper.floor_double(this.boundingBox.minY);
-        int var3 = MathHelper.floor_double(this.posZ);
-        return this.rand.nextInt(65) == 0 && this.worldObj.checkNoEntityCollision(this.boundingBox) && this.worldObj.getCollidingBoundingBoxes(this, this.boundingBox).size() == 0 && !this.worldObj.isAnyLiquid(this.boundingBox) && this.worldObj.getBlockId(var1, var2 - 1, var3) == AetherBlocks.AetherGrass.blockID && this.worldObj.getBlockId(var1, var2 - 1, var3) != AetherBlocks.Holystone.blockID;
+        int i = MathHelper.floor_double(this.posX);
+        int j = MathHelper.floor_double(this.boundingBox.minY);
+        int k = MathHelper.floor_double(this.posZ);
+        return (this.rand.nextInt(65) == 0) && (this.worldObj.checkNoEntityCollision(this.boundingBox)) && (this.worldObj.getCollidingBoundingBoxes(this, this.boundingBox).size() == 0) && (!this.worldObj.isAnyLiquid(this.boundingBox)) && (this.worldObj.getBlockId(i, j - 1, k) == AetherBlocks.AetherGrass.blockID) && (this.worldObj.getBlockId(i, j - 1, k) != AetherBlocks.Holystone.blockID);
     }
 }
+

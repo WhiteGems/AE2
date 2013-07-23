@@ -2,26 +2,26 @@ package net.aetherteam.aether.client.models;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
-import net.minecraft.client.model.ModelBase;
-import net.minecraft.client.model.ModelRenderer;
+import net.minecraft.client.model.ModelMinecart;
+import net.minecraft.src.bdi;
 
 @SideOnly(Side.CLIENT)
-public class ModelAltar1 extends ModelBase
+public class ModelAltar1 extends ModelMinecart
 {
-    public ModelRenderer TopBase;
-    public ModelRenderer CornerTopLeft;
-    public ModelRenderer AmbrosiumTopLeft;
-    public ModelRenderer CornerBottomLeft;
-    public ModelRenderer CornerBottomRight;
-    public ModelRenderer CornerTopRight;
-    public ModelRenderer AmbrosiumTopRight;
-    public ModelRenderer AmbrosiumBottomLeft;
-    public ModelRenderer AmbrosiumBottomRight;
-    public ModelRenderer LowerTopBase;
-    public ModelRenderer SupportPole;
-    public ModelRenderer BottomBase;
-    public ModelRenderer UpperBottomBase;
-    public ModelRenderer Scroll;
+    public bdi TopBase;
+    public bdi CornerTopLeft;
+    public bdi AmbrosiumTopLeft;
+    public bdi CornerBottomLeft;
+    public bdi CornerBottomRight;
+    public bdi CornerTopRight;
+    public bdi AmbrosiumTopRight;
+    public bdi AmbrosiumBottomLeft;
+    public bdi AmbrosiumBottomRight;
+    public bdi LowerTopBase;
+    public bdi SupportPole;
+    public bdi BottomBase;
+    public bdi UpperBottomBase;
+    public bdi Scroll;
     private float offsetX = 0.0F;
     private float offsetY = 0.0F;
     private float offsetZ = 0.0F;
@@ -30,105 +30,106 @@ public class ModelAltar1 extends ModelBase
     {
         this.textureWidth = 64;
         this.textureHeight = 64;
-        this.TopBase = (new ModelRenderer(this, 8, 15)).setTextureSize(64, 64);
-        this.TopBase.addBox(0.0F, 0.0F, 0.0F, 14, 3, 14);
-        this.setRotationPointWithOffset(this.TopBase, -7.0F, 9.0F, -7.0F);
-        this.TopBase.mirror = true;
-        this.setRotation(this.TopBase, 0.0F, 0.0F, 0.0F);
-        this.CornerTopLeft = (new ModelRenderer(this, 48, 6)).setTextureSize(64, 64);
-        this.CornerTopLeft.addBox(0.0F, 0.0F, 0.0F, 4, 5, 4);
-        this.setRotationPointWithOffset(this.CornerTopLeft, 4.0F, 8.0F, 4.0F);
-        this.CornerTopLeft.mirror = true;
-        this.setRotation(this.CornerTopLeft, 0.0F, 0.0F, 0.0F);
-        this.AmbrosiumTopLeft = (new ModelRenderer(this, 0, 29)).setTextureSize(64, 64);
-        this.AmbrosiumTopLeft.addBox(-1.0F, 0.0F, -1.0F, 2, 1, 2);
-        this.setRotationPointWithOffset(this.AmbrosiumTopLeft, 6.0F, 7.0F, 6.0F);
-        this.AmbrosiumTopLeft.mirror = true;
-        this.setRotation(this.AmbrosiumTopLeft, 0.0F, 0.0F, 0.0F);
-        this.CornerBottomLeft = (new ModelRenderer(this, 48, 6)).setTextureSize(64, 64);
-        this.CornerBottomLeft.addBox(0.0F, 0.0F, 0.0F, 4, 5, 4);
-        this.setRotationPointWithOffset(this.CornerBottomLeft, -8.0F, 8.0F, 4.0F);
-        this.CornerBottomLeft.mirror = true;
-        this.setRotation(this.CornerBottomLeft, 0.0F, 0.0F, 0.0F);
-        this.CornerBottomRight = (new ModelRenderer(this, 48, 6)).setTextureSize(64, 64);
-        this.CornerBottomRight.addBox(0.0F, 0.0F, 0.0F, 4, 5, 4);
-        this.setRotationPointWithOffset(this.CornerBottomRight, -8.0F, 8.0F, -8.0F);
-        this.CornerBottomRight.mirror = true;
-        this.setRotation(this.CornerBottomRight, 0.0F, 0.0F, 0.0F);
-        this.CornerTopRight = (new ModelRenderer(this, 48, 6)).setTextureSize(64, 64);
-        this.CornerTopRight.addBox(0.0F, 0.0F, 0.0F, 4, 5, 4);
-        this.setRotationPointWithOffset(this.CornerTopRight, 4.0F, 8.0F, -8.0F);
-        this.CornerTopRight.mirror = true;
-        this.setRotation(this.CornerTopRight, 0.0F, 0.0F, 0.0F);
-        this.AmbrosiumTopRight = (new ModelRenderer(this, 0, 29)).setTextureSize(64, 64);
-        this.AmbrosiumTopRight.addBox(-1.0F, 0.0F, -1.0F, 2, 1, 2);
-        this.setRotationPointWithOffset(this.AmbrosiumTopRight, 6.0F, 7.0F, -6.0F);
-        this.AmbrosiumTopRight.mirror = true;
-        this.setRotation(this.AmbrosiumTopRight, 0.0F, 0.0F, 0.0F);
-        this.AmbrosiumBottomLeft = (new ModelRenderer(this, 0, 29)).setTextureSize(64, 64);
-        this.AmbrosiumBottomLeft.addBox(-1.0F, 0.0F, -1.0F, 2, 1, 2);
-        this.setRotationPointWithOffset(this.AmbrosiumBottomLeft, -6.0F, 7.0F, 6.0F);
-        this.AmbrosiumBottomLeft.mirror = true;
-        this.setRotation(this.AmbrosiumBottomLeft, 0.0F, 0.0F, 0.0F);
-        this.AmbrosiumBottomRight = (new ModelRenderer(this, 0, 29)).setTextureSize(64, 64);
-        this.AmbrosiumBottomRight.addBox(-1.0F, 0.0F, -1.0F, 2, 1, 2);
-        this.setRotationPointWithOffset(this.AmbrosiumBottomRight, -6.0F, 7.0F, -6.0F);
-        this.AmbrosiumBottomRight.mirror = true;
-        this.setRotation(this.AmbrosiumBottomRight, 0.0F, 0.0F, 0.0F);
-        this.LowerTopBase = (new ModelRenderer(this, 0, 0)).setTextureSize(64, 64);
-        this.LowerTopBase.addBox(0.0F, 0.0F, 0.0F, 6, 3, 6);
-        this.setRotationPointWithOffset(this.LowerTopBase, -3.0F, 12.0F, -3.0F);
-        this.LowerTopBase.mirror = true;
-        this.setRotation(this.LowerTopBase, 0.0F, 0.0F, 0.0F);
-        this.SupportPole = (new ModelRenderer(this, 0, 22)).setTextureSize(64, 64);
-        this.SupportPole.addBox(0.0F, 0.0F, 0.0F, 2, 5, 2);
-        this.setRotationPointWithOffset(this.SupportPole, -1.0F, 15.0F, -1.0F);
-        this.SupportPole.mirror = true;
-        this.setRotation(this.SupportPole, 0.0F, 0.0F, 0.0F);
-        this.BottomBase = (new ModelRenderer(this, 8, 32)).setTextureSize(64, 64);
-        this.BottomBase.addBox(0.0F, 0.0F, 0.0F, 14, 2, 14);
-        this.setRotationPointWithOffset(this.BottomBase, -7.0F, 22.0F, -7.0F);
-        this.BottomBase.mirror = true;
-        this.setRotation(this.BottomBase, 0.0F, 0.0F, 0.0F);
-        this.UpperBottomBase = (new ModelRenderer(this, 16, 5)).setTextureSize(64, 64);
-        this.UpperBottomBase.addBox(0.0F, 0.0F, 0.0F, 8, 2, 8);
-        this.setRotationPointWithOffset(this.UpperBottomBase, -4.0F, 20.0F, -4.0F);
-        this.UpperBottomBase.mirror = true;
-        this.setRotation(this.UpperBottomBase, 0.0F, 0.0F, 0.0F);
-        this.Scroll = (new ModelRenderer(this, 0, 56)).setTextureSize(64, 64);
-        this.Scroll.addBox(0.0F, 0.0F, 0.0F, 8, 2, 6);
-        this.setRotationPointWithOffset(this.Scroll, -4.0F, 8.4F, -3.0F);
-        this.Scroll.mirror = true;
-        this.setRotation(this.Scroll, 0.0F, 0.0F, -0.1047198F);
+        this.TopBase = new bdi(this, 8, 15).b(64, 64);
+        this.TopBase.a(0.0F, 0.0F, 0.0F, 14, 3, 14);
+        setRotationPointWithOffset(this.TopBase, -7.0F, 9.0F, -7.0F);
+        this.TopBase.i = true;
+        setRotation(this.TopBase, 0.0F, 0.0F, 0.0F);
+        this.CornerTopLeft = new bdi(this, 48, 6).b(64, 64);
+        this.CornerTopLeft.a(0.0F, 0.0F, 0.0F, 4, 5, 4);
+        setRotationPointWithOffset(this.CornerTopLeft, 4.0F, 8.0F, 4.0F);
+        this.CornerTopLeft.i = true;
+        setRotation(this.CornerTopLeft, 0.0F, 0.0F, 0.0F);
+        this.AmbrosiumTopLeft = new bdi(this, 0, 29).b(64, 64);
+        this.AmbrosiumTopLeft.a(-1.0F, 0.0F, -1.0F, 2, 1, 2);
+        setRotationPointWithOffset(this.AmbrosiumTopLeft, 6.0F, 7.0F, 6.0F);
+        this.AmbrosiumTopLeft.i = true;
+        setRotation(this.AmbrosiumTopLeft, 0.0F, 0.0F, 0.0F);
+        this.CornerBottomLeft = new bdi(this, 48, 6).b(64, 64);
+        this.CornerBottomLeft.a(0.0F, 0.0F, 0.0F, 4, 5, 4);
+        setRotationPointWithOffset(this.CornerBottomLeft, -8.0F, 8.0F, 4.0F);
+        this.CornerBottomLeft.i = true;
+        setRotation(this.CornerBottomLeft, 0.0F, 0.0F, 0.0F);
+        this.CornerBottomRight = new bdi(this, 48, 6).b(64, 64);
+        this.CornerBottomRight.a(0.0F, 0.0F, 0.0F, 4, 5, 4);
+        setRotationPointWithOffset(this.CornerBottomRight, -8.0F, 8.0F, -8.0F);
+        this.CornerBottomRight.i = true;
+        setRotation(this.CornerBottomRight, 0.0F, 0.0F, 0.0F);
+        this.CornerTopRight = new bdi(this, 48, 6).b(64, 64);
+        this.CornerTopRight.a(0.0F, 0.0F, 0.0F, 4, 5, 4);
+        setRotationPointWithOffset(this.CornerTopRight, 4.0F, 8.0F, -8.0F);
+        this.CornerTopRight.i = true;
+        setRotation(this.CornerTopRight, 0.0F, 0.0F, 0.0F);
+        this.AmbrosiumTopRight = new bdi(this, 0, 29).b(64, 64);
+        this.AmbrosiumTopRight.a(-1.0F, 0.0F, -1.0F, 2, 1, 2);
+        setRotationPointWithOffset(this.AmbrosiumTopRight, 6.0F, 7.0F, -6.0F);
+        this.AmbrosiumTopRight.i = true;
+        setRotation(this.AmbrosiumTopRight, 0.0F, 0.0F, 0.0F);
+        this.AmbrosiumBottomLeft = new bdi(this, 0, 29).b(64, 64);
+        this.AmbrosiumBottomLeft.a(-1.0F, 0.0F, -1.0F, 2, 1, 2);
+        setRotationPointWithOffset(this.AmbrosiumBottomLeft, -6.0F, 7.0F, 6.0F);
+        this.AmbrosiumBottomLeft.i = true;
+        setRotation(this.AmbrosiumBottomLeft, 0.0F, 0.0F, 0.0F);
+        this.AmbrosiumBottomRight = new bdi(this, 0, 29).b(64, 64);
+        this.AmbrosiumBottomRight.a(-1.0F, 0.0F, -1.0F, 2, 1, 2);
+        setRotationPointWithOffset(this.AmbrosiumBottomRight, -6.0F, 7.0F, -6.0F);
+        this.AmbrosiumBottomRight.i = true;
+        setRotation(this.AmbrosiumBottomRight, 0.0F, 0.0F, 0.0F);
+        this.LowerTopBase = new bdi(this, 0, 0).b(64, 64);
+        this.LowerTopBase.a(0.0F, 0.0F, 0.0F, 6, 3, 6);
+        setRotationPointWithOffset(this.LowerTopBase, -3.0F, 12.0F, -3.0F);
+        this.LowerTopBase.i = true;
+        setRotation(this.LowerTopBase, 0.0F, 0.0F, 0.0F);
+        this.SupportPole = new bdi(this, 0, 22).b(64, 64);
+        this.SupportPole.a(0.0F, 0.0F, 0.0F, 2, 5, 2);
+        setRotationPointWithOffset(this.SupportPole, -1.0F, 15.0F, -1.0F);
+        this.SupportPole.i = true;
+        setRotation(this.SupportPole, 0.0F, 0.0F, 0.0F);
+        this.BottomBase = new bdi(this, 8, 32).b(64, 64);
+        this.BottomBase.a(0.0F, 0.0F, 0.0F, 14, 2, 14);
+        setRotationPointWithOffset(this.BottomBase, -7.0F, 22.0F, -7.0F);
+        this.BottomBase.i = true;
+        setRotation(this.BottomBase, 0.0F, 0.0F, 0.0F);
+        this.UpperBottomBase = new bdi(this, 16, 5).b(64, 64);
+        this.UpperBottomBase.a(0.0F, 0.0F, 0.0F, 8, 2, 8);
+        setRotationPointWithOffset(this.UpperBottomBase, -4.0F, 20.0F, -4.0F);
+        this.UpperBottomBase.i = true;
+        setRotation(this.UpperBottomBase, 0.0F, 0.0F, 0.0F);
+        this.Scroll = new bdi(this, 0, 56).b(64, 64);
+        this.Scroll.a(0.0F, 0.0F, 0.0F, 8, 2, 6);
+        setRotationPointWithOffset(this.Scroll, -4.0F, 8.4F, -3.0F);
+        this.Scroll.i = true;
+        setRotation(this.Scroll, 0.0F, 0.0F, -0.10472F);
     }
 
-    public void renderAll(float var1)
+    public void renderAll(float f5)
     {
-        this.TopBase.render(var1);
-        this.CornerTopLeft.render(var1);
-        this.AmbrosiumTopLeft.render(var1);
-        this.CornerBottomLeft.render(var1);
-        this.CornerBottomRight.render(var1);
-        this.CornerTopRight.render(var1);
-        this.AmbrosiumTopRight.render(var1);
-        this.AmbrosiumBottomLeft.render(var1);
-        this.AmbrosiumBottomRight.render(var1);
-        this.LowerTopBase.render(var1);
-        this.SupportPole.render(var1);
-        this.BottomBase.render(var1);
-        this.UpperBottomBase.render(var1);
-        this.Scroll.render(var1);
+        this.TopBase.a(f5);
+        this.CornerTopLeft.a(f5);
+        this.AmbrosiumTopLeft.a(f5);
+        this.CornerBottomLeft.a(f5);
+        this.CornerBottomRight.a(f5);
+        this.CornerTopRight.a(f5);
+        this.AmbrosiumTopRight.a(f5);
+        this.AmbrosiumBottomLeft.a(f5);
+        this.AmbrosiumBottomRight.a(f5);
+        this.LowerTopBase.a(f5);
+        this.SupportPole.a(f5);
+        this.BottomBase.a(f5);
+        this.UpperBottomBase.a(f5);
+        this.Scroll.a(f5);
     }
 
-    private void setRotation(ModelRenderer var1, float var2, float var3, float var4)
+    private void setRotation(bdi model, float x, float y, float z)
     {
-        var1.rotateAngleX = var2;
-        var1.rotateAngleY = var3;
-        var1.rotateAngleZ = var4;
+        model.f = x;
+        model.g = y;
+        model.h = z;
     }
 
-    private void setRotationPointWithOffset(ModelRenderer var1, float var2, float var3, float var4)
+    private void setRotationPointWithOffset(bdi renderer, float x, float y, float z)
     {
-        var1.setRotationPoint(var2 + this.offsetX, var3 + this.offsetY, var4 + this.offsetZ);
+        renderer.a(x + this.offsetX, y + this.offsetY, z + this.offsetZ);
     }
 }
+

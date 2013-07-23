@@ -4,55 +4,55 @@ import net.minecraft.item.ItemStack;
 
 public class ItemMoreArmor extends ItemAether
 {
-    public int itemColour;
+    public int itemColour = 16777215;
     public final int armorLevel;
     public final int armorType;
     public final int damageReduceAmount;
     public final int renderIndex;
     public String texture;
     public boolean colouriseRender;
-    private static final int[] damageReduceAmountArray = new int[] {3, 8, 6, 3, 0, 1, 0, 0, 0, 0, 2, 0};
-    private static final int[] maxDamageArray = new int[] {11, 16, 15, 13, 10, 10, 8, 10, 10, 10, 10, 10};
+    private static final int[] damageReduceAmountArray = { 3, 8, 6, 3, 0, 1, 0, 0, 0, 0, 2, 0 };
 
-    protected ItemMoreArmor(int var1, int var2, int var3, int var4, int var5)
+    private static final int[] maxDamageArray = { 11, 16, 15, 13, 10, 10, 8, 10, 10, 10, 10, 10 };
+
+    protected ItemMoreArmor(int i, int j, int k, int l, int col)
     {
-        super(var1);
-        this.itemColour = 16777215;
-        this.armorLevel = var2;
-        this.armorType = var4;
-        this.renderIndex = var3;
-        this.damageReduceAmount = damageReduceAmountArray[var4];
-        this.setMaxDamage(maxDamageArray[var4] * 3 << var2);
+        super(i);
+        this.armorLevel = j;
+        this.armorType = l;
+        this.renderIndex = k;
+        this.damageReduceAmount = damageReduceAmountArray[l];
+        setMaxDamage(maxDamageArray[l] * 3 << j);
         this.maxStackSize = 1;
-        this.itemColour = var5;
+        this.itemColour = col;
         this.colouriseRender = true;
         this.texture = "/armor/Accessories.png";
     }
 
-    public ItemMoreArmor(int var1, int var2, int var3, int var4)
+    public ItemMoreArmor(int i, int j, int k, int l)
     {
-        this(var1, var2, var3, var4, 16777215);
+        this(i, j, k, l, 16777215);
     }
 
-    public ItemMoreArmor(int var1, int var2, String var3, int var4)
+    public ItemMoreArmor(int i, int j, String path, int l)
     {
-        this(var1, var2, 0, var4);
-        this.texture = var3;
+        this(i, j, 0, l);
+        this.texture = path;
     }
 
-    public ItemMoreArmor(int var1, int var2, String var3, int var4, int var5)
+    public ItemMoreArmor(int i, int j, String path, int l, int m)
     {
-        this(var1, var2, 0, var4, var5);
-        this.texture = var3;
+        this(i, j, 0, l, m);
+        this.texture = path;
     }
 
-    public ItemMoreArmor(int var1, int var2, String var3, int var4, int var5, boolean var6)
+    public ItemMoreArmor(int i, int j, String path, int l, int m, boolean flag)
     {
-        this(var1, var2, var3, var4, var5);
-        this.colouriseRender = var6;
+        this(i, j, path, l, m);
+        this.colouriseRender = flag;
     }
 
-    public int getColorFromItemStack(ItemStack var1, int var2)
+    public int getColorFromItemStack(ItemStack par1ItemStack, int damage)
     {
         return this.itemColour;
     }
@@ -72,18 +72,39 @@ public class ItemMoreArmor extends ItemAether
         return null;
     }
 
-    public boolean isTypeValid(int var1)
+    public boolean isTypeValid(int type)
     {
-        return var1 == this.armorType ? true : ((var1 == 8 || var1 == 9) && (this.armorType == 8 || this.armorType == 9) ? true : (var1 == 7 || var1 == 11) && (this.armorType == 7 || this.armorType == 11));
+        if (type == this.armorType)
+        {
+            return true;
+        }
+
+        if (((type == 8) || (type == 9)) && ((this.armorType == 8) || (this.armorType == 9)))
+        {
+            return true;
+        }
+
+        if (((type == 7) || (type == 11)) && ((this.armorType == 7) || (this.armorType == 11)))
+        {
+            return true;
+        }
+
+        return false;
     }
 
     public boolean damageType()
     {
-        return this.damageType(this.armorType);
+        return damageType(this.armorType);
     }
 
-    public boolean damageType(int var1)
+    public boolean damageType(int i)
     {
-        return var1 < 4 || var1 == 6 || var1 == 10;
+        if ((i < 4) || (i == 6) || (i == 10))
+        {
+            return true;
+        }
+
+        return false;
     }
 }
+

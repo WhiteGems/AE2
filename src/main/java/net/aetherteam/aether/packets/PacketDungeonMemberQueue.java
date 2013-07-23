@@ -7,60 +7,60 @@ import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.DataInputStream;
 import java.io.InputStreamReader;
+import java.io.PrintStream;
 import net.aetherteam.aether.dungeons.Dungeon;
 import net.aetherteam.aether.dungeons.DungeonHandler;
 import net.aetherteam.aether.party.Party;
 import net.aetherteam.aether.party.PartyController;
 import net.aetherteam.aether.party.members.PartyMember;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.network.packet.Packet250CustomPayload;
 
 public class PacketDungeonMemberQueue extends AetherPacket
 {
-    public PacketDungeonMemberQueue(int var1)
+    public PacketDungeonMemberQueue(int packetID)
     {
-        super(var1);
+        super(packetID);
     }
 
-    public void onPacketReceived(Packet250CustomPayload var1, Player var2)
+    public void onPacketReceived(Packet250CustomPayload packet, Player player)
     {
-        DataInputStream var3 = new DataInputStream(new ByteArrayInputStream(var1.data));
-        new BufferedReader(new InputStreamReader(var3));
+        DataInputStream dat = new DataInputStream(new ByteArrayInputStream(packet.data));
+        BufferedReader buf = new BufferedReader(new InputStreamReader(dat));
 
         try
         {
-            byte var5 = var3.readByte();
-            int var6 = var3.readInt();
-            String var7 = var3.readUTF();
-            Side var8 = FMLCommonHandler.instance().getEffectiveSide();
-            PartyMember var9;
-            Party var10;
+            byte packetType = dat.readByte();
+            int dungeonID = dat.readInt();
+            String memberName = dat.readUTF();
+            Side side = FMLCommonHandler.instance().getEffectiveSide();
 
-            if (var8.isClient())
+            if (side.isClient())
             {
-                var9 = PartyController.instance().getMember(var7);
-                var10 = PartyController.instance().getParty(var9);
-                Dungeon var11 = DungeonHandler.instance().getDungeon(var6);
+                PartyMember potentialMember = PartyController.instance().getMember(memberName);
+                Party party = PartyController.instance().getParty(potentialMember);
+                Dungeon dungeon = DungeonHandler.instance().getDungeon(dungeonID);
 
-                if (var10 != null && var11 != null)
+                if ((party != null) && (dungeon != null))
                 {
-                    DungeonHandler.instance().queueMember(var11, var9, false);
+                    DungeonHandler.instance().queueMember(dungeon, potentialMember, false);
                 }
             }
             else
             {
-                var9 = PartyController.instance().getMember(var7);
-                var10 = PartyController.instance().getParty(var9);
-                EntityPlayerMP var14 = (EntityPlayerMP)var2;
-                Dungeon var12 = DungeonHandler.instance().getDungeon(var6);
+                PartyMember potentialMember = PartyController.instance().getMember(memberName);
+                Party party = PartyController.instance().getParty(potentialMember);
+                EntityPlayerMP entityPlayer = (EntityPlayerMP)player;
+                Dungeon dungeon = DungeonHandler.instance().getDungeon(dungeonID);
 
-                if (var10 != null && var12 != null)
+                if ((party != null) && (dungeon != null))
                 {
-                    if (var14.username.equalsIgnoreCase(var7))
+                    if (entityPlayer.username.equalsIgnoreCase(memberName))
                     {
-                        System.out.println("No validation needed, adding party member \'" + var7 + "\' to the Dungeon.");
-                        DungeonHandler.instance().queueMember(var12, var9, false);
-                        this.sendPacketToAllExcept(AetherPacketHandler.sendDungeonMemberQueue(var12, var9), var2);
+                        System.out.println("No validation needed, adding party member '" + memberName + "' to the Dungeon.");
+                        DungeonHandler.instance().queueMember(dungeon, potentialMember, false);
+                        sendPacketToAllExcept(AetherPacketHandler.sendDungeonMemberQueue(dungeon, potentialMember), player);
                     }
                     else
                     {
@@ -69,9 +69,10 @@ public class PacketDungeonMemberQueue extends AetherPacket
                 }
             }
         }
-        catch (Exception var13)
+        catch (Exception ex)
         {
-            var13.printStackTrace();
+            ex.printStackTrace();
         }
     }
 }
+

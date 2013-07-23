@@ -5,9 +5,11 @@ import cpw.mods.fml.common.network.PacketDispatcher;
 import cpw.mods.fml.relauncher.Side;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 import net.aetherteam.aether.Aether;
 import net.aetherteam.aether.AetherCommonPlayerHandler;
 import net.aetherteam.aether.AetherNameGen;
+import net.aetherteam.aether.CommonProxy;
 import net.aetherteam.aether.dungeons.Dungeon;
 import net.aetherteam.aether.dungeons.DungeonHandler;
 import net.aetherteam.aether.dungeons.keys.DungeonKey;
@@ -18,15 +20,22 @@ import net.aetherteam.aether.packets.AetherPacketHandler;
 import net.aetherteam.aether.party.Party;
 import net.aetherteam.aether.party.PartyController;
 import net.aetherteam.aether.party.members.PartyMember;
+import net.minecraft.entity.DataWatcher;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityCreature;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerCapabilities;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 
-public class EntitySliderHostMimic extends EntityMiniBoss implements IAetherBoss
+public class EntitySliderHostMimic extends EntityMiniBoss
+    implements IAetherBoss
 {
     public boolean hasBeenAttacked;
     public int eyeCap = 4;
@@ -37,13 +46,13 @@ public class EntitySliderHostMimic extends EntityMiniBoss implements IAetherBoss
     public int sendRespawnDelay = 10;
     private int chatTime;
 
-    public EntitySliderHostMimic(World var1)
+    public EntitySliderHostMimic(World world)
     {
-        super(var1);
-        this.setSize(2.0F, 2.5F);
+        super(world);
+        setSize(2.0F, 2.5F);
         this.bossName = AetherNameGen.gen();
         this.isImmuneToFire = true;
-        this.health = this.getMaxHealth();
+        this.health = getMaxHealth();
         this.moveSpeed = 1.2F;
         this.hasBeenAttacked = false;
         this.scareTime = 0;
@@ -62,11 +71,11 @@ public class EntitySliderHostMimic extends EntityMiniBoss implements IAetherBoss
         return this.dataWatcher.getWatchableObjectByte(16) == 1;
     }
 
-    public void setAwake(boolean var1)
+    public void setAwake(boolean awake)
     {
-        if (var1)
+        if (awake)
         {
-            this.scareItUp();
+            scareItUp();
             this.worldObj.playSoundAtEntity(this, "aeboss.slider.awake", 2.5F, 1.0F / (this.rand.nextFloat() * 0.2F + 0.9F));
             this.dataWatcher.updateObject(16, Byte.valueOf((byte)1));
         }
@@ -81,9 +90,9 @@ public class EntitySliderHostMimic extends EntityMiniBoss implements IAetherBoss
         return this.dataWatcher.getWatchableObjectByte(17) == 1;
     }
 
-    public void setSendMode(boolean var1)
+    public void setSendMode(boolean sendMode)
     {
-        if (var1)
+        if (sendMode)
         {
             this.dataWatcher.updateObject(17, Byte.valueOf((byte)1));
         }
@@ -93,117 +102,91 @@ public class EntitySliderHostMimic extends EntityMiniBoss implements IAetherBoss
         }
     }
 
-    /**
-     * Finds the closest player within 16 blocks to attack, or null if this Entity isn't interested in attacking
-     * (Animals, Spiders at day, peaceful PigZombies).
-     */
     protected Entity findPlayerToAttack()
     {
         EntityPlayer var1 = this.worldObj.getClosestVulnerablePlayerToEntity(this, 8.5D);
-        return var1 != null && this.canEntityBeSeen(var1) ? var1 : null;
+        return (var1 != null) && (canEntityBeSeen(var1)) ? var1 : null;
     }
 
-    /**
-     * Returns the sound this mob makes while it's alive.
-     */
     protected String getLivingSound()
     {
         return "ambient.cave.cave";
     }
 
-    /**
-     * Returns the sound this mob makes when it is hurt.
-     */
     protected String getHurtSound()
     {
         return "step.stone";
     }
 
-    /**
-     * Returns the sound this mob makes on death.
-     */
     protected String getDeathSound()
     {
         return "aeboss.slider.die";
     }
 
-    /**
-     * Plays step sound at given x, y, z for the entity
-     */
-    protected void playStepSound(int var1, int var2, int var3, int var4)
+    protected void playStepSound(int par1, int par2, int par3, int par4)
     {
         this.worldObj.playSoundAtEntity(this, "mob.cow.step", 0.15F, 1.0F);
     }
 
-    /**
-     * Takes in the distance the entity has fallen this tick and whether its on the ground to update the fall distance
-     * and deal fall damage if landing on the ground.  Args: distanceFallenThisTick, onGround
-     */
-    protected void updateFallState(double var1, boolean var3)
+    protected void updateFallState(double par1, boolean par3)
     {
-        if (this.isAwake())
+        if (isAwake())
         {
-            super.updateFallState(var1, var3);
+            super.updateFallState(par1, par3);
         }
     }
 
-    /**
-     * Called when the mob is falling. Calculates and applies fall damage.
-     */
-    protected void fall(float var1)
+    protected void fall(float par1)
     {
-        if (this.isAwake())
+        if (isAwake())
         {
-            super.fall(var1);
+            super.fall(par1);
         }
     }
 
-    /**
-     * Determines if an entity can be despawned, used on idle far away entities
-     */
     public boolean canDespawn()
     {
         return false;
     }
 
-    /**
-     * Called to update the entity's position/logic.
-     */
     public void onUpdate()
     {
         super.onUpdate();
-        this.extinguish();
+        extinguish();
 
         if (this.chatTime >= 0)
         {
-            --this.chatTime;
+            this.chatTime -= 1;
         }
 
-        if (!this.isAwake())
+        if (!isAwake())
         {
             this.texture = "/net/aetherteam/aether/client/sprites/bosses/slider/sliderSleep.png";
             this.motionX = 0.0D;
             this.motionY = 0.0D;
             this.motionZ = 0.0D;
             this.jumpMovementFactor = 0.0F;
-            this.renderYawOffset = this.rotationPitch = this.rotationYaw = 0.0F;
+            this.renderYawOffset = (this.rotationPitch = this.rotationYaw = 0.0F);
         }
 
-        EntityPlayer var1 = this.worldObj.getClosestPlayerToEntity(this, 8.5D);
+        EntityPlayer entityplayer = this.worldObj.getClosestPlayerToEntity(this, 8.5D);
 
-        if (this.entityToAttack == null && var1 != null && this.canEntityBeSeen(var1) && !var1.isDead && !var1.capabilities.isCreativeMode)
+        if (this.entityToAttack == null)
         {
-            this.entityToAttack = var1;
-            this.setSendMode(true);
-        }
-
-        if (this.entityToAttack != null && this.entityToAttack instanceof EntityLiving && this.canEntityBeSeen(this.entityToAttack) && !this.entityToAttack.isDead)
-        {
-            this.faceEntity(this.entityToAttack, 10.0F, 10.0F);
-
-            if (!this.isAwake())
+            if ((entityplayer != null) && (canEntityBeSeen(entityplayer)) && (!entityplayer.isDead) && (!entityplayer.capabilities.isCreativeMode))
             {
-                this.setAwake(true);
+                this.entityToAttack = entityplayer;
+                setSendMode(true);
+            }
+        }
+
+        if ((this.entityToAttack != null) && ((this.entityToAttack instanceof EntityLiving)) && (canEntityBeSeen(this.entityToAttack)) && (!this.entityToAttack.isDead))
+        {
+            faceEntity(this.entityToAttack, 10.0F, 10.0F);
+
+            if (!isAwake())
+            {
+                setAwake(true);
             }
 
             if (!this.hasBeenAttacked)
@@ -211,32 +194,35 @@ public class EntitySliderHostMimic extends EntityMiniBoss implements IAetherBoss
                 this.hasBeenAttacked = true;
             }
 
-            if (this.isSendMode())
+            if (isSendMode())
             {
                 this.motionX = 0.0D;
                 this.motionY = 0.0D;
                 this.motionZ = 0.0D;
                 this.jumpMovementFactor = 0.0F;
-                this.renderYawOffset = this.rotationPitch = this.rotationYaw = 0.0F;
+                this.renderYawOffset = (this.rotationPitch = this.rotationYaw = 0.0F);
 
                 if (this.Eyes.size() < this.eyeCap)
                 {
-                    if (this.sendDelay <= 0 && !this.worldObj.isRemote)
+                    if (this.sendDelay <= 0)
                     {
-                        this.sendEye((EntityLiving)this.entityToAttack);
+                        if (!this.worldObj.isRemote)
+                        {
+                            sendEye((EntityLiving)this.entityToAttack);
+                        }
                     }
                 }
                 else if (this.sendRespawnDelay <= 0)
                 {
                     if (!this.worldObj.isRemote)
                     {
-                        this.sendEye((EntityLiving)this.entityToAttack);
+                        sendEye((EntityLiving)this.entityToAttack);
                         this.sendRespawnDelay = 100;
                     }
                 }
                 else
                 {
-                    this.setSendMode(false);
+                    setSendMode(false);
                 }
             }
         }
@@ -244,15 +230,15 @@ public class EntitySliderHostMimic extends EntityMiniBoss implements IAetherBoss
         {
             this.entityToAttack = null;
             this.hasBeenAttacked = false;
-            this.killEyes();
-            this.setAwake(false);
-            this.setSendMode(false);
+            killEyes();
+            setAwake(false);
+            setSendMode(false);
         }
 
-        if (!this.hasBeenAttacked && this.isAwake())
+        if ((!this.hasBeenAttacked) && (isAwake()))
         {
             this.texture = "/net/aetherteam/aether/client/sprites/mobs/host/hostblue.png";
-            this.killEyes();
+            killEyes();
         }
 
         if (this.Eyes.size() > this.eyeCap)
@@ -260,58 +246,55 @@ public class EntitySliderHostMimic extends EntityMiniBoss implements IAetherBoss
             ((Entity)this.Eyes.remove(0)).setDead();
         }
 
-        if (this.hasBeenAttacked || this.entityToAttack != null && this.canEntityBeSeen(this.entityToAttack))
+        if ((this.hasBeenAttacked) || ((this.entityToAttack != null) && (canEntityBeSeen(this.entityToAttack))))
         {
             this.texture = "/net/aetherteam/aether/client/sprites/mobs/host/hostred.png";
         }
 
         if (this.scareTime > 0)
         {
-            --this.scareTime;
+            this.scareTime -= 1;
         }
 
         if (this.sendDelay > 0)
         {
-            --this.sendDelay;
+            this.sendDelay -= 1;
         }
 
         if (this.sendRespawnDelay > 0)
         {
-            --this.sendRespawnDelay;
+            this.sendRespawnDelay -= 1;
         }
     }
 
-    /**
-     * Basic mob attack. Default to touch of death in EntityCreature. Overridden by each mob to define their attack.
-     */
-    protected void attackEntity(Entity var1, float var2)
+    protected void attackEntity(Entity entity, float f)
     {
-        EntityLiving var3 = (EntityLiving)var1;
+        EntityLiving target = (EntityLiving)entity;
 
-        if (var2 < 8.5F && this.canEntityBeSeen(var3))
+        if ((f < 8.5F) && (canEntityBeSeen(target)))
         {
-            double var4 = var1.posX - this.posX;
-            double var6 = var1.posZ - this.posZ;
+            double d = entity.posX - this.posX;
+            double d1 = entity.posZ - this.posZ;
 
-            if (var3 != null)
+            if (target != null)
             {
-                if (var3.isDead || !this.canEntityBeSeen(var3))
+                if ((target.isDead) || (!canEntityBeSeen(target)))
                 {
-                    var3 = null;
+                    target = null;
                 }
 
-                if (this.Eyes.size() <= 0 && this.canEntityBeSeen(var3))
+                if ((this.Eyes.size() <= 0) && (canEntityBeSeen(target)))
                 {
-                    this.setSendMode(true);
+                    setSendMode(true);
                 }
             }
 
-            this.rotationYaw = (float)(Math.atan2(var6, var4) * 180.0D / Math.PI) - 90.0F;
+            this.rotationYaw = ((float)(Math.atan2(d1, d) * 180.0D / Math.PI) - 90.0F);
             this.hasAttacked = true;
         }
     }
 
-    public void sendEye(EntityLiving var1)
+    public void sendEye(EntityLiving target)
     {
         while (this.Eyes.size() > this.eyeCap)
         {
@@ -320,15 +303,15 @@ public class EntitySliderHostMimic extends EntityMiniBoss implements IAetherBoss
 
         this.hasBeenAttacked = true;
 
-        if (!this.isAwake())
+        if (!isAwake())
         {
-            this.setAwake(true);
+            setAwake(true);
         }
 
-        EntityHostEye var2 = new EntityHostEye(this.worldObj, this.posX - 1.5D, this.posY + 1.5D, this.posZ - 1.5D, this.rotationYaw, this.rotationPitch, this, var1);
-        this.worldObj.spawnEntityInWorld(var2);
+        EntityHostEye eye = new EntityHostEye(this.worldObj, this.posX - 1.5D, this.posY + 1.5D, this.posZ - 1.5D, this.rotationYaw, this.rotationPitch, this, target);
+        this.worldObj.spawnEntityInWorld(eye);
         this.worldObj.playSoundAtEntity(this, "aeboss.slider.awake", 2.5F, 1.0F / (this.rand.nextFloat() * 0.2F + 0.9F));
-        this.Eyes.add(var2);
+        this.Eyes.add(eye);
         this.sendDelay = 30;
     }
 
@@ -349,137 +332,114 @@ public class EntitySliderHostMimic extends EntityMiniBoss implements IAetherBoss
         }
     }
 
-    /**
-     * Adds to the current velocity of the entity. Args: x, y, z
-     */
-    public void addVelocity(double var1, double var3, double var5)
+    public void addVelocity(double d, double d1, double d2)
     {
-        if (this.isAwake() && !this.isSendMode())
+        if ((isAwake()) && (!isSendMode()))
         {
-            super.addVelocity(var1, var3, var5);
+            super.addVelocity(d, d1, d2);
         }
     }
 
-    /**
-     * knocks back this entity
-     */
-    public void knockBack(Entity var1, int var2, double var3, double var5)
+    public void knockBack(Entity entity, int i, double d, double d1)
     {
-        if (this.isAwake() && !this.isSendMode())
+        if ((isAwake()) && (!isSendMode()))
         {
-            super.knockBack(var1, var2, var3, var5);
+            super.knockBack(entity, i, d, d1);
         }
     }
 
-    /**
-     * Called when the entity is attacked.
-     */
-    public boolean attackEntityFrom(DamageSource var1, int var2)
+    public boolean attackEntityFrom(DamageSource par1DamageSource, int par2)
     {
         this.hasBeenAttacked = true;
-        Entity var3 = var1.getSourceOfDamage();
-        Entity var4 = var1.getEntity();
+        Entity entity = par1DamageSource.getSourceOfDamage();
+        Entity attacker = par1DamageSource.getEntity();
 
-        if (var3 != null && var1.isProjectile())
+        if ((entity != null) && (par1DamageSource.isProjectile()))
         {
-            if (var4 instanceof EntityPlayer && ((EntityPlayer)var4).getCurrentEquippedItem() != null)
+            if (((attacker instanceof EntityPlayer)) && (((EntityPlayer)attacker).cd() != null))
             {
-                this.chatItUp((EntityPlayer)var4, "Better switch to a sword, my " + ((EntityPlayer)var4).getCurrentEquippedItem().getItem().getItemDisplayName(((EntityPlayer)var4).getCurrentEquippedItem()) + " doesn\'t seem to affect it.");
+                chatItUp((EntityPlayer)attacker, "Better switch to a sword, my " + ((EntityPlayer)attacker).cd().getItem().getItemDisplayName(((EntityPlayer)attacker).cd()) + " doesn't seem to affect it.");
                 this.chatTime = 60;
             }
 
             return false;
         }
-        else
+
+        if ((attacker instanceof EntityPlayer))
         {
-            if (var4 instanceof EntityPlayer)
+            EntityPlayer player = (EntityPlayer)attacker;
+            AetherCommonPlayerHandler handler = Aether.getPlayerBase(player);
+            PartyMember member = PartyController.instance().getMember(player);
+            Party party = PartyController.instance().getParty(member);
+            Side side = FMLCommonHandler.instance().getEffectiveSide();
+
+            if (handler != null)
             {
-                EntityPlayer var5 = (EntityPlayer)var4;
-                AetherCommonPlayerHandler var6 = Aether.getPlayerBase(var5);
-                PartyMember var7 = PartyController.instance().getMember(var5);
-                Party var8 = PartyController.instance().getParty(var7);
-                Side var9 = FMLCommonHandler.instance().getEffectiveSide();
+                boolean shouldSetBoss = true;
 
-                if (var6 != null)
+                if ((!player.isDead) && (shouldSetBoss))
                 {
-                    boolean var10 = true;
-
-                    if (!var5.isDead && var10)
-                    {
-                        var6.setCurrentBoss(this);
-                    }
+                    handler.setCurrentBoss(this);
                 }
             }
-
-            return super.attackEntityFrom(var1, var2);
         }
+
+        return super.attackEntityFrom(par1DamageSource, par2);
     }
 
-    private void chatItUp(EntityPlayer var1, String var2)
+    private void chatItUp(EntityPlayer player, String s)
     {
         if (this.chatTime <= 0)
         {
-            Aether.proxy.displayMessage(var1, var2);
+            Aether.proxy.displayMessage(player, s);
             this.chatTime = 60;
         }
     }
 
-    /**
-     * Checks if the entity's current position is a valid location to spawn this entity.
-     */
     public boolean getCanSpawnHere()
     {
-        int var1 = MathHelper.floor_double(this.posX);
-        int var2 = MathHelper.floor_double(this.boundingBox.minY);
-        int var3 = MathHelper.floor_double(this.posZ);
-        return this.rand.nextInt(25) == 0 && this.getBlockPathWeight(var1, var2, var3) >= 0.0F && this.worldObj.checkNoEntityCollision(this.boundingBox) && this.worldObj.getCollidingBoundingBoxes(this, this.boundingBox).size() == 0 && !this.worldObj.isAnyLiquid(this.boundingBox) && this.worldObj.difficultySetting > 0;
+        int i = MathHelper.floor_double(this.posX);
+        int j = MathHelper.floor_double(this.boundingBox.minY);
+        int k = MathHelper.floor_double(this.posZ);
+        return (this.rand.nextInt(25) == 0) && (getBlockPathWeight(i, j, k) >= 0.0F) && (this.worldObj.checkNoEntityCollision(this.boundingBox)) && (this.worldObj.getCollidingBoundingBoxes(this, this.boundingBox).size() == 0) && (!this.worldObj.isAnyLiquid(this.boundingBox)) && (this.worldObj.difficultySetting > 0);
     }
 
-    /**
-     * (abstract) Protected helper method to write subclass entity data to NBT.
-     */
-    public void writeEntityToNBT(NBTTagCompound var1)
+    public void writeEntityToNBT(NBTTagCompound nbttagcompound)
     {
-        super.writeEntityToNBT(var1);
-        this.hasBeenAttacked = var1.getBoolean("HasBeenAttacked");
-        this.killEyes();
-        this.setAwake(var1.getBoolean("Awake"));
-        this.setSendMode(var1.getBoolean("SendMode"));
+        super.writeEntityToNBT(nbttagcompound);
+        this.hasBeenAttacked = nbttagcompound.getBoolean("HasBeenAttacked");
+        killEyes();
+        setAwake(nbttagcompound.getBoolean("Awake"));
+        setSendMode(nbttagcompound.getBoolean("SendMode"));
     }
 
-    /**
-     * (abstract) Protected helper method to read subclass entity data from NBT.
-     */
-    public void readEntityFromNBT(NBTTagCompound var1)
+    public void readEntityFromNBT(NBTTagCompound nbttagcompound)
     {
-        super.readEntityFromNBT(var1);
-        var1.setBoolean("HasBeenAttacked", this.hasBeenAttacked);
-        var1.setBoolean("Awake", this.isAwake());
-        var1.setBoolean("SendMode", this.isSendMode());
+        super.readEntityFromNBT(nbttagcompound);
+        nbttagcompound.setBoolean("HasBeenAttacked", this.hasBeenAttacked);
+        nbttagcompound.setBoolean("Awake", isAwake());
+        nbttagcompound.setBoolean("SendMode", isSendMode());
     }
 
-    /**
-     * Called when the mob's health reaches 0.
-     */
-    public void onDeath(DamageSource var1)
+    public void onDeath(DamageSource source)
     {
         this.boss = new EntitySliderHostMimic(this.worldObj);
 
-        if (var1.getEntity() instanceof EntityPlayer)
+        if ((source.getEntity() instanceof EntityPlayer))
         {
-            EntityPlayer var2 = (EntityPlayer)var1.getEntity();
-            Party var3 = PartyController.instance().getParty(PartyController.instance().getMember(var2));
-            Dungeon var4 = DungeonHandler.instance().getInstanceAt(MathHelper.floor_double(this.posX), MathHelper.floor_double(this.posY), MathHelper.floor_double(this.posZ));
+            EntityPlayer attackingPlayer = (EntityPlayer)source.getEntity();
+            Party party = PartyController.instance().getParty(PartyController.instance().getMember(attackingPlayer));
+            Dungeon dungeon = DungeonHandler.instance().getInstanceAt(MathHelper.floor_double(this.posX), MathHelper.floor_double(this.posY), MathHelper.floor_double(this.posZ));
 
-            if (var4 != null && var3 != null)
+            if ((dungeon != null) && (party != null))
             {
-                DungeonHandler.instance().addKey(var4, var3, new DungeonKey(EnumKeyType.Host));
-                PacketDispatcher.sendPacketToAllPlayers(AetherPacketHandler.sendDungeonKey(var4, var3, EnumKeyType.Host));
+                DungeonHandler.instance().addKey(dungeon, party, new DungeonKey(EnumKeyType.Host));
+                PacketDispatcher.sendPacketToAllPlayers(AetherPacketHandler.sendDungeonKey(dungeon, party, EnumKeyType.Host));
             }
         }
 
-        this.killEyes();
-        super.onDeath(var1);
+        killEyes();
+        super.onDeath(source);
     }
 
     public int getMaxHealth()
@@ -517,3 +477,4 @@ public class EntitySliderHostMimic extends EntityMiniBoss implements IAetherBoss
         return EnumBossType.MINI;
     }
 }
+

@@ -1,111 +1,106 @@
 package net.aetherteam.aether.blocks;
 
 import java.util.Iterator;
+import java.util.List;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockBed;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EnumStatus;
 import net.minecraft.util.ChunkCoordinates;
 import net.minecraft.world.World;
+import net.minecraft.world.WorldProvider;
 
-public class BlockAetherBed extends BlockBed implements IAetherBlock
+public class BlockAetherBed extends BlockBed
+    implements IAetherBlock
 {
-    public static final int[][] footBlockToHeadBlockMap = new int[][] {{0, 1}, { -1, 0}, {0, -1}, {1, 0}};
+    public static final int[][] footBlockToHeadBlockMap = { { 0, 1 }, { -1, 0 }, { 0, -1 }, { 1, 0 } };
 
-    public BlockAetherBed(int var1)
+    public BlockAetherBed(int id)
     {
-        super(var1);
+        super(id);
     }
 
-    public Block setIconName(String var1)
+    public Block setIconName(String name)
     {
-        return this.setUnlocalizedName("Aether:" + var1);
+        return setUnlocalizedName("Aether:" + name);
     }
 
-    /**
-     * Called upon block activation (right click on the block.)
-     */
-    public boolean onBlockActivated(World var1, int var2, int var3, int var4, EntityPlayer var5, int var6, float var7, float var8, float var9)
+    public boolean onBlockActivated(World par1World, int par2, int par3, int par4, EntityPlayer par5EntityPlayer, int par6, float par7, float par8, float par9)
     {
-        if (var1.isRemote)
+        if (par1World.isRemote)
         {
             return true;
         }
-        else
+
+        int var10 = par1World.getBlockMetadata(par2, par3, par4);
+
+        if (!isBlockHeadOfBed(var10))
         {
-            int var10 = var1.getBlockMetadata(var2, var3, var4);
+            int var11 = getDirection(var10);
+            par2 += footBlockToHeadBlockMap[var11][0];
+            par4 += footBlockToHeadBlockMap[var11][1];
 
-            if (!isBlockHeadOfBed(var10))
+            if (par1World.getBlockId(par2, par3, par4) != this.blockID)
             {
-                int var11 = getDirection(var10);
-                var2 += footBlockToHeadBlockMap[var11][0];
-                var4 += footBlockToHeadBlockMap[var11][1];
-
-                if (var1.getBlockId(var2, var3, var4) != this.blockID)
-                {
-                    return true;
-                }
-
-                var10 = var1.getBlockMetadata(var2, var3, var4);
-            }
-
-            if (!var1.provider.canRespawnHere())
-            {
-                var5.addChatMessage("Cannot sleep in this dimension.");
                 return true;
             }
-            else
+
+            var10 = par1World.getBlockMetadata(par2, par3, par4);
+        }
+
+        if (!par1World.provider.canRespawnHere())
+        {
+            par5EntityPlayer.addChatMessage("Cannot sleep in this dimension.");
+            return true;
+        }
+
+        if (isBedOccupied(var10))
+        {
+            EntityPlayer var18 = null;
+            Iterator var12 = par1World.playerEntities.iterator();
+
+            while (var12.hasNext())
             {
-                if (isBedOccupied(var10))
+                EntityPlayer var13 = (EntityPlayer)var12.next();
+
+                if (var13.isPlayerSleeping())
                 {
-                    EntityPlayer var15 = null;
-                    Iterator var12 = var1.playerEntities.iterator();
+                    ChunkCoordinates var14 = var13.playerLocation;
 
-                    while (var12.hasNext())
+                    if ((var14.posX == par2) && (var14.posY == par3) && (var14.posZ == par4))
                     {
-                        EntityPlayer var13 = (EntityPlayer)var12.next();
-
-                        if (var13.isPlayerSleeping())
-                        {
-                            ChunkCoordinates var14 = var13.playerLocation;
-
-                            if (var14.posX == var2 && var14.posY == var3 && var14.posZ == var4)
-                            {
-                                var15 = var13;
-                            }
-                        }
+                        var18 = var13;
                     }
-
-                    if (var15 != null)
-                    {
-                        var5.addChatMessage("tile.bed.occupied");
-                        return true;
-                    }
-
-                    setBedOccupied(var1, var2, var3, var4, false);
-                }
-
-                EnumStatus var16 = var5.sleepInBedAt(var2, var3, var4);
-
-                if (var16 == EnumStatus.OK)
-                {
-                    setBedOccupied(var1, var2, var3, var4, true);
-                    return true;
-                }
-                else
-                {
-                    if (var16 == EnumStatus.NOT_POSSIBLE_NOW)
-                    {
-                        var5.addChatMessage("tile.bed.noSleep");
-                    }
-                    else if (var16 == EnumStatus.NOT_SAFE)
-                    {
-                        var5.addChatMessage("tile.bed.notSafe");
-                    }
-
-                    return true;
                 }
             }
+
+            if (var18 != null)
+            {
+                par5EntityPlayer.addChatMessage("tile.bed.occupied");
+                return true;
+            }
+
+            setBedOccupied(par1World, par2, par3, par4, false);
         }
+
+        EnumStatus var20 = par5EntityPlayer.sleepInBedAt(par2, par3, par4);
+
+        if (var20 == EnumStatus.OK)
+        {
+            setBedOccupied(par1World, par2, par3, par4, true);
+            return true;
+        }
+
+        if (var20 == EnumStatus.NOT_POSSIBLE_NOW)
+        {
+            par5EntityPlayer.addChatMessage("tile.bed.noSleep");
+        }
+        else if (var20 == EnumStatus.NOT_SAFE)
+        {
+            par5EntityPlayer.addChatMessage("tile.bed.notSafe");
+        }
+
+        return true;
     }
 }
+

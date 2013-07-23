@@ -2,11 +2,15 @@ package net.aetherteam.aether.commands;
 
 import java.util.List;
 import net.aetherteam.aether.Aether;
+import net.aetherteam.aether.PlayerBaseAetherServer;
 import net.aetherteam.aether.containers.InventoryAether;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.inventory.Container;
 import net.minecraft.server.MinecraftServer;
 
 public class CommandClearInventoryAether extends CommandBase
@@ -16,46 +20,38 @@ public class CommandClearInventoryAether extends CommandBase
         return "clear";
     }
 
-    public String getCommandUsage(ICommandSender var1)
+    public String getCommandUsage(ICommandSender par1ICommandSender)
     {
-        return var1.translateString("commands.clear.usage", new Object[0]);
+        return par1ICommandSender.translateString("commands.clear.usage", new Object[0]);
     }
 
-    /**
-     * Return the required permission level for this command.
-     */
     public int getRequiredPermissionLevel()
     {
         return 2;
     }
 
-    public void processCommand(ICommandSender var1, String[] var2)
+    public void processCommand(ICommandSender par1ICommandSender, String[] par2ArrayOfStr)
     {
-        EntityPlayerMP var3 = var2.length == 0 ? getCommandSenderAsPlayer(var1) : func_82359_c(var1, var2[0]);
-        int var4 = var2.length >= 2 ? parseIntWithMin(var1, var2[1], 1) : -1;
-        int var5 = var2.length >= 3 ? parseIntWithMin(var1, var2[2], 0) : -1;
-        int var6 = var3.inventory.clearInventory(var4, var5);
-        Aether.getServerPlayer(var3).inv.isEmpty();
-        Aether.getServerPlayer(var3).inv = new InventoryAether(var3);
-        Aether.getServerPlayer(var3).inv.onInventoryChanged();
-        var3.inventoryContainer.detectAndSendChanges();
+        EntityPlayerMP entityplayermp = par2ArrayOfStr.length == 0 ? getCommandSenderAsPlayer(par1ICommandSender) : func_82359_c(par1ICommandSender, par2ArrayOfStr[0]);
+        int i = par2ArrayOfStr.length >= 2 ? parseIntWithMin(par1ICommandSender, par2ArrayOfStr[1], 1) : -1;
+        int j = par2ArrayOfStr.length >= 3 ? parseIntWithMin(par1ICommandSender, par2ArrayOfStr[2], 0) : -1;
+        int k = entityplayermp.inventory.clearInventory(i, j);
+        Aether.getServerPlayer(entityplayermp).inv.isEmpty();
+        Aether.getServerPlayer(entityplayermp).inv = new InventoryAether(entityplayermp);
+        Aether.getServerPlayer(entityplayermp).inv.onInventoryChanged();
+        entityplayermp.inventoryContainer.detectAndSendChanges();
 
-        if (var6 == 0 && Aether.getServerPlayer(var3).inv.isEmpty())
+        if ((k == 0) && (Aether.getServerPlayer(entityplayermp).inv.isEmpty()))
         {
-            throw new CommandException("commands.clear.failure", new Object[] {var3.getEntityName()});
+            throw new CommandException("commands.clear.failure", new Object[] { entityplayermp.getEntityName() });
         }
-        else
-        {
-            notifyAdmins(var1, "commands.clear.success", new Object[] {var3.getEntityName(), Integer.valueOf(var6)});
-        }
+
+        notifyAdmins(par1ICommandSender, "commands.clear.success", new Object[] { entityplayermp.getEntityName(), Integer.valueOf(k) });
     }
 
-    /**
-     * Adds the strings available in this command to the given list of tab completion options.
-     */
-    public List addTabCompletionOptions(ICommandSender var1, String[] var2)
+    public List addTabCompletionOptions(ICommandSender par1ICommandSender, String[] par2ArrayOfStr)
     {
-        return var2.length == 1 ? getListOfStringsMatchingLastWord(var2, this.getAllOnlineUsernames()) : null;
+        return par2ArrayOfStr.length == 1 ? getListOfStringsMatchingLastWord(par2ArrayOfStr, getAllOnlineUsernames()) : null;
     }
 
     protected String[] getAllOnlineUsernames()
@@ -63,11 +59,9 @@ public class CommandClearInventoryAether extends CommandBase
         return MinecraftServer.getServer().getAllUsernames();
     }
 
-    /**
-     * Return whether the specified command parameter index is a username parameter.
-     */
-    public boolean isUsernameIndex(String[] var1, int var2)
+    public boolean isUsernameIndex(String[] par1ArrayOfStr, int par2)
     {
-        return var2 == 0;
+        return par2 == 0;
     }
 }
+

@@ -1,6 +1,9 @@
 package net.aetherteam.aether.items;
 
 import net.aetherteam.aether.Aether;
+import net.aetherteam.aether.PlayerBaseAetherServer;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.potion.Potion;
@@ -8,58 +11,59 @@ import net.minecraft.potion.PotionEffect;
 
 public class ItemDexterityCape extends ItemAccessory
 {
-    public ItemDexterityCape(int var1, int var2, int var3, int var4)
+    public ItemDexterityCape(int i, int j, int k, int l)
     {
-        super(var1, var2, var3, var4, 16777215);
+        super(i, j, k, l, 16777215);
     }
 
-    public ItemDexterityCape(int var1, int var2, String var3, int var4)
+    public ItemDexterityCape(int i, int j, String path, int l)
     {
-        super(var1, var2, 0, var4);
-        this.texture = var3;
+        super(i, j, 0, l);
+        this.texture = path;
     }
 
-    public Item setIconName(String var1)
+    public Item setIconName(String name)
     {
-        return this.setUnlocalizedName("Aether:" + var1);
+        return setUnlocalizedName("Aether:" + name);
     }
 
-    public ItemDexterityCape(int var1, int var2, String var3, int var4, int var5)
+    public ItemDexterityCape(int i, int j, String path, int l, int m)
     {
-        super(var1, var2, 0, var4, var5);
-        this.texture = var3;
+        super(i, j, 0, l, m);
+        this.texture = path;
     }
 
-    public ItemDexterityCape(int var1, int var2, String var3, int var4, int var5, boolean var6)
+    public ItemDexterityCape(int i, int j, String path, int l, int m, boolean flag)
     {
-        super(var1, var2, var3, var4, var5);
-        this.colouriseRender = var6;
+        super(i, j, path, l, m);
+        this.colouriseRender = flag;
     }
 
-    public void activatePassive(EntityPlayer var1)
+    public void activatePassive(EntityPlayer player)
     {
-        if (!var1.username.equals("TheLMNOSteve"))
+        if (!player.username.equals("TheLMNOSteve"))
         {
-            var1.addPotionEffect(new PotionEffect(Potion.moveSpeed.id, 10, 0));
+            player.addPotionEffect(new PotionEffect(Potion.moveSpeed.id, 10, 0));
         }
-        else if (var1.username.equals("TheLMNOSteve"))
+        else if (player.username.equals("TheLMNOSteve"))
         {
-            var1.addPotionEffect(new PotionEffect(Potion.moveSlowdown.id, 5000, 20));
+            player.addPotionEffect(new PotionEffect(Potion.moveSlowdown.id, 5000, 20));
 
-            if (var1.isJumping)
+            if (player.isJumping)
             {
-                var1.motionY = 51.0D;
+                player.motionY = 51.0D;
             }
 
-            if (var1.posY >= 2000.0D)
+            if (player.posY >= 2000.0D)
             {
-                if (Aether.getServerPlayer(var1) == null)
+                if (Aether.getServerPlayer(player) == null)
                 {
                     return;
                 }
 
-                Aether.getServerPlayer(var1).setParachuting(true, 0);
+                Aether.getServerPlayer(player).setParachuting(true, 0);
             }
         }
     }
 }
+

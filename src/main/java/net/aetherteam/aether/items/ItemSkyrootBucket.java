@@ -3,11 +3,13 @@ package net.aetherteam.aether.items;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import java.util.List;
+import java.util.Random;
 import net.aetherteam.aether.entities.EntityAechorPlant;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.passive.EntityCow;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
@@ -20,195 +22,185 @@ import net.minecraft.util.MathHelper;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
+import net.minecraft.world.WorldProvider;
 
 public class ItemSkyrootBucket extends ItemAether
 {
-    public static final String[] names = new String[] {"Skyroot Bucket", "Skyroot Milk Bucket", "Skyroot Poison Bucket", "Skyroot Remedy Bucket", "Skyroot Water Bucket"};
+    public static final String[] names = { "Skyroot Bucket", "Skyroot Milk Bucket", "Skyroot Poison Bucket", "Skyroot Remedy Bucket", "Skyroot Water Bucket" };
+
     @SideOnly(Side.CLIENT)
     private Icon[] icons;
     private int waterMoving = 4;
 
-    public ItemSkyrootBucket(int var1)
+    public ItemSkyrootBucket(int i)
     {
-        super(var1);
-        this.setHasSubtypes(true);
+        super(i);
+        setHasSubtypes(true);
         this.maxStackSize = 16;
     }
 
-    /**
-     * returns a list of items with the same ID, but different meta (eg: dye returns 16 items)
-     */
-    public void getSubItems(int var1, CreativeTabs var2, List var3)
+    public void getSubItems(int par1, CreativeTabs par2CreativeTabs, List itemList)
     {
-        var3.add(new ItemStack(this, 1, 0));
-        var3.add(new ItemStack(this, 1, 1));
-        var3.add(new ItemStack(this, 1, 2));
-        var3.add(new ItemStack(this, 1, 3));
-        var3.add(new ItemStack(this, 1, this.waterMoving));
+        itemList.add(new ItemStack(this, 1, 0));
+        itemList.add(new ItemStack(this, 1, 1));
+        itemList.add(new ItemStack(this, 1, 2));
+        itemList.add(new ItemStack(this, 1, 3));
+        itemList.add(new ItemStack(this, 1, this.waterMoving));
     }
 
-    public Item setIconName(String var1)
+    public Item setIconName(String name)
     {
-        return this.setUnlocalizedName("Aether:" + var1);
+        return setUnlocalizedName("Aether:" + name);
     }
 
-    /**
-     * Gets an icon index based on an item's damage value
-     */
-    public Icon getIconFromDamage(int var1)
+    public Icon getIconFromDamage(int damage)
     {
-        return this.icons[var1];
+        return this.icons[damage];
     }
 
-    /**
-     * Returns the unlocalized name of this item. This version accepts an ItemStack so different stacks can have
-     * different names based on their damage or NBT.
-     */
-    public String getUnlocalizedName(ItemStack var1)
+    public String getUnlocalizedName(ItemStack par1ItemStack)
     {
-        int var2 = MathHelper.clamp_int(var1.getItemDamage(), 0, names.length - 1);
+        int var2 = MathHelper.clamp_int(par1ItemStack.getItemDamage(), 0, names.length - 1);
         return super.getUnlocalizedName() + "." + names[var2];
     }
 
     @SideOnly(Side.CLIENT)
-    public void registerIcons(IconRegister var1)
+    public void registerIcons(IconRegister par1IconRegister)
     {
         this.icons = new Icon[names.length];
 
-        for (int var2 = 0; var2 < names.length; ++var2)
+        for (int i = 0; i < names.length; i++)
         {
-            this.icons[var2] = var1.registerIcon("Aether:" + names[var2]);
+            this.icons[i] = par1IconRegister.registerIcon("Aether:" + names[i]);
         }
     }
 
-    /**
-     * Called whenever this item is equipped and the right mouse button is pressed. Args: itemStack, world, entityPlayer
-     */
-    public ItemStack onItemRightClick(ItemStack var1, World var2, EntityPlayer var3)
+    public ItemStack onItemRightClick(ItemStack itemstack, World world, EntityPlayer entityplayer)
     {
-        float var4 = 1.0F;
-        float var5 = var3.prevRotationPitch + (var3.rotationPitch - var3.prevRotationPitch) * var4;
-        float var6 = var3.prevRotationYaw + (var3.rotationYaw - var3.prevRotationYaw) * var4;
-        double var7 = var3.prevPosX + (var3.posX - var3.prevPosX) * (double)var4;
-        double var9 = var3.prevPosY + (var3.posY - var3.prevPosY) * (double)var4 + 1.62D - (double)var3.yOffset;
-        double var11 = var3.prevPosZ + (var3.posZ - var3.prevPosZ) * (double)var4;
-        Vec3 var13 = Vec3.createVectorHelper(var7, var9, var11);
-        float var14 = MathHelper.cos(-var6 * 0.01745329F - (float)Math.PI);
-        float var15 = MathHelper.sin(-var6 * 0.01745329F - (float)Math.PI);
-        float var16 = -MathHelper.cos(-var5 * 0.01745329F);
-        float var17 = MathHelper.sin(-var5 * 0.01745329F);
-        float var18 = var15 * var16;
-        float var20 = var14 * var16;
-        double var21 = 5.0D;
-        Vec3 var23 = var13.addVector((double)var18 * var21, (double)var17 * var21, (double)var20 * var21);
-        MovingObjectPosition var24 = var2.rayTraceBlocks_do(var13, var23, var1.getItemDamage() == 0);
+        float f = 1.0F;
+        float f1 = entityplayer.prevRotationPitch + (entityplayer.rotationPitch - entityplayer.prevRotationPitch) * f;
+        float f2 = entityplayer.prevRotationYaw + (entityplayer.rotationYaw - entityplayer.prevRotationYaw) * f;
+        double d = entityplayer.prevPosX + (entityplayer.posX - entityplayer.prevPosX) * f;
+        double d1 = entityplayer.prevPosY + (entityplayer.posY - entityplayer.prevPosY) * f + 1.62D - entityplayer.yOffset;
+        double d2 = entityplayer.prevPosZ + (entityplayer.posZ - entityplayer.prevPosZ) * f;
+        Vec3 vec3d = Vec3.createVectorHelper(d, d1, d2);
+        float f3 = MathHelper.cos(-f2 * 0.01745329F - (float)Math.PI);
+        float f4 = MathHelper.sin(-f2 * 0.01745329F - (float)Math.PI);
+        float f5 = -MathHelper.cos(-f1 * 0.01745329F);
+        float f6 = MathHelper.sin(-f1 * 0.01745329F);
+        float f7 = f4 * f5;
+        float f8 = f6;
+        float f9 = f3 * f5;
+        double d3 = 5.0D;
+        Vec3 vec3d1 = vec3d.addVector(f7 * d3, f8 * d3, f9 * d3);
+        MovingObjectPosition movingobjectposition = world.rayTraceBlocks_do(vec3d, vec3d1, itemstack.getItemDamage() == 0);
 
-        if (var1.getItemDamage() == 2 && (var24 == null || var24.entityHit == null || !(var24.entityHit instanceof EntityAechorPlant)))
+        if ((itemstack.getItemDamage() == 2) && ((movingobjectposition == null) || (movingobjectposition.entityHit == null) || (!(movingobjectposition.entityHit instanceof EntityAechorPlant))))
         {
-            if (!var2.isRemote)
+            if (!world.isRemote)
             {
-                var3.addPotionEffect(new PotionEffect(Potion.poison.id, 200, 0));
-                var3.addPotionEffect(new PotionEffect(Potion.confusion.id, 200, 3));
+                entityplayer.addPotionEffect(new PotionEffect(Potion.poison.id, 200, 0));
+                entityplayer.addPotionEffect(new PotionEffect(Potion.confusion.id, 200, 3));
             }
 
-            var1.setItemDamage(0);
-            return var1;
+            itemstack.setItemDamage(0);
+            return itemstack;
         }
-        else if (var1.getItemDamage() == 3)
+
+        if (itemstack.getItemDamage() == 3)
         {
-            if (!var2.isRemote)
+            if (!world.isRemote)
             {
-                var3.curePotionEffects(new ItemStack(Item.bucketMilk));
+                entityplayer.curePotionEffects(new ItemStack(Item.bucketMilk));
             }
 
             return new ItemStack(AetherItems.SkyrootBucket);
         }
-        else
+
+        if ((movingobjectposition != null) && (movingobjectposition.typeOfHit == EnumMovingObjectType.TILE) && ((itemstack.getItemDamage() == 0) || (itemstack.getItemDamage() == this.waterMoving)))
         {
-            if (var24 != null && var24.typeOfHit == EnumMovingObjectType.TILE && (var1.getItemDamage() == 0 || var1.getItemDamage() == this.waterMoving))
+            int i = movingobjectposition.blockX;
+            int j = movingobjectposition.blockY;
+            int k = movingobjectposition.blockZ;
+
+            if (!world.canMineBlock(entityplayer, i, j, k))
             {
-                int var25 = var24.blockX;
-                int var26 = var24.blockY;
-                int var27 = var24.blockZ;
-
-                if (!var2.canMineBlock(var3, var25, var26, var27))
-                {
-                    return var1;
-                }
-
-                if (var1.getItemDamage() == 0)
-                {
-                    if (var2.getBlockMaterial(var25, var26, var27) == Material.water && var2.getBlockMetadata(var25, var26, var27) == 0)
-                    {
-                        var2.setBlock(var25, var26, var27, 0);
-                        var1.setItemDamage(this.waterMoving);
-                        return var1;
-                    }
-                }
-                else
-                {
-                    if (var1.getItemDamage() <= 3 && var1.getItemDamage() != 0)
-                    {
-                        return new ItemStack(AetherItems.SkyrootBucket);
-                    }
-
-                    if (var24.sideHit == 0)
-                    {
-                        --var26;
-                    }
-
-                    if (var24.sideHit == 1)
-                    {
-                        ++var26;
-                    }
-
-                    if (var24.sideHit == 2)
-                    {
-                        --var27;
-                    }
-
-                    if (var24.sideHit == 3)
-                    {
-                        ++var27;
-                    }
-
-                    if (var24.sideHit == 4)
-                    {
-                        --var25;
-                    }
-
-                    if (var24.sideHit == 5)
-                    {
-                        ++var25;
-                    }
-
-                    if (var2.isAirBlock(var25, var26, var27) || !var2.getBlockMaterial(var25, var26, var27).isSolid())
-                    {
-                        if (var2.provider.isHellWorld && var1.getItemDamage() == this.waterMoving)
-                        {
-                            var2.playSoundEffect(var7 + 0.5D, var9 + 0.5D, var11 + 0.5D, "random.fizz", 0.5F, 2.6F + (var2.rand.nextFloat() - var2.rand.nextFloat()) * 0.8F);
-
-                            for (int var28 = 0; var28 < 8; ++var28)
-                            {
-                                var2.spawnParticle("largesmoke", (double)var25 + Math.random(), (double)var26 + Math.random(), (double)var27 + Math.random(), 0.0D, 0.0D, 0.0D);
-                            }
-                        }
-                        else
-                        {
-                            var2.setBlock(var25, var26, var27, Block.waterMoving.blockID, 0, 4);
-                        }
-
-                        return new ItemStack(AetherItems.SkyrootBucket);
-                    }
-                }
-            }
-            else if (var1.getItemDamage() == 0 && var24 != null && var24.entityHit != null && var24.entityHit instanceof EntityCow)
-            {
-                var1.setItemDamage(1);
-                return var1;
+                return itemstack;
             }
 
-            return var1;
+            if (itemstack.getItemDamage() == 0)
+            {
+                if ((world.getBlockMaterial(i, j, k) == Material.water) && (world.getBlockMetadata(i, j, k) == 0))
+                {
+                    world.setBlock(i, j, k, 0);
+                    itemstack.setItemDamage(this.waterMoving);
+                    return itemstack;
+                }
+            }
+            else
+            {
+                if ((itemstack.getItemDamage() <= 3) && (itemstack.getItemDamage() != 0))
+                {
+                    return new ItemStack(AetherItems.SkyrootBucket);
+                }
+
+                if (movingobjectposition.sideHit == 0)
+                {
+                    j--;
+                }
+
+                if (movingobjectposition.sideHit == 1)
+                {
+                    j++;
+                }
+
+                if (movingobjectposition.sideHit == 2)
+                {
+                    k--;
+                }
+
+                if (movingobjectposition.sideHit == 3)
+                {
+                    k++;
+                }
+
+                if (movingobjectposition.sideHit == 4)
+                {
+                    i--;
+                }
+
+                if (movingobjectposition.sideHit == 5)
+                {
+                    i++;
+                }
+
+                if ((world.isAirBlock(i, j, k)) || (!world.getBlockMaterial(i, j, k).isSolid()))
+                {
+                    if ((world.provider.isHellWorld) && (itemstack.getItemDamage() == this.waterMoving))
+                    {
+                        world.playSoundEffect(d + 0.5D, d1 + 0.5D, d2 + 0.5D, "random.fizz", 0.5F, 2.6F + (world.rand.nextFloat() - world.rand.nextFloat()) * 0.8F);
+
+                        for (int l = 0; l < 8; l++)
+                        {
+                            world.spawnParticle("largesmoke", i + Math.random(), j + Math.random(), k + Math.random(), 0.0D, 0.0D, 0.0D);
+                        }
+                    }
+                    else
+                    {
+                        world.setBlock(i, j, k, Block.waterMoving.blockID, 0, 4);
+                    }
+
+                    return new ItemStack(AetherItems.SkyrootBucket);
+                }
+            }
         }
+        else if ((itemstack.getItemDamage() == 0) && (movingobjectposition != null) && (movingobjectposition.entityHit != null) && ((movingobjectposition.entityHit instanceof EntityCow)))
+        {
+            itemstack.setItemDamage(1);
+            return itemstack;
+        }
+
+        return itemstack;
     }
 }
+

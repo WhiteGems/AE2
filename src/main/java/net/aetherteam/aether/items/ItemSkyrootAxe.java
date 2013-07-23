@@ -9,13 +9,14 @@ public class ItemSkyrootAxe extends ItemAxe
 {
     private static Random random = new Random();
 
-    protected ItemSkyrootAxe(int var1, EnumToolMaterial var2)
+    protected ItemSkyrootAxe(int i, EnumToolMaterial enumtoolmaterial)
     {
-        super(var1, var2);
+        super(i, enumtoolmaterial);
     }
 
-    public Item setIconName(String var1)
+    public Item setIconName(String name)
     {
-        return this.setUnlocalizedName("Aether:" + var1);
+        return setUnlocalizedName("Aether:" + name);
     }
 }
+

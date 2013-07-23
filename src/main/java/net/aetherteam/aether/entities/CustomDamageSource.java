@@ -9,15 +9,15 @@ public class CustomDamageSource extends EntityDamageSource
     private Entity indirectEntity;
     private String deathMessage;
 
-    public CustomDamageSource(String var1, Entity var2, Entity var3)
+    public CustomDamageSource(String par1Str, Entity par2Entity, Entity par3Entity)
     {
-        super(var1, var2);
-        this.indirectEntity = var3;
+        super(par1Str, par2Entity);
+        this.indirectEntity = par3Entity;
     }
 
-    public CustomDamageSource setDeathMessage(String var1)
+    public CustomDamageSource setDeathMessage(String message)
     {
-        this.deathMessage = var1;
+        this.deathMessage = message;
         return this;
     }
 
@@ -31,11 +31,9 @@ public class CustomDamageSource extends EntityDamageSource
         return this.indirectEntity;
     }
 
-    /**
-     * Returns the message to be displayed on player death.
-     */
-    public String getDeathMessage(EntityLiving var1)
+    public String getDeathMessage(EntityLiving entity)
     {
-        return var1.getEntityName() + this.deathMessage;
+        return entity.getEntityName() + this.deathMessage;
     }
 }
+

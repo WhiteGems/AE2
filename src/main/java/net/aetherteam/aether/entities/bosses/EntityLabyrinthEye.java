@@ -4,9 +4,11 @@ import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.network.PacketDispatcher;
 import cpw.mods.fml.relauncher.Side;
 import java.util.List;
+import java.util.Random;
 import net.aetherteam.aether.Aether;
 import net.aetherteam.aether.AetherCommonPlayerHandler;
 import net.aetherteam.aether.AetherNameGen;
+import net.aetherteam.aether.CommonProxy;
 import net.aetherteam.aether.blocks.AetherBlocks;
 import net.aetherteam.aether.dungeons.Dungeon;
 import net.aetherteam.aether.dungeons.DungeonHandler;
@@ -18,21 +20,28 @@ import net.aetherteam.aether.packets.AetherPacketHandler;
 import net.aetherteam.aether.party.Party;
 import net.aetherteam.aether.party.PartyController;
 import net.aetherteam.aether.party.members.PartyMember;
+import net.minecraft.block.Block;
+import net.minecraft.entity.DataWatcher;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityCreature;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.IRangedAttackMob;
 import net.minecraft.entity.ai.EntityAIHurtByTarget;
 import net.minecraft.entity.ai.EntityAILookIdle;
 import net.minecraft.entity.ai.EntityAINearestAttackableTarget;
+import net.minecraft.entity.ai.EntityAITasks;
 import net.minecraft.entity.ai.EntityAIWatchClosest;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 
-public class EntityLabyrinthEye extends EntityMiniBoss implements IAetherBoss, IRangedAttackMob
+public class EntityLabyrinthEye extends EntityMiniBoss
+    implements IAetherBoss, IRangedAttackMob
 {
     public boolean isAwake;
     public String bossName;
@@ -42,6 +51,7 @@ public class EntityLabyrinthEye extends EntityMiniBoss implements IAetherBoss, I
     private float heightOffset = 0.5F;
     private int chatTime;
     public int timeUntilShoot = 30;
+
     private boolean[] stageDone = new boolean[13];
     public int courseChangeCooldown;
     public double waypointX;
@@ -59,9 +69,9 @@ public class EntityLabyrinthEye extends EntityMiniBoss implements IAetherBoss, I
     private int updateTime;
     private int stage;
 
-    public EntityLabyrinthEye(World var1)
+    public EntityLabyrinthEye(World par1World)
     {
-        super(var1);
+        super(par1World);
         this.isImmuneToFire = true;
         this.moveSpeed = 0.5F;
         this.tasks.addTask(4, new AIEntityArrowAttackCog(this, this.moveSpeed, 60, 10.0F));
@@ -71,11 +81,11 @@ public class EntityLabyrinthEye extends EntityMiniBoss implements IAetherBoss, I
         this.targetTasks.addTask(1, new EntityAIHurtByTarget(this, false));
         this.bossName = AetherNameGen.gen();
         this.texture = "/net/aetherteam/aether/client/sprites/mobs/cogboss/cogsleep.png";
-        this.setSize(2.0F, 2.0F);
+        setSize(2.0F, 2.0F);
 
-        for (int var2 = 0; var2 < 12; ++var2)
+        for (int i = 0; i < 12; i++)
         {
-            this.stageDone[var2] = false;
+            this.stageDone[i] = false;
         }
     }
 
@@ -86,34 +96,28 @@ public class EntityLabyrinthEye extends EntityMiniBoss implements IAetherBoss, I
         this.dataWatcher.addObject(17, Integer.valueOf(0));
     }
 
-    /**
-     * Returns true if the newer Entity AI code should be run
-     */
     public boolean isAIEnabled()
     {
         return true;
     }
 
-    /**
-     * Determines if an entity can be despawned, used on idle far away entities
-     */
     public boolean canDespawn()
     {
         return false;
     }
 
-    private boolean isCourseTraversable(double var1, double var3, double var5, double var7)
+    private boolean isCourseTraversable(double d, double d1, double d2, double d3)
     {
-        double var9 = (this.waypointX - this.posX) / var7;
-        double var11 = (this.waypointY - this.posY) / var7;
-        double var13 = (this.waypointZ - this.posZ) / var7;
-        AxisAlignedBB var15 = this.boundingBox.copy();
+        double d4 = (this.waypointX - this.posX) / d3;
+        double d5 = (this.waypointY - this.posY) / d3;
+        double d6 = (this.waypointZ - this.posZ) / d3;
+        AxisAlignedBB axisalignedbb = this.boundingBox.copy();
 
-        for (int var16 = 1; (double)var16 < var7; ++var16)
+        for (int i = 1; i < d3; i++)
         {
-            var15.offset(var9, var11, var13);
+            axisalignedbb.offset(d4, d5, d6);
 
-            if (this.worldObj.getCollidingBoundingBoxes(this, var15).size() > 0)
+            if (this.worldObj.getCollidingBoundingBoxes(this, axisalignedbb).size() > 0)
             {
                 return false;
             }
@@ -124,70 +128,63 @@ public class EntityLabyrinthEye extends EntityMiniBoss implements IAetherBoss, I
 
     private void orbitPlayer()
     {
-        double var1 = this.waypointX - this.posX;
-        double var3 = this.waypointY - this.posY;
-        double var5 = this.waypointZ - this.posZ;
-        double var7 = (double)MathHelper.sqrt_double(var1 * var1 + var3 * var3 + var5 * var5);
-        double var9 = this.targetedEntity.getDistanceSqToEntity(this);
-        double var11 = this.targetedEntity.posX - this.posX;
-        double var13 = this.targetedEntity.boundingBox.minY + (double)(this.targetedEntity.height / 2.0F) - (this.posY + (double)(this.height / 2.0F));
-        double var15 = this.targetedEntity.posZ - this.posZ;
-        this.renderYawOffset = this.rotationYaw = -((float)Math.atan2(var11, var15)) * 180.0F / (float)Math.PI;
-        double var17 = (double)this.rand.nextFloat() * 10.0D;
-        double var19 = (double)MathHelper.sqrt_double(196.0D - var17 * var17);
-        double var21 = (double)this.rand.nextFloat() * var19;
-        double var23 = (double)MathHelper.sqrt_double(var19 * var19 - var21 * var21);
+        double d = this.waypointX - this.posX;
+        double d1 = this.waypointY - this.posY;
+        double d2 = this.waypointZ - this.posZ;
+        double d3 = MathHelper.sqrt_double(d * d + d1 * d1 + d2 * d2);
+        double d4 = this.targetedEntity.getDistanceSqToEntity(this);
+        double d5 = this.targetedEntity.posX - this.posX;
+        double d6 = this.targetedEntity.boundingBox.minY + this.targetedEntity.height / 2.0F - (this.posY + this.height / 2.0F);
+        double d7 = this.targetedEntity.posZ - this.posZ;
+        this.renderYawOffset = (this.rotationYaw = -(float)Math.atan2(d5, d7) * 180.0F / (float)Math.PI);
+        double randomHeight = this.rand.nextFloat() * 10.0D;
+        double distance = MathHelper.sqrt_double(196.0D - randomHeight * randomHeight);
+        double x = this.rand.nextFloat() * distance;
+        double y = MathHelper.sqrt_double(distance * distance - x * x);
 
         if (this.rand.nextInt(8) == 0)
         {
-            this.xpov = this.rand.nextBoolean() ? -1 : 1;
-            this.zpov = this.rand.nextBoolean() ? -1 : 1;
+            this.xpov = (this.rand.nextBoolean() ? -1 : 1);
+            this.zpov = (this.rand.nextBoolean() ? -1 : 1);
         }
 
-        this.waypointX = this.targetedEntity.posX + var21 * (double)this.xpov;
-        this.waypointY = this.targetedEntity.posY + var17 + 5.0D;
-        this.waypointZ = this.targetedEntity.posZ + var23 * (double)this.zpov;
+        this.waypointX = (this.targetedEntity.posX + x * this.xpov);
+        this.waypointY = (this.targetedEntity.posY + randomHeight + 5.0D);
+        this.waypointZ = (this.targetedEntity.posZ + y * this.zpov);
 
-        if (this.isCourseTraversable(this.waypointX, this.waypointY, this.waypointZ, var7))
+        if (isCourseTraversable(this.waypointX, this.waypointY, this.waypointZ, d3))
         {
-            float var25 = 0.5F;
-            this.motionX = var1 / var7 * (double)var25;
-            this.motionY = var3 / var7 * (double)var25;
-            this.motionZ = var5 / var7 * (double)var25;
+            float Speed = 0.5F;
+            this.motionX = (d / d3 * Speed);
+            this.motionY = (d1 / d3 * Speed);
+            this.motionZ = (d2 / d3 * Speed);
         }
     }
 
-    /**
-     * Basic mob attack. Default to touch of death in EntityCreature. Overridden by each mob to define their attack.
-     */
-    protected void attackEntity(Entity var1, float var2)
+    protected void attackEntity(Entity entity, float f)
     {
-        if (var1 instanceof EntityLiving)
+        if ((entity instanceof EntityLiving))
         {
-            this.target = (EntityLiving)var1;
+            this.target = ((EntityLiving)entity);
 
-            if (var2 < 10.0F)
+            if (f < 10.0F)
             {
-                double var3 = var1.posX - this.posX;
-                double var5 = var1.posZ - this.posZ;
-                int var7;
+                double d = entity.posX - this.posX;
+                double d1 = entity.posZ - this.posZ;
 
                 if (this.target != null)
                 {
-                    if (!this.target.isDead && (double)this.target.getDistanceToEntity(this) <= 12.0D)
-                    {
-                        if (this.getAwake() && this.attackTime >= this.timeUntilShoot)
-                        {
-                            this.attackEntityWithRangedAttack(this.target);
-                        }
-                    }
-                    else
+                    if ((this.target.isDead) || (this.target.getDistanceToEntity(this) > 12.0D))
                     {
                         this.target = null;
                         this.attackTime = 0;
                     }
+                    else if ((getAwake()) && (this.attackTime >= this.timeUntilShoot))
+                    {
+                        func_82196_d(this.target);
+                    }
 
-                    if (this.attackTime >= this.timeUntilShoot && this.canEntityBeSeen(this.target))
+                    if ((this.attackTime >= this.timeUntilShoot) && (canEntityBeSeen(this.target)))
                     {
                         this.attackTime = -10;
                     }
@@ -197,34 +194,34 @@ public class EntityLabyrinthEye extends EntityMiniBoss implements IAetherBoss, I
                         this.attackTime += 2;
                     }
 
-                    for (var7 = 0; var7 < 13; ++var7)
+                    for (int stage = 0; stage < 13; stage++)
                     {
-                        if (this.isBossStage(var7) && !this.stageDone[var7])
+                        if ((isBossStage(stage)) && (this.stageDone[stage] == 0))
                         {
-                            this.setStage(var7);
-                            this.spawnLargeCog(this.target, var7);
+                            setStage(stage);
+                            spawnLargeCog(this.target, stage);
                         }
                     }
 
                     if (this.stage == 12)
                     {
-                        this.setSize(0.5F, 0.5F);
+                        setSize(0.5F, 0.5F);
                     }
                 }
 
-                this.rotationYaw = (float)(Math.atan2(var5, var3) * 180.0D / Math.PI) - 90.0F;
-                var7 = MathHelper.floor_double(var1.posX);
-                int var8 = MathHelper.floor_double(var1.posY);
-                int var9 = MathHelper.floor_double(var1.posZ);
-                this.worldObj.setBlock(var7, var8, var9, AetherBlocks.ColdFire.blockID);
+                this.rotationYaw = ((float)(Math.atan2(d1, d) * 180.0D / Math.PI) - 90.0F);
+                int x = MathHelper.floor_double(entity.posX);
+                int y = MathHelper.floor_double(entity.posY);
+                int z = MathHelper.floor_double(entity.posZ);
+                this.worldObj.setBlock(x, y, z, AetherBlocks.ColdFire.blockID);
             }
         }
     }
 
-    private void setStage(int var1)
+    private void setStage(int stage)
     {
-        this.dataWatcher.updateObject(17, Integer.valueOf(var1));
-        this.stage = var1;
+        this.dataWatcher.updateObject(17, Integer.valueOf(stage));
+        this.stage = stage;
     }
 
     public int getStage()
@@ -232,139 +229,129 @@ public class EntityLabyrinthEye extends EntityMiniBoss implements IAetherBoss, I
         return this.dataWatcher.getWatchableObjectInt(17);
     }
 
-    /**
-     * Attack the specified entity using a ranged attack.
-     */
-    public void attackEntityWithRangedAttack(EntityLiving var1)
+    public void func_82196_d(EntityLiving entityToAttack)
     {
-        double var2 = var1.posX - this.posX;
-        double var4 = var1.posZ - this.posZ;
-        double var6 = Math.sqrt(var2 * var2 + var4 * var4) + (this.posY - var1.posY);
-        double var10000 = var2 * var6;
-        var10000 = var4 * var6;
-        EntityCog var8 = new EntityCog(this.worldObj, this.posX - 0.25D, this.posY + 2.35D, this.posZ - 0.25D, false, this);
-        var8.rotationYaw = this.renderYawOffset;
-        var8.renderYawOffset = this.renderYawOffset;
-        var8.rotationPitch = this.rotationPitch;
-        double var9 = var1.posX + var1.motionX - this.posX;
-        double var11 = var1.posY + -this.posY;
-        double var13 = var1.posZ + var1.motionZ - this.posZ;
-        float var15 = MathHelper.sqrt_double(var9 * var9 + var13 * var13);
+        double d1 = entityToAttack.posX - this.posX;
+        double d2 = entityToAttack.posZ - this.posZ;
+        double d4 = Math.sqrt(d1 * d1 + d2 * d2) + (this.posY - entityToAttack.posY);
+        d1 *= d4;
+        d2 *= d4;
+        EntityCog entityarrow = new EntityCog(this.worldObj, this.posX - 0.25D, this.posY + 2.35D, this.posZ - 0.25D, false, this);
+        entityarrow.rotationYaw = this.renderYawOffset;
+        entityarrow.renderYawOffset = this.renderYawOffset;
+        entityarrow.rotationPitch = this.rotationPitch;
+        double var3 = entityToAttack.posX + entityToAttack.motionX - this.posX;
+        double var5 = entityToAttack.posY + -this.posY;
+        double var7 = entityToAttack.posZ + entityToAttack.motionZ - this.posZ;
+        float var9 = MathHelper.sqrt_double(var3 * var3 + var7 * var7);
 
         if (!this.worldObj.isRemote)
         {
-            float var16 = var15 * 0.075F;
-            var8.setThrowableHeading(var9, var11 + (double)(var15 * 0.2F), var13, var16, 0.0F);
-            this.worldObj.spawnEntityInWorld(var8);
+            float distance = var9 * 0.075F;
+            entityarrow.setThrowableHeading(var3, var5 + var9 * 0.2F, var7, distance, 0.0F);
+            this.worldObj.spawnEntityInWorld(entityarrow);
         }
     }
 
-    public void spawnLargeCog(EntityLiving var1, int var2)
+    public void spawnLargeCog(EntityLiving entityToAttack, int stage)
     {
-        if (!this.stageDone[var2])
+        if (this.stageDone[stage] != 0)
         {
-            double var3 = var1.posX - this.posX;
-            double var5 = var1.posZ - this.posZ;
-            double var7 = Math.sqrt(var3 * var3 + var5 * var5) + (this.posY - var1.posY);
-            double var10000 = var3 * var7;
-            var10000 = var5 * var7;
-            EntityCog var9 = new EntityCog(this.worldObj, this.posX - 0.25D, this.posY + 2.35D, this.posZ - 0.25D, true, this);
-            var9.rotationYaw = this.renderYawOffset;
-            var9.renderYawOffset = this.renderYawOffset;
-            var9.rotationPitch = this.rotationPitch;
-            double var10 = var1.posX + var1.motionX - this.posX;
-            double var12 = var1.posY + -this.posY;
-            double var14 = var1.posZ + var1.motionZ - this.posZ;
-            float var16 = MathHelper.sqrt_double(var10 * var10 + var14 * var14);
-
-            if (!this.worldObj.isRemote)
-            {
-                float var17 = var16 * 0.075F;
-                var9.setThrowableHeading(var10, var12 + (double)(var16 * 0.2F), var14, var17, 0.0F);
-                this.worldObj.playSoundAtEntity(this, "aemob.labyrinthsEye.cogloss", 2.0F, 1.0F);
-                this.playSound("random.break", 0.8F, 0.8F + this.worldObj.rand.nextFloat() * 0.4F);
-                this.worldObj.spawnEntityInWorld(var9);
-            }
-
-            this.stageDone[var2] = true;
+            return;
         }
+
+        double d1 = entityToAttack.posX - this.posX;
+        double d2 = entityToAttack.posZ - this.posZ;
+        double d4 = Math.sqrt(d1 * d1 + d2 * d2) + (this.posY - entityToAttack.posY);
+        d1 *= d4;
+        d2 *= d4;
+        EntityCog entityarrow = new EntityCog(this.worldObj, this.posX - 0.25D, this.posY + 2.35D, this.posZ - 0.25D, true, this);
+        entityarrow.rotationYaw = this.renderYawOffset;
+        entityarrow.renderYawOffset = this.renderYawOffset;
+        entityarrow.rotationPitch = this.rotationPitch;
+        double var3 = entityToAttack.posX + entityToAttack.motionX - this.posX;
+        double var5 = entityToAttack.posY + -this.posY;
+        double var7 = entityToAttack.posZ + entityToAttack.motionZ - this.posZ;
+        float var9 = MathHelper.sqrt_double(var3 * var3 + var7 * var7);
+
+        if (!this.worldObj.isRemote)
+        {
+            float distance = var9 * 0.075F;
+            entityarrow.setThrowableHeading(var3, var5 + var9 * 0.2F, var7, distance, 0.0F);
+            this.worldObj.playSoundAtEntity(this, "aemob.labyrinthsEye.cogloss", 2.0F, 1.0F);
+            playSound("random.break", 0.8F, 0.8F + this.worldObj.rand.nextFloat() * 0.4F);
+            this.worldObj.spawnEntityInWorld(entityarrow);
+        }
+
+        this.stageDone[stage] = true;
     }
 
-    /**
-     * Returns the sound this mob makes on death.
-     */
     protected String getDeathSound()
     {
         return "aemob.labyrinthsEye.eyedeath";
     }
 
-    /**
-     * Returns the sound this mob makes while it's alive.
-     */
     protected String getLivingSound()
     {
         return "aemob.labyrinthsEye.move";
     }
 
-    /**
-     * Called when the mob's health reaches 0.
-     */
-    public void onDeath(DamageSource var1)
+    public void onDeath(DamageSource source)
     {
-        if (var1.getEntity() instanceof EntityPlayer)
+        if ((source.getEntity() instanceof EntityPlayer))
         {
-            EntityPlayer var2 = (EntityPlayer)var1.getEntity();
-            Party var3 = PartyController.instance().getParty(PartyController.instance().getMember(var2));
-            Dungeon var4 = DungeonHandler.instance().getInstanceAt(MathHelper.floor_double(this.posX), MathHelper.floor_double(this.posY), MathHelper.floor_double(this.posZ));
+            EntityPlayer attackingPlayer = (EntityPlayer)source.getEntity();
+            Party party = PartyController.instance().getParty(PartyController.instance().getMember(attackingPlayer));
+            Dungeon dungeon = DungeonHandler.instance().getInstanceAt(MathHelper.floor_double(this.posX), MathHelper.floor_double(this.posY), MathHelper.floor_double(this.posZ));
 
-            if (var4 != null && var3 != null)
+            if ((dungeon != null) && (party != null))
             {
-                DungeonHandler.instance().addKey(var4, var3, new DungeonKey(EnumKeyType.Eye));
-                PacketDispatcher.sendPacketToAllPlayers(AetherPacketHandler.sendDungeonKey(var4, var3, EnumKeyType.Eye));
+                DungeonHandler.instance().addKey(dungeon, party, new DungeonKey(EnumKeyType.Eye));
+                PacketDispatcher.sendPacketToAllPlayers(AetherPacketHandler.sendDungeonKey(dungeon, party, EnumKeyType.Eye));
             }
         }
 
         this.boss = new EntityLabyrinthEye(this.worldObj);
-        super.onDeath(var1);
+        super.onDeath(source);
     }
 
-    /**
-     * Called to update the entity's position/logic.
-     */
     public void onUpdate()
     {
-        this.motionX = this.motionY = this.motionZ = 0.0D;
+        this.motionX = (this.motionY = this.motionZ = 0.0D);
         super.onUpdate();
-        this.motionX = this.motionY = this.motionZ = 0.0D;
-        this.extinguish();
-        AxisAlignedBB var1 = AxisAlignedBB.getBoundingBox(this.posX, this.posY, this.posZ, this.posX, this.posY, this.posZ).expand(1.0D, 1.0D, 1.0D);
-        List var2 = this.worldObj.getEntitiesWithinAABBExcludingEntity(this, var1);
+        this.motionX = (this.motionY = this.motionZ = 0.0D);
+        extinguish();
+        AxisAlignedBB bounds = AxisAlignedBB.getBoundingBox(this.posX, this.posY, this.posZ, this.posX, this.posY, this.posZ).expand(1.0D, 1.0D, 1.0D);
+        List entityInBounds = this.worldObj.getEntitiesWithinAABBExcludingEntity(this, bounds);
 
-        if (var2.size() > 0 && this.getAwake())
+        if ((entityInBounds.size() > 0) && (getAwake()))
         {
-            for (int var3 = 0; var3 < var2.size(); ++var3)
+            for (int i = 0; i < entityInBounds.size(); i++)
             {
-                Entity var4 = (Entity)var2.get(var3);
+                Entity attackedEntity = (Entity)entityInBounds.get(i);
 
-                if (var4 instanceof EntityLiving)
+                if ((attackedEntity instanceof EntityLiving))
                 {
-                    var4.attackEntityFrom(DamageSource.generic, MathHelper.clamp_int(this.rand.nextInt(6), 4, 6));
-                    var4.motionX *= 1.2432525D;
-                    var4.motionY *= 1.2432525D;
-                    var4.motionZ *= 1.2432525D;
-                    var4.velocityChanged = true;
+                    attackedEntity.attackEntityFrom(DamageSource.generic, MathHelper.clamp_int(this.rand.nextInt(6), 4, 6));
+                    attackedEntity.motionX *= 1.2432525D;
+                    attackedEntity.motionY *= 1.2432525D;
+                    attackedEntity.motionZ *= 1.2432525D;
+                    attackedEntity.velocityChanged = true;
                 }
             }
         }
 
-        if (this.targetedEntity != null && this.chatTime >= 0)
+        if (this.targetedEntity != null)
         {
-            --this.chatTime;
+            if (this.chatTime >= 0)
+            {
+                this.chatTime -= 1;
+            }
         }
 
         this.fallDistance = 0.0F;
 
-        if (this.getAwake())
+        if (getAwake())
         {
             this.texture = "/net/aetherteam/aether/client/sprites/mobs/cogboss/cogawake.png";
         }
@@ -373,155 +360,134 @@ public class EntityLabyrinthEye extends EntityMiniBoss implements IAetherBoss, I
             this.texture = "/net/aetherteam/aether/client/sprites/mobs/cogboss/cogsleep.png";
         }
 
-        if (this.entityToAttack != null && this.getAwake())
+        if ((this.entityToAttack != null) && (getAwake()))
         {
-            this.attackEntity(this.entityToAttack, this.getDistanceToEntity(this.entityToAttack));
+            attackEntity(this.entityToAttack, getDistanceToEntity(this.entityToAttack));
 
-            if (this.entityToAttack instanceof EntityPlayer)
-            {
-                ;
-            }
+            if (!(this.entityToAttack instanceof EntityPlayer));
         }
     }
 
-    private boolean isBossStage(int var1)
+    private boolean isBossStage(int stage)
     {
-        switch (var1)
+        switch (stage)
         {
             case 1:
-                return this.getHealth() <= 250 && this.getHealth() >= 231;
+                return (getHealth() <= 250) && (getHealth() >= 231);
 
             case 2:
-                return this.getHealth() < 231 && this.getHealth() >= 212;
+                return (getHealth() < 231) && (getHealth() >= 212);
 
             case 3:
-                return this.getHealth() < 212 && this.getHealth() >= 193;
+                return (getHealth() < 212) && (getHealth() >= 193);
 
             case 4:
-                return this.getHealth() < 193 && this.getHealth() >= 174;
+                return (getHealth() < 193) && (getHealth() >= 174);
 
             case 5:
-                return this.getHealth() < 174 && this.getHealth() >= 155;
+                return (getHealth() < 174) && (getHealth() >= 155);
 
             case 6:
-                return this.getHealth() < 155 && this.getHealth() >= 136;
+                return (getHealth() < 155) && (getHealth() >= 136);
 
             case 7:
-                return this.getHealth() < 136 && this.getHealth() >= 117;
+                return (getHealth() < 136) && (getHealth() >= 117);
 
             case 8:
-                return this.getHealth() < 117 && this.getHealth() >= 98;
+                return (getHealth() < 117) && (getHealth() >= 98);
 
             case 9:
-                return this.getHealth() < 98 && this.getHealth() >= 79;
+                return (getHealth() < 98) && (getHealth() >= 79);
 
             case 10:
-                return this.getHealth() < 79 && this.getHealth() >= 60;
+                return (getHealth() < 79) && (getHealth() >= 60);
 
             case 11:
-                return this.getHealth() < 60 && this.getHealth() >= 41;
+                return (getHealth() < 60) && (getHealth() >= 41);
 
             case 12:
-                return this.getHealth() < 41 && this.getHealth() >= 22;
+                return (getHealth() < 41) && (getHealth() >= 22);
 
             case 13:
-                return this.getHealth() < 3;
-
-            default:
-                return false;
+                return getHealth() < 3;
         }
+
+        return false;
     }
 
-    /**
-     * Called when the entity is attacked.
-     */
-    public boolean attackEntityFrom(DamageSource var1, int var2)
+    public boolean attackEntityFrom(DamageSource par1DamageSource, int par2)
     {
-        Entity var3 = var1.getSourceOfDamage();
-        Entity var4 = var1.getEntity();
-        this.setAwake(true);
+        Entity entity = par1DamageSource.getSourceOfDamage();
+        Entity attacker = par1DamageSource.getEntity();
+        setAwake(true);
         this.texture = "/net/aetherteam/aether/client/sprites/mobs/cogboss/cogawake.png";
 
-        if (var3 != null && var1.isProjectile())
+        if ((entity != null) && (par1DamageSource.isProjectile()))
         {
-            if (var4 instanceof EntityPlayer && ((EntityPlayer)var4).getCurrentEquippedItem() != null)
+            if (((attacker instanceof EntityPlayer)) && (((EntityPlayer)attacker).cd() != null))
             {
-                this.chatItUp((EntityPlayer)var4, "Better switch to a sword, my " + ((EntityPlayer)var4).getCurrentEquippedItem().getItem().getItemDisplayName(((EntityPlayer)var4).getCurrentEquippedItem()) + " doesn\'t seem to affect it.");
+                chatItUp((EntityPlayer)attacker, "Better switch to a sword, my " + ((EntityPlayer)attacker).cd().getItem().getItemDisplayName(((EntityPlayer)attacker).cd()) + " doesn't seem to affect it.");
                 this.chatTime = 60;
             }
 
             return false;
         }
-        else
+
+        if ((attacker instanceof EntityPlayer))
         {
-            if (var4 instanceof EntityPlayer)
+            EntityPlayer player = (EntityPlayer)attacker;
+            AetherCommonPlayerHandler handler = Aether.getPlayerBase(player);
+            PartyMember member = PartyController.instance().getMember(player);
+            Party party = PartyController.instance().getParty(member);
+            Side side = FMLCommonHandler.instance().getEffectiveSide();
+
+            if (handler != null)
             {
-                EntityPlayer var5 = (EntityPlayer)var4;
-                AetherCommonPlayerHandler var6 = Aether.getPlayerBase(var5);
-                PartyMember var7 = PartyController.instance().getMember(var5);
-                Party var8 = PartyController.instance().getParty(var7);
-                Side var9 = FMLCommonHandler.instance().getEffectiveSide();
+                boolean shouldSetBoss = true;
 
-                if (var6 != null)
+                if ((!player.isDead) && (shouldSetBoss))
                 {
-                    boolean var10 = true;
-
-                    if (!var5.isDead && var10)
-                    {
-                        var6.setCurrentBoss(this);
-                    }
+                    handler.setCurrentBoss(this);
                 }
             }
-
-            return super.attackEntityFrom(var1, var2);
         }
+
+        return super.attackEntityFrom(par1DamageSource, par2);
     }
 
-    private void chatItUp(EntityPlayer var1, String var2)
+    private void chatItUp(EntityPlayer player, String s)
     {
         if (this.chatTime <= 0)
         {
-            Aether.proxy.displayMessage(var1, var2);
+            Aether.proxy.displayMessage(player, s);
             this.chatTime = 60;
         }
     }
 
-    /**
-     * Finds the closest player within 16 blocks to attack, or null if this Entity isn't interested in attacking
-     * (Animals, Spiders at day, peaceful PigZombies).
-     */
     protected Entity findPlayerToAttack()
     {
-        if (!this.getAwake())
-        {
-            return null;
-        }
-        else
+        if (getAwake())
         {
             EntityPlayer var1 = this.worldObj.getClosestVulnerablePlayerToEntity(this, 16.0D);
             this.texture = "/net/aetherteam/aether/client/sprites/mobs/cogboss/cogawake.png";
-            return var1 != null && this.canEntityBeSeen(var1) ? var1 : null;
+            return (var1 != null) && (canEntityBeSeen(var1)) ? var1 : null;
         }
+
+        return null;
     }
 
-    /**
-     * (abstract) Protected helper method to write subclass entity data to NBT.
-     */
-    public void writeEntityToNBT(NBTTagCompound var1)
+    public void writeEntityToNBT(NBTTagCompound par1NBTTagCompound)
     {
-        super.writeEntityToNBT(var1);
-        var1.setBoolean("Awake", this.getAwake());
-        var1.setInteger("Stage", this.stage);
+        super.writeEntityToNBT(par1NBTTagCompound);
+        par1NBTTagCompound.setBoolean("Awake", getAwake());
+        par1NBTTagCompound.setInteger("Stage", this.stage);
     }
 
-    /**
-     * (abstract) Protected helper method to read subclass entity data from NBT.
-     */
-    public void readEntityFromNBT(NBTTagCompound var1)
+    public void readEntityFromNBT(NBTTagCompound par1NBTTagCompound)
     {
-        super.readEntityFromNBT(var1);
-        this.setAwake(var1.getBoolean("Awake"));
-        this.setStage(var1.getInteger("Stage"));
+        super.readEntityFromNBT(par1NBTTagCompound);
+        setAwake(par1NBTTagCompound.getBoolean("Awake"));
+        setStage(par1NBTTagCompound.getInteger("Stage"));
     }
 
     public boolean getAwake()
@@ -529,9 +495,9 @@ public class EntityLabyrinthEye extends EntityMiniBoss implements IAetherBoss, I
         return this.dataWatcher.getWatchableObjectByte(16) == 1;
     }
 
-    public void setAwake(boolean var1)
+    public void setAwake(boolean awake)
     {
-        if (var1)
+        if (awake)
         {
             this.texture = "/net/aetherteam/aether/client/sprites/mobs/cog/cogawake.png";
             this.dataWatcher.updateObject(16, Byte.valueOf((byte)1));
@@ -550,11 +516,11 @@ public class EntityLabyrinthEye extends EntityMiniBoss implements IAetherBoss, I
 
     public String getBossTitle()
     {
-        return this.bossName + ", the Labyrinth\'s Eye";
+        return this.bossName + ", the Labyrinth's Eye";
     }
 
-    /**
-     * Attack the specified entity using a ranged attack.
-     */
-    public void attackEntityWithRangedAttack(EntityLiving var1, float var2) {}
+    public void attackEntityWithRangedAttack(EntityLiving entityliving, float f)
+    {
+    }
 }
+

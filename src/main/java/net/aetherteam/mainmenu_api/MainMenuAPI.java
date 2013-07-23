@@ -10,24 +10,16 @@ import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.network.NetworkMod;
+import java.io.PrintStream;
 
-@Mod(
-    modid = "MainMenuAPI",
-    name = "Main Menu API",
-    version = "1.0.0"
-)
-@NetworkMod(
-    clientSideRequired = true,
-    serverSideRequired = true
-)
+@Mod(modid = "MainMenuAPI", name = "Main Menu API", version = "1.0.0")
+@NetworkMod(clientSideRequired = true, serverSideRequired = true)
 public class MainMenuAPI
 {
     @Mod.Instance("MainMenuAPI")
     private static MainMenuAPI instance;
-    @SidedProxy(
-        clientSide = "net.aetherteam.mainmenu_api.client.MenuClientProxy",
-        serverSide = "net.aetherteam.mainmenu_api.MenuCommonProxy"
-    )
+
+    @SidedProxy(clientSide = "net.aetherteam.mainmenu_api.client.MenuClientProxy", serverSide = "net.aetherteam.mainmenu_api.MenuCommonProxy")
     public static MenuCommonProxy proxy;
 
     public static MainMenuAPI getInstance()
@@ -36,39 +28,41 @@ public class MainMenuAPI
     }
 
     @Mod.Init
-    public void load(FMLInitializationEvent var1)
+    public void load(FMLInitializationEvent event)
     {
         proxy.registerTickHandler();
     }
 
     @Mod.PostInit
-    public void postInit(FMLPostInitializationEvent var1) {}
+    public void postInit(FMLPostInitializationEvent event)
+    {
+    }
 
     @Mod.PreInit
-    public void preInit(FMLPreInitializationEvent var1)
+    public void preInit(FMLPreInitializationEvent event)
     {
         proxy.registerSounds();
     }
 
-    public static void registerMenu(String var0, Class var1)
+    public static void registerMenu(String menuName, Class menu)
     {
-        if (var0 == null)
+        if (menuName == null)
         {
             throw new NullPointerException("A Menu Base string is null!");
         }
-        else if (var1 == null)
-        {
-            throw new NullPointerException("The Menu Base \'" + var0 + "\' has a null MenuBase class!");
-        }
-        else
-        {
-            if (MenuBaseSorter.isMenuRegistered(var0))
-            {
-                System.out.println("Menu Base \'" + var1 + "\' with name \'" + var0 + "\' is already registered!");
-            }
 
-            System.out.println("Menu Base \'" + var1 + "\' with name \'" + var0 + "\' has been registered.");
-            MenuBaseSorter.addMenuToSorter(var0, var1);
+        if (menu == null)
+        {
+            throw new NullPointerException("The Menu Base '" + menuName + "' has a null MenuBase class!");
         }
+
+        if (MenuBaseSorter.isMenuRegistered(menuName))
+        {
+            System.out.println("Menu Base '" + menu + "' with name '" + menuName + "' is already registered!");
+        }
+
+        System.out.println("Menu Base '" + menu + "' with name '" + menuName + "' has been registered.");
+        MenuBaseSorter.addMenuToSorter(menuName, menu);
     }
 }
+

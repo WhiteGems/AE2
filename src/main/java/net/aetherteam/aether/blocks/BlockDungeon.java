@@ -11,118 +11,105 @@ import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Icon;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 
-public class BlockDungeon extends BlockAether implements IAetherBlock
+public class BlockDungeon extends BlockAether
+    implements IAetherBlock
 {
-    private HashMap icons;
-    public static final String[] names = new String[] {"Carved Stone", "Angelic Stone", "Hellfire Stone", "Sentry Stone", "Light Angelic Stone", "Light Hellfire Stone"};
+    private HashMap icons = new HashMap();
+    public static final String[] names = { "Carved Stone", "Angelic Stone", "Hellfire Stone", "Sentry Stone", "Light Angelic Stone", "Light Hellfire Stone" };
 
-    public static int getBlockFromDye(int var0)
+    public static int getBlockFromDye(int i)
     {
-        return ~var0 & 15;
+        return (i ^ 0xFFFFFFFF) & 0xF;
     }
 
-    public static int getDyeFromBlock(int var0)
+    public static int getDyeFromBlock(int i)
     {
-        return ~var0 & 15;
+        return (i ^ 0xFFFFFFFF) & 0xF;
     }
 
-    protected BlockDungeon(int var1, float var2, float var3)
+    protected BlockDungeon(int i, float hardness, float light)
     {
-        super(var1, Material.rock);
-        this.icons = new HashMap();
-        this.setStepSound(Block.soundStoneFootstep);
-        this.setHardness(var2);
-        this.setLightValue(var3);
-        this.setLightOpacity(255);
+        super(i, Material.rock);
+        setStepSound(Block.soundStoneFootstep);
+        setHardness(hardness);
+        setLightValue(light);
+        setLightOpacity(255);
     }
 
-    protected BlockDungeon(int var1, float var2, float var3, float var4)
+    protected BlockDungeon(int i, float hardness, float light, float resistance)
     {
-        this(var1, var2, var3);
-        this.setResistance(var4);
+        this(i, hardness, light);
+        setResistance(resistance);
     }
 
-    /**
-     * returns a list of blocks with the same ID, but different meta (eg: wood returns 4 blocks)
-     */
-    public void getSubBlocks(int var1, CreativeTabs var2, List var3)
+    public void getSubBlocks(int par1, CreativeTabs par2CreativeTabs, List par3List)
     {
-        var3.add(new ItemStack(var1, 1, 0));
-        var3.add(new ItemStack(var1, 1, 1));
-        var3.add(new ItemStack(var1, 1, 2));
+        par3List.add(new ItemStack(par1, 1, 0));
+        par3List.add(new ItemStack(par1, 1, 1));
+        par3List.add(new ItemStack(par1, 1, 2));
     }
 
-    /**
-     * Determines the damage on the item the block drops. Used in cloth and wood.
-     */
-    public int damageDropped(int var1)
+    public int damageDropped(int i)
     {
-        return var1;
+        return i;
     }
 
-    /**
-     * From the specified side and block metadata retrieves the blocks texture. Args: side, metadata
-     */
-    public Icon getIcon(int var1, int var2)
+    public Icon getIcon(int i, int meta)
     {
-        ItemStack var3 = new ItemStack(this.isLit() ? AetherBlocks.LightDungeonStone : AetherBlocks.DungeonStone, 1, var2);
-        String var4 = var3.getItem().getItemDisplayName(var3);
-        return (Icon)this.icons.get(var4);
+        ItemStack stack = new ItemStack(isLit() ? AetherBlocks.LightDungeonStone : AetherBlocks.DungeonStone, 1, meta);
+        String name = stack.getItem().getItemDisplayName(stack);
+        return (Icon)this.icons.get(name);
     }
 
-    public boolean removeBlockByPlayer(World var1, EntityPlayer var2, int var3, int var4, int var5)
+    public boolean removeBlockByPlayer(World world, EntityPlayer player, int x, int y, int z)
     {
-        return this.isLocked() ? false : super.removeBlockByPlayer(var1, var2, var3, var4, var5);
-    }
-
-    /**
-     * Called whenever the block is added into the world. Args: world, x, y, z
-     */
-    public void onBlockAdded(World var1, int var2, int var3, int var4)
-    {
-        if (this.isLocked() && DungeonHandler.instance().getInstanceAt(MathHelper.floor_double((double)var2), MathHelper.floor_double((double)var3), MathHelper.floor_double((double)var4)) == null)
+        if (isLocked())
         {
-            var1.setBlockToAir(var2, var3, var4);
+            return false;
+        }
+
+        return super.removeBlockByPlayer(world, player, x, y, z);
+    }
+
+    public void onBlockAdded(World world, int x, int y, int z)
+    {
+        if ((isLocked()) && (DungeonHandler.instance().getInstanceAt(MathHelper.floor_double(x), MathHelper.floor_double(y), MathHelper.floor_double(z)) == null))
+        {
+            world.setBlockToAir(x, y, z);
         }
     }
 
-    /**
-     * Called when the block is placed in the world.
-     */
-    public void onBlockPlacedBy(World var1, int var2, int var3, int var4, EntityLiving var5, ItemStack var6)
+    public void onBlockPlacedBy(World world, int x, int y, int z, EntityLiving par5EntityLiving, ItemStack par6ItemStack)
     {
-        if (this.isLocked())
+        if (isLocked())
         {
-            var1.setBlockToAir(var2, var3, var4);
+            world.setBlockToAir(x, y, z);
         }
     }
 
     @SideOnly(Side.CLIENT)
-
-    /**
-     * When this method is called, your block should register all the icons it needs with the given IconRegister. This
-     * is the only chance you get to register icons.
-     */
-    public void registerIcons(IconRegister var1)
+    public void registerIcons(IconRegister par1IconRegister)
     {
-        for (int var2 = 0; var2 < names.length; ++var2)
+        for (int i = 0; i < names.length; i++)
         {
-            this.icons.put(names[var2], var1.registerIcon("Aether:" + names[var2]));
+            this.icons.put(names[i], par1IconRegister.registerIcon("Aether:" + names[i]));
         }
     }
 
     private boolean isLit()
     {
-        return this.blockID == AetherBlocks.LightDungeonStone.blockID || this.blockID == AetherBlocks.LockedLightDungeonStone.blockID;
+        return (this.blockID == AetherBlocks.LightDungeonStone.blockID) || (this.blockID == AetherBlocks.LockedLightDungeonStone.blockID);
     }
 
     private boolean isLocked()
     {
-        return this.blockID == AetherBlocks.LockedDungeonStone.blockID || this.blockID == AetherBlocks.LockedLightDungeonStone.blockID;
+        return (this.blockID == AetherBlocks.LockedDungeonStone.blockID) || (this.blockID == AetherBlocks.LockedLightDungeonStone.blockID);
     }
 }
+

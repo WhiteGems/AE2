@@ -1,69 +1,70 @@
 package net.aetherteam.aether.client.renders;
 
 import net.aetherteam.aether.entities.npc.EntityBasicNPC;
-import net.minecraft.client.model.ModelBiped;
-import net.minecraft.client.renderer.entity.RenderBiped;
+import net.minecraft.client.model.ModelGhast;
+import net.minecraft.client.renderer.entity.RenderGiantZombie;
 import net.minecraft.entity.EntityLiving;
 
-public class RenderNPC extends RenderBiped
+public class RenderNPC extends RenderGiantZombie
 {
-    public RenderNPC(ModelBiped var1, float var2)
+    public RenderNPC(ModelGhast modelBiped, float par2)
     {
-        super(var1, var2);
+        super(modelBiped, par2);
     }
 
-    public void doRenderLiving(EntityLiving var1, double var2, double var4, double var6, float var8, float var9)
+    public void doRenderLiving(EntityLiving living, double par2, double par4, double par6, float par8, float par9)
     {
-        super.doRenderLiving(var1, var2, var4, var6, var8, var9);
+        super.doRenderLiving(living, par2, par4, par6, par8, par9);
 
-        if (var1 instanceof EntityBasicNPC)
+        if ((living instanceof EntityBasicNPC))
         {
-            EntityBasicNPC var10 = (EntityBasicNPC)var1;
-            String var11 = "Neutral";
+            EntityBasicNPC npc = (EntityBasicNPC)living;
+            String mood = "Neutral";
 
-            if (var10.isAngry())
+            if (npc.isAngry())
             {
-                var11 = "Angry";
+                mood = "Angry";
             }
-            else if (var10.isScared())
+            else if (npc.isScared())
             {
-                var11 = "Scared";
+                mood = "Scared";
             }
-            else if (var10.isBored())
+            else if (npc.isBored())
             {
-                var11 = "Bored";
+                mood = "Bored";
             }
-            else if (var10.isCurious())
+            else if (npc.isCurious())
             {
-                var11 = "Curious";
+                mood = "Curious";
             }
-            else if (var10.isHappy())
+            else if (npc.isHappy())
             {
-                var11 = "Happy";
+                mood = "Happy";
             }
-            else if (var10.isHungry())
+            else if (npc.isHungry())
             {
-                var11 = "Hungry";
+                mood = "Hungry";
             }
-            else if (var10.isInhibited())
+            else if (npc.isInhibited())
             {
-                var11 = "Inhibited";
+                mood = "Inhibited";
             }
-            else if (var10.isPuzzled())
+            else if (npc.isPuzzled())
             {
-                var11 = "Puzzled";
+                mood = "Puzzled";
             }
-            else if (var10.isViolent())
+            else if (npc.isViolent())
             {
-                var11 = "Violent";
+                mood = "Violent";
             }
 
-            String var12 = String.valueOf((int)(var10.getPleasure() * 100.0F) + "%");
-            String var13 = String.valueOf((int)(var10.getArousal() * 100.0F) + "%");
-            String var14 = String.valueOf((int)(var10.getDominance() * 100.0F) + "%");
-            String var15 = "P: " + var12 + " A: " + var13 + " D: " + var14;
-            this.func_96449_a(var1, var2, var4, var6, var11, var9, 1.0D);
-            this.func_96449_a(var1, var2, var4 + 0.30000001192092896D, var6, var15, var9, 1.0D);
+            String p = String.valueOf((int)(npc.getPleasure() * 100.0F) + "%");
+            String a = String.valueOf((int)(npc.getArousal() * 100.0F) + "%");
+            String d = String.valueOf((int)(npc.getDominance() * 100.0F) + "%");
+            String PAD = "P: " + p + " A: " + a + " D: " + d;
+            func_96449_a(living, par2, par4, par6, mood, par9, 1.0D);
+            func_96449_a(living, par2, par4 + 0.300000011920929D, par6, PAD, par9, 1.0D);
         }
     }
 }
+

@@ -10,3 +10,4 @@ public class ClassicMoaChoice extends MoaChoice
         super("Classic Moa", EnumChoiceType.MOA, new DonatorTexture("/old/moa_Classic.png", "Classic.png", 128, 64));
     }
 }
+

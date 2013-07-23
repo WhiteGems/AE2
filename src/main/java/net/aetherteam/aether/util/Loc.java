@@ -2,6 +2,7 @@ package net.aetherteam.aether.util;
 
 import java.util.ArrayList;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.ChunkCoordinates;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
@@ -13,61 +14,61 @@ public class Loc
 
     public static Loc[] vecAdjacent()
     {
-        Loc[] var0 = new Loc[] {new Loc(0, 0, 1), new Loc(0, 0, -1), new Loc(0, 1, 0), new Loc(0, -1, 0), new Loc(1, 0, 0), new Loc(-1, 0, 0)};
-        return var0;
+        Loc[] aloc = { new Loc(0, 0, 1), new Loc(0, 0, -1), new Loc(0, 1, 0), new Loc(0, -1, 0), new Loc(1, 0, 0), new Loc(-1, 0, 0) };
+        return aloc;
     }
 
     public static Loc[] vecAdjacent2D()
     {
-        Loc[] var0 = new Loc[] {new Loc(0, 1), new Loc(0, -1), new Loc(1, 0), new Loc(-1, 0)};
-        return var0;
+        Loc[] aloc = { new Loc(0, 1), new Loc(0, -1), new Loc(1, 0), new Loc(-1, 0) };
+        return aloc;
     }
 
-    public static ArrayList vecInRadius(int var0, boolean var1)
+    public static ArrayList vecInRadius(int i, boolean flag)
     {
-        ArrayList var2 = new ArrayList();
-        Loc var3 = new Loc();
+        ArrayList arraylist = new ArrayList();
+        Loc loc = new Loc();
 
-        for (int var4 = -var0; var4 <= var0; ++var4)
+        for (int j = -i; j <= i; j++)
         {
-            for (int var5 = -var0; var5 <= var0; ++var5)
+            for (int k = -i; k <= i; k++)
             {
-                for (int var6 = -var0; var6 <= var0; ++var6)
+                for (int l = -i; l <= i; l++)
                 {
-                    Loc var7 = new Loc(var4, var6, var5);
-                    double var8 = var1 ? var3.distAdv(var7) : (double)var3.distSimple(var7);
+                    Loc loc1 = new Loc(j, l, k);
+                    double d = flag ? loc.distAdv(loc1) : loc.distSimple(loc1);
 
-                    if (var8 <= (double)var0)
+                    if (d <= i)
                     {
-                        var2.add(var7);
+                        arraylist.add(loc1);
                     }
                 }
             }
         }
 
-        return var2;
+        return arraylist;
     }
 
-    public static ArrayList vecInRadius2D(int var0, boolean var1)
+    public static ArrayList vecInRadius2D(int i, boolean flag)
     {
-        ArrayList var2 = new ArrayList();
-        Loc var3 = new Loc();
+        ArrayList arraylist = new ArrayList();
+        Loc loc = new Loc();
 
-        for (int var4 = -var0; var4 <= var0; ++var4)
+        for (int j = -i; j <= i; j++)
         {
-            for (int var5 = -var0; var5 <= var0; ++var5)
+            for (int k = -i; k <= i; k++)
             {
-                Loc var6 = new Loc(var4, var5);
-                double var7 = var1 ? var3.distAdv(var6) : (double)var3.distSimple(var6);
+                Loc loc1 = new Loc(j, k);
+                double d = flag ? loc.distAdv(loc1) : loc.distSimple(loc1);
 
-                if (var7 <= (double)var0)
+                if (d <= i)
                 {
-                    var2.add(var6);
+                    arraylist.add(loc1);
                 }
             }
         }
 
-        return var2;
+        return arraylist;
     }
 
     public Loc()
@@ -75,118 +76,116 @@ public class Loc
         this(0, 0, 0);
     }
 
-    public Loc(double var1, double var3)
+    public Loc(double d, double d1)
     {
-        this(var1, 0.0D, var3);
+        this(d, 0.0D, d1);
     }
 
-    public Loc(double var1, double var3, double var5)
+    public Loc(double d, double d1, double d2)
     {
-        this.x = var1;
-        this.y = var3;
-        this.z = var5;
+        this.x = d;
+        this.y = d1;
+        this.z = d2;
     }
 
-    public Loc(int var1, int var2)
+    public Loc(int i, int j)
     {
-        this(var1, 0, var2);
+        this(i, 0, j);
     }
 
-    public Loc(int var1, int var2, int var3)
+    public Loc(int i, int j, int k)
     {
-        this((double)var1, (double)var2, (double)var3);
+        this(i, j, k);
     }
 
-    public Loc(Loc var1)
+    public Loc(Loc loc)
     {
-        this(var1.x, var1.y, var1.z);
+        this(loc.x, loc.y, loc.z);
     }
 
-    public Loc(World var1)
+    public Loc(World world)
     {
-        this(var1.getSpawnPoint().posX, var1.getSpawnPoint().posY, var1.getSpawnPoint().posZ);
+        this(world.J().posX, world.J().posY, world.J().posZ);
     }
 
-    public Loc add(double var1, double var3, double var5)
+    public Loc add(double d, double d1, double d2)
     {
-        return new Loc(this.x + var1, this.y + var3, this.z + var5);
+        return new Loc(this.x + d, this.y + d1, this.z + d2);
     }
 
-    public Loc add(int var1, int var2, int var3)
+    public Loc add(int i, int j, int k)
     {
-        return new Loc(this.x + (double)var1, this.y + (double)var2, this.z + (double)var3);
+        return new Loc(this.x + i, this.y + j, this.z + k);
     }
 
-    public Loc add(Loc var1)
+    public Loc add(Loc loc)
     {
-        return new Loc(this.x + var1.x, this.y + var1.y, this.z + var1.z);
+        return new Loc(this.x + loc.x, this.y + loc.y, this.z + loc.z);
     }
 
     public Loc[] adjacent()
     {
-        Loc[] var1 = vecAdjacent();
+        Loc[] aloc = vecAdjacent();
 
-        for (int var2 = 0; var2 < var1.length; ++var2)
+        for (int i = 0; i < aloc.length; i++)
         {
-            var1[var2] = this.add(var1[var2]);
+            aloc[i] = add(aloc[i]);
         }
 
-        return var1;
+        return aloc;
     }
 
     public Loc[] adjacent2D()
     {
-        Loc[] var1 = vecAdjacent();
+        Loc[] aloc = vecAdjacent();
 
-        for (int var2 = 0; var2 < var1.length; ++var2)
+        for (int i = 0; i < aloc.length; i++)
         {
-            var1[var2] = this.add(var1[var2]);
+            aloc[i] = add(aloc[i]);
         }
 
-        return var1;
+        return aloc;
     }
 
-    public double distAdv(Loc var1)
+    public double distAdv(Loc loc)
     {
-        return Math.sqrt(Math.pow(this.x - var1.x, 2.0D) + Math.pow(this.y - var1.y, 2.0D) + Math.pow(this.z - var1.z, 2.0D));
+        return Math.sqrt(Math.pow(this.x - loc.x, 2.0D) + Math.pow(this.y - loc.y, 2.0D) + Math.pow(this.z - loc.z, 2.0D));
     }
 
-    public int distSimple(Loc var1)
+    public int distSimple(Loc loc)
     {
-        return (int)(Math.abs(this.x - var1.x) + Math.abs(this.y - var1.y) + Math.abs(this.z - var1.z));
+        return (int)(Math.abs(this.x - loc.x) + Math.abs(this.y - loc.y) + Math.abs(this.z - loc.z));
     }
 
-    public boolean equals(Object var1)
+    public boolean equals(Object obj)
     {
-        if (!(var1 instanceof Loc))
+        if ((obj instanceof Loc))
         {
-            return false;
+            Loc loc = (Loc)obj;
+            return (this.x == loc.x) && (this.y == loc.y) && (this.z == loc.z);
         }
-        else
-        {
-            Loc var2 = (Loc)var1;
-            return this.x == var2.x && this.y == var2.y && this.z == var2.z;
-        }
+
+        return false;
     }
 
-    public int getBlock(IBlockAccess var1)
+    public int getBlock(IBlockAccess iblockaccess)
     {
-        return var1.getBlockId(this.x(), this.y(), this.z());
+        return iblockaccess.getBlockId(x(), y(), z());
     }
 
-    public int getLight(World var1)
+    public int getLight(World world)
     {
-        return var1.getFullBlockLightValue(this.x(), this.y(), this.z());
+        return world.getFullBlockLightValue(x(), y(), z());
     }
 
-    public int getMeta(IBlockAccess var1)
+    public int getMeta(IBlockAccess iblockaccess)
     {
-        return var1.getBlockMetadata(this.x(), this.y(), this.z());
+        return iblockaccess.getBlockMetadata(x(), y(), z());
     }
 
-    public Loc getSide(int var1)
+    public Loc getSide(int i)
     {
-        switch (var1)
+        switch (i)
         {
             case 0:
                 return new Loc(this.x, this.y - 1.0D, this.z);
@@ -205,134 +204,133 @@ public class Loc
 
             case 5:
                 return new Loc(this.x + 1.0D, this.y, this.z);
-
-            default:
-                return new Loc(this.x, this.y, this.z);
         }
+
+        return new Loc(this.x, this.y, this.z);
     }
 
-    public TileEntity getTileEntity(IBlockAccess var1)
+    public TileEntity getTileEntity(IBlockAccess iblockaccess)
     {
-        return var1.getBlockTileEntity(this.x(), this.y(), this.z());
+        return iblockaccess.getBlockTileEntity(x(), y(), z());
     }
 
-    public ArrayList inRadius(int var1, boolean var2)
+    public ArrayList inRadius(int i, boolean flag)
     {
-        ArrayList var3 = new ArrayList();
+        ArrayList arraylist = new ArrayList();
 
-        for (int var4 = -var1; var4 <= var1; ++var4)
+        for (int j = -i; j <= i; j++)
         {
-            for (int var5 = -var1; var5 <= var1; ++var5)
+            for (int k = -i; k <= i; k++)
             {
-                for (int var6 = -var1; var6 <= var1; ++var6)
+                for (int l = -i; l <= i; l++)
                 {
-                    Loc var7 = (new Loc(var4, var6, var5)).add(this);
-                    double var8 = var2 ? this.distAdv(var7) : (double)this.distSimple(var7);
+                    Loc loc = new Loc(j, l, k).add(this);
+                    double d = flag ? distAdv(loc) : distSimple(loc);
 
-                    if (var8 <= (double)var1)
+                    if (d <= i)
                     {
-                        var3.add(var7);
+                        arraylist.add(loc);
                     }
                 }
             }
         }
 
-        return var3;
+        return arraylist;
     }
 
-    public ArrayList inRadius2D(int var1, boolean var2)
+    public ArrayList inRadius2D(int i, boolean flag)
     {
-        ArrayList var3 = new ArrayList();
+        ArrayList arraylist = new ArrayList();
 
-        for (int var4 = -var1; var4 <= var1; ++var4)
+        for (int j = -i; j <= i; j++)
         {
-            for (int var5 = -var1; var5 <= var1; ++var5)
+            for (int k = -i; k <= i; k++)
             {
-                Loc var6 = (new Loc(var4, var5)).add(this);
-                double var7 = var2 ? this.distAdv(var6) : (double)this.distSimple(var6);
+                Loc loc = new Loc(j, k).add(this);
+                double d = flag ? distAdv(loc) : distSimple(loc);
 
-                if (var7 <= (double)var1)
+                if (d <= i)
                 {
-                    var3.add(var6);
+                    arraylist.add(loc);
                 }
             }
         }
 
-        return var3;
+        return arraylist;
     }
 
-    public Loc multiply(double var1, double var3, double var5)
+    public Loc multiply(double d, double d1, double d2)
     {
-        return new Loc(this.x * var1, this.y * var3, this.z * var5);
+        return new Loc(this.x * d, this.y * d1, this.z * d2);
     }
 
-    public Loc notify(World var1)
+    public Loc notify(World world)
     {
-        var1.notifyBlocksOfNeighborChange(this.x(), this.y(), this.z(), this.getBlock(var1));
+        world.notifyBlocksOfNeighborChange(x(), y(), z(), getBlock(world));
         return this;
     }
 
-    public Loc removeTileEntity(World var1)
+    public Loc removeTileEntity(World world)
     {
-        var1.removeBlockTileEntity(this.x(), this.y(), this.z());
+        world.removeBlockTileEntity(x(), y(), z());
         return this;
     }
 
-    public Loc setBlock(World var1, int var2)
+    public Loc setBlock(World world, int i)
     {
-        var1.setBlock(this.x(), this.y(), this.z(), var2);
+        world.setBlock(x(), y(), z(), i);
         return this;
     }
 
-    public Loc setBlockAndMeta(World var1, int var2, int var3)
+    public Loc setBlockAndMeta(World world, int i, int j)
     {
-        var1.setBlock(this.x(), this.y(), this.z(), var2, var3, 4);
+        world.setBlock(x(), y(), z(), i, j, 4);
         return this;
     }
 
-    public Loc setBlockAndMetaNotify(World var1, int var2, int var3)
+    public Loc setBlockAndMetaNotify(World world, int i, int j)
     {
-        var1.setBlock(this.x(), this.y(), this.z(), var2, var3, 4);
+        world.setBlock(x(), y(), z(), i, j, 4);
         return this;
     }
 
-    public Loc setBlockNotify(World var1, int var2)
+    public Loc setBlockNotify(World world, int i)
     {
-        var1.setBlock(this.x(), this.y(), this.z(), var2);
+        world.setBlock(x(), y(), z(), i);
         return this;
     }
 
-    public Loc setMeta(World var1, int var2)
+    public Loc setMeta(World world, int i)
     {
-        var1.setBlockMetadataWithNotify(this.x(), this.y(), this.z(), var2, 4);
+        world.setBlockMetadataWithNotify(x(), y(), z(), i, 4);
         return this;
     }
 
-    public Loc setMetaNotify(World var1, int var2)
+    public Loc setMetaNotify(World world, int i)
     {
-        var1.setBlockMetadataWithNotify(this.x(), this.y(), this.z(), var2, 4);
+        world.setBlockMetadataWithNotify(x(), y(), z(), i, 4);
         return this;
     }
 
-    public Loc setTileEntity(World var1, TileEntity var2)
+    public Loc setTileEntity(World world, TileEntity tileentity)
     {
-        var1.setBlockTileEntity(this.x(), this.y(), this.z(), var2);
+        world.setBlockTileEntity(x(), y(), z(), tileentity);
         return this;
     }
 
-    public Loc subtract(double var1, double var3, double var5)
+    public Loc subtract(double d, double d1, double d2)
     {
-        return new Loc(this.x - var1, this.y - var3, this.z - var5);
+        return new Loc(this.x - d, this.y - d1, this.z - d2);
     }
 
-    public Loc subtract(int var1, int var2, int var3)
+    public Loc subtract(int i, int j, int k)
     {
-        return new Loc(this.x - (double)var1, this.y - (double)var2, this.z - (double)var3);
+        return new Loc(this.x - i, this.y - j, this.z - k);
     }
 
-    public Loc subtract(Loc var1)
+    public Loc subtract(Loc loc)
     {
-        return new Loc(this.x - var1.x, this.y - var1.y, this.z - var1.z);
+        return new Loc(this.x - loc.x, this.y - loc.y, this.z - loc.z);
     }
 
     public String toString()
@@ -355,3 +353,4 @@ public class Loc
         return (int)this.z;
     }
 }
+

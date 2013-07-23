@@ -9,6 +9,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.PrintStream;
 import net.aetherteam.mainmenu_api.MainMenuAPI;
 import net.aetherteam.mainmenu_api.MenuBaseAether;
 import net.aetherteam.mainmenu_api.MenuBaseLeftMinecraft;
@@ -18,6 +19,7 @@ import net.aetherteam.mainmenu_api.MenuSoundLoader;
 import net.minecraft.client.Minecraft;
 import net.minecraft.src.ModLoader;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.EventBus;
 
 public class MenuClientProxy extends MenuCommonProxy
 {
@@ -38,59 +40,58 @@ public class MenuClientProxy extends MenuCommonProxy
 
     public void registerSounds()
     {
-        this.installSound("streaming/Aether Menu.ogg");
-        this.installSound("streaming/Aether Menu Two.wav");
+        installSound("streaming/Aether Menu.ogg");
+        installSound("streaming/Aether Menu Two.wav");
         MinecraftForge.EVENT_BUS.register(new MenuSoundLoader());
     }
 
-    private void installSound(String var1)
+    private void installSound(String filename)
     {
-        File var2 = new File(ModLoader.getMinecraftInstance().mcDataDir, "resources/" + var1);
+        File soundFile = new File(ModLoader.getMinecraftInstance().mcDataDir, "resources/" + filename);
 
-        if (!var2.exists())
+        if (!soundFile.exists())
         {
             try
             {
-                String var3 = soundZipPath + var1;
-                InputStream var4 = MainMenuAPI.class.getResourceAsStream(var3);
+                String srcPath = soundZipPath + filename;
+                InputStream inStream = MainMenuAPI.class.getResourceAsStream(srcPath);
 
-                if (var4 == null)
+                if (inStream == null)
                 {
                     throw new IOException();
                 }
 
-                if (!var2.getParentFile().exists())
+                if (!soundFile.getParentFile().exists())
                 {
-                    var2.getParentFile().mkdirs();
+                    soundFile.getParentFile().mkdirs();
                 }
 
-                BufferedInputStream var5 = new BufferedInputStream(var4);
-                BufferedOutputStream var6 = new BufferedOutputStream(new FileOutputStream(var2));
-                byte[] var7 = new byte[1024];
-                boolean var8 = false;
-                int var10;
+                BufferedInputStream fileIn = new BufferedInputStream(inStream);
+                BufferedOutputStream fileOut = new BufferedOutputStream(new FileOutputStream(soundFile));
+                byte[] buffer = new byte[1024];
+                int n = 0;
 
-                while (-1 != (var10 = var5.read(var7)))
+                while (-1 != (n = fileIn.read(buffer)))
                 {
-                    var6.write(var7, 0, var10);
+                    fileOut.write(buffer, 0, n);
                 }
 
-                var5.close();
-                var6.close();
+                fileIn.close();
+                fileOut.close();
             }
-            catch (IOException var9)
+            catch (IOException ex)
             {
-                ;
             }
         }
 
-        if (var2.canRead() && var2.isFile())
+        if ((soundFile.canRead()) && (soundFile.isFile()))
         {
-            ModLoader.getMinecraftInstance().installResource(var1, var2);
+            ModLoader.getMinecraftInstance().installResource(filename, soundFile);
         }
         else
         {
-            System.err.println("Could not load file: " + var2);
+            System.err.println("Could not load file: " + soundFile);
         }
     }
 }
+

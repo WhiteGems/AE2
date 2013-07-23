@@ -3,8 +3,10 @@ package net.aetherteam.aether.client.gui.dungeons;
 import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.common.network.PacketDispatcher;
 import java.util.ArrayList;
+import java.util.List;
 import net.aetherteam.aether.client.gui.social.PartyData;
 import net.aetherteam.aether.client.gui.social.dialogue.GuiDialogueBox;
+import net.aetherteam.aether.dungeons.Dungeon;
 import net.aetherteam.aether.dungeons.DungeonHandler;
 import net.aetherteam.aether.packets.AetherPacketHandler;
 import net.aetherteam.aether.party.Party;
@@ -13,11 +15,17 @@ import net.aetherteam.aether.party.PartyType;
 import net.aetherteam.aether.party.members.PartyMember;
 import net.aetherteam.aether.tile_entities.TileEntityEntranceController;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.GuiTextField;
 import net.minecraft.client.gui.ScaledResolution;
+import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.settings.GameSettings;
+import net.minecraft.client.settings.KeyBinding;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.MathHelper;
 import org.lwjgl.opengl.GL11;
 
@@ -30,115 +38,100 @@ public class GuiCreateDungeonParty extends GuiScreen
     private int partyY;
     private int partyW;
     private int partyH;
-
-    /** Reference to the Minecraft object. */
-    Minecraft mc;
-    private ArrayList partyType;
-    private int typeIndex;
+    Minecraft g;
+    private ArrayList partyType = new ArrayList();
+    private int typeIndex = 0;
     private GuiButton typeButton;
     private GuiButton finishButton;
     private GuiButton backButton;
     private GuiTextField partyNameField;
-    private String partyName;
+    private String partyName = "";
     private EntityPlayer player;
     private GuiScreen parent;
     private TileEntityEntranceController controller;
 
-    public GuiCreateDungeonParty(EntityPlayer var1, GuiScreen var2, TileEntityEntranceController var3)
+    public GuiCreateDungeonParty(EntityPlayer player, GuiScreen parent, TileEntityEntranceController controller)
     {
-        this(new PartyData(), var1, var2);
-        this.controller = var3;
+        this(new PartyData(), player, parent);
+        this.controller = controller;
     }
 
-    public GuiCreateDungeonParty(PartyData var1, EntityPlayer var2, GuiScreen var3)
+    public GuiCreateDungeonParty(PartyData pm, EntityPlayer player, GuiScreen parent)
     {
-        this.partyType = new ArrayList();
-        this.typeIndex = 0;
-        this.partyName = "";
-        this.parent = var3;
+        this.parent = parent;
         this.partyType.add("Open");
         this.partyType.add("Closed");
         this.partyType.add("Private");
-        this.player = var2;
-        this.mc = FMLClientHandler.instance().getClient();
-        this.pm = var1;
-        this.backgroundTexture = this.mc.renderEngine.getTexture("/net/aetherteam/aether/client/sprites/gui/createParty.png");
-        this.partyCreatedTexture = this.mc.renderEngine.getTexture("/net/aetherteam/aether/client/sprites/gui/partyCreated.png");
+        this.player = player;
+        this.g = FMLClientHandler.instance().getClient();
+        this.pm = pm;
+        this.backgroundTexture = this.g.renderEngine.f("/net/aetherteam/aether/client/sprites/gui/createParty.png");
+        this.partyCreatedTexture = this.g.renderEngine.f("/net/aetherteam/aether/client/sprites/gui/partyCreated.png");
         this.partyW = 256;
         this.partyH = 256;
-        this.updateScreen();
+        updateScreen();
     }
 
-    /**
-     * Adds the buttons (and other controls) to the screen in question.
-     */
     public void initGui()
     {
-        this.updateScreen();
-        this.buttonList.clear();
+        updateScreen();
+        this.k.clear();
         this.typeButton = new GuiButton(1, this.partyX - 60, this.partyY - 16 - 28, 120, 20, "Type: " + (String)this.partyType.get(this.typeIndex));
         this.finishButton = new GuiButton(2, this.partyX - 60, this.partyY + 6 - 28, 120, 20, "Start Dungeon");
         this.backButton = new GuiButton(0, this.partyX - 60, this.partyY + 81 - 28, 120, 20, "Back");
-        this.buttonList.add(this.typeButton);
-        this.buttonList.add(this.finishButton);
-        this.buttonList.add(this.backButton);
-        this.partyNameField = new GuiTextField(this.fontRenderer, this.partyX - 55, this.partyY - 64, 107, 16);
+        this.k.add(this.typeButton);
+        this.k.add(this.finishButton);
+        this.k.add(this.backButton);
+        this.partyNameField = new GuiTextField(this.m, this.partyX - 55, this.partyY - 64, 107, 16);
         this.partyNameField.setFocused(true);
         this.partyNameField.setMaxStringLength(22);
         this.partyNameField.setText(this.partyName);
         this.partyNameField.setEnableBackgroundDrawing(false);
     }
 
-    /**
-     * Fired when a control is clicked. This is the equivalent of ActionListener.actionPerformed(ActionEvent e).
-     */
-    protected void actionPerformed(GuiButton var1)
+    protected void actionPerformed(GuiButton button)
     {
-        switch (var1.id)
+        switch (button.id)
         {
             case 0:
-                this.mc.displayGuiScreen(this.parent);
+                this.g.displayGuiScreen(this.parent);
                 break;
 
             case 1:
-                ++this.typeIndex;
+                this.typeIndex += 1;
                 break;
 
             case 2:
-                Party var2 = (new Party(this.partyName, new PartyMember(this.player))).setType(PartyType.getTypeFromString((String)this.partyType.get(this.typeIndex)));
-                boolean var3 = PartyController.instance().addParty(var2, true);
+                Party party = new Party(this.partyName, new PartyMember(this.player)).setType(PartyType.getTypeFromString((String)this.partyType.get(this.typeIndex)));
+                boolean created = PartyController.instance().addParty(party, true);
                 PacketDispatcher.sendPacketToServer(AetherPacketHandler.sendPartyChange(true, this.partyName, this.player.username, this.player.skinUrl));
                 PacketDispatcher.sendPacketToServer(AetherPacketHandler.sendPartyTypeChange(this.partyName, PartyType.getTypeFromString((String)this.partyType.get(this.typeIndex))));
 
-                if (!var3)
+                if (!created)
                 {
-                    this.mc.displayGuiScreen(new GuiDialogueBox(this, "Your party was successfully created!", "Your party name is already taken. Try again.", var3));
+                    this.g.displayGuiScreen(new GuiDialogueBox(this, "Your party was successfully created!", "Your party name is already taken. Try again.", created));
                 }
-                else if (this.controller != null && this.controller.getDungeon() != null && !this.controller.getDungeon().hasQueuedParty())
+                else if ((this.controller != null) && (this.controller.getDungeon() != null) && (!this.controller.getDungeon().hasQueuedParty()))
                 {
-                    int var4 = MathHelper.floor_double((double)this.controller.xCoord);
-                    int var5 = MathHelper.floor_double((double)this.controller.yCoord);
-                    int var6 = MathHelper.floor_double((double)this.controller.zCoord);
-                    DungeonHandler.instance().queueParty(this.controller.getDungeon(), var2, var4, var5, var6, true);
-                    this.mc.displayGuiScreen((GuiScreen)null);
+                    int x = MathHelper.floor_double(this.controller.xCoord);
+                    int y = MathHelper.floor_double(this.controller.yCoord);
+                    int z = MathHelper.floor_double(this.controller.zCoord);
+                    DungeonHandler.instance().queueParty(this.controller.getDungeon(), party, x, y, z, true);
+                    this.g.displayGuiScreen(null);
                 }
+
+                break;
         }
     }
 
-    /**
-     * Returns true if this GUI should pause the game when it is displayed in single-player
-     */
     public boolean doesGuiPauseGame()
     {
         return false;
     }
 
-    /**
-     * Draws the screen and all the components in it.
-     */
-    public void drawScreen(int var1, int var2, float var3)
+    public void drawScreen(int x, int y, float partialTick)
     {
-        this.buttonList.clear();
+        this.k.clear();
 
         if (this.typeIndex > this.partyType.size() - 1)
         {
@@ -153,63 +146,54 @@ public class GuiCreateDungeonParty extends GuiScreen
             this.finishButton.enabled = false;
         }
 
-        this.buttonList.add(this.typeButton);
-        this.buttonList.add(this.finishButton);
-        this.buttonList.add(this.backButton);
-        this.drawDefaultBackground();
+        this.k.add(this.typeButton);
+        this.k.add(this.finishButton);
+        this.k.add(this.backButton);
+        drawDefaultBackground();
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
         GL11.glBindTexture(GL11.GL_TEXTURE_2D, this.backgroundTexture);
-        int var4 = this.partyX - 70;
-        int var5 = this.partyY - 84;
-        new ScaledResolution(this.mc.gameSettings, this.mc.displayWidth, this.mc.displayHeight);
-        this.drawTexturedModalRect(var4, var5, 0, 0, 141, this.partyH);
+        int centerX = this.partyX - 70;
+        int centerY = this.partyY - 84;
+        ScaledResolution sr = new ScaledResolution(this.g.gameSettings, this.g.displayWidth, this.g.displayHeight);
+        drawTexturedModalRect(centerX, centerY, 0, 0, 141, this.partyH);
         GL11.glBindTexture(GL11.GL_TEXTURE_2D, this.backgroundTexture);
-        this.mc.renderEngine.resetBoundTexture();
-        String var7 = "Dungeon Raid Name";
-        this.drawString(this.fontRenderer, var7, var4 + 68 - this.fontRenderer.getStringWidth(var7) / 2, var5 + 5, 16777215);
+        this.g.renderEngine.a();
+        String headerName = "Dungeon Raid Name";
+        drawString(this.m, headerName, centerX + 68 - this.m.getStringWidth(headerName) / 2, centerY + 5, 16777215);
         this.partyNameField.drawTextBox();
-        super.drawScreen(var1, var2, var3);
+        super.drawScreen(x, y, partialTick);
     }
 
-    /**
-     * Fired when a key is typed. This is the equivalent of KeyListener.keyTyped(KeyEvent e).
-     */
-    protected void keyTyped(char var1, int var2)
+    protected void keyTyped(char charTyped, int keyTyped)
     {
         if (this.partyNameField.isFocused())
         {
-            this.partyNameField.textboxKeyTyped(var1, var2);
+            this.partyNameField.textboxKeyTyped(charTyped, keyTyped);
             this.partyName = this.partyNameField.getText();
         }
-        else if (var2 == Minecraft.getMinecraft().gameSettings.keyBindInventory.keyCode)
+        else if (keyTyped == Minecraft.getMinecraft().gameSettings.keyBindInventory.keyCode)
         {
-            this.mc.displayGuiScreen((GuiScreen)null);
-            this.mc.setIngameFocus();
+            this.g.displayGuiScreen((GuiScreen)null);
+            this.g.setIngameFocus();
         }
 
-        super.keyTyped(var1, var2);
+        super.keyTyped(charTyped, keyTyped);
     }
 
-    /**
-     * Called when the mouse is clicked.
-     */
-    protected void mouseClicked(int var1, int var2, int var3)
+    protected void mouseClicked(int par1, int par2, int par3)
     {
-        this.partyNameField.mouseClicked(var1, var2, var3);
-        super.mouseClicked(var1, var2, var3);
+        this.partyNameField.mouseClicked(par1, par2, par3);
+        super.mouseClicked(par1, par2, par3);
     }
 
-    /**
-     * Called from the main game loop to update the screen.
-     */
     public void updateScreen()
     {
         super.updateScreen();
-        ScaledResolution var1 = new ScaledResolution(this.mc.gameSettings, this.mc.displayWidth, this.mc.displayHeight);
-        int var2 = var1.getScaledWidth();
-        int var3 = var1.getScaledHeight();
-        this.partyX = var2 / 2;
-        this.partyY = var3 / 2;
+        ScaledResolution scaledresolution = new ScaledResolution(this.g.gameSettings, this.g.displayWidth, this.g.displayHeight);
+        int width = scaledresolution.getScaledWidth();
+        int height = scaledresolution.getScaledHeight();
+        this.partyX = (width / 2);
+        this.partyY = (height / 2);
 
         if (this.partyNameField != null)
         {
@@ -217,3 +201,4 @@ public class GuiCreateDungeonParty extends GuiScreen
         }
     }
 }
+

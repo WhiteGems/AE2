@@ -11,3 +11,4 @@ public class AercloudCapeChoice extends DonatorChoice
         super("Aercloud Cape", EnumChoiceType.CAPE, new DonatorTexture("cape_Aercloud.png", "Aercloud.png", 256, 128));
     }
 }
+

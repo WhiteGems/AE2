@@ -3,25 +3,33 @@ package net.aetherteam.aether.entities.mounts;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import java.util.ArrayList;
+import java.util.Random;
 import net.aetherteam.aether.Aether;
 import net.aetherteam.aether.AetherMoaColour;
 import net.aetherteam.aether.PlayerBaseAetherServer;
 import net.aetherteam.aether.entities.EntityAetherAnimal;
 import net.aetherteam.aether.items.AetherItems;
+import net.minecraft.entity.DataWatcher;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityAgeable;
+import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.ai.EntityAILookIdle;
 import net.minecraft.entity.ai.EntityAIPanic;
 import net.minecraft.entity.ai.EntityAISwimming;
+import net.minecraft.entity.ai.EntityAITasks;
 import net.minecraft.entity.ai.EntityAIWander;
 import net.minecraft.entity.ai.EntityAIWatchClosest;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.pathfinding.PathNavigate;
 import net.minecraft.util.DamageSource;
 import net.minecraft.world.World;
 
-public class EntityMoa extends EntityAetherAnimal implements Mount
+public class EntityMoa extends EntityAetherAnimal
+    implements Mount
 {
     float speed;
     public float field_752_b;
@@ -31,50 +39,46 @@ public class EntityMoa extends EntityAetherAnimal implements Mount
     public float field_755_h;
     public boolean riderJumped;
     public int timeUntilNextEgg;
-    boolean followPlayer;
+    boolean followPlayer = false;
 
-    public EntityMoa(World var1)
+    public EntityMoa(World world)
     {
-        this(var1, false, false, false, (EntityPlayer)null);
+        this(world, false, false, false, null);
     }
 
-    public EntityMoa(World var1, boolean var2, boolean var3, boolean var4, AetherMoaColour var5, EntityPlayer var6, String var7)
+    public EntityMoa(World world, boolean babyBool, boolean grownBool, boolean saddledBool, AetherMoaColour moaColour, EntityPlayer player, String texture)
     {
-        this(var1, var2, var3, var4, var5, var6);
+        this(world, babyBool, grownBool, saddledBool, moaColour, player);
 
-        if (var7 != null && !var7.isEmpty())
+        if ((texture != null) && (!texture.isEmpty()))
         {
-            this.texture = var7;
+            this.texture = texture;
         }
     }
 
-    public EntityMoa(World var1, boolean var2, boolean var3, boolean var4, AetherMoaColour var5, EntityPlayer var6)
+    public EntityMoa(World world, boolean babyBool, boolean grownBool, boolean saddledBool, AetherMoaColour moaColour, EntityPlayer player)
     {
-        super(var1);
-        this.followPlayer = false;
+        super(world);
         this.destPos = 0.0F;
         this.field_755_h = 1.0F;
         this.stepHeight = 1.0F;
-        this.setSaddled(var4);
-        this.setGrown(var3);
-        this.setBaby(var2);
+        setSaddled(saddledBool);
+        setGrown(grownBool);
+        setBaby(babyBool);
 
-        if (this.isBaby())
+        if (isBaby())
         {
-            this.setSize(0.4F, 0.5F);
+            setSize(0.4F, 0.5F);
 
-            if (var6 != null)
-            {
-                ;
-            }
+            if (player == null);
         }
 
-        this.setColour(var5);
-        this.texture = this.getColour().getTexture(this.getSaddled());
-        this.setSize(1.0F, 2.0F);
-        this.timeUntilNextEgg = this.rand.nextInt(6000) + 6000;
+        setColour(moaColour);
+        this.texture = getColour().getTexture(getSaddled());
+        setSize(1.0F, 2.0F);
+        this.timeUntilNextEgg = (this.rand.nextInt(6000) + 6000);
         this.speed = 0.3F;
-        this.getNavigator().setAvoidsWater(true);
+        getNavigator().setAvoidsWater(true);
         this.tasks.addTask(0, new EntityAISwimming(this));
         this.tasks.addTask(1, new EntityAIPanic(this, 0.38F));
         this.tasks.addTask(2, new EntityAIWander(this, this.speed));
@@ -83,9 +87,9 @@ public class EntityMoa extends EntityAetherAnimal implements Mount
         this.ignoreFrustumCheck = true;
     }
 
-    public EntityMoa(World var1, boolean var2, boolean var3, boolean var4, EntityPlayer var5)
+    public EntityMoa(World world, boolean babyBool, boolean grownBool, boolean saddledBool, EntityPlayer player)
     {
-        this(var1, var2, var3, var4, AetherMoaColour.pickRandomMoa(), var5);
+        this(world, babyBool, grownBool, saddledBool, AetherMoaColour.pickRandomMoa(), player);
     }
 
     protected void entityInit()
@@ -98,115 +102,99 @@ public class EntityMoa extends EntityAetherAnimal implements Mount
         this.dataWatcher.addObject(20, Short.valueOf((short)0));
         this.dataWatcher.addObject(21, Byte.valueOf((byte)0));
         this.dataWatcher.addObject(22, String.valueOf(this.texture));
-        this.dataWatcher.addObject(23, Integer.valueOf(this.getColour().jumps));
+        this.dataWatcher.addObject(23, Integer.valueOf(getColour().jumps));
         this.dataWatcher.addObject(24, Integer.valueOf(this.health));
     }
 
-    /**
-     * Returns true if the newer Entity AI code should be run
-     */
     public boolean isAIEnabled()
     {
-        return !this.getSaddled();
+        return !getSaddled();
     }
 
-    public boolean shouldRiderFaceForward(EntityPlayer var1)
+    public boolean shouldRiderFaceForward(EntityPlayer player)
     {
         return true;
     }
 
-    /**
-     * Plays step sound at given x, y, z for the entity
-     */
-    protected void playStepSound(int var1, int var2, int var3, int var4)
+    protected void playStepSound(int par1, int par2, int par3, int par4)
     {
         this.worldObj.playSoundAtEntity(this, "mob.pig.step", 0.15F, 1.0F);
     }
 
-    /**
-     * Causes this entity to do an upwards motion (jumping).
-     */
     protected void jump()
     {
         this.motionY = 0.6D;
     }
 
-    /**
-     * returns true if all the conditions for steering the entity are met. For pigs, this is true if it is being ridden
-     * by a player and the player is holding a carrot-on-a-stick
-     */
     public boolean canBeSteered()
     {
         return true;
     }
 
-    /**
-     * Called to update the entity's position/logic.
-     */
     public void onUpdate()
     {
         super.onUpdate();
 
-        if (!this.worldObj.isRemote && this.getHealthTracked() != this.health)
+        if ((!this.worldObj.isRemote) && (getHealthTracked() != this.health))
         {
-            this.setHealthTracked();
+            setHealthTracked();
         }
 
         if (this.riddenByEntity == null)
         {
-            this.setTexture(this.getColour().getTexture(this.getSaddled()));
+            setTexture(getColour().getTexture(getSaddled()));
         }
         else
         {
-            this.setTexture(this.getColour().getTexture(this.getSaddled(), (EntityPlayer)this.riddenByEntity));
+            setTexture(getColour().getTexture(getSaddled(), (EntityPlayer)this.riddenByEntity));
         }
 
         this.fallDistance = 0.0F;
 
-        if (!this.worldObj.isRemote && !this.isBaby() && --this.timeUntilNextEgg <= 0)
+        if ((!this.worldObj.isRemote) && (!isBaby()) && (--this.timeUntilNextEgg <= 0))
         {
             this.worldObj.playSoundAtEntity(this, "mob.chickenplop", 1.0F, (this.rand.nextFloat() - this.rand.nextFloat()) * 0.2F + 1.0F);
-            boolean var1 = false;
+            boolean spawnMusicDisk = false;
 
             if (this.rand.nextInt(20) == 0)
             {
-                var1 = true;
+                spawnMusicDisk = true;
             }
 
-            if (var1)
+            if (spawnMusicDisk)
             {
-                this.entityDropItem(new ItemStack(AetherItems.MoaMusicDisk, 1, 0), 0.0F);
+                entityDropItem(new ItemStack(AetherItems.MoaMusicDisk, 1, 0), 0.0F);
             }
             else
             {
-                this.entityDropItem(new ItemStack(AetherItems.MoaEgg, 1, this.getColour().ID), 0.0F);
+                entityDropItem(new ItemStack(AetherItems.MoaEgg, 1, getColour().ID), 0.0F);
             }
 
-            this.timeUntilNextEgg = this.rand.nextInt(6000) + 6000;
+            this.timeUntilNextEgg = (this.rand.nextInt(6000) + 6000);
         }
 
-        if (this.isWellFed() && this.rand.nextInt(750) == 0)
+        if ((isWellFed()) && (this.rand.nextInt(750) == 0))
         {
-            this.setWellFed(false);
+            setWellFed(false);
         }
 
-        this.updateWingFields();
+        updateWingFields();
 
         if (this.onGround)
         {
             this.riderJumped = false;
-            this.setJumpsRemaining(this.getColour().jumps);
+            setJumpsRemaining(getColour().jumps);
         }
 
-        if (!this.onGround && this.motionY < 0.0D)
+        if ((!this.onGround) && (this.motionY < 0.0D))
         {
             if (this.riddenByEntity != null)
             {
-                if (this.riddenByEntity instanceof EntityPlayer)
+                if ((this.riddenByEntity instanceof EntityPlayer))
                 {
-                    EntityPlayer var2 = (EntityPlayer)this.riddenByEntity;
+                    EntityPlayer player = (EntityPlayer)this.riddenByEntity;
 
-                    if (!var2.isSneaking())
+                    if (!player.isSneaking())
                     {
                         this.motionY *= 0.6375D;
                     }
@@ -219,9 +207,6 @@ public class EntityMoa extends EntityAetherAnimal implements Mount
         }
     }
 
-    /**
-     * Returns the Y offset from the entity's position for any entity riding this one.
-     */
     public double getMountedYOffset()
     {
         return 1.37D;
@@ -231,257 +216,240 @@ public class EntityMoa extends EntityAetherAnimal implements Mount
     {
         if (!this.worldObj.isRemote)
         {
-            if (this.riddenByEntity != null && this.riddenByEntity instanceof EntityPlayer)
+            if ((this.riddenByEntity != null) && ((this.riddenByEntity instanceof EntityPlayer)))
             {
                 this.moveForward = 0.0F;
                 this.moveStrafing = 0.0F;
                 this.isJumping = false;
                 this.riddenByEntity.fallDistance = 0.0F;
-                EntityPlayer var1 = (EntityPlayer)this.riddenByEntity;
-                this.setRotation(this.riddenByEntity.rotationYaw, this.riddenByEntity.rotationPitch);
-                double var2 = 0.40499999701976774D;
+                EntityPlayer player = (EntityPlayer)this.riddenByEntity;
+                setRotation(this.riddenByEntity.rotationYaw, this.riddenByEntity.rotationPitch);
+                double mountSpeed = 0.4049999970197677D;
 
-                if (var1.isSneaking())
+                if (player.isSneaking())
                 {
-                    var2 = 0.15D;
+                    mountSpeed = 0.15D;
                 }
 
-                float var4 = (float)Math.PI;
-                float var5 = var4 / 180.0F;
-                PlayerBaseAetherServer var6 = Aether.getServerPlayer(var1);
+                float magicRotationFloat = (float)Math.PI;
+                float f1 = magicRotationFloat / 180.0F;
+                PlayerBaseAetherServer playerBase = Aether.getServerPlayer(player);
 
-                if (var6 != null)
+                if (playerBase != null)
                 {
-                    ArrayList var7 = var6.mountInput;
-                    boolean var8 = var7.contains(MountInput.FORWARD);
-                    boolean var9 = var7.contains(MountInput.BACKWARD);
-                    boolean var10 = var7.contains(MountInput.LEFT);
-                    boolean var11 = var7.contains(MountInput.RIGHT);
-                    boolean var12 = var7.contains(MountInput.JUMP);
-                    float var13;
+                    ArrayList directions = playerBase.mountInput;
+                    boolean moveForward = directions.contains(MountInput.FORWARD);
+                    boolean moveBackward = directions.contains(MountInput.BACKWARD);
+                    boolean moveLeft = directions.contains(MountInput.LEFT);
+                    boolean moveRight = directions.contains(MountInput.RIGHT);
+                    boolean jump = directions.contains(MountInput.JUMP);
 
-                    if (var8)
+                    if (moveForward)
                     {
-                        var13 = var1.rotationYaw * var5;
-                        this.motionX += -Math.sin((double)var13) * var2;
-                        this.motionZ += Math.cos((double)var13) * var2;
+                        float rotationFactor_FORWARD = player.rotationYaw * f1;
+                        this.motionX += -Math.sin(rotationFactor_FORWARD) * mountSpeed;
+                        this.motionZ += Math.cos(rotationFactor_FORWARD) * mountSpeed;
                     }
-                    else if (var9)
+                    else if (moveBackward)
                     {
-                        var13 = var1.rotationYaw * var5;
-                        this.motionX += Math.sin((double)var13) * var2;
-                        this.motionZ += -Math.cos((double)var13) * var2;
-                    }
-
-                    if (var10)
-                    {
-                        var13 = var1.rotationYaw * var5;
-                        this.motionX += Math.cos((double)var13) * var2;
-                        this.motionZ += Math.sin((double)var13) * var2;
-                    }
-                    else if (var11)
-                    {
-                        var13 = var1.rotationYaw * var5;
-                        this.motionX += -Math.cos((double)var13) * var2;
-                        this.motionZ += -Math.sin((double)var13) * var2;
+                        float rotationFactor_BACKWARD = player.rotationYaw * f1;
+                        this.motionX += Math.sin(rotationFactor_BACKWARD) * mountSpeed;
+                        this.motionZ += -Math.cos(rotationFactor_BACKWARD) * mountSpeed;
                     }
 
-                    if (this.onGround && var12)
+                    if (moveLeft)
+                    {
+                        float rotationFactor_LEFT = player.rotationYaw * f1;
+                        this.motionX += Math.cos(rotationFactor_LEFT) * mountSpeed;
+                        this.motionZ += Math.sin(rotationFactor_LEFT) * mountSpeed;
+                    }
+                    else if (moveRight)
+                    {
+                        float rotationFactor_RIGHT = player.rotationYaw * f1;
+                        this.motionX += -Math.cos(rotationFactor_RIGHT) * mountSpeed;
+                        this.motionZ += -Math.sin(rotationFactor_RIGHT) * mountSpeed;
+                    }
+
+                    if ((this.onGround) && (jump))
                     {
                         this.onGround = false;
                         this.motionY = 0.875D;
                         this.riderJumped = true;
-                        this.setJumpsRemaining(this.getJumpsRemaining() - 1);
+                        setJumpsRemaining(getJumpsRemaining() - 1);
                     }
-                    else if (this.handleWaterMovement() && var12)
+                    else if ((handleWaterMovement()) && (jump))
                     {
                         this.motionY = 0.5D;
                         this.riderJumped = true;
-                        this.setJumpsRemaining(this.getJumpsRemaining() - 1);
+                        setJumpsRemaining(getJumpsRemaining() - 1);
                     }
-                    else if (this.getJumpsRemaining() > 0 && !this.riderJumped && var12)
+                    else if ((getJumpsRemaining() > 0) && (!this.riderJumped) && (jump))
                     {
                         this.motionY = 0.75D;
                         this.riderJumped = true;
-                        this.setJumpsRemaining(this.getJumpsRemaining() - 1);
+                        setJumpsRemaining(getJumpsRemaining() - 1);
                     }
 
-                    if (this.riderJumped && !var12)
+                    if ((this.riderJumped) && (!jump))
                     {
                         this.riderJumped = false;
                     }
                 }
 
-                double var14 = Math.abs(Math.sqrt(this.motionX * this.motionX + this.motionZ * this.motionZ));
+                double d = Math.abs(Math.sqrt(this.motionX * this.motionX + this.motionZ * this.motionZ));
 
-                if (var14 > var2)
+                if (d > mountSpeed)
                 {
-                    double var15 = var2 / var14;
-                    this.motionX *= var15;
-                    this.motionZ *= var15;
+                    double d1 = mountSpeed / d;
+                    this.motionX *= d1;
+                    this.motionZ *= d1;
                 }
+
+                return;
             }
-            else
-            {
-                super.updateEntityActionState();
-            }
+
+            super.updateEntityActionState();
+            return;
         }
     }
 
-    /**
-     * Called when the entity is attacked.
-     */
-    public boolean attackEntityFrom(DamageSource var1, int var2)
+    public boolean attackEntityFrom(DamageSource damagesource, int i)
     {
-        return var1.getEntity() instanceof EntityPlayer && this.riddenByEntity == var1.getEntity() ? false : super.attackEntityFrom(var1, var2);
+        if (((damagesource.getEntity() instanceof EntityPlayer)) && (this.riddenByEntity == damagesource.getEntity()))
+        {
+            return false;
+        }
+
+        return super.attackEntityFrom(damagesource, i);
     }
 
-    /**
-     * (abstract) Protected helper method to write subclass entity data to NBT.
-     */
-    public void writeEntityToNBT(NBTTagCompound var1)
+    public void writeEntityToNBT(NBTTagCompound nbttagcompound)
     {
-        super.writeEntityToNBT(var1);
-        var1.setShort("ColourNumber", (short)this.getColour().ID);
-        var1.setBoolean("Saddled", this.getSaddled());
-        var1.setBoolean("Grown", this.isGrown());
-        var1.setBoolean("Baby", this.isBaby());
-        var1.setBoolean("wellFed", this.isWellFed());
-        var1.setInteger("petalsEaten", this.getPetalsEaten());
-        var1.setBoolean("followPlayer", this.followPlayer);
-        var1.setInteger("jumpsRemaining", this.getJumpsRemaining());
-        var1.setBoolean("riderJumped", this.riderJumped);
+        super.writeEntityToNBT(nbttagcompound);
+        nbttagcompound.setShort("ColourNumber", (short)getColour().ID);
+        nbttagcompound.setBoolean("Saddled", getSaddled());
+        nbttagcompound.setBoolean("Grown", isGrown());
+        nbttagcompound.setBoolean("Baby", isBaby());
+        nbttagcompound.setBoolean("wellFed", isWellFed());
+        nbttagcompound.setInteger("petalsEaten", getPetalsEaten());
+        nbttagcompound.setBoolean("followPlayer", this.followPlayer);
+        nbttagcompound.setInteger("jumpsRemaining", getJumpsRemaining());
+        nbttagcompound.setBoolean("riderJumped", this.riderJumped);
     }
 
-    /**
-     * (abstract) Protected helper method to read subclass entity data from NBT.
-     */
-    public void readEntityFromNBT(NBTTagCompound var1)
+    public void readEntityFromNBT(NBTTagCompound nbttagcompound)
     {
-        super.readEntityFromNBT(var1);
-        this.setColour(AetherMoaColour.getColour(var1.getShort("ColourNumber")));
-        this.setSaddled(var1.getBoolean("Saddled"));
-        this.setGrown(var1.getBoolean("Grown"));
-        this.setBaby(var1.getBoolean("Baby"));
-        this.setWellFed(var1.getBoolean("wellFed"));
-        this.setPetalsEaten(var1.getInteger("petalsEaten"));
-        this.followPlayer = var1.getBoolean("followPlayer");
-        this.setJumpsRemaining(var1.getInteger("jumpsRemaining"));
-        this.riderJumped = var1.getBoolean("riderJumped");
+        super.readEntityFromNBT(nbttagcompound);
+        setColour(AetherMoaColour.getColour(nbttagcompound.getShort("ColourNumber")));
+        setSaddled(nbttagcompound.getBoolean("Saddled"));
+        setGrown(nbttagcompound.getBoolean("Grown"));
+        setBaby(nbttagcompound.getBoolean("Baby"));
+        setWellFed(nbttagcompound.getBoolean("wellFed"));
+        setPetalsEaten(nbttagcompound.getInteger("petalsEaten"));
+        this.followPlayer = nbttagcompound.getBoolean("followPlayer");
+        setJumpsRemaining(nbttagcompound.getInteger("jumpsRemaining"));
+        this.riderJumped = nbttagcompound.getBoolean("riderJumped");
     }
 
-    /**
-     * Returns the sound this mob makes while it's alive.
-     */
     protected String getLivingSound()
     {
         return "aemob.moa.say";
     }
 
-    /**
-     * Returns the sound this mob makes when it is hurt.
-     */
     protected String getHurtSound()
     {
         return "aemob.moa.say";
     }
 
-    /**
-     * Returns the sound this mob makes on death.
-     */
     protected String getDeathSound()
     {
         return "aemob.moa.say";
     }
 
-    /**
-     * Called when a player interacts with a mob. e.g. gets milk from a cow, gets into the saddle on a pig.
-     */
-    public boolean interact(EntityPlayer var1)
+    public boolean interact(EntityPlayer entityplayer)
     {
-        if (this.canAddSaddle() && var1.inventory.getCurrentItem() != null && var1.inventory.getCurrentItem().itemID == Item.saddle.itemID)
+        if ((canAddSaddle()) && (entityplayer.inventory.getCurrentItem() != null) && (entityplayer.inventory.getCurrentItem().itemID == Item.saddle.itemID))
         {
-            var1.inventory.setInventorySlotContents(var1.inventory.currentItem, (ItemStack)null);
+            entityplayer.inventory.setInventorySlotContents(entityplayer.inventory.currentItem, null);
 
             if (!this.worldObj.isRemote)
             {
-                this.setGrown(false);
-                this.setSaddled(true);
-                this.setTexture(this.getColour().getTexture(this.getSaddled()));
+                setGrown(false);
+                setSaddled(true);
+                setTexture(getColour().getTexture(getSaddled()));
             }
 
             return true;
         }
-        else if (this.getSaddled() && (this.riddenByEntity == null || var1 == this.riddenByEntity))
+
+        if ((getSaddled()) && ((this.riddenByEntity == null) || (entityplayer == this.riddenByEntity)))
         {
-            if (!var1.worldObj.isRemote)
+            if (!entityplayer.worldObj.isRemote)
             {
                 if (this.riddenByEntity == null)
                 {
-                    this.setTexture(this.getColour().getTexture(this.getSaddled(), var1));
+                    setTexture(getColour().getTexture(getSaddled(), entityplayer));
                 }
                 else
                 {
-                    this.setTexture(this.getColour().getTexture(this.getSaddled()));
+                    setTexture(getColour().getTexture(getSaddled()));
                 }
 
-                var1.mountEntity(this);
-                var1.prevRotationYaw = var1.rotationYaw = this.rotationYaw;
+                entityplayer.mountEntity(this);
+                entityplayer.prevRotationYaw = (entityplayer.rotationYaw = this.rotationYaw);
             }
 
             return true;
         }
-        else
+
+        ItemStack itemstack = entityplayer.inventory.getCurrentItem();
+
+        if (!this.worldObj.isRemote)
         {
-            ItemStack var2 = var1.inventory.getCurrentItem();
-
-            if (!this.worldObj.isRemote)
+            if ((itemstack != null) && (itemstack.itemID == AetherItems.AechorPetal.itemID))
             {
-                if (var2 != null && var2.itemID == AetherItems.AechorPetal.itemID)
+                if ((!isWellFed()) && (isBaby()))
                 {
-                    if (!this.isWellFed() && this.isBaby())
+                    increasePetalsEaten(1);
+                    entityplayer.inventory.decrStackSize(entityplayer.inventory.currentItem, 1);
+
+                    if (getPetalsEaten() >= getColour().jumps)
                     {
-                        this.increasePetalsEaten(1);
-                        var1.inventory.decrStackSize(var1.inventory.currentItem, 1);
-
-                        if (this.getPetalsEaten() >= this.getColour().jumps)
-                        {
-                            this.setBaby(false);
-                            this.setGrown(true);
-                        }
-                        else
-                        {
-                            this.setWellFed(true);
-                        }
-                    }
-
-                    return true;
-                }
-
-                if (this.isBaby() || this.isGrown())
-                {
-                    if (!this.followPlayer)
-                    {
-                        this.followPlayer = true;
-                        this.entityToAttack = var1;
+                        setBaby(false);
+                        setGrown(true);
                     }
                     else
                     {
-                        this.followPlayer = false;
-                        this.entityToAttack = null;
+                        setWellFed(true);
                     }
                 }
+
+                return true;
             }
 
-            return super.interact(var1);
+            if ((isBaby()) || (isGrown()))
+            {
+                if (!this.followPlayer)
+                {
+                    this.followPlayer = true;
+                    this.entityToAttack = entityplayer;
+                }
+                else
+                {
+                    this.followPlayer = false;
+                    this.entityToAttack = null;
+                }
+            }
         }
+
+        return super.interact(entityplayer);
     }
 
     public void updateWingFields()
     {
         this.field_756_e = this.field_752_b;
         this.field_757_d = this.destPos;
-        this.destPos = (float)((double)this.destPos + (double)(this.onGround ? -1 : 4) * 0.05D);
+        this.destPos = ((float)(this.destPos + (this.onGround ? -1 : 4) * 0.05D));
 
         if (this.destPos < 0.01F)
         {
@@ -498,26 +466,26 @@ public class EntityMoa extends EntityAetherAnimal implements Mount
             this.destPos = 0.0F;
         }
 
-        if (!this.onGround && this.field_755_h < 1.0F)
+        if ((!this.onGround) && (this.field_755_h < 1.0F))
         {
             this.field_755_h = 1.0F;
         }
 
-        this.field_755_h = (float)((double)this.field_755_h * 0.9D);
+        this.field_755_h = ((float)(this.field_755_h * 0.9D));
         this.field_752_b += this.field_755_h * 2.0F;
     }
 
     public boolean getSaddled()
     {
-        return (this.dataWatcher.getWatchableObjectByte(16) & 1) != 0;
+        return (this.dataWatcher.getWatchableObjectByte(16) & 0x1) != 0;
     }
 
-    public void setSaddled(boolean var1)
+    public void setSaddled(boolean saddled)
     {
-        if (var1)
+        if (saddled)
         {
             this.dataWatcher.updateObject(16, Byte.valueOf((byte)1));
-            this.health = this.getMaxHealth();
+            this.health = getMaxHealth();
         }
         else
         {
@@ -527,12 +495,12 @@ public class EntityMoa extends EntityAetherAnimal implements Mount
 
     public boolean isBaby()
     {
-        return (this.dataWatcher.getWatchableObjectByte(17) & 1) != 0;
+        return (this.dataWatcher.getWatchableObjectByte(17) & 0x1) != 0;
     }
 
-    public void setBaby(boolean var1)
+    public void setBaby(boolean isBaby)
     {
-        if (var1)
+        if (isBaby)
         {
             this.dataWatcher.updateObject(17, Byte.valueOf((byte)1));
         }
@@ -544,12 +512,12 @@ public class EntityMoa extends EntityAetherAnimal implements Mount
 
     public boolean isGrown()
     {
-        return (this.dataWatcher.getWatchableObjectByte(18) & 1) != 0;
+        return (this.dataWatcher.getWatchableObjectByte(18) & 0x1) != 0;
     }
 
-    public void setGrown(boolean var1)
+    public void setGrown(boolean isGrown)
     {
-        if (var1)
+        if (isGrown)
         {
             this.dataWatcher.updateObject(18, Byte.valueOf((byte)1));
         }
@@ -564,14 +532,14 @@ public class EntityMoa extends EntityAetherAnimal implements Mount
         return this.dataWatcher.getWatchableObjectInt(19);
     }
 
-    public void increasePetalsEaten(int var1)
+    public void increasePetalsEaten(int amount)
     {
-        this.dataWatcher.updateObject(19, Integer.valueOf(this.dataWatcher.getWatchableObjectInt(19) + var1));
+        this.dataWatcher.updateObject(19, Integer.valueOf(this.dataWatcher.getWatchableObjectInt(19) + amount));
     }
 
-    public void setPetalsEaten(int var1)
+    public void setPetalsEaten(int amount)
     {
-        this.dataWatcher.updateObject(19, Integer.valueOf(var1));
+        this.dataWatcher.updateObject(19, Integer.valueOf(amount));
     }
 
     public AetherMoaColour getColour()
@@ -579,19 +547,19 @@ public class EntityMoa extends EntityAetherAnimal implements Mount
         return AetherMoaColour.getColour(this.dataWatcher.getWatchableObjectShort(20));
     }
 
-    public void setColour(AetherMoaColour var1)
+    public void setColour(AetherMoaColour colour)
     {
-        this.dataWatcher.updateObject(20, Short.valueOf((short)var1.ID));
+        this.dataWatcher.updateObject(20, Short.valueOf((short)colour.ID));
     }
 
     public boolean isWellFed()
     {
-        return (this.dataWatcher.getWatchableObjectByte(21) & 1) != 0;
+        return (this.dataWatcher.getWatchableObjectByte(21) & 0x1) != 0;
     }
 
-    public void setWellFed(boolean var1)
+    public void setWellFed(boolean wellFed)
     {
-        if (var1)
+        if (wellFed)
         {
             this.dataWatcher.updateObject(21, Byte.valueOf((byte)1));
         }
@@ -606,9 +574,9 @@ public class EntityMoa extends EntityAetherAnimal implements Mount
         return this.dataWatcher.getWatchableObjectInt(23);
     }
 
-    public void setJumpsRemaining(int var1)
+    public void setJumpsRemaining(int jumps)
     {
-        this.dataWatcher.updateObject(23, Integer.valueOf(var1));
+        this.dataWatcher.updateObject(23, Integer.valueOf(jumps));
     }
 
     public int getHealthTracked()
@@ -622,72 +590,57 @@ public class EntityMoa extends EntityAetherAnimal implements Mount
     }
 
     @SideOnly(Side.CLIENT)
-
-    /**
-     * Returns the texture's file path as a String.
-     */
     public String getTexture()
     {
         return this.texture;
     }
 
-    public void setTexture(String var1)
+    public void setTexture(String texture)
     {
-        this.texture = var1;
+        this.texture = texture;
     }
 
     public boolean canAddSaddle()
     {
-        return this.isGrown();
+        return isGrown();
     }
 
-    /**
-     * Determines if an entity can be despawned, used on idle far away entities
-     */
     public boolean canDespawn()
     {
-        return !this.isBaby() && !this.isGrown() && !this.getSaddled();
+        return (!isBaby()) && (!isGrown()) && (!getSaddled());
     }
 
-    /**
-     * returns if this entity triggers Block.onEntityWalking on the blocks they walk on. used for spiders and wolves to
-     * prevent them from trampling crops
-     */
     protected boolean canTriggerWalking()
     {
         return this.onGround;
     }
 
-    /**
-     * Drop 0-2 items of this living's type. @param par1 - Whether this entity has recently been hit by a player. @param
-     * par2 - Level of Looting used to kill this mob.
-     */
     protected void dropFewItems(boolean var1, int var2)
     {
-        this.dropItem(Item.feather.itemID, 3);
-        this.dropSaddle();
+        dropItem(Item.feather.itemID, 3);
+        dropSaddle();
     }
 
     protected void dropSaddle()
     {
-        if (this.getSaddled())
+        if (getSaddled())
         {
-            this.dropItem(Item.saddle.itemID, 1);
+            dropItem(Item.saddle.itemID, 1);
         }
     }
 
-    /**
-     * Called when the mob is falling. Calculates and applies fall damage.
-     */
-    protected void fall(float var1) {}
+    protected void fall(float f)
+    {
+    }
 
     public int getMaxHealth()
     {
-        return this.getSaddled() ? 40 : (!this.isGrown() && !this.isBaby() ? 10 : 20);
+        return (isGrown()) || (isBaby()) ? 20 : getSaddled() ? 40 : 10;
     }
 
-    public EntityAgeable createChild(EntityAgeable var1)
+    public EntityAgeable createChild(EntityAgeable entityageable)
     {
         return null;
     }
 }
+

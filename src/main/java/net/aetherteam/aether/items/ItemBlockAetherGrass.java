@@ -6,43 +6,42 @@ import net.minecraft.item.ItemStack;
 
 public class ItemBlockAetherGrass extends ItemBlock
 {
-    public ItemBlockAetherGrass(int var1)
+    public ItemBlockAetherGrass(int itemID)
     {
-        super(var1);
-        this.setHasSubtypes(true);
+        super(itemID);
+        setHasSubtypes(true);
     }
 
-    public Item setIconName(String var1)
+    public Item setIconName(String name)
     {
-        return this.setUnlocalizedName("Aether:" + var1);
+        return setUnlocalizedName("Aether:" + name);
     }
 
-    /**
-     * Returns the unlocalized name of this item. This version accepts an ItemStack so different stacks can have
-     * different names based on their damage or NBT.
-     */
-    public String getUnlocalizedName(ItemStack var1)
+    public String getUnlocalizedName(ItemStack itemstack)
     {
-        int var2 = var1.getItemDamage();
+        int i = itemstack.getItemDamage();
 
-        if (var2 == 1)
+        if (i == 1)
         {
-            var2 = 1;
+            i = 1;
         }
 
-        if (var2 == 0)
+        if (i == 0)
         {
-            var2 = 0;
+            i = 0;
         }
 
-        return this.getUnlocalizedName() + var2;
+        return getUnlocalizedName() + i;
     }
 
-    /**
-     * Returns the metadata of the block which this Item (ItemBlock) can place
-     */
-    public int getMetadata(int var1)
+    public int getMetadata(int damage)
     {
-        return var1 == 1 ? 1 : 0;
+        if (damage == 1)
+        {
+            return 1;
+        }
+
+        return 0;
     }
 }
+

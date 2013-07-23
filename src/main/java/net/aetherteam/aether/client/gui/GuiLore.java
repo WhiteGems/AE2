@@ -2,21 +2,33 @@ package net.aetherteam.aether.client.gui;
 
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 import net.aetherteam.aether.Aether;
 import net.aetherteam.aether.AetherLore;
+import net.aetherteam.aether.CommonProxy;
 import net.aetherteam.aether.blocks.AetherBlocks;
 import net.aetherteam.aether.containers.ContainerLore;
 import net.aetherteam.aether.items.AetherItems;
 import net.minecraft.block.Block;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiButton;
+import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.gui.inventory.GuiContainerCreative;
 import net.minecraft.client.gui.inventory.GuiInventory;
+import net.minecraft.client.multiplayer.PlayerControllerMP;
 import net.minecraft.client.renderer.InventoryEffectRenderer;
+import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.entity.player.PlayerCapabilities;
+import net.minecraft.inventory.IInventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.StringTranslate;
+import net.minecraft.world.WorldProvider;
+import net.minecraft.world.WorldType;
 import org.lwjgl.opengl.GL11;
 
 public class GuiLore extends InventoryEffectRenderer
@@ -24,107 +36,90 @@ public class GuiLore extends InventoryEffectRenderer
     public static ArrayList lores = new ArrayList();
     private int type;
 
-    public GuiLore(InventoryPlayer var1, EntityPlayer var2, int var3)
+    public GuiLore(InventoryPlayer inventoryplayer, EntityPlayer player, int i)
     {
-        super(new ContainerLore(var1, true, var2));
+        super(new ContainerLore(inventoryplayer, true, player));
         this.xSize = 256;
         this.ySize = 195;
-        this.type = var3;
+        this.type = i;
     }
 
-    /**
-     * Fired when a control is clicked. This is the equivalent of ActionListener.actionPerformed(ActionEvent e).
-     */
     protected void actionPerformed(GuiButton var1)
     {
         if (var1.id == 0)
-        {
             if (Aether.proxy.getClientPlayer().capabilities.isCreativeMode)
             {
-                this.mc.displayGuiScreen(new GuiContainerCreative(Aether.proxy.getClientPlayer()));
+                this.g.displayGuiScreen(new GuiContainerCreative(Aether.proxy.getClientPlayer()));
             }
             else
             {
-                this.mc.displayGuiScreen(new GuiInventory(Aether.proxy.getClientPlayer()));
+                this.g.displayGuiScreen(new GuiInventory(Aether.proxy.getClientPlayer()));
             }
-        }
     }
 
-    /**
-     * Draw the foreground layer for the GuiContainer (everything in front of the items)
-     */
-    protected void drawGuiContainerForegroundLayer(int var1, int var2)
+    protected void drawGuiContainerForegroundLayer(int par1, int par2)
     {
-        this.fontRenderer.drawString("Book Of Lore:", 37, 18, 4210752);
+        this.m.drawString("Book Of Lore:", 37, 18, 4210752);
 
         switch (this.type)
         {
             case 0:
-                this.fontRenderer.drawString("Add Object", 37, 38, 4210752);
+                this.m.drawString("Add Object", 37, 38, 4210752);
                 break;
 
             case 1:
-                this.fontRenderer.drawString("The Nether", 37, 38, 4210752);
+                this.m.drawString("The Nether", 37, 38, 4210752);
                 break;
 
             case 2:
-                this.fontRenderer.drawString("The Aether", 37, 38, 4210752);
+                this.m.drawString("The Aether", 37, 38, 4210752);
         }
 
-        this.fontRenderer.drawString("Item : ", 46, 72, 4210752);
-        ItemStack var3 = ((ContainerLore)this.inventorySlots).loreSlot.getStackInSlot(0);
+        this.m.drawString("Item : ", 46, 72, 4210752);
+        ItemStack item = ((ContainerLore)this.inventorySlots).loreSlot.getStackInSlot(0);
 
-        if (var3 != null)
+        if (item != null)
         {
-            Iterator var4 = lores.iterator();
-
-            while (var4.hasNext())
+            for (Iterator i$ = lores.iterator(); i$.hasNext();
+                    goto 356)
             {
-                AetherLore var5 = (AetherLore)var4.next();
+                AetherLore lore = (AetherLore)i$.next();
 
-                if (var5.equals(var3) && var5.type == this.type)
+                if ((lore.equals(item)) && (lore.type == this.type))
                 {
-                    this.fontRenderer.drawString(var5.name, 134, 14, 4210752);
-                    this.fontRenderer.drawString(var5.line1, 134, 28, 4210752);
-                    this.fontRenderer.drawString(var5.line2, 134, 38, 4210752);
-                    this.fontRenderer.drawString(var5.line3, 134, 48, 4210752);
-                    this.fontRenderer.drawString(var5.line4, 134, 58, 4210752);
-                    this.fontRenderer.drawString(var5.line5, 134, 68, 4210752);
-                    this.fontRenderer.drawString(var5.line6, 134, 78, 4210752);
+                    this.m.drawString(lore.name, 134, 14, 4210752);
+                    this.m.drawString(lore.line1, 134, 28, 4210752);
+                    this.m.drawString(lore.line2, 134, 38, 4210752);
+                    this.m.drawString(lore.line3, 134, 48, 4210752);
+                    this.m.drawString(lore.line4, 134, 58, 4210752);
+                    this.m.drawString(lore.line5, 134, 68, 4210752);
+                    this.m.drawString(lore.line6, 134, 78, 4210752);
 
-                    if (this.mc.theWorld.provider.terrainType.getWorldTypeID() == 2)
+                    if (this.g.theWorld.t.terrainType.getWorldTypeID() != 2)
                     {
-                        ;
+                        break;
                     }
-
-                    break;
                 }
             }
         }
 
-        StringTranslate var6 = StringTranslate.getInstance();
-        this.buttonList.clear();
-        this.buttonList.add(new GuiButton(0, this.guiLeft - 20, this.guiTop, 20, 20, var6.translateKey("X")));
+        StringTranslate var1 = StringTranslate.getInstance();
+        this.k.clear();
+        this.k.add(new GuiButton(0, this.e - 20, this.guiTop, 20, 20, var1.translateKey("X")));
     }
 
-    /**
-     * Called when the screen is unloaded. Used to disable keyboard repeat events
-     */
     public void onGuiClosed()
     {
         super.onGuiClosed();
     }
 
-    /**
-     * Draw the background layer for the GuiContainer (everything behind the items)
-     */
-    protected void drawGuiContainerBackgroundLayer(float var1, int var2, int var3)
+    protected void drawGuiContainerBackgroundLayer(float f, int i1, int i2)
     {
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-        this.mc.renderEngine.bindTexture("/net/aetherteam/aether/client/sprites/gui/lore.png");
-        int var4 = (this.width - this.xSize) / 2;
-        int var5 = (this.height - this.ySize) / 2;
-        this.drawTexturedModalRect(var4, var5, 0, 0, this.xSize, this.ySize);
+        this.g.renderEngine.b("/net/aetherteam/aether/client/sprites/gui/lore.png");
+        int j = (this.height - this.xSize) / 2;
+        int k = (this.i - this.ySize) / 2;
+        drawTexturedModalRect(j, k, 0, 0, this.xSize, this.ySize);
     }
 
     static
@@ -260,7 +255,7 @@ public class GuiLore extends InventoryEffectRenderer
         lores.add(new AetherLore(Item.bucketEmpty, "Bucket", "Made from iron.", "Can pick up water", "and lava.", "If used on a cow,", "milk may be", "obtained", 0));
         lores.add(new AetherLore(Item.bucketWater, "Water Bucket", "Can be used to", "place a water", "source", "", "", "", 0));
         lores.add(new AetherLore(Item.bucketLava, "Lava Bucket", "Can be used to", "place a lava", "source", "", "", "", 0));
-        lores.add(new AetherLore(Item.minecartEmpty, "Minecart", "Can be ridden in,", "but make sure the", "animals can\'t get", "to your cart", "", "", 0));
+        lores.add(new AetherLore(Item.minecartEmpty, "Minecart", "Can be ridden in,", "but make sure the", "animals can't get", "to your cart", "", "", 0));
         lores.add(new AetherLore(Item.saddle, "Saddle", "Found in dungeons.", "Can be used to", "saddle a pig", "", "", "", 0));
         lores.add(new AetherLore(Item.doorIron, "Iron Door", "Made from iron.", "Behaves like a door", "but can only be", "opened by redstone", "", "", 0));
         lores.add(new AetherLore(Item.redstone, "Redstone", "Used to carry", "redstone currents", "in redstone circuits", "", "", "", 0));
@@ -457,3 +452,4 @@ public class GuiLore extends InventoryEffectRenderer
         lores.add(new AetherLore(AetherItems.SentryBoots, "Sentry Boots", "Found in Bronze", "Dungeon chests.", "Negates the", "effect of Zephyr", "snowballs.", "", 0));
     }
 }
+

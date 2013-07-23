@@ -4,53 +4,55 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.aetherteam.aether.PlayerBaseAetherServer;
 import net.aetherteam.aether.client.PlayerBaseAetherClient;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 
 public class ItemRegenerationStone extends ItemAccessory
 {
-    public ItemRegenerationStone(int var1, int var2, int var3, int var4)
+    public ItemRegenerationStone(int i, int j, int k, int l)
     {
-        super(var1, var2, var3, var4, 16777215);
+        super(i, j, k, l, 16777215);
     }
 
-    public ItemRegenerationStone(int var1, int var2, String var3, int var4)
+    public ItemRegenerationStone(int i, int j, String path, int l)
     {
-        super(var1, var2, 0, var4);
-        this.texture = var3;
+        super(i, j, 0, l);
+        this.texture = path;
     }
 
-    public Item setIconName(String var1)
+    public Item setIconName(String name)
     {
-        return this.setUnlocalizedName("Aether:" + var1);
+        return setUnlocalizedName("Aether:" + name);
     }
 
-    public ItemRegenerationStone(int var1, int var2, String var3, int var4, int var5)
+    public ItemRegenerationStone(int i, int j, String path, int l, int m)
     {
-        super(var1, var2, 0, var4, var5);
-        this.texture = var3;
+        super(i, j, 0, l, m);
+        this.texture = path;
     }
 
-    public ItemRegenerationStone(int var1, int var2, String var3, int var4, int var5, boolean var6)
+    public ItemRegenerationStone(int i, int j, String path, int l, int m, boolean flag)
     {
-        super(var1, var2, var3, var4, var5);
-        this.colouriseRender = var6;
+        super(i, j, path, l, m);
+        this.colouriseRender = flag;
     }
 
-    public void activateServerPassive(EntityPlayer var1, PlayerBaseAetherServer var2)
+    public void activateServerPassive(EntityPlayer player, PlayerBaseAetherServer playerBase)
     {
-        if (var1.ticksExisted % 200 == 0 && var1.getHealth() < var2.maxHealth)
+        if ((player.ticksExisted % 200 == 0) && (player.getHealth() < playerBase.maxHealth))
         {
-            var1.heal(2);
+            player.heal(2);
         }
     }
 
     @SideOnly(Side.CLIENT)
-    public void activateClientPassive(EntityPlayer var1, PlayerBaseAetherClient var2)
+    public void activateClientPassive(EntityPlayer player, PlayerBaseAetherClient playerBase)
     {
-        if (var1.ticksExisted % 200 == 0 && var1.getHealth() < var2.maxHealth)
+        if ((player.ticksExisted % 200 == 0) && (player.getHealth() < playerBase.maxHealth))
         {
-            var1.heal(2);
+            player.heal(2);
         }
     }
 }
+

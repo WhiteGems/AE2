@@ -7,6 +7,7 @@ import java.util.List;
 import net.aetherteam.aether.AetherFrozen;
 import net.aetherteam.aether.blocks.AetherBlocks;
 import net.aetherteam.aether.items.AetherItems;
+import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.Item;
@@ -17,178 +18,159 @@ import net.minecraft.network.INetworkManager;
 import net.minecraft.network.packet.Packet;
 import net.minecraft.network.packet.Packet132TileEntityData;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.common.ISidedInventory;
 
-public class TileEntityFreezer extends TileEntity implements IInventory, ISidedInventory
+public class TileEntityFreezer extends TileEntity
+    implements IInventory, ISidedInventory
 {
     private static List frozen = new ArrayList();
-    private ItemStack[] frozenItemStacks = new ItemStack[3];
-    public int frozenProgress = 0;
-    public int frozenPowerRemaining = 0;
-    public int frozenTimeForItem = 0;
+    private ItemStack[] frozenItemStacks;
+    public int frozenProgress;
+    public int frozenPowerRemaining;
+    public int frozenTimeForItem;
     private AetherFrozen currentFrozen;
 
-    /**
-     * Returns the number of slots in the inventory.
-     */
+    public TileEntityFreezer()
+    {
+        this.frozenItemStacks = new ItemStack[3];
+        this.frozenProgress = 0;
+        this.frozenPowerRemaining = 0;
+        this.frozenTimeForItem = 0;
+    }
+
     public int getSizeInventory()
     {
         return this.frozenItemStacks.length;
     }
 
-    /**
-     * Returns the stack in slot i
-     */
-    public ItemStack getStackInSlot(int var1)
+    public ItemStack getStackInSlot(int i)
     {
-        return this.frozenItemStacks[var1];
+        return this.frozenItemStacks[i];
     }
 
-    /**
-     * Removes from an inventory slot (first arg) up to a specified number (second arg) of items and returns them in a
-     * new stack.
-     */
-    public ItemStack decrStackSize(int var1, int var2)
+    public ItemStack decrStackSize(int i, int j)
     {
-        if (this.frozenItemStacks[var1] != null)
+        if (this.frozenItemStacks[i] != null)
         {
-            ItemStack var3;
-
-            if (this.frozenItemStacks[var1].stackSize <= var2)
+            if (this.frozenItemStacks[i].stackSize <= j)
             {
-                var3 = this.frozenItemStacks[var1];
-                this.frozenItemStacks[var1] = null;
-                return var3;
+                ItemStack itemstack = this.frozenItemStacks[i];
+                this.frozenItemStacks[i] = null;
+                return itemstack;
             }
-            else
+
+            ItemStack itemstack1 = this.frozenItemStacks[i].splitStack(j);
+
+            if (this.frozenItemStacks[i].stackSize == 0)
             {
-                var3 = this.frozenItemStacks[var1].splitStack(var2);
-
-                if (this.frozenItemStacks[var1].stackSize == 0)
-                {
-                    this.frozenItemStacks[var1] = null;
-                }
-
-                return var3;
+                this.frozenItemStacks[i] = null;
             }
+
+            return itemstack1;
         }
-        else
-        {
-            return null;
-        }
+
+        return null;
     }
 
-    /**
-     * When some containers are closed they call this on each slot, then drop whatever it returns as an EntityItem -
-     * like when you close a workbench GUI.
-     */
-    public ItemStack getStackInSlotOnClosing(int var1)
+    public ItemStack getStackInSlotOnClosing(int par1)
     {
-        if (this.frozenItemStacks[var1] != null)
+        if (this.frozenItemStacks[par1] != null)
         {
-            ItemStack var2 = this.frozenItemStacks[var1];
-            this.frozenItemStacks[var1] = null;
+            ItemStack var2 = this.frozenItemStacks[par1];
+            this.frozenItemStacks[par1] = null;
             return var2;
         }
-        else
-        {
-            return null;
-        }
+
+        return null;
     }
 
-    /**
-     * Sets the given item stack to the specified slot in the inventory (can be crafting or armor sections).
-     */
-    public void setInventorySlotContents(int var1, ItemStack var2)
+    public void setInventorySlotContents(int i, ItemStack itemstack)
     {
-        this.frozenItemStacks[var1] = var2;
+        this.frozenItemStacks[i] = itemstack;
 
-        if (var2 != null && var2.stackSize > this.getInventoryStackLimit())
+        if ((itemstack != null) && (itemstack.stackSize > getInventoryStackLimit()))
         {
-            var2.stackSize = this.getInventoryStackLimit();
+            itemstack.stackSize = getInventoryStackLimit();
         }
     }
 
-    /**
-     * Returns the name of the inventory.
-     */
     public String getInvName()
     {
         return "Freezer";
     }
 
-    public void openChest() {}
-
-    public void closeChest() {}
-
-    /**
-     * Reads a tile entity from NBT.
-     */
-    public void readFromNBT(NBTTagCompound var1)
+    public void openChest()
     {
-        super.readFromNBT(var1);
-        NBTTagList var2 = var1.getTagList("Items");
-        this.frozenItemStacks = new ItemStack[this.getSizeInventory()];
+    }
 
-        for (int var3 = 0; var3 < var2.tagCount(); ++var3)
+    public void closeChest()
+    {
+    }
+
+    public void readFromNBT(NBTTagCompound nbttagcompound)
+    {
+        super.readFromNBT(nbttagcompound);
+        NBTTagList nbttaglist = nbttagcompound.getTagList("Items");
+        this.frozenItemStacks = new ItemStack[getSizeInventory()];
+
+        for (int i = 0; i < nbttaglist.tagCount(); i++)
         {
-            NBTTagCompound var4 = (NBTTagCompound)var2.tagAt(var3);
-            byte var5 = var4.getByte("Slot");
+            NBTTagCompound nbttagcompound1 = (NBTTagCompound)nbttaglist.tagAt(i);
+            byte byte0 = nbttagcompound1.getByte("Slot");
 
-            if (var5 >= 0 && var5 < this.frozenItemStacks.length)
+            if ((byte0 >= 0) && (byte0 < this.frozenItemStacks.length))
             {
-                this.frozenItemStacks[var5] = ItemStack.loadItemStackFromNBT(var4);
+                this.frozenItemStacks[byte0] = ItemStack.loadItemStackFromNBT(nbttagcompound1);
             }
         }
 
-        this.frozenProgress = var1.getShort("BurnTime");
-        this.frozenTimeForItem = var1.getShort("CookTime");
+        this.frozenProgress = nbttagcompound.getShort("BurnTime");
+        this.frozenTimeForItem = nbttagcompound.getShort("CookTime");
     }
 
-    /**
-     * Writes a tile entity to NBT.
-     */
-    public void writeToNBT(NBTTagCompound var1)
+    public void writeToNBT(NBTTagCompound nbttagcompound)
     {
-        super.writeToNBT(var1);
-        var1.setShort("BurnTime", (short)this.frozenProgress);
-        var1.setShort("CookTime", (short)this.frozenTimeForItem);
-        NBTTagList var2 = new NBTTagList();
+        super.writeToNBT(nbttagcompound);
+        nbttagcompound.setShort("BurnTime", (short)this.frozenProgress);
+        nbttagcompound.setShort("CookTime", (short)this.frozenTimeForItem);
+        NBTTagList nbttaglist = new NBTTagList();
 
-        for (int var3 = 0; var3 < this.frozenItemStacks.length; ++var3)
+        for (int i = 0; i < this.frozenItemStacks.length; i++)
         {
-            if (this.frozenItemStacks[var3] != null)
+            if (this.frozenItemStacks[i] != null)
             {
-                NBTTagCompound var4 = new NBTTagCompound();
-                var4.setByte("Slot", (byte)var3);
-                this.frozenItemStacks[var3].writeToNBT(var4);
-                var2.appendTag(var4);
+                NBTTagCompound nbttagcompound1 = new NBTTagCompound();
+                nbttagcompound1.setByte("Slot", (byte)i);
+                this.frozenItemStacks[i].writeToNBT(nbttagcompound1);
+                nbttaglist.appendTag(nbttagcompound1);
             }
         }
 
-        var1.setTag("Items", var2);
+        nbttagcompound.setTag("Items", nbttaglist);
     }
 
-    /**
-     * Returns the maximum stack size for a inventory slot. Seems to always be 64, possibly will be extended. *Isn't
-     * this more of a set than a get?*
-     */
     public int getInventoryStackLimit()
     {
         return 64;
     }
 
     @SideOnly(Side.CLIENT)
-    public int getCookProgressScaled(int var1)
+    public int getCookProgressScaled(int i)
     {
-        return this.frozenTimeForItem == 0 ? 0 : this.frozenProgress * var1 / this.frozenTimeForItem;
+        if (this.frozenTimeForItem == 0)
+        {
+            return 0;
+        }
+
+        return this.frozenProgress * i / this.frozenTimeForItem;
     }
 
     @SideOnly(Side.CLIENT)
-    public int getBurnTimeRemainingScaled(int var1)
+    public int getBurnTimeRemainingScaled(int i)
     {
-        return this.frozenPowerRemaining * var1 / 500;
+        return this.frozenPowerRemaining * i / 500;
     }
 
     public boolean isBurning()
@@ -196,55 +178,48 @@ public class TileEntityFreezer extends TileEntity implements IInventory, ISidedI
         return this.frozenPowerRemaining > 0;
     }
 
-    /**
-     * Allows the entity to update its state. Overridden in most subclasses, e.g. the mob spawner uses this to count
-     * ticks and creates a new spawn inside its implementation.
-     */
     public void updateEntity()
     {
         if (this.frozenPowerRemaining > 0)
         {
-            --this.frozenPowerRemaining;
+            this.frozenPowerRemaining -= 1;
 
             if (this.currentFrozen != null)
             {
-                ++this.frozenProgress;
+                this.frozenProgress += 1;
             }
         }
 
-        if (this.currentFrozen != null && (this.frozenItemStacks[0] == null || this.frozenItemStacks[0].itemID != this.currentFrozen.frozenFrom.itemID))
+        if ((this.currentFrozen != null) && ((this.frozenItemStacks[0] == null) || (this.frozenItemStacks[0].itemID != this.currentFrozen.frozenFrom.itemID)))
         {
             this.currentFrozen = null;
             this.frozenProgress = 0;
         }
 
-        if (this.currentFrozen != null && this.frozenProgress >= this.currentFrozen.frozenPowerNeeded)
+        if ((this.currentFrozen != null) && (this.frozenProgress >= this.currentFrozen.frozenPowerNeeded))
         {
             if (!this.worldObj.isRemote)
             {
                 if (this.frozenItemStacks[2] == null)
                 {
-                    this.setInventorySlotContents(2, new ItemStack(this.currentFrozen.frozenTo.getItem(), 1, this.currentFrozen.frozenTo.getItemDamage()));
+                    setInventorySlotContents(2, new ItemStack(this.currentFrozen.frozenTo.getItem(), 1, this.currentFrozen.frozenTo.getItemDamage()));
                 }
                 else
                 {
-                    this.setInventorySlotContents(2, new ItemStack(this.currentFrozen.frozenTo.getItem(), this.getStackInSlot(2).stackSize + 1, this.currentFrozen.frozenTo.getItemDamage()));
+                    setInventorySlotContents(2, new ItemStack(this.currentFrozen.frozenTo.getItem(), getStackInSlot(2).stackSize + 1, this.currentFrozen.frozenTo.getItemDamage()));
                 }
 
-                if (this.getStackInSlot(0).itemID != Item.bucketWater.itemID && this.getStackInSlot(0).itemID != Item.bucketLava.itemID)
+                if ((getStackInSlot(0).itemID == Item.bucketWater.itemID) || (getStackInSlot(0).itemID == Item.bucketLava.itemID))
                 {
-                    if (this.getStackInSlot(0).itemID == AetherItems.SkyrootBucket.itemID)
-                    {
-                        this.setInventorySlotContents(0, new ItemStack(AetherItems.SkyrootBucket));
-                    }
-                    else
-                    {
-                        this.decrStackSize(0, 1);
-                    }
+                    setInventorySlotContents(0, new ItemStack(Item.bucketEmpty));
+                }
+                else if (getStackInSlot(0).itemID == AetherItems.SkyrootBucket.itemID)
+                {
+                    setInventorySlotContents(0, new ItemStack(AetherItems.SkyrootBucket));
                 }
                 else
                 {
-                    this.setInventorySlotContents(0, new ItemStack(Item.bucketEmpty));
+                    decrStackSize(0, 1);
                 }
             }
 
@@ -253,32 +228,32 @@ public class TileEntityFreezer extends TileEntity implements IInventory, ISidedI
             this.frozenTimeForItem = 0;
         }
 
-        if (this.frozenPowerRemaining <= 0 && this.currentFrozen != null && this.getStackInSlot(1) != null && this.getStackInSlot(1).itemID == AetherBlocks.Icestone.blockID)
+        if ((this.frozenPowerRemaining <= 0) && (this.currentFrozen != null) && (getStackInSlot(1) != null) && (getStackInSlot(1).itemID == AetherBlocks.Icestone.blockID))
         {
             this.frozenPowerRemaining += 500;
 
             if (!this.worldObj.isRemote)
             {
-                this.decrStackSize(1, 1);
+                decrStackSize(1, 1);
             }
         }
 
         if (this.currentFrozen == null)
         {
-            ItemStack var1 = this.getStackInSlot(0);
+            ItemStack itemstack = getStackInSlot(0);
 
-            for (int var2 = 0; var2 < frozen.size(); ++var2)
+            for (int i = 0; i < frozen.size(); i++)
             {
-                if (var1 != null && frozen.get(var2) != null && var1.itemID == ((AetherFrozen)frozen.get(var2)).frozenFrom.itemID && var1.getItemDamage() == ((AetherFrozen)frozen.get(var2)).frozenFrom.getItemDamage())
+                if ((itemstack != null) && (frozen.get(i) != null) && (itemstack.itemID == ((AetherFrozen)frozen.get(i)).frozenFrom.itemID) && (itemstack.getItemDamage() == ((AetherFrozen)frozen.get(i)).frozenFrom.getItemDamage()))
                 {
                     if (this.frozenItemStacks[2] == null)
                     {
-                        this.currentFrozen = (AetherFrozen)frozen.get(var2);
+                        this.currentFrozen = ((AetherFrozen)frozen.get(i));
                         this.frozenTimeForItem = this.currentFrozen.frozenPowerNeeded;
                     }
-                    else if (this.frozenItemStacks[2].itemID == ((AetherFrozen)frozen.get(var2)).frozenTo.itemID && ((AetherFrozen)frozen.get(var2)).frozenTo.getItem().getItemStackLimit() > this.frozenItemStacks[2].stackSize)
+                    else if ((this.frozenItemStacks[2].itemID == ((AetherFrozen)frozen.get(i)).frozenTo.itemID) && (((AetherFrozen)frozen.get(i)).frozenTo.getItem().getItemStackLimit() > this.frozenItemStacks[2].stackSize))
                     {
-                        this.currentFrozen = (AetherFrozen)frozen.get(var2);
+                        this.currentFrozen = ((AetherFrozen)frozen.get(i));
                         this.frozenTimeForItem = this.currentFrozen.frozenPowerNeeded;
                     }
                 }
@@ -286,58 +261,56 @@ public class TileEntityFreezer extends TileEntity implements IInventory, ISidedI
         }
     }
 
-    /**
-     * Do not make give this method the name canInteractWith because it clashes with Container
-     */
-    public boolean isUseableByPlayer(EntityPlayer var1)
+    public boolean isUseableByPlayer(EntityPlayer par1EntityPlayer)
     {
-        return this.worldObj.getBlockTileEntity(this.xCoord, this.yCoord, this.zCoord) != this ? false : var1.getDistanceSq((double)this.xCoord + 0.5D, (double)this.yCoord + 0.5D, (double)this.zCoord + 0.5D) <= 64.0D;
+        return this.worldObj.getBlockTileEntity(this.xCoord, this.yCoord, this.zCoord) == this;
     }
 
-    public static void addFreezable(ItemStack var0, ItemStack var1, int var2)
+    public static void addFreezable(ItemStack from, ItemStack to, int i)
     {
-        frozen.add(new AetherFrozen(var0, var1, var2));
+        frozen.add(new AetherFrozen(from, to, i));
     }
 
-    public int getStartInventorySide(ForgeDirection var1)
+    public int getStartInventorySide(ForgeDirection side)
     {
-        return var1 == ForgeDirection.DOWN ? 1 : (var1 == ForgeDirection.UP ? 0 : 2);
+        if (side == ForgeDirection.DOWN)
+        {
+            return 1;
+        }
+
+        if (side == ForgeDirection.UP)
+        {
+            return 0;
+        }
+
+        return 2;
     }
 
-    public int getSizeInventorySide(ForgeDirection var1)
+    public int getSizeInventorySide(ForgeDirection side)
     {
         return 1;
     }
 
-    public void onDataPacket(INetworkManager var1, Packet132TileEntityData var2)
+    public void onDataPacket(INetworkManager net, Packet132TileEntityData pkt)
     {
-        this.readFromNBT(var2.customParam1);
+        readFromNBT(pkt.customParam1);
     }
 
-    /**
-     * Overriden in a sign to provide the text.
-     */
     public Packet getDescriptionPacket()
     {
         NBTTagCompound var1 = new NBTTagCompound();
-        this.writeToNBT(var1);
+        writeToNBT(var1);
         return new Packet132TileEntityData(this.xCoord, this.yCoord, this.zCoord, 1, var1);
     }
 
-    /**
-     * If this returns false, the inventory name will be used as an unlocalized name, and translated into the player's
-     * language. Otherwise it will be used directly.
-     */
     public boolean isInvNameLocalized()
     {
         return false;
     }
 
-    /**
-     * Returns true if automation is allowed to insert the given stack (ignoring stack size) into the given slot.
-     */
-    public boolean isStackValidForSlot(int var1, ItemStack var2)
+    public boolean isStackValidForSlot(int i, ItemStack itemstack)
     {
         return false;
     }
 }
+

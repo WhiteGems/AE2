@@ -2,6 +2,7 @@ package net.aetherteam.aether.items;
 
 import java.util.Random;
 import net.minecraft.enchantment.EnchantmentHelper;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.player.EntityPlayer;
@@ -10,72 +11,67 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemSword;
 import net.minecraft.util.DamageSource;
+import net.minecraft.world.World;
 
 public class ItemPigSlayer extends ItemSword
 {
-    Random rand = new Random();
+    Random rand;
 
-    public ItemPigSlayer(int var1)
+    public ItemPigSlayer(int i)
     {
-        super(var1, EnumToolMaterial.IRON);
-        this.setMaxDamage(0);
+        super(i, EnumToolMaterial.IRON);
+        this.rand = new Random();
+        setMaxDamage(0);
     }
 
-    public Item setIconName(String var1)
+    public Item setIconName(String name)
     {
-        return this.setUnlocalizedName("Aether:" + var1);
+        return setUnlocalizedName("Aether:" + name);
     }
 
-    /**
-     * Current implementations of this method in child classes do not use the entry argument beside ev. They just raise
-     * the damage on the stack.
-     */
-    public boolean hitEntity(ItemStack var1, EntityLiving var2, EntityLiving var3)
+    public boolean hitEntity(ItemStack itemstack, EntityLiving entityliving, EntityLiving entityliving1)
     {
-        if (var2 != null && var3 != null)
-        {
-            String var4 = EntityList.getEntityString(var2);
-
-            if (var4 != null && !var4.equals("") && (var4.toLowerCase().contains("pig") || var4.toLowerCase().contains("phyg")))
-            {
-                if (var2.getHealth() > 0)
-                {
-                    var2.setEntityHealth(1);
-                    var2.hurtTime = 0;
-                    var2.attackEntityFrom(DamageSource.causeMobDamage(var3), 9999);
-                }
-
-                int var5;
-
-                for (var5 = 0; var5 < 20; ++var5)
-                {
-                    double var6 = this.rand.nextGaussian() * 0.02D;
-                    double var8 = this.rand.nextGaussian() * 0.02D;
-                    double var10 = this.rand.nextGaussian() * 0.02D;
-                    double var12 = 5.0D;
-                    var2.worldObj.spawnParticle("flame", var2.posX + (double)(this.rand.nextFloat() * var2.width * 2.0F) - (double)var2.width - var6 * var12, var2.posY + (double)(this.rand.nextFloat() * var2.height) - var8 * var12, var2.posZ + (double)(this.rand.nextFloat() * var2.width * 2.0F) - (double)var2.width - var10 * var12, var6, var8, var10);
-                }
-
-                boolean var14 = false;
-
-                if (var3 instanceof EntityPlayer)
-                {
-                    var5 = EnchantmentHelper.getLootingModifier(var3);
-                }
-
-                var2.isDead = true;
-            }
-
-            return true;
-        }
-        else
+        if ((entityliving == null) || (entityliving1 == null))
         {
             return false;
         }
+
+        String s = EntityList.getEntityString(entityliving);
+
+        if ((s != null) && (!s.equals("")) && ((s.toLowerCase().contains("pig")) || (s.toLowerCase().contains("phyg"))))
+        {
+            if (entityliving.getHealth() > 0)
+            {
+                entityliving.setEntityHealth(1);
+                entityliving.hurtTime = 0;
+                entityliving.attackEntityFrom(DamageSource.causeMobDamage(entityliving1), 9999);
+            }
+
+            for (int j = 0; j < 20; j++)
+            {
+                double d = this.rand.nextGaussian() * 0.02D;
+                double d1 = this.rand.nextGaussian() * 0.02D;
+                double d2 = this.rand.nextGaussian() * 0.02D;
+                double d3 = 5.0D;
+                entityliving.worldObj.spawnParticle("flame", entityliving.posX + this.rand.nextFloat() * entityliving.width * 2.0F - entityliving.width - d * d3, entityliving.posY + this.rand.nextFloat() * entityliving.height - d1 * d3, entityliving.posZ + this.rand.nextFloat() * entityliving.width * 2.0F - entityliving.width - d2 * d3, d, d1, d2);
+            }
+
+            int lootingModifier = 0;
+
+            if ((entityliving1 instanceof EntityPlayer))
+            {
+                lootingModifier = EnchantmentHelper.getLootingModifier(entityliving1);
+            }
+
+            entityliving.isDead = true;
+        }
+
+        return true;
     }
 
-    public boolean onBlockDestroyed(ItemStack var1, int var2, int var3, int var4, int var5, EntityLiving var6)
+    public boolean onBlockDestroyed(ItemStack itemstack, int i, int j, int k, int l, EntityLiving entityliving)
     {
         return true;
     }
 }
+

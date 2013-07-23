@@ -12,49 +12,46 @@ public class AetherGenClouds extends WorldGenerator
     private int numberOfBlocks;
     private boolean flat;
 
-    public AetherGenClouds(int var1, int var2, int var3, boolean var4, BronzeDungeon var5)
+    public AetherGenClouds(int i, int meta, int j, boolean flag, BronzeDungeon bronzeDungeon)
     {
-        this.dungeon = var5;
-        this.cloudBlockId = var1;
-        this.meta = var2;
-        this.numberOfBlocks = var3;
-        this.flat = var4;
+        this.dungeon = bronzeDungeon;
+        this.cloudBlockId = i;
+        this.meta = meta;
+        this.numberOfBlocks = j;
+        this.flat = flag;
     }
 
-    public boolean generate(World var1, Random var2, int var3, int var4, int var5)
+    public boolean generate(World world, Random random, int i, int j, int k)
     {
-        int var6 = var3;
-        int var7 = var4;
-        int var8 = var5;
-        int var9 = var2.nextInt(3) - 1;
-        int var10 = var2.nextInt(3) - 1;
+        int x = i;
+        int y = j;
+        int z = k;
+        int xTendency = random.nextInt(3) - 1;
+        int zTendency = random.nextInt(3) - 1;
 
-        if (this.meta >= 3)
+        if (this.meta >= 3);
+
+        for (int n = 0; n < this.numberOfBlocks; n++)
         {
-            ;
-        }
+            x += random.nextInt(3) - 1 + xTendency;
 
-        for (int var11 = 0; var11 < this.numberOfBlocks; ++var11)
-        {
-            var6 += var2.nextInt(3) - 1 + var9;
-
-            if (var2.nextBoolean() && !this.flat || this.flat && var2.nextInt(10) == 0)
+            if (((random.nextBoolean()) && (!this.flat)) || ((this.flat) && (random.nextInt(10) == 0)))
             {
-                var7 += var2.nextInt(3) - 1;
+                y += random.nextInt(3) - 1;
             }
 
-            var8 += var2.nextInt(3) - 1 + var10;
+            z += random.nextInt(3) - 1 + zTendency;
 
-            for (int var12 = var6; var12 < var6 + var2.nextInt(4) + 3 * (this.flat ? 3 : 1); ++var12)
+            for (int x1 = x; x1 < x + random.nextInt(4) + 3 * (this.flat ? 3 : 1); x1++)
             {
-                for (int var13 = var7; var13 < var7 + var2.nextInt(1) + 2; ++var13)
+                for (int y1 = y; y1 < y + random.nextInt(1) + 2; y1++)
                 {
-                    for (int var14 = var8; var14 < var8 + var2.nextInt(4) + 3 * (this.flat ? 3 : 1); ++var14)
+                    for (int z1 = z; z1 < z + random.nextInt(4) + 3 * (this.flat ? 3 : 1); z1++)
                     {
-                        if (var1.getBlockId(var12, var13, var14) == 0 && Math.abs(var12 - var6) + Math.abs(var13 - var7) + Math.abs(var14 - var8) < 4 * (this.flat ? 3 : 1) + var2.nextInt(2) && !this.dungeon.hasStructureAt(var12, var13, var14))
-                        {
-                            var1.setBlock(var12, var13, var14, this.cloudBlockId, this.meta, ChunkProviderAether.placementFlagType);
-                        }
+                        if (world.getBlockId(x1, y1, z1) == 0) if ((Math.abs(x1 - x) + Math.abs(y1 - y) + Math.abs(z1 - z) < 4 * (this.flat ? 3 : 1) + random.nextInt(2)) && (!this.dungeon.hasStructureAt(x1, y1, z1)))
+                            {
+                                world.setBlock(x1, y1, z1, this.cloudBlockId, this.meta, ChunkProviderAether.placementFlagType);
+                            }
                     }
                 }
             }
@@ -63,3 +60,4 @@ public class AetherGenClouds extends WorldGenerator
         return true;
     }
 }
+

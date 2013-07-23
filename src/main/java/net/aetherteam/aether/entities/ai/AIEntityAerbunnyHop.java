@@ -1,31 +1,28 @@
 package net.aetherteam.aether.entities.ai;
 
 import net.aetherteam.aether.entities.mounts.EntityAerbunny;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.ai.EntityAIBase;
+import net.minecraft.entity.ai.EntityJumpHelper;
 
 public class AIEntityAerbunnyHop extends EntityAIBase
 {
     private EntityAerbunny theEntity;
 
-    public AIEntityAerbunnyHop(EntityAerbunny var1)
+    public AIEntityAerbunnyHop(EntityAerbunny entityAerbunny)
     {
-        this.setMutexBits(8);
-        this.theEntity = var1;
+        setMutexBits(8);
+        this.theEntity = entityAerbunny;
     }
 
-    /**
-     * Returns whether the EntityAIBase should begin execution.
-     */
     public boolean shouldExecute()
     {
-        return this.theEntity.motionZ > 0.0D || this.theEntity.motionX > 0.0D || this.theEntity.onGround;
+        return (this.theEntity.motionZ > 0.0D) || (this.theEntity.motionX > 0.0D) || (this.theEntity.onGround);
     }
 
-    /**
-     * Updates the task
-     */
     public void updateTask()
     {
         this.theEntity.getJumpHelper().setJumping();
     }
 }
+

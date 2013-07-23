@@ -9,58 +9,50 @@ public class EntityTNTPresent extends Entity
 {
     public int fuse;
 
-    public EntityTNTPresent(World var1)
+    public EntityTNTPresent(World world)
     {
-        super(var1);
+        super(world);
         this.fuse = 0;
         this.preventEntitySpawning = true;
-        this.setSize(0.98F, 0.98F);
-        this.yOffset = this.height / 2.0F;
+        setSize(0.98F, 0.98F);
+        this.yOffset = (this.height / 2.0F);
     }
 
-    public EntityTNTPresent(World var1, double var2, double var4, double var6)
+    public EntityTNTPresent(World world, double d, double d1, double d2)
     {
-        this(var1);
-        this.setPosition(var2, var4, var6);
-        float var8 = (float)(Math.random() * Math.PI * 2.0D);
-        this.motionX = (double)(-MathHelper.sin(var8 * (float)Math.PI / 180.0F) * 0.02F);
-        this.motionY = 0.20000000298023224D;
-        this.motionZ = (double)(-MathHelper.cos(var8 * (float)Math.PI / 180.0F) * 0.02F);
+        this(world);
+        setPosition(d, d1, d2);
+        float f = (float)(Math.random() * Math.PI * 2.0D);
+        this.motionX = (-MathHelper.sin(f * (float)Math.PI / 180.0F) * 0.02F);
+        this.motionY = 0.2000000029802322D;
+        this.motionZ = (-MathHelper.cos(f * (float)Math.PI / 180.0F) * 0.02F);
         this.fuse = 80;
-        this.prevPosX = var2;
-        this.prevPosY = var4;
-        this.prevPosZ = var6;
+        this.prevPosX = d;
+        this.prevPosY = d1;
+        this.prevPosZ = d2;
     }
 
-    protected void entityInit() {}
+    protected void entityInit()
+    {
+    }
 
-    /**
-     * returns if this entity triggers Block.onEntityWalking on the blocks they walk on. used for spiders and wolves to
-     * prevent them from trampling crops
-     */
     protected boolean canTriggerWalking()
     {
         return false;
     }
 
-    /**
-     * Returns true if other Entities should be prevented from moving through this Entity.
-     */
     public boolean canBeCollidedWith()
     {
         return !this.isDead;
     }
 
-    /**
-     * Called to update the entity's position/logic.
-     */
     public void onUpdate()
     {
         this.prevPosX = this.posX;
         this.prevPosY = this.posY;
         this.prevPosZ = this.posZ;
         this.motionY -= 0.03999999910593033D;
-        this.moveEntity(this.motionX, this.motionY, this.motionZ);
+        moveEntity(this.motionX, this.motionY, this.motionZ);
         this.motionX *= 0.9800000190734863D;
         this.motionY *= 0.9800000190734863D;
         this.motionZ *= 0.9800000190734863D;
@@ -76,8 +68,8 @@ public class EntityTNTPresent extends Entity
         {
             if (!this.worldObj.isRemote)
             {
-                this.setDead();
-                this.explode();
+                setDead();
+                explode();
             }
         }
         else
@@ -88,24 +80,18 @@ public class EntityTNTPresent extends Entity
 
     private void explode()
     {
-        float var1 = 0.5F;
-        this.worldObj.createExplosion((Entity)null, this.posX, this.posY, this.posZ, var1, false);
+        float f = 0.5F;
+        this.worldObj.createExplosion(null, this.posX, this.posY, this.posZ, f, false);
     }
 
-    /**
-     * (abstract) Protected helper method to write subclass entity data to NBT.
-     */
-    protected void writeEntityToNBT(NBTTagCompound var1)
+    protected void writeEntityToNBT(NBTTagCompound nbttagcompound)
     {
-        var1.setByte("Fuse", (byte)this.fuse);
+        nbttagcompound.setByte("Fuse", (byte)this.fuse);
     }
 
-    /**
-     * (abstract) Protected helper method to read subclass entity data from NBT.
-     */
-    protected void readEntityFromNBT(NBTTagCompound var1)
+    protected void readEntityFromNBT(NBTTagCompound nbttagcompound)
     {
-        this.fuse = var1.getByte("Fuse");
+        this.fuse = nbttagcompound.getByte("Fuse");
     }
 
     public float getShadowSize()
@@ -113,3 +99,4 @@ public class EntityTNTPresent extends Entity
         return 0.0F;
     }
 }
+

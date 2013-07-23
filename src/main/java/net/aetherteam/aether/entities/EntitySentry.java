@@ -1,14 +1,18 @@
 package net.aetherteam.aether.entities;
 
+import java.util.Random;
 import net.aetherteam.aether.blocks.AetherBlocks;
 import net.aetherteam.aether.entities.bosses.EntitySentryGuardian;
 import net.aetherteam.aether.entities.bosses.EntitySlider;
+import net.minecraft.block.Block;
+import net.minecraft.entity.DataWatcher;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityCreature;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.entity.player.PlayerCapabilities;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.pathfinding.PathEntity;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
@@ -16,9 +20,7 @@ import net.minecraft.world.World;
 public class EntitySentry extends EntityDungeonMob
 {
     public String dir = "/net/aetherteam/aether/client/sprites";
-
-    /** Reference to the World object. */
-    private World worldObj;
+    private World q;
     private boolean shouldExplode = false;
     public float field_100021_a;
     public float field_100020_b;
@@ -28,156 +30,144 @@ public class EntitySentry extends EntityDungeonMob
     public int lostyou;
     private EntitySentryGuardian parent;
 
-    public EntitySentry(World var1)
+    public EntitySentry(World world)
     {
-        super(var1);
-        this.texture = this.dir + "/mobs/sentry/sentry.png";
+        super(world);
+        this.texture = (this.dir + "/mobs/sentry/sentry.png");
         this.size = 2;
         this.yOffset = 0.0F;
         this.moveSpeed = 1.0F;
         this.field_100021_a = 1.0F;
         this.field_100020_b = 1.0F;
-        this.jcount = this.rand.nextInt(20) + 10;
-        this.func_100019_e(this.size);
-        this.worldObj = var1;
+        this.jcount = (this.rand.nextInt(20) + 10);
+        func_100019_e(this.size);
+        this.worldObj = world;
     }
 
-    public EntitySentry(World var1, double var2, double var4, double var6)
+    public EntitySentry(World world, double x, double y, double z)
     {
-        super(var1);
-        this.texture = this.dir + "/mobs/sentry/sentry.png";
+        super(world);
+        this.texture = (this.dir + "/mobs/sentry/sentry.png");
         this.size = 2;
         this.yOffset = 0.0F;
         this.moveSpeed = 1.0F;
         this.field_100021_a = 1.0F;
         this.field_100020_b = 1.0F;
-        this.jcount = this.rand.nextInt(20) + 10;
-        this.func_100019_e(this.size);
-        this.setPosition(var2, var4, var6);
-        this.worldObj = var1;
+        this.jcount = (this.rand.nextInt(20) + 10);
+        func_100019_e(this.size);
+        setPosition(x, y, z);
+        this.worldObj = world;
     }
 
-    /**
-     * Called when the mob's health reaches 0.
-     */
-    public void onDeath(DamageSource var1)
+    public void onDeath(DamageSource source)
     {
         if (this.parent != null)
         {
             this.parent.failedYou();
         }
 
-        super.onDeath(var1);
+        super.onDeath(source);
     }
 
-    public void func_100019_e(int var1)
+    public void func_100019_e(int i)
     {
-        this.setEntityHealth(10);
+        setEntityHealth(10);
         this.width = 0.85F;
         this.height = 0.85F;
-        this.setPosition(this.posX, this.posY, this.posZ);
+        setPosition(this.posX, this.posY, this.posZ);
     }
 
-    /**
-     * (abstract) Protected helper method to write subclass entity data to NBT.
-     */
-    public void writeEntityToNBT(NBTTagCompound var1)
+    public void writeEntityToNBT(NBTTagCompound nbttagcompound)
     {
-        super.writeEntityToNBT(var1);
-        var1.setInteger("Size", this.size - 1);
-        var1.setInteger("LostYou", this.lostyou);
-        var1.setInteger("Counter", this.counter);
-        var1.setBoolean("Awake", this.getAwake());
+        super.writeEntityToNBT(nbttagcompound);
+        nbttagcompound.setInteger("Size", this.size - 1);
+        nbttagcompound.setInteger("LostYou", this.lostyou);
+        nbttagcompound.setInteger("Counter", this.counter);
+        nbttagcompound.setBoolean("Awake", getAwake());
     }
 
-    /**
-     * (abstract) Protected helper method to read subclass entity data from NBT.
-     */
-    public void readEntityFromNBT(NBTTagCompound var1)
+    public void readEntityFromNBT(NBTTagCompound nbttagcompound)
     {
-        super.readEntityFromNBT(var1);
-        this.size = var1.getInteger("Size") + 1;
-        this.lostyou = var1.getInteger("LostYou");
-        this.counter = var1.getInteger("Counter");
-        this.setAwake(var1.getBoolean("Awake"));
+        super.readEntityFromNBT(nbttagcompound);
+        this.size = (nbttagcompound.getInteger("Size") + 1);
+        this.lostyou = nbttagcompound.getInteger("LostYou");
+        this.counter = nbttagcompound.getInteger("Counter");
+        setAwake(nbttagcompound.getBoolean("Awake"));
     }
 
-    /**
-     * Called to update the entity's position/logic.
-     */
     public void onUpdate()
     {
-        boolean var1 = this.onGround;
+        boolean flag = this.onGround;
         super.onUpdate();
 
-        if (this.onGround && !var1)
+        if ((this.onGround) && (!flag))
         {
-            this.worldObj.playSoundAtEntity(this, "mob.slime.small", this.getSoundVolume(), ((this.rand.nextFloat() - this.rand.nextFloat()) * 0.2F + 1.0F) / 0.8F);
+            this.worldObj.playSoundAtEntity(this, "mob.slime.small", getSoundVolume(), ((this.rand.nextFloat() - this.rand.nextFloat()) * 0.2F + 1.0F) / 0.8F);
         }
-        else if (!this.onGround && var1 && this.entityToAttack != null)
+        else if ((!this.onGround) && (flag) && (this.entityToAttack != null))
         {
             this.motionX *= 3.0D;
             this.motionZ *= 3.0D;
         }
 
-        if (this.entityToAttack != null && this.entityToAttack.isDead)
+        if ((this.entityToAttack != null) && (this.entityToAttack.isDead))
         {
             this.entityToAttack = null;
         }
 
-        if (this.shouldExplode && !this.worldObj.isRemote)
+        if (this.shouldExplode)
         {
-            this.worldObj.createExplosion(this, this.posX, this.posY, this.posZ, 0.1F, false);
-            this.setEntityHealth(0);
-            this.setDead();
+            if (!this.worldObj.isRemote)
+            {
+                this.worldObj.createExplosion(this, this.posX, this.posY, this.posZ, 0.1F, false);
+                setEntityHealth(0);
+                setDead();
+            }
         }
     }
 
-    /**
-     * Called when the entity is attacked.
-     */
-    public boolean attackEntityFrom(DamageSource var1, int var2)
+    public boolean attackEntityFrom(DamageSource ds, int i)
     {
-        boolean var3 = super.attackEntityFrom(var1, var2);
+        boolean flag = super.attackEntityFrom(ds, i);
 
-        if (var3 && var1.getEntity() instanceof EntityLiving)
+        if ((flag) && ((ds.getEntity() instanceof EntityLiving)))
         {
-            this.setAwake(true);
+            setAwake(true);
             this.lostyou = 0;
-            this.entityToAttack = var1.getEntity();
-            this.texture = this.dir + "/mobs/sentry/sentry_lit.png";
+            this.entityToAttack = ds.getEntity();
+            this.texture = (this.dir + "/mobs/sentry/sentry_lit.png");
         }
 
-        return var3;
+        return flag;
     }
 
-    public void setArrowHeading(double var1, double var3, double var5, float var7, float var8)
+    public void setArrowHeading(double d, double d1, double d2, float f, float f1)
     {
-        float var9 = MathHelper.sqrt_double(var1 * var1 + var3 * var3 + var5 * var5);
-        var1 /= (double)var9;
-        var3 /= (double)var9;
-        var5 /= (double)var9;
-        var1 += this.rand.nextGaussian() * 0.007499999832361937D * (double)var8;
-        var3 += this.rand.nextGaussian() * 0.007499999832361937D * (double)var8;
-        var5 += this.rand.nextGaussian() * 0.007499999832361937D * (double)var8;
-        var1 *= (double)var7;
-        var3 *= (double)var7;
-        var5 *= (double)var7;
-        this.motionX = var1;
-        this.motionY = var3;
-        this.motionZ = var5;
-        float var10 = MathHelper.sqrt_double(var1 * var1 + var5 * var5);
-        this.prevRotationYaw = this.rotationYaw = (float)(Math.atan2(var1, var5) * 180.0D / Math.PI);
-        this.prevRotationPitch = this.rotationPitch = (float)(Math.atan2(var3, (double)var10) * 180.0D / Math.PI);
+        float f2 = MathHelper.sqrt_double(d * d + d1 * d1 + d2 * d2);
+        d /= f2;
+        d1 /= f2;
+        d2 /= f2;
+        d += this.rand.nextGaussian() * 0.007499999832361937D * f1;
+        d1 += this.rand.nextGaussian() * 0.007499999832361937D * f1;
+        d2 += this.rand.nextGaussian() * 0.007499999832361937D * f1;
+        d *= f;
+        d1 *= f;
+        d2 *= f;
+        this.motionX = d;
+        this.motionY = d1;
+        this.motionZ = d2;
+        float f3 = MathHelper.sqrt_double(d * d + d2 * d2);
+        this.prevRotationYaw = (this.rotationYaw = (float)(Math.atan2(d, d2) * 180.0D / Math.PI));
+        this.prevRotationPitch = (this.rotationPitch = (float)(Math.atan2(d1, f3) * 180.0D / Math.PI));
     }
 
     public void shutdown()
     {
         this.counter = -64;
-        this.setAwake(false);
+        setAwake(false);
         this.entityToAttack = null;
-        this.texture = this.dir + "/mobs/sentry/sentry.png";
-        this.setPathToEntity((PathEntity)null);
+        this.texture = (this.dir + "/mobs/sentry/sentry.png");
+        setPathToEntity(null);
         this.moveStrafing = 0.0F;
         this.moveForward = 0.0F;
         this.isJumping = false;
@@ -185,195 +175,183 @@ public class EntitySentry extends EntityDungeonMob
         this.motionZ = 0.0D;
     }
 
-    /**
-     * Applies a velocity to each of the entities pushing them away from each other. Args: entity
-     */
-    public void applyEntityCollision(Entity var1)
+    public void applyEntityCollision(Entity entity)
     {
-        if (!this.worldObj.isRemote && !this.isDead && this.entityToAttack != null && var1 != null && this.entityToAttack == var1)
+        if (!this.worldObj.isRemote)
         {
-            if (var1 instanceof EntityPlayer && !((EntityPlayer)var1).capabilities.isCreativeMode)
+            if ((!this.isDead) && (this.entityToAttack != null) && (entity != null) && (this.entityToAttack == entity))
             {
-                ;
-            }
-
-            if (var1 instanceof EntitySlider)
-            {
-                return;
-            }
-
-            this.shouldExplode = true;
-            var1.attackEntityFrom(DamageSource.causeMobDamage(this), 2);
-
-            if (var1 instanceof EntityLiving)
-            {
-                EntityLiving var2 = (EntityLiving)var1;
-                double var3 = var2.posX - this.posX;
-                double var5;
-
-                for (var5 = var2.posZ - this.posZ; var3 * var3 + var5 * var5 < 1.0E-4D; var5 = (Math.random() - Math.random()) * 0.01D)
+                if (((!(entity instanceof EntityPlayer)) ||
+                        (((EntityPlayer)entity).capabilities.isCreativeMode)) ||
+                        ((entity instanceof EntitySlider)))
                 {
-                    var3 = (Math.random() - Math.random()) * 0.01D;
+                    return;
                 }
 
-                if (var1 instanceof EntityPlayerMP)
-                {
-                    var2.knockBack(this, 5, -var3, -var5);
-                    var2.addVelocity(4.0D, 0.0D, 0.0D);
-                    var2.addVelocity(0.0D, 4.0D, 0.0D);
-                    var2.addVelocity(0.0D, 0.0D, 4.0D);
-                }
-                else
-                {
-                    var2.knockBack(this, 5, -var3, -var5);
-                    var2.addVelocity(4.0D, 0.0D, 0.0D);
-                    var2.addVelocity(0.0D, 4.0D, 0.0D);
-                    var2.addVelocity(0.0D, 0.0D, 4.0D);
-                }
-            }
+                this.shouldExplode = true;
+                entity.attackEntityFrom(DamageSource.causeMobDamage(this), 2);
 
-            float var11 = 0.01745329F;
+                if ((entity instanceof EntityLiving))
+                {
+                    EntityLiving entityliving = (EntityLiving)entity;
+                    double d = entityliving.posX - this.posX;
 
-            for (int var12 = 0; var12 < 40; ++var12)
-            {
-                double var4 = (double)((float)this.posX + this.rand.nextFloat() * 0.25F);
-                double var6 = (double)((float)this.posY + 0.5F);
-                double var8 = (double)((float)this.posZ + this.rand.nextFloat() * 0.25F);
-                float var10 = this.rand.nextFloat() * 360.0F;
-                this.worldObj.spawnParticle("explode", var4, var6, var8, -Math.sin((double)(var11 * var10)) * 0.75D, 0.125D, Math.cos((double)(var11 * var10)) * 0.75D);
+                    for (double d2 = entityliving.posZ - this.posZ; d * d + d2 * d2 < 0.0001D; d2 = (Math.random() - Math.random()) * 0.01D)
+                    {
+                        d = (Math.random() - Math.random()) * 0.01D;
+                    }
+
+                    if ((entity instanceof EntityPlayerMP))
+                    {
+                        entityliving.knockBack(this, 5, -d, -d2);
+                        entityliving.addVelocity(4.0D, 0.0D, 0.0D);
+                        entityliving.addVelocity(0.0D, 4.0D, 0.0D);
+                        entityliving.addVelocity(0.0D, 0.0D, 4.0D);
+                    }
+                    else
+                    {
+                        entityliving.knockBack(this, 5, -d, -d2);
+                        entityliving.addVelocity(4.0D, 0.0D, 0.0D);
+                        entityliving.addVelocity(0.0D, 4.0D, 0.0D);
+                        entityliving.addVelocity(0.0D, 0.0D, 4.0D);
+                    }
+                }
+
+                float f = 0.01745329F;
+
+                for (int i = 0; i < 40; i++)
+                {
+                    double d1 = (float)this.posX + this.rand.nextFloat() * 0.25F;
+                    double d3 = (float)this.posY + 0.5F;
+                    double d4 = (float)this.posZ + this.rand.nextFloat() * 0.25F;
+                    float f1 = this.rand.nextFloat() * 360.0F;
+                    this.worldObj.spawnParticle("explode", d1, d3, d4, -Math.sin(f * f1) * 0.75D, 0.125D, Math.cos(f * f1) * 0.75D);
+                }
             }
         }
     }
 
     protected void updateEntityActionState()
     {
-        EntityPlayer var1 = this.worldObj.getClosestPlayerToEntity(this, 8.0D);
+        EntityPlayer entityplayer = this.worldObj.getClosestPlayerToEntity(this, 8.0D);
 
-        if (!this.getAwake() && this.counter >= 8)
+        if ((!getAwake()) && (this.counter >= 8))
         {
-            if (var1 != null && this.canEntityBeSeen(var1) && !var1.capabilities.isCreativeMode)
+            if ((entityplayer != null) && (canEntityBeSeen(entityplayer)) && (!entityplayer.capabilities.isCreativeMode))
             {
-                this.faceEntity(var1, 10.0F, 10.0F);
-                this.entityToAttack = var1;
-                this.setAwake(true);
+                faceEntity(entityplayer, 10.0F, 10.0F);
+                this.entityToAttack = entityplayer;
+                setAwake(true);
                 this.lostyou = 0;
-                this.texture = this.dir + "/mobs/sentry/sentry_lit.png";
+                this.texture = (this.dir + "/mobs/sentry/sentry_lit.png");
             }
 
             this.counter = 0;
         }
-        else if (this.getAwake() && this.counter >= 8)
+        else if ((getAwake()) && (this.counter >= 8))
         {
             if (this.entityToAttack == null)
             {
-                if (var1 != null && this.canEntityBeSeen(var1))
+                if ((entityplayer != null) && (canEntityBeSeen(entityplayer)))
                 {
-                    this.entityToAttack = var1;
-                    this.setAwake(true);
+                    this.entityToAttack = entityplayer;
+                    setAwake(true);
                     this.lostyou = 0;
                 }
                 else
                 {
-                    ++this.lostyou;
+                    this.lostyou += 1;
 
                     if (this.lostyou >= 4)
                     {
-                        this.shutdown();
+                        shutdown();
                     }
                 }
             }
-            else if (this.canEntityBeSeen(this.entityToAttack) && this.getDistanceToEntity(this.entityToAttack) < 16.0F)
+            else if ((!canEntityBeSeen(this.entityToAttack)) || (getDistanceToEntity(this.entityToAttack) >= 16.0F))
             {
-                this.lostyou = 0;
-            }
-            else
-            {
-                ++this.lostyou;
+                this.lostyou += 1;
 
                 if (this.lostyou >= 4)
                 {
-                    this.shutdown();
+                    shutdown();
                 }
+            }
+            else
+            {
+                this.lostyou = 0;
             }
 
             this.counter = 0;
         }
         else
         {
-            ++this.counter;
+            this.counter += 1;
         }
 
-        if (this.getAwake())
+        if (!getAwake())
         {
+            return;
+        }
+
+        if (this.entityToAttack != null)
+        {
+            faceEntity(this.entityToAttack, 10.0F, 10.0F);
+        }
+
+        if ((this.onGround) && (this.jcount-- <= 0))
+        {
+            this.jcount = (this.rand.nextInt(20) + 10);
+            this.isJumping = true;
+            this.moveStrafing = (0.5F - this.rand.nextFloat());
+            this.moveForward = 1.0F;
+            this.worldObj.playSoundAtEntity(this, "mob.slime.small", getSoundVolume(), ((this.rand.nextFloat() - this.rand.nextFloat()) * 0.2F + 1.0F) * 0.8F);
+
             if (this.entityToAttack != null)
             {
-                this.faceEntity(this.entityToAttack, 10.0F, 10.0F);
-            }
-
-            if (this.onGround && this.jcount-- <= 0)
-            {
-                this.jcount = this.rand.nextInt(20) + 10;
-                this.isJumping = true;
-                this.moveStrafing = 0.5F - this.rand.nextFloat();
+                this.jcount /= 2;
                 this.moveForward = 1.0F;
-                this.worldObj.playSoundAtEntity(this, "mob.slime.small", this.getSoundVolume(), ((this.rand.nextFloat() - this.rand.nextFloat()) * 0.2F + 1.0F) * 0.8F);
-
-                if (this.entityToAttack != null)
-                {
-                    this.jcount /= 2;
-                    this.moveForward = 1.0F;
-                }
             }
-            else
-            {
-                this.isJumping = false;
+        }
+        else
+        {
+            this.isJumping = false;
 
-                if (this.onGround)
-                {
-                    this.moveStrafing = this.moveForward = 0.0F;
-                }
+            if (this.onGround)
+            {
+                this.moveStrafing = (this.moveForward = 0.0F);
             }
         }
     }
 
-    /**
-     * Returns the sound this mob makes when it is hurt.
-     */
     protected String getHurtSound()
     {
         return "mob.slime.small";
     }
 
-    /**
-     * Returns the sound this mob makes on death.
-     */
     protected String getDeathSound()
     {
         return "mob.slime.small";
     }
 
-    /**
-     * Checks if the entity's current position is a valid location to spawn this entity.
-     */
     public boolean getCanSpawnHere()
     {
         return super.getCanSpawnHere();
     }
 
-    /**
-     * Returns the volume for the sounds this mob makes.
-     */
     protected float getSoundVolume()
     {
         return 0.6F;
     }
 
-    /**
-     * Returns the item ID for the item the mob drops on death.
-     */
     protected int getDropItemId()
     {
-        return this.rand.nextInt(5) == 0 ? AetherBlocks.LightDungeonStone.blockID : AetherBlocks.DungeonStone.blockID;
+        if (this.rand.nextInt(5) == 0)
+        {
+            return AetherBlocks.LightDungeonStone.blockID;
+        }
+
+        return AetherBlocks.DungeonStone.blockID;
     }
 
     public void entityInit()
@@ -384,12 +362,12 @@ public class EntitySentry extends EntityDungeonMob
 
     public boolean getAwake()
     {
-        return (this.dataWatcher.getWatchableObjectByte(16) & 1) != 0;
+        return (this.dataWatcher.getWatchableObjectByte(16) & 0x1) != 0;
     }
 
-    public void setAwake(boolean var1)
+    public void setAwake(boolean awake)
     {
-        if (var1)
+        if (awake)
         {
             this.dataWatcher.updateObject(16, Byte.valueOf((byte)1));
         }
@@ -399,8 +377,9 @@ public class EntitySentry extends EntityDungeonMob
         }
     }
 
-    public void setParent(EntitySentryGuardian var1)
+    public void setParent(EntitySentryGuardian entitySentryGuardian)
     {
-        this.parent = var1;
+        this.parent = entitySentryGuardian;
     }
 }
+

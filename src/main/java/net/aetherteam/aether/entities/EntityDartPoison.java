@@ -13,19 +13,19 @@ public class EntityDartPoison extends EntityDartGolden
     public EntityLiving victim;
     public int poisonTime;
 
-    public EntityDartPoison(World var1)
+    public EntityDartPoison(World world)
     {
-        super(var1);
+        super(world);
     }
 
-    public EntityDartPoison(World var1, double var2, double var4, double var6)
+    public EntityDartPoison(World world, double x, double y, double z)
     {
-        super(var1, var2, var4, var6);
+        super(world, x, y, z);
     }
 
-    public EntityDartPoison(World var1, EntityLiving var2)
+    public EntityDartPoison(World world, EntityLiving ent)
     {
-        super(var1, var2);
+        super(world, ent);
     }
 
     public void entityInit()
@@ -35,22 +35,23 @@ public class EntityDartPoison extends EntityDartGolden
         this.dmg = 1;
     }
 
-    public boolean onHitTarget(Entity var1)
+    public boolean onHitTarget(Entity entity)
     {
-        super.onHitTarget(var1);
+        super.onHitTarget(entity);
 
-        if (var1 instanceof EntityLiving)
+        if ((entity instanceof EntityLiving))
         {
-            EntityLiving var2 = (EntityLiving)var1;
+            EntityLiving ent = (EntityLiving)entity;
 
             if (!this.worldObj.isRemote)
             {
-                var2.addPotionEffect(new PotionEffect(Potion.poison.id, 200, 0));
-                var2.addPotionEffect(new PotionEffect(Potion.confusion.id, 200, 3));
-                this.setDead();
+                ent.addPotionEffect(new PotionEffect(Potion.poison.id, 200, 0));
+                ent.addPotionEffect(new PotionEffect(Potion.confusion.id, 200, 3));
+                setDead();
             }
         }
 
         return true;
     }
 }
+

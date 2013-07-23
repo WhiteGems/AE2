@@ -10,9 +10,9 @@ import net.minecraft.world.World;
 
 public class BlockLockedAetherStairs extends BlockAetherStairs
 {
-    protected BlockLockedAetherStairs(int var1, Block var2, int var3)
+    protected BlockLockedAetherStairs(int par1, Block par2Block, int metadata)
     {
-        super(var1, var2, var3);
+        super(par1, par2Block, metadata);
     }
 
     private boolean isLocked()
@@ -20,30 +20,30 @@ public class BlockLockedAetherStairs extends BlockAetherStairs
         return true;
     }
 
-    public boolean removeBlockByPlayer(World var1, EntityPlayer var2, int var3, int var4, int var5)
+    public boolean removeBlockByPlayer(World world, EntityPlayer player, int x, int y, int z)
     {
-        return this.isLocked() ? false : super.removeBlockByPlayer(var1, var2, var3, var4, var5);
+        if (isLocked())
+        {
+            return false;
+        }
+
+        return super.removeBlockByPlayer(world, player, x, y, z);
     }
 
-    /**
-     * Called whenever the block is added into the world. Args: world, x, y, z
-     */
-    public void onBlockAdded(World var1, int var2, int var3, int var4)
+    public void onBlockAdded(World world, int x, int y, int z)
     {
-        if (this.isLocked() && DungeonHandler.instance().getInstanceAt(MathHelper.floor_double((double)var2), MathHelper.floor_double((double)var3), MathHelper.floor_double((double)var4)) == null)
+        if ((isLocked()) && (DungeonHandler.instance().getInstanceAt(MathHelper.floor_double(x), MathHelper.floor_double(y), MathHelper.floor_double(z)) == null))
         {
-            var1.setBlockToAir(var2, var3, var4);
+            world.setBlockToAir(x, y, z);
         }
     }
 
-    /**
-     * Called when the block is placed in the world.
-     */
-    public void onBlockPlacedBy(World var1, int var2, int var3, int var4, EntityLiving var5, ItemStack var6)
+    public void onBlockPlacedBy(World world, int x, int y, int z, EntityLiving par5EntityLiving, ItemStack par6ItemStack)
     {
-        if (this.isLocked())
+        if (isLocked())
         {
-            var1.setBlockToAir(var2, var3, var4);
+            world.setBlockToAir(x, y, z);
         }
     }
 }
+

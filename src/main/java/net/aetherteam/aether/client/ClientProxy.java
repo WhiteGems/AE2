@@ -13,6 +13,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.PrintStream;
 import java.util.HashMap;
 import java.util.Random;
 import net.aetherteam.aether.Aether;
@@ -24,7 +25,6 @@ import net.aetherteam.aether.AetherSoundLoader;
 import net.aetherteam.aether.CommonProxy;
 import net.aetherteam.aether.MenuBaseAetherII;
 import net.aetherteam.aether.PlayerBaseAetherServer;
-import net.aetherteam.aether.blocks.AetherBlocks;
 import net.aetherteam.aether.client.gui.AetherGuis;
 import net.aetherteam.aether.client.gui.GuiAetherIngame;
 import net.aetherteam.aether.client.gui.social.GuiDungeonScreen;
@@ -34,6 +34,7 @@ import net.aetherteam.aether.client.renders.RenderBerryBush;
 import net.aetherteam.aether.client.renders.RenderHandlerAltar;
 import net.aetherteam.aether.client.renders.RenderHandlerSkyrootChest;
 import net.aetherteam.aether.client.renders.RenderHandlerTreasureChest;
+import net.aetherteam.aether.donator.SyncDonatorList;
 import net.aetherteam.aether.entities.EntityAetherBreakingFX;
 import net.aetherteam.aether.entities.EntityAetherPortalFX;
 import net.aetherteam.aether.entities.EntityCloudSmokeFX;
@@ -53,11 +54,15 @@ import net.aetherteam.playercore_api.PlayerCoreAPI;
 import net.aetherteam.playercore_api.PlayerCoreAPI.PlayerCoreType;
 import net.aetherteam.playercore_api.cores.PlayerCoreClient;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.entity.EntityPlayerSP;
+import net.minecraft.client.audio.SoundPoolEntry;
+import net.minecraft.client.particle.EntityFX;
+import net.minecraft.client.particle.EntityNoteFX;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.MovementInputFromOptions;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.EventBus;
 
 public class ClientProxy extends CommonProxy
 {
@@ -69,28 +74,27 @@ public class ClientProxy extends CommonProxy
     private HashMap playerCoins = new HashMap();
     private HashMap playerParachutes = new HashMap();
     private HashMap playerParachuteTypes = new HashMap();
+
     private HashMap playerClientInfo = new HashMap();
+
     private static String soundZipPath = "/resources/";
     private Minecraft mc = Minecraft.getMinecraft();
     public Random rand = new Random();
 
     @SideOnly(Side.CLIENT)
-    public AetherCommonPlayerHandler getPlayerHandler(EntityPlayer var1)
+    public AetherCommonPlayerHandler getPlayerHandler(EntityPlayer entity)
     {
-        if (var1 instanceof EntityPlayerSP)
+        if ((entity instanceof MovementInputFromOptions))
         {
-            PlayerBaseAetherClient var2 = (PlayerBaseAetherClient)((PlayerCoreClient)var1).getPlayerCoreObject(PlayerBaseAetherClient.class);
-            return var2.getPlayerHandler();
+            PlayerBaseAetherClient playerBaseAetherClient = (PlayerBaseAetherClient)((PlayerCoreClient)entity).getPlayerCoreObject(PlayerBaseAetherClient.class);
+            return playerBaseAetherClient.getPlayerHandler();
         }
-        else
-        {
-            return super.getPlayerHandler(var1);
-        }
+
+        return super.getPlayerHandler(entity);
     }
 
     public void registerRenderers()
     {
-        Aether var10000 = Aether.instance;
         Aether.syncDonatorList.initialVerification(this.mc);
         AetherGuis.init();
         AetherEntityRenderers.registerEntityRenderers();
@@ -98,12 +102,12 @@ public class ClientProxy extends CommonProxy
         ClientRegistry.bindTileEntitySpecialRenderer(TileEntityTreasureChest.class, new TileEntityTreasureChestRenderer());
         ClientRegistry.bindTileEntitySpecialRenderer(TileEntitySkyrootChest.class, new TileEntitySkyrootChestRenderer());
         ClientRegistry.bindTileEntitySpecialRenderer(TileEntityEntranceController.class, new TileEntityEntranceRenderer());
-        AetherBlocks.altarRenderId = RenderingRegistry.getNextAvailableRenderId();
-        AetherBlocks.treasureChestRenderId = RenderingRegistry.getNextAvailableRenderId();
-        AetherBlocks.skyrootChestRenderId = RenderingRegistry.getNextAvailableRenderId();
-        AetherBlocks.entranceRenderId = RenderingRegistry.getNextAvailableRenderId();
-        AetherBlocks.berryBushRenderId = RenderingRegistry.getNextAvailableRenderId();
-        AetherBlocks.tallAetherGrassRenderId = RenderingRegistry.getNextAvailableRenderId();
+        net.aetherteam.aether.blocks.AetherBlocks.altarRenderId = RenderingRegistry.getNextAvailableRenderId();
+        net.aetherteam.aether.blocks.AetherBlocks.treasureChestRenderId = RenderingRegistry.getNextAvailableRenderId();
+        net.aetherteam.aether.blocks.AetherBlocks.skyrootChestRenderId = RenderingRegistry.getNextAvailableRenderId();
+        net.aetherteam.aether.blocks.AetherBlocks.entranceRenderId = RenderingRegistry.getNextAvailableRenderId();
+        net.aetherteam.aether.blocks.AetherBlocks.berryBushRenderId = RenderingRegistry.getNextAvailableRenderId();
+        net.aetherteam.aether.blocks.AetherBlocks.tallAetherGrassRenderId = RenderingRegistry.getNextAvailableRenderId();
         RenderingRegistry.registerBlockHandler(new RenderBerryBush());
         RenderingRegistry.registerBlockHandler(new RenderAetherTallGrass());
         RenderingRegistry.registerBlockHandler(new RenderHandlerAltar());
@@ -115,11 +119,13 @@ public class ClientProxy extends CommonProxy
 
     public void registerPlayerAPI()
     {
-        PlayerCoreAPI.register(PlayerCoreType.CLIENT, PlayerBaseAetherClient.class);
-        PlayerCoreAPI.register(PlayerCoreType.SERVER, PlayerBaseAetherServer.class);
+        PlayerCoreAPI.register(PlayerCoreAPI.PlayerCoreType.CLIENT, PlayerBaseAetherClient.class);
+        PlayerCoreAPI.register(PlayerCoreAPI.PlayerCoreType.SERVER, PlayerBaseAetherServer.class);
     }
 
-    public void registerMainMenu() {}
+    public void registerMainMenu()
+    {
+    }
 
     public void registerTickHandler()
     {
@@ -127,14 +133,14 @@ public class ClientProxy extends CommonProxy
         TickRegistry.registerTickHandler(new ClientTickHandler(), Side.CLIENT);
     }
 
-    public void playSoundFX(String var1, float var2, float var3)
+    public void playSoundFX(String path, float volume, float pitch)
     {
-        this.mc.sndManager.playSoundFX(var1, var2, var3);
+        this.mc.sndManager.a(path, volume, pitch);
     }
 
-    public int addArmor(String var1)
+    public int addArmor(String type)
     {
-        return RenderingRegistry.addNewArmourRendererPrefix(var1);
+        return RenderingRegistry.addNewArmourRendererPrefix(type);
     }
 
     public void registerKeyBindings()
@@ -159,74 +165,76 @@ public class ClientProxy extends CommonProxy
 
     public void loadSounds()
     {
-        if (this.mc.sndManager != null)
+        if (this.mc.sndManager == null)
         {
-            this.installSound("music/aether1.ogg");
-            this.installSound("music/aether2.ogg");
-            this.installSound("music/aether3.ogg");
-            this.installSound("music/aether4.ogg");
-            this.installSound("music/aether5.ogg");
-            this.installSound("music/Approaches.ogg");
-            this.installSound("streaming/Aether Menu.ogg");
-            this.installSound("streaming/Aether Menu Two.wav");
-            this.installSound("streaming/Spectrum.ogg");
-            this.installSound("streaming/Aether Day 1.ogg");
-            this.installSound("streaming/Aether Night 1.ogg");
-            this.installSound("streaming/Aether Night 2.ogg");
-            this.installSound("streaming/Dungeon Background.ogg");
-            this.installSound("streaming/Approaches.ogg");
-            this.installSound("streaming/Demise.ogg");
-            this.installSound("streaming/Aerwhale.ogg");
-            this.installSound("streaming/Aether Tune.ogg");
-            this.installSound("streaming/Ascending Dawn.ogg");
-            this.installSound("streaming/Slider Battle.ogg");
-            this.installSound("streaming/Slider Finish.ogg");
-            this.installSound("newsound/aeboss/slider/awake.ogg");
-            this.installSound("newsound/aeboss/slider/collide.ogg");
-            this.installSound("newsound/aeboss/slider/die.ogg");
-            this.installSound("newsound/aeboss/slider/move.ogg");
-            this.installSound("newsound/aeboss/slider/unlock.ogg");
-            this.installSound("newsound/aemob/aerbunny/die.ogg");
-            this.installSound("newsound/aemob/aerbunny/hurt1.ogg");
-            this.installSound("newsound/aemob/aerbunny/hurt2.ogg");
-            this.installSound("newsound/aemob/aerbunny/land.ogg");
-            this.installSound("newsound/aemob/aerbunny/lift.ogg");
-            this.installSound("newsound/aemob/aerwhale/say.wav");
-            this.installSound("newsound/aemob/aerwhale/die.wav");
-            this.installSound("newsound/aemob/moa/say.wav");
-            this.installSound("newsound/aemob/zephyr/say1.wav");
-            this.installSound("newsound/aemob/zephyr/say2.wav");
-            this.installSound("newsound/aemob/zephyr/shoot.ogg");
-            this.installSound("newsound/aemisc/achieveGen.ogg");
-            this.installSound("newsound/aemisc/achieveBronze.ogg");
-            this.installSound("newsound/aemisc/achieveSilver.ogg");
-            this.installSound("newsound/aemisc/achieveBronzeNew.ogg");
-            this.installSound("newsound/aemisc/activateTrap.ogg");
-            this.installSound("newsound/aemisc/shootDart.ogg");
-            this.installSound("newsound/aemob/sentryGolem/seenEnemy.ogg");
-            this.installSound("newsound/aemob/sentryGolem/creepySeen.wav");
-            this.installSound("newsound/aemob/sentryGolem/say1.wav");
-            this.installSound("newsound/aemob/sentryGolem/say2.wav");
-            this.installSound("newsound/aemob/sentryGolem/death.wav");
-            this.installSound("newsound/aemob/sentryGolem/hit1.wav");
-            this.installSound("newsound/aemob/sentryGolem/hit2.wav");
-            this.installSound("newsound/aemob/sentryGuardian/death.wav");
-            this.installSound("newsound/aemob/sentryGuardian/spawn.ogg");
-            this.installSound("newsound/aemob/sentryGuardian/hit.ogg");
-            this.installSound("newsound/aemob/sentryGuardian/living.ogg");
-            this.installSound("newsound/aemisc/coin.ogg");
-            this.installSound("newsound/aemob/cog/wall.wav");
-            this.installSound("newsound/aemob/cog/wall1.wav");
-            this.installSound("newsound/aemob/cog/wall2.wav");
-            this.installSound("newsound/aemob/cog/wallFinal.ogg");
-            this.installSound("newsound/aeportal/aeportal.wav");
-            this.installSound("newsound/aeportal/aetravel.wav");
-            this.installSound("newsound/aeportal/aetrigger.wav");
-            this.installSound("newsound/aemob/labyrinthsEye/cogloss.ogg");
-            this.installSound("newsound/aemob/labyrinthsEye/eyedeath.ogg");
-            this.installSound("newsound/aemob/labyrinthsEye/move_1.ogg");
-            this.installSound("newsound/aemob/labyrinthsEye/move_2.ogg");
+            return;
         }
+
+        installSound("music/aether1.ogg");
+        installSound("music/aether2.ogg");
+        installSound("music/aether3.ogg");
+        installSound("music/aether4.ogg");
+        installSound("music/aether5.ogg");
+        installSound("music/Approaches.ogg");
+        installSound("streaming/Aether Menu.ogg");
+        installSound("streaming/Aether Menu Two.wav");
+        installSound("streaming/Spectrum.ogg");
+        installSound("streaming/Aether Day 1.ogg");
+        installSound("streaming/Aether Night 1.ogg");
+        installSound("streaming/Aether Night 2.ogg");
+        installSound("streaming/Dungeon Background.ogg");
+        installSound("streaming/Approaches.ogg");
+        installSound("streaming/Demise.ogg");
+        installSound("streaming/Aerwhale.ogg");
+        installSound("streaming/Aether Tune.ogg");
+        installSound("streaming/Ascending Dawn.ogg");
+        installSound("streaming/Slider Battle.ogg");
+        installSound("streaming/Slider Finish.ogg");
+        installSound("newsound/aeboss/slider/awake.ogg");
+        installSound("newsound/aeboss/slider/collide.ogg");
+        installSound("newsound/aeboss/slider/die.ogg");
+        installSound("newsound/aeboss/slider/move.ogg");
+        installSound("newsound/aeboss/slider/unlock.ogg");
+        installSound("newsound/aemob/aerbunny/die.ogg");
+        installSound("newsound/aemob/aerbunny/hurt1.ogg");
+        installSound("newsound/aemob/aerbunny/hurt2.ogg");
+        installSound("newsound/aemob/aerbunny/land.ogg");
+        installSound("newsound/aemob/aerbunny/lift.ogg");
+        installSound("newsound/aemob/aerwhale/say.wav");
+        installSound("newsound/aemob/aerwhale/die.wav");
+        installSound("newsound/aemob/moa/say.wav");
+        installSound("newsound/aemob/zephyr/say1.wav");
+        installSound("newsound/aemob/zephyr/say2.wav");
+        installSound("newsound/aemob/zephyr/shoot.ogg");
+        installSound("newsound/aemisc/achieveGen.ogg");
+        installSound("newsound/aemisc/achieveBronze.ogg");
+        installSound("newsound/aemisc/achieveSilver.ogg");
+        installSound("newsound/aemisc/achieveBronzeNew.ogg");
+        installSound("newsound/aemisc/activateTrap.ogg");
+        installSound("newsound/aemisc/shootDart.ogg");
+        installSound("newsound/aemob/sentryGolem/seenEnemy.ogg");
+        installSound("newsound/aemob/sentryGolem/creepySeen.wav");
+        installSound("newsound/aemob/sentryGolem/say1.wav");
+        installSound("newsound/aemob/sentryGolem/say2.wav");
+        installSound("newsound/aemob/sentryGolem/death.wav");
+        installSound("newsound/aemob/sentryGolem/hit1.wav");
+        installSound("newsound/aemob/sentryGolem/hit2.wav");
+        installSound("newsound/aemob/sentryGuardian/death.wav");
+        installSound("newsound/aemob/sentryGuardian/spawn.ogg");
+        installSound("newsound/aemob/sentryGuardian/hit.ogg");
+        installSound("newsound/aemob/sentryGuardian/living.ogg");
+        installSound("newsound/aemisc/coin.ogg");
+        installSound("newsound/aemob/cog/wall.wav");
+        installSound("newsound/aemob/cog/wall1.wav");
+        installSound("newsound/aemob/cog/wall2.wav");
+        installSound("newsound/aemob/cog/wallFinal.ogg");
+        installSound("newsound/aeportal/aeportal.wav");
+        installSound("newsound/aeportal/aetravel.wav");
+        installSound("newsound/aeportal/aetrigger.wav");
+        installSound("newsound/aemob/labyrinthsEye/cogloss.ogg");
+        installSound("newsound/aemob/labyrinthsEye/eyedeath.ogg");
+        installSound("newsound/aemob/labyrinthsEye/move_1.ogg");
+        installSound("newsound/aemob/labyrinthsEye/move_2.ogg");
     }
 
     public void registerSounds()
@@ -234,54 +242,50 @@ public class ClientProxy extends CommonProxy
         MinecraftForge.EVENT_BUS.register(new AetherSoundLoader());
     }
 
-    private void installSound(String var1)
+    private void installSound(String filename)
     {
-        File var2 = new File(this.mc.mcDataDir, "resources/" + var1);
+        File soundFile = new File(this.mc.mcDataDir, "resources/" + filename);
 
-        if (!var2.exists())
-        {
+        if (!soundFile.exists())
             try
             {
-                String var3 = soundZipPath + var1;
-                InputStream var4 = Aether.class.getResourceAsStream(var3);
+                String srcPath = soundZipPath + filename;
+                InputStream inStream = Aether.class.getResourceAsStream(srcPath);
 
-                if (var4 == null)
+                if (inStream == null)
                 {
                     throw new IOException();
                 }
 
-                if (!var2.getParentFile().exists())
+                if (!soundFile.getParentFile().exists())
                 {
-                    var2.getParentFile().mkdirs();
+                    soundFile.getParentFile().mkdirs();
                 }
 
-                BufferedInputStream var5 = new BufferedInputStream(var4);
-                BufferedOutputStream var6 = new BufferedOutputStream(new FileOutputStream(var2));
-                byte[] var7 = new byte[1024];
-                boolean var8 = false;
-                int var10;
+                BufferedInputStream fileIn = new BufferedInputStream(inStream);
+                BufferedOutputStream fileOut = new BufferedOutputStream(new FileOutputStream(soundFile));
+                byte[] buffer = new byte[1024];
+                int n = 0;
 
-                while (-1 != (var10 = var5.read(var7)))
+                while (-1 != (n = fileIn.read(buffer)))
                 {
-                    var6.write(var7, 0, var10);
+                    fileOut.write(buffer, 0, n);
                 }
 
-                var5.close();
-                var6.close();
+                fileIn.close();
+                fileOut.close();
             }
-            catch (IOException var9)
+            catch (IOException ex)
             {
-                ;
             }
-        }
 
-        if (var2.canRead() && var2.isFile())
+        if ((soundFile.canRead()) && (soundFile.isFile()))
         {
-            this.mc.installResource(var1, var2);
+            this.mc.installResource(filename, soundFile);
         }
         else
         {
-            System.err.println("Could not load file: " + var2);
+            System.err.println("Could not load file: " + soundFile);
         }
     }
 
@@ -291,121 +295,123 @@ public class ClientProxy extends CommonProxy
     }
 
     @SideOnly(Side.CLIENT)
-    public void renderGameOverlay(float var1, boolean var2, int var3, int var4)
+    public void renderGameOverlay(float zLevel, boolean flag, int x, int y)
     {
-        if (Aether.getClientPlayer(this.getClientPlayer()) != null)
+        if (Aether.getClientPlayer(getClientPlayer()) == null)
         {
-            ClientNotificationHandler.updateNotifications();
-            AetherPoison.displayCureEffect();
-            AetherPoison.displayPoisonEffect();
+            return;
         }
+
+        ClientNotificationHandler.updateNotifications();
+        AetherPoison.displayCureEffect();
+        AetherPoison.displayPoisonEffect();
     }
 
-    public void displayMessage(EntityPlayer var1, String var2)
+    public void displayMessage(EntityPlayer player, String message)
     {
-        var1.addChatMessage(var2);
+        player.addChatMessage(message);
     }
 
     public void registerRenderPAPI()
     {
-        PlayerCoreAPI.register(PlayerCoreType.RENDER, RenderPlayerBaseAether.class);
+        PlayerCoreAPI.register(PlayerCoreAPI.PlayerCoreType.RENDER, RenderPlayerBaseAether.class);
     }
 
-    public void spawnSwettyParticles(World var1, int var2, int var3, int var4)
+    public void spawnSwettyParticles(World world, int x, int y, int z)
     {
-        for (int var5 = 0; var5 < 5; ++var5)
+        for (int count = 0; count < 5; count++)
         {
-            EntityAetherBreakingFX var6 = new EntityAetherBreakingFX(var1, (double)var2 + this.rand.nextDouble(), (double)var3 + this.rand.nextDouble(), (double)var4 + this.rand.nextDouble(), AetherItems.SwettyBall);
-            var6.renderDistanceWeight = 10.0D;
-            var6.setParticleTextureIndex(143);
-            FMLClientHandler.instance().getClient().effectRenderer.addEffect(var6);
+            EntityNoteFX particles = new EntityAetherBreakingFX(world, x + this.rand.nextDouble(), y + this.rand.nextDouble(), z + this.rand.nextDouble(), AetherItems.SwettyBall);
+            particles.renderDistanceWeight = 10.0D;
+            particles.setParticleTextureIndex(143);
+            FMLClientHandler.instance().getClient().effectRenderer.a(particles);
         }
     }
 
-    public void spawnAltarParticles(World var1, int var2, int var3, int var4, Random var5)
+    public void spawnAltarParticles(World world, int x, int y, int z, Random rand)
     {
-        byte var6 = 50;
+        int particleAmount = 50;
 
-        for (int var7 = 0; var7 < var6; ++var7)
+        for (int count = 0; count < particleAmount; count++)
         {
-            EntityGoldenFX var8 = new EntityGoldenFX(var1, (double)((float)var2 + var5.nextFloat()), (double)((float)var3 + (var7 > var6 / 2 ? 0.3F : 0.5F)), (double)((float)var4 + var5.nextFloat()), 0.0D, 1.0D, 0.0D, true);
-            FMLClientHandler.instance().getClient().effectRenderer.addEffect(var8);
+            EntityNoteFX particles = new EntityGoldenFX(world, x + rand.nextFloat(), y + (count > particleAmount / 2 ? 0.3F : 0.5F), z + rand.nextFloat(), 0.0D, 1.0D, 0.0D, true);
+            FMLClientHandler.instance().getClient().effectRenderer.a(particles);
         }
     }
 
-    public void spawnCloudSmoke(World var1, double var2, double var4, double var6, Random var8, double var9)
+    public void spawnCloudSmoke(World world, double x, double y, double z, Random rand, double radius)
     {
-        double var11 = var2 + var8.nextDouble() * var9 * 2.0D - var9;
-        double var13 = var4 + var8.nextDouble() * var9 * 2.0D - var9;
-        double var15 = var6 + var8.nextDouble() * var9 * 2.0D - var9;
-        FMLClientHandler.instance().getClient().effectRenderer.addEffect(new EntityCloudSmokeFX(var1, var11, var13, var15, 0.0D, 0.0D, 0.0D, 2.5F, 1.0F, 1.0F, 1.0F));
+        double xOffset = x + rand.nextDouble() * radius * 2.0D - radius;
+        double yOffset = y + rand.nextDouble() * radius * 2.0D - radius;
+        double zOffset = z + rand.nextDouble() * radius * 2.0D - radius;
+        FMLClientHandler.instance().getClient().effectRenderer.a(new EntityCloudSmokeFX(world, xOffset, yOffset, zOffset, 0.0D, 0.0D, 0.0D, 2.5F, 1.0F, 1.0F, 1.0F));
     }
 
-    public void spawnCloudSmoke(World var1, double var2, double var4, double var6, Random var8, double var9, double var11, double var13, double var15)
+    public void spawnCloudSmoke(World world, double x, double y, double z, Random rand, double radius, double forceX, double forceY, double forceZ)
     {
-        double var17 = var2 + var8.nextDouble() * var9 * 2.0D - var9;
-        double var19 = var4 + var8.nextDouble() * var9 * 2.0D - var9;
-        double var21 = var6 + var8.nextDouble() * var9 * 2.0D - var9;
-        FMLClientHandler.instance().getClient().effectRenderer.addEffect(new EntityCloudSmokeFX(var1, var17, var19, var21, var11, var13, var15, 2.5F, 1.0F, 1.0F, 1.0F));
+        double xOffset = x + rand.nextDouble() * radius * 2.0D - radius;
+        double yOffset = y + rand.nextDouble() * radius * 2.0D - radius;
+        double zOffset = z + rand.nextDouble() * radius * 2.0D - radius;
+        FMLClientHandler.instance().getClient().effectRenderer.a(new EntityCloudSmokeFX(world, xOffset, yOffset, zOffset, forceX, forceY, forceZ, 2.5F, 1.0F, 1.0F, 1.0F));
     }
 
-    public void spawnDonatorMoaParticles(Entity var1, Random var2)
+    public void spawnDonatorMoaParticles(Entity rider, Random rand)
     {
-        for (int var3 = 0; var3 < 4; ++var3)
+        for (int count = 0; count < 4; count++)
         {
-            double var4 = var1.posX + ((double)var2.nextFloat() - 0.5D) * 4.0D;
-            double var6 = var1.posY + ((double)var2.nextFloat() - 0.5D) * 4.0D;
-            double var8 = var1.posZ + ((double)var2.nextFloat() - 0.5D) * 4.0D;
-            double var10 = 0.0D;
-            double var12 = 0.0D;
-            double var14 = 0.0D;
-            var10 = ((double)var2.nextFloat() - 0.5D) * 0.5D;
-            var12 = ((double)var2.nextFloat() - 0.5D) * 0.5D;
-            var14 = ((double)var2.nextFloat() - 0.5D) * 0.5D;
-            EntityGoldenFX var16 = new EntityGoldenFX(var1.worldObj, var4, var6, var8, var10, var12, var14, false);
-            FMLClientHandler.instance().getClient().effectRenderer.addEffect(var16);
+            double xOffset = rider.posX + (rand.nextFloat() - 0.5D) * 4.0D;
+            double yOffset = rider.posY + (rand.nextFloat() - 0.5D) * 4.0D;
+            double zOffset = rider.posZ + (rand.nextFloat() - 0.5D) * 4.0D;
+            double motionX = 0.0D;
+            double motionY = 0.0D;
+            double motionZ = 0.0D;
+            motionX = (rand.nextFloat() - 0.5D) * 0.5D;
+            motionY = (rand.nextFloat() - 0.5D) * 0.5D;
+            motionZ = (rand.nextFloat() - 0.5D) * 0.5D;
+            EntityNoteFX particles = new EntityGoldenFX(rider.worldObj, xOffset, yOffset, zOffset, motionX, motionY, motionZ, false);
+            FMLClientHandler.instance().getClient().effectRenderer.a(particles);
         }
     }
 
-    public void spawnPortalParticles(World var1, int var2, int var3, int var4, Random var5, int var6)
+    public void spawnPortalParticles(World world, int x, int y, int z, Random random, int blockID)
     {
-        for (int var7 = 0; var7 < 4; ++var7)
+        for (int l = 0; l < 4; l++)
         {
-            double var8 = (double)((float)var2 + var5.nextFloat());
-            double var10 = (double)((float)var3 + var5.nextFloat());
-            double var12 = (double)((float)var4 + var5.nextFloat());
-            double var14 = 0.0D;
-            double var16 = 0.0D;
-            double var18 = 0.0D;
-            int var20 = var5.nextInt(2) * 2 - 1;
-            var14 = ((double)var5.nextFloat() - 0.5D) * 0.5D;
-            var16 = ((double)var5.nextFloat() - 0.5D) * 0.5D;
-            var18 = ((double)var5.nextFloat() - 0.5D) * 0.5D;
+            double xOffset = x + random.nextFloat();
+            double yOffset = y + random.nextFloat();
+            double zOffset = z + random.nextFloat();
+            double motionX = 0.0D;
+            double motionY = 0.0D;
+            double motionZ = 0.0D;
+            int randMotionFactor = random.nextInt(2) * 2 - 1;
+            motionX = (random.nextFloat() - 0.5D) * 0.5D;
+            motionY = (random.nextFloat() - 0.5D) * 0.5D;
+            motionZ = (random.nextFloat() - 0.5D) * 0.5D;
 
-            if (var1.getBlockId(var2 - 1, var3, var4) != var6 && var1.getBlockId(var2 + 1, var3, var4) != var6)
+            if ((world.getBlockId(x - 1, y, z) == blockID) || (world.getBlockId(x + 1, y, z) == blockID))
             {
-                var8 = (double)var2 + 0.5D + 0.25D * (double)var20;
-                var14 = (double)(var5.nextFloat() * 2.0F * (float)var20);
+                zOffset = z + 0.5D + 0.25D * randMotionFactor;
+                motionZ = random.nextFloat() * 2.0F * randMotionFactor;
             }
             else
             {
-                var12 = (double)var4 + 0.5D + 0.25D * (double)var20;
-                var18 = (double)(var5.nextFloat() * 2.0F * (float)var20);
+                xOffset = x + 0.5D + 0.25D * randMotionFactor;
+                motionX = random.nextFloat() * 2.0F * randMotionFactor;
             }
 
-            EntityAetherPortalFX var21 = new EntityAetherPortalFX(var1, var8, var10, var12, var14, var16, var18);
-            FMLClientHandler.instance().getClient().effectRenderer.addEffect(var21);
+            EntityNoteFX obj = new EntityAetherPortalFX(world, xOffset, yOffset, zOffset, motionX, motionY, motionZ);
+            FMLClientHandler.instance().getClient().effectRenderer.a(obj);
         }
     }
 
-    public void spawnRainParticles(World var1, int var2, int var3, int var4, Random var5, int var6)
+    public void spawnRainParticles(World world, int x, int y, int z, Random rand, int amount)
     {
-        for (int var7 = 0; var7 < var6; ++var7)
+        for (int count = 0; count < amount; count++)
         {
-            double var8 = (double)var2 + var5.nextDouble();
-            double var10 = (double)var3 + var5.nextDouble();
-            double var12 = (double)var4 + var5.nextDouble();
-            var1.spawnParticle("splash", var8, var10, var12, 0.0D, 0.0D, 0.0D);
+            double xOffset = x + rand.nextDouble();
+            double yOffset = y + rand.nextDouble();
+            double zOffset = z + rand.nextDouble();
+            world.spawnParticle("splash", xOffset, yOffset, zOffset, 0.0D, 0.0D, 0.0D);
         }
     }
 
@@ -454,3 +460,4 @@ public class ClientProxy extends CommonProxy
         return this.playerParachuteTypes;
     }
 }
+

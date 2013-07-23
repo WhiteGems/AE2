@@ -2,68 +2,67 @@ package net.aetherteam.aether.tile_entities;
 
 import cpw.mods.fml.common.FMLCommonHandler;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Random;
 import net.aetherteam.aether.AetherLoot;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.INetworkManager;
+import net.minecraft.network.NetServerHandler;
 import net.minecraft.network.packet.Packet;
 import net.minecraft.network.packet.Packet132TileEntityData;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.management.ServerConfigurationManager;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityChest;
+import net.minecraft.world.World;
 
 public class TileEntityTreasureChest extends TileEntityChest
 {
     private boolean locked = true;
     private int kind = 0;
 
-    /**
-     * Reads a tile entity from NBT.
-     */
-    public void readFromNBT(NBTTagCompound var1)
+    public void readFromNBT(NBTTagCompound par1nbtTagCompound)
     {
-        super.readFromNBT(var1);
-        this.locked = var1.getBoolean("locked");
-        this.kind = var1.getInteger("kind");
+        super.readFromNBT(par1nbtTagCompound);
+        this.locked = par1nbtTagCompound.getBoolean("locked");
+        this.kind = par1nbtTagCompound.getInteger("kind");
     }
 
-    /**
-     * Writes a tile entity to NBT.
-     */
-    public void writeToNBT(NBTTagCompound var1)
+    public void writeToNBT(NBTTagCompound par1nbtTagCompound)
     {
-        super.writeToNBT(var1);
-        var1.setBoolean("locked", this.locked);
-        var1.setInteger("kind", this.kind);
+        super.writeToNBT(par1nbtTagCompound);
+        par1nbtTagCompound.setBoolean("locked", this.locked);
+        par1nbtTagCompound.setInteger("kind", this.kind);
     }
 
-    public void unlock(int var1)
+    public void unlock(int kind)
     {
-        this.kind = var1;
-        Random var2 = new Random();
-        int var3;
+        this.kind = kind;
+        Random random = new Random();
 
-        if (var1 == 0)
+        if (kind == 0)
         {
-            for (var3 = 0; var3 < 5 + var2.nextInt(1); ++var3)
+            for (int p = 0; p < 5 + random.nextInt(1); p++)
             {
-                this.setInventorySlotContents(var2.nextInt(this.getSizeInventory()), AetherLoot.BRONZE.getRandomItem(var2));
+                setInventorySlotContents(random.nextInt(getSizeInventory()), AetherLoot.BRONZE.getRandomItem(random));
             }
         }
 
-        if (var1 == 1)
+        if (kind == 1)
         {
-            for (var3 = 0; var3 < 5 + var2.nextInt(1); ++var3)
+            for (int p = 0; p < 5 + random.nextInt(1); p++)
             {
-                this.setInventorySlotContents(var2.nextInt(this.getSizeInventory()), AetherLoot.SILVER.getRandomItem(var2));
+                setInventorySlotContents(random.nextInt(getSizeInventory()), AetherLoot.SILVER.getRandomItem(random));
             }
         }
 
-        if (var1 == 2)
+        if (kind == 2)
         {
-            for (var3 = 0; var3 < 5 + var2.nextInt(1); ++var3)
+            for (int p = 0; p < 5 + random.nextInt(1); p++)
             {
-                this.setInventorySlotContents(var2.nextInt(this.getSizeInventory()), AetherLoot.GOLD.getRandomItem(var2));
+                setInventorySlotContents(random.nextInt(getSizeInventory()), AetherLoot.GOLD.getRandomItem(random));
             }
         }
 
@@ -71,38 +70,34 @@ public class TileEntityTreasureChest extends TileEntityChest
 
         if (!this.worldObj.isRemote)
         {
-            this.sendToAllInOurWorld(this.getDescriptionPacket());
+            sendToAllInOurWorld(getDescriptionPacket());
         }
     }
 
-    public void onDataPacket(INetworkManager var1, Packet132TileEntityData var2)
+    public void onDataPacket(INetworkManager net, Packet132TileEntityData pkt)
     {
-        this.readFromNBT(var2.customParam1);
+        readFromNBT(pkt.customParam1);
     }
 
-    /**
-     * Overriden in a sign to provide the text.
-     */
     public Packet getDescriptionPacket()
     {
         NBTTagCompound var1 = new NBTTagCompound();
-        this.writeToNBT(var1);
+        writeToNBT(var1);
         return new Packet132TileEntityData(this.xCoord, this.yCoord, this.zCoord, 1, var1);
     }
 
-    private void sendToAllInOurWorld(Packet var1)
+    private void sendToAllInOurWorld(Packet pkt)
     {
-        ServerConfigurationManager var2 = FMLCommonHandler.instance().getMinecraftServerInstance().getConfigurationManager();
-        Iterator var3 = var2.playerEntityList.iterator();
+        ServerConfigurationManager scm = FMLCommonHandler.instance().getMinecraftServerInstance().getConfigurationManager();
 
-        while (var3.hasNext())
+        for (Iterator i$ = scm.playerEntityList.iterator(); i$.hasNext();)
         {
-            Object var4 = var3.next();
-            EntityPlayerMP var5 = (EntityPlayerMP)var4;
+            Object obj = i$.next();
+            EntityPlayerMP player = (EntityPlayerMP)obj;
 
-            if (var5.worldObj == this.worldObj)
+            if (player.worldObj == this.worldObj)
             {
-                var5.playerNetServerHandler.sendPacketToPlayer(var1);
+                player.playerNetServerHandler.sendPacketToPlayer(pkt);
             }
         }
     }
@@ -117,3 +112,4 @@ public class TileEntityTreasureChest extends TileEntityChest
         return this.kind;
     }
 }
+

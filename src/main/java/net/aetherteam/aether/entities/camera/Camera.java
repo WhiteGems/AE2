@@ -8,78 +8,67 @@ import net.minecraft.world.World;
 
 public class Camera extends EntityLiving
 {
-    Minecraft mc;
+    Minecraft mc = Minecraft.getMinecraft();
     Entity entityAttachedTo;
     double offsetX;
     double offsetY;
     double offsetZ;
 
-    public Camera(World var1)
+    public Camera(World world)
     {
-        super(var1);
-        this.mc = Minecraft.getMinecraft();
+        super(world);
     }
 
-    public Camera(World var1, Entity var2, double var3, double var5, double var7)
+    public Camera(World world, Entity entity, double offsetX, double offsetY, double offsetZ)
     {
-        this(var1);
+        this(world);
 
-        if (var2 == null)
+        if (entity == null)
         {
-            this.setDead();
+            setDead();
+            return;
         }
-        else
+
+        this.entityAttachedTo = entity;
+
+        if (this.entityAttachedTo != null)
         {
-            this.entityAttachedTo = var2;
-
-            if (this.entityAttachedTo != null)
-            {
-                this.mountEntity(this.entityAttachedTo);
-            }
-
-            this.offsetX = var3;
-            this.offsetY = var5;
-            this.offsetZ = var7;
+            mountEntity(this.entityAttachedTo);
         }
+
+        this.offsetX = offsetX;
+        this.offsetY = offsetY;
+        this.offsetZ = offsetZ;
     }
 
-    /**
-     * Called to update the entity's position/logic.
-     */
     public void onUpdate()
     {
         if (this.entityAttachedTo != null)
         {
-            this.mountEntity(this.entityAttachedTo);
-            this.setRotation(this.entityAttachedTo.rotationYaw, this.entityAttachedTo.rotationPitch);
+            mountEntity(this.entityAttachedTo);
+            setRotation(this.entityAttachedTo.rotationYaw, this.entityAttachedTo.rotationPitch);
         }
         else
         {
             CameraManager.turnOffCamera(this.worldObj);
-            this.setDead();
+            setDead();
         }
     }
 
-    /**
-     * (abstract) Protected helper method to read subclass entity data from NBT.
-     */
-    public void readEntityFromNBT(NBTTagCompound var1)
+    public void readEntityFromNBT(NBTTagCompound nbttagcompound)
     {
-        super.readEntityFromNBT(var1);
-        this.offsetX = var1.getDouble("offsetX");
-        this.offsetY = var1.getDouble("offsetY");
-        this.offsetZ = var1.getDouble("offsetZ");
+        super.readEntityFromNBT(nbttagcompound);
+        this.offsetX = nbttagcompound.getDouble("offsetX");
+        this.offsetY = nbttagcompound.getDouble("offsetY");
+        this.offsetZ = nbttagcompound.getDouble("offsetZ");
     }
 
-    /**
-     * (abstract) Protected helper method to write subclass entity data to NBT.
-     */
-    public void writeEntityToNBT(NBTTagCompound var1)
+    public void writeEntityToNBT(NBTTagCompound nbttagcompound)
     {
-        super.writeEntityToNBT(var1);
-        var1.setDouble("offsetX", this.offsetX);
-        var1.setDouble("offsetY", this.offsetY);
-        var1.setDouble("offsetZ", this.offsetZ);
+        super.writeEntityToNBT(nbttagcompound);
+        nbttagcompound.setDouble("offsetX", this.offsetX);
+        nbttagcompound.setDouble("offsetY", this.offsetY);
+        nbttagcompound.setDouble("offsetZ", this.offsetZ);
     }
 
     public int getMaxHealth()
@@ -87,3 +76,4 @@ public class Camera extends EntityLiving
         return 0;
     }
 }
+

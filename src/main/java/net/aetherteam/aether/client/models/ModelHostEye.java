@@ -1,49 +1,42 @@
 package net.aetherteam.aether.client.models;
 
-import net.minecraft.client.model.ModelBase;
-import net.minecraft.client.model.ModelRenderer;
+import net.minecraft.client.model.ModelMinecart;
 import net.minecraft.entity.Entity;
+import net.minecraft.src.bdi;
 
-public class ModelHostEye extends ModelBase
+public class ModelHostEye extends ModelMinecart
 {
-    ModelRenderer Eye;
+    bdi Eye;
 
     public ModelHostEye()
     {
         this.textureWidth = 64;
         this.textureHeight = 32;
-        this.Eye = new ModelRenderer(this, 0, 0);
-        this.Eye.addBox(0.0F, 0.0F, 0.0F, 11, 11, 11);
-        this.Eye.setRotationPoint(-5.5F, 13.0F, -5.5F);
-        this.Eye.setTextureSize(64, 32);
-        this.Eye.mirror = true;
-        this.setRotation(this.Eye, 0.0F, 0.0F, 0.0F);
+        this.Eye = new bdi(this, 0, 0);
+        this.Eye.a(0.0F, 0.0F, 0.0F, 11, 11, 11);
+        this.Eye.a(-5.5F, 13.0F, -5.5F);
+        this.Eye.b(64, 32);
+        this.Eye.i = true;
+        setRotation(this.Eye, 0.0F, 0.0F, 0.0F);
     }
 
-    /**
-     * Sets the models various rotation angles then renders the model.
-     */
-    public void render(Entity var1, float var2, float var3, float var4, float var5, float var6, float var7)
+    public void render(Entity entity, float f, float f1, float f2, float f3, float f4, float f5)
     {
-        super.render(var1, var2, var3, var4, var5, var6, var7);
-        this.setRotationAngles(var2, var3, var4, var5, var6, var7, var1);
-        this.Eye.render(var7);
+        super.render(entity, f, f1, f2, f3, f4, f5);
+        setRotationAngles(f, f1, f2, f3, f4, f5, entity);
+        this.Eye.a(f5);
     }
 
-    private void setRotation(ModelRenderer var1, float var2, float var3, float var4)
+    private void setRotation(bdi model, float x, float y, float z)
     {
-        var1.rotateAngleX = var2;
-        var1.rotateAngleY = var3;
-        var1.rotateAngleZ = var4;
+        model.f = x;
+        model.g = y;
+        model.h = z;
     }
 
-    /**
-     * Sets the model's various rotation angles. For bipeds, par1 and par2 are used for animating the movement of arms
-     * and legs, where par1 represents the time(so that arms and legs swing back and forth) and par2 represents how
-     * "far" arms and legs can swing at most.
-     */
-    public void setRotationAngles(float var1, float var2, float var3, float var4, float var5, float var6, Entity var7)
+    public void setRotationAngles(float f, float f1, float f2, float f3, float f4, float f5, Entity entity)
     {
-        super.setRotationAngles(var1, var2, var3, var4, var5, var6, var7);
+        super.setRotationAngles(f, f1, f2, f3, f4, f5, entity);
     }
 }
+

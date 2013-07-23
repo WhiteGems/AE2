@@ -5,193 +5,173 @@ import cpw.mods.fml.relauncher.SideOnly;
 import java.util.Random;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockFire;
+import net.minecraft.block.BlockPortal;
 import net.minecraft.client.renderer.texture.IconRegister;
+import net.minecraft.util.AABBPool;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.Icon;
+import net.minecraft.world.GameRules;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import net.minecraft.world.WorldProvider;
 import net.minecraftforge.common.ForgeDirection;
 
 public class BlockColdFire extends BlockFire
 {
     private int[] chanceToEncourageFire = new int[256];
+
     private int[] abilityToCatchFire = new int[256];
+
     @SideOnly(Side.CLIENT)
     private Icon[] iconArray;
 
-    protected BlockColdFire(int var1)
+    protected BlockColdFire(int par1)
     {
-        super(var1);
-        this.setTickRandomly(true);
+        super(par1);
+        setTickRandomly(true);
     }
 
-    public Block setIconName(String var1)
+    public Block setIconName(String name)
     {
-        return this.setUnlocalizedName("Aether:" + var1);
+        return setUnlocalizedName("Aether:" + name);
     }
 
-    /**
-     * This method is called on a block after all other blocks gets already created. You can use it to reference and
-     * configure something on the block that needs the others ones.
-     */
     public void initializeBlock()
     {
         this.abilityToCatchFire = Block.blockFlammability;
         this.chanceToEncourageFire = Block.blockFireSpreadSpeed;
-        this.setBurnRate(AetherBlocks.SkyrootPlank.blockID, 5, 20);
-        this.setBurnRate(AetherBlocks.SkyrootFence.blockID, 5, 20);
-        this.setBurnRate(AetherBlocks.SkyrootStairs.blockID, 5, 20);
-        this.setBurnRate(AetherBlocks.AetherLog.blockID, 5, 5);
+        setBurnRate(AetherBlocks.SkyrootPlank.blockID, 5, 20);
+        setBurnRate(AetherBlocks.SkyrootFence.blockID, 5, 20);
+        setBurnRate(AetherBlocks.SkyrootStairs.blockID, 5, 20);
+        setBurnRate(AetherBlocks.AetherLog.blockID, 5, 5);
     }
 
-    private void setBurnRate(int var1, int var2, int var3)
+    private void setBurnRate(int par1, int par2, int par3)
     {
-        Block.setBurnProperties(var1, var2, var3);
+        Block.setBurnProperties(par1, par2, par3);
     }
 
-    /**
-     * Returns the bounding box of the wired rectangular prism to render.
-     */
-    public AxisAlignedBB getSelectedBoundingBoxFromPool(World var1, int var2, int var3, int var4)
+    public AxisAlignedBB getSelectedBoundingBoxFromPool(World par1World, int par2, int par3, int par4)
     {
-        return AxisAlignedBB.getAABBPool().getAABB((double)var2 + this.minX, (double)var3 + this.minY, (double)var4 + this.minZ, (double)var2 + this.maxX, (double)var3 + this.maxY, (double)var4 + this.maxZ);
+        return AxisAlignedBB.getAABBPool().getAABB(par2 + this.minX, par3 + this.minY, par4 + this.minZ, par2 + this.maxX, par3 + this.maxY, par4 + this.maxZ);
     }
 
-    /**
-     * Is this block (a) opaque and (b) a full 1m cube?  This determines whether or not to render the shared face of two
-     * adjacent blocks and also whether the player can attach torches, redstone wire, etc to this block.
-     */
     public boolean isOpaqueCube()
     {
         return false;
     }
 
-    /**
-     * If this block doesn't render as an ordinary block it will return False (examples: signs, buttons, stairs, etc)
-     */
     public boolean renderAsNormalBlock()
     {
         return false;
     }
 
-    /**
-     * The type of render function that is called for this block
-     */
     public int getRenderType()
     {
         return 3;
     }
 
-    /**
-     * Returns the quantity of items to drop on block destruction.
-     */
-    public int quantityDropped(Random var1)
+    public int quantityDropped(Random par1Random)
     {
         return 0;
     }
 
-    /**
-     * How many world ticks before ticking
-     */
-    public int tickRate(World var1)
+    public int tickRate(World par1World)
     {
         return 30;
     }
 
-    /**
-     * Ticks the block if it's been scheduled
-     */
-    public void updateTick(World var1, int var2, int var3, int var4, Random var5)
+    public void updateTick(World par1World, int par2, int par3, int par4, Random par5Random)
     {
-        if (var1.getGameRules().getGameRuleBooleanValue("doFireTick"))
+        if (par1World.N().getGameRuleBooleanValue("doFireTick"))
         {
-            Block var6 = Block.blocksList[var1.getBlockId(var2, var3 - 1, var4)];
-            boolean var7 = var6 != null && var6.isFireSource(var1, var2, var3 - 1, var4, var1.getBlockMetadata(var2, var3 - 1, var4), ForgeDirection.UP);
+            Block base = Block.blocksList[par1World.getBlockId(par2, par3 - 1, par4)];
+            boolean flag = (base != null) && (base.isFireSource(par1World, par2, par3 - 1, par4, par1World.getBlockMetadata(par2, par3 - 1, par4), ForgeDirection.UP));
 
-            if (!this.canPlaceBlockAt(var1, var2, var3, var4))
+            if (!canPlaceBlockAt(par1World, par2, par3, par4))
             {
-                var1.setBlockToAir(var2, var3, var4);
+                par1World.setBlockToAir(par2, par3, par4);
             }
 
-            if (!var7 && var1.isRaining() && (var1.canLightningStrikeAt(var2, var3, var4) || var1.canLightningStrikeAt(var2 - 1, var3, var4) || var1.canLightningStrikeAt(var2 + 1, var3, var4) || var1.canLightningStrikeAt(var2, var3, var4 - 1) || var1.canLightningStrikeAt(var2, var3, var4 + 1)))
+            if ((!flag) && (par1World.P()) && ((par1World.canLightningStrikeAt(par2, par3, par4)) || (par1World.canLightningStrikeAt(par2 - 1, par3, par4)) || (par1World.canLightningStrikeAt(par2 + 1, par3, par4)) || (par1World.canLightningStrikeAt(par2, par3, par4 - 1)) || (par1World.canLightningStrikeAt(par2, par3, par4 + 1))))
             {
-                var1.setBlockToAir(var2, var3, var4);
+                par1World.setBlockToAir(par2, par3, par4);
             }
             else
             {
-                int var8 = var1.getBlockMetadata(var2, var3, var4);
+                int l = par1World.getBlockMetadata(par2, par3, par4);
 
-                if (var8 < 15)
+                if (l < 15)
                 {
-                    var1.setBlockMetadataWithNotify(var2, var3, var4, var8 + var5.nextInt(3) / 2, 4);
+                    par1World.setBlockMetadataWithNotify(par2, par3, par4, l + par5Random.nextInt(3) / 2, 4);
                 }
 
-                var1.scheduleBlockUpdate(var2, var3, var4, this.blockID, this.tickRate(var1) + var5.nextInt(10));
+                par1World.scheduleBlockUpdate(par2, par3, par4, this.blockID, tickRate(par1World) + par5Random.nextInt(10));
 
-                if (!var7 && !this.canNeighborBurn(var1, var2, var3, var4))
+                if ((!flag) && (!canNeighborBurn(par1World, par2, par3, par4)))
                 {
-                    if (!var1.doesBlockHaveSolidTopSurface(var2, var3 - 1, var4) || var8 > 3)
+                    if ((!par1World.doesBlockHaveSolidTopSurface(par2, par3 - 1, par4)) || (l > 3))
                     {
-                        var1.setBlockToAir(var2, var3, var4);
+                        par1World.setBlockToAir(par2, par3, par4);
                     }
                 }
-                else if (!var7 && !this.canBlockCatchFire(var1, var2, var3 - 1, var4, ForgeDirection.UP) && var8 == 15 && var5.nextInt(4) == 0)
+                else if ((!flag) && (!canBlockCatchFire(par1World, par2, par3 - 1, par4, ForgeDirection.UP)) && (l == 15) && (par5Random.nextInt(4) == 0))
                 {
-                    var1.setBlockToAir(var2, var3, var4);
+                    par1World.setBlockToAir(par2, par3, par4);
                 }
                 else
                 {
-                    boolean var9 = var1.isBlockHighHumidity(var2, var3, var4);
-                    byte var10 = 0;
+                    boolean flag1 = par1World.isBlockHighHumidity(par2, par3, par4);
+                    byte b0 = 0;
 
-                    if (var9)
+                    if (flag1)
                     {
-                        var10 = -50;
+                        b0 = -50;
                     }
 
-                    this.tryToCatchBlockOnFire(var1, var2 + 1, var3, var4, 300 + var10, var5, var8, ForgeDirection.WEST);
-                    this.tryToCatchBlockOnFire(var1, var2 - 1, var3, var4, 300 + var10, var5, var8, ForgeDirection.EAST);
-                    this.tryToCatchBlockOnFire(var1, var2, var3 - 1, var4, 250 + var10, var5, var8, ForgeDirection.UP);
-                    this.tryToCatchBlockOnFire(var1, var2, var3 + 1, var4, 250 + var10, var5, var8, ForgeDirection.DOWN);
-                    this.tryToCatchBlockOnFire(var1, var2, var3, var4 - 1, 300 + var10, var5, var8, ForgeDirection.SOUTH);
-                    this.tryToCatchBlockOnFire(var1, var2, var3, var4 + 1, 300 + var10, var5, var8, ForgeDirection.NORTH);
+                    tryToCatchBlockOnFire(par1World, par2 + 1, par3, par4, 300 + b0, par5Random, l, ForgeDirection.WEST);
+                    tryToCatchBlockOnFire(par1World, par2 - 1, par3, par4, 300 + b0, par5Random, l, ForgeDirection.EAST);
+                    tryToCatchBlockOnFire(par1World, par2, par3 - 1, par4, 250 + b0, par5Random, l, ForgeDirection.UP);
+                    tryToCatchBlockOnFire(par1World, par2, par3 + 1, par4, 250 + b0, par5Random, l, ForgeDirection.DOWN);
+                    tryToCatchBlockOnFire(par1World, par2, par3, par4 - 1, 300 + b0, par5Random, l, ForgeDirection.SOUTH);
+                    tryToCatchBlockOnFire(par1World, par2, par3, par4 + 1, 300 + b0, par5Random, l, ForgeDirection.NORTH);
 
-                    for (int var11 = var2 - 1; var11 <= var2 + 1; ++var11)
+                    for (int i1 = par2 - 1; i1 <= par2 + 1; i1++)
                     {
-                        for (int var12 = var4 - 1; var12 <= var4 + 1; ++var12)
+                        for (int j1 = par4 - 1; j1 <= par4 + 1; j1++)
                         {
-                            for (int var13 = var3 - 1; var13 <= var3 + 4; ++var13)
+                            for (int k1 = par3 - 1; k1 <= par3 + 4; k1++)
                             {
-                                if (var11 != var2 || var13 != var3 || var12 != var4)
+                                if ((i1 != par2) || (k1 != par3) || (j1 != par4))
                                 {
-                                    int var14 = 100;
+                                    int l1 = 100;
 
-                                    if (var13 > var3 + 1)
+                                    if (k1 > par3 + 1)
                                     {
-                                        var14 += (var13 - (var3 + 1)) * 100;
+                                        l1 += (k1 - (par3 + 1)) * 100;
                                     }
 
-                                    int var15 = this.getChanceOfNeighborsEncouragingFire(var1, var11, var13, var12);
+                                    int i2 = getChanceOfNeighborsEncouragingFire(par1World, i1, k1, j1);
 
-                                    if (var15 > 0)
+                                    if (i2 > 0)
                                     {
-                                        int var16 = (var15 + 40 + var1.difficultySetting * 7) / (var8 + 30);
+                                        int j2 = (i2 + 40 + par1World.difficultySetting * 7) / (l + 30);
 
-                                        if (var9)
+                                        if (flag1)
                                         {
-                                            var16 /= 2;
+                                            j2 /= 2;
                                         }
 
-                                        if (var16 > 0 && var5.nextInt(var14) <= var16 && (!var1.isRaining() || !var1.canLightningStrikeAt(var11, var13, var12)) && !var1.canLightningStrikeAt(var11 - 1, var13, var4) && !var1.canLightningStrikeAt(var11 + 1, var13, var12) && !var1.canLightningStrikeAt(var11, var13, var12 - 1) && !var1.canLightningStrikeAt(var11, var13, var12 + 1))
+                                        if ((j2 > 0) && (par5Random.nextInt(l1) <= j2) && ((!par1World.P()) || (!par1World.canLightningStrikeAt(i1, k1, j1))) && (!par1World.canLightningStrikeAt(i1 - 1, k1, par4)) && (!par1World.canLightningStrikeAt(i1 + 1, k1, j1)) && (!par1World.canLightningStrikeAt(i1, k1, j1 - 1)) && (!par1World.canLightningStrikeAt(i1, k1, j1 + 1)))
                                         {
-                                            int var17 = var8 + var5.nextInt(5) / 4;
+                                            int k2 = l + par5Random.nextInt(5) / 4;
 
-                                            if (var17 > 15)
+                                            if (k2 > 15)
                                             {
-                                                var17 = 15;
+                                                k2 = 15;
                                             }
 
-                                            var1.setBlock(var11, var13, var12, this.blockID, var17, 3);
+                                            par1World.setBlock(i1, k1, j1, this.blockID, k2, 3);
                                         }
                                     }
                                 }
@@ -209,266 +189,238 @@ public class BlockColdFire extends BlockFire
     }
 
     @Deprecated
-    private void tryToCatchBlockOnFire(World var1, int var2, int var3, int var4, int var5, Random var6, int var7)
+    private void tryToCatchBlockOnFire(World par1World, int par2, int par3, int par4, int par5, Random par6Random, int par7)
     {
-        this.tryToCatchBlockOnFire(var1, var2, var3, var4, var5, var6, var7, ForgeDirection.UP);
+        tryToCatchBlockOnFire(par1World, par2, par3, par4, par5, par6Random, par7, ForgeDirection.UP);
     }
 
-    private void tryToCatchBlockOnFire(World var1, int var2, int var3, int var4, int var5, Random var6, int var7, ForgeDirection var8)
+    private void tryToCatchBlockOnFire(World par1World, int par2, int par3, int par4, int par5, Random par6Random, int par7, ForgeDirection face)
     {
-        int var9 = 0;
-        Block var10 = Block.blocksList[var1.getBlockId(var2, var3, var4)];
+        int j1 = 0;
+        Block block = Block.blocksList[par1World.getBlockId(par2, par3, par4)];
 
-        if (var10 != null)
+        if (block != null)
         {
-            var9 = var10.getFlammability(var1, var2, var3, var4, var1.getBlockMetadata(var2, var3, var4), var8);
+            j1 = block.getFlammability(par1World, par2, par3, par4, par1World.getBlockMetadata(par2, par3, par4), face);
         }
 
-        if (var6.nextInt(var5) < var9)
+        if (par6Random.nextInt(par5) < j1)
         {
-            boolean var11 = var1.getBlockId(var2, var3, var4) == Block.tnt.blockID;
+            boolean flag = par1World.getBlockId(par2, par3, par4) == Block.tnt.blockID;
 
-            if (var6.nextInt(var7 + 10) < 5 && !var1.canLightningStrikeAt(var2, var3, var4))
+            if ((par6Random.nextInt(par7 + 10) < 5) && (!par1World.canLightningStrikeAt(par2, par3, par4)))
             {
-                int var12 = var7 + var6.nextInt(5) / 4;
+                int k1 = par7 + par6Random.nextInt(5) / 4;
 
-                if (var12 > 15)
+                if (k1 > 15)
                 {
-                    var12 = 15;
+                    k1 = 15;
                 }
 
-                var1.setBlock(var2, var3, var4, this.blockID, var12, 3);
+                par1World.setBlock(par2, par3, par4, this.blockID, k1, 3);
             }
             else
             {
-                var1.setBlockToAir(var2, var3, var4);
+                par1World.setBlockToAir(par2, par3, par4);
             }
 
-            if (var11)
+            if (flag)
             {
-                Block.tnt.onBlockDestroyedByPlayer(var1, var2, var3, var4, 1);
+                Block.tnt.onBlockDestroyedByPlayer(par1World, par2, par3, par4, 1);
             }
         }
     }
 
-    private boolean canNeighborBurn(World var1, int var2, int var3, int var4)
+    private boolean canNeighborBurn(World par1World, int par2, int par3, int par4)
     {
-        return this.canBlockCatchFire(var1, var2 + 1, var3, var4, ForgeDirection.WEST) || this.canBlockCatchFire(var1, var2 - 1, var3, var4, ForgeDirection.EAST) || this.canBlockCatchFire(var1, var2, var3 - 1, var4, ForgeDirection.UP) || this.canBlockCatchFire(var1, var2, var3 + 1, var4, ForgeDirection.DOWN) || this.canBlockCatchFire(var1, var2, var3, var4 - 1, ForgeDirection.SOUTH) || this.canBlockCatchFire(var1, var2, var3, var4 + 1, ForgeDirection.NORTH);
+        return (canBlockCatchFire(par1World, par2 + 1, par3, par4, ForgeDirection.WEST)) || (canBlockCatchFire(par1World, par2 - 1, par3, par4, ForgeDirection.EAST)) || (canBlockCatchFire(par1World, par2, par3 - 1, par4, ForgeDirection.UP)) || (canBlockCatchFire(par1World, par2, par3 + 1, par4, ForgeDirection.DOWN)) || (canBlockCatchFire(par1World, par2, par3, par4 - 1, ForgeDirection.SOUTH)) || (canBlockCatchFire(par1World, par2, par3, par4 + 1, ForgeDirection.NORTH));
     }
 
-    private int getChanceOfNeighborsEncouragingFire(World var1, int var2, int var3, int var4)
+    private int getChanceOfNeighborsEncouragingFire(World par1World, int par2, int par3, int par4)
     {
-        byte var5 = 0;
+        byte b0 = 0;
 
-        if (!var1.isAirBlock(var2, var3, var4))
+        if (!par1World.isAirBlock(par2, par3, par4))
         {
             return 0;
         }
-        else
-        {
-            int var6 = this.getChanceToEncourageFire(var1, var2 + 1, var3, var4, var5, ForgeDirection.WEST);
-            var6 = this.getChanceToEncourageFire(var1, var2 - 1, var3, var4, var6, ForgeDirection.EAST);
-            var6 = this.getChanceToEncourageFire(var1, var2, var3 - 1, var4, var6, ForgeDirection.UP);
-            var6 = this.getChanceToEncourageFire(var1, var2, var3 + 1, var4, var6, ForgeDirection.DOWN);
-            var6 = this.getChanceToEncourageFire(var1, var2, var3, var4 - 1, var6, ForgeDirection.SOUTH);
-            var6 = this.getChanceToEncourageFire(var1, var2, var3, var4 + 1, var6, ForgeDirection.NORTH);
-            return var6;
-        }
+
+        int l = getChanceToEncourageFire(par1World, par2 + 1, par3, par4, b0, ForgeDirection.WEST);
+        l = getChanceToEncourageFire(par1World, par2 - 1, par3, par4, l, ForgeDirection.EAST);
+        l = getChanceToEncourageFire(par1World, par2, par3 - 1, par4, l, ForgeDirection.UP);
+        l = getChanceToEncourageFire(par1World, par2, par3 + 1, par4, l, ForgeDirection.DOWN);
+        l = getChanceToEncourageFire(par1World, par2, par3, par4 - 1, l, ForgeDirection.SOUTH);
+        l = getChanceToEncourageFire(par1World, par2, par3, par4 + 1, l, ForgeDirection.NORTH);
+        return l;
     }
 
-    /**
-     * Returns if this block is collidable (only used by Fire). Args: x, y, z
-     */
     public boolean isCollidable()
     {
         return false;
     }
 
     @Deprecated
-
-    /**
-     * Checks the specified block coordinate to see if it can catch fire.  Args: blockAccess, x, y, z
-     */
-    public boolean canBlockCatchFire(IBlockAccess var1, int var2, int var3, int var4)
+    public boolean canBlockCatchFire(IBlockAccess par1IBlockAccess, int par2, int par3, int par4)
     {
-        return this.canBlockCatchFire(var1, var2, var3, var4, ForgeDirection.UP);
+        return canBlockCatchFire(par1IBlockAccess, par2, par3, par4, ForgeDirection.UP);
     }
 
     @Deprecated
-
-    /**
-     * Retrieves a specified block's chance to encourage their neighbors to burn and if the number is greater than the
-     * current number passed in it will return its number instead of the passed in one.  Args: world, x, y, z,
-     * curChanceToEncourageFire
-     */
-    public int getChanceToEncourageFire(World var1, int var2, int var3, int var4, int var5)
+    public int getChanceToEncourageFire(World par1World, int par2, int par3, int par4, int par5)
     {
-        return this.getChanceToEncourageFire(var1, var2, var3, var4, var5, ForgeDirection.UP);
+        return getChanceToEncourageFire(par1World, par2, par3, par4, par5, ForgeDirection.UP);
     }
 
-    /**
-     * Checks to see if its valid to put this block at the specified coordinates. Args: world, x, y, z
-     */
-    public boolean canPlaceBlockAt(World var1, int var2, int var3, int var4)
+    public boolean canPlaceBlockAt(World par1World, int par2, int par3, int par4)
     {
-        return var1.doesBlockHaveSolidTopSurface(var2, var3 - 1, var4) || this.canNeighborBurn(var1, var2, var3, var4);
+        return (par1World.doesBlockHaveSolidTopSurface(par2, par3 - 1, par4)) || (canNeighborBurn(par1World, par2, par3, par4));
     }
 
-    /**
-     * Lets the block know when one of its neighbor changes. Doesn't know which neighbor changed (coordinates passed are
-     * their own) Args: x, y, z, neighbor blockID
-     */
-    public void onNeighborBlockChange(World var1, int var2, int var3, int var4, int var5)
+    public void onNeighborBlockChange(World par1World, int par2, int par3, int par4, int par5)
     {
-        if (!var1.doesBlockHaveSolidTopSurface(var2, var3 - 1, var4) && !this.canNeighborBurn(var1, var2, var3, var4))
+        if ((!par1World.doesBlockHaveSolidTopSurface(par2, par3 - 1, par4)) && (!canNeighborBurn(par1World, par2, par3, par4)))
         {
-            var1.setBlockToAir(var2, var3, var4);
+            par1World.setBlockToAir(par2, par3, par4);
         }
     }
 
-    /**
-     * Called whenever the block is added into the world. Args: world, x, y, z
-     */
-    public void onBlockAdded(World var1, int var2, int var3, int var4)
+    public void onBlockAdded(World par1World, int par2, int par3, int par4)
     {
-        if (var1.provider.dimensionId > 0 || var1.getBlockId(var2, var3 - 1, var4) != Block.obsidian.blockID || !Block.portal.tryToCreatePortal(var1, var2, var3, var4))
+        if ((par1World.provider.dimensionId > 0) || (par1World.getBlockId(par2, par3 - 1, par4) != Block.obsidian.blockID) || (!Block.portal.tryToCreatePortal(par1World, par2, par3, par4)))
         {
-            if (!var1.doesBlockHaveSolidTopSurface(var2, var3 - 1, var4) && !this.canNeighborBurn(var1, var2, var3, var4))
+            if ((!par1World.doesBlockHaveSolidTopSurface(par2, par3 - 1, par4)) && (!canNeighborBurn(par1World, par2, par3, par4)))
             {
-                var1.setBlockToAir(var2, var3, var4);
+                par1World.setBlockToAir(par2, par3, par4);
             }
             else
             {
-                var1.scheduleBlockUpdate(var2, var3, var4, this.blockID, this.tickRate(var1) + var1.rand.nextInt(10));
+                par1World.scheduleBlockUpdate(par2, par3, par4, this.blockID, tickRate(par1World) + par1World.rand.nextInt(10));
             }
         }
     }
 
     @SideOnly(Side.CLIENT)
-
-    /**
-     * A randomly called display update to be able to add particles or other items for display
-     */
-    public void randomDisplayTick(World var1, int var2, int var3, int var4, Random var5)
+    public void randomDisplayTick(World par1World, int par2, int par3, int par4, Random par5Random)
     {
-        if (var5.nextInt(24) == 0)
+        if (par5Random.nextInt(24) == 0)
         {
-            var1.playSound((double)((float)var2 + 0.5F), (double)((float)var3 + 0.5F), (double)((float)var4 + 0.5F), "fire.fire", 1.0F + var5.nextFloat(), var5.nextFloat() * 0.7F + 0.3F, false);
+            par1World.playSound(par2 + 0.5F, par3 + 0.5F, par4 + 0.5F, "fire.fire", 1.0F + par5Random.nextFloat(), par5Random.nextFloat() * 0.7F + 0.3F, false);
         }
 
-        int var6;
-        float var7;
-        float var8;
-        float var9;
+        int l;
 
-        if (!var1.doesBlockHaveSolidTopSurface(var2, var3 - 1, var4) && !AetherBlocks.ColdFire.canBlockCatchFire(var1, var2, var3 - 1, var4, ForgeDirection.UP))
+        if ((!par1World.doesBlockHaveSolidTopSurface(par2, par3 - 1, par4)) && (!AetherBlocks.ColdFire.canBlockCatchFire(par1World, par2, par3 - 1, par4, ForgeDirection.UP)))
         {
-            if (AetherBlocks.ColdFire.canBlockCatchFire(var1, var2 - 1, var3, var4, ForgeDirection.EAST))
+            if (AetherBlocks.ColdFire.canBlockCatchFire(par1World, par2 - 1, par3, par4, ForgeDirection.EAST))
             {
-                for (var6 = 0; var6 < 2; ++var6)
+                for (int l = 0; l < 2; l++)
                 {
-                    var7 = (float)var2 + var5.nextFloat() * 0.1F;
-                    var8 = (float)var3 + var5.nextFloat();
-                    var9 = (float)var4 + var5.nextFloat();
-                    var1.spawnParticle("largesmoke", (double)var7, (double)var8, (double)var9, 0.0D, 0.0D, 0.0D);
+                    float f = par2 + par5Random.nextFloat() * 0.1F;
+                    float f1 = par3 + par5Random.nextFloat();
+                    float f2 = par4 + par5Random.nextFloat();
+                    par1World.spawnParticle("largesmoke", f, f1, f2, 0.0D, 0.0D, 0.0D);
                 }
             }
 
-            if (AetherBlocks.ColdFire.canBlockCatchFire(var1, var2 + 1, var3, var4, ForgeDirection.WEST))
+            if (AetherBlocks.ColdFire.canBlockCatchFire(par1World, par2 + 1, par3, par4, ForgeDirection.WEST))
             {
-                for (var6 = 0; var6 < 2; ++var6)
+                for (int l = 0; l < 2; l++)
                 {
-                    var7 = (float)(var2 + 1) - var5.nextFloat() * 0.1F;
-                    var8 = (float)var3 + var5.nextFloat();
-                    var9 = (float)var4 + var5.nextFloat();
-                    var1.spawnParticle("largesmoke", (double)var7, (double)var8, (double)var9, 0.0D, 0.0D, 0.0D);
+                    float f = par2 + 1 - par5Random.nextFloat() * 0.1F;
+                    float f1 = par3 + par5Random.nextFloat();
+                    float f2 = par4 + par5Random.nextFloat();
+                    par1World.spawnParticle("largesmoke", f, f1, f2, 0.0D, 0.0D, 0.0D);
                 }
             }
 
-            if (AetherBlocks.ColdFire.canBlockCatchFire(var1, var2, var3, var4 - 1, ForgeDirection.SOUTH))
+            if (AetherBlocks.ColdFire.canBlockCatchFire(par1World, par2, par3, par4 - 1, ForgeDirection.SOUTH))
             {
-                for (var6 = 0; var6 < 2; ++var6)
+                for (int l = 0; l < 2; l++)
                 {
-                    var7 = (float)var2 + var5.nextFloat();
-                    var8 = (float)var3 + var5.nextFloat();
-                    var9 = (float)var4 + var5.nextFloat() * 0.1F;
-                    var1.spawnParticle("largesmoke", (double)var7, (double)var8, (double)var9, 0.0D, 0.0D, 0.0D);
+                    float f = par2 + par5Random.nextFloat();
+                    float f1 = par3 + par5Random.nextFloat();
+                    float f2 = par4 + par5Random.nextFloat() * 0.1F;
+                    par1World.spawnParticle("largesmoke", f, f1, f2, 0.0D, 0.0D, 0.0D);
                 }
             }
 
-            if (AetherBlocks.ColdFire.canBlockCatchFire(var1, var2, var3, var4 + 1, ForgeDirection.NORTH))
+            if (AetherBlocks.ColdFire.canBlockCatchFire(par1World, par2, par3, par4 + 1, ForgeDirection.NORTH))
             {
-                for (var6 = 0; var6 < 2; ++var6)
+                for (int l = 0; l < 2; l++)
                 {
-                    var7 = (float)var2 + var5.nextFloat();
-                    var8 = (float)var3 + var5.nextFloat();
-                    var9 = (float)(var4 + 1) - var5.nextFloat() * 0.1F;
-                    var1.spawnParticle("largesmoke", (double)var7, (double)var8, (double)var9, 0.0D, 0.0D, 0.0D);
+                    float f = par2 + par5Random.nextFloat();
+                    float f1 = par3 + par5Random.nextFloat();
+                    float f2 = par4 + 1 - par5Random.nextFloat() * 0.1F;
+                    par1World.spawnParticle("largesmoke", f, f1, f2, 0.0D, 0.0D, 0.0D);
                 }
             }
 
-            if (AetherBlocks.ColdFire.canBlockCatchFire(var1, var2, var3 + 1, var4, ForgeDirection.DOWN))
+            if (!AetherBlocks.ColdFire.canBlockCatchFire(par1World, par2, par3 + 1, par4, ForgeDirection.DOWN))
             {
-                for (var6 = 0; var6 < 2; ++var6)
-                {
-                    var7 = (float)var2 + var5.nextFloat();
-                    var8 = (float)(var3 + 1) - var5.nextFloat() * 0.1F;
-                    var9 = (float)var4 + var5.nextFloat();
-                    var1.spawnParticle("largesmoke", (double)var7, (double)var8, (double)var9, 0.0D, 0.0D, 0.0D);
-                }
+                return;
             }
-        }
-        else
-        {
-            for (var6 = 0; var6 < 3; ++var6)
+
+            for (l = 0; l < 2;)
             {
-                var7 = (float)var2 + var5.nextFloat();
-                var8 = (float)var3 + var5.nextFloat() * 0.5F + 0.5F;
-                var9 = (float)var4 + var5.nextFloat();
-                var1.spawnParticle("largesmoke", (double)var7, (double)var8, (double)var9, 0.0D, 0.0D, 0.0D);
+                float f = par2 + par5Random.nextFloat();
+                float f1 = par3 + 1 - par5Random.nextFloat() * 0.1F;
+                float f2 = par4 + par5Random.nextFloat();
+                par1World.spawnParticle("largesmoke", f, f1, f2, 0.0D, 0.0D, 0.0D);
+                l++;
+                continue;
+
+                for (int l = 0; l < 3; l++)
+                {
+                    float f = par2 + par5Random.nextFloat();
+                    float f1 = par3 + par5Random.nextFloat() * 0.5F + 0.5F;
+                    float f2 = par4 + par5Random.nextFloat();
+                    par1World.spawnParticle("largesmoke", f, f1, f2, 0.0D, 0.0D, 0.0D);
+                }
             }
         }
     }
 
     @SideOnly(Side.CLIENT)
-
-    /**
-     * When this method is called, your block should register all the icons it needs with the given IconRegister. This
-     * is the only chance you get to register icons.
-     */
-    public void registerIcons(IconRegister var1)
+    public void registerIcons(IconRegister par1IconRegister)
     {
-        this.iconArray = new Icon[] {var1.registerIcon("Aether:coldfire_0"), var1.registerIcon("Aether:coldfire_1")};
+        this.iconArray = new Icon[] { par1IconRegister.registerIcon("Aether:coldfire_0"), par1IconRegister.registerIcon("Aether:coldfire_1") };
     }
 
     @SideOnly(Side.CLIENT)
-    public Icon func_94438_c(int var1)
+    public Icon func_94438_c(int par1)
     {
-        return this.iconArray[var1];
+        return this.iconArray[par1];
     }
 
     @SideOnly(Side.CLIENT)
-    public Icon getBlockTextureFromSideAndMetadata(int var1, int var2)
+    public Icon getBlockTextureFromSideAndMetadata(int par1, int par2)
     {
         return this.iconArray[0];
     }
 
-    public boolean canBlockCatchFire(IBlockAccess var1, int var2, int var3, int var4, ForgeDirection var5)
+    public boolean canBlockCatchFire(IBlockAccess world, int x, int y, int z, ForgeDirection face)
     {
-        Block var6 = Block.blocksList[var1.getBlockId(var2, var3, var4)];
-        return var6 != null ? var6.isFlammable(var1, var2, var3, var4, var1.getBlockMetadata(var2, var3, var4), var5) : false;
-    }
+        Block block = Block.blocksList[world.getBlockId(x, y, z)];
 
-    public int getChanceToEncourageFire(World var1, int var2, int var3, int var4, int var5, ForgeDirection var6)
-    {
-        int var7 = 0;
-        Block var8 = Block.blocksList[var1.getBlockId(var2, var3, var4)];
-
-        if (var8 != null)
+        if (block != null)
         {
-            var7 = var8.getFireSpreadSpeed(var1, var2, var3, var4, var1.getBlockMetadata(var2, var3, var4), var6);
+            return block.isFlammable(world, x, y, z, world.getBlockMetadata(x, y, z), face);
         }
 
-        return var7 > var5 ? var7 : var5;
+        return false;
+    }
+
+    public int getChanceToEncourageFire(World world, int x, int y, int z, int oldChance, ForgeDirection face)
+    {
+        int newChance = 0;
+        Block block = Block.blocksList[world.getBlockId(x, y, z)];
+
+        if (block != null)
+        {
+            newChance = block.getFireSpreadSpeed(world, x, y, z, world.getBlockMetadata(x, y, z), face);
+        }
+
+        return newChance > oldChance ? newChance : oldChance;
     }
 }
+

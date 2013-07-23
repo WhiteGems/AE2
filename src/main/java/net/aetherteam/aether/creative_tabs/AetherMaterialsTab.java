@@ -21,11 +21,9 @@ public class AetherMaterialsTab extends CreativeTabs
         return "Aether Materials";
     }
 
-    /**
-     * Gets the translated Label.
-     */
     public String getTranslatedTabLabel()
     {
-        return this.getTabLabel();
+        return getTabLabel();
     }
 }
+

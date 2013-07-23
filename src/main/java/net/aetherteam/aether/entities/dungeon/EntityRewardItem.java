@@ -1,5 +1,7 @@
 package net.aetherteam.aether.entities.dungeon;
 
+import net.minecraft.entity.DataWatcher;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -8,21 +10,21 @@ import net.minecraft.world.World;
 
 public class EntityRewardItem extends EntityItem
 {
-    public EntityRewardItem(World var1, double var2, double var4, double var6, String var8)
+    public EntityRewardItem(World par1World, double par2, double par4, double par6, String playerName)
     {
-        super(var1);
-        this.setPlayerName(var8);
+        super(par1World);
+        setPlayerName(playerName);
     }
 
-    public EntityRewardItem(World var1, double var2, double var4, double var6, ItemStack var8, String var9)
+    public EntityRewardItem(World par1World, double par2, double par4, double par6, ItemStack par8ItemStack, String playerName)
     {
-        super(var1, var2, var4, var6, var8);
-        this.setPlayerName(var9);
+        super(par1World, par2, par4, par6, par8ItemStack);
+        setPlayerName(playerName);
     }
 
-    public EntityRewardItem(World var1)
+    public EntityRewardItem(World par1World)
     {
-        super(var1);
+        super(par1World);
     }
 
     protected void entityInit()
@@ -31,9 +33,9 @@ public class EntityRewardItem extends EntityItem
         this.dataWatcher.addObject(16, String.valueOf(""));
     }
 
-    public void setPlayerName(String var1)
+    public void setPlayerName(String playerName)
     {
-        this.dataWatcher.updateObject(16, var1);
+        this.dataWatcher.updateObject(16, playerName);
     }
 
     public String getPlayerName()
@@ -41,39 +43,36 @@ public class EntityRewardItem extends EntityItem
         return this.dataWatcher.getWatchableObjectString(16);
     }
 
-    private void searchForOtherItemsNearby() {}
+    private void searchForOtherItemsNearby()
+    {
+    }
 
-    public boolean combineItems(EntityRewardItem var1)
+    public boolean combineItems(EntityRewardItem par1EntityItem)
     {
         return false;
     }
 
-    /**
-     * (abstract) Protected helper method to write subclass entity data to NBT.
-     */
-    public void writeEntityToNBT(NBTTagCompound var1)
+    public void writeEntityToNBT(NBTTagCompound tag)
     {
-        super.writeEntityToNBT(var1);
-        var1.setString("PlayerName", this.getPlayerName());
+        super.writeEntityToNBT(tag);
+        tag.setString("PlayerName", getPlayerName());
     }
 
-    /**
-     * (abstract) Protected helper method to read subclass entity data from NBT.
-     */
-    public void readEntityFromNBT(NBTTagCompound var1)
+    public void readEntityFromNBT(NBTTagCompound tag)
     {
-        super.readEntityFromNBT(var1);
-        this.setPlayerName(var1.getString("PlayerName"));
+        super.readEntityFromNBT(tag);
+        setPlayerName(tag.getString("PlayerName"));
     }
 
-    /**
-     * Called by a player entity when they collide with an entity
-     */
-    public void onCollideWithPlayer(EntityPlayer var1)
+    public void onCollideWithPlayer(EntityPlayer par1EntityPlayer)
     {
-        if (!this.worldObj.isRemote && this.getPlayerName() != null && var1.username.equalsIgnoreCase(this.getPlayerName()))
+        if (!this.worldObj.isRemote)
         {
-            super.onCollideWithPlayer(var1);
+            if ((getPlayerName() != null) && (par1EntityPlayer.username.equalsIgnoreCase(getPlayerName())))
+            {
+                super.onCollideWithPlayer(par1EntityPlayer);
+            }
         }
     }
 }
+

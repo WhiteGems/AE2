@@ -2,16 +2,16 @@ package net.aetherteam.aether.party;
 
 import java.io.Serializable;
 
-public enum PartyType implements Serializable
+public enum PartyType
+implements Serializable
 {
-    OPEN(6750054),
-    CLOSED(16711680),
-    PRIVATE(0);
+    OPEN(6750054), CLOSED(16711680), PRIVATE(0);
+
     public int displayColor;
 
-    private PartyType(int var3)
+    private PartyType(int displayColor)
     {
-        this.displayColor = var3;
+        this.displayColor = displayColor;
     }
 
     public int getDisplayColor()
@@ -19,21 +19,17 @@ public enum PartyType implements Serializable
         return this.displayColor;
     }
 
-    public static PartyType getTypeFromString(String var0)
+    public static PartyType getTypeFromString(String name)
     {
-        PartyType[] var1 = values();
-        int var2 = var1.length;
-
-        for (int var3 = 0; var3 < var2; ++var3)
+        for (PartyType type : values())
         {
-            PartyType var4 = var1[var3];
-
-            if (var4.name().equalsIgnoreCase(var0))
+            if (type.name().equalsIgnoreCase(name))
             {
-                return var4;
+                return type;
             }
         }
 
         return null;
     }
 }
+

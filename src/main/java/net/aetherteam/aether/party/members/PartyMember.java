@@ -4,45 +4,47 @@ import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.relauncher.Side;
 import java.io.Serializable;
 import net.aetherteam.aether.Aether;
+import net.aetherteam.aether.CommonProxy;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 
-public class PartyMember implements Serializable
+public class PartyMember
+    implements Serializable
 {
     public String username;
     public int skinIndex;
     public String skinUrl;
-    private MemberType type;
-    Side side;
+    private MemberType type = MemberType.MEMBER;
 
-    public PartyMember(EntityPlayer var1)
+    Side side = FMLCommonHandler.instance().getEffectiveSide();
+
+    public PartyMember(EntityPlayer player)
     {
-        this.type = MemberType.MEMBER;
-        this.side = FMLCommonHandler.instance().getEffectiveSide();
-        this.username = var1.username;
+        this.username = player.username;
 
         if (this.side.isClient())
         {
-            this.skinIndex = Aether.proxy.getClient().renderEngine.getTextureForDownloadableImage(var1.skinUrl, "/mob/char.png");
-            this.skinUrl = var1.skinUrl;
+            this.skinIndex = Aether.proxy.getClient().renderEngine.a(player.skinUrl, "/mob/char.png");
+            this.skinUrl = player.skinUrl;
         }
     }
 
-    public PartyMember(String var1, String var2)
+    public PartyMember(String username, String skinUrl)
     {
-        this.type = MemberType.MEMBER;
-        this.side = FMLCommonHandler.instance().getEffectiveSide();
-        this.username = var1;
+        this.username = username;
 
         if (this.side.isClient())
         {
-            this.skinIndex = Aether.proxy.getClient().renderEngine.getTextureForDownloadableImage(var2, "/mob/char.png");
-            this.skinUrl = var2;
+            this.skinIndex = Aether.proxy.getClient().renderEngine.a(skinUrl, "/mob/char.png");
+            this.skinUrl = skinUrl;
         }
     }
 
-    public PartyMember promoteTo(MemberType var1)
+    public PartyMember promoteTo(MemberType type)
     {
-        this.type = var1;
+        this.type = type;
         return this;
     }
 
@@ -81,3 +83,4 @@ public class PartyMember implements Serializable
         return this.type;
     }
 }
+

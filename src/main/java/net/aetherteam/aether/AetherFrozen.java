@@ -8,10 +8,11 @@ public class AetherFrozen
     public ItemStack frozenTo;
     public int frozenPowerNeeded;
 
-    public AetherFrozen(ItemStack var1, ItemStack var2, int var3)
+    public AetherFrozen(ItemStack from, ItemStack to, int i)
     {
-        this.frozenFrom = var1;
-        this.frozenTo = var2;
-        this.frozenPowerNeeded = var3;
+        this.frozenFrom = from;
+        this.frozenTo = to;
+        this.frozenPowerNeeded = i;
     }
 }
+

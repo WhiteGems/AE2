@@ -7,3 +7,4 @@ public class PartyData
     public ArrayList pList_online = new ArrayList();
     public ArrayList pList_offline = new ArrayList();
 }
+

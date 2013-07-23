@@ -1,17 +1,19 @@
 package net.aetherteam.mainmenu_api;
 
+import java.io.PrintStream;
+
 public class MenuPage
 {
     private MenuSlot[] menuSlots = new MenuSlot[3];
     private int slotIndex = 0;
 
-    public void addMenuSlot(MenuSlot var1)
+    public void addMenuSlot(MenuSlot slot)
     {
-        this.menuSlots[this.slotIndex] = var1;
+        this.menuSlots[this.slotIndex] = slot;
 
-        if (this.slotIndex < this.getPageAmount())
+        if (this.slotIndex < getPageAmount())
         {
-            ++this.slotIndex;
+            this.slotIndex += 1;
         }
         else
         {
@@ -19,9 +21,9 @@ public class MenuPage
         }
     }
 
-    public MenuSlot getMenuSlot(int var1)
+    public MenuSlot getMenuSlot(int index)
     {
-        return this.menuSlots[var1];
+        return this.menuSlots[index];
     }
 
     public int getPageAmount()
@@ -29,3 +31,4 @@ public class MenuPage
         return this.menuSlots.length;
     }
 }
+

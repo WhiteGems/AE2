@@ -5,6 +5,7 @@ import java.util.Iterator;
 import java.util.List;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.inventory.Container;
 import net.minecraft.inventory.ContainerPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.InventoryBasic;
@@ -16,110 +17,110 @@ public class ContainerLore extends ContainerPlayer
     public List slotsToRemove = new ArrayList();
     public IInventory loreSlot;
 
-    public ContainerLore(InventoryPlayer var1, boolean var2, EntityPlayer var3)
+    public ContainerLore(InventoryPlayer inventoryplayer, boolean b, EntityPlayer player)
     {
-        super(var1, var2, var3);
-        Iterator var4 = this.inventorySlots.iterator();
+        super(inventoryplayer, b, player);
 
-        while (var4.hasNext())
+        for (Iterator i$ = this.inventorySlots.iterator(); i$.hasNext();)
         {
-            Object var5 = var4.next();
+            Object slottemp = i$.next();
 
-            if (var5 instanceof Slot)
+            if ((slottemp instanceof Slot))
             {
-                Slot var6 = (Slot)var5;
-                this.slotsToRemove.add(var6);
+                Slot slot = (Slot)slottemp;
+                this.slotsToRemove.add(slot);
             }
         }
 
         this.inventorySlots.remove(0);
-        int var7;
 
-        for (var7 = 0; var7 < 3; ++var7)
+        for (int var4 = 0; var4 < 3; var4++)
         {
-            for (int var8 = 0; var8 < 9; ++var8)
+            for (int var5 = 0; var5 < 9; var5++)
             {
-                ((Slot)this.inventorySlots.get(var8 + (var7 + 1) * 9)).xDisplayPosition = 48 + var8 * 18;
-                ((Slot)this.inventorySlots.get(var8 + (var7 + 1) * 9)).yDisplayPosition = 113 + var7 * 18;
+                ((Slot)this.inventorySlots.get(var5 + (var4 + 1) * 9)).xDisplayPosition = (48 + var5 * 18);
+                ((Slot)this.inventorySlots.get(var5 + (var4 + 1) * 9)).yDisplayPosition = (113 + var4 * 18);
             }
         }
 
-        for (var7 = 0; var7 < 9; ++var7)
+        for (int var4 = 0; var4 < 9; var4++)
         {
-            ((Slot)this.inventorySlots.get(var7)).xDisplayPosition = 48 + var7 * 18;
-            ((Slot)this.inventorySlots.get(var7)).yDisplayPosition = 171;
+            ((Slot)this.inventorySlots.get(var4)).xDisplayPosition = (48 + var4 * 18);
+            ((Slot)this.inventorySlots.get(var4)).yDisplayPosition = 171;
         }
 
         this.loreSlot = new InventoryBasic("Lore Item", true, 1);
-        this.addSlotToContainer(new Slot(this.loreSlot, 0, 82, 66));
-        this.onCraftMatrixChanged(this.craftMatrix);
+        addSlotToContainer(new Slot(this.loreSlot, 0, 82, 66));
+        onCraftMatrixChanged(this.craftMatrix);
     }
 
-    protected void retrySlotClick(int var1, int var2, boolean var3, EntityPlayer var4) {}
-
-    /**
-     * Callback for when the crafting gui is closed.
-     */
-    public void onCraftGuiClosed(EntityPlayer var1)
+    protected void retrySlotClick(int par1, int par2, boolean par3, EntityPlayer par4EntityPlayer)
     {
-        super.onCraftGuiClosed(var1);
-        ItemStack var2 = this.loreSlot.getStackInSlotOnClosing(0);
+    }
 
-        if (var2 != null)
+    public void onCraftGuiClosed(EntityPlayer entityplayer)
+    {
+        super.onCraftGuiClosed(entityplayer);
+        ItemStack itemstack = this.loreSlot.getStackInSlotOnClosing(0);
+
+        if (itemstack != null)
         {
-            var1.dropPlayerItem(var2);
+            entityplayer.dropPlayerItem(itemstack);
         }
     }
 
-    public boolean canInteractWith(EntityPlayer var1)
+    public boolean canInteractWith(EntityPlayer entityplayer)
     {
         return true;
     }
 
-    public ItemStack getStackInSlot(int var1)
+    public ItemStack getStackInSlot(int i)
     {
-        ItemStack var2 = null;
-        Slot var3 = (Slot)this.inventorySlots.get(var1);
+        ItemStack itemstack = null;
+        Slot slot = (Slot)this.inventorySlots.get(i);
 
-        if (var3 != null && var3.getHasStack())
+        if ((slot != null) && (slot.getHasStack()))
         {
-            ItemStack var4 = var3.getStack();
-            var2 = var4.copy();
+            ItemStack itemstack1 = slot.getStack();
+            itemstack = itemstack1.copy();
 
-            if (var1 == 0)
+            if (i == 0)
             {
-                this.mergeItemStack(var4, 10, 46, true);
+                mergeItemStack(itemstack1, 10, 46, true);
             }
-            else if (var1 >= 10 && var1 < 37)
+            else if ((i >= 10) && (i < 37))
             {
-                this.mergeItemStack(var4, 37, 46, false);
+                mergeItemStack(itemstack1, 37, 46, false);
             }
-            else if (var1 >= 37 && var1 < 46)
+            else if ((i >= 37) && (i < 46))
             {
-                this.mergeItemStack(var4, 10, 37, false);
+                mergeItemStack(itemstack1, 10, 37, false);
             }
             else
             {
-                this.mergeItemStack(var4, 10, 46, false);
+                mergeItemStack(itemstack1, 10, 46, false);
             }
 
-            if (var4.stackSize == 0)
+            if (itemstack1.stackSize == 0)
             {
-                var3.putStack((ItemStack)null);
+                slot.putStack(null);
             }
             else
             {
-                var3.onSlotChanged();
+                slot.onSlotChanged();
             }
 
-            if (var4.stackSize == var2.stackSize)
+            if (itemstack1.stackSize != itemstack.stackSize)
+            {
+                slot.onSlotChange(itemstack1, itemstack);
+            }
+            else
             {
                 return null;
             }
-
-            var3.onSlotChange(var4, var2);
         }
 
-        return var2;
+        return itemstack;
     }
 }
+

@@ -14,16 +14,16 @@ public class AetherGenBuildings extends WorldGenerator
     public boolean replaceAir;
     public boolean replaceSolid;
 
-    public boolean generate(World var1, Random var2, int var3, int var4, int var5)
+    public boolean generate(World world, Random random, int i, int j, int k)
     {
         return false;
     }
 
-    public void setBlocks(int var1, int var2, int var3)
+    public void setBlocks(int i, int j, int k)
     {
-        this.blockID1 = var1;
-        this.blockID2 = var2;
-        this.chance = var3;
+        this.blockID1 = i;
+        this.blockID2 = j;
+        this.chance = k;
 
         if (this.chance < 1)
         {
@@ -31,188 +31,92 @@ public class AetherGenBuildings extends WorldGenerator
         }
     }
 
-    public void setMetadata(int var1, int var2)
+    public void setMetadata(int i, int j)
     {
-        this.meta1 = var1;
-        this.meta2 = var2;
+        this.meta1 = i;
+        this.meta2 = j;
     }
 
-    public void addLineX(World var1, Random var2, int var3, int var4, int var5, int var6)
+    public void addLineX(World world, Random random, int i, int j, int k, int length)
     {
-        for (int var7 = var3; var7 < var3 + var6; ++var7)
+        for (int x = i; x < i + length; x++)
         {
-            if ((this.replaceAir || var1.getBlockId(var7, var4, var5) != 0) && (this.replaceSolid || var1.getBlockId(var7, var4, var5) == 0))
+            if ((this.replaceAir) || (world.getBlockId(x, j, k) != 0))
             {
-                if (var2.nextInt(this.chance) == 0)
+                if ((this.replaceSolid) || (world.getBlockId(x, j, k) == 0))
                 {
-                    var1.setBlock(var7, var4, var5, this.blockID2, this.meta2, 2);
-                }
-                else
-                {
-                    var1.setBlock(var7, var4, var5, this.blockID1, this.meta1, 2);
-                }
-            }
-        }
-    }
-
-    public void addLineY(World var1, Random var2, int var3, int var4, int var5, int var6)
-    {
-        for (int var7 = var4; var7 < var4 + var6; ++var7)
-        {
-            if ((this.replaceAir || var1.getBlockId(var3, var7, var5) != 0) && (this.replaceSolid || var1.getBlockId(var3, var7, var5) == 0))
-            {
-                if (var2.nextInt(this.chance) == 0)
-                {
-                    var1.setBlock(var3, var7, var5, this.blockID2, this.meta2, 2);
-                }
-                else
-                {
-                    var1.setBlock(var3, var7, var5, this.blockID1, this.meta1, 2);
-                }
-            }
-        }
-    }
-
-    public void addLineZ(World var1, Random var2, int var3, int var4, int var5, int var6)
-    {
-        for (int var7 = var5; var7 < var5 + var6; ++var7)
-        {
-            if ((this.replaceAir || var1.getBlockId(var3, var4, var7) != 0) && (this.replaceSolid || var1.getBlockId(var3, var4, var7) == 0))
-            {
-                if (var2.nextInt(this.chance) == 0)
-                {
-                    var1.setBlock(var3, var4, var7, this.blockID2, this.meta2, 2);
-                }
-                else
-                {
-                    var1.setBlock(var3, var4, var7, this.blockID1, this.meta1, 2);
-                }
-            }
-        }
-    }
-
-    public void addPlaneX(World var1, Random var2, int var3, int var4, int var5, int var6, int var7)
-    {
-        for (int var8 = var4; var8 < var4 + var6; ++var8)
-        {
-            for (int var9 = var5; var9 < var5 + var7; ++var9)
-            {
-                if ((this.replaceAir || var1.getBlockId(var3, var8, var9) != 0) && (this.replaceSolid || var1.getBlockId(var3, var8, var9) == 0))
-                {
-                    if (var2.nextInt(this.chance) == 0)
+                    if (random.nextInt(this.chance) == 0)
                     {
-                        var1.setBlock(var3, var8, var9, this.blockID2, this.meta2, 2);
+                        world.setBlock(x, j, k, this.blockID2, this.meta2, 2);
                     }
                     else
                     {
-                        var1.setBlock(var3, var8, var9, this.blockID1, this.meta1, 2);
+                        world.setBlock(x, j, k, this.blockID1, this.meta1, 2);
                     }
                 }
             }
         }
     }
 
-    public void addPlaneY(World var1, Random var2, int var3, int var4, int var5, int var6, int var7)
+    public void addLineY(World world, Random random, int i, int j, int k, int length)
     {
-        for (int var8 = var3; var8 < var3 + var6; ++var8)
+        for (int y = j; y < j + length; y++)
         {
-            for (int var9 = var5; var9 < var5 + var7; ++var9)
+            if ((this.replaceAir) || (world.getBlockId(i, y, k) != 0))
             {
-                if ((this.replaceAir || var1.getBlockId(var8, var4, var9) != 0) && (this.replaceSolid || var1.getBlockId(var8, var4, var9) == 0))
+                if ((this.replaceSolid) || (world.getBlockId(i, y, k) == 0))
                 {
-                    if (var2.nextInt(this.chance) == 0)
+                    if (random.nextInt(this.chance) == 0)
                     {
-                        var1.setBlock(var8, var4, var9, this.blockID2, this.meta2, 2);
+                        world.setBlock(i, y, k, this.blockID2, this.meta2, 2);
                     }
                     else
                     {
-                        var1.setBlock(var8, var4, var9, this.blockID1, this.meta1, 2);
+                        world.setBlock(i, y, k, this.blockID1, this.meta1, 2);
                     }
                 }
             }
         }
     }
 
-    public void addPlaneZ(World var1, Random var2, int var3, int var4, int var5, int var6, int var7)
+    public void addLineZ(World world, Random random, int i, int j, int k, int length)
     {
-        for (int var8 = var3; var8 < var3 + var6; ++var8)
+        for (int z = k; z < k + length; z++)
         {
-            for (int var9 = var4; var9 < var4 + var7; ++var9)
+            if ((this.replaceAir) || (world.getBlockId(i, j, z) != 0))
             {
-                if ((this.replaceAir || var1.getBlockId(var8, var9, var5) != 0) && (this.replaceSolid || var1.getBlockId(var8, var9, var5) == 0))
+                if ((this.replaceSolid) || (world.getBlockId(i, j, z) == 0))
                 {
-                    if (var2.nextInt(this.chance) == 0)
+                    if (random.nextInt(this.chance) == 0)
                     {
-                        var1.setBlock(var8, var9, var5, this.blockID2, this.meta2, 2);
+                        world.setBlock(i, j, z, this.blockID2, this.meta2, 2);
                     }
                     else
                     {
-                        var1.setBlock(var8, var9, var5, this.blockID1, this.meta1, 2);
+                        world.setBlock(i, j, z, this.blockID1, this.meta1, 2);
                     }
                 }
             }
         }
     }
 
-    public void addHollowBox(World var1, Random var2, int var3, int var4, int var5, int var6, int var7, int var8)
+    public void addPlaneX(World world, Random random, int i, int j, int k, int dj, int dk)
     {
-        int var9 = this.blockID1;
-        int var10 = this.blockID2;
-        this.setBlocks(0, 0, this.chance);
-        this.addSolidBox(var1, var2, var3, var4, var5, var6, var7, var8);
-        this.setBlocks(var9, var10, this.chance);
-        this.addPlaneY(var1, var2, var3, var4, var5, var6, var8);
-        this.addPlaneY(var1, var2, var3, var4 + var7 - 1, var5, var6, var8);
-        this.addPlaneX(var1, var2, var3, var4, var5, var7, var8);
-        this.addPlaneX(var1, var2, var3 + var6 - 1, var4, var5, var7, var8);
-        this.addPlaneZ(var1, var2, var3, var4, var5, var6, var7);
-        this.addPlaneZ(var1, var2, var3, var4, var5 + var8 - 1, var6, var7);
-    }
-
-    public void addSquareTube(World var1, Random var2, int var3, int var4, int var5, int var6, int var7, int var8, int var9)
-    {
-        int var10 = this.blockID1;
-        int var11 = this.blockID2;
-        this.setBlocks(0, 0, this.chance);
-        this.addSolidBox(var1, var2, var3, var4, var5, var6, var7, var8);
-        this.setBlocks(var10, var11, this.chance);
-
-        if (var9 == 0 || var9 == 2)
+        for (int y = j; y < j + dj; y++)
         {
-            this.addPlaneY(var1, var2, var3, var4, var5, var6, var8);
-            this.addPlaneY(var1, var2, var3, var4 + var7 - 1, var5, var6, var8);
-        }
-
-        if (var9 == 1 || var9 == 2)
-        {
-            this.addPlaneX(var1, var2, var3, var4, var5, var7, var8);
-            this.addPlaneX(var1, var2, var3 + var6 - 1, var4, var5, var7, var8);
-        }
-
-        if (var9 == 0 || var9 == 1)
-        {
-            this.addPlaneZ(var1, var2, var3, var4, var5, var6, var7);
-            this.addPlaneZ(var1, var2, var3, var4, var5 + var8 - 1, var6, var7);
-        }
-    }
-
-    public void addSolidBox(World var1, Random var2, int var3, int var4, int var5, int var6, int var7, int var8)
-    {
-        for (int var9 = var3; var9 < var3 + var6; ++var9)
-        {
-            for (int var10 = var4; var10 < var4 + var7; ++var10)
+            for (int z = k; z < k + dk; z++)
             {
-                for (int var11 = var5; var11 < var5 + var8; ++var11)
+                if ((this.replaceAir) || (world.getBlockId(i, y, z) != 0))
                 {
-                    if ((this.replaceAir || var1.getBlockId(var9, var10, var11) != 0) && (this.replaceSolid || var1.getBlockId(var9, var10, var11) == 0))
+                    if ((this.replaceSolid) || (world.getBlockId(i, y, z) == 0))
                     {
-                        if (var2.nextInt(this.chance) == 0)
+                        if (random.nextInt(this.chance) == 0)
                         {
-                            var1.setBlock(var9, var10, var11, this.blockID2, this.meta2, 2);
+                            world.setBlock(i, y, z, this.blockID2, this.meta2, 2);
                         }
                         else
                         {
-                            var1.setBlock(var9, var10, var11, this.blockID1, this.meta1, 2);
+                            world.setBlock(i, y, z, this.blockID1, this.meta1, 2);
                         }
                     }
                 }
@@ -220,45 +124,163 @@ public class AetherGenBuildings extends WorldGenerator
         }
     }
 
-    public boolean isBoxSolid(World var1, int var2, int var3, int var4, int var5, int var6, int var7)
+    public void addPlaneY(World world, Random random, int i, int j, int k, int di, int dk)
     {
-        boolean var8 = true;
-
-        for (int var9 = var2; var9 < var2 + var5; ++var9)
+        for (int x = i; x < i + di; x++)
         {
-            for (int var10 = var3; var10 < var3 + var6; ++var10)
+            for (int z = k; z < k + dk; z++)
             {
-                for (int var11 = var4; var11 < var4 + var7; ++var11)
+                if ((this.replaceAir) || (world.getBlockId(x, j, z) != 0))
                 {
-                    if (var1.getBlockId(var9, var10, var11) == 0)
+                    if ((this.replaceSolid) || (world.getBlockId(x, j, z) == 0))
                     {
-                        var8 = false;
+                        if (random.nextInt(this.chance) == 0)
+                        {
+                            world.setBlock(x, j, z, this.blockID2, this.meta2, 2);
+                        }
+                        else
+                        {
+                            world.setBlock(x, j, z, this.blockID1, this.meta1, 2);
+                        }
                     }
                 }
             }
         }
-
-        return var8;
     }
 
-    public boolean isBoxEmpty(World var1, int var2, int var3, int var4, int var5, int var6, int var7)
+    public void addPlaneZ(World world, Random random, int i, int j, int k, int di, int dj)
     {
-        boolean var8 = true;
-
-        for (int var9 = var2; var9 < var2 + var5; ++var9)
+        for (int x = i; x < i + di; x++)
         {
-            for (int var10 = var3; var10 < var3 + var6; ++var10)
+            for (int y = j; y < j + dj; y++)
             {
-                for (int var11 = var4; var11 < var4 + var7; ++var11)
+                if ((this.replaceAir) || (world.getBlockId(x, y, k) != 0))
                 {
-                    if (var1.getBlockId(var9, var10, var11) != 0)
+                    if ((this.replaceSolid) || (world.getBlockId(x, y, k) == 0))
                     {
-                        var8 = false;
+                        if (random.nextInt(this.chance) == 0)
+                        {
+                            world.setBlock(x, y, k, this.blockID2, this.meta2, 2);
+                        }
+                        else
+                        {
+                            world.setBlock(x, y, k, this.blockID1, this.meta1, 2);
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    public void addHollowBox(World world, Random random, int i, int j, int k, int di, int dj, int dk)
+    {
+        int temp1 = this.blockID1;
+        int temp2 = this.blockID2;
+        setBlocks(0, 0, this.chance);
+        addSolidBox(world, random, i, j, k, di, dj, dk);
+        setBlocks(temp1, temp2, this.chance);
+        addPlaneY(world, random, i, j, k, di, dk);
+        addPlaneY(world, random, i, j + dj - 1, k, di, dk);
+        addPlaneX(world, random, i, j, k, dj, dk);
+        addPlaneX(world, random, i + di - 1, j, k, dj, dk);
+        addPlaneZ(world, random, i, j, k, di, dj);
+        addPlaneZ(world, random, i, j, k + dk - 1, di, dj);
+    }
+
+    public void addSquareTube(World world, Random random, int i, int j, int k, int di, int dj, int dk, int dir)
+    {
+        int temp1 = this.blockID1;
+        int temp2 = this.blockID2;
+        setBlocks(0, 0, this.chance);
+        addSolidBox(world, random, i, j, k, di, dj, dk);
+        setBlocks(temp1, temp2, this.chance);
+
+        if ((dir == 0) || (dir == 2))
+        {
+            addPlaneY(world, random, i, j, k, di, dk);
+            addPlaneY(world, random, i, j + dj - 1, k, di, dk);
+        }
+
+        if ((dir == 1) || (dir == 2))
+        {
+            addPlaneX(world, random, i, j, k, dj, dk);
+            addPlaneX(world, random, i + di - 1, j, k, dj, dk);
+        }
+
+        if ((dir == 0) || (dir == 1))
+        {
+            addPlaneZ(world, random, i, j, k, di, dj);
+            addPlaneZ(world, random, i, j, k + dk - 1, di, dj);
+        }
+    }
+
+    public void addSolidBox(World world, Random random, int i, int j, int k, int di, int dj, int dk)
+    {
+        for (int x = i; x < i + di; x++)
+        {
+            for (int y = j; y < j + dj; y++)
+            {
+                for (int z = k; z < k + dk; z++)
+                {
+                    if ((this.replaceAir) || (world.getBlockId(x, y, z) != 0))
+                    {
+                        if ((this.replaceSolid) || (world.getBlockId(x, y, z) == 0))
+                        {
+                            if (random.nextInt(this.chance) == 0)
+                            {
+                                world.setBlock(x, y, z, this.blockID2, this.meta2, 2);
+                            }
+                            else
+                            {
+                                world.setBlock(x, y, z, this.blockID1, this.meta1, 2);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    public boolean isBoxSolid(World world, int i, int j, int k, int di, int dj, int dk)
+    {
+        boolean flag = true;
+
+        for (int x = i; x < i + di; x++)
+        {
+            for (int y = j; y < j + dj; y++)
+            {
+                for (int z = k; z < k + dk; z++)
+                {
+                    if (world.getBlockId(x, y, z) == 0)
+                    {
+                        flag = false;
                     }
                 }
             }
         }
 
-        return var8;
+        return flag;
+    }
+
+    public boolean isBoxEmpty(World world, int i, int j, int k, int di, int dj, int dk)
+    {
+        boolean flag = true;
+
+        for (int x = i; x < i + di; x++)
+        {
+            for (int y = j; y < j + dj; y++)
+            {
+                for (int z = k; z < k + dk; z++)
+                {
+                    if (world.getBlockId(x, y, z) != 0)
+                    {
+                        flag = false;
+                    }
+                }
+            }
+        }
+
+        return flag;
     }
 }
+

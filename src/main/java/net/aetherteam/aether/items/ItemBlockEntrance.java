@@ -6,32 +6,42 @@ import net.minecraft.item.ItemStack;
 
 public class ItemBlockEntrance extends ItemBlock
 {
-    public ItemBlockEntrance(int var1)
+    public ItemBlockEntrance(int itemID)
     {
-        super(var1);
-        this.setHasSubtypes(true);
+        super(itemID);
+        setHasSubtypes(true);
     }
 
-    public Item setIconName(String var1)
+    public Item setIconName(String name)
     {
-        return this.setUnlocalizedName("Aether:" + var1);
+        return setUnlocalizedName("Aether:" + name);
     }
 
-    /**
-     * Returns the unlocalized name of this item. This version accepts an ItemStack so different stacks can have
-     * different names based on their damage or NBT.
-     */
-    public String getUnlocalizedName(ItemStack var1)
+    public String getUnlocalizedName(ItemStack itemstack)
     {
-        int var2 = var1.getItemDamage();
-        return var2 >= 1 ? "Dungeon Entrance Lock" : (var2 >= 0 ? "Dungeon Entrance" : this.getUnlocalizedName() + var2);
+        int i = itemstack.getItemDamage();
+
+        if (i >= 1)
+        {
+            return "Dungeon Entrance Lock";
+        }
+
+        if (i >= 0)
+        {
+            return "Dungeon Entrance";
+        }
+
+        return getUnlocalizedName() + i;
     }
 
-    /**
-     * Returns the metadata of the block which this Item (ItemBlock) can place
-     */
-    public int getMetadata(int var1)
+    public int getMetadata(int damage)
     {
-        return var1 > 1 ? 1 : 0;
+        if (damage > 1)
+        {
+            return 1;
+        }
+
+        return 0;
     }
 }
+

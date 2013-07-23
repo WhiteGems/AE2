@@ -1,6 +1,7 @@
 package net.aetherteam.aether.items;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.StepSound;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -10,86 +11,82 @@ public class ItemOrangeSeeds extends ItemAether
 {
     public static int spawnID;
 
-    public ItemOrangeSeeds(int var1, int var2)
+    public ItemOrangeSeeds(int par1, int par2)
     {
-        super(var1);
-        spawnID = var2;
+        super(par1);
+        spawnID = par2;
     }
 
-    /**
-     * Callback for item usage. If the item does something special on right clicking, he will have one of those. Return
-     * True if something happen and false if it don't. This is for ITEMS, not BLOCKS
-     */
-    public boolean onItemUse(ItemStack var1, EntityPlayer var2, World var3, int var4, int var5, int var6, int var7, float var8, float var9, float var10)
+    public boolean onItemUse(ItemStack par1ItemStack, EntityPlayer par2EntityPlayer, World par3World, int par4, int par5, int par6, int par7, float par8, float par9, float par10)
     {
-        int var11 = var3.getBlockId(var4, var5, var6);
+        int i1 = par3World.getBlockId(par4, par5, par6);
 
-        if (var11 == Block.snow.blockID && (var3.getBlockMetadata(var4, var5, var6) & 7) < 1)
+        if ((i1 == Block.snow.blockID) && ((par3World.getBlockMetadata(par4, par5, par6) & 0x7) < 1))
         {
-            var7 = 1;
+            par7 = 1;
         }
-        else if (var11 != Block.vine.blockID && var11 != Block.tallGrass.blockID && var11 != Block.deadBush.blockID)
+        else if ((i1 != Block.vine.blockID) && (i1 != Block.tallGrass.blockID) && (i1 != Block.deadBush.blockID))
         {
-            if (var7 == 0)
+            if (par7 == 0)
             {
-                --var5;
+                par5--;
             }
 
-            if (var7 == 1)
+            if (par7 == 1)
             {
-                ++var5;
+                par5++;
             }
 
-            if (var7 == 2)
+            if (par7 == 2)
             {
-                --var6;
+                par6--;
             }
 
-            if (var7 == 3)
+            if (par7 == 3)
             {
-                ++var6;
+                par6++;
             }
 
-            if (var7 == 4)
+            if (par7 == 4)
             {
-                --var4;
+                par4--;
             }
 
-            if (var7 == 5)
+            if (par7 == 5)
             {
-                ++var4;
+                par4++;
             }
         }
 
-        if (!var2.canPlayerEdit(var4, var5, var6, var7, var1))
+        if (!par2EntityPlayer.canPlayerEdit(par4, par5, par6, par7, par1ItemStack))
         {
             return false;
         }
-        else if (var1.stackSize == 0)
+
+        if (par1ItemStack.stackSize == 0)
         {
             return false;
         }
-        else
-        {
-            if (var3.canPlaceEntityOnSide(spawnID, var4, var5, var6, false, var7, (Entity)null, var1))
-            {
-                Block var12 = Block.blocksList[spawnID];
-                int var13 = var12.onBlockPlaced(var3, var4, var5, var6, var7, var8, var9, var10, 0);
 
-                if (var3.setBlock(var4, var5, var6, spawnID, var13, 3))
+        if (par3World.canPlaceEntityOnSide(spawnID, par4, par5, par6, false, par7, (Entity)null, par1ItemStack))
+        {
+            Block block = Block.blocksList[spawnID];
+            int j1 = block.onBlockPlaced(par3World, par4, par5, par6, par7, par8, par9, par10, 0);
+
+            if (par3World.setBlock(par4, par5, par6, spawnID, j1, 3))
+            {
+                if (par3World.getBlockId(par4, par5, par6) == spawnID)
                 {
-                    if (var3.getBlockId(var4, var5, var6) == spawnID)
-                    {
-                        Block.blocksList[spawnID].onBlockPlacedBy(var3, var4, var5, var6, var2, var1);
-                        Block.blocksList[spawnID].onPostBlockPlaced(var3, var4, var5, var6, var13);
-                    }
-
-                    var3.playSoundEffect((double)((float)var4 + 0.5F), (double)((float)var5 + 0.5F), (double)((float)var6 + 0.5F), var12.stepSound.getPlaceSound(), (var12.stepSound.getVolume() + 1.0F) / 2.0F, var12.stepSound.getPitch() * 0.8F);
-                    --var1.stackSize;
+                    Block.blocksList[spawnID].onBlockPlacedBy(par3World, par4, par5, par6, par2EntityPlayer, par1ItemStack);
+                    Block.blocksList[spawnID].onPostBlockPlaced(par3World, par4, par5, par6, j1);
                 }
-            }
 
-            return true;
+                par3World.playSoundEffect(par4 + 0.5F, par5 + 0.5F, par6 + 0.5F, block.stepSound.getPlaceSound(), (block.stepSound.getVolume() + 1.0F) / 2.0F, block.stepSound.getPitch() * 0.8F);
+                par1ItemStack.stackSize -= 1;
+            }
         }
+
+        return true;
     }
 }
+

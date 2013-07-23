@@ -9,10 +9,15 @@ import net.aetherteam.aether.tile_entities.TileEntityAltar;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiIngame;
+import net.minecraft.client.gui.GuiNewChat;
 import net.minecraft.client.renderer.texture.IconRegister;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
@@ -20,44 +25,43 @@ import net.minecraft.util.Icon;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 
-public class BlockAltar extends BlockContainer implements IAetherBlock
+public class BlockAltar extends BlockContainer
+    implements IAetherBlock
 {
-    private Random EnchanterRand = new Random();
+    private Random EnchanterRand;
     private Icon sideIcon;
 
-    public static void updateEnchanterBlockState(boolean var0, World var1, int var2, int var3, int var4)
+    public static void updateEnchanterBlockState(boolean flag, World world, int i, int j, int k)
     {
-        int var5 = var1.getBlockMetadata(var2, var3, var4);
-        TileEntity var6 = var1.getBlockTileEntity(var2, var3, var4);
-        var1.setBlockMetadataWithNotify(var2, var3, var4, var5, 4);
-        var1.setBlockTileEntity(var2, var3, var4, var6);
+        int l = world.getBlockMetadata(i, j, k);
+        TileEntity tileentity = world.getBlockTileEntity(i, j, k);
+        world.setBlockMetadataWithNotify(i, j, k, l, 4);
+        world.setBlockTileEntity(i, j, k, tileentity);
     }
 
-    protected BlockAltar(int var1)
+    protected BlockAltar(int blockID)
     {
-        super(var1, Material.rock);
-        this.setHardness(2.0F);
+        super(blockID, Material.rock);
+        this.EnchanterRand = new Random();
+        setHardness(2.0F);
     }
 
-    public Block setIconName(String var1)
+    public Block setIconName(String name)
     {
-        return this.setUnlocalizedName("Aether:" + var1);
+        return setUnlocalizedName("Aether:" + name);
     }
 
-    /**
-     * Called upon block activation (right click on the block.)
-     */
-    public boolean onBlockActivated(World var1, int var2, int var3, int var4, EntityPlayer var5, int var6, float var7, float var8, float var9)
+    public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer entityplayer, int par6, float par7, float par8, float par9)
     {
-        TileEntityAltar var10 = (TileEntityAltar)var1.getBlockTileEntity(var2, var3, var4);
+        TileEntityAltar enchanter = (TileEntityAltar)world.getBlockTileEntity(x, y, z);
 
-        if (var10 != null)
+        if (enchanter != null)
         {
-            ItemStack var11 = var5.getCurrentEquippedItem();
+            ItemStack itemStack = entityplayer.cd();
 
-            if (!var10.canEnchant())
+            if (!enchanter.canEnchant())
             {
-                if (var1.isRemote)
+                if (world.isRemote)
                 {
                     FMLClientHandler.instance().getClient().ingameGUI.getChatGUI().printChatMessage("Altar is being blocked by something above!");
                 }
@@ -65,48 +69,45 @@ public class BlockAltar extends BlockContainer implements IAetherBlock
                 return true;
             }
 
-            if (var11 != null)
+            if (itemStack != null)
             {
-                if (var11.itemID == AetherItems.AmbrosiumShard.itemID)
+                if (itemStack.itemID == AetherItems.AmbrosiumShard.itemID)
                 {
-                    var10.addAmbrosium(var11);
-                    var10.onInventoryChanged();
+                    enchanter.addAmbrosium(itemStack);
+                    enchanter.onInventoryChanged();
                 }
-                else if (var10.isEnchantable(var11))
+                else if (enchanter.isEnchantable(itemStack))
                 {
-                    if (var10.getEnchanterStacks(0) != null && var10.getEnchanterStacks(0).itemID != var11.itemID)
+                    if ((enchanter.getEnchanterStacks(0) != null) && (enchanter.getEnchanterStacks(0).itemID != itemStack.itemID))
                     {
-                        var10.dropNextStack();
+                        enchanter.dropNextStack();
                     }
                     else
                     {
-                        var10.addEnchantable(var11);
-                        var10.onInventoryChanged();
+                        enchanter.addEnchantable(itemStack);
+                        enchanter.onInventoryChanged();
                     }
                 }
                 else
                 {
-                    var10.dropNextStack();
+                    enchanter.dropNextStack();
                 }
             }
             else
             {
-                var10.dropNextStack();
+                enchanter.dropNextStack();
             }
         }
 
         return true;
     }
 
-    public boolean hasTileEntity(int var1)
+    public boolean hasTileEntity(int metadata)
     {
         return true;
     }
 
-    /**
-     * Returns a new instance of a block's tile entity class. Called on placing the block.
-     */
-    public TileEntity createNewTileEntity(World var1)
+    public TileEntity createNewTileEntity(World par1World)
     {
         try
         {
@@ -118,61 +119,49 @@ public class BlockAltar extends BlockContainer implements IAetherBlock
         }
     }
 
-    /**
-     * From the specified side and block metadata retrieves the blocks texture. Args: side, metadata
-     */
-    public Icon getIcon(int var1, int var2)
+    public Icon getIcon(int i, int meta)
     {
         return this.sideIcon;
     }
 
-    /**
-     * Called whenever the block is added into the world. Args: world, x, y, z
-     */
-    public void onBlockAdded(World var1, int var2, int var3, int var4)
+    public void onBlockAdded(World world, int i, int j, int k)
     {
-        super.onBlockAdded(var1, var2, var3, var4);
-        this.setDefaultDirection(var1, var2, var3, var4);
+        super.onBlockAdded(world, i, j, k);
+        setDefaultDirection(world, i, j, k);
     }
 
-    /**
-     * Called when the block is placed in the world.
-     */
-    public void onBlockPlacedBy(World var1, int var2, int var3, int var4, EntityLiving var5, ItemStack var6)
+    public void onBlockPlacedBy(World world, int i, int j, int k, EntityLiving entityliving, ItemStack stack)
     {
-        int var7 = MathHelper.floor_double((double)(var5.rotationYaw * 4.0F / 360.0F) + 0.5D) & 3;
+        int l = MathHelper.floor_double(entityliving.rotationYaw * 4.0F / 360.0F + 0.5D) & 0x3;
 
-        if (var7 == 0)
+        if (l == 0)
         {
-            var1.setBlockMetadataWithNotify(var2, var3, var4, 2, 4);
+            world.setBlockMetadataWithNotify(i, j, k, 2, 4);
         }
 
-        if (var7 == 1)
+        if (l == 1)
         {
-            var1.setBlockMetadataWithNotify(var2, var3, var4, 5, 4);
+            world.setBlockMetadataWithNotify(i, j, k, 5, 4);
         }
 
-        if (var7 == 2)
+        if (l == 2)
         {
-            var1.setBlockMetadataWithNotify(var2, var3, var4, 3, 4);
+            world.setBlockMetadataWithNotify(i, j, k, 3, 4);
         }
 
-        if (var7 == 3)
+        if (l == 3)
         {
-            var1.setBlockMetadataWithNotify(var2, var3, var4, 4, 4);
+            world.setBlockMetadataWithNotify(i, j, k, 4, 4);
         }
     }
 
-    /**
-     * ejects contained items into the world, and notifies neighbours of an update, as appropriate
-     */
-    public void breakBlock(World var1, int var2, int var3, int var4, int var5, int var6)
+    public void breakBlock(World par1World, int par2, int par3, int par4, int par5, int par6)
     {
-        TileEntityAltar var7 = (TileEntityAltar)var1.getBlockTileEntity(var2, var3, var4);
+        TileEntityAltar var7 = (TileEntityAltar)par1World.getBlockTileEntity(par2, par3, par4);
 
         if (var7 != null)
         {
-            for (int var8 = 0; var8 < var7.getSizeInventory(); ++var8)
+            for (int var8 = 0; var8 < var7.getSizeInventory(); var8++)
             {
                 ItemStack var9 = var7.getStackInSlot(var8);
 
@@ -192,7 +181,7 @@ public class BlockAltar extends BlockContainer implements IAetherBlock
                         }
 
                         var9.stackSize -= var13;
-                        EntityItem var14 = new EntityItem(var1, (double)((float)var2 + var10), (double)((float)var3 + var11), (double)((float)var4 + var12), new ItemStack(var9.itemID, var13, var9.getItemDamage()));
+                        EntityItem var14 = new EntityItem(par1World, par2 + var10, par3 + var11, par4 + var12, new ItemStack(var9.itemID, var13, var9.getItemDamage()));
 
                         if (var9.hasTagCompound())
                         {
@@ -200,94 +189,79 @@ public class BlockAltar extends BlockContainer implements IAetherBlock
                         }
 
                         float var15 = 0.05F;
-                        var14.motionX = (double)((float)this.EnchanterRand.nextGaussian() * var15);
-                        var14.motionY = (double)((float)this.EnchanterRand.nextGaussian() * var15 + 0.2F);
-                        var14.motionZ = (double)((float)this.EnchanterRand.nextGaussian() * var15);
-                        var1.spawnEntityInWorld(var14);
+                        var14.motionX = ((float)this.EnchanterRand.nextGaussian() * var15);
+                        var14.motionY = ((float)this.EnchanterRand.nextGaussian() * var15 + 0.2F);
+                        var14.motionZ = ((float)this.EnchanterRand.nextGaussian() * var15);
+                        par1World.spawnEntityInWorld(var14);
                     }
                 }
             }
         }
 
-        super.breakBlock(var1, var2, var3, var4, var5, var6);
+        super.breakBlock(par1World, par2, par3, par4, par5, par6);
     }
 
     @SideOnly(Side.CLIENT)
-
-    /**
-     * A randomly called display update to be able to add particles or other items for display
-     */
-    public void randomDisplayTick(World var1, int var2, int var3, int var4, Random var5)
+    public void randomDisplayTick(World world, int x, int y, int z, Random random)
     {
-        TileEntityAltar var6 = (TileEntityAltar)var1.getBlockTileEntity(var2, var3, var4);
+        TileEntityAltar tileentity = (TileEntityAltar)world.getBlockTileEntity(x, y, z);
     }
 
-    private void setDefaultDirection(World var1, int var2, int var3, int var4)
+    private void setDefaultDirection(World world, int i, int j, int k)
     {
-        if (!var1.isRemote)
+        if (world.isRemote)
         {
-            int var5 = var1.getBlockId(var2, var3, var4 - 1);
-            int var6 = var1.getBlockId(var2, var3, var4 + 1);
-            int var7 = var1.getBlockId(var2 - 1, var3, var4);
-            int var8 = var1.getBlockId(var2 + 1, var3, var4);
-            byte var9 = 3;
-
-            if (Block.opaqueCubeLookup[var5] && !Block.opaqueCubeLookup[var6])
-            {
-                var9 = 3;
-            }
-
-            if (Block.opaqueCubeLookup[var6] && !Block.opaqueCubeLookup[var5])
-            {
-                var9 = 2;
-            }
-
-            if (Block.opaqueCubeLookup[var7] && !Block.opaqueCubeLookup[var8])
-            {
-                var9 = 5;
-            }
-
-            if (Block.opaqueCubeLookup[var8] && !Block.opaqueCubeLookup[var7])
-            {
-                var9 = 4;
-            }
-
-            var1.setBlockMetadataWithNotify(var2, var3, var4, var9, 4);
+            return;
         }
+
+        int l = world.getBlockId(i, j, k - 1);
+        int i1 = world.getBlockId(i, j, k + 1);
+        int j1 = world.getBlockId(i - 1, j, k);
+        int k1 = world.getBlockId(i + 1, j, k);
+        byte byte0 = 3;
+
+        if ((Block.opaqueCubeLookup[l] != 0) && (Block.opaqueCubeLookup[i1] == 0))
+        {
+            byte0 = 3;
+        }
+
+        if ((Block.opaqueCubeLookup[i1] != 0) && (Block.opaqueCubeLookup[l] == 0))
+        {
+            byte0 = 2;
+        }
+
+        if ((Block.opaqueCubeLookup[j1] != 0) && (Block.opaqueCubeLookup[k1] == 0))
+        {
+            byte0 = 5;
+        }
+
+        if ((Block.opaqueCubeLookup[k1] != 0) && (Block.opaqueCubeLookup[j1] == 0))
+        {
+            byte0 = 4;
+        }
+
+        world.setBlockMetadataWithNotify(i, j, k, byte0, 4);
     }
 
-    /**
-     * Is this block (a) opaque and (b) a full 1m cube?  This determines whether or not to render the shared face of two
-     * adjacent blocks and also whether the player can attach torches, redstone wire, etc to this block.
-     */
     public boolean isOpaqueCube()
     {
         return false;
     }
 
-    /**
-     * If this block doesn't render as an ordinary block it will return False (examples: signs, buttons, stairs, etc)
-     */
     public boolean renderAsNormalBlock()
     {
         return false;
     }
 
-    /**
-     * The type of render function that is called for this block
-     */
     public int getRenderType()
     {
         return AetherBlocks.altarRenderId;
     }
 
-    /**
-     * When this method is called, your block should register all the icons it needs with the given IconRegister. This
-     * is the only chance you get to register icons.
-     */
-    public void registerIcons(IconRegister var1)
+    public void registerIcons(IconRegister par1IconRegister)
     {
-        this.sideIcon = var1.registerIcon("Aether:Holystone");
-        super.registerIcons(var1);
+        this.sideIcon = par1IconRegister.registerIcon("Aether:Holystone");
+        super.registerIcons(par1IconRegister);
     }
 }
+

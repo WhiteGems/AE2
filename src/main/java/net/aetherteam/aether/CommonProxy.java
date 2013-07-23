@@ -6,7 +6,7 @@ import net.aetherteam.playercore_api.PlayerCoreAPI;
 import net.aetherteam.playercore_api.PlayerCoreAPI.PlayerCoreType;
 import net.aetherteam.playercore_api.cores.PlayerCoreServer;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.particle.EffectRenderer;
+import net.minecraft.client.particle.EntityFX;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -24,32 +24,34 @@ public class CommonProxy
     private HashMap playerCoins = new HashMap();
     private HashMap playerParachutes = new HashMap();
     private HashMap playerParachuteTypes = new HashMap();
-    private HashMap playerClientInfo = new HashMap();
-    public static EnumArmorMaterial OBSIDIAN;
 
-    public AetherCommonPlayerHandler getPlayerHandler(EntityPlayer var1)
+    private HashMap playerClientInfo = new HashMap();
+
+    public static EnumArmorMaterial OBSIDIAN = EnumHelper.addArmorMaterial("OBISIDAN", 33, new int[] { 2, 6, 5, 2 }, 8);
+
+    public AetherCommonPlayerHandler getPlayerHandler(EntityPlayer entity)
     {
-        if (var1 instanceof EntityPlayerMP)
+        if ((entity instanceof EntityPlayerMP))
         {
-            PlayerBaseAetherServer var2 = (PlayerBaseAetherServer)((PlayerCoreServer)var1).getPlayerCoreObject(PlayerBaseAetherServer.class);
-            return var2.getPlayerHandler();
+            PlayerBaseAetherServer playerBaseAetherServer = (PlayerBaseAetherServer)((PlayerCoreServer)entity).getPlayerCoreObject(PlayerBaseAetherServer.class);
+            return playerBaseAetherServer.getPlayerHandler();
         }
-        else
-        {
-            return null;
-        }
+
+        return null;
     }
 
     public void registerPlayerAPI()
     {
-        PlayerCoreAPI.register(PlayerCoreType.SERVER, PlayerBaseAetherServer.class);
+        PlayerCoreAPI.register(PlayerCoreAPI.PlayerCoreType.SERVER, PlayerBaseAetherServer.class);
     }
 
-    public void registerTickHandler() {}
-
-    public void displayMessage(EntityPlayer var1, String var2)
+    public void registerTickHandler()
     {
-        var1.addChatMessage(var2);
+    }
+
+    public void displayMessage(EntityPlayer player, String message)
+    {
+        player.addChatMessage(message);
     }
 
     public HashMap getClientInventories()
@@ -102,47 +104,71 @@ public class CommonProxy
         return null;
     }
 
-    public EffectRenderer getEffectRenderer()
+    public EntityFX getEffectRenderer()
     {
         return null;
     }
 
-    public int addArmor(String var1)
+    public int addArmor(String type)
     {
         return 0;
     }
+    public void registerKeyBindings()
+    {
+    }
+    public void registerRenderers()
+    {
+    }
+    public void registerMainMenu()
+    {
+    }
+    public void spawnSwettyParticles(World world, int x, int y, int z)
+    {
+    }
+    public void spawnAltarParticles(World world, int x, int y, int z, Random rand)
+    {
+    }
+    public void spawnCloudSmoke(World world, double x, double y, double z, Random rand, Double radius)
+    {
+    }
+    public void spawnDonatorMoaParticles(Entity rider, Random rand)
+    {
+    }
+    public void spawnPortalParticles(World world, int x, int y, int z, Random random, int blockID)
+    {
+    }
 
-    public void registerKeyBindings() {}
+    public void spawnRainParticles(World world, int x, int y, int z, Random random, int amount)
+    {
+    }
 
-    public void registerRenderers() {}
+    public void loadSounds()
+    {
+    }
 
-    public void registerMainMenu() {}
+    public void registerSounds()
+    {
+    }
 
-    public void spawnSwettyParticles(World var1, int var2, int var3, int var4) {}
+    public void registerRenderPAPI()
+    {
+    }
 
-    public void spawnAltarParticles(World var1, int var2, int var3, int var4, Random var5) {}
+    public void renderGameOverlay(float zLevel, boolean flag, int x, int y)
+    {
+    }
 
-    public void spawnCloudSmoke(World var1, double var2, double var4, double var6, Random var8, Double var9) {}
+    public void playSoundFX(String path, float volume, float pitch)
+    {
+    }
 
-    public void spawnDonatorMoaParticles(Entity var1, Random var2) {}
+    public void openDungeonQueue()
+    {
+    }
 
-    public void spawnPortalParticles(World var1, int var2, int var3, int var4, Random var5, int var6) {}
-
-    public void spawnRainParticles(World var1, int var2, int var3, int var4, Random var5, int var6) {}
-
-    public void loadSounds() {}
-
-    public void registerSounds() {}
-
-    public void registerRenderPAPI() {}
-
-    public void renderGameOverlay(float var1, boolean var2, int var3, int var4) {}
-
-    public void playSoundFX(String var1, float var2, float var3) {}
-
-    public void openDungeonQueue() {}
-
-    public void spawnCloudSmoke(World var1, double var2, double var4, double var6, Random var8, double var9, double var11, double var13, double var15) {}
+    public void spawnCloudSmoke(World world, double x, double y, double z, Random rand, double radius, double forceX, double forceY, double forceZ)
+    {
+    }
 
     public HashMap getClientParachuting()
     {
@@ -157,6 +183,6 @@ public class CommonProxy
     static
     {
         new EnumHelper();
-        OBSIDIAN = EnumHelper.addArmorMaterial("OBISIDAN", 33, new int[] {2, 6, 5, 2}, 8);
     }
 }
+

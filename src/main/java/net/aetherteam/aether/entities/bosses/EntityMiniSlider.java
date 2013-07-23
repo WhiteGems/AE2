@@ -1,11 +1,13 @@
 package net.aetherteam.aether.entities.bosses;
 
 import java.util.List;
+import java.util.Random;
 import net.aetherteam.aether.entities.EntityBattleSentry;
 import net.aetherteam.aether.entities.EntitySentry;
 import net.aetherteam.aether.entities.EntitySentryGolem;
 import net.aetherteam.aether.entities.EntityTrackingGolem;
 import net.aetherteam.aether.interfaces.IAetherMob;
+import net.minecraft.entity.DataWatcher;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityCreature;
 import net.minecraft.entity.EntityLiving;
@@ -17,10 +19,11 @@ import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
 
-public class EntityMiniSlider extends EntityMiniBoss implements IAetherMob
+public class EntityMiniSlider extends EntityMiniBoss
+    implements IAetherMob
 {
-    public String dir;
-    public boolean reform;
+    public String dir = "/net/aetherteam/aether/client/sprites";
+    public boolean reform = false;
     public int moveTimer;
     public int dennis;
     public int rennis;
@@ -33,16 +36,14 @@ public class EntityMiniSlider extends EntityMiniBoss implements IAetherMob
     public int direction;
     public EntitySlider slider;
 
-    public EntityMiniSlider(World var1)
+    public EntityMiniSlider(World world)
     {
-        super(var1);
-        this.dir = "/net/aetherteam/aether/client/sprites";
-        this.reform = false;
-        this.setSize(0.4F, 0.4F);
-        this.health = this.getHealth();
+        super(world);
+        setSize(0.4F, 0.4F);
+        this.health = getHealth();
         this.dennis = 1;
         this.jumpMovementFactor = 0.0F;
-        this.texture = this.dir + "/mobs/cog.png";
+        this.texture = (this.dir + "/mobs/cog.png");
 
         if (this.target == null)
         {
@@ -50,21 +51,21 @@ public class EntityMiniSlider extends EntityMiniBoss implements IAetherMob
         }
     }
 
-    public EntityMiniSlider(World var1, double var2, double var4, double var6, float var8, float var9)
+    public EntityMiniSlider(World world, double x, double y, double z, float yaw, float pitch)
     {
-        this(var1);
-        this.setPositionAndRotation(var2, var4, var6, var8, var9);
+        this(world);
+        setPositionAndRotation(x, y, z, yaw, pitch);
     }
 
-    public EntityMiniSlider(World var1, double var2, double var4, double var6, float var8, float var9, EntitySlider var10, EntityLiving var11, double var12, double var14, double var16)
+    public EntityMiniSlider(World world, double x, double y, double z, float yaw, float pitch, EntitySlider slider, EntityLiving target, double sliderX, double sliderY, double sliderZ)
     {
-        this(var1, var2, var4, var6, var8, var9);
-        this.slider = var10;
-        this.target = var11;
+        this(world, x, y, z, yaw, pitch);
+        this.slider = slider;
+        this.target = target;
         this.moveTimer = 60;
-        this.dataWatcher.updateObject(16, Integer.valueOf((int)var12));
-        this.dataWatcher.updateObject(17, Integer.valueOf((int)var14));
-        this.dataWatcher.updateObject(18, Integer.valueOf((int)var16));
+        this.dataWatcher.updateObject(16, Integer.valueOf((int)sliderX));
+        this.dataWatcher.updateObject(17, Integer.valueOf((int)sliderY));
+        this.dataWatcher.updateObject(18, Integer.valueOf((int)sliderZ));
     }
 
     public void entityInit()
@@ -91,31 +92,31 @@ public class EntityMiniSlider extends EntityMiniBoss implements IAetherMob
         return this.dataWatcher.getWatchableObjectInt(18);
     }
 
-    public void setOrgX(int var1)
+    public void setOrgX(int x)
     {
-        this.dataWatcher.updateObject(20, Integer.valueOf(var1));
+        this.dataWatcher.updateObject(20, Integer.valueOf(x));
     }
 
-    public void setOrgY(int var1)
+    public void setOrgY(int y)
     {
-        this.dataWatcher.updateObject(21, Integer.valueOf(var1));
+        this.dataWatcher.updateObject(21, Integer.valueOf(y));
     }
 
-    public void setOrgZ(int var1)
+    public void setOrgZ(int z)
     {
-        this.dataWatcher.updateObject(22, Integer.valueOf(var1));
+        this.dataWatcher.updateObject(22, Integer.valueOf(z));
     }
 
     public boolean isReformed()
     {
-        return (this.dataWatcher.getWatchableObjectByte(19) & 1) != 0;
+        return (this.dataWatcher.getWatchableObjectByte(19) & 0x1) != 0;
     }
 
-    public void setReformed(boolean var1)
+    public void setReformed(boolean reformed)
     {
         if (!this.worldObj.isRemote)
         {
-            if (var1)
+            if (reformed)
             {
                 this.dataWatcher.updateObject(19, Byte.valueOf((byte)1));
             }
@@ -126,79 +127,58 @@ public class EntityMiniSlider extends EntityMiniBoss implements IAetherMob
         }
     }
 
-    /**
-     * Takes in the distance the entity has fallen this tick and whether its on the ground to update the fall distance
-     * and deal fall damage if landing on the ground.  Args: distanceFallenThisTick, onGround
-     */
-    protected void updateFallState(double var1, boolean var3) {}
+    protected void updateFallState(double par1, boolean par3)
+    {
+    }
 
-    /**
-     * Called when the mob is falling. Calculates and applies fall damage.
-     */
-    protected void fall(float var1) {}
+    protected void fall(float par1)
+    {
+    }
 
-    /**
-     * Determines if an entity can be despawned, used on idle far away entities
-     */
     public boolean canDespawn()
     {
         return true;
     }
 
-    /**
-     * Returns the sound this mob makes while it's alive.
-     */
     protected String getLivingSound()
     {
         return null;
     }
 
-    /**
-     * Returns the sound this mob makes when it is hurt.
-     */
     protected String getHurtSound()
     {
         return null;
     }
 
-    /**
-     * Returns the sound this mob makes on death.
-     */
     protected String getDeathSound()
     {
         return null;
     }
 
-    /**
-     * (abstract) Protected helper method to write subclass entity data to NBT.
-     */
-    public void writeEntityToNBT(NBTTagCompound var1)
+    public void writeEntityToNBT(NBTTagCompound nbttagcompound)
     {
-        super.writeEntityToNBT(var1);
-        var1.setFloat("Speedy", this.speedy);
-        var1.setShort("MoveTimer", (short)this.moveTimer);
-        var1.setShort("Direction", (short)this.direction);
-        var1.setBoolean("GotMovement", this.gotMovement);
-        var1.setBoolean("Reformed", this.isReformed());
-        var1.setInteger("OrgX", this.getOrgX());
-        var1.setInteger("OrgY", this.getOrgY());
-        var1.setInteger("OrgZ", this.getOrgZ());
+        super.writeEntityToNBT(nbttagcompound);
+        nbttagcompound.setFloat("Speedy", this.speedy);
+        nbttagcompound.setShort("MoveTimer", (short)this.moveTimer);
+        nbttagcompound.setShort("Direction", (short)this.direction);
+        nbttagcompound.setBoolean("GotMovement", this.gotMovement);
+        nbttagcompound.setBoolean("Reformed", isReformed());
+        nbttagcompound.setInteger("OrgX", getOrgX());
+        nbttagcompound.setInteger("OrgY", getOrgY());
+        nbttagcompound.setInteger("OrgZ", getOrgZ());
     }
 
-    /**
-     * (abstract) Protected helper method to read subclass entity data from NBT.
-     */
-    public void readEntityFromNBT(NBTTagCompound var1)
+    public void readEntityFromNBT(NBTTagCompound nbttagcompound)
     {
-        super.readEntityFromNBT(var1);
-        this.speedy = var1.getFloat("Speedy");
-        this.moveTimer = var1.getShort("MoveTimer");
-        this.direction = var1.getShort("Direction");
-        this.gotMovement = var1.getBoolean("GotMovement");
-        this.setReformed(var1.getBoolean("Reformed"));
-        this.setOrgX(var1.getInteger("OrgX"));
-        this.setOrgY(var1.getInteger("OrgY"));
-        this.setOrgZ(var1.getInteger("OrgZ"));
+        super.readEntityFromNBT(nbttagcompound);
+        this.speedy = nbttagcompound.getFloat("Speedy");
+        this.moveTimer = nbttagcompound.getShort("MoveTimer");
+        this.direction = nbttagcompound.getShort("Direction");
+        this.gotMovement = nbttagcompound.getBoolean("GotMovement");
+        setReformed(nbttagcompound.getBoolean("Reformed"));
+        setOrgX(nbttagcompound.getInteger("OrgX"));
+        setOrgY(nbttagcompound.getInteger("OrgY"));
+        setOrgZ(nbttagcompound.getInteger("OrgZ"));
     }
 
     public void reform()
@@ -206,33 +186,30 @@ public class EntityMiniSlider extends EntityMiniBoss implements IAetherMob
         this.reform = true;
     }
 
-    /**
-     * Called to update the entity's position/logic.
-     */
     public void onUpdate()
     {
         super.onUpdate();
         this.jumpMovementFactor = 0.0F;
-        this.renderYawOffset = this.rotationPitch = this.rotationYaw = 0.0F;
+        this.renderYawOffset = (this.rotationPitch = this.rotationYaw = 0.0F);
 
-        if (this.target != null && this.target instanceof EntityLiving)
+        if ((this.target != null) && ((this.target instanceof EntityLiving)))
         {
-            EntityLiving var1 = (EntityLiving)this.target;
+            EntityLiving e1 = (EntityLiving)this.target;
 
-            if (var1.getHealth() <= 0 || !this.canEntityBeSeen(var1))
+            if ((e1.getHealth() <= 0) || (!canEntityBeSeen(e1)))
             {
                 this.target = null;
-                this.stop();
+                stop();
                 this.moveTimer = 0;
                 return;
             }
         }
         else
         {
-            if (this.target != null && this.target.isDead)
+            if ((this.target != null) && (this.target.isDead))
             {
                 this.target = null;
-                this.stop();
+                stop();
                 this.moveTimer = 0;
                 return;
             }
@@ -244,12 +221,12 @@ public class EntityMiniSlider extends EntityMiniBoss implements IAetherMob
                 if (this.target == null)
                 {
                     this.target = null;
-                    this.stop();
+                    stop();
                     this.moveTimer = 0;
 
                     if (!this.worldObj.isRemote)
                     {
-                        this.setDead();
+                        setDead();
                     }
 
                     return;
@@ -257,278 +234,274 @@ public class EntityMiniSlider extends EntityMiniBoss implements IAetherMob
             }
         }
 
-        if (this.posX == (double)this.getOrgX() && this.posY == (double)this.getOrgY() && this.posZ == (double)this.getOrgZ())
+        if ((this.posX == getOrgX()) && (this.posY == getOrgY()) && (this.posZ == getOrgZ()))
         {
-            if (!this.isReformed())
+            if (!isReformed())
             {
-                this.setReformed(true);
+                setReformed(true);
             }
 
-            this.stop();
+            stop();
             this.moveTimer = 0;
         }
 
         if (this.slider == null)
         {
-            Vec3 var16 = Vec3.createVectorHelper(this.posX, this.posY, this.posZ);
-            Vec3 var2 = Vec3.createVectorHelper(this.posX + this.motionX, this.posY + this.motionY, this.posZ + this.motionZ);
-            MovingObjectPosition var17 = this.worldObj.rayTraceBlocks(var16, var2);
-            var16 = Vec3.createVectorHelper(this.posX, this.posY, this.posZ);
-            var2 = Vec3.createVectorHelper(this.posX + this.motionX, this.posY + this.motionY, this.posZ + this.motionZ);
+            Vec3 vec3d = Vec3.createVectorHelper(this.posX, this.posY, this.posZ);
+            Vec3 vec3d1 = Vec3.createVectorHelper(this.posX + this.motionX, this.posY + this.motionY, this.posZ + this.motionZ);
+            MovingObjectPosition movingobjectposition = this.worldObj.rayTraceBlocks(vec3d, vec3d1);
+            vec3d = Vec3.createVectorHelper(this.posX, this.posY, this.posZ);
+            vec3d1 = Vec3.createVectorHelper(this.posX + this.motionX, this.posY + this.motionY, this.posZ + this.motionZ);
 
-            if (var17 != null)
+            if (movingobjectposition != null)
             {
-                var2 = Vec3.createVectorHelper(var17.hitVec.xCoord, var17.hitVec.yCoord, var17.hitVec.zCoord);
+                vec3d1 = Vec3.createVectorHelper(movingobjectposition.hitVec.xCoord, movingobjectposition.hitVec.yCoord, movingobjectposition.hitVec.zCoord);
             }
 
             if (!this.worldObj.isRemote)
             {
-                Object var4 = null;
-                List var18 = this.worldObj.getEntitiesWithinAABBExcludingEntity(this, this.boundingBox.addCoord(this.motionX, this.motionY, this.motionZ).expand(4.0D, 4.0D, 4.0D));
-                double var6 = 0.0D;
+                Entity entity = null;
+                List list = this.worldObj.getEntitiesWithinAABBExcludingEntity(this, this.boundingBox.addCoord(this.motionX, this.motionY, this.motionZ).expand(4.0D, 4.0D, 4.0D));
+                double d = 0.0D;
 
-                for (int var8 = 0; var8 < var18.size(); ++var8)
+                for (int l = 0; l < list.size(); l++)
                 {
-                    Entity var9 = (Entity)var18.get(var8);
+                    Entity entity1 = (Entity)list.get(l);
 
-                    if (var9.canBeCollidedWith() && var9 != this)
+                    if ((entity1.canBeCollidedWith()) && (entity1 != this))
                     {
-                        float var10 = 0.3F;
+                        float f4 = 0.3F;
 
-                        if (var9 instanceof EntitySlider)
+                        if ((entity1 instanceof EntitySlider))
                         {
-                            this.slider = (EntitySlider)var9;
-                            var17 = null;
+                            this.slider = ((EntitySlider)entity1);
+                            movingobjectposition = null;
                         }
 
-                        AxisAlignedBB var11 = var9.boundingBox.expand((double)var10, (double)var10, (double)var10);
-                        MovingObjectPosition var12 = var11.calculateIntercept(var16, var2);
+                        AxisAlignedBB axisalignedbb = entity1.boundingBox.expand(f4, f4, f4);
+                        MovingObjectPosition movingobjectposition1 = axisalignedbb.calculateIntercept(vec3d, vec3d1);
 
-                        if (var12 != null)
+                        if (movingobjectposition1 != null)
                         {
-                            double var13 = var16.distanceTo(var12.hitVec);
+                            double d1 = vec3d.distanceTo(movingobjectposition1.hitVec);
 
-                            if (var13 < var6 || var6 == 0.0D)
+                            if ((d1 < d) || (d == 0.0D))
                             {
-                                var6 = var13;
+                                entity = entity1;
+                                d = d1;
                             }
                         }
                     }
                 }
             }
 
-            if (this.slider == null || this.slider.isDead)
+            if ((this.slider == null) || (this.slider.isDead))
             {
                 this.target = null;
-                this.stop();
+                stop();
                 this.moveTimer = 0;
 
                 if (!this.worldObj.isRemote)
                 {
-                    this.setDead();
+                    setDead();
                 }
             }
+
+            return;
         }
-        else if (this.slider.target != this.target)
+
+        if (this.slider.target != this.target)
         {
             this.target = null;
-            this.stop();
+            stop();
             this.moveTimer = 0;
 
             if (!this.worldObj.isRemote)
             {
-                this.setDead();
+                setDead();
+            }
+
+            return;
+        }
+
+        this.fallDistance = 0.0F;
+
+        if (this.gotMovement)
+        {
+            if (this.isCollided)
+            {
+                double x = this.posX - 0.5D;
+                double y = this.boundingBox.minY + 0.75D;
+                double z = this.posZ - 0.5D;
+
+                if (this.crushed)
+                {
+                    this.worldObj.playSoundEffect(this.posX, this.posY, this.posZ, "random.explode", 3.0F, (0.625F + (this.worldObj.rand.nextFloat() - this.worldObj.rand.nextFloat()) * 0.2F) * 0.7F);
+                    this.worldObj.playSoundAtEntity(this, "aeboss.slider.collide", 2.5F, 1.0F / (this.rand.nextFloat() * 0.2F + 0.9F));
+                }
+
+                stop();
+            }
+            else
+            {
+                if (this.speedy < 2.0F)
+                {
+                    this.speedy += 0.035F;
+                }
+
+                this.motionX = 0.0D;
+                this.motionY = 0.0D;
+                this.motionZ = 0.0D;
+
+                if (this.direction == 0)
+                {
+                    this.motionY = this.speedy;
+
+                    if (this.boundingBox.minY > (this.reform == true ? getOrgY() : this.target.boundingBox.minY + 0.35D))
+                    {
+                        stop();
+                        this.moveTimer = 8;
+                    }
+                }
+                else if (this.direction == 1)
+                {
+                    this.motionY = (-this.speedy);
+
+                    if (this.boundingBox.minY < (this.reform == true ? getOrgY() : this.target.boundingBox.minY - 0.25D))
+                    {
+                        stop();
+                        this.moveTimer = 8;
+                    }
+                }
+                else if (this.direction == 2)
+                {
+                    this.motionX = this.speedy;
+
+                    if (this.posX > (this.reform == true ? getOrgX() - 1.0D : this.target.posX + 0.125D))
+                    {
+                        stop();
+                        this.moveTimer = 8;
+                    }
+                }
+                else if (this.direction == 3)
+                {
+                    this.motionX = (-this.speedy);
+
+                    if (this.posX < (this.reform == true ? getOrgX() - 1.0D : this.target.posX - 0.125D))
+                    {
+                        stop();
+                        this.moveTimer = 8;
+                    }
+                }
+                else if (this.direction == 4)
+                {
+                    this.motionZ = this.speedy;
+
+                    if (this.posZ > (this.reform == true ? getOrgZ() - 1.0D : this.target.posZ + 0.125D))
+                    {
+                        stop();
+                        this.moveTimer = 8;
+                    }
+                }
+                else if (this.direction == 5)
+                {
+                    this.motionZ = (-this.speedy);
+
+                    if (this.posZ < (this.reform == true ? getOrgZ() - 1.0D : this.target.posZ - 0.125D))
+                    {
+                        stop();
+                        this.moveTimer = 8;
+                    }
+                }
             }
         }
         else
         {
-            this.fallDistance = 0.0F;
-            double var3;
-            double var5;
-            double var15;
+            this.motionY = 0.0D;
 
-            if (this.gotMovement)
+            if (this.moveTimer > 0)
             {
-                if (this.isCollided)
-                {
-                    var15 = this.posX - 0.5D;
-                    var3 = this.boundingBox.minY + 0.75D;
-                    var5 = this.posZ - 0.5D;
-
-                    if (this.crushed)
-                    {
-                        this.worldObj.playSoundEffect(this.posX, this.posY, this.posZ, "random.explode", 3.0F, (0.625F + (this.worldObj.rand.nextFloat() - this.worldObj.rand.nextFloat()) * 0.2F) * 0.7F);
-                        this.worldObj.playSoundAtEntity(this, "aeboss.slider.collide", 2.5F, 1.0F / (this.rand.nextFloat() * 0.2F + 0.9F));
-                    }
-
-                    this.stop();
-                }
-                else
-                {
-                    if (this.speedy < 2.0F)
-                    {
-                        this.speedy += 0.035F;
-                    }
-
-                    this.motionX = 0.0D;
-                    this.motionY = 0.0D;
-                    this.motionZ = 0.0D;
-
-                    if (this.direction == 0)
-                    {
-                        this.motionY = (double)this.speedy;
-
-                        if (this.boundingBox.minY > (this.reform ? (double)this.getOrgY() : this.target.boundingBox.minY + 0.35D))
-                        {
-                            this.stop();
-                            this.moveTimer = 8;
-                        }
-                    }
-                    else if (this.direction == 1)
-                    {
-                        this.motionY = (double)(-this.speedy);
-
-                        if (this.boundingBox.minY < (this.reform ? (double)this.getOrgY() : this.target.boundingBox.minY - 0.25D))
-                        {
-                            this.stop();
-                            this.moveTimer = 8;
-                        }
-                    }
-                    else if (this.direction == 2)
-                    {
-                        this.motionX = (double)this.speedy;
-
-                        if (this.posX > (this.reform ? (double)this.getOrgX() - 1.0D : this.target.posX + 0.125D))
-                        {
-                            this.stop();
-                            this.moveTimer = 8;
-                        }
-                    }
-                    else if (this.direction == 3)
-                    {
-                        this.motionX = (double)(-this.speedy);
-
-                        if (this.posX < (this.reform ? (double)this.getOrgX() - 1.0D : this.target.posX - 0.125D))
-                        {
-                            this.stop();
-                            this.moveTimer = 8;
-                        }
-                    }
-                    else if (this.direction == 4)
-                    {
-                        this.motionZ = (double)this.speedy;
-
-                        if (this.posZ > (this.reform ? (double)this.getOrgZ() - 1.0D : this.target.posZ + 0.125D))
-                        {
-                            this.stop();
-                            this.moveTimer = 8;
-                        }
-                    }
-                    else if (this.direction == 5)
-                    {
-                        this.motionZ = (double)(-this.speedy);
-
-                        if (this.posZ < (this.reform ? (double)this.getOrgZ() - 1.0D : this.target.posZ - 0.125D))
-                        {
-                            this.stop();
-                            this.moveTimer = 8;
-                        }
-                    }
-                }
+                this.moveTimer -= 1;
+                this.motionX = 0.0D;
+                this.motionY = 0.0D;
+                this.motionZ = 0.0D;
             }
             else
             {
-                this.motionY = 0.0D;
+                double a = Math.abs(this.posX - (this.reform == true ? getOrgX() : this.target.posX));
+                double b = Math.abs(this.boundingBox.minY - (this.reform == true ? getOrgY() : this.target.boundingBox.minY));
+                double c = Math.abs(this.posZ - (this.reform == true ? getOrgZ() : this.target.posZ));
 
-                if (this.moveTimer > 0)
+                if (a > c)
                 {
-                    --this.moveTimer;
-                    this.motionX = 0.0D;
-                    this.motionY = 0.0D;
-                    this.motionZ = 0.0D;
+                    this.direction = 2;
+
+                    if (this.posX > (this.reform == true ? getOrgX() - 1.0D : this.target.posX))
+                    {
+                        this.direction = 3;
+                    }
                 }
                 else
                 {
-                    var15 = Math.abs(this.posX - (this.reform ? (double)this.getOrgX() : this.target.posX));
-                    var3 = Math.abs(this.boundingBox.minY - (this.reform ? (double)this.getOrgY() : this.target.boundingBox.minY));
-                    var5 = Math.abs(this.posZ - (this.reform ? (double)this.getOrgZ() : this.target.posZ));
+                    this.direction = 4;
 
-                    if (var15 > var5)
+                    if (this.posZ > (this.reform == true ? getOrgZ() - 1.0D : this.target.posZ))
                     {
-                        this.direction = 2;
-
-                        if (this.posX > (this.reform ? (double)this.getOrgX() - 1.0D : this.target.posX))
-                        {
-                            this.direction = 3;
-                        }
+                        this.direction = 5;
                     }
-                    else
-                    {
-                        this.direction = 4;
-
-                        if (this.posZ > (this.reform ? (double)this.getOrgZ() - 1.0D : this.target.posZ))
-                        {
-                            this.direction = 5;
-                        }
-                    }
-
-                    if (var3 > var15 && var3 > var5 || var3 > 0.25D && this.rand.nextInt(5) == 0)
-                    {
-                        this.direction = 0;
-
-                        if (this.posY > (this.reform ? (double)this.getOrgY() : this.target.posY))
-                        {
-                            this.direction = 1;
-                        }
-                    }
-
-                    this.gotMovement = true;
                 }
-            }
 
-            if (this.harvey > 0.01F)
-            {
-                this.harvey *= 0.8F;
+                if (((b > a) && (b > c)) || ((b > 0.25D) && (this.rand.nextInt(5) == 0)))
+                {
+                    this.direction = 0;
+
+                    if (this.posY > (this.reform == true ? getOrgY() : this.target.posY))
+                    {
+                        this.direction = 1;
+                    }
+                }
+
+                this.gotMovement = true;
             }
+        }
+
+        if (this.harvey > 0.01F)
+        {
+            this.harvey *= 0.8F;
         }
     }
 
-    /**
-     * Applies a velocity to each of the entities pushing them away from each other. Args: entity
-     */
-    public void applyEntityCollision(Entity var1)
+    public void applyEntityCollision(Entity entity)
     {
         if (this.gotMovement)
         {
-            if (var1 instanceof EntitySentry || var1 instanceof EntityTrackingGolem || var1 instanceof EntitySliderHostMimic || var1 instanceof EntitySentryGuardian || var1 instanceof EntitySentryGolem || var1 instanceof EntityBattleSentry || var1 instanceof EntitySlider || var1 instanceof EntityMiniSlider)
+            if (((entity instanceof EntitySentry)) || ((entity instanceof EntityTrackingGolem)) || ((entity instanceof EntitySliderHostMimic)) || ((entity instanceof EntitySentryGuardian)) || ((entity instanceof EntitySentryGolem)) || ((entity instanceof EntityBattleSentry)) || ((entity instanceof EntitySlider)) || ((entity instanceof EntityMiniSlider)))
             {
                 return;
             }
 
-            boolean var2 = var1.attackEntityFrom(DamageSource.causeMobDamage(this.slider), 6);
+            boolean flag = entity.attackEntityFrom(DamageSource.causeMobDamage(this.slider), 6);
 
-            if (var2 && var1 instanceof EntityLiving)
+            if ((flag) && ((entity instanceof EntityLiving)))
             {
                 this.worldObj.playSoundAtEntity(this, "aeboss.slider.collide", 2.5F, 1.0F / (this.rand.nextFloat() * 0.2F + 0.9F));
 
-                if (var1 instanceof EntityCreature || var1 instanceof EntityPlayer)
+                if (((entity instanceof EntityCreature)) || ((entity instanceof EntityPlayer)))
                 {
-                    EntityLiving var3 = (EntityLiving)var1;
-                    var3.motionY += 0.35D;
-                    var3.motionX *= 2.0D;
-                    var3.motionZ *= 2.0D;
+                    EntityLiving ek = (EntityLiving)entity;
+                    ek.motionY += 0.35D;
+                    ek.motionX *= 2.0D;
+                    ek.motionZ *= 2.0D;
                 }
 
-                this.stop();
+                stop();
             }
         }
     }
 
-    /**
-     * Drop 0-2 items of this living's type. @param par1 - Whether this entity has recently been hit by a player. @param
-     * par2 - Level of Looting used to kill this mob.
-     */
-    protected void dropFewItems(boolean var1, int var2) {}
+    protected void dropFewItems(boolean var1, int var2)
+    {
+    }
 
     public void stop()
     {
@@ -541,38 +514,33 @@ public class EntityMiniSlider extends EntityMiniBoss implements IAetherMob
         this.motionZ = 0.0D;
     }
 
-    /**
-     * Called when the entity is attacked.
-     */
-    public boolean attackEntityFrom(DamageSource var1, int var2)
+    public boolean attackEntityFrom(DamageSource ds, int damage)
     {
         if (this.slider != null)
         {
-            this.slider.attackEntityFrom(DamageSource.causeMobDamage(this), var2);
+            this.slider.attackEntityFrom(DamageSource.causeMobDamage(this), damage);
         }
 
-        this.heal(var2);
-        return super.attackEntityFrom(var1, var2);
+        heal(damage);
+        return super.attackEntityFrom(ds, damage);
     }
 
-    /**
-     * Adds to the current velocity of the entity. Args: x, y, z
-     */
-    public void addVelocity(double var1, double var3, double var5) {}
+    public void addVelocity(double d, double d1, double d2)
+    {
+    }
 
-    /**
-     * knocks back this entity
-     */
-    public void knockBack(Entity var1, int var2, double var3, double var5) {}
+    public void knockBack(Entity entity, int i, double d, double d1)
+    {
+    }
 
-    public void addSquirrelButts(int var1, int var2, int var3)
+    public void addSquirrelButts(int x, int y, int z)
     {
         if (this.worldObj.isRemote)
         {
-            double var4 = (double)var1 + 0.5D + (double)(this.rand.nextFloat() - this.rand.nextFloat()) * 0.375D;
-            double var6 = (double)var2 + 0.5D + (double)(this.rand.nextFloat() - this.rand.nextFloat()) * 0.375D;
-            double var8 = (double)var3 + 0.5D + (double)(this.rand.nextFloat() - this.rand.nextFloat()) * 0.375D;
-            this.worldObj.spawnParticle("explode", var4, var6, var8, 0.0D, 0.0D, 0.0D);
+            double a = x + 0.5D + (this.rand.nextFloat() - this.rand.nextFloat()) * 0.375D;
+            double b = y + 0.5D + (this.rand.nextFloat() - this.rand.nextFloat()) * 0.375D;
+            double c = z + 0.5D + (this.rand.nextFloat() - this.rand.nextFloat()) * 0.375D;
+            this.worldObj.spawnParticle("explode", a, b, c, 0.0D, 0.0D, 0.0D);
         }
     }
 
@@ -581,3 +549,4 @@ public class EntityMiniSlider extends EntityMiniBoss implements IAetherMob
         return 10;
     }
 }
+

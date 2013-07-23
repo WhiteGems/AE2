@@ -9,6 +9,7 @@ public class TileEntityBronzeSpawner extends TileEntityMobSpawner
 
     public TileEntityBronzeSpawner()
     {
-        this.func_98049_a().setMobID("Aerbunny");
+        func_98049_a().setMobID("Aerbunny");
     }
 }
+

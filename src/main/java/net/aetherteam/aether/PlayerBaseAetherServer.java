@@ -5,9 +5,11 @@ import cpw.mods.fml.common.network.PacketDispatcher;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
 import net.aetherteam.aether.blocks.AetherBlocks;
@@ -17,6 +19,7 @@ import net.aetherteam.aether.data.PlayerClientInfo;
 import net.aetherteam.aether.dungeons.Dungeon;
 import net.aetherteam.aether.dungeons.DungeonHandler;
 import net.aetherteam.aether.entities.EntityAetherLightning;
+import net.aetherteam.aether.entities.mounts_old.RidingHandler;
 import net.aetherteam.aether.interfaces.IAetherAccessory;
 import net.aetherteam.aether.interfaces.IAetherBoss;
 import net.aetherteam.aether.items.AetherItems;
@@ -34,7 +37,8 @@ import net.minecraft.entity.effect.EntityLightningBolt;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.inventory.Container;
+import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.entity.player.PlayerCapabilities;
 import net.minecraft.inventory.ContainerPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemInWorldManager;
@@ -42,17 +46,20 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompressedStreamTools;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
+import net.minecraft.network.NetServerHandler;
 import net.minecraft.network.packet.Packet43Experience;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.management.ServerConfigurationManager;
+import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.FoodStats;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
+import net.minecraft.world.WorldProvider;
 import net.minecraft.world.WorldServer;
 import net.minecraft.world.storage.SaveHandler;
 import net.minecraftforge.common.ForgeHooks;
@@ -91,31 +98,36 @@ public class PlayerBaseAetherServer extends PlayerCoreServer
     public static int frostBiteTimer;
     private Random ab = new Random();
     private int hitAmnt;
-    public List extendedReachItems;
+    public List extendedReachItems = Arrays.asList(new Item[] { AetherItems.ValkyrieShovel, AetherItems.ValkyriePickaxe, AetherItems.ValkyrieAxe });
     private int ao;
     private boolean ap;
     private boolean isParachuting;
     private int parachuteType;
 
-    public PlayerBaseAetherServer(MinecraftServer var1, World var2, String var3, ItemInWorldManager var4, int var5, PlayerCoreServer var6)
+    public PlayerBaseAetherServer(MinecraftServer par1MinecraftServer, World par2World, String par3Str, ItemInWorldManager par4ItemInWorldManager, int playerCoreIndex, PlayerCoreServer entityPlayerMP)
     {
-        super(var1, var2, var3, var4, var5, var6);
-        this.extendedReachItems = Arrays.asList(new Item[] {AetherItems.ValkyrieShovel, AetherItems.ValkyriePickaxe, AetherItems.ValkyrieAxe});
+        super(par1MinecraftServer, par2World, par3Str, par4ItemInWorldManager, playerCoreIndex, entityPlayerMP);
         this.maxHealth = 20;
         this.inv = new InventoryAether(this.player);
-        this.player.bL = (Container)(!this.player.ce.isCreativeMode ? new ContainerPlayerAether(this.player.bK, this.inv, !this.player.q.isRemote, this.player, this.playerHandler) : new ContainerPlayer(this.player.bK, false, this.player));
+
+        if (!this.player.q.isRemote)
+        {
+            tmpTernaryOp = 1;
+        }
+
+        this.player.bL = (!this.player.ce.isCreativeMode ? new ContainerPlayerAether(this.player.bK, this.inv, false, this.player, this.playerHandler) : new ContainerPlayer(this.player.bK, false, this.player));
         this.player.bM = this.player.bL;
     }
 
     public boolean a(DamageSource var1, int var2)
     {
-        if (var1.getEntity() instanceof EntityPlayer)
+        if ((var1.getEntity() instanceof EntityPlayer))
         {
-            EntityPlayer var3 = (EntityPlayer)var1.getEntity();
-            Party var4 = PartyController.instance().getParty(var3);
-            Party var5 = PartyController.instance().getParty(PartyController.instance().getMember(this.player.bS));
+            EntityPlayer attackingPlayer = (EntityPlayer)var1.getEntity();
+            Party attackingParty = PartyController.instance().getParty(attackingPlayer);
+            Party receivingParty = PartyController.instance().getParty(PartyController.instance().getMember(this.player.bS));
 
-            if (var4 != null && var5 != null && var4.getName().toLowerCase().equalsIgnoreCase(var5.getName()))
+            if ((attackingParty != null) && (receivingParty != null) && (attackingParty.getName().toLowerCase().equalsIgnoreCase(receivingParty.getName())))
             {
                 return false;
             }
@@ -134,9 +146,9 @@ public class PlayerBaseAetherServer extends PlayerCoreServer
         return this.coinAmount;
     }
 
-    public void addCoins(int var1)
+    public void addCoins(int amount)
     {
-        this.coinAmount += var1;
+        this.coinAmount += amount;
 
         if (!this.player.q.isRemote)
         {
@@ -144,9 +156,9 @@ public class PlayerBaseAetherServer extends PlayerCoreServer
         }
     }
 
-    public void removeCoins(int var1)
+    public void removeCoins(int amount)
     {
-        this.coinAmount -= var1;
+        this.coinAmount -= amount;
 
         if (!this.player.q.isRemote)
         {
@@ -156,7 +168,12 @@ public class PlayerBaseAetherServer extends PlayerCoreServer
 
     public boolean g_()
     {
-        return this.wearingAccessory(AetherItems.SwettyPendant.itemID) && this.isBesideClimbableBlock() ? true : super.g_();
+        if ((wearingAccessory(AetherItems.SwettyPendant.itemID)) && (isBesideClimbableBlock()))
+        {
+            return true;
+        }
+
+        return super.g_();
     }
 
     public boolean isBesideClimbableBlock()
@@ -166,17 +183,22 @@ public class PlayerBaseAetherServer extends PlayerCoreServer
 
     public void a(EntityLightningBolt var1)
     {
-        if (!(var1 instanceof EntityAetherLightning) || ((EntityAetherLightning)var1).playerUsing != this.player)
+        if ((var1 instanceof EntityAetherLightning))
         {
-            super.a(var1);
+            if (((EntityAetherLightning)var1).playerUsing == this.player)
+            {
+                return;
+            }
         }
+
+        super.a(var1);
     }
 
     public void c()
     {
         this.playerHandler.beforeOnLivingUpdate();
 
-        if (this.playerHandler.riddenBy != null && this.playerHandler.riddenBy.shouldBeSitting())
+        if ((this.playerHandler.riddenBy != null) && (this.playerHandler.riddenBy.shouldBeSitting()))
         {
             if (this.playerHandler.riddenBy.animateSitting())
             {
@@ -193,55 +215,55 @@ public class PlayerBaseAetherServer extends PlayerCoreServer
         super.c();
     }
 
-    public void q(Entity var1)
+    public void q(Entity ent)
     {
-        super.q(var1);
+        super.q(ent);
 
-        if (var1 instanceof EntityLiving && ((EntityLiving)var1).deathTime <= 0 && !var1.isEntityAlive() && this.player.cd() != null && this.player.cd().itemID == AetherItems.SkyrootSword.itemID && var1 instanceof EntityLiving)
+        if ((ent instanceof EntityLiving))
         {
-            ;
+            if ((((EntityLiving)ent).deathTime > 0) || (ent.isEntityAlive()) || (this.player.cd() == null) || (this.player.cd().itemID != AetherItems.SkyrootSword.itemID) || (!(ent instanceof EntityLiving)));
         }
     }
 
     public void l_()
     {
-        if (this.isAboveBlock(AetherBlocks.Aercloud.blockID))
+        if (isAboveBlock(AetherBlocks.Aercloud.blockID))
         {
             this.player.T = 0.0F;
         }
 
-        int var2 = MathHelper.floor_double(this.player.u);
-        int var3 = MathHelper.floor_double(this.player.v);
-        int var4 = MathHelper.floor_double(this.player.w);
+        int posX = MathHelper.floor_double(this.player.u);
+        int posY = MathHelper.floor_double(this.player.v);
+        int posZ = MathHelper.floor_double(this.player.w);
 
-        if (this.isInBlock(AetherBlocks.ColdFire.blockID))
+        if (isInBlock(AetherBlocks.ColdFire.blockID))
         {
             this.player.d(new PotionEffect(Potion.moveSlowdown.id, 10, 4));
         }
 
-        if (!this.player.q.isRemote && this.player.q instanceof WorldServer)
+        if ((!this.player.q.isRemote) && ((this.player.q instanceof WorldServer)))
         {
-            ((WorldServer)this.player.q).getMinecraftServer();
-            int var1 = this.player.y() + 1;
+            ((WorldServer)this.player.q).p();
+            int i = this.player.y() + 1;
 
             if (this.ap)
             {
-                if (this.player.o == null && this.aq == var1 && this.aq <= var1)
+                if ((this.player.o == null) && (this.aq == i) && (this.aq <= i))
                 {
                     this.ap = false;
-                    this.aq = var1;
+                    this.aq = i;
                     this.player.ao = this.player.aa();
                     Aether.teleportPlayerToAether(this.player, false);
-                    this.aq = var1 + 5;
+                    this.aq = (i + 5);
                 }
                 else
                 {
-                    ++this.aq;
+                    this.aq += 1;
                 }
             }
             else
             {
-                if (this.aq > 0 && this.aq <= var1)
+                if ((this.aq > 0) && (this.aq <= i))
                 {
                     this.aq -= 4;
                 }
@@ -257,31 +279,28 @@ public class PlayerBaseAetherServer extends PlayerCoreServer
                 this.aq = 0;
             }
 
-            if (this.ao > 0)
-            {
-                ;
-            }
+            if (this.ao > 0);
 
-            this.idleInPortal = this.isInBlock(AetherBlocks.AetherPortal.blockID);
+            this.idleInPortal = isInBlock(AetherBlocks.AetherPortal.blockID);
         }
 
-        Party var5 = PartyController.instance().getParty((EntityPlayer)this.player);
-        Dungeon var6 = DungeonHandler.instance().getDungeon(var5);
+        Party party = PartyController.instance().getParty(this.player);
+        Dungeon dungeon = DungeonHandler.instance().getDungeon(party);
 
-        if (var6 != null)
+        if (dungeon != null)
         {
-            if ((DungeonHandler.instance().getInstanceAt(var2, var3, var4) != null && !DungeonHandler.instance().getInstanceAt(var2, var3, var4).equals(var6) || DungeonHandler.instance().getInstanceAt(var2, var3, var4) == null) && var6.getQueuedMembers().contains(PartyController.instance().getMember((EntityPlayer)this.player)) && var6.hasStarted() && this.player.q.provider.dimensionId == 3)
+            if (((DungeonHandler.instance().getInstanceAt(posX, posY, posZ) != null) && (!DungeonHandler.instance().getInstanceAt(posX, posY, posZ).equals(dungeon))) || ((DungeonHandler.instance().getInstanceAt(posX, posY, posZ) == null) && (dungeon.getQueuedMembers().contains(PartyController.instance().getMember(this.player))) && (dungeon.hasStarted()) && (this.player.q.provider.dimensionId == 3)))
             {
                 this.player.a(this.dungeonPosX, this.dungeonPosY, this.dungeonPosZ);
             }
-            else if (DungeonHandler.instance().getInstanceAt(var2, var3, var4) != null && DungeonHandler.instance().getInstanceAt(var2, var3, var4).equals(var6) && var6.hasStarted())
+            else if ((DungeonHandler.instance().getInstanceAt(posX, posY, posZ) != null) && (DungeonHandler.instance().getInstanceAt(posX, posY, posZ).equals(dungeon)) && (dungeon.hasStarted()))
             {
                 this.dungeonPosX = this.player.u;
                 this.dungeonPosY = this.player.v;
                 this.dungeonPosZ = this.player.w;
             }
         }
-        else if (DungeonHandler.instance().getInstanceAt(var2, var3, var4) != null && this.player.q.provider.dimensionId == 3)
+        else if ((DungeonHandler.instance().getInstanceAt(posX, posY, posZ) != null) && (this.player.q.provider.dimensionId == 3))
         {
             this.player.a(this.nondungeonPosX, this.nondungeonPosY, this.nondungeonPosZ);
         }
@@ -293,24 +312,17 @@ public class PlayerBaseAetherServer extends PlayerCoreServer
         }
 
         super.l_();
-        this.processAbilities();
-        int var7 = MathHelper.floor_double(this.player.u);
-        int var8 = MathHelper.floor_double(this.player.v);
-        int var9 = MathHelper.floor_double(this.player.w);
+        processAbilities();
+        int x = MathHelper.floor_double(this.player.u);
+        int y = MathHelper.floor_double(this.player.v);
+        int z = MathHelper.floor_double(this.player.w);
 
-        if (var6 != null && !var6.hasMember(PartyController.instance().getMember((EntityPlayer)this.player)))
-        {
-            ;
-        }
-
-        if (this.prevCreative != this.player.ce.isCreativeMode)
+        if (((dungeon == null) || (dungeon.hasMember(PartyController.instance().getMember(this.player)))) ||
+                (this.prevCreative != this.player.ce.isCreativeMode))
         {
             System.out.println("hey");
 
-            if (!this.player.ce.isCreativeMode)
-            {
-                ;
-            }
+            if (!this.player.ce.isCreativeMode);
 
             this.prevCreative = this.player.ce.isCreativeMode;
         }
@@ -322,19 +334,19 @@ public class PlayerBaseAetherServer extends PlayerCoreServer
 
         if (this.generalcooldown > 0)
         {
-            --this.generalcooldown;
+            this.generalcooldown -= 1;
         }
 
-        PotionEffect var10 = this.player.b(Potion.regeneration);
+        PotionEffect effect = this.player.b(Potion.regeneration);
 
-        if (var10 != null && var10.getDuration() > 0 && Potion.potionTypes[var10.getPotionID()].isReady(var10.getDuration(), var10.getAmplifier()) && this.player.aX() >= 20 && this.player.aX() < this.maxHealth)
+        if ((effect != null) && (effect.getDuration() > 0) && (Potion.potionTypes[effect.getPotionID()].isReady(effect.getDuration(), effect.getAmplifier())) && (this.player.aX() >= 20) && (this.player.aX() < this.maxHealth))
         {
             this.player.j(1);
         }
 
-        if (this.player.cn().getFoodLevel() >= 18 && this.player.aX() >= 20 && this.player.aX() < this.maxHealth)
+        if ((this.player.cn().getFoodLevel() >= 18) && (this.player.aX() >= 20) && (this.player.aX() < this.maxHealth))
         {
-            ++this.foodTimer;
+            this.foodTimer += 1;
 
             if (this.foodTimer >= 80)
             {
@@ -347,24 +359,24 @@ public class PlayerBaseAetherServer extends PlayerCoreServer
             this.foodTimer = 0;
         }
 
-        if (this.player.q.difficultySetting == 0 && this.player.aX() >= 20 && this.player.aX() < this.maxHealth && this.player.ac % 20 == 0)
+        if ((this.player.q.difficultySetting == 0) && (this.player.aX() >= 20) && (this.player.aX() < this.maxHealth) && (this.player.ac % 20 == 0))
         {
             this.player.j(1);
         }
 
         if (this.playerHandler.getCurrentBoss() != null)
         {
-            Entity var11 = this.playerHandler.getCurrentBoss().getBossEntity();
+            Entity boss = this.playerHandler.getCurrentBoss().getBossEntity();
 
-            if (Math.sqrt(Math.pow(var11.posX - this.player.u, 2.0D) + Math.pow(var11.posY - this.player.v, 2.0D) + Math.pow(var11.posZ - this.player.w, 2.0D)) > 50.0D)
+            if (Math.sqrt(Math.pow(boss.posX - this.player.u, 2.0D) + Math.pow(boss.posY - this.player.v, 2.0D) + Math.pow(boss.posZ - this.player.w, 2.0D)) > 50.0D)
             {
-                this.playerHandler.setCurrentBoss((IAetherBoss)null);
+                this.playerHandler.setCurrentBoss(null);
             }
         }
 
-        ItemStack var15 = this.player.cd();
+        ItemStack stack = this.player.cd();
 
-        if (var15 != null && var15.getItem() != null && this.extendedReachItems.contains(var15.getItem()))
+        if ((stack != null) && (stack.getItem() != null) && (this.extendedReachItems.contains(stack.getItem())))
         {
             this.player.c.setBlockReachDistance(10.0D);
         }
@@ -373,26 +385,29 @@ public class PlayerBaseAetherServer extends PlayerCoreServer
             this.player.c.setBlockReachDistance(5.0D);
         }
 
-        if (this.player.ar == 3 && this.player.v < -2.0D)
+        if ((this.player.ar == 3) && (this.player.v < -2.0D))
         {
             Aether.teleportPlayerToAether(this.player, true);
         }
 
         this.playerHandler.afterOnUpdate();
-        float var12 = this.player.getMoveForward();
-        float var13 = this.player.getMoveStrafing();
+        float forward = this.player.getMoveForward();
+        float strafe = this.player.getMoveStrafing();
 
-        if (this.player.o != null && (var13 != 0.0F || var12 != 0.0F))
+        if (this.player.o != null)
         {
-            this.player.f(0.0F);
-            this.player.setMoveStrafing(0.0F);
+            if ((strafe != 0.0F) || (forward != 0.0F))
+            {
+                this.player.f(0.0F);
+                this.player.setMoveStrafing(0.0F);
+            }
         }
 
         if (this.isParachuting)
         {
-            Vec3 var14 = this.player.Y();
+            Vec3 vec3 = this.player.Y();
 
-            switch (this.getParachuteType())
+            switch (getParachuteType())
             {
                 case 0:
                     this.player.x *= 0.6D;
@@ -407,9 +422,9 @@ public class PlayerBaseAetherServer extends PlayerCoreServer
                     break;
 
                 case 2:
-                    this.player.x = var14.xCoord * 0.18000000715255737D;
+                    this.player.x = (vec3.xCoord * 0.1800000071525574D);
                     this.player.y = -0.07999999821186066D;
-                    this.player.z = var14.zCoord * 0.18000000715255737D;
+                    this.player.z = (vec3.zCoord * 0.1800000071525574D);
                     break;
 
                 case 3:
@@ -421,107 +436,106 @@ public class PlayerBaseAetherServer extends PlayerCoreServer
                     this.player.y = 1.08D;
                     this.player.z *= 0.6D;
 
-                    if (this.player.v >= (double)this.player.q.getActualHeight() || !this.player.q.isAirBlock(var7, var8 + 1, var9))
+                    if ((this.player.v >= this.player.q.R()) || (!this.player.q.isAirBlock(x, y + 1, z)))
                     {
-                        this.setParachuting(false, this.parachuteType);
+                        setParachuting(false, this.parachuteType);
                     }
+
+                    break;
             }
 
             this.player.ce.allowFlying = true;
             this.player.J = true;
             this.player.T = 0.0F;
 
-            if ((this.getParachuteType() == 4 || this.player.q.isAirBlock(var7, var8 - 1, var9)) && (!this.isParachuting || this.hitAmnt < 4))
+            if (((getParachuteType() != 4) && (!this.player.q.isAirBlock(x, y - 1, z))) || ((this.isParachuting) && (this.hitAmnt >= 4)))
             {
-                if (this.player.bs >= 4 && this.isParachuting && var14.yCoord >= 1.0D)
-                {
-                    System.out.println(this.hitAmnt);
-                    ++this.hitAmnt;
-                }
-            }
-            else
-            {
-                this.setParachuting(false, this.parachuteType);
+                setParachuting(false, this.parachuteType);
                 this.player.ce.allowFlying = this.player.ce.isCreativeMode;
                 this.hitAmnt = 0;
             }
+            else if ((this.player.bs >= 4) && (this.isParachuting) && (vec3.yCoord >= 1.0D))
+            {
+                System.out.println(this.hitAmnt);
+                this.hitAmnt += 1;
+            }
         }
 
-        if (this.clientInfoChanged())
+        if (clientInfoChanged())
         {
-            this.updatePlayerClientInfo();
+            updatePlayerClientInfo();
         }
     }
 
-    public void a(DamageSource var1)
+    public void a(DamageSource source)
     {
-        float var2 = this.player.ch;
-        int var3 = this.player.cg;
-        int var4 = this.player.cf;
+        float exp = this.player.ch;
+        int expTotal = this.player.cg;
+        int expLevel = this.player.cf;
 
-        for (int var5 = 0; var5 < 8; ++var5)
+        for (int index = 0; index < 8; index++)
         {
-            if (this.inv.slots[var5] != null && this.inv.slots[var5].itemID == AetherItems.CrystalBottle.itemID)
+            if ((this.inv.slots[index] != null) && (this.inv.slots[index].itemID == AetherItems.CrystalBottle.itemID))
             {
-                if (this.inv.slots[var5].getTagCompound() != null)
+                if (this.inv.slots[index].getTagCompound() != null)
                 {
-                    this.inv.slots[var5].getTagCompound().setFloat("Experience", this.inv.slots[var5].getTagCompound().getFloat("Experience") + (float)(var4 * 2) + (float)Math.round(var2 * 10.0F) * 0.1F);
+                    this.inv.slots[index].getTagCompound().setFloat("Experience", this.inv.slots[index].getTagCompound().getFloat("Experience") + expLevel * 2 + Math.round(exp * 10.0F) * 0.1F);
                 }
                 else
                 {
-                    this.inv.slots[var5].setTagCompound(new NBTTagCompound());
-                    this.inv.slots[var5].getTagCompound().setFloat("Experience", this.inv.slots[var5].getTagCompound().getFloat("Experience") + (float)(var4 * 2) + (float)Math.round(var2 * 10.0F) * 0.1F);
+                    this.inv.slots[index].setTagCompound(new NBTTagCompound());
+                    this.inv.slots[index].getTagCompound().setFloat("Experience", this.inv.slots[index].getTagCompound().getFloat("Experience") + expLevel * 2 + Math.round(exp * 10.0F) * 0.1F);
                 }
             }
-            else if (this.inv.slots[var5] != null && this.inv.slots[var5].itemID == AetherItems.PiggieBank.itemID)
+            else if ((this.inv.slots[index] != null) && (this.inv.slots[index].itemID == AetherItems.PiggieBank.itemID))
             {
-                if (this.inv.slots[var5].getTagCompound() != null)
+                if (this.inv.slots[index].getTagCompound() != null)
                 {
-                    this.inv.slots[var5].getTagCompound().setInteger("Coins", this.inv.slots[var5].getTagCompound().getInteger("Coins") + this.getCoins());
+                    this.inv.slots[index].getTagCompound().setInteger("Coins", this.inv.slots[index].getTagCompound().getInteger("Coins") + getCoins());
                 }
                 else
                 {
-                    this.inv.slots[var5].setTagCompound(new NBTTagCompound());
-                    this.inv.slots[var5].getTagCompound().setInteger("Coins", this.inv.slots[var5].getTagCompound().getInteger("Coins") + this.getCoins());
+                    this.inv.slots[index].setTagCompound(new NBTTagCompound());
+                    this.inv.slots[index].getTagCompound().setInteger("Coins", this.inv.slots[index].getTagCompound().getInteger("Coins") + getCoins());
                 }
             }
         }
 
-        if (this.wearingAccessory(AetherItems.PiggieBank.itemID))
+        if (wearingAccessory(AetherItems.PiggieBank.itemID))
         {
-            this.setCoinAmount(0);
+            setCoinAmount(0);
         }
 
-        if (this.wearingAccessory(AetherItems.CrystalBottle.itemID))
+        if (wearingAccessory(AetherItems.CrystalBottle.itemID))
         {
             this.player.ch = 0.0F;
             this.player.cf = 0;
         }
 
-        var2 = this.player.ch;
-        var3 = this.player.cg;
-        var4 = this.player.cf;
-        super.a(var1);
-        PartyMember var11 = PartyController.instance().getMember((EntityPlayer)this.player);
-        int var6 = MathHelper.floor_double(this.player.u);
-        int var7 = MathHelper.floor_double(this.player.v);
-        int var8 = MathHelper.floor_double(this.player.w);
-        Dungeon var9 = DungeonHandler.instance().getInstanceAt(var6, var7, var8);
+        exp = this.player.ch;
+        expTotal = this.player.cg;
+        expLevel = this.player.cf;
+        super.a(source);
+        PartyMember member = PartyController.instance().getMember(this.player);
+        int x = MathHelper.floor_double(this.player.u);
+        int y = MathHelper.floor_double(this.player.v);
+        int z = MathHelper.floor_double(this.player.w);
+        Dungeon dungeon = DungeonHandler.instance().getInstanceAt(x, y, z);
         System.out.println("Hooking into player death!");
 
-        if (var11 != null && var9 != null)
+        if ((member != null) && (dungeon != null))
         {
-            Party var10 = PartyController.instance().getParty(var11);
+            Party party = PartyController.instance().getParty(member);
 
-            if (var10 != null && var9.isActive() && var9.isQueuedParty(var10))
+            if ((party != null) && (dungeon.isActive()) && (dungeon.isQueuedParty(party)))
             {
                 this.player.M = false;
                 this.player.b(this.maxHealth);
-                this.player.x = this.player.y = this.player.z = 0.0D;
+                this.player.x = (this.player.y = this.player.z = 0.0D);
                 this.player.setFoodStats(new FoodStats());
-                this.player.a.sendPacketToPlayer(new Packet43Experience(var2, var3, var4));
-                this.player.a((double)((float)((double)var9.getControllerX() + 0.5D)), (double)((float)((double)var9.getControllerY() + 1.0D)), (double)((float)((double)var9.getControllerZ() + 0.5D)));
-                this.player.a.sendPacketToPlayer(AetherPacketHandler.sendDungeonRespawn(var9, var10));
+                this.player.a.sendPacketToPlayer(new Packet43Experience(exp, expTotal, expLevel));
+                this.player.a((float)(dungeon.getControllerX() + 0.5D), (float)(dungeon.getControllerY() + 1.0D), (float)(dungeon.getControllerZ() + 0.5D));
+                this.player.a.sendPacketToPlayer(AetherPacketHandler.sendDungeonRespawn(dungeon, party));
                 return;
             }
         }
@@ -529,35 +543,35 @@ public class PlayerBaseAetherServer extends PlayerCoreServer
 
     public void a(Entity var1, int var2, double var3, double var5)
     {
-        if (!this.wearingObsidianArmour())
+        if (!wearingObsidianArmour())
         {
             super.a(var1, var2, var3, var5);
         }
     }
 
-    public boolean isAboveBlock(int var1)
+    public boolean isAboveBlock(int blockID)
     {
         MathHelper.floor_double(this.player.u);
-        int var2 = MathHelper.floor_double(this.player.E.minY);
+        int y = MathHelper.floor_double(this.player.E.minY);
         MathHelper.floor_double(this.player.w);
-        return this.player.q.getBlockId(MathHelper.floor_double(this.player.E.minX), var2 - 1, MathHelper.floor_double(this.player.E.minZ)) == var1 || this.player.q.getBlockId(MathHelper.floor_double(this.player.E.maxX), var2 - 1, MathHelper.floor_double(this.player.E.minZ)) == var1 || this.player.q.getBlockId(MathHelper.floor_double(this.player.E.maxX), var2 - 1, MathHelper.floor_double(this.player.E.maxZ)) == var1 || this.player.q.getBlockId(MathHelper.floor_double(this.player.E.minX), var2 - 1, MathHelper.floor_double(this.player.E.maxZ)) == var1;
+        return (this.player.q.getBlockId(MathHelper.floor_double(this.player.E.minX), y - 1, MathHelper.floor_double(this.player.E.minZ)) == blockID) || (this.player.q.getBlockId(MathHelper.floor_double(this.player.E.maxX), y - 1, MathHelper.floor_double(this.player.E.minZ)) == blockID) || (this.player.q.getBlockId(MathHelper.floor_double(this.player.E.maxX), y - 1, MathHelper.floor_double(this.player.E.maxZ)) == blockID) || (this.player.q.getBlockId(MathHelper.floor_double(this.player.E.minX), y - 1, MathHelper.floor_double(this.player.E.maxZ)) == blockID);
     }
 
-    public boolean isInBlock(int var1)
+    public boolean isInBlock(int blockID)
     {
         MathHelper.floor_double(this.player.u);
-        int var2 = MathHelper.floor_double(this.player.v);
+        int y = MathHelper.floor_double(this.player.v);
         MathHelper.floor_double(this.player.w);
-        return this.player.q.getBlockId(MathHelper.floor_double(this.player.E.minX), var2, MathHelper.floor_double(this.player.E.minZ)) == var1 || this.player.q.getBlockId(MathHelper.floor_double(this.player.E.maxX), var2 + 1, MathHelper.floor_double(this.player.E.minZ)) == var1;
+        return (this.player.q.getBlockId(MathHelper.floor_double(this.player.E.minX), y, MathHelper.floor_double(this.player.E.minZ)) == blockID) || (this.player.q.getBlockId(MathHelper.floor_double(this.player.E.maxX), y + 1, MathHelper.floor_double(this.player.E.minZ)) == blockID);
     }
 
-    public boolean setGeneralCooldown(int var1, String var2)
+    public boolean setGeneralCooldown(int cooldown, String stackName)
     {
         if (this.generalcooldown == 0)
         {
-            this.generalcooldown = var1;
-            this.generalcooldownmax = var1;
-            this.cooldownName = var2;
+            this.generalcooldown = cooldown;
+            this.generalcooldownmax = cooldown;
+            this.cooldownName = stackName;
 
             if (!this.player.q.isRemote)
             {
@@ -566,16 +580,20 @@ public class PlayerBaseAetherServer extends PlayerCoreServer
 
             return true;
         }
-        else
-        {
-            return false;
-        }
+
+        return false;
     }
 
     public boolean clientInfoChanged()
     {
-        PlayerClientInfo var1 = (PlayerClientInfo)Aether.proxy.getPlayerClientInfo().get(this.player.bS);
-        return var1 == null ? false : this.player.aZ() != var1.getArmourValue() || this.player.cn().getFoodLevel() != var1.getHunger() || this.player.aX() != var1.getHalfHearts() || this.maxHealth != var1.getMaxHealth() || this.getCoins() != var1.getAetherCoins();
+        PlayerClientInfo playerClientInfo = (PlayerClientInfo)Aether.proxy.getPlayerClientInfo().get(this.player.bS);
+
+        if (playerClientInfo != null)
+        {
+            return (this.player.aZ() != playerClientInfo.getArmourValue()) || (this.player.cn().getFoodLevel() != playerClientInfo.getHunger()) || (this.player.aX() != playerClientInfo.getHalfHearts()) || (this.maxHealth != playerClientInfo.getMaxHealth()) || (getCoins() != playerClientInfo.getAetherCoins());
+        }
+
+        return false;
     }
 
     public void processAbilities()
@@ -594,9 +612,9 @@ public class PlayerBaseAetherServer extends PlayerCoreServer
             this.sinage -= ((float)Math.PI * 2F);
         }
 
-        if (this.wearingAccessory(AetherItems.SwettyPendant.itemID) && this.isBesideClimbableBlock())
+        if ((wearingAccessory(AetherItems.SwettyPendant.itemID)) && (isBesideClimbableBlock()))
         {
-            if (!this.player.F && this.player.y < 0.0D && !this.player.G() && !this.player.ag())
+            if ((!this.player.F) && (this.player.y < 0.0D) && (!this.player.G()) && (!this.player.ag()))
             {
                 this.player.y *= 0.6D;
             }
@@ -606,7 +624,7 @@ public class PlayerBaseAetherServer extends PlayerCoreServer
 
         if (this.player.ac % 400 == 0)
         {
-            if (this.inv.slots[0] != null && this.inv.slots[0].itemID == AetherItems.ZanitePendant.itemID)
+            if ((this.inv.slots[0] != null) && (this.inv.slots[0].itemID == AetherItems.ZanitePendant.itemID))
             {
                 this.inv.slots[0].damageItem(1, this.player);
 
@@ -616,7 +634,7 @@ public class PlayerBaseAetherServer extends PlayerCoreServer
                 }
             }
 
-            if (this.inv.slots[4] != null && this.inv.slots[4].itemID == AetherItems.ZaniteRing.itemID)
+            if ((this.inv.slots[4] != null) && (this.inv.slots[4].itemID == AetherItems.ZaniteRing.itemID))
             {
                 this.inv.slots[4].damageItem(1, this.player);
 
@@ -626,7 +644,7 @@ public class PlayerBaseAetherServer extends PlayerCoreServer
                 }
             }
 
-            if (this.inv.slots[5] != null && this.inv.slots[5].itemID == AetherItems.ZaniteRing.itemID)
+            if ((this.inv.slots[5] != null) && (this.inv.slots[5].itemID == AetherItems.ZaniteRing.itemID))
             {
                 this.inv.slots[5].damageItem(1, this.player);
 
@@ -637,15 +655,15 @@ public class PlayerBaseAetherServer extends PlayerCoreServer
             }
         }
 
-        if (this.wearingPhoenixArmour())
+        if (wearingPhoenixArmour())
         {
             this.player.A();
             this.player.d(new PotionEffect(Potion.fireResistance.id, 10, 4));
         }
 
-        if (this.wearingGravititeArmour())
+        if (wearingGravititeArmour())
         {
-            if (this.player.bG && !this.jumpBoosted && this.player.ag())
+            if ((this.player.bG) && (!this.jumpBoosted) && (this.player.ag()))
             {
                 this.player.y = 1.0D;
                 this.jumpBoosted = true;
@@ -654,13 +672,13 @@ public class PlayerBaseAetherServer extends PlayerCoreServer
             this.player.T = -1.0F;
         }
 
-        if (this.wearingObsidianArmour())
+        if (wearingObsidianArmour())
         {
             this.player.d(new PotionEffect(Potion.resistance.id, 10, 3));
             this.player.d(new PotionEffect(Potion.moveSlowdown.id, 10, 1));
         }
 
-        if (this.wearingValkyrieArmour())
+        if (wearingValkyrieArmour())
         {
             if (this.player.bG)
             {
@@ -674,13 +692,13 @@ public class PlayerBaseAetherServer extends PlayerCoreServer
                     if (this.flightCount < this.maxFlightCount)
                     {
                         this.flightMod += 0.25D;
-                        this.player.y = 0.025D * this.flightMod;
-                        ++this.flightCount;
+                        this.player.y = (0.025D * this.flightMod);
+                        this.flightCount += 1;
                     }
                 }
                 else
                 {
-                    ++this.flightCount;
+                    this.flightCount += 1;
                 }
             }
             else
@@ -697,20 +715,20 @@ public class PlayerBaseAetherServer extends PlayerCoreServer
             this.flightMod = 1.0D;
         }
 
-        if (!this.player.bG && this.player.F)
+        if ((!this.player.bG) && (this.player.F))
         {
             this.jumpBoosted = false;
         }
 
-        for (int var1 = 0; var1 < 8; ++var1)
+        for (int index = 0; index < 8; index++)
         {
-            if (this.inv.slots[var1] != null && this.inv.slots[var1].getItem() instanceof IAetherAccessory)
+            if ((this.inv.slots[index] != null) && ((this.inv.slots[index].getItem() instanceof IAetherAccessory)))
             {
-                ((ItemAccessory)this.inv.slots[var1].getItem()).activateServerPassive(this.player, this);
+                ((ItemAccessory)this.inv.slots[index].getItem()).activateServerPassive(this.player, this);
             }
         }
 
-        if (!this.wearingAccessory(AetherItems.AgilityCape.itemID))
+        if (!wearingAccessory(AetherItems.AgilityCape.itemID))
         {
             this.player.Y = this.prevStepHeight;
         }
@@ -726,8 +744,8 @@ public class PlayerBaseAetherServer extends PlayerCoreServer
 
     public float bE()
     {
-        float var1 = this.playerHandler.getSpeedModifier();
-        return var1 == -1.0F ? var1 : super.bE();
+        float speed = this.playerHandler.getSpeedModifier();
+        return speed == -1.0F ? speed : super.bE();
     }
 
     public AetherCommonPlayerHandler getPlayerHandler()
@@ -735,142 +753,143 @@ public class PlayerBaseAetherServer extends PlayerCoreServer
         return this.playerHandler;
     }
 
-    public void j(int var1)
+    public void j(int i)
     {
-        if (this.player.aX() > 0)
+        if (this.player.aX() <= 0)
         {
-            this.player.b(this.player.aX() + var1);
-
-            if (this.player.aX() > this.maxHealth)
-            {
-                this.player.b(this.maxHealth);
-            }
-
-            this.updatePlayerClientInfo();
+            return;
         }
+
+        this.player.b(this.player.aX() + i);
+
+        if (this.player.aX() > this.maxHealth)
+        {
+            this.player.b(this.maxHealth);
+        }
+
+        updatePlayerClientInfo();
     }
 
     public void updatePlayerClientInfo()
     {
         if (!this.player.q.isRemote)
         {
-            MinecraftServer var1 = FMLCommonHandler.instance().getMinecraftServerInstance();
-            ServerConfigurationManager var2 = var1.getConfigurationManager();
-            PlayerClientInfo var3 = new PlayerClientInfo(this.player.aX(), this.maxHealth, this.player.cn().getFoodLevel(), this.player.aZ(), this.getCoins());
-            Aether.proxy.getPlayerClientInfo().put(this.player.bS, var3);
-            PartyMember var4 = PartyController.instance().getMember(this.player.bS);
-            PartyController.instance().getParty(var4);
+            MinecraftServer server = FMLCommonHandler.instance().getMinecraftServerInstance();
+            ServerConfigurationManager configManager = server.getConfigurationManager();
+            PlayerClientInfo playerClientInfo = new PlayerClientInfo(this.player.aX(), this.maxHealth, this.player.cn().getFoodLevel(), this.player.aZ(), getCoins());
+            Aether.proxy.getPlayerClientInfo().put(this.player.bS, playerClientInfo);
+            PartyMember member = PartyController.instance().getMember(this.player.bS);
+            PartyController.instance().getParty(member);
 
-            for (int var5 = 0; var5 < var2.playerEntityList.size(); ++var5)
+            for (int playerAmount = 0; playerAmount < configManager.playerEntityList.size(); playerAmount++)
             {
-                EntityPlayerMP var6 = (EntityPlayerMP)var2.playerEntityList.get(var5);
-                PartyController.instance().getMember((EntityPlayer)var6);
-                var6.playerNetServerHandler.sendPacketToPlayer(AetherPacketHandler.sendPlayerClientInfo(false, true, this.player.bS, var3));
+                EntityPlayerMP entityPlayer = (EntityPlayerMP)configManager.playerEntityList.get(playerAmount);
+                PartyController.instance().getMember(entityPlayer);
+                entityPlayer.playerNetServerHandler.sendPacketToPlayer(AetherPacketHandler.sendPlayerClientInfo(false, true, this.player.bS, playerClientInfo));
             }
 
-            this.player.a.sendPacketToPlayer(AetherPacketHandler.sendPlayerClientInfo(false, true, this.player.bS, var3));
+            this.player.a.sendPacketToPlayer(AetherPacketHandler.sendPlayerClientInfo(false, true, this.player.bS, playerClientInfo));
         }
     }
 
-    public void increaseMaxHP(int var1)
+    public void increaseMaxHP(int i)
     {
-        if (this.maxHealth <= 40 - var1)
+        if (this.maxHealth <= 40 - i)
         {
             if (!this.player.q.isRemote)
             {
-                PacketDispatcher.sendPacketToAllPlayers(AetherPacketHandler.sendHeartChange(false, true, this.maxHealth + var1, Collections.singleton(this.player.bS)));
+                PacketDispatcher.sendPacketToAllPlayers(AetherPacketHandler.sendHeartChange(false, true, this.maxHealth + i, Collections.singleton(this.player.bS)));
             }
 
-            this.maxHealth += var1;
-            this.player.b(this.player.aX() + var1);
+            this.maxHealth += i;
+            this.player.b(this.player.aX() + i);
         }
     }
 
-    public void b(NBTTagCompound var1)
+    public void b(NBTTagCompound tag)
     {
-        var1.setInteger("MaxHealth", this.maxHealth);
-        var1.setTag("AetherInventory", this.inv.writeToNBT(new NBTTagList()));
-        var1.setBoolean("HasDefeatedSunSpirit", this.hasDefeatedSunSpirit);
-        var1.setBoolean("inAether", this.player.ar == 3);
-        var1.setInteger("GeneralCooldown", this.generalcooldown);
-        var1.setInteger("GeneralCooldownMax", this.generalcooldownmax);
-        var1.setString("CooldownName", this.cooldownName);
-        var1.setInteger("Coins", this.coinAmount);
-        var1.setDouble("NondungeonPosX", this.nondungeonPosX);
-        var1.setDouble("NondungeonPosY", this.nondungeonPosY);
-        var1.setDouble("NondungeonPosZ", this.nondungeonPosZ);
-        var1.setDouble("DungeonPosX", this.dungeonPosX);
-        var1.setDouble("DungeonPosY", this.dungeonPosY);
-        var1.setDouble("DungeonPosZ", this.dungeonPosZ);
-        super.b(var1);
+        tag.setInteger("MaxHealth", this.maxHealth);
+        tag.setTag("AetherInventory", this.inv.writeToNBT(new NBTTagList()));
+        tag.setBoolean("HasDefeatedSunSpirit", this.hasDefeatedSunSpirit);
+        tag.setBoolean("inAether", this.player.ar == 3);
+        tag.setInteger("GeneralCooldown", this.generalcooldown);
+        tag.setInteger("GeneralCooldownMax", this.generalcooldownmax);
+        tag.setString("CooldownName", this.cooldownName);
+        tag.setInteger("Coins", this.coinAmount);
+        tag.setDouble("NondungeonPosX", this.nondungeonPosX);
+        tag.setDouble("NondungeonPosY", this.nondungeonPosY);
+        tag.setDouble("NondungeonPosZ", this.nondungeonPosZ);
+        tag.setDouble("DungeonPosX", this.dungeonPosX);
+        tag.setDouble("DungeonPosY", this.dungeonPosY);
+        tag.setDouble("DungeonPosZ", this.dungeonPosZ);
+        super.b(tag);
     }
 
-    public void a(NBTTagCompound var1)
+    public void a(NBTTagCompound tag)
     {
         if (!this.player.q.isRemote)
         {
-            File var2 = new File(((SaveHandler)this.player.q.getSaveHandler()).getWorldDirectoryName(), "aether.dat");
+            File file = new File(((SaveHandler)this.player.q.L()).getWorldDirectoryName(), "aether.dat");
 
-            if (var2.exists())
+            if (file.exists())
             {
-                new NBTTagCompound();
+                NBTTagCompound customData = new NBTTagCompound();
 
                 try
                 {
-                    NBTTagCompound var3 = CompressedStreamTools.readCompressed(new FileInputStream(var2));
-                    this.maxHealth = var3.getInteger("MaxHealth");
-                    NBTTagList var4 = var3.getTagList("Inventory");
+                    customData = CompressedStreamTools.readCompressed(new FileInputStream(file));
+                    this.maxHealth = customData.getInteger("MaxHealth");
+                    NBTTagList nbttaglist = customData.getTagList("Inventory");
 
                     if (this.player.ar == 3)
                     {
                         this.player.ar = 3;
                     }
 
-                    this.inv.readFromNBT(var4);
-                    var2.delete();
+                    this.inv.readFromNBT(nbttaglist);
+                    file.delete();
                 }
-                catch (IOException var5)
+                catch (IOException ioexception)
                 {
-                    ;
                 }
             }
             else
             {
                 System.out.println("Failed to read player data. Making new");
-                this.maxHealth = var1.getInteger("MaxHealth");
-                NBTTagList var6 = var1.getTagList("AetherInventory");
-                this.hasDefeatedSunSpirit = var1.getBoolean("HasDefeatedSunSpirit");
+                this.maxHealth = tag.getInteger("MaxHealth");
+                NBTTagList nbttaglist = tag.getTagList("AetherInventory");
+                this.hasDefeatedSunSpirit = tag.getBoolean("HasDefeatedSunSpirit");
 
-                if (var1.getBoolean("inAether"))
+                if (tag.getBoolean("inAether"))
                 {
                     this.player.ar = 3;
                 }
 
-                this.generalcooldown = var1.getInteger("GeneralCooldown");
-                this.generalcooldownmax = var1.getInteger("GeneralCooldownMax");
-                this.cooldownName = var1.getString("CooldownName");
-                this.coinAmount = var1.getInteger("Coins");
-                this.nondungeonPosX = var1.getDouble("NondungeonPosX");
-                this.nondungeonPosY = var1.getDouble("NondungeonPosY");
-                this.nondungeonPosZ = var1.getDouble("NondungeonPosZ");
-                this.dungeonPosX = var1.getDouble("DungeonPosX");
-                this.dungeonPosY = var1.getDouble("DungeonPosY");
-                this.dungeonPosZ = var1.getDouble("DungeonPosZ");
-                this.inv.readFromNBT(var6);
+                this.generalcooldown = tag.getInteger("GeneralCooldown");
+                this.generalcooldownmax = tag.getInteger("GeneralCooldownMax");
+                this.cooldownName = tag.getString("CooldownName");
+                this.coinAmount = tag.getInteger("Coins");
+                this.nondungeonPosX = tag.getDouble("NondungeonPosX");
+                this.nondungeonPosY = tag.getDouble("NondungeonPosY");
+                this.nondungeonPosZ = tag.getDouble("NondungeonPosZ");
+                this.dungeonPosX = tag.getDouble("DungeonPosX");
+                this.dungeonPosY = tag.getDouble("DungeonPosY");
+                this.dungeonPosZ = tag.getDouble("DungeonPosZ");
+                this.inv.readFromNBT(nbttaglist);
             }
         }
 
-        super.a(var1);
+        super.a(tag);
     }
 
     public void onDefeatSunSpirit()
     {
-        this.setHasDefeatedSunSpirit(true);
+        setHasDefeatedSunSpirit(true);
     }
 
-    public void setHasDefeatedSunSpirit(boolean var1)
+    public void setHasDefeatedSunSpirit(boolean defeatedSunSpirit)
     {
-        this.hasDefeatedSunSpirit = var1;
+        this.hasDefeatedSunSpirit = defeatedSunSpirit;
     }
 
     public boolean getHasDefeatedSunSpirit()
@@ -878,78 +897,81 @@ public class PlayerBaseAetherServer extends PlayerCoreServer
         return this.hasDefeatedSunSpirit;
     }
 
-    public float a(Block var1, boolean var2)
+    public float a(Block block, boolean flag)
     {
-        ItemStack var3 = this.player.bK.getCurrentItem();
-        float var4 = var3 == null ? 1.0F : var3.getItem().getStrVsBlock(var3, var1, 0);
+        ItemStack stack = this.player.bK.getCurrentItem();
+        float f = stack == null ? 1.0F : stack.getItem().getStrVsBlock(stack, block, 0);
 
-        if (this.inv.slots[0] != null && this.inv.slots[0].itemID == AetherItems.ZanitePendant.itemID)
+        if ((this.inv.slots[0] != null) && (this.inv.slots[0].itemID == AetherItems.ZanitePendant.itemID))
         {
-            var4 *= 1.0F + (float)this.inv.slots[0].getItemDamage() / ((float)this.inv.slots[0].getMaxDamage() * 3.0F);
+            f *= (1.0F + this.inv.slots[0].getItemDamage() / (this.inv.slots[0].getMaxDamage() * 3.0F));
         }
 
-        if (this.inv.slots[4] != null && this.inv.slots[4].itemID == AetherItems.ZaniteRing.itemID)
+        if ((this.inv.slots[4] != null) && (this.inv.slots[4].itemID == AetherItems.ZaniteRing.itemID))
         {
-            var4 *= 1.0F + (float)this.inv.slots[4].getItemDamage() / ((float)this.inv.slots[4].getMaxDamage() * 3.0F);
+            f *= (1.0F + this.inv.slots[4].getItemDamage() / (this.inv.slots[4].getMaxDamage() * 3.0F));
         }
 
-        if (this.inv.slots[5] != null && this.inv.slots[5].itemID == AetherItems.ZaniteRing.itemID)
+        if ((this.inv.slots[5] != null) && (this.inv.slots[5].itemID == AetherItems.ZaniteRing.itemID))
         {
-            var4 *= 1.0F + (float)this.inv.slots[5].getItemDamage() / ((float)this.inv.slots[5].getMaxDamage() * 3.0F);
+            f *= (1.0F + this.inv.slots[5].getItemDamage() / (this.inv.slots[5].getMaxDamage() * 3.0F));
         }
 
-        if (!this.wearingNeptuneArmour())
+        if (wearingNeptuneArmour())
         {
-            return var4 == -1.0F ? super.a(var1, var2) : var4;
-        }
-        else
-        {
-            if (var4 > 1.0F)
+            if (f > 1.0F)
             {
-                int var5 = EnchantmentHelper.getEfficiencyModifier(this.player);
-                ItemStack var6 = this.player.bK.getCurrentItem();
+                int i = EnchantmentHelper.getEfficiencyModifier(this.player);
+                ItemStack itemstack = this.player.bK.getCurrentItem();
 
-                if (var5 > 0 && var6 != null)
+                if ((i > 0) && (itemstack != null))
                 {
-                    float var7 = (float)(var5 * var5 + 1);
-                    boolean var8 = ForgeHooks.canToolHarvestBlock(var1, 0, var6);
+                    float f1 = i * i + 1;
+                    boolean canHarvest = ForgeHooks.canToolHarvestBlock(block, 0, itemstack);
 
-                    if (!var8 && var4 <= 1.0F)
+                    if ((!canHarvest) && (f <= 1.0F))
                     {
-                        var4 += var7 * 0.08F;
+                        f += f1 * 0.08F;
                     }
                     else
                     {
-                        var4 += var7;
+                        f += f1;
                     }
                 }
             }
 
             if (this.player.a(Potion.digSpeed))
             {
-                var4 *= 1.0F + (float)(this.player.b(Potion.digSpeed).getAmplifier() + 1) * 0.2F;
+                f *= (1.0F + (this.player.b(Potion.digSpeed).getAmplifier() + 1) * 0.2F);
             }
 
             if (this.player.a(Potion.digSlowdown))
             {
-                var4 *= 1.0F - (float)(this.player.b(Potion.digSlowdown).getAmplifier() + 1) * 0.2F;
+                f *= (1.0F - (this.player.b(Potion.digSlowdown).getAmplifier() + 1) * 0.2F);
             }
 
-            var4 = ForgeEventFactory.getBreakSpeed(this.player, var1, 0, var4);
-            return var4 < 0.0F ? 0.0F : var4;
+            f = ForgeEventFactory.getBreakSpeed(this.player, block, 0, f);
+            return f < 0.0F ? 0.0F : f;
         }
+
+        return f == -1.0F ? super.a(block, flag) : f;
     }
 
     public boolean G()
     {
-        return this.wearingNeptuneArmour() ? false : super.G();
+        if (wearingNeptuneArmour())
+        {
+            return false;
+        }
+
+        return super.G();
     }
 
     public MovingObjectPosition a(double var1, float var3)
     {
-        ItemStack var4 = this.player.cd();
+        ItemStack stack = this.player.cd();
 
-        if (var4 != null && var4.getItem() != null && this.extendedReachItems.contains(var4.getItem()))
+        if ((stack != null) && (stack.getItem() != null) && (this.extendedReachItems.contains(stack.getItem())))
         {
             var1 = 10.0D;
         }
@@ -957,26 +979,26 @@ public class PlayerBaseAetherServer extends PlayerCoreServer
         return this.player.rayTrace(var1, var3);
     }
 
-    public int getAccessoryCount(int var1)
+    public int getAccessoryCount(int itemID)
     {
-        int var2 = 0;
+        int count = 0;
 
-        for (int var3 = 0; var3 < 8; ++var3)
+        for (int index = 0; index < 8; index++)
         {
-            if (this.inv.slots[var3] != null && this.inv.slots[var3].itemID == var1)
+            if ((this.inv.slots[index] != null) && (this.inv.slots[index].itemID == itemID))
             {
-                ++var2;
+                count++;
             }
         }
 
-        return var2;
+        return count;
     }
 
-    public boolean wearingAccessory(int var1)
+    public boolean wearingAccessory(int itemID)
     {
-        for (int var2 = 0; var2 < 8; ++var2)
+        for (int index = 0; index < 8; index++)
         {
-            if (this.inv.slots[var2] != null && this.inv.slots[var2].itemID == var1)
+            if ((this.inv.slots[index] != null) && (this.inv.slots[index].itemID == itemID))
             {
                 return true;
             }
@@ -985,45 +1007,45 @@ public class PlayerBaseAetherServer extends PlayerCoreServer
         return false;
     }
 
-    public void setSlotStack(int var1, ItemStack var2)
+    public void setSlotStack(int slotIndex, ItemStack stack)
     {
-        this.inv.slots[var1] = var2;
+        this.inv.slots[slotIndex] = stack;
     }
 
-    public ItemStack getSlotStack(int var1)
+    public ItemStack getSlotStack(int itemID)
     {
-        ItemStack var2 = null;
+        ItemStack slot = null;
 
-        for (int var3 = 0; var3 < 8; ++var3)
+        for (int index = 0; index < 8; index++)
         {
-            if (this.inv.slots[var3] != null && this.inv.slots[var3].itemID == var1)
+            if ((this.inv.slots[index] != null) && (this.inv.slots[index].itemID == itemID))
             {
-                var2 = this.inv.slots[var3];
-                return var2;
+                slot = this.inv.slots[index];
+                return slot;
             }
         }
 
-        return var2;
+        return slot;
     }
 
-    public int getSlotIndex(int var1)
+    public int getSlotIndex(int itemID)
     {
-        for (int var2 = 0; var2 < 8; ++var2)
+        for (int index = 0; index < 8; index++)
         {
-            if (this.inv.slots[var2] != null && this.inv.slots[var2].itemID == var1)
+            if ((this.inv.slots[index] != null) && (this.inv.slots[index].itemID == itemID))
             {
-                return var2;
+                return index;
             }
         }
 
         return 0;
     }
 
-    public boolean wearingArmour(int var1)
+    public boolean wearingArmour(int itemID)
     {
-        for (int var2 = 0; var2 < 4; ++var2)
+        for (int index = 0; index < 4; index++)
         {
-            if (this.player.bK.armorInventory[var2] != null && this.player.bK.armorInventory[var2].itemID == var1)
+            if ((this.player.bK.armorInventory[index] != null) && (this.player.bK.armorInventory[index].itemID == itemID))
             {
                 return true;
             }
@@ -1039,32 +1061,32 @@ public class PlayerBaseAetherServer extends PlayerCoreServer
 
     public boolean wearingNeptuneArmour()
     {
-        return this.wearingArmour(AetherItems.NeptuneHelmet.itemID) && this.wearingArmour(AetherItems.NeptuneChestplate.itemID) && this.wearingArmour(AetherItems.NeptuneLeggings.itemID) && this.wearingArmour(AetherItems.NeptuneBoots.itemID) && this.wearingAccessory(AetherItems.NeptuneGloves.itemID);
+        return (wearingArmour(AetherItems.NeptuneHelmet.itemID)) && (wearingArmour(AetherItems.NeptuneChestplate.itemID)) && (wearingArmour(AetherItems.NeptuneLeggings.itemID)) && (wearingArmour(AetherItems.NeptuneBoots.itemID)) && (wearingAccessory(AetherItems.NeptuneGloves.itemID));
     }
 
     public boolean wearingValkyrieArmour()
     {
-        return this.wearingArmour(AetherItems.ValkyrieHelmet.itemID) && this.wearingArmour(AetherItems.ValkyrieChestplate.itemID) && this.wearingArmour(AetherItems.ValkyrieLeggings.itemID) && this.wearingArmour(AetherItems.ValkyrieBoots.itemID) && this.wearingAccessory(AetherItems.ValkyrieGloves.itemID);
+        return (wearingArmour(AetherItems.ValkyrieHelmet.itemID)) && (wearingArmour(AetherItems.ValkyrieChestplate.itemID)) && (wearingArmour(AetherItems.ValkyrieLeggings.itemID)) && (wearingArmour(AetherItems.ValkyrieBoots.itemID)) && (wearingAccessory(AetherItems.ValkyrieGloves.itemID));
     }
 
     public boolean wearingObsidianArmour()
     {
-        return this.wearingArmour(AetherItems.ObsidianHelmet.itemID) && this.wearingArmour(AetherItems.ObsidianChestplate.itemID) && this.wearingArmour(AetherItems.ObsidianLeggings.itemID) && this.wearingArmour(AetherItems.ObsidianBoots.itemID) && this.wearingAccessory(AetherItems.ObsidianGloves.itemID);
+        return (wearingArmour(AetherItems.ObsidianHelmet.itemID)) && (wearingArmour(AetherItems.ObsidianChestplate.itemID)) && (wearingArmour(AetherItems.ObsidianLeggings.itemID)) && (wearingArmour(AetherItems.ObsidianBoots.itemID)) && (wearingAccessory(AetherItems.ObsidianGloves.itemID));
     }
 
     public boolean wearingPhoenixArmour()
     {
-        return this.wearingArmour(AetherItems.PhoenixHelmet.itemID) && this.wearingArmour(AetherItems.PhoenixChestplate.itemID) && this.wearingArmour(AetherItems.PhoenixLeggings.itemID) && this.wearingArmour(AetherItems.PhoenixBoots.itemID) && this.wearingAccessory(AetherItems.PhoenixGloves.itemID);
+        return (wearingArmour(AetherItems.PhoenixHelmet.itemID)) && (wearingArmour(AetherItems.PhoenixChestplate.itemID)) && (wearingArmour(AetherItems.PhoenixLeggings.itemID)) && (wearingArmour(AetherItems.PhoenixBoots.itemID)) && (wearingAccessory(AetherItems.PhoenixGloves.itemID));
     }
 
     public boolean wearingGravititeArmour()
     {
-        return this.wearingArmour(AetherItems.GravititeHelmet.itemID) && this.wearingArmour(AetherItems.GravititeChestplate.itemID) && this.wearingArmour(AetherItems.GravititeLeggings.itemID) && this.wearingArmour(AetherItems.GravititeBoots.itemID) && this.wearingAccessory(AetherItems.GravititeGloves.itemID);
+        return (wearingArmour(AetherItems.GravititeHelmet.itemID)) && (wearingArmour(AetherItems.GravititeChestplate.itemID)) && (wearingArmour(AetherItems.GravititeLeggings.itemID)) && (wearingArmour(AetherItems.GravititeBoots.itemID)) && (wearingAccessory(AetherItems.GravititeGloves.itemID));
     }
 
-    public void setCoinAmount(int var1)
+    public void setCoinAmount(int i)
     {
-        this.coinAmount = var1;
+        this.coinAmount = i;
 
         if (!this.player.q.isRemote)
         {
@@ -1105,7 +1127,7 @@ public class PlayerBaseAetherServer extends PlayerCoreServer
 
     public int getType()
     {
-        switch (this.getParachuteType())
+        switch (getParachuteType())
         {
             case 0:
                 return 0;
@@ -1121,28 +1143,28 @@ public class PlayerBaseAetherServer extends PlayerCoreServer
 
             case 4:
                 return 1;
-
-            default:
-                return 0;
         }
+
+        return 0;
     }
 
-    public void setParachuting(boolean var1, int var2)
+    public void setParachuting(boolean isParachuting, int parachuteType)
     {
-        this.isParachuting = var1;
-        this.parachuteType = var2;
+        this.isParachuting = isParachuting;
+        this.parachuteType = parachuteType;
 
-        if (!var1)
+        if (!isParachuting)
         {
-            EntityItem var3 = new EntityItem(this.player.q, this.player.u, this.player.v, this.player.w, new ItemStack(Item.silk, this.ab.nextInt(3)));
-            EntityItem var4 = new EntityItem(this.player.q, this.player.u, this.player.v, this.player.w, new ItemStack(AetherBlocks.Aercloud, this.ab.nextInt(3), this.getType()));
-            this.player.q.spawnEntityInWorld(var4);
-            this.player.q.spawnEntityInWorld(var3);
+            EntityItem item = new EntityItem(this.player.q, this.player.u, this.player.v, this.player.w, new ItemStack(Item.silk, this.ab.nextInt(3)));
+            EntityItem block = new EntityItem(this.player.q, this.player.u, this.player.v, this.player.w, new ItemStack(AetherBlocks.Aercloud, this.ab.nextInt(3), getType()));
+            this.player.q.spawnEntityInWorld(block);
+            this.player.q.spawnEntityInWorld(item);
         }
 
         if (!this.player.q.isRemote)
         {
-            PacketDispatcher.sendPacketToAllPlayers(AetherPacketHandler.sendParachuteCheck(false, var1, var1, var2, Collections.singleton(this.player.bS)));
+            PacketDispatcher.sendPacketToAllPlayers(AetherPacketHandler.sendParachuteCheck(false, isParachuting, isParachuting, parachuteType, Collections.singleton(this.player.bS)));
         }
     }
 }
+

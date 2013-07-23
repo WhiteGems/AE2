@@ -2,7 +2,8 @@ package net.aetherteam.aether.blocks;
 
 import net.minecraft.block.Block;
 
-public interface IAetherBlock
+public abstract interface IAetherBlock
 {
-    Block setIconName(String var1);
+    public abstract Block setIconName(String paramString);
 }
+

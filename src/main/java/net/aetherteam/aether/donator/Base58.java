@@ -7,85 +7,78 @@ public class Base58
     private static final String ALPHABET = "123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz";
     private static final BigInteger BASE = BigInteger.valueOf(58L);
 
-    public static String encode(byte[] var0)
+    public static String encode(byte[] input)
     {
-        BigInteger var1 = new BigInteger(1, var0);
-        StringBuffer var2;
-        BigInteger var3;
+        BigInteger bi = new BigInteger(1, input);
+        StringBuffer s = new StringBuffer();
 
-        for (var2 = new StringBuffer(); var1.compareTo(BASE) >= 0; var1 = var1.subtract(var3).divide(BASE))
+        while (bi.compareTo(BASE) >= 0)
         {
-            var3 = var1.mod(BASE);
-            var2.insert(0, "123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz".charAt(var3.intValue()));
+            BigInteger mod = bi.mod(BASE);
+            s.insert(0, "123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz".charAt(mod.intValue()));
+            bi = bi.subtract(mod).divide(BASE);
         }
 
-        var2.insert(0, "123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz".charAt(var1.intValue()));
-        byte[] var7 = var0;
-        int var4 = var0.length;
+        s.insert(0, "123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz".charAt(bi.intValue()));
 
-        for (int var5 = 0; var5 < var4; ++var5)
+        for (byte anInput : input)
         {
-            byte var6 = var7[var5];
-
-            if (var6 != 0)
+            if (anInput != 0)
             {
                 break;
             }
 
-            var2.insert(0, "123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz".charAt(0));
+            s.insert(0, "123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz".charAt(0));
         }
 
-        return var2.toString();
+        return s.toString();
     }
 
-    public static byte[] decode(String var0)
+    public static byte[] decode(String input)
     {
-        if (var0.length() == 0)
+        if (input.length() == 0)
         {
             return null;
         }
-        else
+
+        BigInteger decoded = decodeToBigInteger(input);
+
+        if (decoded == null)
         {
-            BigInteger var1 = decodeToBigInteger(var0);
-
-            if (var1 == null)
-            {
-                return null;
-            }
-            else
-            {
-                byte[] var2 = var1.toByteArray();
-                boolean var3 = var2.length > 1 && var2[0] == 0 && var2[1] < 0;
-                int var4 = 0;
-
-                for (int var5 = 0; var5 < var0.length() && var0.charAt(var5) == "123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz".charAt(0); ++var5)
-                {
-                    ++var4;
-                }
-
-                byte[] var6 = new byte[var2.length - (var3 ? 1 : 0) + var4];
-                System.arraycopy(var2, var3 ? 1 : 0, var6, var4, var6.length - var4);
-                return var6;
-            }
+            return null;
         }
+
+        byte[] bytes = decoded.toByteArray();
+        boolean stripSignByte = (bytes.length > 1) && (bytes[0] == 0) && (bytes[1] < 0);
+        int leadingZeros = 0;
+
+        for (int i = 0; (i < input.length()) && (input.charAt(i) == "123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz".charAt(0)); i++)
+        {
+            leadingZeros++;
+        }
+
+        byte[] tmp = new byte[bytes.length - (stripSignByte ? 1 : 0) + leadingZeros];
+        System.arraycopy(bytes, stripSignByte ? 1 : 0, tmp, leadingZeros, tmp.length - leadingZeros);
+        return tmp;
     }
 
-    private static BigInteger decodeToBigInteger(String var0)
+    private static BigInteger decodeToBigInteger(String input)
     {
-        BigInteger var1 = BigInteger.valueOf(0L);
+        BigInteger bi = BigInteger.valueOf(0L);
 
-        for (int var2 = var0.length() - 1; var2 >= 0; --var2)
+        for (int i = input.length() - 1; i >= 0; i--)
         {
-            int var3 = "123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz".indexOf(var0.charAt(var2));
+            int alphaIndex = "123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz".indexOf(input.charAt(i));
 
-            if (var3 == -1)
+            if (alphaIndex == -1)
             {
                 return null;
             }
 
-            var1 = var1.add(BigInteger.valueOf((long)var3).multiply(BASE.pow(var0.length() - 1 - var2)));
+            bi = bi.add(BigInteger.valueOf(alphaIndex).multiply(BASE.pow(input.length() - 1 - i)));
         }
 
-        return var1;
+        return bi;
     }
 }
+

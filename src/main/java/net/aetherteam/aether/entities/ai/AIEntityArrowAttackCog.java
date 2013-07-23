@@ -1,20 +1,23 @@
 package net.aetherteam.aether.entities.ai;
 
 import net.aetherteam.aether.entities.bosses.EntityLabyrinthEye;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityCreature;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.ai.EntityAIBase;
+import net.minecraft.entity.ai.EntityLookHelper;
+import net.minecraft.entity.ai.EntitySenses;
 import net.minecraft.entity.ai.RandomPositionGenerator;
+import net.minecraft.pathfinding.PathNavigate;
+import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.Vec3;
+import net.minecraft.util.Vec3Pool;
+import net.minecraft.world.World;
 
 public class AIEntityArrowAttackCog extends EntityAIBase
 {
     private final EntityLiving entityHost;
-
-    /**
-     * The entity (as a RangedAttackMob) the AI instance has been applied to.
-     */
-    private final EntityLabyrinthEye rangedAttackEntityHost;
+    private final EntityLabyrinthEye field_82641_b;
     private EntityLiving attackTarget;
     private int rangedAttackTime = 0;
     private float entityMoveSpeed;
@@ -28,28 +31,23 @@ public class AIEntityArrowAttackCog extends EntityAIBase
     double k = 0.0D;
     boolean running = false;
 
-    public AIEntityArrowAttackCog(EntityLabyrinthEye var1, float var2, int var3, float var4)
+    public AIEntityArrowAttackCog(EntityLabyrinthEye par1IRangedAttackMob, float par2, int par3, float par4)
     {
-        if (!(var1 instanceof EntityLiving))
+        if (!(par1IRangedAttackMob instanceof EntityLiving))
         {
             throw new IllegalArgumentException("ArrowAttackGoal requires Mob implements RangedAttackMob");
         }
-        else
-        {
-            this.rangedAttackEntityHost = var1;
-            this.entityHost = var1;
-            this.entityMoveSpeed = var2;
-            this.maxRangedAttackTime = var3;
-            this.maxAttackRange = var4 * var4;
-            this.minAttackRange = 49.0F;
-            this.runRange = 16.0F;
-            this.setMutexBits(3);
-        }
+
+        this.field_82641_b = par1IRangedAttackMob;
+        this.entityHost = par1IRangedAttackMob;
+        this.entityMoveSpeed = par2;
+        this.maxRangedAttackTime = par3;
+        this.maxAttackRange = (par4 * par4);
+        this.minAttackRange = 49.0F;
+        this.runRange = 16.0F;
+        setMutexBits(3);
     }
 
-    /**
-     * Returns whether the EntityAIBase should begin execution.
-     */
     public boolean shouldExecute()
     {
         EntityLiving var1 = this.entityHost.getAttackTarget();
@@ -58,66 +56,55 @@ public class AIEntityArrowAttackCog extends EntityAIBase
         {
             return false;
         }
-        else
-        {
-            this.attackTarget = var1;
-            return true;
-        }
+
+        this.attackTarget = var1;
+        return true;
     }
 
-    /**
-     * Returns whether an in-progress EntityAIBase should continue executing
-     */
     public boolean continueExecuting()
     {
-        return this.shouldExecute() || !this.entityHost.getNavigator().noPath();
+        return (shouldExecute()) || (!this.entityHost.getNavigator().noPath());
     }
 
-    /**
-     * Resets the task
-     */
     public void resetTask()
     {
         this.attackTarget = null;
         this.seeTimer = 0;
     }
 
-    /**
-     * Updates the task
-     */
     public void updateTask()
     {
-        double var1 = this.entityHost.getDistanceSq(this.attackTarget.posX, this.attackTarget.boundingBox.minY, this.attackTarget.posZ);
-        boolean var3 = this.entityHost.getEntitySenses().canSee(this.attackTarget);
+        double distances = this.entityHost.getDistanceSq(this.attackTarget.posX, this.attackTarget.boundingBox.minY, this.attackTarget.posZ);
+        boolean canSee = this.entityHost.getEntitySenses().canSee(this.attackTarget);
 
-        if (var3)
+        if (canSee)
         {
-            ++this.seeTimer;
+            this.seeTimer += 1;
         }
         else
         {
             this.seeTimer = 0;
         }
 
-        if (var1 <= (double)this.runRange && this.seeTimer >= 20)
+        if ((distances <= this.runRange) && (this.seeTimer >= 20))
         {
             this.running = true;
         }
 
-        if (this.running && var1 <= (double)this.minAttackRange && this.seeTimer >= 20)
+        if ((this.running) && (distances <= this.minAttackRange) && (this.seeTimer >= 20))
         {
-            Vec3 var4 = RandomPositionGenerator.findRandomTargetBlockAwayFrom((EntityCreature)this.entityHost, 16, 7, this.entityHost.worldObj.getWorldVec3Pool().getVecFromPool(this.attackTarget.posX, this.attackTarget.posY, this.attackTarget.posZ));
+            Vec3 var2 = RandomPositionGenerator.findRandomTargetBlockAwayFrom((EntityCreature)this.entityHost, 16, 7, this.entityHost.worldObj.U().getVecFromPool(this.attackTarget.posX, this.attackTarget.posY, this.attackTarget.posZ));
 
-            if (var4 != null)
+            if (var2 != null)
             {
-                this.i = var4.xCoord;
-                this.j = var4.yCoord;
-                this.k = var4.zCoord;
+                this.i = var2.xCoord;
+                this.j = var2.yCoord;
+                this.k = var2.zCoord;
             }
 
             this.entityHost.getNavigator().tryMoveToXYZ(this.i, this.j, this.k, this.entityMoveSpeed);
         }
-        else if (var1 <= (double)this.maxAttackRange && this.seeTimer >= 20)
+        else if ((distances <= this.maxAttackRange) && (this.seeTimer >= 20))
         {
             this.running = false;
             this.entityHost.getNavigator().clearPathEntity();
@@ -132,3 +119,4 @@ public class AIEntityArrowAttackCog extends EntityAIBase
         this.rangedAttackTime = Math.max(this.rangedAttackTime - 1, 0);
     }
 }
+

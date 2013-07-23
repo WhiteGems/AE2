@@ -11,3 +11,4 @@ public class SliderCapeChoice extends DonatorChoice
         super("Slider Cape", EnumChoiceType.CAPE, new DonatorTexture("cape_Slider.png", "Slider.png", 256, 128));
     }
 }
+

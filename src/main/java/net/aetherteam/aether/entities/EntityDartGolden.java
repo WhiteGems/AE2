@@ -1,5 +1,6 @@
 package net.aetherteam.aether.entities;
 
+import java.util.Random;
 import net.aetherteam.aether.items.AetherItems;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
@@ -11,19 +12,19 @@ public class EntityDartGolden extends EntityProjectileBase
     public EntityLiving victim;
     public static int texfxindex = 94;
 
-    public EntityDartGolden(World var1)
+    public EntityDartGolden(World world)
     {
-        super(var1);
+        super(world);
     }
 
-    public EntityDartGolden(World var1, double var2, double var4, double var6)
+    public EntityDartGolden(World world, double x, double y, double z)
     {
-        super(var1, var2, var4, var6);
+        super(world, x, y, z);
     }
 
-    public EntityDartGolden(World var1, EntityLiving var2)
+    public EntityDartGolden(World world, EntityLiving ent)
     {
-        super(var1, var2);
+        super(world, ent);
     }
 
     public void entityInit()
@@ -35,30 +36,24 @@ public class EntityDartGolden extends EntityProjectileBase
         this.speed = 1.5F;
     }
 
-    /**
-     * Returns if this entity is in water and will end up adding the waters velocity to the entity
-     */
     public boolean handleWaterMovement()
     {
-        return this.victim == null && super.handleWaterMovement();
+        return (this.victim == null) && (super.handleWaterMovement());
     }
 
-    /**
-     * Called to update the entity's position/logic.
-     */
     public void onUpdate()
     {
         super.onUpdate();
 
-        if (this.ticksFlying == 200 && !this.worldObj.isRemote)
+        if (this.ticksFlying == 200)
         {
-            this.setDead();
+            if (!this.worldObj.isRemote)
+            {
+                setDead();
+            }
         }
     }
 
-    /**
-     * Will get destroyed next tick.
-     */
     public void setDead()
     {
         this.victim = null;
@@ -72,8 +67,9 @@ public class EntityDartGolden extends EntityProjectileBase
         return this.victim == null;
     }
 
-    public boolean canBeShot(Entity var1)
+    public boolean canBeShot(Entity ent)
     {
-        return super.canBeShot(var1) && this.victim == null;
+        return (super.canBeShot(ent)) && (this.victim == null);
     }
 }
+

@@ -1,11 +1,19 @@
 package net.aetherteam.aether.client.gui.social;
 
 import cpw.mods.fml.client.FMLClientHandler;
+import java.util.ArrayList;
+import java.util.List;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.GuiTextField;
 import net.minecraft.client.gui.ScaledResolution;
+import net.minecraft.client.multiplayer.PlayerControllerMP;
+import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.settings.GameSettings;
+import net.minecraft.client.settings.KeyBinding;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
@@ -28,57 +36,48 @@ public class GuiParty extends GuiScreen
     private static final int DIALOGUE_NONE = 4;
     private static final int DIALOGUE_INVITE = 5;
     private static final int DIALOGUE_REMOVE = 6;
-    private int dialogueState;
-    private boolean dialogue;
+    private int dialogueState = 4;
+    private boolean dialogue = false;
     private final PartyData pm;
     private GuiTextField partyNameField;
     private GuiTextField dialogueInput;
     private GuiYSlider sbar;
-    private float sbarVal;
-    private String name;
+    private float sbarVal = 0.0F;
+    private String name = "Aether Party";
     private int backgroundTexture;
     private int dialogueTexture;
     private int xParty;
     private int yParty;
     private int wParty;
     private int hParty;
-
-    /** Reference to the Minecraft object. */
-    Minecraft mc;
+    Minecraft g;
 
     public GuiParty()
     {
         this(new PartyData());
     }
 
-    public GuiParty(PartyData var1)
+    public GuiParty(PartyData pm)
     {
-        this.dialogueState = 4;
-        this.dialogue = false;
-        this.sbarVal = 0.0F;
-        this.name = "Aether Party";
-        this.mc = FMLClientHandler.instance().getClient();
-        this.pm = var1;
-        this.backgroundTexture = this.mc.renderEngine.getTexture("/net/aetherteam/aether/client/sprites/gui/party.png");
-        this.dialogueTexture = this.mc.renderEngine.getTexture("/net/aetherteam/aether/client/sprites/gui/dialogue.png");
+        this.g = FMLClientHandler.instance().getClient();
+        this.pm = pm;
+        this.backgroundTexture = this.g.renderEngine.f("/net/aetherteam/aether/client/sprites/gui/party.png");
+        this.dialogueTexture = this.g.renderEngine.f("/net/aetherteam/aether/client/sprites/gui/dialogue.png");
         this.wParty = 256;
         this.hParty = 256;
-        this.updateScreen();
-        var1.pList_online.add(this.mc.thePlayer);
-        var1.pList_online.add(this.mc.thePlayer);
-        var1.pList_offline.add(this.mc.thePlayer);
-        var1.pList_offline.add(this.mc.thePlayer);
-        var1.pList_offline.add(this.mc.thePlayer);
+        updateScreen();
+        pm.pList_online.add(this.g.thePlayer);
+        pm.pList_online.add(this.g.thePlayer);
+        pm.pList_offline.add(this.g.thePlayer);
+        pm.pList_offline.add(this.g.thePlayer);
+        pm.pList_offline.add(this.g.thePlayer);
     }
 
-    /**
-     * Adds the buttons (and other controls) to the screen in question.
-     */
     public void initGui()
     {
         Keyboard.enableRepeatEvents(true);
-        this.updateScreen();
-        this.buttonList.clear();
+        updateScreen();
+        this.k.clear();
 
         if (this.sbar != null)
         {
@@ -87,9 +86,9 @@ public class GuiParty extends GuiScreen
 
         this.sbar = new GuiYSlider(-1, this.xParty + 46, this.yParty - 54, 10, 103);
         this.sbar.sliderValue = this.sbarVal;
-        this.buttonList.add(new GuiButton(0, this.xParty - 58, this.yParty + 85 - 28, 52, 20, "Invite"));
-        this.buttonList.add(new GuiButton(1, this.xParty - 1, this.yParty + 85 - 28, 60, 20, "Remove"));
-        this.partyNameField = new GuiTextField(this.fontRenderer, this.xParty - 55, this.yParty - 73, 107, 16);
+        this.k.add(new GuiButton(0, this.xParty - 58, this.yParty + 85 - 28, 52, 20, "Invite"));
+        this.k.add(new GuiButton(1, this.xParty - 1, this.yParty + 85 - 28, 60, 20, "Remove"));
+        this.partyNameField = new GuiTextField(this.m, this.xParty - 55, this.yParty - 73, 107, 16);
         this.partyNameField.setFocused(true);
         this.partyNameField.setMaxStringLength(16);
         this.partyNameField.setText(this.name);
@@ -97,77 +96,64 @@ public class GuiParty extends GuiScreen
 
         if (this.dialogue)
         {
-            this.openDialogue();
+            openDialogue();
         }
     }
 
-    /**
-     * Fired when a key is typed. This is the equivalent of KeyListener.keyTyped(KeyEvent e).
-     */
-    protected void keyTyped(char var1, int var2)
+    protected void keyTyped(char charTyped, int keyTyped)
     {
         if (this.partyNameField.isFocused())
         {
-            this.partyNameField.textboxKeyTyped(var1, var2);
+            this.partyNameField.textboxKeyTyped(charTyped, keyTyped);
             this.name = this.partyNameField.getText();
         }
 
         if (this.dialogue)
         {
-            this.dialogueInput.textboxKeyTyped(var1, var2);
+            this.dialogueInput.textboxKeyTyped(charTyped, keyTyped);
         }
 
-        super.keyTyped(var1, var2);
+        super.keyTyped(charTyped, keyTyped);
 
-        if (var2 == Minecraft.getMinecraft().gameSettings.keyBindInventory.keyCode)
+        if (keyTyped == Minecraft.getMinecraft().gameSettings.keyBindInventory.keyCode)
         {
-            this.mc.displayGuiScreen((GuiScreen)null);
-            this.mc.setIngameFocus();
+            this.g.displayGuiScreen((GuiScreen)null);
+            this.g.setIngameFocus();
         }
     }
 
-    /**
-     * Called when the mouse is clicked.
-     */
-    protected void mouseClicked(int var1, int var2, int var3)
+    protected void mouseClicked(int par1, int par2, int par3)
     {
-        this.partyNameField.mouseClicked(var1, var2, var3);
+        this.partyNameField.mouseClicked(par1, par2, par3);
 
         if (!this.dialogue)
         {
-            this.sbar.mousePressed(this.mc, var1, var2);
+            this.sbar.mousePressed(this.g, par1, par2);
         }
 
-        super.mouseClicked(var1, var2, var3);
+        super.mouseClicked(par1, par2, par3);
     }
 
-    /**
-     * Called when the mouse is moved or a mouse button is released.  Signature: (mouseX, mouseY, which) which==-1 is
-     * mouseMove, which==0 or which==1 is mouseUp
-     */
-    protected void mouseMovedOrUp(int var1, int var2, int var3)
+    protected void mouseMovedOrUp(int par1, int par2, int par3)
     {
-        if (var3 == 0)
+        if (par3 == 0)
         {
-            this.sbar.mouseReleased(var1, var2);
+            this.sbar.mouseReleased(par1, par2);
         }
 
-        super.mouseMovedOrUp(var1, var2, var3);
+        super.mouseMovedOrUp(par1, par2, par3);
     }
 
-    /**
-     * Fired when a control is clicked. This is the equivalent of ActionListener.actionPerformed(ActionEvent e).
-     */
-    protected void actionPerformed(GuiButton var1)
+    protected void actionPerformed(GuiButton btn)
     {
-        switch (var1.id)
+        switch (btn.id)
         {
             case 0:
                 if (!this.dialogue)
                 {
                     this.dialogue = true;
                     this.dialogueState = 5;
-                    this.openDialogue();
+                    openDialogue();
                 }
 
                 break;
@@ -177,7 +163,7 @@ public class GuiParty extends GuiScreen
                 {
                     this.dialogue = true;
                     this.dialogueState = 6;
-                    this.openDialogue();
+                    openDialogue();
                 }
 
                 break;
@@ -186,20 +172,21 @@ public class GuiParty extends GuiScreen
                 switch (this.dialogueState)
                 {
                     case 5:
-                        Minecraft.getMinecraft().theWorld.getPlayerEntityByName(this.dialogueInput.getText());
+                        Minecraft.getMinecraft().theWorld.a(this.dialogueInput.getText());
+                        break;
 
                     case 6:
-                    default:
-                        this.dialogue = false;
-                        this.dialogueState = 4;
-                        this.initGui();
-                        return;
                 }
+
+                this.dialogue = false;
+                this.dialogueState = 4;
+                initGui();
+                break;
 
             case 3:
                 this.dialogue = false;
                 this.dialogueState = 4;
-                this.initGui();
+                initGui();
         }
     }
 
@@ -212,40 +199,33 @@ public class GuiParty extends GuiScreen
 
             case 6:
                 return "Remove";
-
-            default:
-                return "";
         }
+
+        return "";
     }
 
     private void openDialogue()
     {
         this.partyNameField.setFocused(false);
-        this.dialogueInput = new GuiTextField(this.fontRenderer, this.xParty - 88 + this.fontRenderer.getStringWidth(this.getDialogueOption()), this.yParty - 7, 193 - this.fontRenderer.getStringWidth(this.getDialogueOption()) - 10, 16);
+        this.dialogueInput = new GuiTextField(this.m, this.xParty - 88 + this.m.getStringWidth(getDialogueOption()), this.yParty - 7, 193 - this.m.getStringWidth(getDialogueOption()) - 10, 16);
         this.dialogueInput.setFocused(true);
         this.dialogueInput.setCanLoseFocus(false);
-        this.buttonList.add(new GuiButton(2, this.xParty - 1, this.yParty + 14, 50, 20, "Confirm"));
-        this.buttonList.add(new GuiButton(3, this.xParty + 52, this.yParty + 14, 45, 20, "Cancel"));
+        this.k.add(new GuiButton(2, this.xParty - 1, this.yParty + 14, 50, 20, "Confirm"));
+        this.k.add(new GuiButton(3, this.xParty + 52, this.yParty + 14, 45, 20, "Cancel"));
     }
 
-    /**
-     * Returns true if this GUI should pause the game when it is displayed in single-player
-     */
     public boolean doesGuiPauseGame()
     {
         return false;
     }
 
-    /**
-     * Draws the screen and all the components in it.
-     */
-    public void drawScreen(int var1, int var2, float var3)
+    public void drawScreen(int x, int y, float partialTick)
     {
-        this.drawDefaultBackground();
+        drawDefaultBackground();
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
         GL11.glBindTexture(GL11.GL_TEXTURE_2D, this.backgroundTexture);
-        int var4 = Mouse.getDWheel();
-        this.sbar.sliderValue -= (float)var4 / 1000.0F;
+        int dmsy = Mouse.getDWheel();
+        this.sbar.sliderValue -= dmsy / 1000.0F;
 
         if (this.sbar.sliderValue > 1.0F)
         {
@@ -257,68 +237,63 @@ public class GuiParty extends GuiScreen
             this.sbar.sliderValue = 0.0F;
         }
 
-        int var5 = this.xParty - 70;
-        int var6 = this.yParty - 84;
-        ScaledResolution var7 = new ScaledResolution(this.mc.gameSettings, this.mc.displayWidth, this.mc.displayHeight);
-        this.drawTexturedModalRect(var5, var6, 0, 0, 141, this.hParty);
-        boolean var8 = false;
-        byte var9 = 100;
-        byte var10 = 20;
-        byte var11 = 2;
+        int centerX = this.xParty - 70;
+        int centerY = this.yParty - 84;
+        ScaledResolution sr = new ScaledResolution(this.g.gameSettings, this.g.displayWidth, this.g.displayHeight);
+        drawTexturedModalRect(centerX, centerY, 0, 0, 141, this.hParty);
+        int totalHeight = 0;
+        int slotW = 100;
+        int slotH = 20;
+        int gutter = 2;
         GL11.glEnable(GL11.GL_SCISSOR_TEST);
-        GL11.glScissor((var5 + 14) * var7.getScaleFactor(), (var6 + 35) * var7.getScaleFactor(), var9 * var7.getScaleFactor(), 103 * var7.getScaleFactor());
+        GL11.glScissor((centerX + 14) * sr.getScaleFactor(), (centerY + 35) * sr.getScaleFactor(), slotW * sr.getScaleFactor(), 103 * sr.getScaleFactor());
         GL11.glPushMatrix();
-        int var15 = (this.pm.pList_offline.size() + this.pm.pList_online.size()) * (var10 + var11);
-        float var12 = -this.sbar.sliderValue * (float)(var15 - 105);
+        totalHeight = (this.pm.pList_offline.size() + this.pm.pList_online.size()) * (slotH + gutter);
+        float sVal = -this.sbar.sliderValue * (totalHeight - 105);
 
-        if (var15 > 103)
+        if (totalHeight > 103)
         {
-            GL11.glTranslatef(0.0F, var12, 0.0F);
+            GL11.glTranslatef(0.0F, sVal, 0.0F);
         }
 
-        var15 = 0;
-        int var13;
-        EntityPlayer var14;
+        totalHeight = 0;
 
-        for (var13 = 0; var13 < this.pm.pList_online.size(); ++var13)
+        for (int i = 0; i < this.pm.pList_online.size(); i++)
         {
-            var14 = (EntityPlayer)this.pm.pList_online.get(var13);
-            this.drawPlayerSlot(var14, var5 + 15, var6 + var15 + 30, var9, var10, true);
-            var15 += var10 + var11;
+            EntityPlayer p = (EntityPlayer)this.pm.pList_online.get(i);
+            drawPlayerSlot(p, centerX + 15, centerY + totalHeight + 30, slotW, slotH, true);
+            totalHeight += slotH + gutter;
         }
 
-        for (var13 = 0; var13 < this.pm.pList_offline.size(); ++var13)
+        for (int i = 0; i < this.pm.pList_offline.size(); i++)
         {
-            var14 = (EntityPlayer)this.pm.pList_offline.get(var13);
-            this.drawPlayerSlot(var14, var5 + 15, var6 + var15 + 30, var9, var10, false);
-            var15 += var10 + var11;
+            EntityPlayer p = (EntityPlayer)this.pm.pList_offline.get(i);
+            drawPlayerSlot(p, centerX + 15, centerY + totalHeight + 30, slotW, slotH, false);
+            totalHeight += slotH + gutter;
         }
 
         GL11.glPopMatrix();
         GL11.glDisable(GL11.GL_SCISSOR_TEST);
         this.partyNameField.drawTextBox();
 
-        if (var15 > 103)
+        if (totalHeight > 103)
         {
-            this.sbar.drawButton(this.mc, var1, var2);
+            this.sbar.drawButton(this.g, x, y);
         }
 
         if (this.dialogue)
         {
-            this.drawGradientRect(0, 0, this.width, this.height, -1728053248, -1728053248);
+            drawGradientRect(0, 0, this.height, this.i, -1728053248, -1728053248);
             GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
             GL11.glBindTexture(GL11.GL_TEXTURE_2D, this.dialogueTexture);
-            this.drawTexturedModalRect(var5 - 30, var6 + 71, 0, 0, 201, this.hParty - 201);
+            drawTexturedModalRect(centerX - 30, centerY + 71, 0, 0, 201, this.hParty - 201);
             this.dialogueInput.drawTextBox();
-            this.fontRenderer.drawStringWithShadow(this.getDialogueOption() + ":", var5 - 24, var6 + 80, 16777215);
+            this.m.drawStringWithShadow(getDialogueOption() + ":", centerX - 24, centerY + 80, 16777215);
         }
 
-        super.drawScreen(var1, var2, var3);
+        super.drawScreen(x, y, partialTick);
     }
 
-    /**
-     * Called from the main game loop to update the screen.
-     */
     public void updateScreen()
     {
         super.updateScreen();
@@ -333,39 +308,40 @@ public class GuiParty extends GuiScreen
             this.dialogueInput.updateCursorCounter();
         }
 
-        ScaledResolution var1 = new ScaledResolution(this.mc.gameSettings, this.mc.displayWidth, this.mc.displayHeight);
-        int var2 = var1.getScaledWidth();
-        int var3 = var1.getScaledHeight();
-        this.xParty = var2 / 2;
-        this.yParty = var3 / 2;
+        ScaledResolution scaledresolution = new ScaledResolution(this.g.gameSettings, this.g.displayWidth, this.g.displayHeight);
+        int width = scaledresolution.getScaledWidth();
+        int height = scaledresolution.getScaledHeight();
+        this.xParty = (width / 2);
+        this.yParty = (height / 2);
     }
 
-    public void drawPlayerSlot(EntityPlayer var1, int var2, int var3, int var4, int var5, boolean var6)
+    public void drawPlayerSlot(EntityPlayer p, int x, int y, int width, int height, boolean online)
     {
-        this.drawGradientRect(var2, var3, var2 + var4, var3 + var5, -11184811, -10066330);
-        int var7 = this.mc.renderEngine.getTextureForDownloadableImage(var1.skinUrl, "/mob/char.png");
+        drawGradientRect(x, y, x + width, y + height, -11184811, -10066330);
+        int icon = this.g.renderEngine.a(p.skinUrl, "/mob/char.png");
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-        GL11.glBindTexture(GL11.GL_TEXTURE_2D, var7);
+        GL11.glBindTexture(GL11.GL_TEXTURE_2D, icon);
         GL11.glEnable(GL11.GL_TEXTURE_2D);
-        float var8 = 0.125F;
-        float var9 = 0.25F;
-        float var10 = 0.25F;
-        float var11 = 0.5F;
+        float u = 0.125F;
+        float v = 0.25F;
+        float u1 = 0.25F;
+        float v1 = 0.5F;
         GL11.glBegin(GL11.GL_QUADS);
-        GL11.glTexCoord2f(var8, var9);
-        GL11.glVertex2f((float)(var2 + 2), (float)(var3 + 2));
-        GL11.glTexCoord2f(var8, var11);
-        GL11.glVertex2f((float)(var2 + 2), (float)(var3 + 18));
-        GL11.glTexCoord2f(var10, var11);
-        GL11.glVertex2f((float)(var2 + 18), (float)(var3 + 18));
-        GL11.glTexCoord2f(var10, var9);
-        GL11.glVertex2f((float)(var2 + 18), (float)(var3 + 2));
+        GL11.glTexCoord2f(u, v);
+        GL11.glVertex2f(x + 2, y + 2);
+        GL11.glTexCoord2f(u, v1);
+        GL11.glVertex2f(x + 2, y + 18);
+        GL11.glTexCoord2f(u1, v1);
+        GL11.glVertex2f(x + 18, y + 18);
+        GL11.glTexCoord2f(u1, v);
+        GL11.glVertex2f(x + 18, y + 2);
         GL11.glEnd();
-        this.mc.renderEngine.resetBoundTexture();
-        this.fontRenderer.drawStringWithShadow(var1.username, var2 + var5, var3 + 2, 15066597);
+        this.g.renderEngine.a();
+        this.m.drawStringWithShadow(p.username, x + height, y + 2, 15066597);
         GL11.glPushMatrix();
         GL11.glScalef(0.75F, 0.75F, 1.0F);
-        this.fontRenderer.drawString(var6 ? "Online" : "Offline", (int)(((float)var2 + (float)var5) / 0.75F), (int)(((float)var3 + 12.0F) / 0.75F), var6 ? 7859831 : 15628151);
+        this.m.drawString(online ? "Online" : "Offline", (int)((x + height) / 0.75F), (int)((y + 12.0F) / 0.75F), online ? 7859831 : 15628151);
         GL11.glPopMatrix();
     }
 }
+

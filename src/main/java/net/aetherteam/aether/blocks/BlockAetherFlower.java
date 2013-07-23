@@ -5,43 +5,38 @@ import net.minecraft.block.BlockFlower;
 import net.minecraft.block.material.Material;
 import net.minecraft.world.World;
 
-public class BlockAetherFlower extends BlockFlower implements IAetherBlock
+public class BlockAetherFlower extends BlockFlower
+    implements IAetherBlock
 {
-    public BlockAetherFlower(int var1)
+    public BlockAetherFlower(int id)
     {
-        this(var1, Material.plants);
+        this(id, Material.plants);
     }
 
-    public BlockAetherFlower(int var1, Material var2)
+    public BlockAetherFlower(int id, Material material)
     {
-        super(var1, var2);
-        this.setTickRandomly(true);
+        super(id, material);
+        setTickRandomly(true);
         float var3 = 0.2F;
-        this.setHardness(0.0F);
-        this.setStepSound(Block.soundGrassFootstep);
-        this.setBlockBounds(0.5F - var3, 0.0F, 0.5F - var3, 0.5F + var3, var3 * 3.0F, 0.5F + var3);
+        setHardness(0.0F);
+        setStepSound(Block.soundGrassFootstep);
+        setBlockBounds(0.5F - var3, 0.0F, 0.5F - var3, 0.5F + var3, var3 * 3.0F, 0.5F + var3);
     }
 
-    /**
-     * Gets passed in the blockID of the block below and supposed to return true if its allowed to grow on the type of
-     * blockID passed in. Args: blockID
-     */
-    protected boolean canThisPlantGrowOnThisBlockID(int var1)
+    protected boolean canThisPlantGrowOnThisBlockID(int blockID)
     {
-        return var1 == AetherBlocks.AetherGrass.blockID || var1 == AetherBlocks.AetherDirt.blockID;
+        return (blockID == AetherBlocks.AetherGrass.blockID) || (blockID == AetherBlocks.AetherDirt.blockID);
     }
 
-    /**
-     * Can this block stay at this position.  Similar to canPlaceBlockAt except gets checked often with plants.
-     */
-    public boolean canBlockStay(World var1, int var2, int var3, int var4)
+    public boolean canBlockStay(World par1World, int par2, int par3, int par4)
     {
-        Block var5 = blocksList[var1.getBlockId(var2, var3 - 1, var4)];
-        return (var1.getFullBlockLightValue(var2, var3, var4) >= 8 || var1.canBlockSeeTheSky(var2, var3, var4)) && var5 != null && (var5.blockID == AetherBlocks.AetherDirt.blockID || var5.blockID == AetherBlocks.AetherGrass.blockID);
+        Block soil = Block.blocksList[par1World.getBlockId(par2, par3 - 1, par4)];
+        return ((par1World.getFullBlockLightValue(par2, par3, par4) >= 8) || (par1World.canBlockSeeTheSky(par2, par3, par4))) && (soil != null) && ((soil.blockID == AetherBlocks.AetherDirt.blockID) || (soil.blockID == AetherBlocks.AetherGrass.blockID));
     }
 
-    public Block setIconName(String var1)
+    public Block setIconName(String name)
     {
-        return this.setUnlocalizedName("Aether:" + var1);
+        return setUnlocalizedName("Aether:" + name);
     }
 }
+

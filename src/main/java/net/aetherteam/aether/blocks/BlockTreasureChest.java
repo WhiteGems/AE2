@@ -9,69 +9,71 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockChest;
 import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Icon;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
-public class BlockTreasureChest extends BlockChest implements IAetherBlock
+public class BlockTreasureChest extends BlockChest
+    implements IAetherBlock
 {
-    private Random random = new Random();
+    private Random random;
     private int sideTexture;
 
-    protected BlockTreasureChest(int var1, int var2)
+    protected BlockTreasureChest(int i, int j)
     {
-        super(var1, var2);
-        this.setHardness(-1.0F);
-        this.setStepSound(Block.soundStoneFootstep);
+        super(i, j);
+        this.random = new Random();
+        setHardness(-1.0F);
+        setStepSound(Block.soundStoneFootstep);
     }
 
-    public Block setIconName(String var1)
+    public Block setIconName(String name)
     {
-        return this.setUnlocalizedName("Aether:" + var1);
+        return setUnlocalizedName("Aether:" + name);
     }
 
-    /**
-     * Called upon block activation (right click on the block.)
-     */
-    public boolean onBlockActivated(World var1, int var2, int var3, int var4, EntityPlayer var5, int var6, float var7, float var8, float var9)
+    public boolean onBlockActivated(World world, int i, int j, int k, EntityPlayer entityplayer, int par6, float par7, float par8, float par9)
     {
-        TileEntityTreasureChest var10 = (TileEntityTreasureChest)var1.getBlockTileEntity(var2, var3, var4);
+        TileEntityTreasureChest treasurechest = (TileEntityTreasureChest)world.getBlockTileEntity(i, j, k);
 
-        if (var10.isLocked())
+        if (treasurechest.isLocked())
         {
-            ItemStack var11 = var5.inventory.getCurrentItem();
+            ItemStack itemstack = entityplayer.inventory.getCurrentItem();
 
-            if (var11 == null || var11.itemID != AetherItems.Key.itemID)
+            if ((itemstack != null) && (itemstack.itemID == AetherItems.Key.itemID))
+            {
+                if (!world.isRemote)
+                {
+                    treasurechest.unlock(itemstack.getItemDamage());
+                }
+
+                itemstack.stackSize -= 1;
+            }
+            else
             {
                 return false;
             }
-
-            if (!var1.isRemote)
-            {
-                var10.unlock(var11.getItemDamage());
-            }
-
-            --var11.stackSize;
         }
 
-        int var12 = AetherGuiHandler.treasureChestID;
-        var5.openGui(Aether.instance, var12, var1, var2, var3, var4);
+        int guiID = AetherGuiHandler.treasureChestID;
+        entityplayer.openGui(Aether.instance, guiID, world, i, j, k);
         return true;
     }
 
-    public void checkForAdjacentChests() {}
+    public void checkForAdjacentChests()
+    {
+    }
 
-    public boolean hasTileEntity(int var1)
+    public boolean hasTileEntity(int metadata)
     {
         return true;
     }
 
-    /**
-     * Returns a new instance of a block's tile entity class. Called on placing the block.
-     */
-    public TileEntity createNewTileEntity(World var1)
+    public TileEntity createNewTileEntity(World par1World)
     {
         try
         {
@@ -83,44 +85,29 @@ public class BlockTreasureChest extends BlockChest implements IAetherBlock
         }
     }
 
-    /**
-     * Returns the quantity of items to drop on block destruction.
-     */
-    public int quantityDropped(Random var1)
+    public int quantityDropped(Random random)
     {
         return 0;
     }
 
-    /**
-     * If this block doesn't render as an ordinary block it will return False (examples: signs, buttons, stairs, etc)
-     */
     public boolean renderAsNormalBlock()
     {
         return false;
     }
 
-    /**
-     * The type of render function that is called for this block
-     */
     public int getRenderType()
     {
         return AetherBlocks.treasureChestRenderId;
     }
 
-    /**
-     * When this method is called, your block should register all the icons it needs with the given IconRegister. This
-     * is the only chance you get to register icons.
-     */
-    public void registerIcons(IconRegister var1)
+    public void registerIcons(IconRegister par1IconRegister)
     {
-        this.blockIcon = var1.registerIcon("Aether:Carved Stone");
+        this.blockIcon = par1IconRegister.registerIcon("Aether:Carved Stone");
     }
 
-    /**
-     * Retrieves the block texture to use based on the display side. Args: iBlockAccess, x, y, z, side
-     */
-    public Icon getBlockTexture(IBlockAccess var1, int var2, int var3, int var4, int var5)
+    public Icon getBlockTexture(IBlockAccess iblockaccess, int i, int j, int k, int l)
     {
         return this.blockIcon;
     }
 }
+

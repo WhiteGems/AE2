@@ -1,13 +1,13 @@
 package net.aetherteam.aether.client.models;
 
-import net.minecraft.client.model.ModelBase;
-import net.minecraft.client.model.ModelRenderer;
+import net.minecraft.client.model.ModelMinecart;
 import net.minecraft.entity.Entity;
+import net.minecraft.src.bdi;
 import org.lwjgl.opengl.GL11;
 
-public class ModelBall extends ModelBase
+public class ModelBall extends ModelMinecart
 {
-    public ModelRenderer[] head;
+    public bdi[] head;
     public float[] sinage;
     private static final float sponge = (180F / (float)Math.PI);
 
@@ -16,32 +16,29 @@ public class ModelBall extends ModelBase
         this(0.0F);
     }
 
-    public ModelBall(float var1)
+    public ModelBall(float f)
     {
-        this(var1, 0.0F);
+        this(f, 0.0F);
     }
 
-    public ModelBall(float var1, float var2)
+    public ModelBall(float f, float f1)
     {
         this.sinage = new float[3];
-        this.head = new ModelRenderer[3];
-        this.head[0] = new ModelRenderer(this, 0, 0);
-        this.head[1] = new ModelRenderer(this, 32, 0);
-        this.head[2] = new ModelRenderer(this, 0, 16);
+        this.head = new bdi[3];
+        this.head[0] = new bdi(this, 0, 0);
+        this.head[1] = new bdi(this, 32, 0);
+        this.head[2] = new bdi(this, 0, 16);
 
-        for (int var3 = 0; var3 < 3; ++var3)
+        for (int i = 0; i < 3; i++)
         {
-            this.head[var3].addBox(-4.0F, -4.0F, -4.0F, 8, 8, 8, var1);
-            this.head[var3].setRotationPoint(0.0F, 0.0F + var2, 0.0F);
+            this.head[i].a(-4.0F, -4.0F, -4.0F, 8, 8, 8, f);
+            this.head[i].a(0.0F, 0.0F + f1, 0.0F);
         }
     }
 
-    /**
-     * Sets the models various rotation angles then renders the model.
-     */
-    public void render(Entity var1, float var2, float var3, float var4, float var5, float var6, float var7)
+    public void render(Entity e, float f, float f1, float f2, float f3, float f4, float f5)
     {
-        this.setRotationAngles(var2, var3, var4, var5, var6, var7);
+        setRotationAngles(f, f1, f2, f3, f4, f5);
         GL11.glTranslatef(0.0F, 0.75F, 0.0F);
         GL11.glEnable(GL11.GL_NORMALIZE);
         GL11.glEnable(GL11.GL_BLEND);
@@ -50,25 +47,26 @@ public class ModelBall extends ModelBase
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
         GL11.glPushMatrix();
         GL11.glRotatef(this.sinage[0] * (180F / (float)Math.PI), 1.0F, 0.0F, 0.0F);
-        this.head[0].render(var7);
+        this.head[0].a(f5);
         GL11.glPopMatrix();
         GL11.glPushMatrix();
         GL11.glRotatef(this.sinage[1] * (180F / (float)Math.PI), 0.0F, 1.0F, 0.0F);
-        this.head[1].render(var7);
+        this.head[1].a(f5);
         GL11.glPopMatrix();
         GL11.glPushMatrix();
         GL11.glRotatef(this.sinage[2] * (180F / (float)Math.PI), 0.0F, 0.0F, 1.0F);
-        this.head[2].render(var7);
+        this.head[2].a(f5);
         GL11.glPopMatrix();
         GL11.glEnable(GL11.GL_ALPHA_TEST);
     }
 
-    public void setRotationAngles(float var1, float var2, float var3, float var4, float var5, float var6)
+    public void setRotationAngles(float f, float f1, float f2, float f3, float f4, float f5)
     {
-        for (int var7 = 0; var7 < 3; ++var7)
+        for (int i = 0; i < 3; i++)
         {
-            this.head[var7].rotateAngleY = var4 / (180F / (float)Math.PI);
-            this.head[var7].rotateAngleX = var5 / (180F / (float)Math.PI);
+            this.head[i].g = (f3 / (180F / (float)Math.PI));
+            this.head[i].f = (f4 / (180F / (float)Math.PI));
         }
     }
 }
+

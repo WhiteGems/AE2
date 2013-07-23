@@ -6,21 +6,23 @@ import net.aetherteam.aether.PlayerBaseAetherServer;
 import net.aetherteam.aether.client.PlayerBaseAetherClient;
 import net.minecraft.entity.player.EntityPlayer;
 
-public interface IAetherAccessory
+public abstract interface IAetherAccessory
 {
-    int[] damageReduceAmountArray = new int[] {3, 8, 6, 3, 0, 1, 0, 0, 0, 0, 2, 0};
-    int[] maxDamageArray = new int[] {11, 16, 15, 13, 10, 10, 8, 10, 10, 10, 10, 10};
+    public static final int[] damageReduceAmountArray = { 3, 8, 6, 3, 0, 1, 0, 0, 0, 0, 2, 0 };
 
-    boolean isTypeValid(int var1);
+    public static final int[] maxDamageArray = { 11, 16, 15, 13, 10, 10, 8, 10, 10, 10, 10, 10 };
 
-    boolean damageType();
+    public abstract boolean isTypeValid(int paramInt);
 
-    boolean damageType(int var1);
+    public abstract boolean damageType();
 
-    void activatePassive(EntityPlayer var1);
+    public abstract boolean damageType(int paramInt);
 
-    void activateServerPassive(EntityPlayer var1, PlayerBaseAetherServer var2);
+    public abstract void activatePassive(EntityPlayer paramEntityPlayer);
+
+    public abstract void activateServerPassive(EntityPlayer paramEntityPlayer, PlayerBaseAetherServer paramPlayerBaseAetherServer);
 
     @SideOnly(Side.CLIENT)
-    void activateClientPassive(EntityPlayer var1, PlayerBaseAetherClient var2);
+    public abstract void activateClientPassive(EntityPlayer paramEntityPlayer, PlayerBaseAetherClient paramPlayerBaseAetherClient);
 }
+

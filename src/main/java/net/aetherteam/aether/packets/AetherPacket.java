@@ -5,6 +5,7 @@ import cpw.mods.fml.common.network.PacketDispatcher;
 import cpw.mods.fml.common.network.Player;
 import cpw.mods.fml.relauncher.Side;
 import java.util.Iterator;
+import java.util.List;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.network.packet.Packet;
 import net.minecraft.network.packet.Packet250CustomPayload;
@@ -15,37 +16,38 @@ public abstract class AetherPacket
 {
     public byte packetID;
 
-    public AetherPacket(int var1)
+    public AetherPacket(int packetID)
     {
-        this.packetID = Byte.valueOf((byte)var1).byteValue();
+        this.packetID = Byte.valueOf((byte)packetID).byteValue();
         RegisteredPackets.registerPacket(this);
     }
 
-    public abstract void onPacketReceived(Packet250CustomPayload var1, Player var2);
+    public abstract void onPacketReceived(Packet250CustomPayload paramPacket250CustomPayload, Player paramPlayer);
 
-    public void sendPacketToAllExcept(Packet var1, Player var2)
+    public void sendPacketToAllExcept(Packet packet, Player player)
     {
-        Side var3 = FMLCommonHandler.instance().getEffectiveSide();
+        Side side = FMLCommonHandler.instance().getEffectiveSide();
+        Iterator i$;
 
-        if (var3.isServer())
+        if (side.isServer())
         {
-            MinecraftServer var4 = FMLCommonHandler.instance().getMinecraftServerInstance();
+            MinecraftServer server = FMLCommonHandler.instance().getMinecraftServerInstance();
 
-            if (var4 != null)
+            if (server != null)
             {
-                ServerConfigurationManager var5 = var4.getConfigurationManager();
-                Iterator var6 = var5.playerEntityList.iterator();
+                ServerConfigurationManager configManager = server.getConfigurationManager();
 
-                while (var6.hasNext())
+                for (i$ = configManager.playerEntityList.iterator(); i$.hasNext();)
                 {
-                    Object var7 = var6.next();
+                    Object playerObj = i$.next();
 
-                    if (var7 instanceof EntityPlayer && (Player)var7 != var2)
+                    if (((playerObj instanceof EntityPlayer)) && ((Player)playerObj != player))
                     {
-                        PacketDispatcher.sendPacketToPlayer(var1, (Player)var7);
+                        PacketDispatcher.sendPacketToPlayer(packet, (Player)playerObj);
                     }
                 }
             }
         }
     }
 }
+

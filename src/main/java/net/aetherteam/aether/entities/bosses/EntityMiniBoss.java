@@ -11,40 +11,38 @@ import net.minecraft.entity.EntityLiving;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 
-public class EntityMiniBoss extends EntityBossMob implements IAetherBoss
+public class EntityMiniBoss extends EntityBossMob
+    implements IAetherBoss
 {
     protected EntityLiving boss;
     private double spawnX;
     private double spawnY;
     private double spawnZ;
 
-    public EntityMiniBoss(World var1)
+    public EntityMiniBoss(World par1World)
     {
-        super(var1);
+        super(par1World);
     }
 
-    /**
-     * Called to update the entity's position/logic.
-     */
     public void onUpdate()
     {
         super.onUpdate();
-        Side var1 = FMLCommonHandler.instance().getEffectiveSide();
+        Side side = FMLCommonHandler.instance().getEffectiveSide();
 
-        if (var1.isServer())
+        if (side.isServer())
         {
-            Dungeon var2 = DungeonHandler.instance().getInstanceAt(MathHelper.floor_double(this.posX), MathHelper.floor_double(this.posY), MathHelper.floor_double(this.posZ));
+            Dungeon dungeon = DungeonHandler.instance().getInstanceAt(MathHelper.floor_double(this.posX), MathHelper.floor_double(this.posY), MathHelper.floor_double(this.posZ));
 
-            if (var2 != null && !var2.isActive() && !(this.boss instanceof EntityLabyrinthEye))
+            if ((dungeon != null) && (!dungeon.isActive()) && (!(this.boss instanceof EntityLabyrinthEye)))
             {
-                this.setDead();
+                setDead();
             }
         }
     }
 
     public int getBossMaxHP()
     {
-        return this.getMaxHealth();
+        return getMaxHealth();
     }
 
     public int getBossEntityID()
@@ -77,3 +75,4 @@ public class EntityMiniBoss extends EntityBossMob implements IAetherBoss
         return 200;
     }
 }
+

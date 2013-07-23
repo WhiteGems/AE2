@@ -2,17 +2,24 @@ package net.aetherteam.aether.notifications.client;
 
 import cpw.mods.fml.client.FMLClientHandler;
 import java.util.ArrayList;
+import java.util.List;
 import net.aetherteam.aether.client.gui.social.PartyData;
 import net.aetherteam.aether.client.gui.social.dialogue.GuiDialogueBox;
 import net.aetherteam.aether.notifications.Notification;
 import net.aetherteam.aether.notifications.NotificationType;
+import net.aetherteam.aether.notifications.actions.NotificationAction;
+import net.aetherteam.aether.notifications.description.NotificationContents;
 import net.aetherteam.aether.party.Party;
 import net.aetherteam.aether.party.PartyController;
 import net.aetherteam.aether.party.members.PartyMember;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.ScaledResolution;
+import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.settings.GameSettings;
+import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.entity.player.EntityPlayer;
 import org.lwjgl.opengl.GL11;
 
@@ -24,9 +31,7 @@ public class GuiViewNotification extends GuiScreen
     private int yParty;
     private int wParty;
     private int hParty;
-
-    /** Reference to the Minecraft object. */
-    Minecraft mc;
+    Minecraft g;
     private Notification notification;
     private GuiScreen parent;
     private EntityPlayer player;
@@ -34,128 +39,111 @@ public class GuiViewNotification extends GuiScreen
     private GuiButton denyButton;
     private GuiButton backButton;
 
-    public GuiViewNotification(EntityPlayer var1, Notification var2, GuiScreen var3)
+    public GuiViewNotification(EntityPlayer player, Notification notification, GuiScreen parent)
     {
-        this(new PartyData(), var1, var2, var3);
+        this(new PartyData(), player, notification, parent);
     }
 
-    public GuiViewNotification(PartyData var1, EntityPlayer var2, Notification var3, GuiScreen var4)
+    public GuiViewNotification(PartyData pm, EntityPlayer player, Notification notification, GuiScreen parent)
     {
-        this.parent = var4;
-        this.notification = var3;
-        this.player = var2;
-        this.mc = FMLClientHandler.instance().getClient();
-        this.pm = var1;
-        this.backgroundTexture = this.mc.renderEngine.getTexture("/net/aetherteam/aether/client/sprites/gui/notification/view.png");
+        this.parent = parent;
+        this.notification = notification;
+        this.player = player;
+        this.g = FMLClientHandler.instance().getClient();
+        this.pm = pm;
+        this.backgroundTexture = this.g.renderEngine.f("/net/aetherteam/aether/client/sprites/gui/notification/view.png");
         this.wParty = 256;
         this.hParty = 126;
-        this.updateScreen();
+        updateScreen();
     }
 
-    /**
-     * Fired when a key is typed. This is the equivalent of KeyListener.keyTyped(KeyEvent e).
-     */
-    protected void keyTyped(char var1, int var2)
+    protected void keyTyped(char charTyped, int keyTyped)
     {
-        super.keyTyped(var1, var2);
+        super.keyTyped(charTyped, keyTyped);
 
-        if (var2 == Minecraft.getMinecraft().gameSettings.keyBindInventory.keyCode)
+        if (keyTyped == Minecraft.getMinecraft().gameSettings.keyBindInventory.keyCode)
         {
-            this.mc.displayGuiScreen((GuiScreen)null);
-            this.mc.setIngameFocus();
+            this.g.displayGuiScreen((GuiScreen)null);
+            this.g.setIngameFocus();
         }
     }
 
-    /**
-     * Adds the buttons (and other controls) to the screen in question.
-     */
     public void initGui()
     {
-        this.updateScreen();
-        this.buttonList.clear();
+        updateScreen();
+        this.k.clear();
         this.acceptButton = new GuiButton(0, this.xParty - 30, this.yParty + 34, 60, 20, "Accept");
         this.denyButton = new GuiButton(1, this.xParty - 100, this.yParty + 34, 60, 20, "Decline");
         this.backButton = new GuiButton(2, this.xParty + 40, this.yParty + 34, 60, 20, "Back");
-        this.buttonList.add(this.acceptButton);
-        this.buttonList.add(this.denyButton);
-        this.buttonList.add(this.backButton);
+        this.k.add(this.acceptButton);
+        this.k.add(this.denyButton);
+        this.k.add(this.backButton);
     }
 
-    /**
-     * Fired when a control is clicked. This is the equivalent of ActionListener.actionPerformed(ActionEvent e).
-     */
-    protected void actionPerformed(GuiButton var1)
+    protected void actionPerformed(GuiButton button)
     {
-        NotificationType var2 = this.notification.getType();
+        NotificationType type = this.notification.getType();
 
-        switch (var1.id)
+        switch (button.id)
         {
             case 0:
-                PartyMember var3 = PartyController.instance().getMember(this.notification.getSenderName());
-                Party var4 = PartyController.instance().getParty(var3);
-                this.mc.displayGuiScreen(new GuiDialogueBox(this.parent, var2.action.acceptMessage(this.notification), var2.action.failedMessage(this.notification), var2.action.executeAccept(this.notification)));
+                PartyMember recruiter = PartyController.instance().getMember(this.notification.getSenderName());
+                Party party = PartyController.instance().getParty(recruiter);
+                this.g.displayGuiScreen(new GuiDialogueBox(this.parent, type.action.acceptMessage(this.notification), type.action.failedMessage(this.notification), type.action.executeAccept(this.notification)));
                 break;
 
             case 1:
-                var2.action.executeDecline(this.notification);
-                this.mc.displayGuiScreen(this.parent);
+                type.action.executeDecline(this.notification);
+                this.g.displayGuiScreen(this.parent);
                 break;
 
             case 2:
-                this.mc.displayGuiScreen(this.parent);
+                this.g.displayGuiScreen(this.parent);
         }
     }
 
-    /**
-     * Returns true if this GUI should pause the game when it is displayed in single-player
-     */
     public boolean doesGuiPauseGame()
     {
         return false;
     }
 
-    /**
-     * Draws the screen and all the components in it.
-     */
-    public void drawScreen(int var1, int var2, float var3)
+    public void drawScreen(int x, int y, float partialTick)
     {
-        this.drawDefaultBackground();
+        drawDefaultBackground();
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
         GL11.glBindTexture(GL11.GL_TEXTURE_2D, this.backgroundTexture);
-        int var4 = this.xParty - 128;
-        int var5 = this.yParty - 63;
-        new ScaledResolution(this.mc.gameSettings, this.mc.displayWidth, this.mc.displayHeight);
-        this.drawTexturedModalRect(var4, var5, 0, 0, 256, this.hParty);
+        int centerX = this.xParty - 128;
+        int centerY = this.yParty - 63;
+        ScaledResolution sr = new ScaledResolution(this.g.gameSettings, this.g.displayWidth, this.g.displayHeight);
+        drawTexturedModalRect(centerX, centerY, 0, 0, 256, this.hParty);
         GL11.glBindTexture(GL11.GL_TEXTURE_2D, this.backgroundTexture);
-        String var7 = "Viewing Notification";
-        this.mc.renderEngine.resetBoundTexture();
-        this.drawString(this.fontRenderer, var7, this.width / 2 - this.fontRenderer.getStringWidth(var7) / 2, var5 + 7, 16777215);
-        String var8 = this.notification.getTypeContents().getTitle(this.notification);
-        this.mc.renderEngine.resetBoundTexture();
-        this.drawString(this.fontRenderer, var8, this.width / 2 - this.fontRenderer.getStringWidth(var8) / 2, var5 + 27, 16777215);
-        String var9 = this.notification.getTypeContents().getDescription(this.notification);
-        ArrayList var10 = (new StringBox(var9, 45)).getStringList();
+        String name = "Viewing Notification";
+        this.g.renderEngine.a();
+        drawString(this.m, name, this.height / 2 - this.m.getStringWidth(name) / 2, centerY + 7, 16777215);
+        String title = this.notification.getTypeContents().getTitle(this.notification);
+        this.g.renderEngine.a();
+        drawString(this.m, title, this.height / 2 - this.m.getStringWidth(title) / 2, centerY + 27, 16777215);
+        String description = this.notification.getTypeContents().getDescription(this.notification);
+        ArrayList descriptions = new StringBox(description, 45).getStringList();
 
-        for (int var11 = 0; var11 < var10.size(); ++var11)
+        for (int count = 0; count < descriptions.size(); count++)
         {
-            String var12 = (String)var10.get(var11);
-            this.mc.renderEngine.resetBoundTexture();
-            this.drawString(this.fontRenderer, var12, this.width / 2 - this.fontRenderer.getStringWidth(var12) / 2, var5 + 45 + var11 * 10, 16777215);
+            String newLine = (String)descriptions.get(count);
+            this.g.renderEngine.a();
+            drawString(this.m, newLine, this.height / 2 - this.m.getStringWidth(newLine) / 2, centerY + 45 + count * 10, 16777215);
         }
 
-        super.drawScreen(var1, var2, var3);
+        super.drawScreen(x, y, partialTick);
     }
 
-    /**
-     * Called from the main game loop to update the screen.
-     */
     public void updateScreen()
     {
         super.updateScreen();
-        ScaledResolution var1 = new ScaledResolution(this.mc.gameSettings, this.mc.displayWidth, this.mc.displayHeight);
-        int var2 = var1.getScaledWidth();
-        int var3 = var1.getScaledHeight();
-        this.xParty = var2 / 2;
-        this.yParty = var3 / 2;
+        ScaledResolution scaledresolution = new ScaledResolution(this.g.gameSettings, this.g.displayWidth, this.g.displayHeight);
+        int width = scaledresolution.getScaledWidth();
+        int height = scaledresolution.getScaledHeight();
+        this.xParty = (width / 2);
+        this.yParty = (height / 2);
     }
 }
+

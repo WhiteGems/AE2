@@ -5,35 +5,37 @@ import cpw.mods.fml.common.network.Player;
 import java.io.ByteArrayInputStream;
 import java.io.DataInputStream;
 import java.io.IOException;
+import java.io.PrintStream;
 import net.aetherteam.aether.Aether;
+import net.aetherteam.aether.donator.Donator;
 import net.aetherteam.aether.donator.DonatorChoice;
 import net.aetherteam.aether.donator.SyncDonatorList;
 import net.minecraft.network.packet.Packet250CustomPayload;
 
 public class PacketDonatorChoice extends AetherPacket
 {
-    public PacketDonatorChoice(int var1)
+    public PacketDonatorChoice(int packetID)
     {
-        super(var1);
+        super(packetID);
     }
 
-    public void onPacketReceived(Packet250CustomPayload var1, Player var2)
+    public void onPacketReceived(Packet250CustomPayload packet, Player player)
     {
-        DataInputStream var3 = new DataInputStream(new ByteArrayInputStream(var1.data));
+        DataInputStream dat = new DataInputStream(new ByteArrayInputStream(packet.data));
 
         try
         {
-            byte var4 = var3.readByte();
-            String var5 = var3.readUTF();
-            String var6 = var3.readUTF();
-            boolean var7 = var3.readBoolean();
-            byte var8 = var3.readByte();
+            byte packetType = dat.readByte();
+            String username = dat.readUTF();
+            String choiceName = dat.readUTF();
+            boolean adding = dat.readBoolean();
+            byte proxy = dat.readByte();
 
-            if (var8 >= 1)
+            if (proxy >= 1)
             {
-                DonatorChoice var9 = DonatorChoice.getChoiceFromString(var6);
+                DonatorChoice choice = DonatorChoice.getChoiceFromString(choiceName);
 
-                if (var9 == null)
+                if (choice == null)
                 {
                     System.out.println("Choice was null! Packet handling unsuccessful.");
                     return;
@@ -41,28 +43,28 @@ public class PacketDonatorChoice extends AetherPacket
 
                 System.out.println("Choice transferred!");
 
-                if (var7)
+                if (adding)
                 {
                     Aether.getInstance();
-                    Aether.syncDonatorList.getDonator(var5).addChoice(var9);
+                    Aether.syncDonatorList.getDonator(username).addChoice(choice);
                 }
                 else
                 {
                     Aether.getInstance();
-                    Aether.syncDonatorList.getDonator(var5).removeChoiceType(var9.type);
+                    Aether.syncDonatorList.getDonator(username).removeChoiceType(choice.type);
                 }
             }
             else
             {
-                Aether var10000 = Aether.instance;
-                SyncDonatorList var11 = Aether.syncDonatorList;
-                PacketDispatcher.sendPacketToAllPlayers(AetherPacketHandler.sendDonatorChoice(var5, DonatorChoice.getChoiceFromString(var6), var7, (byte)1));
+                SyncDonatorList donators = Aether.syncDonatorList;
+                PacketDispatcher.sendPacketToAllPlayers(AetherPacketHandler.sendDonatorChoice(username, DonatorChoice.getChoiceFromString(choiceName), adding, (byte)1));
                 System.out.println("Server received packet, dispatching to players!");
             }
         }
-        catch (IOException var10)
+        catch (IOException e)
         {
-            var10.printStackTrace();
+            e.printStackTrace();
         }
     }
 }
+

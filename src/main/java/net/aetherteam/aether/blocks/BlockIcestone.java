@@ -5,61 +5,55 @@ import net.minecraft.block.material.Material;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
-import net.minecraft.stats.StatList;
 import net.minecraft.world.World;
 
-public class BlockIcestone extends BlockAether implements IAetherBlock
+public class BlockIcestone extends BlockAether
+    implements IAetherBlock
 {
-    protected BlockIcestone(int var1)
+    protected BlockIcestone(int blockID)
     {
-        super(var1, Material.rock);
-        this.setHardness(3.0F);
-        this.setStepSound(Block.soundGlassFootstep);
+        super(blockID, Material.rock);
+        setHardness(3.0F);
+        setStepSound(Block.soundGlassFootstep);
     }
 
-    /**
-     * Called when the player destroys a block with an item that can harvest it. (i, j, k) are the coordinates of the
-     * block and l is the block's subtype/damage.
-     */
-    public void harvestBlock(World var1, EntityPlayer var2, int var3, int var4, int var5, int var6)
+    public void harvestBlock(World world, EntityPlayer entityplayer, int i, int j, int k, int l)
     {
-        var2.addStat(StatList.mineBlockStatArray[this.blockID], 1);
-        var2.addExhaustion(0.025F);
-        this.dropBlockAsItem(var1, var3, var4, var5, var6, 0);
+        entityplayer.addStat(net.minecraft.stats.StatList.mineBlockStatArray[this.blockID], 1);
+        entityplayer.addExhaustion(0.025F);
+        dropBlockAsItem(world, i, j, k, l, 0);
     }
 
-    /**
-     * Called when the block is placed in the world.
-     */
-    public void onBlockPlacedBy(World var1, int var2, int var3, int var4, EntityLiving var5, ItemStack var6)
+    public void onBlockPlacedBy(World world, int i, int j, int k, EntityLiving entity, ItemStack stack)
     {
-        var1.getBlockMaterial(var2, var3, var4);
-        var1.getBlockMaterial(var2, var3 - 1, var4);
+        Material mat0 = world.getBlockMaterial(i, j, k);
+        Material mat1 = world.getBlockMaterial(i, j - 1, k);
 
-        for (int var9 = var2 - 3; var9 <= var2 + 3; ++var9)
+        for (int l = i - 3; l <= i + 3; l++)
         {
-            for (int var10 = var3 - 3; var10 <= var3 + 3; ++var10)
+            for (int i1 = j - 3; i1 <= j + 3; i1++)
             {
-                for (int var11 = var4 - 3; var11 <= var4 + 3; ++var11)
+                for (int j1 = k - 3; j1 <= k + 3; j1++)
                 {
-                    if (var1.getBlockId(var9, var10, var11) == 8)
+                    if (world.getBlockId(l, i1, j1) == 8)
                     {
-                        var1.setBlock(var9, var10, var11, 79);
+                        world.setBlock(l, i1, j1, 79);
                     }
-                    else if (var1.getBlockId(var9, var10, var11) == 9)
+                    else if (world.getBlockId(l, i1, j1) == 9)
                     {
-                        var1.setBlock(var9, var10, var11, 79);
+                        world.setBlock(l, i1, j1, 79);
                     }
-                    else if (var1.getBlockId(var9, var10, var11) == 10)
+                    else if (world.getBlockId(l, i1, j1) == 10)
                     {
-                        var1.setBlock(var9, var10, var11, 49);
+                        world.setBlock(l, i1, j1, 49);
                     }
-                    else if (var1.getBlockId(var9, var10, var11) == 11)
+                    else if (world.getBlockId(l, i1, j1) == 11)
                     {
-                        var1.setBlock(var9, var10, var11, 49);
+                        world.setBlock(l, i1, j1, 49);
                     }
                 }
             }
         }
     }
 }
+

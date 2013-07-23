@@ -24,3 +24,4 @@ public class AetherAchievements
         LanguageRegistry.instance().addStringLocalization("achievement." + achievement + ".desc", "en_US", desc);
     }
 }
+

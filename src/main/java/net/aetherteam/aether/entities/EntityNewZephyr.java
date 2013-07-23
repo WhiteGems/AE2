@@ -1,20 +1,27 @@
 package net.aetherteam.aether.entities;
 
+import java.io.PrintStream;
 import java.util.List;
 import java.util.Random;
 import net.aetherteam.aether.Aether;
+import net.aetherteam.aether.CommonProxy;
 import net.aetherteam.aether.blocks.AetherBlocks;
+import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityFlying;
+import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerCapabilities;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 
-public class EntityNewZephyr extends EntityFlying implements IMob
+public class EntityNewZephyr extends EntityFlying
+    implements IMob
 {
     public String dir = "/net/aetherteam/aether/client/sprites";
+
     boolean divepointSet = false;
     int xpov = 1;
     int zpov = 1;
@@ -30,23 +37,28 @@ public class EntityNewZephyr extends EntityFlying implements IMob
     private double checkZ = 0.0D;
     private final double minTraversalDist = 3.0D;
     private boolean isStuckWarning = false;
-    public int courseChangeCooldown = 0;
+    public int courseChangeCooldown;
     public double waypointX;
     public double waypointY;
     public double waypointZ;
-    private Entity targetedEntity = null;
-    private int aggroCooldown = 0;
-    public int prevAttackCounter = 0;
-    public int attackCounter = 0;
+    private Entity targetedEntity;
+    private int aggroCooldown;
+    public int prevAttackCounter;
+    public int attackCounter;
     public float sinage;
 
-    public EntityNewZephyr(World var1)
+    public EntityNewZephyr(World world)
     {
-        super(var1);
-        this.texture = this.dir + "/mobs/newzephyr/zephyr.png";
-        this.setSize(2.0F, 1.0F);
-        this.xpov = this.rand.nextBoolean() ? -1 : 1;
-        this.zpov = this.rand.nextBoolean() ? -1 : 1;
+        super(world);
+        this.courseChangeCooldown = 0;
+        this.targetedEntity = null;
+        this.aggroCooldown = 0;
+        this.prevAttackCounter = 0;
+        this.attackCounter = 0;
+        this.texture = (this.dir + "/mobs/newzephyr/zephyr.png");
+        setSize(2.0F, 1.0F);
+        this.xpov = (this.rand.nextBoolean() ? -1 : 1);
+        this.zpov = (this.rand.nextBoolean() ? -1 : 1);
     }
 
     public int getMaxHealth()
@@ -54,26 +66,19 @@ public class EntityNewZephyr extends EntityFlying implements IMob
         return 5;
     }
 
-    /**
-     * Called to update the entity's position/logic.
-     */
     public void onUpdate()
     {
         super.onUpdate();
 
         if (this.targetedEntity != null)
         {
-            double var1 = this.targetedEntity.posX - this.posX;
-            double var3 = this.targetedEntity.boundingBox.minY + (double)(this.targetedEntity.height / 2.0F) - (this.posY + (double)(this.height / 2.0F));
-            double var5 = this.targetedEntity.posZ - this.posZ;
-            this.renderYawOffset = this.rotationYaw = -((float)Math.atan2(var1, var5)) * 180.0F / (float)Math.PI;
+            double d5 = this.targetedEntity.posX - this.posX;
+            double d6 = this.targetedEntity.boundingBox.minY + this.targetedEntity.height / 2.0F - (this.posY + this.height / 2.0F);
+            double d7 = this.targetedEntity.posZ - this.posZ;
+            this.renderYawOffset = (this.rotationYaw = -(float)Math.atan2(d5, d7) * 180.0F / (float)Math.PI);
         }
     }
 
-    /**
-     * Called frequently so the entity can update its state every tick as required. For example, zombies and skeletons
-     * use this to react to sunlight and start to burn.
-     */
     public void onLivingUpdate()
     {
         super.onLivingUpdate();
@@ -95,21 +100,22 @@ public class EntityNewZephyr extends EntityFlying implements IMob
 
     protected void updateEntityActionState()
     {
-        if (this.targetedEntity != null && this.targetedEntity.isDead)
+        if ((this.targetedEntity != null) && (this.targetedEntity.isDead))
         {
             this.targetedEntity = null;
         }
 
-        if (this.targetedEntity == null || this.aggroCooldown-- <= 0)
+        if ((this.targetedEntity == null) || (this.aggroCooldown-- <= 0))
         {
-            AxisAlignedBB var1 = AxisAlignedBB.getBoundingBox(this.posX, this.posY, this.posZ, this.posX, this.posY, this.posZ).expand(15.0D, 200.0D, 15.0D);
-            List var2 = this.worldObj.getEntitiesWithinAABB(EntityPlayer.class, var1);
+            AxisAlignedBB bounds = AxisAlignedBB.getBoundingBox(this.posX, this.posY, this.posZ, this.posX, this.posY, this.posZ).expand(15.0D, 200.0D, 15.0D);
+            List list = this.worldObj.getEntitiesWithinAABB(EntityPlayer.class, bounds);
 
-            for (int var3 = 0; var3 < var2.size(); ++var3)
+            for (int i = 0; i < list.size(); i++)
             {
-                if (var2.size() > 0 && !((EntityPlayer)var2.get(var3)).capabilities.isCreativeMode)
+                if ((list.size() > 0) &&
+                        (!((EntityPlayer)list.get(i)).capabilities.isCreativeMode))
                 {
-                    this.targetedEntity = (EntityPlayer)var2.get(var3);
+                    this.targetedEntity = ((EntityPlayer)list.get(i));
                 }
             }
 
@@ -119,22 +125,22 @@ public class EntityNewZephyr extends EntityFlying implements IMob
             }
         }
 
-        if (this.posY < -2.0D || this.posY > 130.0D)
+        if ((this.posY < -2.0D) || (this.posY > 130.0D))
         {
-            this.despawnEntity();
+            despawnEntity();
         }
 
         if (this.targetedEntity == null)
         {
-            this.randomMovement();
+            randomMovement();
         }
         else if (this.dive)
         {
-            this.dive();
+            dive();
         }
         else
         {
-            this.orbitPlayer();
+            orbitPlayer();
         }
 
         this.prevAttackCounter = this.attackCounter;
@@ -142,51 +148,44 @@ public class EntityNewZephyr extends EntityFlying implements IMob
 
     private void dive()
     {
-        double var1;
-        double var3;
-        double var5;
-        double var7;
-        double var9;
-        double var11;
-        double var13;
-        double var15;
+        EntityZephyrSnowball snowball;
 
         if (!this.divepointSet)
         {
-            var1 = (double)this.rand.nextFloat() * 2.0D;
-            var3 = (double)MathHelper.sqrt_double(9.0D - var1 * var1);
-            var5 = (double)this.rand.nextFloat() * var3;
-            var7 = (double)MathHelper.sqrt_double(var3 * var3 - var5 * var5);
-            this.waypointX = this.targetedEntity.posX + var5 * (double)this.xpov;
-            this.waypointY = this.targetedEntity.posY + var1;
-            this.waypointZ = this.targetedEntity.posZ + var7 * (double)this.zpov;
+            double randomHeight = this.rand.nextFloat() * 2.0D;
+            double distance = MathHelper.sqrt_double(9.0D - randomHeight * randomHeight);
+            double x = this.rand.nextFloat() * distance;
+            double y = MathHelper.sqrt_double(distance * distance - x * x);
+            this.waypointX = (this.targetedEntity.posX + x * this.xpov);
+            this.waypointY = (this.targetedEntity.posY + randomHeight);
+            this.waypointZ = (this.targetedEntity.posZ + y * this.zpov);
             this.targetX = this.targetedEntity.posX;
             this.targetY = this.targetedEntity.posY;
             this.targetZ = this.targetedEntity.posZ;
             this.divepointSet = true;
-            var9 = this.waypointX - this.posX;
-            var11 = this.waypointY - this.posY;
-            var13 = this.waypointZ - this.posZ;
-            var15 = (double)MathHelper.sqrt_double(var9 * var9 + var11 * var11 + var13 * var13);
+            double d = this.waypointX - this.posX;
+            double d1 = this.waypointY - this.posY;
+            double d2 = this.waypointZ - this.posZ;
+            double d3 = MathHelper.sqrt_double(d * d + d1 * d1 + d2 * d2);
 
-            if (!this.isCourseTraversable(this.waypointX, this.waypointY, this.waypointZ, var15))
+            if (!isCourseTraversable(this.waypointX, this.waypointY, this.waypointZ, d3))
             {
                 this.divepointSet = false;
             }
         }
         else
         {
-            var1 = this.waypointX - this.posX;
-            var3 = this.waypointY - this.posY;
-            var5 = this.waypointZ - this.posZ;
-            var7 = (double)MathHelper.sqrt_double(var1 * var1 + var3 * var3 + var5 * var5);
+            double d = this.waypointX - this.posX;
+            double d1 = this.waypointY - this.posY;
+            double d2 = this.waypointZ - this.posZ;
+            double d3 = MathHelper.sqrt_double(d * d + d1 * d1 + d2 * d2);
 
-            if (this.isCourseTraversable(this.waypointX, this.waypointY, this.waypointZ, var7))
+            if (isCourseTraversable(this.waypointX, this.waypointY, this.waypointZ, d3))
             {
-                float var25 = 0.5F;
-                this.motionX = var1 / var7 * (double)var25;
-                this.motionY = var3 / var7 * (double)var25;
-                this.motionZ = var5 / var7 * (double)var25;
+                float Speed = 0.5F;
+                this.motionX = (d / d3 * Speed);
+                this.motionY = (d1 / d3 * Speed);
+                this.motionZ = (d2 / d3 * Speed);
             }
             else
             {
@@ -195,7 +194,7 @@ public class EntityNewZephyr extends EntityFlying implements IMob
                 this.updateTime = -1;
             }
 
-            if (var7 < 1.0D)
+            if (d3 < 1.0D)
             {
                 this.divepointSet = false;
                 this.dive = false;
@@ -203,82 +202,81 @@ public class EntityNewZephyr extends EntityFlying implements IMob
                 this.motionX = 0.0D;
                 this.motionY = 0.0D;
                 this.motionZ = 0.0D;
-                var9 = this.targetX - this.posX;
-                var11 = this.targetY - (this.posY + (double)(this.height / 2.0F));
-                var13 = this.targetZ - this.posZ;
-                var15 = (double)MathHelper.sqrt_double(var9 * var9 + var11 * var11 + var13 * var13);
-                Object var17 = null;
+                double d5 = this.targetX - this.posX;
+                double d6 = this.targetY - (this.posY + this.height / 2.0F);
+                double d7 = this.targetZ - this.posZ;
+                double range = MathHelper.sqrt_double(d5 * d5 + d6 * d6 + d7 * d7);
+                Entity entity = null;
 
-                for (int var18 = 0; var18 < 5; ++var18)
+                for (int multiply = 0; multiply < 5; multiply++)
                 {
-                    Aether.proxy.spawnCloudSmoke(this.worldObj, this.posX, this.posY + 0.5D, this.posZ, new Random(), 0.5D, var9 / var15, var11 / var15, var13 / var15);
+                    Aether.proxy.spawnCloudSmoke(this.worldObj, this.posX, this.posY + 0.5D, this.posZ, new Random(), 0.5D, d5 / range, d6 / range, d7 / range);
                 }
 
-                List var26 = this.worldObj.getEntitiesWithinAABBExcludingEntity(this, this.boundingBox.addCoord(var9 / var15, var11 / var15, var13 / var15).expand(1.0D, 4.0D, 1.0D));
+                List list = this.worldObj.getEntitiesWithinAABBExcludingEntity(this, this.boundingBox.addCoord(d5 / range, d6 / range, d7 / range).expand(1.0D, 4.0D, 1.0D));
 
-                for (int var19 = 0; var19 < var26.size(); ++var19)
+                for (int l = 0; l < list.size(); l++)
                 {
-                    Entity var20 = (Entity)var26.get(var19);
-                    System.out.println(var20);
-                    double var21 = var20.posX - this.posX;
-                    double var23;
+                    Entity entity1 = (Entity)list.get(l);
+                    System.out.println(entity1);
+                    double knockx = entity1.posX - this.posX;
 
-                    for (var23 = var20.posZ - this.posZ; var21 * var21 + var23 * var23 < 1.0E-4D; var23 = (Math.random() - Math.random()) * 0.01D)
+                    for (double knockz = entity1.posZ - this.posZ; knockx * knockx + knockz * knockz < 0.0001D; knockz = (Math.random() - Math.random()) * 0.01D)
                     {
-                        var21 = (Math.random() - Math.random()) * 0.01D;
+                        knockx = (Math.random() - Math.random()) * 0.01D;
                     }
 
-                    var20.velocityChanged = true;
-                    var20.motionX = 0.3D * var21;
-                    var20.motionY = 1.0D;
-                    var20.motionZ = 0.3D * var23;
+                    entity1.velocityChanged = true;
+                    entity1.motionX = (0.3D * knockx);
+                    entity1.motionY = 1.0D;
+                    entity1.motionZ = (0.3D * knockz);
                 }
 
-                new EntityZephyrSnowball(this.worldObj, this, var9, var11, var13);
+                snowball = new EntityZephyrSnowball(this.worldObj, this, d5, d6, d7);
             }
         }
     }
 
     private void orbitPlayer()
     {
-        double var1 = this.waypointX - this.posX;
-        double var3 = this.waypointY - this.posY;
-        double var5 = this.waypointZ - this.posZ;
-        double var7 = (double)MathHelper.sqrt_double(var1 * var1 + var3 * var3 + var5 * var5);
-        double var9 = this.targetedEntity.getDistanceSqToEntity(this);
-        double var11 = this.targetedEntity.posX - this.posX;
-        double var13 = this.targetedEntity.boundingBox.minY + (double)(this.targetedEntity.height / 2.0F) - (this.posY + (double)(this.height / 2.0F));
-        double var15 = this.targetedEntity.posZ - this.posZ;
-        this.renderYawOffset = this.rotationYaw = -((float)Math.atan2(var11, var15)) * 180.0F / (float)Math.PI;
+        double d = this.waypointX - this.posX;
+        double d1 = this.waypointY - this.posY;
+        double d2 = this.waypointZ - this.posZ;
+        double d3 = MathHelper.sqrt_double(d * d + d1 * d1 + d2 * d2);
+        double d4 = this.targetedEntity.getDistanceSqToEntity(this);
+        double d5 = this.targetedEntity.posX - this.posX;
+        double d6 = this.targetedEntity.boundingBox.minY + this.targetedEntity.height / 2.0F - (this.posY + this.height / 2.0F);
+        double d7 = this.targetedEntity.posZ - this.posZ;
+        this.renderYawOffset = (this.rotationYaw = -(float)Math.atan2(d5, d7) * 180.0F / (float)Math.PI);
 
         if (this.updateTime-- < 0)
         {
-            this.updateTime = this.rand.nextInt(5) + 40;
-            double var17 = (double)this.rand.nextFloat() * 10.0D;
-            double var19 = (double)MathHelper.sqrt_double(196.0D - var17 * var17);
-            double var21 = (double)this.rand.nextFloat() * var19;
-            double var23 = (double)MathHelper.sqrt_double(var19 * var19 - var21 * var21);
+            this.updateTime = (this.rand.nextInt(5) + 40);
+            double randomHeight = this.rand.nextFloat() * 10.0D;
+            double distance = MathHelper.sqrt_double(196.0D - randomHeight * randomHeight);
+            double x = this.rand.nextFloat() * distance;
+            double y = MathHelper.sqrt_double(distance * distance - x * x);
 
             if (this.rand.nextInt(8) == 0)
             {
-                this.xpov = this.rand.nextBoolean() ? -1 : 1;
-                this.zpov = this.rand.nextBoolean() ? -1 : 1;
+                this.xpov = (this.rand.nextBoolean() ? -1 : 1);
+                this.zpov = (this.rand.nextBoolean() ? -1 : 1);
             }
 
-            this.waypointX = this.targetedEntity.posX + var21 * (double)this.xpov;
-            this.waypointY = this.targetedEntity.posY + var17;
-            this.waypointZ = this.targetedEntity.posZ + var23 * (double)this.zpov;
+            this.waypointX = (this.targetedEntity.posX + x * this.xpov);
+            this.waypointY = (this.targetedEntity.posY + randomHeight);
+            this.waypointZ = (this.targetedEntity.posZ + y * this.zpov);
         }
 
-        if (this.isCourseTraversable(this.waypointX, this.waypointY, this.waypointZ, var7))
+        if (isCourseTraversable(this.waypointX, this.waypointY, this.waypointZ, d3))
         {
-            float var25 = 0.5F;
-            this.motionX = var1 / var7 * (double)var25;
-            this.motionY = var3 / var7 * (double)var25;
-            this.motionZ = var5 / var7 * (double)var25;
+            float Speed = 0.5F;
+            this.motionX = (d / d3 * Speed);
+            this.motionY = (d1 / d3 * Speed);
+            this.motionZ = (d2 / d3 * Speed);
         }
 
-        if (var7 < 1.0D)
+        if (d3 < 1.0D)
         {
             if (this.rand.nextInt(6) == 0)
             {
@@ -291,55 +289,52 @@ public class EntityNewZephyr extends EntityFlying implements IMob
         }
     }
 
-    /**
-     * Moves the entity based on the specified heading.  Args: strafe, forward
-     */
-    public void moveEntityWithHeading(float var1, float var2)
+    public void moveEntityWithHeading(float par1, float par2)
     {
-        this.moveEntity(this.motionX, this.motionY, this.motionZ);
+        moveEntity(this.motionX, this.motionY, this.motionZ);
     }
 
     private void randomMovement()
     {
-        double var1 = this.waypointX - this.posX;
-        double var3 = this.waypointY - this.posY;
-        double var5 = this.waypointZ - this.posZ;
-        double var7 = (double)MathHelper.sqrt_double(var1 * var1 + var3 * var3 + var5 * var5);
+        double d = this.waypointX - this.posX;
+        double d1 = this.waypointY - this.posY;
+        double d2 = this.waypointZ - this.posZ;
+        double d3 = MathHelper.sqrt_double(d * d + d1 * d1 + d2 * d2);
 
-        if (var7 < 4.0D || var7 > 40.0D)
+        if ((d3 < 4.0D) || (d3 > 40.0D))
         {
-            this.waypointX = this.posX + (double)((this.rand.nextFloat() * 2.0F - 1.0F) * 30.0F);
-            this.waypointY = this.posY + (double)((this.rand.nextFloat() * 2.0F - 1.0F) * 30.0F);
-            this.waypointZ = this.posZ + (double)((this.rand.nextFloat() * 2.0F - 1.0F) * 30.0F);
+            this.waypointX = (this.posX + (this.rand.nextFloat() * 2.0F - 1.0F) * 30.0F);
+            this.waypointY = (this.posY + (this.rand.nextFloat() * 2.0F - 1.0F) * 30.0F);
+            this.waypointZ = (this.posZ + (this.rand.nextFloat() * 2.0F - 1.0F) * 30.0F);
         }
 
-        if (this.isCourseTraversable(this.waypointX, this.waypointY, this.waypointZ, var7))
+        if (isCourseTraversable(this.waypointX, this.waypointY, this.waypointZ, d3))
         {
-            float var9 = 0.5F;
-            this.motionX = var1 / var7 * (double)var9;
-            this.motionY = var3 / var7 * (double)var9;
-            this.motionZ = var5 / var7 * (double)var9;
+            float Speed = 0.5F;
+            this.motionX = (d / d3 * Speed);
+            this.motionY = (d1 / d3 * Speed);
+            this.motionZ = (d2 / d3 * Speed);
         }
         else
         {
-            this.waypointX = this.posX + (double)((this.rand.nextFloat() * 2.0F - 1.0F) * 16.0F);
-            this.waypointY = this.posY + (double)((this.rand.nextFloat() * 2.0F - 1.0F) * 16.0F);
-            this.waypointZ = this.posZ + (double)((this.rand.nextFloat() * 2.0F - 1.0F) * 16.0F);
+            this.waypointX = (this.posX + (this.rand.nextFloat() * 2.0F - 1.0F) * 16.0F);
+            this.waypointY = (this.posY + (this.rand.nextFloat() * 2.0F - 1.0F) * 16.0F);
+            this.waypointZ = (this.posZ + (this.rand.nextFloat() * 2.0F - 1.0F) * 16.0F);
         }
     }
 
-    private boolean isCourseTraversable(double var1, double var3, double var5, double var7)
+    private boolean isCourseTraversable(double d, double d1, double d2, double d3)
     {
-        double var9 = (this.waypointX - this.posX) / var7;
-        double var11 = (this.waypointY - this.posY) / var7;
-        double var13 = (this.waypointZ - this.posZ) / var7;
-        AxisAlignedBB var15 = this.boundingBox.copy();
+        double d4 = (this.waypointX - this.posX) / d3;
+        double d5 = (this.waypointY - this.posY) / d3;
+        double d6 = (this.waypointZ - this.posZ) / d3;
+        AxisAlignedBB axisalignedbb = this.boundingBox.copy();
 
-        for (int var16 = 1; (double)var16 < var7; ++var16)
+        for (int i = 1; i < d3; i++)
         {
-            var15.offset(var9, var11, var13);
+            axisalignedbb.offset(d4, d5, d6);
 
-            if (this.worldObj.getCollidingBoundingBoxes(this, var15).size() > 0)
+            if (this.worldObj.getCollidingBoundingBoxes(this, axisalignedbb).size() > 0)
             {
                 return false;
             }
@@ -348,62 +343,42 @@ public class EntityNewZephyr extends EntityFlying implements IMob
         return true;
     }
 
-    /**
-     * Returns the sound this mob makes while it's alive.
-     */
     protected String getLivingSound()
     {
         return "aemob.zephyr.say";
     }
 
-    /**
-     * Returns the sound this mob makes when it is hurt.
-     */
     protected String getHurtSound()
     {
         return "aemob.zephyr.say";
     }
 
-    /**
-     * Returns the sound this mob makes on death.
-     */
     protected String getDeathSound()
     {
         return "aemob.zephyr.say";
     }
 
-    /**
-     * Determines if an entity can be despawned, used on idle far away entities
-     */
     public boolean canDespawn()
     {
         return true;
     }
 
-    /**
-     * Returns the volume for the sounds this mob makes.
-     */
     protected float getSoundVolume()
     {
         return 3.0F;
     }
 
-    /**
-     * Checks if the entity's current position is a valid location to spawn this entity.
-     */
     public boolean getCanSpawnHere()
     {
-        int var1 = MathHelper.floor_double(this.posX);
-        int var2 = MathHelper.floor_double(this.boundingBox.minY);
-        int var3 = MathHelper.floor_double(this.posZ);
-        return this.rand.nextInt(65) == 0 && this.worldObj.checkNoEntityCollision(this.boundingBox) && this.worldObj.getCollidingBoundingBoxes(this, this.boundingBox).size() == 0 && !this.worldObj.isAnyLiquid(this.boundingBox) && this.worldObj.getBlockId(var1, var2 - 1, var3) == AetherBlocks.AetherGrass.blockID && this.worldObj.getBlockId(var1, var2 - 1, var3) != AetherBlocks.Holystone.blockID && this.worldObj.difficultySetting > 0;
+        int i = MathHelper.floor_double(this.posX);
+        int j = MathHelper.floor_double(this.boundingBox.minY);
+        int k = MathHelper.floor_double(this.posZ);
+        return (this.rand.nextInt(65) == 0) && (this.worldObj.checkNoEntityCollision(this.boundingBox)) && (this.worldObj.getCollidingBoundingBoxes(this, this.boundingBox).size() == 0) && (!this.worldObj.isAnyLiquid(this.boundingBox)) && (this.worldObj.getBlockId(i, j - 1, k) == AetherBlocks.AetherGrass.blockID) && (this.worldObj.getBlockId(i, j - 1, k) != AetherBlocks.Holystone.blockID) && (this.worldObj.difficultySetting > 0);
     }
 
-    /**
-     * Will return how many at most can spawn in a chunk at once.
-     */
     public int getMaxSpawnedInChunk()
     {
         return 1;
     }
 }
+

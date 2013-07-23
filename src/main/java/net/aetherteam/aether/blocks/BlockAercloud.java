@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
 import net.aetherteam.aether.Aether;
+import net.aetherteam.aether.CommonProxy;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IconRegister;
@@ -15,14 +16,18 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.effect.EntityLightningBolt;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.Icon;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import net.minecraft.world.storage.WorldInfo;
 
-public class BlockAercloud extends BlockAether implements IAetherBlock
+public class BlockAercloud extends BlockAether
+    implements IAetherBlock
 {
     private Icon backTexture;
     private Icon frontTexture;
@@ -31,7 +36,7 @@ public class BlockAercloud extends BlockAether implements IAetherBlock
     private Icon upArrow;
     private Icon downArrow;
     private HashMap icons = new HashMap();
-    public static final String[] names = new String[] {"Cold Aercloud", "Blue Aercloud", "Golden Aercloud", "Green Aercloud", "Storm Aercloud"};
+    public static final String[] names = { "Cold Aercloud", "Blue Aercloud", "Golden Aercloud", "Green Aercloud", "Storm Aercloud" };
     public static final int bouncingMeta = 1;
     public static final int sinkingMeta = 2;
     public static final int randomMeta = 3;
@@ -39,339 +44,289 @@ public class BlockAercloud extends BlockAether implements IAetherBlock
     private Random rand = new Random();
     public static final int metaBeforePurple = 4;
 
-    protected BlockAercloud(int var1)
+    protected BlockAercloud(int blockID)
     {
-        super(var1, Material.ice);
-        this.setHardness(0.2F);
-        this.setLightOpacity(0);
-        this.setStepSound(Block.soundClothFootstep);
-        this.setTickRandomly(true);
+        super(blockID, Material.ice);
+        setHardness(0.2F);
+        setLightOpacity(0);
+        setStepSound(Block.soundClothFootstep);
+        setTickRandomly(true);
     }
 
-    public void addCreativeItems(ArrayList var1)
+    public void addCreativeItems(ArrayList itemList)
     {
-        for (int var2 = 0; var2 < 4; ++var2)
+        for (int meta = 0; meta < 4; meta++)
         {
-            var1.add(new ItemStack(this, 1, var2));
+            itemList.add(new ItemStack(this, 1, meta));
         }
     }
 
-    /**
-     * Determines the damage on the item the block drops. Used in cloth and wood.
-     */
-    public int damageDropped(int var1)
+    public int damageDropped(int meta)
     {
-        return var1 <= 4 ? var1 : 5;
+        if (meta <= 4)
+        {
+            return meta;
+        }
+
+        return 5;
     }
 
-    /**
-     * Ticks the block if it's been scheduled
-     */
-    public void updateTick(World var1, int var2, int var3, int var4, Random var5)
+    public void updateTick(World world, int i, int j, int k, Random random)
     {
-        if (!var1.isRemote)
+        if (world.isRemote)
         {
-            super.updateTick(var1, var2, var3, var4, var5);
+            return;
+        }
 
-            if (var1.getBlockMetadata(var2, var3, var4) == 4 && var5.nextInt(155) == 0 && var1.getWorldInfo().isRaining())
-            {
-                var1.addWeatherEffect(new EntityLightningBolt(var1, (double)var2, (double)(var3 + 1), (double)var4));
-            }
+        super.updateTick(world, i, j, k, random);
+
+        if ((world.getBlockMetadata(i, j, k) == 4) && (random.nextInt(155) == 0) && (world.M().isRaining()))
+        {
+            world.addWeatherEffect(new EntityLightningBolt(world, i, j + 1, k));
         }
     }
 
-    /**
-     * Returns a bounding box from the pool of bounding boxes (this means this box can change after the pool has been
-     * cleared to be reused)
-     */
-    public AxisAlignedBB getCollisionBoundingBoxFromPool(World var1, int var2, int var3, int var4)
+    public AxisAlignedBB getCollisionBoundingBoxFromPool(World world, int i, int j, int k)
     {
-        return var1.getBlockMetadata(var2, var3, var4) != 1 && var1.getBlockMetadata(var2, var3, var4) != 2 && var1.getBlockMetadata(var2, var3, var4) < 5 ? AxisAlignedBB.getBoundingBox((double)var2, (double)var3, (double)var4, (double)(var2 + 1), (double)var3, (double)(var4 + 1)) : AxisAlignedBB.getBoundingBox((double)var2, (double)var3, (double)var4, (double)var2, (double)var3, (double)var4);
+        if ((world.getBlockMetadata(i, j, k) == 1) || (world.getBlockMetadata(i, j, k) == 2) || (world.getBlockMetadata(i, j, k) >= 5))
+        {
+            return AxisAlignedBB.getBoundingBox(i, j, k, i, j, k);
+        }
+
+        return AxisAlignedBB.getBoundingBox(i, j, k, i + 1, j, k + 1);
     }
 
-    /**
-     * Returns which pass should this block be rendered on. 0 for solids and 1 for alpha
-     */
     public int getRenderBlockPass()
     {
         return 1;
     }
 
-    /**
-     * Is this block (a) opaque and (b) a full 1m cube?  This determines whether or not to render the shared face of two
-     * adjacent blocks and also whether the player can attach torches, redstone wire, etc to this block.
-     */
     public boolean isOpaqueCube()
     {
         return false;
     }
 
-    /**
-     * Triggered whenever an entity collides with this block (enters into the block). Args: world, x, y, z, entity
-     */
-    public void onEntityCollidedWithBlock(World var1, int var2, int var3, int var4, Entity var5)
+    public void onEntityCollidedWithBlock(World world, int x, int y, int z, Entity entity)
     {
-        var5.fallDistance = 0.0F;
-        int var6 = var1.getBlockMetadata(var2, var3, var4);
+        entity.fallDistance = 0.0F;
+        int meta = world.getBlockMetadata(x, y, z);
 
-        if (!var5.isRiding())
+        if (!entity.isRiding())
         {
-            EntityPlayer var7;
-
-            if (var5 instanceof EntityPlayer)
+            if ((entity instanceof EntityPlayer))
             {
-                var7 = (EntityPlayer)var5;
+                EntityPlayer player = (EntityPlayer)entity;
 
-                if (var7.isSneaking())
+                if (player.isSneaking())
                 {
-                    if (var5.motionY < 0.0D)
+                    if (entity.motionY < 0.0D)
                     {
-                        var5.motionY *= 0.005D;
+                        entity.motionY *= 0.005D;
                     }
 
                     return;
                 }
             }
 
-            if (var6 >= 5 && var5.posY <= (double)var3 + 1.6D && var5.posY >= (double)var3 - 0.2D)
+            if ((meta >= 5) && (entity.posY <= y + 1.6D) && (entity.posY >= y - 0.2D))
             {
-                var5.motionY = 0.1D;
+                entity.motionY = 0.1D;
             }
 
-            if (var6 != 5 && var6 != 9)
+            if ((meta == 5) || (meta == 9))
             {
-                if (var6 != 6 && var6 != 10)
-                {
-                    if (var6 != 7 && var6 != 11)
-                    {
-                        if (var6 == 8 || var6 == 12)
-                        {
-                            var5.motionX = -2.5D;
-                        }
-                    }
-                    else
-                    {
-                        var5.motionZ = 2.5D;
-                    }
-                }
-                else
-                {
-                    var5.motionX = 2.5D;
-                }
+                entity.motionZ = -2.5D;
             }
-            else
+            else if ((meta == 6) || (meta == 10))
             {
-                var5.motionZ = -2.5D;
+                entity.motionX = 2.5D;
+            }
+            else if ((meta == 7) || (meta == 11))
+            {
+                entity.motionZ = 2.5D;
+            }
+            else if ((meta == 8) || (meta == 12))
+            {
+                entity.motionX = -2.5D;
             }
 
-            if (var6 == 1)
+            if (meta == 1)
             {
-                var5.motionY = 2.0D;
+                entity.motionY = 2.0D;
 
-                if (var5 instanceof EntityLiving)
+                if ((entity instanceof EntityLiving))
                 {
-                    Aether.proxy.spawnRainParticles(var1, var2, var3, var4, this.rand, 15);
+                    Aether.proxy.spawnRainParticles(world, x, y, z, this.rand, 15);
                 }
             }
-            else if (var6 == 2)
+            else if (meta == 2)
             {
-                var5.motionY = -1.5D;
+                entity.motionY = -1.5D;
             }
-            else if (var6 == 3)
+            else if (meta == 3)
             {
-                var5.motionX *= 5.0E-10D;
-                var5.motionZ *= 5.0E-10D;
+                entity.motionX *= 5.E-010D;
+                entity.motionZ *= 5.E-010D;
 
-                if (var5 instanceof EntityPlayer)
+                if ((entity instanceof EntityPlayer))
                 {
-                    var7 = (EntityPlayer)var5;
+                    EntityPlayer player = (EntityPlayer)entity;
 
-                    if (!var7.isJumping)
+                    if (!player.isJumping)
                     {
-                        var5.setPosition((double)var2 + 0.5D, (double)((float)var3 + var5.height), (double)var4 + 0.5D);
+                        entity.setPosition(x + 0.5D, y + entity.height, z + 0.5D);
                     }
                 }
                 else
                 {
-                    var5.setPosition((double)var2 + 0.5D, (double)var3, (double)var4 + 0.5D);
+                    entity.setPosition(x + 0.5D, y, z + 0.5D);
                 }
 
-                Random var9 = new Random();
-                int var8 = var9.nextInt(4);
+                Random rand = new Random();
+                int chance = rand.nextInt(4);
 
-                if (var8 == 0)
+                if (chance == 0)
                 {
-                    var5.motionZ = -2.5D;
+                    entity.motionZ = -2.5D;
                 }
-                else if (var8 == 1)
+                else if (chance == 1)
                 {
-                    var5.motionX = 2.5D;
+                    entity.motionX = 2.5D;
                 }
-                else if (var8 == 2)
+                else if (chance == 2)
                 {
-                    var5.motionZ = 2.5D;
+                    entity.motionZ = 2.5D;
                 }
-                else if (var8 == 3)
+                else if (chance == 3)
                 {
-                    var5.motionX = -2.5D;
+                    entity.motionX = -2.5D;
                 }
             }
-            else if (var5.motionY < 0.0D)
+            else if (entity.motionY < 0.0D)
             {
-                var5.motionY *= 0.005D;
+                entity.motionY *= 0.005D;
             }
 
-            if (!(var5 instanceof EntityPlayer))
+            if (!(entity instanceof EntityPlayer))
             {
-                var5.fallDistance = -20.0F;
+                entity.fallDistance = -20.0F;
             }
         }
     }
 
-    /**
-     * Returns true if the given side of this block type should be rendered, if the adjacent block is at the given
-     * coordinates.  Args: blockAccess, x, y, z, side
-     */
-    public boolean shouldSideBeRendered(IBlockAccess var1, int var2, int var3, int var4, int var5)
+    public boolean shouldSideBeRendered(IBlockAccess iblockaccess, int i, int j, int k, int l)
     {
-        return super.shouldSideBeRendered(var1, var2, var3, var4, 1 - var5);
+        return super.shouldSideBeRendered(iblockaccess, i, j, k, 1 - l);
     }
 
-    /**
-     * returns a list of blocks with the same ID, but different meta (eg: wood returns 4 blocks)
-     */
-    public void getSubBlocks(int var1, CreativeTabs var2, List var3)
+    public void getSubBlocks(int par1, CreativeTabs par2CreativeTabs, List par3List)
     {
-        for (int var4 = 0; var4 < 6; ++var4)
+        for (int var4 = 0; var4 < 6; var4++)
         {
-            var3.add(new ItemStack(var1, 1, var4));
+            par3List.add(new ItemStack(par1, 1, var4));
         }
     }
 
-    /**
-     * Called whenever the block is added into the world. Args: world, x, y, z
-     */
-    public void onBlockAdded(World var1, int var2, int var3, int var4)
+    public void onBlockAdded(World world, int par2, int par3, int par4)
     {
-        super.onBlockAdded(var1, var2, var3, var4);
+        super.onBlockAdded(world, par2, par3, par4);
 
-        if (!var1.isRemote && var1.getBlockMetadata(var2, var3, var4) >= 9)
+        if ((!world.isRemote) && (world.getBlockMetadata(par2, par3, par4) >= 9))
         {
-            int var5 = var1.getBlockId(var2 - 1, var3, var4);
-            int var6 = var1.getBlockId(var2 + 1, var3, var4);
-            int var7 = var1.getBlockId(var2, var3, var4 + 1);
-            int var8 = var1.getBlockId(var2, var3, var4 - 1);
-            byte var9 = 0;
+            int left = world.getBlockId(par2 - 1, par3, par4);
+            int right = world.getBlockId(par2 + 1, par3, par4);
+            int front = world.getBlockId(par2, par3, par4 + 1);
+            int behind = world.getBlockId(par2, par3, par4 - 1);
+            byte meta = 0;
 
-            if (Block.opaqueCubeLookup[var5] && !Block.opaqueCubeLookup[var6])
+            if ((Block.opaqueCubeLookup[left] != 0) && (Block.opaqueCubeLookup[right] == 0))
             {
-                var9 = 9;
+                meta = 9;
             }
 
-            if (Block.opaqueCubeLookup[var6] && !Block.opaqueCubeLookup[var5])
+            if ((Block.opaqueCubeLookup[right] != 0) && (Block.opaqueCubeLookup[left] == 0))
             {
-                var9 = 10;
+                meta = 10;
             }
 
-            if (Block.opaqueCubeLookup[var7] && !Block.opaqueCubeLookup[var8])
+            if ((Block.opaqueCubeLookup[front] != 0) && (Block.opaqueCubeLookup[behind] == 0))
             {
-                var9 = 11;
+                meta = 11;
             }
 
-            if (Block.opaqueCubeLookup[var8] && !Block.opaqueCubeLookup[var7])
+            if ((Block.opaqueCubeLookup[behind] != 0) && (Block.opaqueCubeLookup[front] == 0))
             {
-                var9 = 12;
+                meta = 12;
             }
 
-            if (var9 > 0)
+            if (meta > 0)
             {
-                var1.setBlockMetadataWithNotify(var2, var3, var4, var9, 16);
+                world.setBlockMetadataWithNotify(par2, par3, par4, meta, 16);
             }
         }
     }
 
-    /**
-     * Called when the block is placed in the world.
-     */
-    public void onBlockPlacedBy(World var1, int var2, int var3, int var4, EntityLiving var5, ItemStack var6)
+    public void onBlockPlacedBy(World world, int x, int y, int z, EntityLiving entityLiving, ItemStack itemStack)
     {
-        int var7 = MathHelper.floor_double((double)(var5.rotationYaw * 4.0F / 360.0F) + 0.5D) & 3;
+        int facing = MathHelper.floor_double(entityLiving.rotationYaw * 4.0F / 360.0F + 0.5D) & 0x3;
 
-        if (((EntityPlayer)var5).inventory.getCurrentItem().getItemDamage() >= 5)
-        {
-            switch (var7)
+        if (((EntityPlayer)entityLiving).inventory.getCurrentItem().getItemDamage() >= 5)
+            switch (facing)
             {
                 case 0:
-                    var1.setBlockMetadataWithNotify(var2, var3, var4, 9, 16);
+                    world.setBlockMetadataWithNotify(x, y, z, 9, 16);
                     break;
 
                 case 1:
-                    var1.setBlockMetadataWithNotify(var2, var3, var4, 10, 16);
+                    world.setBlockMetadataWithNotify(x, y, z, 10, 16);
                     break;
 
                 case 2:
-                    var1.setBlockMetadataWithNotify(var2, var3, var4, 11, 16);
+                    world.setBlockMetadataWithNotify(x, y, z, 11, 16);
                     break;
 
                 case 3:
-                    var1.setBlockMetadataWithNotify(var2, var3, var4, 12, 16);
+                    world.setBlockMetadataWithNotify(x, y, z, 12, 16);
             }
-        }
     }
 
     @SideOnly(Side.CLIENT)
-
-    /**
-     * A randomly called display update to be able to add particles or other items for display
-     */
-    public void randomDisplayTick(World var1, int var2, int var3, int var4, Random var5)
+    public void randomDisplayTick(World world, int x, int y, int z, Random random)
     {
-        float var6 = (float)var2 + 0.5F;
-        float var7 = (float)var3 + 0.0F + var5.nextFloat() * 10.0F / 16.0F;
-        float var8 = (float)var4 + 0.5F;
-        int var9 = var1.getBlockMetadata(var2, var3, var4);
-        float var10 = var5.nextFloat() * 0.9F;
-        float var11 = var5.nextFloat() * 0.2F;
+        float x1 = x + 0.5F;
+        float y1 = y + 0.0F + random.nextFloat() * 10.0F / 16.0F;
+        float z1 = z + 0.5F;
+        int meta = world.getBlockMetadata(x, y, z);
+        float i = random.nextFloat() * 0.9F;
+        float j = random.nextFloat() * 0.2F;
 
-        if (var9 != 5 && var9 != 9)
+        if ((meta == 5) || (meta == 9))
         {
-            if (var9 != 6 && var9 != 10)
-            {
-                if (var9 != 7 && var9 != 11)
-                {
-                    if (var9 == 8 || var9 == 12)
-                    {
-                        var1.spawnParticle("reddust", (double)(var6 - var10), (double)var7, (double)(var8 + var11), 1.0D, 1.0D, 1.0D);
-                        var1.spawnParticle("reddust", (double)(var6 - var10 * var5.nextFloat() / 0.4F), (double)var7, (double)(var8 + var11), 1.0D, 1.0D, 1.0D);
-                    }
-                }
-                else
-                {
-                    var1.spawnParticle("reddust", (double)(var6 + var11), (double)var7, (double)(var8 + var10), 1.0D, 1.0D, 1.0D);
-                    var1.spawnParticle("reddust", (double)(var6 + var11 * var5.nextFloat() / 0.4F), (double)var7, (double)(var8 + var10), 1.0D, 1.0D, 1.0D);
-                }
-            }
-            else
-            {
-                var1.spawnParticle("reddust", (double)(var6 + var10), (double)var7, (double)(var8 + var11), 1.0D, 1.0D, 1.0D);
-                var1.spawnParticle("reddust", (double)(var6 + var10 * var5.nextFloat() / 0.4F), (double)var7, (double)(var8 + var11), 1.0D, 1.0D, 1.0D);
-            }
+            world.spawnParticle("reddust", x1 + j, y1, z1 - i, 1.0D, 1.0D, 1.0D);
+            world.spawnParticle("reddust", x1 + j * random.nextFloat() / 0.4F, y1, z1 - i, 1.0D, 1.0D, 1.0D);
         }
-        else
+        else if ((meta == 6) || (meta == 10))
         {
-            var1.spawnParticle("reddust", (double)(var6 + var11), (double)var7, (double)(var8 - var10), 1.0D, 1.0D, 1.0D);
-            var1.spawnParticle("reddust", (double)(var6 + var11 * var5.nextFloat() / 0.4F), (double)var7, (double)(var8 - var10), 1.0D, 1.0D, 1.0D);
+            world.spawnParticle("reddust", x1 + i, y1, z1 + j, 1.0D, 1.0D, 1.0D);
+            world.spawnParticle("reddust", x1 + i * random.nextFloat() / 0.4F, y1, z1 + j, 1.0D, 1.0D, 1.0D);
+        }
+        else if ((meta == 7) || (meta == 11))
+        {
+            world.spawnParticle("reddust", x1 + j, y1, z1 + i, 1.0D, 1.0D, 1.0D);
+            world.spawnParticle("reddust", x1 + j * random.nextFloat() / 0.4F, y1, z1 + i, 1.0D, 1.0D, 1.0D);
+        }
+        else if ((meta == 8) || (meta == 12))
+        {
+            world.spawnParticle("reddust", x1 - i, y1, z1 + j, 1.0D, 1.0D, 1.0D);
+            world.spawnParticle("reddust", x1 - i * random.nextFloat() / 0.4F, y1, z1 + j, 1.0D, 1.0D, 1.0D);
         }
     }
 
-    /**
-     * From the specified side and block metadata retrieves the blocks texture. Args: side, metadata
-     */
-    public Icon getIcon(int var1, int var2)
+    public Icon getIcon(int side, int meta)
     {
-        if (var2 == 5 || var2 == 9)
+        if ((meta == 5) || (meta == 9))
         {
-            switch (var1)
+            switch (side)
             {
                 case 0:
                     return this.upArrow;
@@ -393,9 +348,9 @@ public class BlockAercloud extends BlockAether implements IAetherBlock
             }
         }
 
-        if (var2 == 6 || var2 == 10)
+        if ((meta == 6) || (meta == 10))
         {
-            switch (var1)
+            switch (side)
             {
                 case 0:
                     return this.rightArrow;
@@ -417,9 +372,9 @@ public class BlockAercloud extends BlockAether implements IAetherBlock
             }
         }
 
-        if (var2 == 7 || var2 == 11)
+        if ((meta == 7) || (meta == 11))
         {
-            switch (var1)
+            switch (side)
             {
                 case 0:
                     return this.downArrow;
@@ -441,9 +396,9 @@ public class BlockAercloud extends BlockAether implements IAetherBlock
             }
         }
 
-        if (var2 == 8 || var2 == 12)
+        if ((meta == 8) || (meta == 12))
         {
-            switch (var1)
+            switch (side)
             {
                 case 0:
                     return this.leftArrow;
@@ -465,36 +420,30 @@ public class BlockAercloud extends BlockAether implements IAetherBlock
             }
         }
 
-        ItemStack var3 = new ItemStack(AetherBlocks.Aercloud, 1, var2);
-        String var4 = var3.getItem().getItemDisplayName(var3);
-        return (Icon)this.icons.get(var4);
+        ItemStack stack = new ItemStack(AetherBlocks.Aercloud, 1, meta);
+        String name = stack.getItem().getItemDisplayName(stack);
+        return (Icon)this.icons.get(name);
     }
 
-    /**
-     * Called upon block activation (right click on the block.)
-     */
-    public boolean onBlockActivated(World var1, int var2, int var3, int var4, EntityPlayer var5, int var6, float var7, float var8, float var9)
+    public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer entityPlayer, int par6, float par7, float par8, float par9)
     {
-        var1.getBlockMetadata(var2, var3, var4);
+        int meta = world.getBlockMetadata(x, y, z);
         return false;
     }
 
-    /**
-     * When this method is called, your block should register all the icons it needs with the given IconRegister. This
-     * is the only chance you get to register icons.
-     */
-    public void registerIcons(IconRegister var1)
+    public void registerIcons(IconRegister iconRegister)
     {
-        this.frontTexture = var1.registerIcon("Aether:Purple Aercloud Front");
-        this.backTexture = var1.registerIcon("Aether:Purple Aercloud Back");
-        this.upArrow = var1.registerIcon("Aether:Purple Aercloud Up");
-        this.downArrow = var1.registerIcon("Aether:Purple Aercloud Down");
-        this.leftArrow = var1.registerIcon("Aether:Purple Aercloud Left");
-        this.rightArrow = var1.registerIcon("Aether:Purple Aercloud Right");
+        this.frontTexture = iconRegister.registerIcon("Aether:Purple Aercloud Front");
+        this.backTexture = iconRegister.registerIcon("Aether:Purple Aercloud Back");
+        this.upArrow = iconRegister.registerIcon("Aether:Purple Aercloud Up");
+        this.downArrow = iconRegister.registerIcon("Aether:Purple Aercloud Down");
+        this.leftArrow = iconRegister.registerIcon("Aether:Purple Aercloud Left");
+        this.rightArrow = iconRegister.registerIcon("Aether:Purple Aercloud Right");
 
-        for (int var2 = 0; var2 < names.length; ++var2)
+        for (int i = 0; i < names.length; i++)
         {
-            this.icons.put(names[var2], var1.registerIcon("Aether:" + names[var2]));
+            this.icons.put(names[i], iconRegister.registerIcon("Aether:" + names[i]));
         }
     }
 }
+

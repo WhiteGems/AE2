@@ -10,19 +10,19 @@ public class EntityDartEnchanted extends EntityDartGolden
     public EntityLiving victim;
     public static int texfxindex = 94;
 
-    public EntityDartEnchanted(World var1)
+    public EntityDartEnchanted(World world)
     {
-        super(var1);
+        super(world);
     }
 
-    public EntityDartEnchanted(World var1, double var2, double var4, double var6)
+    public EntityDartEnchanted(World world, double x, double y, double z)
     {
-        super(var1, var2, var4, var6);
+        super(world, x, y, z);
     }
 
-    public EntityDartEnchanted(World var1, EntityLiving var2)
+    public EntityDartEnchanted(World world, EntityLiving ent)
     {
-        super(var1, var2);
+        super(world, ent);
     }
 
     public void entityInit()
@@ -32,3 +32,4 @@ public class EntityDartEnchanted extends EntityDartGolden
         this.dmg = 6;
     }
 }
+

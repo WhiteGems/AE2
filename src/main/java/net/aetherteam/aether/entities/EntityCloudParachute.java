@@ -1,10 +1,13 @@
 package net.aetherteam.aether.entities;
 
+import java.util.List;
 import java.util.Random;
 import net.aetherteam.aether.Aether;
+import net.aetherteam.aether.CommonProxy;
 import net.aetherteam.aether.entities.mounts_old.RidingHandler;
 import net.aetherteam.aether.entities.mounts_old.RidingHandlerParachute;
 import net.minecraft.block.material.Material;
+import net.minecraft.entity.DataWatcher;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.player.EntityPlayer;
@@ -14,15 +17,15 @@ import net.minecraft.world.World;
 
 public class EntityCloudParachute extends Entity
 {
-    public static Random rand;
+    public static Random ab;
     public RidingHandler ridinghandler;
     private static final double ANIM_RADIUS = 0.75D;
 
-    public EntityCloudParachute(World var1)
+    public EntityCloudParachute(World world)
     {
-        super(var1);
-        this.setSize(1.0F, 1.0F);
-        rand = new Random();
+        super(world);
+        setSize(1.0F, 1.0F);
+        Entity.rand = new Random();
         this.prevPosX = this.posX;
         this.prevPosY = this.posY;
         this.prevPosZ = this.posZ;
@@ -30,22 +33,24 @@ public class EntityCloudParachute extends Entity
         this.ignoreFrustumCheck = true;
     }
 
-    public EntityCloudParachute(World var1, EntityPlayer var2, boolean var3)
+    public EntityCloudParachute(World world, EntityPlayer player, boolean bool)
     {
-        this(var1);
+        this(world);
 
-        if (var2 != null)
+        if (player == null)
         {
-            this.setPositionAndRotation(var2.posX, var2.posY, var2.posZ, this.rotationYaw, this.rotationPitch);
-            this.getRidingHandler().setRider(var2);
-            this.setColor(var3);
+            return;
         }
+
+        setPositionAndRotation(player.posX, player.posY, player.posZ, this.rotationYaw, this.rotationPitch);
+        getRidingHandler().setRider(player);
+        setColor(bool);
     }
 
-    public static boolean entityHasRoomForCloud(World var0, EntityLiving var1)
+    public static boolean entityHasRoomForCloud(World world, EntityLiving entityliving)
     {
-        AxisAlignedBB var2 = AxisAlignedBB.getBoundingBox(var1.posX - 0.5D, var1.boundingBox.minY - 1.0D, var1.posZ - 0.5D, var1.posX + 0.5D, var1.boundingBox.minY, var1.posZ + 0.5D);
-        return var0.getCollidingBoundingBoxes(var1, var2).size() == 0 && !var0.isAABBInMaterial(var2, Material.water);
+        AxisAlignedBB boundingBox = AxisAlignedBB.getBoundingBox(entityliving.posX - 0.5D, entityliving.boundingBox.minY - 1.0D, entityliving.posZ - 0.5D, entityliving.posX + 0.5D, entityliving.boundingBox.minY, entityliving.posZ + 0.5D);
+        return (world.getCollidingBoundingBoxes(entityliving, boundingBox).size() == 0) && (!world.isAABBInMaterial(boundingBox, Material.water));
     }
 
     protected void entityInit()
@@ -58,86 +63,73 @@ public class EntityCloudParachute extends Entity
         return this.dataWatcher.getWatchableObjectByte(16) == 1;
     }
 
-    public void setColor(boolean var1)
+    public void setColor(boolean b)
     {
-        byte var2 = this.dataWatcher.getWatchableObjectByte(16);
-        this.dataWatcher.updateObject(16, Byte.valueOf((byte)(var1 ? 1 : 0)));
+        byte byte0 = this.dataWatcher.getWatchableObjectByte(16);
+        this.dataWatcher.updateObject(16, Byte.valueOf((byte)(b ? 1 : 0)));
     }
 
-    /**
-     * Checks if the entity is in range to render by using the past in distance and comparing it to its average edge
-     * length * 64 * renderDistanceWeight Args: distance
-     */
-    public boolean isInRangeToRenderDist(double var1)
+    public boolean isInRangeToRenderDist(double d)
     {
-        return this.getRidingHandler().getRider() != null ? this.getRidingHandler().getRider().isInRangeToRenderDist(var1) : super.isInRangeToRenderDist(var1);
+        if (getRidingHandler().getRider() != null)
+        {
+            return getRidingHandler().getRider().isInRangeToRenderDist(d);
+        }
+
+        return super.isInRangeToRenderDist(d);
     }
 
-    /**
-     * Returns true if other Entities should be prevented from moving through this Entity.
-     */
     public boolean canBeCollidedWith()
     {
         return false;
     }
 
-    /**
-     * returns the bounding box for this entity
-     */
     public AxisAlignedBB getBoundingBox()
     {
         return this.boundingBox;
     }
 
-    /**
-     * Gets called every tick from main Entity class
-     */
     public void onEntityUpdate()
     {
-        if (this.getRidingHandler() != null && this.getRidingHandler().getRider() != null)
+        if ((getRidingHandler() != null) && (getRidingHandler().getRider() != null))
         {
-            Aether.proxy.spawnCloudSmoke(this.worldObj, this.posX, this.posY, this.posZ, rand, Double.valueOf(0.75D));
+            Aether.proxy.spawnCloudSmoke(this.worldObj, this.posX, this.posY, this.posZ, Entity.rand, Double.valueOf(0.75D));
         }
 
-        if (this.isCollided())
+        if (isCollided())
         {
-            this.die();
+            die();
         }
 
         super.onEntityUpdate();
     }
 
-    /**
-     * Called when a player interacts with a mob. e.g. gets milk from a cow, gets into the saddle on a pig.
-     */
-    public boolean interact(EntityPlayer var1)
+    public boolean interact(EntityPlayer entityplayer)
     {
-        if (super.interact(var1))
+        if (super.interact(entityplayer))
         {
-            return super.interact(var1);
+            return super.interact(entityplayer);
+        }
+
+        if ((this.riddenByEntity == null) && (!getRidingHandler().isBeingRidden()))
+        {
+            getRidingHandler().setRider(entityplayer);
         }
         else
         {
-            if (this.riddenByEntity == null && !this.getRidingHandler().isBeingRidden())
-            {
-                this.getRidingHandler().setRider(var1);
-            }
-            else
-            {
-                this.getRidingHandler().onUnMount();
-            }
-
-            return true;
+            getRidingHandler().onUnMount();
         }
+
+        return true;
     }
 
     public void die()
     {
-        this.getRidingHandler().onUnMount();
+        getRidingHandler().onUnMount();
 
-        for (int var1 = 0; var1 < 32; ++var1)
+        for (int i = 0; i < 32; i++)
         {
-            Aether.proxy.spawnCloudSmoke(this.worldObj, this.posX, this.posY, this.posZ, rand, Double.valueOf(0.75D));
+            Aether.proxy.spawnCloudSmoke(this.worldObj, this.posX, this.posY, this.posZ, Entity.rand, Double.valueOf(0.75D));
         }
 
         this.isDead = true;
@@ -145,26 +137,24 @@ public class EntityCloudParachute extends Entity
 
     private boolean isCollided()
     {
-        return this.worldObj.getCollidingBoundingBoxes(this, this.boundingBox).size() > 0 || this.worldObj.isAABBInMaterial(this.boundingBox, Material.water);
+        return (this.worldObj.getCollidingBoundingBoxes(this, this.boundingBox).size() > 0) || (this.worldObj.isAABBInMaterial(this.boundingBox, Material.water));
     }
 
-    /**
-     * Called by a player entity when they collide with an entity
-     */
-    public void onCollideWithPlayer(EntityPlayer var1) {}
+    public void onCollideWithPlayer(EntityPlayer entityplayer)
+    {
+    }
 
     public RidingHandler getRidingHandler()
     {
         return this.ridinghandler;
     }
 
-    /**
-     * (abstract) Protected helper method to read subclass entity data from NBT.
-     */
-    protected void readEntityFromNBT(NBTTagCompound var1) {}
+    protected void readEntityFromNBT(NBTTagCompound var1)
+    {
+    }
 
-    /**
-     * (abstract) Protected helper method to write subclass entity data to NBT.
-     */
-    protected void writeEntityToNBT(NBTTagCompound var1) {}
+    protected void writeEntityToNBT(NBTTagCompound var1)
+    {
+    }
 }
+

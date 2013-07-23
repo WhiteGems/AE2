@@ -1,12 +1,17 @@
 package net.aetherteam.aether.entities.npc;
 
-import java.util.Iterator;
+import java.io.PrintStream;
 import java.util.List;
+import java.util.Random;
 import net.aetherteam.aether.items.AetherItems;
+import net.minecraft.entity.DataWatcher;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityCreature;
+import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.ai.EntityAILookIdle;
 import net.minecraft.entity.ai.EntityAIPanic;
 import net.minecraft.entity.ai.EntityAISwimming;
+import net.minecraft.entity.ai.EntityAITasks;
 import net.minecraft.entity.ai.EntityAITempt;
 import net.minecraft.entity.ai.EntityAIWander;
 import net.minecraft.entity.ai.EntityAIWatchClosest;
@@ -15,6 +20,8 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.pathfinding.PathNavigate;
+import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
@@ -23,23 +30,25 @@ public class EntityBasicNPC extends EntityMob
 {
     private double energy = 1.0D;
     public String dir = "/net/aetherteam/aether/client/sprites";
+
     private float pleasure = 0.0F;
     private float arousal = 0.0F;
     private float dominance = 0.0F;
+
     private int restSeconds = 0;
     double restX;
     double restY;
     double restZ;
 
-    public EntityBasicNPC(World var1)
+    public EntityBasicNPC(World world)
     {
-        super(var1);
-        this.addRandomArmor();
-        this.texture = this.dir + "/npc/angel.png";
-        this.pleasure = this.rand.nextBoolean() ? this.rand.nextFloat() : -this.rand.nextFloat();
-        this.arousal = this.rand.nextBoolean() ? this.rand.nextFloat() : -this.rand.nextFloat();
-        this.dominance = this.rand.nextBoolean() ? this.rand.nextFloat() : -this.rand.nextFloat();
-        this.getNavigator().setAvoidsWater(true);
+        super(world);
+        addRandomArmor();
+        this.texture = (this.dir + "/npc/angel.png");
+        this.pleasure = (this.rand.nextBoolean() ? this.rand.nextFloat() : -this.rand.nextFloat());
+        this.arousal = (this.rand.nextBoolean() ? this.rand.nextFloat() : -this.rand.nextFloat());
+        this.dominance = (this.rand.nextBoolean() ? this.rand.nextFloat() : -this.rand.nextFloat());
+        getNavigator().setAvoidsWater(true);
         this.tasks.addTask(0, new EntityAISwimming(this));
         this.tasks.addTask(1, new EntityAIPanic(this, 0.45F));
         this.tasks.addTask(2, new EntityAIWander(this, 0.38F));
@@ -47,136 +56,123 @@ public class EntityBasicNPC extends EntityMob
         this.tasks.addTask(4, new EntityAIWatchClosest(this, EntityPlayer.class, 6.0F));
         this.tasks.addTask(5, new EntityAILookIdle(this));
 
-        if (!this.worldObj.isRemote)
+        if (this.worldObj.isRemote)
         {
-            System.out.println("Pleasure: " + this.pleasure);
-            System.out.println("Arousal: " + this.arousal);
-            System.out.println("Dominance: " + this.dominance);
+            return;
         }
+
+        System.out.println("Pleasure: " + this.pleasure);
+        System.out.println("Arousal: " + this.arousal);
+        System.out.println("Dominance: " + this.dominance);
     }
 
-    /**
-     * Returns true if the newer Entity AI code should be run
-     */
     public boolean isAIEnabled()
     {
         return true;
     }
 
-    /**
-     * Makes entity wear random armor based on difficulty
-     */
     protected void addRandomArmor()
     {
         if (this.rand.nextBoolean())
         {
-            int var1 = this.rand.nextInt(2);
-            float var2 = this.worldObj.difficultySetting == 3 ? 0.1F : 0.25F;
+            int i = this.rand.nextInt(2);
+            float f = this.worldObj.difficultySetting == 3 ? 0.1F : 0.25F;
 
             if (this.rand.nextFloat() < 0.095F)
             {
-                ++var1;
+                i++;
             }
 
             if (this.rand.nextFloat() < 0.095F)
             {
-                ++var1;
+                i++;
             }
 
             if (this.rand.nextFloat() < 0.095F)
             {
-                ++var1;
+                i++;
             }
 
-            for (int var3 = 3; var3 >= 0; --var3)
+            for (int j = 3; j >= 0; j--)
             {
-                ItemStack var4 = this.getCurrentArmor(var3);
+                ItemStack itemstack = getCurrentArmor(j);
 
-                if (var3 < 3 && this.rand.nextFloat() < var2)
+                if ((j < 3) && (this.rand.nextFloat() < f))
                 {
                     break;
                 }
 
-                if (var4 == null)
+                if (itemstack == null)
                 {
-                    Item var5 = getArmorItemForSlot(var3 + 1, var1);
+                    Item item = getArmorItemForSlot(j + 1, i);
 
-                    if (var5 != null)
+                    if (item != null)
                     {
-                        this.setCurrentItemOrArmor(var3 + 1, new ItemStack(var5));
+                        setCurrentItemOrArmor(j + 1, new ItemStack(item));
                     }
                 }
             }
         }
     }
 
-    public static Item getArmorItemForSlot(int var0, int var1)
+    public static Item getArmorItemForSlot(int par0, int par1)
     {
-        switch (var0)
+        switch (par0)
         {
-            case 1:
-                if (var1 == 0)
-                {
-                    return AetherItems.ZaniteBoots;
-                }
-                else
-                {
-                    if (var1 == 1)
-                    {
-                        return AetherItems.ValkyrieBoots;
-                    }
-
-                    return AetherItems.GravititeBoots;
-                }
-
-            case 2:
-                if (var1 == 0)
-                {
-                    return AetherItems.ZaniteLeggings;
-                }
-                else
-                {
-                    if (var1 == 1)
-                    {
-                        return AetherItems.ValkyrieLeggings;
-                    }
-
-                    return AetherItems.GravititeLeggings;
-                }
-
-            case 3:
-                if (var1 == 0)
-                {
-                    return AetherItems.ZaniteChestplate;
-                }
-                else
-                {
-                    if (var1 == 1)
-                    {
-                        return AetherItems.ValkyrieChestplate;
-                    }
-
-                    return AetherItems.GravititeChestplate;
-                }
-
             case 4:
-                if (var1 == 0)
+                if (par1 == 0)
                 {
                     return AetherItems.ZaniteHelmet;
                 }
-                else
-                {
-                    if (var1 == 1)
-                    {
-                        return AetherItems.ValkyrieHelmet;
-                    }
 
-                    return AetherItems.GravititeHelmet;
+                if (par1 == 1)
+                {
+                    return AetherItems.ValkyrieHelmet;
                 }
 
-            default:
-                return null;
+                return AetherItems.GravititeHelmet;
+
+            case 3:
+                if (par1 == 0)
+                {
+                    return AetherItems.ZaniteChestplate;
+                }
+
+                if (par1 == 1)
+                {
+                    return AetherItems.ValkyrieChestplate;
+                }
+
+                return AetherItems.GravititeChestplate;
+
+            case 2:
+                if (par1 == 0)
+                {
+                    return AetherItems.ZaniteLeggings;
+                }
+
+                if (par1 == 1)
+                {
+                    return AetherItems.ValkyrieLeggings;
+                }
+
+                return AetherItems.GravititeLeggings;
+
+            case 1:
+                if (par1 == 0)
+                {
+                    return AetherItems.ZaniteBoots;
+                }
+
+                if (par1 == 1)
+                {
+                    return AetherItems.ValkyrieBoots;
+                }
+
+                return AetherItems.GravititeBoots;
         }
+
+        return null;
     }
 
     public void entityInit()
@@ -202,19 +198,19 @@ public class EntityBasicNPC extends EntityMob
         return Float.valueOf(this.dataWatcher.getWatchableObjectString(16)).floatValue();
     }
 
-    public void setPleasure(float var1)
+    public void setPleasure(float pleasure)
     {
-        this.dataWatcher.updateObject(14, String.valueOf(var1));
+        this.dataWatcher.updateObject(14, String.valueOf(pleasure));
     }
 
-    public void setArousal(float var1)
+    public void setArousal(float arousal)
     {
-        this.dataWatcher.updateObject(15, String.valueOf(var1));
+        this.dataWatcher.updateObject(15, String.valueOf(arousal));
     }
 
-    public void setDominance(float var1)
+    public void setDominance(float dominance)
     {
-        this.dataWatcher.updateObject(16, String.valueOf(var1));
+        this.dataWatcher.updateObject(16, String.valueOf(dominance));
     }
 
     public boolean isPleasured()
@@ -249,114 +245,111 @@ public class EntityBasicNPC extends EntityMob
 
     public boolean isAngry()
     {
-        return this.getPleasure() <= -0.51F && (double)this.getArousal() >= 0.59D && this.getDominance() >= 0.25F;
+        return (getPleasure() <= -0.51F) && (getArousal() >= 0.59D) && (getDominance() >= 0.25F);
     }
 
     public boolean isScared()
     {
-        return this.getPleasure() <= -0.64F && (double)this.getArousal() >= 0.6D && this.getDominance() <= -0.43F;
+        return (getPleasure() <= -0.64F) && (getArousal() >= 0.6D) && (getDominance() <= -0.43F);
     }
 
     public boolean isBored()
     {
-        return this.getPleasure() <= -0.65F && (double)this.getArousal() <= -0.62D && this.getDominance() <= -0.33F;
+        return (getPleasure() <= -0.65F) && (getArousal() <= -0.62D) && (getDominance() <= -0.33F);
     }
 
     public boolean isCurious()
     {
-        return this.getPleasure() >= 0.22F && this.getArousal() >= 0.62F && this.getDominance() <= -0.01F;
+        return (getPleasure() >= 0.22F) && (getArousal() >= 0.62F) && (getDominance() <= -0.01F);
     }
 
     public boolean isHappy()
     {
-        return this.getPleasure() >= 0.5F && this.getArousal() >= 0.42F && this.getDominance() >= 0.23F;
+        return (getPleasure() >= 0.5F) && (getArousal() >= 0.42F) && (getDominance() >= 0.23F);
     }
 
     public boolean isHungry()
     {
-        return this.getPleasure() <= -0.44F && this.getArousal() >= 0.14F && this.getDominance() <= -0.21F;
+        return (getPleasure() <= -0.44F) && (getArousal() >= 0.14F) && (getDominance() <= -0.21F);
     }
 
     public boolean isInhibited()
     {
-        return this.getPleasure() <= -0.54F && this.getArousal() <= -0.04F && this.getDominance() <= -0.41F;
+        return (getPleasure() <= -0.54F) && (getArousal() <= -0.04F) && (getDominance() <= -0.41F);
     }
 
     public boolean isPuzzled()
     {
-        return this.getPleasure() <= -0.41F && this.getArousal() >= 0.48F && this.getDominance() <= -0.33F;
+        return (getPleasure() <= -0.41F) && (getArousal() >= 0.48F) && (getDominance() <= -0.33F);
     }
 
     public boolean isViolent()
     {
-        return (double)this.getPleasure() <= -0.5D && (double)this.getArousal() >= 0.62D && (double)this.getDominance() >= 0.38D;
+        return (getPleasure() <= -0.5D) && (getArousal() >= 0.62D) && (getDominance() >= 0.38D);
     }
 
-    public float getSpeedWithFactors(float var1)
+    public float getSpeedWithFactors(float moveSpeed)
     {
-        float var3 = 1.0F;
-        var3 += 0.5F * this.arousal;
-        var3 += this.isViolent() && this.entityToAttack != null ? 4.0F : 0.0F;
-        var3 += this.isSubmissive() ? -1.0F : 0.0F;
-        float var2 = Math.max(var1 * var3, 0.1F);
-        return var2;
+        float factor = 1.0F;
+        factor += 0.5F * this.arousal;
+        factor += ((isViolent()) && (this.entityToAttack != null) ? 4.0F : 0.0F);
+        factor += (isSubmissive() ? -1.0F : 0.0F);
+        float factoredMoveSpeed = Math.max(moveSpeed * factor, 0.1F);
+        return factoredMoveSpeed;
     }
 
-    public void rest(double var1, double var3, double var5, int var7)
+    public void rest(double x, double y, double z, int howLong)
     {
         this.motionX = 0.0D;
         this.motionZ = 0.0D;
-        this.setPositionAndRotation(var1, var3, var5, this.rotationYaw, this.rotationPitch);
+        setPositionAndRotation(x, y, z, this.rotationYaw, this.rotationPitch);
 
         if (this.ticksExisted % 20 == 0)
         {
-            ++this.restSeconds;
+            this.restSeconds += 1;
         }
 
-        if (this.restSeconds >= var7)
+        if (this.restSeconds >= howLong)
         {
             this.energy = 0.5D;
         }
     }
 
-    /**
-     * Called to update the entity's position/logic.
-     */
     public void onUpdate()
     {
         super.onUpdate();
 
-        if ((this.pleasure != this.getPleasure() || this.arousal != this.getArousal() || this.dominance != this.getDominance()) && !this.worldObj.isRemote)
+        if (((this.pleasure != getPleasure()) || (this.arousal != getArousal()) || (this.dominance != getDominance())) && (!this.worldObj.isRemote))
         {
-            this.setPleasure(this.pleasure);
-            this.setArousal(this.arousal);
-            this.setDominance(this.dominance);
+            setPleasure(this.pleasure);
+            setArousal(this.arousal);
+            setDominance(this.dominance);
         }
 
         if (!this.worldObj.isRemote)
         {
-            this.setPleasure(MathHelper.clamp_float(this.getPleasure(), -1.0F, 1.0F));
-            this.setArousal(MathHelper.clamp_float(this.getArousal(), -1.0F, 1.0F));
-            this.setDominance(MathHelper.clamp_float(this.getDominance(), -1.0F, 1.0F));
+            setPleasure(MathHelper.clamp_float(getPleasure(), -1.0F, 1.0F));
+            setArousal(MathHelper.clamp_float(getArousal(), -1.0F, 1.0F));
+            setDominance(MathHelper.clamp_float(getDominance(), -1.0F, 1.0F));
         }
 
-        this.energy = this.energy < 1.0D ? Math.max(this.energy, 0.1D) : 1.0D;
-        this.moveSpeed = this.getSpeedWithFactors(2.0F);
+        this.energy = (this.energy < 1.0D ? Math.max(this.energy, 0.1D) : 1.0D);
+        this.moveSpeed = getSpeedWithFactors(2.0F);
 
-        if (this.motionX == 0.0D && this.motionZ == 0.0D)
-        {
-            this.energy += 0.001D;
-        }
-        else
+        if ((this.motionX != 0.0D) || (this.motionZ != 0.0D))
         {
             this.energy -= 0.001D;
         }
-
-        int var1 = 6 + this.rand.nextInt(4);
-
-        if (this.energy <= 0.1D && this.restSeconds <= var1)
+        else
         {
-            this.rest(this.restX, this.restY, this.restZ, var1);
+            this.energy += 0.001D;
+        }
+
+        int restFor = 6 + this.rand.nextInt(4);
+
+        if ((this.energy <= 0.1D) && (this.restSeconds <= restFor))
+        {
+            rest(this.restX, this.restY, this.restZ, restFor);
         }
         else
         {
@@ -368,28 +361,25 @@ public class EntityBasicNPC extends EntityMob
 
         if (!this.worldObj.isRemote)
         {
-            this.moveSpeed = (float)((double)this.moveSpeed * this.energy);
+            this.moveSpeed = ((float)(this.moveSpeed * this.energy));
         }
 
-        if (this.isCurious())
+        if (isCurious())
         {
-            List var2 = this.worldObj.getEntitiesWithinAABBExcludingEntity(this, this.boundingBox.expand(5.5D, 1.75D, 5.5D));
-            boolean var3 = false;
-            Iterator var4 = var2.iterator();
+            List entitiesAround = this.worldObj.getEntitiesWithinAABBExcludingEntity(this, this.boundingBox.expand(5.5D, 1.75D, 5.5D));
+            boolean foundPlayer = false;
 
-            while (var4.hasNext())
+            for (Entity entity : entitiesAround)
             {
-                Entity var5 = (Entity)var4.next();
-
-                if (var5 instanceof EntityPlayer)
+                if ((entity instanceof EntityPlayer))
                 {
-                    var3 = true;
-                    this.followEntity(var5, 20.0F);
-                    this.faceEntity(var5, 5.5F, (float)this.getVerticalFaceSpeed());
+                    foundPlayer = true;
+                    followEntity(entity, 20.0F);
+                    faceEntity(entity, 5.5F, getVerticalFaceSpeed());
                 }
             }
 
-            if (!var3)
+            if (!foundPlayer)
             {
                 this.entityToAttack = null;
             }
@@ -399,26 +389,27 @@ public class EntityBasicNPC extends EntityMob
             }
         }
 
-        this.checkForAggression();
+        checkForAggression();
     }
 
     public void checkForAggression()
     {
-        if (!this.isAngry() && !this.isCurious())
+        if ((isAngry()) || (isCurious()))
         {
-            this.entityToAttack = null;
+            return;
         }
+
+        this.entityToAttack = null;
     }
 
-    /**
-     * Basic mob attack. Default to touch of death in EntityCreature. Overridden by each mob to define their attack.
-     */
-    protected void attackEntity(Entity var1, float var2)
+    protected void attackEntity(Entity entity, float f)
     {
-        if (this.isAngry() && this.isCurious())
+        if ((!isAngry()) || (!isCurious()))
         {
-            super.attackEntity(var1, var2);
+            return;
         }
+
+        super.attackEntity(entity, f);
     }
 
     protected void updateEntityActionState()
@@ -426,52 +417,40 @@ public class EntityBasicNPC extends EntityMob
         super.updateEntityActionState();
     }
 
-    /**
-     * Called when the entity is attacked.
-     */
-    public boolean attackEntityFrom(DamageSource var1, int var2)
+    public boolean attackEntityFrom(DamageSource source, int damage)
     {
-        this.pleasure = (float)((double)this.pleasure - 0.7D);
-        this.arousal = (float)((double)this.arousal + 0.3D);
+        this.pleasure = ((float)(this.pleasure - 0.7D));
+        this.arousal = ((float)(this.arousal + 0.3D));
         System.out.println("Pleasure: " + this.pleasure);
         System.out.println("Arousal: " + this.arousal);
         System.out.println("Dominance: " + this.dominance);
 
-        if (this.isScared())
+        if (isScared())
         {
             this.fleeingTick = 60;
         }
 
-        return super.attackEntityFrom(var1, var2);
+        return super.attackEntityFrom(source, damage);
     }
 
-    protected void followEntity(Entity var1, float var2)
+    protected void followEntity(Entity entity, float distance)
     {
-        this.entityToAttack = var1;
+        this.entityToAttack = entity;
     }
 
-    /**
-     * Determines if an entity can be despawned, used on idle far away entities
-     */
     public boolean canDespawn()
     {
         return false;
     }
 
-    /**
-     * (abstract) Protected helper method to write subclass entity data to NBT.
-     */
-    public void writeEntityToNBT(NBTTagCompound var1)
+    public void writeEntityToNBT(NBTTagCompound nbttagcompound)
     {
-        super.writeEntityToNBT(var1);
+        super.writeEntityToNBT(nbttagcompound);
     }
 
-    /**
-     * (abstract) Protected helper method to read subclass entity data from NBT.
-     */
-    public void readEntityFromNBT(NBTTagCompound var1)
+    public void readEntityFromNBT(NBTTagCompound nbttagcompound)
     {
-        super.readEntityFromNBT(var1);
+        super.readEntityFromNBT(nbttagcompound);
     }
 
     public int getMaxHealth()
@@ -479,3 +458,4 @@ public class EntityBasicNPC extends EntityMob
         return 100;
     }
 }
+

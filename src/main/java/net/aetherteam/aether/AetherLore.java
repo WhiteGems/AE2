@@ -16,36 +16,52 @@ public class AetherLore
     public String line6;
     public int type;
 
-    public AetherLore(ItemStack var1, String var2, String var3, String var4, String var5, String var6, String var7, String var8, int var9)
+    public AetherLore(ItemStack item, String s, String s1, String s2, String s3, String s4, String s5, String s6, int i)
     {
-        this.stack = var1;
-        this.name = var2;
-        this.line1 = var3;
-        this.line2 = var4;
-        this.line3 = var5;
-        this.line4 = var6;
-        this.line5 = var7;
-        this.line6 = var8;
-        this.type = var9;
+        this.stack = item;
+        this.name = s;
+        this.line1 = s1;
+        this.line2 = s2;
+        this.line3 = s3;
+        this.line4 = s4;
+        this.line5 = s5;
+        this.line6 = s6;
+        this.type = i;
     }
 
-    public AetherLore(int var1, String var2, String var3, String var4, String var5, String var6, String var7, String var8, int var9)
+    public AetherLore(int id, String s, String s1, String s2, String s3, String s4, String s5, String s6, int i)
     {
-        this(new ItemStack(var1, 1, -1), var2, var3, var4, var5, var6, var7, var8, var9);
+        this(new ItemStack(id, 1, -1), s, s1, s2, s3, s4, s5, s6, i);
     }
 
-    public AetherLore(Block var1, String var2, String var3, String var4, String var5, String var6, String var7, String var8, int var9)
+    public AetherLore(Block block, String s, String s1, String s2, String s3, String s4, String s5, String s6, int i)
     {
-        this(new ItemStack(var1, 1, -1), var2, var3, var4, var5, var6, var7, var8, var9);
+        this(new ItemStack(block, 1, -1), s, s1, s2, s3, s4, s5, s6, i);
     }
 
-    public AetherLore(Item var1, String var2, String var3, String var4, String var5, String var6, String var7, String var8, int var9)
+    public AetherLore(Item item, String s, String s1, String s2, String s3, String s4, String s5, String s6, int i)
     {
-        this(new ItemStack(var1, 1, -1), var2, var3, var4, var5, var6, var7, var8, var9);
+        this(new ItemStack(item, 1, -1), s, s1, s2, s3, s4, s5, s6, i);
     }
 
-    public boolean equals(Object var1)
+    public boolean equals(Object other)
     {
-        return var1 == null ? this.stack == null : (var1 instanceof AetherLore ? ((AetherLore)var1).stack.itemID == this.stack.itemID && (((AetherLore)var1).stack.getItemDamage() == this.stack.getItemDamage() || this.stack.getItemDamage() == -1) : (!(var1 instanceof ItemStack) ? false : ((ItemStack)var1).itemID == this.stack.itemID && (((ItemStack)var1).getItemDamage() == this.stack.getItemDamage() || this.stack.getItemDamage() == -1)));
+        if (other == null)
+        {
+            return this.stack == null;
+        }
+
+        if ((other instanceof AetherLore))
+        {
+            return (((AetherLore)other).stack.itemID == this.stack.itemID) && ((((AetherLore)other).stack.getItemDamage() == this.stack.getItemDamage()) || (this.stack.getItemDamage() == -1));
+        }
+
+        if ((other instanceof ItemStack))
+        {
+            return (((ItemStack)other).itemID == this.stack.itemID) && ((((ItemStack)other).getItemDamage() == this.stack.getItemDamage()) || (this.stack.getItemDamage() == -1));
+        }
+
+        return false;
     }
 }
+

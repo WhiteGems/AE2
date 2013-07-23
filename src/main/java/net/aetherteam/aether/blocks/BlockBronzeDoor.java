@@ -2,6 +2,7 @@ package net.aetherteam.aether.blocks;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Random;
@@ -10,127 +11,114 @@ import net.aetherteam.aether.dungeons.DungeonHandler;
 import net.aetherteam.aether.party.Party;
 import net.aetherteam.aether.party.PartyController;
 import net.aetherteam.aether.tile_entities.TileEntityBronzeDoorController;
+import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Icon;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 
-public class BlockBronzeDoor extends BlockAether implements IAetherBlock
+public class BlockBronzeDoor extends BlockAether
+    implements IAetherBlock
 {
-    private Random rand = new Random();
+    private Random rand;
     private HashMap icons = new HashMap();
-    public static final String[] names = new String[] {"Bronze Door", "Bronze Door Lock"};
+    public static final String[] names = { "Bronze Door", "Bronze Door Lock" };
 
-    protected BlockBronzeDoor(int var1)
+    protected BlockBronzeDoor(int blockID)
     {
-        super(var1, Material.wood);
-        this.setHardness(-1.0F);
-        this.setResistance(1000000.0F);
+        super(blockID, Material.wood);
+        this.rand = new Random();
+        setHardness(-1.0F);
+        setResistance(1000000.0F);
     }
 
-    public boolean removeBlockByPlayer(World var1, EntityPlayer var2, int var3, int var4, int var5)
+    public boolean removeBlockByPlayer(World world, EntityPlayer player, int x, int y, int z)
     {
         return false;
     }
 
-    /**
-     * Called whenever the block is added into the world. Args: world, x, y, z
-     */
-    public void onBlockAdded(World var1, int var2, int var3, int var4)
+    public void onBlockAdded(World world, int i, int j, int k)
     {
-        Dungeon var5 = DungeonHandler.instance().getInstanceAt(MathHelper.floor_double((double)var2), MathHelper.floor_double((double)var3), MathHelper.floor_double((double)var4));
+        Dungeon dungeon = DungeonHandler.instance().getInstanceAt(MathHelper.floor_double(i), MathHelper.floor_double(j), MathHelper.floor_double(k));
 
-        if (var5 != null)
+        if (dungeon != null)
         {
-            super.onBlockAdded(var1, var2, var3, var4);
+            super.onBlockAdded(world, i, j, k);
         }
         else
         {
-            var1.setBlock(var2, var3, var4, 0);
+            world.setBlock(i, j, k, 0);
         }
     }
 
-    /**
-     * Called when the block is placed in the world.
-     */
-    public void onBlockPlacedBy(World var1, int var2, int var3, int var4, EntityLiving var5, ItemStack var6)
+    public void onBlockPlacedBy(World world, int i, int j, int k, EntityLiving entity, ItemStack stack)
     {
-        var1.setBlock(var2, var3, var4, 0);
+        world.setBlock(i, j, k, 0);
     }
 
-    /**
-     * From the specified side and block metadata retrieves the blocks texture. Args: side, metadata
-     */
-    public Icon getIcon(int var1, int var2)
+    public Icon getIcon(int i, int meta)
     {
-        ItemStack var3 = new ItemStack(AetherBlocks.BronzeDoor, 1, var2);
-        String var4 = var3.getItem().getItemDisplayName(var3);
-        return (Icon)this.icons.get(var4);
+        ItemStack stack = new ItemStack(AetherBlocks.BronzeDoor, 1, meta);
+        String name = stack.getItem().getItemDisplayName(stack);
+        return (Icon)this.icons.get(name);
     }
 
     @SideOnly(Side.CLIENT)
-
-    /**
-     * When this method is called, your block should register all the icons it needs with the given IconRegister. This
-     * is the only chance you get to register icons.
-     */
-    public void registerIcons(IconRegister var1)
+    public void registerIcons(IconRegister par1IconRegister)
     {
-        for (int var2 = 0; var2 < names.length; ++var2)
+        for (int i = 0; i < names.length; i++)
         {
-            this.icons.put(names[var2], var1.registerIcon("Aether:" + names[var2]));
+            this.icons.put(names[i], par1IconRegister.registerIcon("Aether:" + names[i]));
         }
     }
 
-    /**
-     * Called upon block activation (right click on the block.)
-     */
-    public boolean onBlockActivated(World var1, int var2, int var3, int var4, EntityPlayer var5, int var6, float var7, float var8, float var9)
+    public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer entityplayer, int par6, float par7, float par8, float par9)
     {
-        for (int var10 = var2 - 3; var10 <= var2 + 3; ++var10)
+        for (int l = x - 3; l <= x + 3; l++)
         {
-            for (int var11 = var3 - 3; var11 <= var3 + 3; ++var11)
+            for (int i1 = y - 3; i1 <= y + 3; i1++)
             {
-                for (int var12 = var4 - 3; var12 <= var4 + 3; ++var12)
+                for (int j1 = z - 3; j1 <= z + 3; j1++)
                 {
-                    if (var1.getBlockId(var10, var11, var12) == AetherBlocks.BronzeDoorController.blockID)
+                    if (world.getBlockId(l, i1, j1) == AetherBlocks.BronzeDoorController.blockID)
                     {
-                        TileEntityBronzeDoorController var13 = (TileEntityBronzeDoorController)var1.getBlockTileEntity(var10, var11, var12);
+                        TileEntityBronzeDoorController bronzeDoor = (TileEntityBronzeDoorController)world.getBlockTileEntity(l, i1, j1);
 
-                        if (var13 != null)
+                        if (bronzeDoor != null)
                         {
-                            Party var14 = PartyController.instance().getParty(PartyController.instance().getMember(var5));
-                            Dungeon var15 = var13.getDungeon();
+                            Party party = PartyController.instance().getParty(PartyController.instance().getMember(entityplayer));
+                            Dungeon dungeon = bronzeDoor.getDungeon();
 
-                            if (var14 != null && var15 != null && var15.isQueuedParty(var14))
+                            if ((party != null) && (dungeon != null) && (dungeon.isQueuedParty(party)))
                             {
-                                int var16 = var15.getKeyAmount();
-                                ArrayList var17 = var15.getKeys();
-                                System.out.println(var16);
+                                int keyAmount = dungeon.getKeyAmount();
+                                ArrayList keys = dungeon.getKeys();
+                                System.out.println(keyAmount);
 
-                                if (var1.isRemote)
+                                if (world.isRemote)
                                 {
-                                    if (var16 <= 0)
+                                    if (keyAmount <= 0)
                                     {
-                                        System.out.println(var16);
-                                        var13.chatItUp(var5, "This door seems to require " + (5 - var13.getKeyAmount()) + (5 - var16 < 5 ? " more " : " ") + (5 - var16 > 1 ? "keys" : "key") + ". Perhaps they are elsewhere in the dungeon?");
+                                        System.out.println(keyAmount);
+                                        bronzeDoor.chatItUp(entityplayer, "This door seems to require " + (5 - bronzeDoor.getKeyAmount()) + (5 - keyAmount < 5 ? " more " : " ") + (5 - keyAmount > 1 ? "keys" : "key") + ". Perhaps they are elsewhere in the dungeon?");
                                         return true;
                                     }
 
-                                    if (var13.getKeyAmount() < 5)
+                                    if (bronzeDoor.getKeyAmount() < 5)
                                     {
-                                        var13.chatItUp(var5, "You have just added " + var16 + " keys to this door. It seems to require " + (5 - var16) + (5 - var16 < 5 ? " more " : " ") + (5 - var16 > 1 ? "keys" : "key") + ".");
+                                        bronzeDoor.chatItUp(entityplayer, "You have just added " + keyAmount + " keys to this door. It seems to require " + (5 - keyAmount) + (5 - keyAmount < 5 ? " more " : " ") + (5 - keyAmount > 1 ? "keys" : "key") + ".");
                                         return true;
                                     }
                                 }
 
-                                if (var16 > 0)
+                                if (keyAmount > 0)
                                 {
-                                    var13.addKeys(var17);
+                                    bronzeDoor.addKeys(keys);
                                     return true;
                                 }
                             }
@@ -145,3 +133,4 @@ public class BlockBronzeDoor extends BlockAether implements IAetherBlock
         return false;
     }
 }
+

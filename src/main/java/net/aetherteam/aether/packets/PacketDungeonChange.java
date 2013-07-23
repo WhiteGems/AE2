@@ -16,66 +16,67 @@ import net.minecraft.network.packet.Packet250CustomPayload;
 
 public class PacketDungeonChange extends AetherPacket
 {
-    public PacketDungeonChange(int var1)
+    public PacketDungeonChange(int packetID)
     {
-        super(var1);
+        super(packetID);
     }
 
-    public void onPacketReceived(Packet250CustomPayload var1, Player var2)
+    public void onPacketReceived(Packet250CustomPayload packet, Player player)
     {
-        DataInputStream var3 = new DataInputStream(new ByteArrayInputStream(var1.data));
-        new BufferedReader(new InputStreamReader(var3));
+        DataInputStream dat = new DataInputStream(new ByteArrayInputStream(packet.data));
+        BufferedReader buf = new BufferedReader(new InputStreamReader(dat));
 
         try
         {
-            byte var5 = var3.readByte();
-            boolean var6 = var3.readBoolean();
-            int var7 = var3.readInt();
-            DungeonType var8 = null;
-            int var9 = -1;
-            int var10 = -1;
-            boolean var11 = false;
-            StructureBoundingBoxSerial var12 = null;
-            ArrayList var13 = null;
-            Side var14 = FMLCommonHandler.instance().getEffectiveSide();
+            byte packetType = dat.readByte();
+            boolean adding = dat.readBoolean();
+            int dungeonID = dat.readInt();
+            DungeonType dungeonType = null;
+            int x = -1;
+            int z = -1;
+            int amountBoxes = 0;
+            StructureBoundingBoxSerial boundingBox = null;
+            ArrayList boundingBoxes = null;
+            Side side = FMLCommonHandler.instance().getEffectiveSide();
 
-            if (var6)
+            if (adding)
             {
-                var8 = DungeonType.getTypeFromString(var3.readUTF());
-                var9 = var3.readInt();
-                var10 = var3.readInt();
-                short var17 = var3.readShort();
-                var12 = new StructureBoundingBoxSerial(var3.readInt(), var3.readInt(), var3.readInt(), var3.readInt(), var3.readInt(), var3.readInt());
-                var13 = new ArrayList();
+                dungeonType = DungeonType.getTypeFromString(dat.readUTF());
+                x = dat.readInt();
+                z = dat.readInt();
+                amountBoxes = dat.readShort();
+                boundingBox = new StructureBoundingBoxSerial(dat.readInt(), dat.readInt(), dat.readInt(), dat.readInt(), dat.readInt(), dat.readInt());
+                boundingBoxes = new ArrayList();
 
-                for (int var15 = 0; var15 < var17; ++var15)
+                for (int i = 0; i < amountBoxes; i++)
                 {
-                    var13.add(new StructureBoundingBoxSerial(var3.readInt(), var3.readInt(), var3.readInt(), var3.readInt(), var3.readInt(), var3.readInt()));
+                    boundingBoxes.add(new StructureBoundingBoxSerial(dat.readInt(), dat.readInt(), dat.readInt(), dat.readInt(), dat.readInt(), dat.readInt()));
                 }
             }
 
-            if (var14.isClient())
+            if (side.isClient())
             {
-                Dungeon var18 = DungeonHandler.instance().getDungeon(var7);
+                Dungeon dungeon = DungeonHandler.instance().getDungeon(dungeonID);
 
-                if (var6)
+                if (adding)
                 {
-                    if (var18 != null)
+                    if (dungeon != null)
                     {
-                        DungeonHandler.instance().removeInstance(var18);
+                        DungeonHandler.instance().removeInstance(dungeon);
                     }
 
-                    DungeonHandler.instance().addInstance(new Dungeon(var8, var9, var10, var12, var13));
+                    DungeonHandler.instance().addInstance(new Dungeon(dungeonType, x, z, boundingBox, boundingBoxes));
                 }
-                else if (var18 != null)
+                else if (dungeon != null)
                 {
-                    DungeonHandler.instance().removeInstance(var18);
+                    DungeonHandler.instance().removeInstance(dungeon);
                 }
             }
         }
-        catch (Exception var16)
+        catch (Exception ex)
         {
-            var16.printStackTrace();
+            ex.printStackTrace();
         }
     }
 }
+

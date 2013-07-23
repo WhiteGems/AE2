@@ -3,97 +3,96 @@ package net.aetherteam.aether.client.renders;
 import cpw.mods.fml.client.registry.ISimpleBlockRenderingHandler;
 import net.aetherteam.aether.blocks.AetherBlocks;
 import net.minecraft.block.Block;
-import net.minecraft.client.renderer.EntityRenderer;
-import net.minecraft.client.renderer.RenderBlocks;
-import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.ChestItemRenderHelper;
+import net.minecraft.client.renderer.RenderEngine;
+import net.minecraft.client.renderer.texture.Rect2i;
 import net.minecraft.util.Icon;
 import net.minecraft.world.IBlockAccess;
 import org.lwjgl.opengl.GL11;
 
-public class RenderAetherTallGrass implements ISimpleBlockRenderingHandler
+public class RenderAetherTallGrass
+    implements ISimpleBlockRenderingHandler
 {
-    public void renderInventoryBlock(Block var1, int var2, int var3, RenderBlocks var4)
+    public void renderInventoryBlock(Block block, int metadata, int modelID, RenderEngine renderer)
     {
-        if (var3 == this.getRenderId())
+        if (modelID == getRenderId())
         {
-            Tessellator var5 = Tessellator.instance;
-            var5.startDrawingQuads();
-            var5.setNormal(0.0F, -1.0F, 0.0F);
+            Rect2i tessellator = Rect2i.rectX;
+            tessellator.b();
+            tessellator.b(0.0F, -1.0F, 0.0F);
             GL11.glDisable(GL11.GL_LIGHTING);
-            var4.drawCrossedSquares(var1, var2, -0.5D, -0.5D, -0.5D, 1.0F);
-            var5.draw();
+            renderer.a(block, metadata, -0.5D, -0.5D, -0.5D, 1.0F);
+            tessellator.getRectX();
         }
     }
 
-    public boolean renderWorldBlock(IBlockAccess var1, int var2, int var3, int var4, Block var5, int var6, RenderBlocks var7)
+    public boolean renderWorldBlock(IBlockAccess world, int x, int y, int z, Block block, int modelID, RenderEngine renderer)
     {
-        if (var6 == this.getRenderId())
+        if (modelID == getRenderId())
         {
-            Tessellator var8 = Tessellator.instance;
-            var8.setBrightness(var5.getMixedBrightnessForBlock(var1, var2, var3, var4));
-            float var9 = 1.0F;
-            int var10 = var5.colorMultiplier(var1, var2, var3, var4);
-            float var11 = (float)(var10 >> 16 & 255) / 255.0F;
-            float var12 = (float)(var10 >> 8 & 255) / 255.0F;
-            float var13 = (float)(var10 & 255) / 255.0F;
+            Rect2i tessellator = Rect2i.rectX;
+            tessellator.c(block.getMixedBrightnessForBlock(world, x, y, z));
+            float f = 1.0F;
+            int l = block.colorMultiplier(world, x, y, z);
+            float f1 = (l >> 16 & 0xFF) / 255.0F;
+            float f2 = (l >> 8 & 0xFF) / 255.0F;
+            float f3 = (l & 0xFF) / 255.0F;
 
-            if (EntityRenderer.anaglyphEnable)
+            if (ChestItemRenderHelper.instance)
             {
-                float var14 = (var11 * 30.0F + var12 * 59.0F + var13 * 11.0F) / 100.0F;
-                float var15 = (var11 * 30.0F + var12 * 70.0F) / 100.0F;
-                float var16 = (var11 * 30.0F + var13 * 70.0F) / 100.0F;
-                var11 = var14;
-                var12 = var15;
-                var13 = var16;
+                float f4 = (f1 * 30.0F + f2 * 59.0F + f3 * 11.0F) / 100.0F;
+                float f5 = (f1 * 30.0F + f2 * 70.0F) / 100.0F;
+                float f6 = (f1 * 30.0F + f3 * 70.0F) / 100.0F;
+                f1 = f4;
+                f2 = f5;
+                f3 = f6;
             }
 
-            var8.setColorOpaque_F(var9 * var11, var9 * var12, var9 * var13);
-            double var22 = (double)var2;
-            double var23 = (double)var3;
-            double var18 = (double)var4;
-            long var20 = (long)(var2 * 3129871) ^ (long)var4 * 116129781L ^ (long)var3;
-            var20 = var20 * var20 * 42317861L + var20 * 11L;
-            var22 += ((double)((float)(var20 >> 16 & 15L) / 15.0F) - 0.5D) * 0.5D;
-            var23 += ((double)((float)(var20 >> 20 & 15L) / 15.0F) - 1.0D) * 0.2D;
-            var18 += ((double)((float)(var20 >> 24 & 15L) / 15.0F) - 0.5D) * 0.5D;
-            this.drawCrossedSquares(var5, var1.getBlockMetadata(var2, var3, var4), var22, var23, var18, 1.0F);
+            tessellator.a(f * f1, f * f2, f * f3);
+            double d0 = x;
+            double d1 = y;
+            double d2 = z;
+            long i1 = x * 3129871 ^ z * 116129781L ^ y;
+            i1 = i1 * i1 * 42317861L + i1 * 11L;
+            d0 += ((float)(i1 >> 16 & 0xF) / 15.0F - 0.5D) * 0.5D;
+            d1 += ((float)(i1 >> 20 & 0xF) / 15.0F - 1.0D) * 0.2D;
+            d2 += ((float)(i1 >> 24 & 0xF) / 15.0F - 0.5D) * 0.5D;
+            drawCrossedSquares(block, world.getBlockMetadata(x, y, z), d0, d1, d2, 1.0F);
             return true;
         }
-        else
-        {
-            return false;
-        }
+
+        return false;
     }
 
-    public void drawCrossedSquares(Block var1, int var2, double var3, double var5, double var7, float var9)
+    public void drawCrossedSquares(Block par1Block, int par2, double par3, double par5, double par7, float par9)
     {
-        Tessellator var10 = Tessellator.instance;
-        Icon var11 = var1.getIcon(0, var2);
-        double var12 = (double)var11.getMinU();
-        double var14 = (double)var11.getMinV();
-        double var16 = (double)var11.getMaxU();
-        double var18 = (double)var11.getMaxV();
-        double var20 = 0.45D * (double)var9;
-        double var22 = var3 + 0.5D - var20;
-        double var24 = var3 + 0.5D + var20;
-        double var26 = var7 + 0.5D - var20;
-        double var28 = var7 + 0.5D + var20;
-        var10.addVertexWithUV(var22, var5 + (double)var9, var26, var12, var14);
-        var10.addVertexWithUV(var22, var5 + 0.0D, var26, var12, var18);
-        var10.addVertexWithUV(var24, var5 + 0.0D, var28, var16, var18);
-        var10.addVertexWithUV(var24, var5 + (double)var9, var28, var16, var14);
-        var10.addVertexWithUV(var24, var5 + (double)var9, var28, var12, var14);
-        var10.addVertexWithUV(var24, var5 + 0.0D, var28, var12, var18);
-        var10.addVertexWithUV(var22, var5 + 0.0D, var26, var16, var18);
-        var10.addVertexWithUV(var22, var5 + (double)var9, var26, var16, var14);
-        var10.addVertexWithUV(var22, var5 + (double)var9, var28, var12, var14);
-        var10.addVertexWithUV(var22, var5 + 0.0D, var28, var12, var18);
-        var10.addVertexWithUV(var24, var5 + 0.0D, var26, var16, var18);
-        var10.addVertexWithUV(var24, var5 + (double)var9, var26, var16, var14);
-        var10.addVertexWithUV(var24, var5 + (double)var9, var26, var12, var14);
-        var10.addVertexWithUV(var24, var5 + 0.0D, var26, var12, var18);
-        var10.addVertexWithUV(var22, var5 + 0.0D, var28, var16, var18);
-        var10.addVertexWithUV(var22, var5 + (double)var9, var28, var16, var14);
+        Rect2i tessellator = Rect2i.rectX;
+        Icon icon = par1Block.getIcon(0, par2);
+        double d3 = icon.getMinU();
+        double d4 = icon.getMinV();
+        double d5 = icon.getMaxU();
+        double d6 = icon.getMaxV();
+        double d7 = 0.45D * par9;
+        double d8 = par3 + 0.5D - d7;
+        double d9 = par3 + 0.5D + d7;
+        double d10 = par7 + 0.5D - d7;
+        double d11 = par7 + 0.5D + d7;
+        tessellator.a(d8, par5 + par9, d10, d3, d4);
+        tessellator.a(d8, par5 + 0.0D, d10, d3, d6);
+        tessellator.a(d9, par5 + 0.0D, d11, d5, d6);
+        tessellator.a(d9, par5 + par9, d11, d5, d4);
+        tessellator.a(d9, par5 + par9, d11, d3, d4);
+        tessellator.a(d9, par5 + 0.0D, d11, d3, d6);
+        tessellator.a(d8, par5 + 0.0D, d10, d5, d6);
+        tessellator.a(d8, par5 + par9, d10, d5, d4);
+        tessellator.a(d8, par5 + par9, d11, d3, d4);
+        tessellator.a(d8, par5 + 0.0D, d11, d3, d6);
+        tessellator.a(d9, par5 + 0.0D, d10, d5, d6);
+        tessellator.a(d9, par5 + par9, d10, d5, d4);
+        tessellator.a(d9, par5 + par9, d10, d3, d4);
+        tessellator.a(d9, par5 + 0.0D, d10, d3, d6);
+        tessellator.a(d8, par5 + 0.0D, d11, d5, d6);
+        tessellator.a(d8, par5 + par9, d11, d5, d4);
     }
 
     public boolean shouldRender3DInInventory()
@@ -106,3 +105,4 @@ public class RenderAetherTallGrass implements ISimpleBlockRenderingHandler
         return AetherBlocks.tallAetherGrassRenderId;
     }
 }
+

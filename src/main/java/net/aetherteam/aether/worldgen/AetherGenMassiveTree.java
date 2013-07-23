@@ -2,6 +2,7 @@ package net.aetherteam.aether.worldgen;
 
 import java.util.Random;
 import net.aetherteam.aether.blocks.AetherBlocks;
+import net.minecraft.block.Block;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.feature.WorldGenerator;
 
@@ -11,297 +12,290 @@ public class AetherGenMassiveTree extends WorldGenerator
     int randHeight;
     boolean branches;
 
-    public AetherGenMassiveTree(int var1, int var2, boolean var3)
+    public AetherGenMassiveTree(int leafID, int heightWeight, boolean branchFlag)
     {
-        this.leaves = var1;
-        this.randHeight = var2;
-        this.branches = var3;
+        this.leaves = leafID;
+        this.randHeight = heightWeight;
+        this.branches = branchFlag;
     }
 
-    public boolean generate(World var1, Random var2, int var3, int var4, int var5)
+    public boolean generate(World world, Random random, int x, int y, int z)
     {
-        boolean var6 = true;
-        int var7 = var2.nextInt(this.randHeight) + (this.branches ? 8 : 4);
-        int var8;
-        int var9;
-        int var10;
+        boolean cangen = true;
+        int height = random.nextInt(this.randHeight) + (this.branches == true ? 8 : 4);
 
-        for (var8 = var3 - 3; var8 < var3 + 3; ++var8)
+        for (int x1 = x - 3; x1 < x + 3; x1++)
         {
-            for (var9 = var4 + 1; var9 < var4 + var7 + 2; ++var9)
+            for (int y1 = y + 1; y1 < y + (height + 2); y1++)
             {
-                for (var10 = var5 - 3; var10 < var5 + 3; ++var10)
+                for (int z1 = z - 3; z1 < z + 3; z1++)
                 {
-                    if (var1.getBlockId(var8, var9, var10) != 0)
+                    if (world.getBlockId(x1, y1, z1) != 0)
                     {
-                        var6 = false;
+                        cangen = false;
                     }
                 }
             }
         }
 
-        if (var4 + var7 + 2 <= var1.getHeight() && var6)
+        if ((y + (height + 2) <= world.getActualHeight()) && (cangen))
         {
-            var8 = var1.getBlockId(var3, var4 - 1, var5);
+            int y1 = world.getBlockId(x, y - 1, z);
 
-            if (var8 != AetherBlocks.AetherGrass.blockID && var8 != AetherBlocks.AetherDirt.blockID)
+            if ((y1 != AetherBlocks.AetherGrass.blockID) && (y1 != AetherBlocks.AetherDirt.blockID))
             {
                 return false;
             }
-            else
+
+            world.setBlock(x, y - 1, z, AetherBlocks.AetherDirt.blockID);
+
+            for (int y2 = y; y2 <= y + height; y2++)
             {
-                var1.setBlock(var3, var4 - 1, var5, AetherBlocks.AetherDirt.blockID);
+                world.setBlock(x, y2, z, AetherBlocks.AetherLog.blockID);
+            }
 
-                for (var9 = var4; var9 <= var4 + var7; ++var9)
+            if (this.branches)
+            {
+                world.setBlock(x + 1, y, z, AetherBlocks.SkyrootLogWall.blockID);
+                world.setBlock(x + 1, y + 1, z, AetherBlocks.SkyrootLogWall.blockID);
+                world.setBlock(x + 2, y, z, AetherBlocks.SkyrootLogWall.blockID);
+                world.setBlock(x - 1, y, z, AetherBlocks.SkyrootLogWall.blockID);
+                world.setBlock(x - 1, y + 1, z, AetherBlocks.SkyrootLogWall.blockID);
+                world.setBlock(x - 2, y, z, AetherBlocks.SkyrootLogWall.blockID);
+                world.setBlock(x, y, z + 1, AetherBlocks.SkyrootLogWall.blockID);
+                world.setBlock(x, y + 1, z + 1, AetherBlocks.SkyrootLogWall.blockID);
+                world.setBlock(x, y, z + 2, AetherBlocks.SkyrootLogWall.blockID);
+                world.setBlock(x, y, z - 1, AetherBlocks.SkyrootLogWall.blockID);
+                world.setBlock(x, y + 1, z - 1, AetherBlocks.SkyrootLogWall.blockID);
+                world.setBlock(x, y, z - 2, AetherBlocks.SkyrootLogWall.blockID);
+                world.setBlock(x + 1, y - 1, z, AetherBlocks.AetherGrass.blockID);
+                world.setBlock(x + 2, y - 1, z, AetherBlocks.AetherGrass.blockID);
+                world.setBlock(x - 1, y - 1, z, AetherBlocks.AetherGrass.blockID);
+                world.setBlock(x - 2, y - 1, z, AetherBlocks.AetherGrass.blockID);
+                world.setBlock(x, y - 1, z + 1, AetherBlocks.AetherGrass.blockID);
+                world.setBlock(x, y - 1, z + 2, AetherBlocks.AetherGrass.blockID);
+                world.setBlock(x, y - 1, z - 1, AetherBlocks.AetherGrass.blockID);
+                world.setBlock(x, y - 1, z - 2, AetherBlocks.AetherGrass.blockID);
+                world.setBlock(x + 1, y - 2, z, AetherBlocks.AetherDirt.blockID);
+                world.setBlock(x + 2, y - 2, z, AetherBlocks.AetherDirt.blockID);
+                world.setBlock(x - 1, y - 2, z, AetherBlocks.AetherDirt.blockID);
+                world.setBlock(x - 2, y - 2, z, AetherBlocks.AetherDirt.blockID);
+                world.setBlock(x, y - 2, z + 1, AetherBlocks.AetherDirt.blockID);
+                world.setBlock(x, y - 2, z + 2, AetherBlocks.AetherDirt.blockID);
+                world.setBlock(x, y - 2, z - 1, AetherBlocks.AetherDirt.blockID);
+                world.setBlock(x, y - 2, z - 2, AetherBlocks.AetherDirt.blockID);
+            }
+
+            setBlockAirCheck(world, x, y + (height + 1), z, this.leaves);
+            setBlockAirCheck(world, x, y + (height + 2), z, this.leaves);
+
+            for (int y2 = y + 2; y2 <= y + (height + 1); y2++)
+            {
+                setBlockAirCheck(world, x + 1, y2, z, this.leaves);
+                setBlockAirCheck(world, x - 1, y2, z, this.leaves);
+                setBlockAirCheck(world, x, y2, z + 1, this.leaves);
+                setBlockAirCheck(world, x, y2, z - 1, this.leaves);
+            }
+
+            for (int y2 = y + 3; y2 <= y + height; y2 += 2)
+            {
+                setBlockAirCheck(world, x + 1, y2, z + 1, this.leaves);
+                setBlockAirCheck(world, x - 1, y2, z - 1, this.leaves);
+                setBlockAirCheck(world, x + 1, y2, z - 1, this.leaves);
+                setBlockAirCheck(world, x - 1, y2, z + 1, this.leaves);
+                setBlockAirCheck(world, x + 2, y2, z, this.leaves);
+                setBlockAirCheck(world, x - 2, y2, z, this.leaves);
+                setBlockAirCheck(world, x, y2, z + 2, this.leaves);
+                setBlockAirCheck(world, x, y2, z - 2, this.leaves);
+            }
+
+            if (this.branches)
+            {
+                int side = random.nextInt(3);
+
+                for (int y2 = y + (random.nextInt(2) + 3); y2 <= y + height - 2; y2 += 1 + random.nextInt(3))
                 {
-                    var1.setBlock(var3, var9, var5, AetherBlocks.AetherLog.blockID);
-                }
+                    int branchLength = random.nextInt(4) + 1;
 
-                if (this.branches)
-                {
-                    var1.setBlock(var3 + 1, var4, var5, AetherBlocks.SkyrootLogWall.blockID);
-                    var1.setBlock(var3 + 1, var4 + 1, var5, AetherBlocks.SkyrootLogWall.blockID);
-                    var1.setBlock(var3 + 2, var4, var5, AetherBlocks.SkyrootLogWall.blockID);
-                    var1.setBlock(var3 - 1, var4, var5, AetherBlocks.SkyrootLogWall.blockID);
-                    var1.setBlock(var3 - 1, var4 + 1, var5, AetherBlocks.SkyrootLogWall.blockID);
-                    var1.setBlock(var3 - 2, var4, var5, AetherBlocks.SkyrootLogWall.blockID);
-                    var1.setBlock(var3, var4, var5 + 1, AetherBlocks.SkyrootLogWall.blockID);
-                    var1.setBlock(var3, var4 + 1, var5 + 1, AetherBlocks.SkyrootLogWall.blockID);
-                    var1.setBlock(var3, var4, var5 + 2, AetherBlocks.SkyrootLogWall.blockID);
-                    var1.setBlock(var3, var4, var5 - 1, AetherBlocks.SkyrootLogWall.blockID);
-                    var1.setBlock(var3, var4 + 1, var5 - 1, AetherBlocks.SkyrootLogWall.blockID);
-                    var1.setBlock(var3, var4, var5 - 2, AetherBlocks.SkyrootLogWall.blockID);
-                    var1.setBlock(var3 + 1, var4 - 1, var5, AetherBlocks.AetherGrass.blockID);
-                    var1.setBlock(var3 + 2, var4 - 1, var5, AetherBlocks.AetherGrass.blockID);
-                    var1.setBlock(var3 - 1, var4 - 1, var5, AetherBlocks.AetherGrass.blockID);
-                    var1.setBlock(var3 - 2, var4 - 1, var5, AetherBlocks.AetherGrass.blockID);
-                    var1.setBlock(var3, var4 - 1, var5 + 1, AetherBlocks.AetherGrass.blockID);
-                    var1.setBlock(var3, var4 - 1, var5 + 2, AetherBlocks.AetherGrass.blockID);
-                    var1.setBlock(var3, var4 - 1, var5 - 1, AetherBlocks.AetherGrass.blockID);
-                    var1.setBlock(var3, var4 - 1, var5 - 2, AetherBlocks.AetherGrass.blockID);
-                    var1.setBlock(var3 + 1, var4 - 2, var5, AetherBlocks.AetherDirt.blockID);
-                    var1.setBlock(var3 + 2, var4 - 2, var5, AetherBlocks.AetherDirt.blockID);
-                    var1.setBlock(var3 - 1, var4 - 2, var5, AetherBlocks.AetherDirt.blockID);
-                    var1.setBlock(var3 - 2, var4 - 2, var5, AetherBlocks.AetherDirt.blockID);
-                    var1.setBlock(var3, var4 - 2, var5 + 1, AetherBlocks.AetherDirt.blockID);
-                    var1.setBlock(var3, var4 - 2, var5 + 2, AetherBlocks.AetherDirt.blockID);
-                    var1.setBlock(var3, var4 - 2, var5 - 1, AetherBlocks.AetherDirt.blockID);
-                    var1.setBlock(var3, var4 - 2, var5 - 2, AetherBlocks.AetherDirt.blockID);
-                }
-
-                this.setBlockAirCheck(var1, var3, var4 + var7 + 1, var5, this.leaves);
-                this.setBlockAirCheck(var1, var3, var4 + var7 + 2, var5, this.leaves);
-
-                for (var9 = var4 + 2; var9 <= var4 + var7 + 1; ++var9)
-                {
-                    this.setBlockAirCheck(var1, var3 + 1, var9, var5, this.leaves);
-                    this.setBlockAirCheck(var1, var3 - 1, var9, var5, this.leaves);
-                    this.setBlockAirCheck(var1, var3, var9, var5 + 1, this.leaves);
-                    this.setBlockAirCheck(var1, var3, var9, var5 - 1, this.leaves);
-                }
-
-                for (var9 = var4 + 3; var9 <= var4 + var7; var9 += 2)
-                {
-                    this.setBlockAirCheck(var1, var3 + 1, var9, var5 + 1, this.leaves);
-                    this.setBlockAirCheck(var1, var3 - 1, var9, var5 - 1, this.leaves);
-                    this.setBlockAirCheck(var1, var3 + 1, var9, var5 - 1, this.leaves);
-                    this.setBlockAirCheck(var1, var3 - 1, var9, var5 + 1, this.leaves);
-                    this.setBlockAirCheck(var1, var3 + 2, var9, var5, this.leaves);
-                    this.setBlockAirCheck(var1, var3 - 2, var9, var5, this.leaves);
-                    this.setBlockAirCheck(var1, var3, var9, var5 + 2, this.leaves);
-                    this.setBlockAirCheck(var1, var3, var9, var5 - 2, this.leaves);
-                }
-
-                if (this.branches)
-                {
-                    var9 = var2.nextInt(3);
-
-                    for (var10 = var4 + var2.nextInt(2) + 3; var10 <= var4 + var7 - 2; var10 += 1 + var2.nextInt(3))
+                    switch (side)
                     {
-                        int var11 = var2.nextInt(4) + 1;
-                        int var12;
+                        case 0:
+                            for (int x2 = x; x2 <= x + branchLength; x2++)
+                            {
+                                world.setBlock(x2, y2, z, AetherBlocks.AetherLog.blockID);
+                                setBlockAirCheck(world, x2, y2 + 1, z, this.leaves);
+                                setBlockAirCheck(world, x2, y2 - 1, z, this.leaves);
+                                setBlockAirCheck(world, x2 + 1, y2, z + 1, this.leaves);
+                                setBlockAirCheck(world, x2 - 1, y2, z - 1, this.leaves);
+                            }
 
-                        switch (var9)
-                        {
-                            case 0:
-                                for (var12 = var3; var12 <= var3 + var11; ++var12)
-                                {
-                                    var1.setBlock(var12, var10, var5, AetherBlocks.AetherLog.blockID);
-                                    this.setBlockAirCheck(var1, var12, var10 + 1, var5, this.leaves);
-                                    this.setBlockAirCheck(var1, var12, var10 - 1, var5, this.leaves);
-                                    this.setBlockAirCheck(var1, var12 + 1, var10, var5 + 1, this.leaves);
-                                    this.setBlockAirCheck(var1, var12 - 1, var10, var5 - 1, this.leaves);
-                                }
+                            world.setBlock(x + (branchLength + 1), y2 + 1, z, AetherBlocks.AetherLog.blockID);
+                            world.setBlock(x + (branchLength + 2), y2 + 2, z, AetherBlocks.AetherLog.blockID);
+                            world.setBlock(x + (branchLength + 2), y2 + 3, z, AetherBlocks.AetherLog.blockID);
+                            setBlockAirCheck(world, x + (branchLength + 1), y2 + 2, z, this.leaves);
+                            setBlockAirCheck(world, x + (branchLength + 1), y2 + 3, z, this.leaves);
+                            setBlockAirCheck(world, x + (branchLength + 2), y2 + 4, z, this.leaves);
+                            setBlockAirCheck(world, x + (branchLength + 3), y2 + 2, z, this.leaves);
+                            setBlockAirCheck(world, x + (branchLength + 3), y2 + 3, z, this.leaves);
+                            setBlockAirCheck(world, x + (branchLength + 2), y2 + 2, z - 1, this.leaves);
+                            setBlockAirCheck(world, x + (branchLength + 2), y2 + 3, z - 1, this.leaves);
+                            setBlockAirCheck(world, x + (branchLength + 2), y2 + 2, z + 1, this.leaves);
+                            setBlockAirCheck(world, x + (branchLength + 2), y2 + 3, z + 1, this.leaves);
+                            setBlockAirCheck(world, x + (branchLength + 1), y2 + 1, z - 1, this.leaves);
+                            setBlockAirCheck(world, x + (branchLength + 1), y2 + 2, z - 1, this.leaves);
+                            setBlockAirCheck(world, x + (branchLength + 1), y2 + 1, z + 1, this.leaves);
+                            setBlockAirCheck(world, x + (branchLength + 1), y2 + 2, z + 1, this.leaves);
+                            setBlockAirCheck(world, x + branchLength, y2, z - 1, this.leaves);
+                            setBlockAirCheck(world, x + branchLength, y2 + 1, z - 1, this.leaves);
+                            setBlockAirCheck(world, x + branchLength, y2, z + 1, this.leaves);
+                            setBlockAirCheck(world, x + branchLength, y2 + 1, z + 1, this.leaves);
+                            setBlockAirCheck(world, x + (branchLength - 1), y2, z - 1, this.leaves);
+                            setBlockAirCheck(world, x + (branchLength - 1), y2, z + 1, this.leaves);
+                            setBlockAirCheck(world, x + (branchLength - 2), y2 - 1, z, this.leaves);
+                            setBlockAirCheck(world, x + (branchLength - 1), y2 - 1, z, this.leaves);
+                            setBlockAirCheck(world, x + branchLength, y2 - 1, z, this.leaves);
+                            setBlockAirCheck(world, x + (branchLength + 1), y2, z, this.leaves);
+                            setBlockAirCheck(world, x + (branchLength + 2), y2 + 1, z, this.leaves);
+                            break;
 
-                                var1.setBlock(var3 + var11 + 1, var10 + 1, var5, AetherBlocks.AetherLog.blockID);
-                                var1.setBlock(var3 + var11 + 2, var10 + 2, var5, AetherBlocks.AetherLog.blockID);
-                                var1.setBlock(var3 + var11 + 2, var10 + 3, var5, AetherBlocks.AetherLog.blockID);
-                                this.setBlockAirCheck(var1, var3 + var11 + 1, var10 + 2, var5, this.leaves);
-                                this.setBlockAirCheck(var1, var3 + var11 + 1, var10 + 3, var5, this.leaves);
-                                this.setBlockAirCheck(var1, var3 + var11 + 2, var10 + 4, var5, this.leaves);
-                                this.setBlockAirCheck(var1, var3 + var11 + 3, var10 + 2, var5, this.leaves);
-                                this.setBlockAirCheck(var1, var3 + var11 + 3, var10 + 3, var5, this.leaves);
-                                this.setBlockAirCheck(var1, var3 + var11 + 2, var10 + 2, var5 - 1, this.leaves);
-                                this.setBlockAirCheck(var1, var3 + var11 + 2, var10 + 3, var5 - 1, this.leaves);
-                                this.setBlockAirCheck(var1, var3 + var11 + 2, var10 + 2, var5 + 1, this.leaves);
-                                this.setBlockAirCheck(var1, var3 + var11 + 2, var10 + 3, var5 + 1, this.leaves);
-                                this.setBlockAirCheck(var1, var3 + var11 + 1, var10 + 1, var5 - 1, this.leaves);
-                                this.setBlockAirCheck(var1, var3 + var11 + 1, var10 + 2, var5 - 1, this.leaves);
-                                this.setBlockAirCheck(var1, var3 + var11 + 1, var10 + 1, var5 + 1, this.leaves);
-                                this.setBlockAirCheck(var1, var3 + var11 + 1, var10 + 2, var5 + 1, this.leaves);
-                                this.setBlockAirCheck(var1, var3 + var11, var10, var5 - 1, this.leaves);
-                                this.setBlockAirCheck(var1, var3 + var11, var10 + 1, var5 - 1, this.leaves);
-                                this.setBlockAirCheck(var1, var3 + var11, var10, var5 + 1, this.leaves);
-                                this.setBlockAirCheck(var1, var3 + var11, var10 + 1, var5 + 1, this.leaves);
-                                this.setBlockAirCheck(var1, var3 + (var11 - 1), var10, var5 - 1, this.leaves);
-                                this.setBlockAirCheck(var1, var3 + (var11 - 1), var10, var5 + 1, this.leaves);
-                                this.setBlockAirCheck(var1, var3 + (var11 - 2), var10 - 1, var5, this.leaves);
-                                this.setBlockAirCheck(var1, var3 + (var11 - 1), var10 - 1, var5, this.leaves);
-                                this.setBlockAirCheck(var1, var3 + var11, var10 - 1, var5, this.leaves);
-                                this.setBlockAirCheck(var1, var3 + var11 + 1, var10, var5, this.leaves);
-                                this.setBlockAirCheck(var1, var3 + var11 + 2, var10 + 1, var5, this.leaves);
-                                break;
+                        case 1:
+                            for (int x3 = x; x3 >= x - branchLength; x3--)
+                            {
+                                world.setBlock(x3, y2, z, AetherBlocks.AetherLog.blockID);
+                                setBlockAirCheck(world, x3, y2 + 1, z, this.leaves);
+                                setBlockAirCheck(world, x3, y2 - 1, z, this.leaves);
+                                setBlockAirCheck(world, x3 + 1, y2, z + 1, this.leaves);
+                                setBlockAirCheck(world, x3 - 1, y2, z - 1, this.leaves);
+                            }
 
-                            case 1:
-                                for (var12 = var3; var12 >= var3 - var11; --var12)
-                                {
-                                    var1.setBlock(var12, var10, var5, AetherBlocks.AetherLog.blockID);
-                                    this.setBlockAirCheck(var1, var12, var10 + 1, var5, this.leaves);
-                                    this.setBlockAirCheck(var1, var12, var10 - 1, var5, this.leaves);
-                                    this.setBlockAirCheck(var1, var12 + 1, var10, var5 + 1, this.leaves);
-                                    this.setBlockAirCheck(var1, var12 - 1, var10, var5 - 1, this.leaves);
-                                }
+                            world.setBlock(x - (branchLength + 1), y2 + 1, z, AetherBlocks.AetherLog.blockID);
+                            world.setBlock(x - (branchLength + 2), y2 + 2, z, AetherBlocks.AetherLog.blockID);
+                            world.setBlock(x - (branchLength + 2), y2 + 3, z, AetherBlocks.AetherLog.blockID);
+                            setBlockAirCheck(world, x - (branchLength + 1), y2 + 2, z, this.leaves);
+                            setBlockAirCheck(world, x - (branchLength + 1), y2 + 3, z, this.leaves);
+                            setBlockAirCheck(world, x - (branchLength + 2), y2 + 4, z, this.leaves);
+                            setBlockAirCheck(world, x - (branchLength + 3), y2 + 2, z, this.leaves);
+                            setBlockAirCheck(world, x - (branchLength + 3), y2 + 3, z, this.leaves);
+                            setBlockAirCheck(world, x - (branchLength + 2), y2 + 2, z - 1, this.leaves);
+                            setBlockAirCheck(world, x - (branchLength + 2), y2 + 3, z - 1, this.leaves);
+                            setBlockAirCheck(world, x - (branchLength + 2), y2 + 2, z + 1, this.leaves);
+                            setBlockAirCheck(world, x - (branchLength + 2), y2 + 3, z + 1, this.leaves);
+                            setBlockAirCheck(world, x - (branchLength + 1), y2 + 1, z - 1, this.leaves);
+                            setBlockAirCheck(world, x - (branchLength + 1), y2 + 2, z - 1, this.leaves);
+                            setBlockAirCheck(world, x - (branchLength + 1), y2 + 1, z + 1, this.leaves);
+                            setBlockAirCheck(world, x - (branchLength + 1), y2 + 2, z + 1, this.leaves);
+                            setBlockAirCheck(world, x - branchLength, y2, z - 1, this.leaves);
+                            setBlockAirCheck(world, x - branchLength, y2 + 1, z - 1, this.leaves);
+                            setBlockAirCheck(world, x - branchLength, y2, z + 1, this.leaves);
+                            setBlockAirCheck(world, x - branchLength, y2 + 1, z + 1, this.leaves);
+                            setBlockAirCheck(world, x - (branchLength - 1), y2, z - 1, this.leaves);
+                            setBlockAirCheck(world, x - (branchLength - 1), y2, z + 1, this.leaves);
+                            setBlockAirCheck(world, x - (branchLength - 2), y2 - 1, z, this.leaves);
+                            setBlockAirCheck(world, x - (branchLength - 1), y2 - 1, z, this.leaves);
+                            setBlockAirCheck(world, x - branchLength, y2 - 1, z, this.leaves);
+                            setBlockAirCheck(world, x - (branchLength + 1), y2, z, this.leaves);
+                            setBlockAirCheck(world, x - (branchLength + 2), y2 + 1, z, this.leaves);
+                            break;
 
-                                var1.setBlock(var3 - (var11 + 1), var10 + 1, var5, AetherBlocks.AetherLog.blockID);
-                                var1.setBlock(var3 - (var11 + 2), var10 + 2, var5, AetherBlocks.AetherLog.blockID);
-                                var1.setBlock(var3 - (var11 + 2), var10 + 3, var5, AetherBlocks.AetherLog.blockID);
-                                this.setBlockAirCheck(var1, var3 - (var11 + 1), var10 + 2, var5, this.leaves);
-                                this.setBlockAirCheck(var1, var3 - (var11 + 1), var10 + 3, var5, this.leaves);
-                                this.setBlockAirCheck(var1, var3 - (var11 + 2), var10 + 4, var5, this.leaves);
-                                this.setBlockAirCheck(var1, var3 - (var11 + 3), var10 + 2, var5, this.leaves);
-                                this.setBlockAirCheck(var1, var3 - (var11 + 3), var10 + 3, var5, this.leaves);
-                                this.setBlockAirCheck(var1, var3 - (var11 + 2), var10 + 2, var5 - 1, this.leaves);
-                                this.setBlockAirCheck(var1, var3 - (var11 + 2), var10 + 3, var5 - 1, this.leaves);
-                                this.setBlockAirCheck(var1, var3 - (var11 + 2), var10 + 2, var5 + 1, this.leaves);
-                                this.setBlockAirCheck(var1, var3 - (var11 + 2), var10 + 3, var5 + 1, this.leaves);
-                                this.setBlockAirCheck(var1, var3 - (var11 + 1), var10 + 1, var5 - 1, this.leaves);
-                                this.setBlockAirCheck(var1, var3 - (var11 + 1), var10 + 2, var5 - 1, this.leaves);
-                                this.setBlockAirCheck(var1, var3 - (var11 + 1), var10 + 1, var5 + 1, this.leaves);
-                                this.setBlockAirCheck(var1, var3 - (var11 + 1), var10 + 2, var5 + 1, this.leaves);
-                                this.setBlockAirCheck(var1, var3 - var11, var10, var5 - 1, this.leaves);
-                                this.setBlockAirCheck(var1, var3 - var11, var10 + 1, var5 - 1, this.leaves);
-                                this.setBlockAirCheck(var1, var3 - var11, var10, var5 + 1, this.leaves);
-                                this.setBlockAirCheck(var1, var3 - var11, var10 + 1, var5 + 1, this.leaves);
-                                this.setBlockAirCheck(var1, var3 - (var11 - 1), var10, var5 - 1, this.leaves);
-                                this.setBlockAirCheck(var1, var3 - (var11 - 1), var10, var5 + 1, this.leaves);
-                                this.setBlockAirCheck(var1, var3 - (var11 - 2), var10 - 1, var5, this.leaves);
-                                this.setBlockAirCheck(var1, var3 - (var11 - 1), var10 - 1, var5, this.leaves);
-                                this.setBlockAirCheck(var1, var3 - var11, var10 - 1, var5, this.leaves);
-                                this.setBlockAirCheck(var1, var3 - (var11 + 1), var10, var5, this.leaves);
-                                this.setBlockAirCheck(var1, var3 - (var11 + 2), var10 + 1, var5, this.leaves);
-                                break;
+                        case 2:
+                            for (int z2 = z; z2 <= z + branchLength; z2++)
+                            {
+                                world.setBlock(x, y2, z2, AetherBlocks.AetherLog.blockID);
+                                setBlockAirCheck(world, x, y2 + 1, z2, this.leaves);
+                                setBlockAirCheck(world, x, y2 - 1, z2, this.leaves);
+                                setBlockAirCheck(world, x + 1, y2, z2, this.leaves);
+                                setBlockAirCheck(world, x - 1, y2, z2, this.leaves);
+                            }
 
-                            case 2:
-                                for (var12 = var5; var12 <= var5 + var11; ++var12)
-                                {
-                                    var1.setBlock(var3, var10, var12, AetherBlocks.AetherLog.blockID);
-                                    this.setBlockAirCheck(var1, var3, var10 + 1, var12, this.leaves);
-                                    this.setBlockAirCheck(var1, var3, var10 - 1, var12, this.leaves);
-                                    this.setBlockAirCheck(var1, var3 + 1, var10, var12, this.leaves);
-                                    this.setBlockAirCheck(var1, var3 - 1, var10, var12, this.leaves);
-                                }
+                            world.setBlock(x, y2 + 1, z + (branchLength + 1), AetherBlocks.AetherLog.blockID);
+                            world.setBlock(x, y2 + 2, z + (branchLength + 2), AetherBlocks.AetherLog.blockID);
+                            world.setBlock(x, y2 + 3, z + (branchLength + 2), AetherBlocks.AetherLog.blockID);
+                            setBlockAirCheck(world, x, y2 + 2, z + (branchLength + 1), this.leaves);
+                            setBlockAirCheck(world, x, y2 + 3, z + (branchLength + 1), this.leaves);
+                            setBlockAirCheck(world, x, y2 + 4, z + (branchLength + 2), this.leaves);
+                            setBlockAirCheck(world, x, y2 + 2, z + (branchLength + 3), this.leaves);
+                            setBlockAirCheck(world, x, y2 + 3, z + (branchLength + 3), this.leaves);
+                            setBlockAirCheck(world, x - 1, y2 + 2, z + (branchLength + 2), this.leaves);
+                            setBlockAirCheck(world, x - 1, y2 + 3, z + (branchLength + 2), this.leaves);
+                            setBlockAirCheck(world, x + 1, y2 + 2, z + (branchLength + 2), this.leaves);
+                            setBlockAirCheck(world, x + 1, y2 + 3, z + (branchLength + 2), this.leaves);
+                            setBlockAirCheck(world, x - 1, y2 + 1, z + (branchLength + 1), this.leaves);
+                            setBlockAirCheck(world, x - 1, y2 + 2, z + (branchLength + 1), this.leaves);
+                            setBlockAirCheck(world, x + 1, y2 + 1, z + (branchLength + 1), this.leaves);
+                            setBlockAirCheck(world, x + 1, y2 + 2, z + (branchLength + 1), this.leaves);
+                            setBlockAirCheck(world, x - 1, y2, z + branchLength, this.leaves);
+                            setBlockAirCheck(world, x - 1, y2 + 1, z + branchLength, this.leaves);
+                            setBlockAirCheck(world, x + 1, y2, z + branchLength, this.leaves);
+                            setBlockAirCheck(world, x + 1, y2 + 1, z + branchLength, this.leaves);
+                            setBlockAirCheck(world, x - 1, y2, z + (branchLength - 1), this.leaves);
+                            setBlockAirCheck(world, x + 1, y2, z + (branchLength - 1), this.leaves);
+                            setBlockAirCheck(world, x, y2 - 1, z + (branchLength - 2), this.leaves);
+                            setBlockAirCheck(world, x, y2 - 1, z + (branchLength - 1), this.leaves);
+                            setBlockAirCheck(world, x, y2 - 1, z + branchLength, this.leaves);
+                            setBlockAirCheck(world, x, y2, z + (branchLength + 1), this.leaves);
+                            setBlockAirCheck(world, x, y2 + 1, z + (branchLength + 2), this.leaves);
+                            break;
 
-                                var1.setBlock(var3, var10 + 1, var5 + var11 + 1, AetherBlocks.AetherLog.blockID);
-                                var1.setBlock(var3, var10 + 2, var5 + var11 + 2, AetherBlocks.AetherLog.blockID);
-                                var1.setBlock(var3, var10 + 3, var5 + var11 + 2, AetherBlocks.AetherLog.blockID);
-                                this.setBlockAirCheck(var1, var3, var10 + 2, var5 + var11 + 1, this.leaves);
-                                this.setBlockAirCheck(var1, var3, var10 + 3, var5 + var11 + 1, this.leaves);
-                                this.setBlockAirCheck(var1, var3, var10 + 4, var5 + var11 + 2, this.leaves);
-                                this.setBlockAirCheck(var1, var3, var10 + 2, var5 + var11 + 3, this.leaves);
-                                this.setBlockAirCheck(var1, var3, var10 + 3, var5 + var11 + 3, this.leaves);
-                                this.setBlockAirCheck(var1, var3 - 1, var10 + 2, var5 + var11 + 2, this.leaves);
-                                this.setBlockAirCheck(var1, var3 - 1, var10 + 3, var5 + var11 + 2, this.leaves);
-                                this.setBlockAirCheck(var1, var3 + 1, var10 + 2, var5 + var11 + 2, this.leaves);
-                                this.setBlockAirCheck(var1, var3 + 1, var10 + 3, var5 + var11 + 2, this.leaves);
-                                this.setBlockAirCheck(var1, var3 - 1, var10 + 1, var5 + var11 + 1, this.leaves);
-                                this.setBlockAirCheck(var1, var3 - 1, var10 + 2, var5 + var11 + 1, this.leaves);
-                                this.setBlockAirCheck(var1, var3 + 1, var10 + 1, var5 + var11 + 1, this.leaves);
-                                this.setBlockAirCheck(var1, var3 + 1, var10 + 2, var5 + var11 + 1, this.leaves);
-                                this.setBlockAirCheck(var1, var3 - 1, var10, var5 + var11, this.leaves);
-                                this.setBlockAirCheck(var1, var3 - 1, var10 + 1, var5 + var11, this.leaves);
-                                this.setBlockAirCheck(var1, var3 + 1, var10, var5 + var11, this.leaves);
-                                this.setBlockAirCheck(var1, var3 + 1, var10 + 1, var5 + var11, this.leaves);
-                                this.setBlockAirCheck(var1, var3 - 1, var10, var5 + (var11 - 1), this.leaves);
-                                this.setBlockAirCheck(var1, var3 + 1, var10, var5 + (var11 - 1), this.leaves);
-                                this.setBlockAirCheck(var1, var3, var10 - 1, var5 + (var11 - 2), this.leaves);
-                                this.setBlockAirCheck(var1, var3, var10 - 1, var5 + (var11 - 1), this.leaves);
-                                this.setBlockAirCheck(var1, var3, var10 - 1, var5 + var11, this.leaves);
-                                this.setBlockAirCheck(var1, var3, var10, var5 + var11 + 1, this.leaves);
-                                this.setBlockAirCheck(var1, var3, var10 + 1, var5 + var11 + 2, this.leaves);
-                                break;
+                        case 3:
+                            for (int z3 = z; z3 >= z - branchLength; z3--)
+                            {
+                                world.setBlock(x, y2, z3, AetherBlocks.AetherLog.blockID);
+                                setBlockAirCheck(world, x, y2 + 1, z3, this.leaves);
+                                setBlockAirCheck(world, x, y2 - 1, z3, this.leaves);
+                                setBlockAirCheck(world, x + 1, y2, z3, this.leaves);
+                                setBlockAirCheck(world, x - 1, y2, z3, this.leaves);
+                            }
 
-                            case 3:
-                                for (var12 = var5; var12 >= var5 - var11; --var12)
-                                {
-                                    var1.setBlock(var3, var10, var12, AetherBlocks.AetherLog.blockID);
-                                    this.setBlockAirCheck(var1, var3, var10 + 1, var12, this.leaves);
-                                    this.setBlockAirCheck(var1, var3, var10 - 1, var12, this.leaves);
-                                    this.setBlockAirCheck(var1, var3 + 1, var10, var12, this.leaves);
-                                    this.setBlockAirCheck(var1, var3 - 1, var10, var12, this.leaves);
-                                }
+                            world.setBlock(x, y2 + 1, z - (branchLength + 1), AetherBlocks.AetherLog.blockID);
+                            world.setBlock(x, y2 + 2, z - (branchLength + 2), AetherBlocks.AetherLog.blockID);
+                            world.setBlock(x, y2 + 3, z - (branchLength + 2), AetherBlocks.AetherLog.blockID);
+                            setBlockAirCheck(world, x, y2 + 2, z - (branchLength + 1), this.leaves);
+                            setBlockAirCheck(world, x, y2 + 3, z - (branchLength + 1), this.leaves);
+                            setBlockAirCheck(world, x, y2 + 4, z - (branchLength + 2), this.leaves);
+                            setBlockAirCheck(world, x, y2 + 2, z - (branchLength + 3), this.leaves);
+                            setBlockAirCheck(world, x, y2 + 3, z - (branchLength + 3), this.leaves);
+                            setBlockAirCheck(world, x - 1, y2 + 2, z - (branchLength + 2), this.leaves);
+                            setBlockAirCheck(world, x - 1, y2 + 3, z - (branchLength + 2), this.leaves);
+                            setBlockAirCheck(world, x + 1, y2 + 2, z - (branchLength + 2), this.leaves);
+                            setBlockAirCheck(world, x + 1, y2 + 3, z - (branchLength + 2), this.leaves);
+                            setBlockAirCheck(world, x - 1, y2 + 1, z - (branchLength + 1), this.leaves);
+                            setBlockAirCheck(world, x - 1, y2 + 2, z - (branchLength + 1), this.leaves);
+                            setBlockAirCheck(world, x + 1, y2 + 1, z - (branchLength + 1), this.leaves);
+                            setBlockAirCheck(world, x + 1, y2 + 2, z - (branchLength + 1), this.leaves);
+                            setBlockAirCheck(world, x - 1, y2, z - branchLength, this.leaves);
+                            setBlockAirCheck(world, x - 1, y2 + 1, z - branchLength, this.leaves);
+                            setBlockAirCheck(world, x + 1, y2, z - branchLength, this.leaves);
+                            setBlockAirCheck(world, x + 1, y2 + 1, z - branchLength, this.leaves);
+                            setBlockAirCheck(world, x - 1, y2, z - (branchLength - 1), this.leaves);
+                            setBlockAirCheck(world, x + 1, y2, z - (branchLength - 1), this.leaves);
+                            setBlockAirCheck(world, x, y2 - 1, z - (branchLength - 2), this.leaves);
+                            setBlockAirCheck(world, x, y2 - 1, z - (branchLength - 1), this.leaves);
+                            setBlockAirCheck(world, x, y2 - 1, z - branchLength, this.leaves);
+                            setBlockAirCheck(world, x, y2, z - (branchLength + 1), this.leaves);
+                            setBlockAirCheck(world, x, y2 + 1, z - (branchLength + 2), this.leaves);
+                    }
 
-                                var1.setBlock(var3, var10 + 1, var5 - (var11 + 1), AetherBlocks.AetherLog.blockID);
-                                var1.setBlock(var3, var10 + 2, var5 - (var11 + 2), AetherBlocks.AetherLog.blockID);
-                                var1.setBlock(var3, var10 + 3, var5 - (var11 + 2), AetherBlocks.AetherLog.blockID);
-                                this.setBlockAirCheck(var1, var3, var10 + 2, var5 - (var11 + 1), this.leaves);
-                                this.setBlockAirCheck(var1, var3, var10 + 3, var5 - (var11 + 1), this.leaves);
-                                this.setBlockAirCheck(var1, var3, var10 + 4, var5 - (var11 + 2), this.leaves);
-                                this.setBlockAirCheck(var1, var3, var10 + 2, var5 - (var11 + 3), this.leaves);
-                                this.setBlockAirCheck(var1, var3, var10 + 3, var5 - (var11 + 3), this.leaves);
-                                this.setBlockAirCheck(var1, var3 - 1, var10 + 2, var5 - (var11 + 2), this.leaves);
-                                this.setBlockAirCheck(var1, var3 - 1, var10 + 3, var5 - (var11 + 2), this.leaves);
-                                this.setBlockAirCheck(var1, var3 + 1, var10 + 2, var5 - (var11 + 2), this.leaves);
-                                this.setBlockAirCheck(var1, var3 + 1, var10 + 3, var5 - (var11 + 2), this.leaves);
-                                this.setBlockAirCheck(var1, var3 - 1, var10 + 1, var5 - (var11 + 1), this.leaves);
-                                this.setBlockAirCheck(var1, var3 - 1, var10 + 2, var5 - (var11 + 1), this.leaves);
-                                this.setBlockAirCheck(var1, var3 + 1, var10 + 1, var5 - (var11 + 1), this.leaves);
-                                this.setBlockAirCheck(var1, var3 + 1, var10 + 2, var5 - (var11 + 1), this.leaves);
-                                this.setBlockAirCheck(var1, var3 - 1, var10, var5 - var11, this.leaves);
-                                this.setBlockAirCheck(var1, var3 - 1, var10 + 1, var5 - var11, this.leaves);
-                                this.setBlockAirCheck(var1, var3 + 1, var10, var5 - var11, this.leaves);
-                                this.setBlockAirCheck(var1, var3 + 1, var10 + 1, var5 - var11, this.leaves);
-                                this.setBlockAirCheck(var1, var3 - 1, var10, var5 - (var11 - 1), this.leaves);
-                                this.setBlockAirCheck(var1, var3 + 1, var10, var5 - (var11 - 1), this.leaves);
-                                this.setBlockAirCheck(var1, var3, var10 - 1, var5 - (var11 - 2), this.leaves);
-                                this.setBlockAirCheck(var1, var3, var10 - 1, var5 - (var11 - 1), this.leaves);
-                                this.setBlockAirCheck(var1, var3, var10 - 1, var5 - var11, this.leaves);
-                                this.setBlockAirCheck(var1, var3, var10, var5 - (var11 + 1), this.leaves);
-                                this.setBlockAirCheck(var1, var3, var10 + 1, var5 - (var11 + 2), this.leaves);
-                        }
+                    side++;
 
-                        ++var9;
-
-                        if (var9 > 3)
-                        {
-                            var9 = 0;
-                        }
+                    if (side > 3)
+                    {
+                        side = 0;
                     }
                 }
-
-                return true;
             }
+
+            return true;
         }
-        else
-        {
-            return false;
-        }
+
+        return false;
     }
 
-    public void setBlockAirCheck(World var1, int var2, int var3, int var4, int var5)
+    public void setBlockAirCheck(World world, int x, int y, int z, int blockID)
     {
-        if (var1.getBlockId(var2, var3, var4) == 0)
+        if (world.getBlockId(x, y, z) == 0)
         {
-            var1.setBlock(var2, var3, var4, var5);
+            world.setBlock(x, y, z, blockID);
         }
     }
 }
+

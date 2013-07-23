@@ -8,22 +8,19 @@ import net.minecraft.item.ItemStack;
 
 public class ItemZanitePickaxe extends ItemPickaxe
 {
-    protected ItemZanitePickaxe(int var1, EnumToolMaterial var2)
+    protected ItemZanitePickaxe(int i, EnumToolMaterial enumtoolmaterial)
     {
-        super(var1, var2);
+        super(i, enumtoolmaterial);
     }
 
-    public Item setIconName(String var1)
+    public Item setIconName(String name)
     {
-        return this.setUnlocalizedName("Aether:" + var1);
+        return setUnlocalizedName("Aether:" + name);
     }
 
-    /**
-     * Returns the strength of the stack against a given block. 1.0F base, (Quality+1)*2 if correct blocktype, 1.5F if
-     * sword
-     */
-    public float getStrVsBlock(ItemStack var1, Block var2)
+    public float getStrVsBlock(ItemStack itemstack, Block block)
     {
-        return super.getStrVsBlock(var1, var2) * (2.0F * (float)var1.getItemDamage() / (float)var1.getItem().getMaxDamage() + 0.5F);
+        return super.getStrVsBlock(itemstack, block) * (2.0F * itemstack.getItemDamage() / itemstack.getItem().getMaxDamage() + 0.5F);
     }
 }
+

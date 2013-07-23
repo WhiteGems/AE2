@@ -1,31 +1,33 @@
 package net.aetherteam.aether.entities.mounts_old;
 
+import java.util.List;
 import net.aetherteam.aether.entities.ai.AIEntityAerbunnyHop;
 import net.aetherteam.aether.entities.mounts.EntityAerbunny;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.ai.EntityAIAvoidEntity;
 import net.minecraft.entity.ai.EntityAISwimming;
+import net.minecraft.entity.ai.EntityAITasks;
 import net.minecraft.entity.ai.EntityAIWander;
 import net.minecraft.entity.ai.EntityAIWatchClosest;
 import net.minecraft.entity.player.EntityPlayer;
 
 public class RidingHandlerAerbunny extends RidingHandler
 {
-    protected EntityLiving animal;
+    protected EntityLiving animal = (EntityLiving)this.mount;
 
-    public RidingHandlerAerbunny(EntityAerbunny var1)
+    public RidingHandlerAerbunny(EntityAerbunny entityAerbunny)
     {
-        super(var1);
-        this.animal = (EntityLiving)this.mount;
+        super(entityAerbunny);
     }
 
     public void update()
     {
-        if (this.isBeingRidden())
+        if (isBeingRidden())
         {
             this.rider.fallDistance = 0.0F;
 
-            if (this.rider.motionY < -0.2D && !this.rider.isSneaking())
+            if ((this.rider.motionY < -0.2D) && (!this.rider.isSneaking()))
             {
                 this.rider.motionY = -0.2D;
             }
@@ -49,7 +51,7 @@ public class RidingHandlerAerbunny extends RidingHandler
 
     public boolean shouldBeSitting()
     {
-        return this.isBeingRidden();
+        return isBeingRidden();
     }
 
     public double getAnimalYOffset()
@@ -67,3 +69,4 @@ public class RidingHandlerAerbunny extends RidingHandler
         return false;
     }
 }
+

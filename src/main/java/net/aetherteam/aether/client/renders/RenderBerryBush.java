@@ -3,64 +3,63 @@ package net.aetherteam.aether.client.renders;
 import cpw.mods.fml.client.registry.ISimpleBlockRenderingHandler;
 import net.aetherteam.aether.blocks.AetherBlocks;
 import net.minecraft.block.Block;
-import net.minecraft.client.renderer.RenderBlocks;
-import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.RenderEngine;
+import net.minecraft.client.renderer.texture.Rect2i;
 import net.minecraft.world.IBlockAccess;
 import org.lwjgl.opengl.GL11;
 
-public class RenderBerryBush implements ISimpleBlockRenderingHandler
+public class RenderBerryBush
+    implements ISimpleBlockRenderingHandler
 {
-    public void renderInventoryBlock(Block var1, int var2, int var3, RenderBlocks var4)
+    public void renderInventoryBlock(Block block, int metadata, int modelID, RenderEngine renderer)
     {
-        if (var3 == this.getRenderId())
+        if (modelID == getRenderId())
         {
-            Tessellator var5 = Tessellator.instance;
-            var5.startDrawingQuads();
-            var5.setNormal(0.0F, -1.0F, 0.0F);
-            var4.drawCrossedSquares(var1, var2, -0.5D, -0.5D, -0.5D, 1.0F);
-            var5.draw();
-            var1.setBlockBoundsForItemRender();
+            Rect2i tessellator = Rect2i.rectX;
+            tessellator.b();
+            tessellator.b(0.0F, -1.0F, 0.0F);
+            renderer.a(block, metadata, -0.5D, -0.5D, -0.5D, 1.0F);
+            tessellator.getRectX();
+            block.setBlockBoundsForItemRender();
             GL11.glTranslatef(-0.5F, -0.5F, -0.5F);
-            var5.startDrawingQuads();
-            var5.setNormal(0.0F, -1.0F, 0.0F);
-            var4.renderFaceYNeg(var1, 0.0D, 0.0D, 0.0D, var1.getIcon(0, var2));
-            var5.draw();
-            var5.startDrawingQuads();
-            var5.setNormal(0.0F, 1.0F, 0.0F);
-            var4.renderFaceYPos(var1, 0.0D, 0.0D, 0.0D, var1.getIcon(1, var2));
-            var5.draw();
-            var5.startDrawingQuads();
-            var5.setNormal(0.0F, 0.0F, -1.0F);
-            var4.renderFaceZPos(var1, 0.0D, 0.0D, 0.0D, var1.getIcon(2, var2));
-            var5.draw();
-            var5.startDrawingQuads();
-            var5.setNormal(0.0F, 0.0F, 1.0F);
-            var4.renderFaceZNeg(var1, 0.0D, 0.0D, 0.0D, var1.getIcon(3, var2));
-            var5.draw();
-            var5.startDrawingQuads();
-            var5.setNormal(-1.0F, 0.0F, 0.0F);
-            var4.renderFaceXPos(var1, 0.0D, 0.0D, 0.0D, var1.getIcon(4, var2));
-            var5.draw();
-            var5.startDrawingQuads();
-            var5.setNormal(1.0F, 0.0F, 0.0F);
-            var4.renderFaceXNeg(var1, 0.0D, 0.0D, 0.0D, var1.getIcon(5, var2));
-            var5.draw();
+            tessellator.b();
+            tessellator.b(0.0F, -1.0F, 0.0F);
+            renderer.a(block, 0.0D, 0.0D, 0.0D, block.getIcon(0, metadata));
+            tessellator.getRectX();
+            tessellator.b();
+            tessellator.b(0.0F, 1.0F, 0.0F);
+            renderer.b(block, 0.0D, 0.0D, 0.0D, block.getIcon(1, metadata));
+            tessellator.getRectX();
+            tessellator.b();
+            tessellator.b(0.0F, 0.0F, -1.0F);
+            renderer.d(block, 0.0D, 0.0D, 0.0D, block.getIcon(2, metadata));
+            tessellator.getRectX();
+            tessellator.b();
+            tessellator.b(0.0F, 0.0F, 1.0F);
+            renderer.c(block, 0.0D, 0.0D, 0.0D, block.getIcon(3, metadata));
+            tessellator.getRectX();
+            tessellator.b();
+            tessellator.b(-1.0F, 0.0F, 0.0F);
+            renderer.f(block, 0.0D, 0.0D, 0.0D, block.getIcon(4, metadata));
+            tessellator.getRectX();
+            tessellator.b();
+            tessellator.b(1.0F, 0.0F, 0.0F);
+            renderer.e(block, 0.0D, 0.0D, 0.0D, block.getIcon(5, metadata));
+            tessellator.getRectX();
             GL11.glTranslatef(0.5F, 0.5F, 0.5F);
         }
     }
 
-    public boolean renderWorldBlock(IBlockAccess var1, int var2, int var3, int var4, Block var5, int var6, RenderBlocks var7)
+    public boolean renderWorldBlock(IBlockAccess world, int x, int y, int z, Block block, int modelID, RenderEngine renderer)
     {
-        if (var6 == this.getRenderId())
+        if (modelID == getRenderId())
         {
-            var7.renderCrossedSquares(var5, var2, var3, var4);
-            var7.renderStandardBlock(var5, var2, var3, var4);
+            renderer.k(block, x, y, z);
+            renderer.p(block, x, y, z);
             return true;
         }
-        else
-        {
-            return false;
-        }
+
+        return false;
     }
 
     public boolean shouldRender3DInInventory()
@@ -73,3 +72,4 @@ public class RenderBerryBush implements ISimpleBlockRenderingHandler
         return AetherBlocks.berryBushRenderId;
     }
 }
+

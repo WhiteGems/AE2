@@ -8,10 +8,10 @@ public class ItemAmbrosium extends ItemAether
 {
     private int healAmount;
 
-    public ItemAmbrosium(int var1, int var2)
+    public ItemAmbrosium(int i, int j)
     {
-        super(var1);
-        this.healAmount = var2;
+        super(i);
+        this.healAmount = j;
         this.maxStackSize = 64;
     }
 
@@ -20,13 +20,11 @@ public class ItemAmbrosium extends ItemAether
         return this.healAmount;
     }
 
-    /**
-     * Called whenever this item is equipped and the right mouse button is pressed. Args: itemStack, world, entityPlayer
-     */
-    public ItemStack onItemRightClick(ItemStack var1, World var2, EntityPlayer var3)
+    public ItemStack onItemRightClick(ItemStack itemstack, World world, EntityPlayer entityplayer)
     {
-        --var1.stackSize;
-        var3.heal(this.healAmount);
-        return var1;
+        itemstack.stackSize -= 1;
+        entityplayer.heal(this.healAmount);
+        return itemstack;
     }
 }
+

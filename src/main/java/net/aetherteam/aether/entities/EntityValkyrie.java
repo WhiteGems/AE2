@@ -1,5 +1,7 @@
 package net.aetherteam.aether.entities;
 
+import java.util.List;
+import java.util.Random;
 import net.aetherteam.aether.AetherNameGen;
 import net.aetherteam.aether.blocks.AetherBlocks;
 import net.aetherteam.aether.enums.EnumBossType;
@@ -8,21 +10,25 @@ import net.aetherteam.aether.items.AetherItems;
 import net.aetherteam.aether.oldcode.EntityHomeShot;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.multiplayer.CallableMPL2;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityCreature;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagDouble;
 import net.minecraft.nbt.NBTTagList;
-import net.minecraft.pathfinding.PathEntity;
 import net.minecraft.src.ModLoader;
+import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 
-public class EntityValkyrie extends EntityDungeonMob implements IAetherBoss
+public class EntityValkyrie extends EntityDungeonMob
+    implements IAetherBoss
 {
     private String optPrefix;
     public boolean hasMet;
@@ -47,10 +53,10 @@ public class EntityValkyrie extends EntityDungeonMob implements IAetherBoss
     public String name;
     Minecraft mc = ModLoader.getMinecraftInstance();
 
-    public EntityValkyrie(World var1)
+    public EntityValkyrie(World world)
     {
-        super(var1);
-        this.setSize(0.8F, 1.6F);
+        super(world);
+        setSize(0.8F, 1.6F);
         this.texture = "/aether/mobs/valkyrie.png";
         this.teleTimer = this.rand.nextInt(250);
         this.health = 50;
@@ -62,11 +68,11 @@ public class EntityValkyrie extends EntityDungeonMob implements IAetherBoss
         this.safeZ = this.posZ;
     }
 
-    public EntityValkyrie(World var1, double var2, double var4, double var6, boolean var8)
+    public EntityValkyrie(World world, double x, double y, double z, boolean flag)
     {
-        super(var1);
+        super(world);
 
-        if (var8)
+        if (flag)
         {
             this.texture = "/aether/mobs/valkyrie2.png";
             this.health = 500;
@@ -78,15 +84,15 @@ public class EntityValkyrie extends EntityDungeonMob implements IAetherBoss
             this.health = 50;
         }
 
-        this.setSize(0.8F, 1.6F);
+        setSize(0.8F, 1.6F);
         this.name = AetherNameGen.valkGen();
         this.teleTimer = this.rand.nextInt(250);
         this.moveSpeed = 0.5F;
         this.timeLeft = 1200;
         this.attackStrength = 7;
-        this.safeX = this.posX = var2;
-        this.safeY = this.posY = var4;
-        this.safeZ = this.posZ = var6;
+        this.safeX = (this.posX = x);
+        this.safeY = (this.posY = y);
+        this.safeZ = (this.posZ = z);
         this.hasDungeon = false;
     }
 
@@ -100,34 +106,32 @@ public class EntityValkyrie extends EntityDungeonMob implements IAetherBoss
         }
     }
 
-    private void becomeAngryAt(Entity var1)
+    private void becomeAngryAt(Entity entity)
     {
-        this.entityToAttack = var1;
-        this.angerLevel = 200 + this.rand.nextInt(200);
+        this.entityToAttack = entity;
+        this.angerLevel = (200 + this.rand.nextInt(200));
 
         if (this.boss)
         {
-            for (int var2 = this.dungeonZ + 2; var2 < this.dungeonZ + 23; var2 += 7)
-            {
-                if (this.worldObj.getBlockId(this.dungeonX - 1, this.dungeonY, var2) == 0)
+            for (int k = this.dungeonZ + 2; k < this.dungeonZ + 23; k += 7)
+                if (this.worldObj.getBlockId(this.dungeonX - 1, this.dungeonY, k) == 0)
                 {
-                    this.dungeonEntranceZ = var2;
-                    this.worldObj.setBlock(this.dungeonX - 1, this.dungeonY, var2, AetherBlocks.LockedDungeonStone.blockID, 1, 4);
-                    this.worldObj.setBlock(this.dungeonX - 1, this.dungeonY, var2 + 1, AetherBlocks.LockedDungeonStone.blockID, 1, 4);
-                    this.worldObj.setBlock(this.dungeonX - 1, this.dungeonY + 1, var2 + 1, AetherBlocks.LockedDungeonStone.blockID, 1, 4);
-                    this.worldObj.setBlock(this.dungeonX - 1, this.dungeonY + 1, var2, AetherBlocks.LockedDungeonStone.blockID, 1, 4);
+                    this.dungeonEntranceZ = k;
+                    this.worldObj.setBlock(this.dungeonX - 1, this.dungeonY, k, AetherBlocks.LockedDungeonStone.blockID, 1, 4);
+                    this.worldObj.setBlock(this.dungeonX - 1, this.dungeonY, k + 1, AetherBlocks.LockedDungeonStone.blockID, 1, 4);
+                    this.worldObj.setBlock(this.dungeonX - 1, this.dungeonY + 1, k + 1, AetherBlocks.LockedDungeonStone.blockID, 1, 4);
+                    this.worldObj.setBlock(this.dungeonX - 1, this.dungeonY + 1, k, AetherBlocks.LockedDungeonStone.blockID, 1, 4);
                     return;
                 }
-            }
         }
     }
 
-    public void setDungeon(int var1, int var2, int var3)
+    public void setDungeon(int i, int j, int k)
     {
         this.hasDungeon = true;
-        this.dungeonX = var1;
-        this.dungeonY = var2;
-        this.dungeonZ = var3;
+        this.dungeonX = i;
+        this.dungeonY = j;
+        this.dungeonZ = k;
     }
 
     private void unlockDoor()
@@ -145,80 +149,79 @@ public class EntityValkyrie extends EntityDungeonMob implements IAetherBoss
         this.worldObj.setBlock(this.dungeonX + 16, this.dungeonY + 1, this.dungeonZ + 10, Block.trapdoor.blockID, 3, 4);
         this.worldObj.setBlock(this.dungeonX + 17, this.dungeonY + 1, this.dungeonZ + 10, Block.trapdoor.blockID, 2, 4);
 
-        for (int var1 = this.dungeonX - 26; var1 < this.dungeonX + 29; ++var1)
-        {
-            for (int var2 = this.dungeonY - 1; var2 < this.dungeonY + 22; ++var2)
-            {
-                for (int var3 = this.dungeonZ - 5; var3 < this.dungeonZ + 25; ++var3)
+        for (int x = this.dungeonX - 26; x < this.dungeonX + 29; x++)
+            for (int y = this.dungeonY - 1; y < this.dungeonY + 22; y++)
+                for (int z = this.dungeonZ - 5; z < this.dungeonZ + 25; z++)
                 {
-                    int var4 = this.worldObj.getBlockId(var1, var2, var3);
+                    int id = this.worldObj.getBlockId(x, y, z);
 
-                    if (var4 == AetherBlocks.LockedDungeonStone.blockID)
+                    if (id == AetherBlocks.LockedDungeonStone.blockID)
                     {
-                        this.worldObj.setBlock(var1, var2, var3, AetherBlocks.DungeonStone.blockID, this.worldObj.getBlockMetadata(var1, var2, var3), 4);
+                        this.worldObj.setBlock(x, y, z, AetherBlocks.DungeonStone.blockID, this.worldObj.getBlockMetadata(x, y, z), 4);
                     }
 
-                    if (var4 == AetherBlocks.Trap.blockID)
+                    if (id == AetherBlocks.Trap.blockID)
                     {
-                        this.worldObj.setBlock(var1, var2, var3, AetherBlocks.DungeonStone.blockID, this.worldObj.getBlockMetadata(var1, var2, var3), 4);
+                        this.worldObj.setBlock(x, y, z, AetherBlocks.DungeonStone.blockID, this.worldObj.getBlockMetadata(x, y, z), 4);
                     }
 
-                    if (var4 == AetherBlocks.LockedLightDungeonStone.blockID)
+                    if (id == AetherBlocks.LockedLightDungeonStone.blockID)
                     {
-                        this.worldObj.setBlock(var1, var2, var3, AetherBlocks.LightDungeonStone.blockID, this.worldObj.getBlockMetadata(var1, var2, var3), 4);
+                        this.worldObj.setBlock(x, y, z, AetherBlocks.LightDungeonStone.blockID, this.worldObj.getBlockMetadata(x, y, z), 4);
                     }
                 }
-            }
-        }
     }
 
-    private void chatItUp(String var1)
+    private void chatItUp(String s)
     {
-        if (this.chatTime <= 0 && this.otherDimension())
+        if ((this.chatTime <= 0) && (otherDimension()))
         {
             this.chatTime = 60;
         }
     }
 
-    public void teleport(double var1, double var3, double var5, int var7)
+    public void teleport(double x, double y, double z, int rad)
     {
-        int var8 = this.rand.nextInt(var7 + 1);
-        int var9 = this.rand.nextInt(var7 / 2);
-        int var10 = var7 - var8;
-        var8 *= this.rand.nextInt(2) * 2 - 1;
-        var9 *= this.rand.nextInt(2) * 2 - 1;
-        var10 *= this.rand.nextInt(2) * 2 - 1;
-        var1 += (double)var8;
-        var3 += (double)var9;
-        var5 += (double)var10;
-        int var11 = (int)Math.floor(var1 - 0.5D);
-        int var12 = (int)Math.floor(var3 - 0.5D);
-        int var13 = (int)Math.floor(var5 - 0.5D);
-        boolean var14 = false;
+        int a = this.rand.nextInt(rad + 1);
+        int b = this.rand.nextInt(rad / 2);
+        int c = rad - a;
+        a *= (this.rand.nextInt(2) * 2 - 1);
+        b *= (this.rand.nextInt(2) * 2 - 1);
+        c *= (this.rand.nextInt(2) * 2 - 1);
+        x += a;
+        y += b;
+        z += c;
+        int newX = (int)Math.floor(x - 0.5D);
+        int newY = (int)Math.floor(y - 0.5D);
+        int newZ = (int)Math.floor(z - 0.5D);
+        boolean flag = false;
 
-        for (int var15 = 0; var15 < 32 && !var14; ++var15)
+        for (int q = 0; (q < 32) && (!flag); q++)
         {
-            int var16 = var11 + (this.rand.nextInt(var7 / 2) - this.rand.nextInt(var7 / 2));
-            int var17 = var12 + (this.rand.nextInt(var7 / 2) - this.rand.nextInt(var7 / 2));
-            int var18 = var13 + (this.rand.nextInt(var7 / 2) - this.rand.nextInt(var7 / 2));
+            int i = newX + (this.rand.nextInt(rad / 2) - this.rand.nextInt(rad / 2));
+            int j = newY + (this.rand.nextInt(rad / 2) - this.rand.nextInt(rad / 2));
+            int k = newZ + (this.rand.nextInt(rad / 2) - this.rand.nextInt(rad / 2));
 
-            if (var17 <= 124 && var17 >= 5 && this.isAirySpace(var16, var17, var18) && this.isAirySpace(var16, var17 + 1, var18) && !this.isAirySpace(var16, var17 - 1, var18) && (!this.hasDungeon || var16 > this.dungeonX && var16 < this.dungeonX + 20 && var17 > this.dungeonY && var17 < this.dungeonY + 12 && var18 > this.dungeonZ && var18 < this.dungeonZ + 20))
+            if ((j <= 124) && (j >= 5))
             {
-                var11 = var16;
-                var12 = var17;
-                var13 = var18;
-                var14 = true;
+                if ((isAirySpace(i, j, k)) && (isAirySpace(i, j + 1, k)) && (!isAirySpace(i, j - 1, k)) && ((!this.hasDungeon) || ((i > this.dungeonX) && (i < this.dungeonX + 20) && (j > this.dungeonY) && (j < this.dungeonY + 12) && (k > this.dungeonZ) && (k < this.dungeonZ + 20))))
+                {
+                    newX = i;
+                    newY = j;
+                    newZ = k;
+                    flag = true;
+                }
             }
         }
 
-        if (!var14)
+        if (!flag)
         {
-            this.teleFail();
+            teleFail();
         }
         else
         {
-            this.spawnExplosionParticle();
-            this.setPosition((double)var11 + 0.5D, (double)var12 + 0.5D, (double)var13 + 0.5D);
+            spawnExplosionParticle();
+            setPosition(newX + 0.5D, newY + 0.5D, newZ + 0.5D);
             this.motionX = 0.0D;
             this.motionY = 0.0D;
             this.motionZ = 0.0D;
@@ -227,19 +230,19 @@ public class EntityValkyrie extends EntityDungeonMob implements IAetherBoss
             this.isJumping = false;
             this.rotationPitch = 0.0F;
             this.rotationYaw = 0.0F;
-            this.setPathToEntity((PathEntity)null);
-            this.renderYawOffset = this.rand.nextFloat() * 360.0F;
-            this.spawnExplosionParticle();
+            setPathToEntity(null);
+            this.renderYawOffset = (this.rand.nextFloat() * 360.0F);
+            spawnExplosionParticle();
             this.teleTimer = this.rand.nextInt(40);
         }
     }
 
-    public void makeHomeShot(int var1, EntityLiving var2)
+    public void makeHomeShot(int shots, EntityLiving ep)
     {
-        for (int var3 = 0; var3 < var1; ++var3)
+        for (int i = 0; i < shots; i++)
         {
-            EntityHomeShot var4 = new EntityHomeShot(this.worldObj, this.posX - this.motionX / 2.0D, this.posY, this.posZ - this.motionZ / 2.0D, var2);
-            this.worldObj.spawnEntityInWorld(var4);
+            EntityHomeShot e1 = new EntityHomeShot(this.worldObj, this.posX - this.motionX / 2.0D, this.posY, this.posZ - this.motionZ / 2.0D, ep);
+            this.worldObj.spawnEntityInWorld(e1);
         }
     }
 
@@ -253,17 +256,10 @@ public class EntityValkyrie extends EntityDungeonMob implements IAetherBoss
         }
     }
 
-    /**
-     * Called when a player interacts with a mob. e.g. gets milk from a cow, gets into the saddle on a pig.
-     */
-    public boolean interact(EntityPlayer var1)
+    public boolean interact(EntityPlayer entityplayer)
     {
-        if (!this.duel && !this.talking && this.boss)
-        {
-            ;
-        }
-
-        if (!this.hasMet)
+        if (((this.duel) || (this.talking) || (!this.boss)) ||
+                (!this.hasMet))
         {
             this.hasMet = true;
         }
@@ -278,60 +274,60 @@ public class EntityValkyrie extends EntityDungeonMob implements IAetherBoss
             this.moveStrafing = 0.0F;
             this.motionY *= 0.5D;
             this.moveForward = 0.0F;
-            this.faceEntity(this.mc.thePlayer, 15.0F, 180.0F);
+            faceEntity(this.mc.thePlayer, 15.0F, 180.0F);
         }
         else
         {
             super.updateEntityActionState();
-            ++this.teleTimer;
+            this.teleTimer += 1;
 
             if (this.teleTimer >= 450)
             {
                 if (this.entityToAttack != null)
                 {
-                    if (this.boss && this.onGround && this.rand.nextInt(2) == 0 && this.entityToAttack != null && this.entityToAttack instanceof EntityLiving)
+                    if ((this.boss) && (this.onGround) && (this.rand.nextInt(2) == 0) && (this.entityToAttack != null) && ((this.entityToAttack instanceof EntityLiving)))
                     {
-                        this.makeHomeShot(1, (EntityLiving)this.entityToAttack);
+                        makeHomeShot(1, (EntityLiving)this.entityToAttack);
                         this.teleTimer = -100;
                     }
                     else
                     {
-                        this.teleport(this.entityToAttack.posX, this.entityToAttack.posY, this.entityToAttack.posZ, 7);
+                        teleport(this.entityToAttack.posX, this.entityToAttack.posY, this.entityToAttack.posZ, 7);
                     }
                 }
-                else if (this.onGround && !this.boss)
+                else if ((!this.onGround) || (this.boss))
                 {
-                    this.teleport(this.posX, this.posY, this.posZ, 12 + this.rand.nextInt(12));
+                    teleport(this.safeX, this.safeY, this.safeZ, 6);
                 }
                 else
                 {
-                    this.teleport(this.safeX, this.safeY, this.safeZ, 6);
+                    teleport(this.posX, this.posY, this.posZ, 12 + this.rand.nextInt(12));
                 }
             }
-            else if (this.teleTimer < 446 && (this.posY <= 0.0D || this.posY <= this.safeY - 16.0D))
+            else if ((this.teleTimer < 446) && ((this.posY <= 0.0D) || (this.posY <= this.safeY - 16.0D)))
             {
                 this.teleTimer = 446;
             }
-            else if (this.teleTimer % 5 == 0 && this.entityToAttack != null && !this.canEntityBeSeen(this.entityToAttack))
+            else if ((this.teleTimer % 5 == 0) && (this.entityToAttack != null) && (!canEntityBeSeen(this.entityToAttack)))
             {
                 this.teleTimer += 100;
             }
         }
 
-        if (this.onGround && this.teleTimer % 10 == 0 && !this.boss)
+        if ((this.onGround) && (this.teleTimer % 10 == 0) && (!this.boss))
         {
             this.safeX = this.posX;
             this.safeY = this.posY;
             this.safeZ = this.posZ;
         }
 
-        if (this.entityToAttack != null && this.entityToAttack.isDead)
+        if ((this.entityToAttack != null) && (this.entityToAttack.isDead))
         {
             this.entityToAttack = null;
 
             if (this.boss)
             {
-                this.unlockDoor();
+                unlockDoor();
             }
 
             this.angerLevel = 0;
@@ -339,30 +335,27 @@ public class EntityValkyrie extends EntityDungeonMob implements IAetherBoss
 
         if (this.chatTime > 0)
         {
-            --this.chatTime;
+            this.chatTime -= 1;
         }
     }
 
-    /**
-     * Called to update the entity's position/logic.
-     */
     public void onUpdate()
     {
         this.lastMotionY = this.motionY;
         super.onUpdate();
 
-        if (!this.onGround && this.entityToAttack != null && this.lastMotionY >= 0.0D && this.motionY < 0.0D && this.getDistanceToEntity(this.entityToAttack) <= 16.0F && this.canEntityBeSeen(this.entityToAttack))
+        if ((!this.onGround) && (this.entityToAttack != null) && (this.lastMotionY >= 0.0D) && (this.motionY < 0.0D) && (getDistanceToEntity(this.entityToAttack) <= 16.0F) && (canEntityBeSeen(this.entityToAttack)))
         {
-            double var1 = this.entityToAttack.posX - this.posX;
-            double var3 = this.entityToAttack.posZ - this.posZ;
-            double var5 = Math.atan2(var1, var3);
-            this.motionX = Math.sin(var5) * 0.25D;
-            this.motionZ = Math.cos(var5) * 0.25D;
+            double a = this.entityToAttack.posX - this.posX;
+            double b = this.entityToAttack.posZ - this.posZ;
+            double angle = Math.atan2(a, b);
+            this.motionX = (Math.sin(angle) * 0.25D);
+            this.motionZ = (Math.cos(angle) * 0.25D);
         }
 
-        if (!this.onGround && !this.isOnLadder() && Math.abs(this.motionY - this.lastMotionY) > 0.07D && Math.abs(this.motionY - this.lastMotionY) < 0.09D)
+        if ((!this.onGround) && (!isOnLadder()) && (Math.abs(this.motionY - this.lastMotionY) > 0.07000000000000001D) && (Math.abs(this.motionY - this.lastMotionY) < 0.09D))
         {
-            this.motionY += 0.054999999701976776D;
+            this.motionY += 0.05499999970197678D;
 
             if (this.motionY < -0.2750000059604645D)
             {
@@ -370,9 +363,9 @@ public class EntityValkyrie extends EntityDungeonMob implements IAetherBoss
             }
         }
 
-        this.moveSpeed = this.entityToAttack == null ? 0.5F : 1.0F;
+        this.moveSpeed = (this.entityToAttack == null ? 0.5F : 1.0F);
 
-        if (this.worldObj.difficultySetting <= 0 && (this.entityToAttack != null || this.angerLevel > 0))
+        if ((this.worldObj.difficultySetting <= 0) && ((this.entityToAttack != null) || (this.angerLevel > 0)))
         {
             this.angerLevel = 0;
             this.entityToAttack = null;
@@ -383,7 +376,7 @@ public class EntityValkyrie extends EntityDungeonMob implements IAetherBoss
             this.prevSwingProgress += 0.15F;
             this.swingProgress += 0.15F;
 
-            if (this.prevSwingProgress > 1.0F || this.swingProgress > 1.0F)
+            if ((this.prevSwingProgress > 1.0F) || (this.swingProgress > 1.0F))
             {
                 this.isSwinging = false;
                 this.prevSwingProgress = 0.0F;
@@ -405,264 +398,242 @@ public class EntityValkyrie extends EntityDungeonMob implements IAetherBoss
             this.sinage -= ((float)Math.PI * 2F);
         }
 
-        if (!this.otherDimension())
+        if (!otherDimension())
         {
-            --this.timeLeft;
+            this.timeLeft -= 1;
 
             if (this.timeLeft <= 0)
             {
                 this.isDead = true;
-                this.spawnExplosionParticle();
+                spawnExplosionParticle();
             }
         }
     }
 
-    /**
-     * (abstract) Protected helper method to write subclass entity data to NBT.
-     */
-    public void writeEntityToNBT(NBTTagCompound var1)
+    public void writeEntityToNBT(NBTTagCompound nbttagcompound)
     {
-        super.writeEntityToNBT(var1);
-        var1.setShort("Anger", (short)this.angerLevel);
-        var1.setShort("TeleTimer", (short)this.teleTimer);
-        var1.setShort("TimeLeft", (short)this.timeLeft);
-        var1.setBoolean("Boss", this.boss);
-        var1.setBoolean("Duel", this.duel);
-        var1.setInteger("DungeonX", this.dungeonX);
-        var1.setInteger("DungeonY", this.dungeonY);
-        var1.setInteger("DungeonZ", this.dungeonZ);
-        var1.setInteger("DungeonEntranceZ", this.dungeonEntranceZ);
-        var1.setTag("SafePos", this.newDoubleNBTList(new double[] {this.safeX, this.safeY, this.safeZ}));
-        var1.setString("BossName", this.name);
+        super.writeEntityToNBT(nbttagcompound);
+        nbttagcompound.setShort("Anger", (short)this.angerLevel);
+        nbttagcompound.setShort("TeleTimer", (short)this.teleTimer);
+        nbttagcompound.setShort("TimeLeft", (short)this.timeLeft);
+        nbttagcompound.setBoolean("Boss", this.boss);
+        nbttagcompound.setBoolean("Duel", this.duel);
+        nbttagcompound.setInteger("DungeonX", this.dungeonX);
+        nbttagcompound.setInteger("DungeonY", this.dungeonY);
+        nbttagcompound.setInteger("DungeonZ", this.dungeonZ);
+        nbttagcompound.setInteger("DungeonEntranceZ", this.dungeonEntranceZ);
+        nbttagcompound.setTag("SafePos", newDoubleNBTList(new double[] { this.safeX, this.safeY, this.safeZ }));
+        nbttagcompound.setString("BossName", this.name);
     }
 
-    /**
-     * (abstract) Protected helper method to read subclass entity data from NBT.
-     */
-    public void readEntityFromNBT(NBTTagCompound var1)
+    public void readEntityFromNBT(NBTTagCompound nbttagcompound)
     {
-        super.readEntityFromNBT(var1);
-        this.angerLevel = var1.getShort("Anger");
-        this.teleTimer = var1.getShort("TeleTimer");
-        this.timeLeft = var1.getShort("TimeLeft");
-        this.duel = var1.getBoolean("Duel");
-        this.boss = var1.getBoolean("Boss");
-        this.dungeonX = var1.getInteger("DungeonX");
-        this.dungeonY = var1.getInteger("DungeonY");
-        this.dungeonZ = var1.getInteger("DungeonZ");
-        this.dungeonEntranceZ = var1.getInteger("DungeonEntranceZ");
+        super.readEntityFromNBT(nbttagcompound);
+        this.angerLevel = nbttagcompound.getShort("Anger");
+        this.teleTimer = nbttagcompound.getShort("TeleTimer");
+        this.timeLeft = nbttagcompound.getShort("TimeLeft");
+        this.duel = nbttagcompound.getBoolean("Duel");
+        this.boss = nbttagcompound.getBoolean("Boss");
+        this.dungeonX = nbttagcompound.getInteger("DungeonX");
+        this.dungeonY = nbttagcompound.getInteger("DungeonY");
+        this.dungeonZ = nbttagcompound.getInteger("DungeonZ");
+        this.dungeonEntranceZ = nbttagcompound.getInteger("DungeonEntranceZ");
 
         if (this.boss)
         {
             this.texture = "/aether/mobs/valkyrie2.png";
         }
 
-        NBTTagList var2 = var1.getTagList("SafePos");
-        this.safeX = ((NBTTagDouble)var2.tagAt(0)).data;
-        this.safeY = ((NBTTagDouble)var2.tagAt(1)).data;
-        this.safeZ = ((NBTTagDouble)var2.tagAt(2)).data;
+        NBTTagList nbttaglist = nbttagcompound.getTagList("SafePos");
+        this.safeX = ((NBTTagDouble)nbttaglist.tagAt(0)).data;
+        this.safeY = ((NBTTagDouble)nbttaglist.tagAt(1)).data;
+        this.safeZ = ((NBTTagDouble)nbttaglist.tagAt(2)).data;
 
-        if (var1.getBoolean("IsCurrentBoss"))
+        if (nbttagcompound.getBoolean("IsCurrentBoss"))
         {
-            this.name = var1.getString("BossName");
+            this.name = nbttagcompound.getString("BossName");
         }
     }
 
-    /**
-     * Finds the closest player within 16 blocks to attack, or null if this Entity isn't interested in attacking
-     * (Animals, Spiders at day, peaceful PigZombies).
-     */
     protected Entity findPlayerToAttack()
     {
-        return this.otherDimension() && (this.worldObj.difficultySetting <= 0 || this.boss && !this.duel || this.angerLevel <= 0) ? null : super.findPlayerToAttack();
+        if ((otherDimension()) && ((this.worldObj.difficultySetting <= 0) || ((this.boss) && (!this.duel)) || (this.angerLevel <= 0)))
+        {
+            return null;
+        }
+
+        return super.findPlayerToAttack();
     }
 
-    /**
-     * Called when the entity is attacked.
-     */
-    public boolean attackEntityFrom(DamageSource var1, int var2)
+    public boolean attackEntityFrom(DamageSource ds, int i)
     {
-        if (var1.getEntity() instanceof EntityPlayer && this.worldObj.difficultySetting > 0)
+        if (((ds.getEntity() instanceof EntityPlayer)) && (this.worldObj.difficultySetting > 0))
         {
-            int var3;
-
-            if (this.boss && (!this.duel || this.worldObj.difficultySetting <= 0))
+            if ((this.boss) && ((!this.duel) || (this.worldObj.difficultySetting <= 0)))
             {
-                this.spawnExplosionParticle();
-                var3 = this.rand.nextInt(2);
+                spawnExplosionParticle();
+                int pokey = this.rand.nextInt(2);
 
-                if (var3 == 2)
+                if (pokey == 2)
                 {
-                    this.chatItUp("Sorry, I don\'t fight with weaklings.");
+                    chatItUp("Sorry, I don't fight with weaklings.");
                 }
                 else
                 {
-                    this.chatItUp("Try defeating some weaker valkyries first.");
+                    chatItUp("Try defeating some weaker valkyries first.");
                 }
 
                 return false;
             }
-            else
+
+            if (this.boss)
             {
-                if (this.boss)
-                {
-                    if (this.entityToAttack == null)
-                    {
-                        this.chatTime = 0;
-                        this.chatItUp("This will be your final battle!");
-                    }
-                    else
-                    {
-                        this.teleTimer += 60;
-                    }
-                }
-                else if (this.entityToAttack == null)
+                if (this.entityToAttack == null)
                 {
                     this.chatTime = 0;
-                    var3 = this.rand.nextInt(3);
-
-                    if (var3 == 2)
-                    {
-                        this.chatItUp("I\'m not going easy on you!");
-                    }
-                    else if (var3 == 1)
-                    {
-                        this.chatItUp("You\'re gonna regret that!");
-                    }
-                    else
-                    {
-                        this.chatItUp("Now you\'re in for it!");
-                    }
+                    chatItUp("This will be your final battle!");
                 }
                 else
                 {
-                    this.teleTimer -= 10;
+                    this.teleTimer += 60;
                 }
-
-                this.becomeAngryAt(var1.getEntity());
-                boolean var5 = super.attackEntityFrom(var1, var2);
-
-                if (var5 && this.health <= 0)
-                {
-                    int var4 = this.rand.nextInt(3);
-                    this.isDead = true;
-
-                    if (this.boss)
-                    {
-                        this.isDead = false;
-                        this.unlockDoor();
-                        this.unlockTreasure();
-                        this.chatItUp("You are truly... a mighty warrior...");
-                    }
-                    else if (var4 == 2)
-                    {
-                        this.chatItUp("Alright, alright! You win!");
-                    }
-                    else if (var4 == 1)
-                    {
-                        this.chatItUp("Okay, I give up! Geez!");
-                    }
-                    else
-                    {
-                        this.chatItUp("Oww! Fine, here\'s your medal...");
-                    }
-
-                    this.spawnExplosionParticle();
-                }
-
-                return var5;
             }
+            else if (this.entityToAttack == null)
+            {
+                this.chatTime = 0;
+                int pokey = this.rand.nextInt(3);
+
+                if (pokey == 2)
+                {
+                    chatItUp("I'm not going easy on you!");
+                }
+                else if (pokey == 1)
+                {
+                    chatItUp("You're gonna regret that!");
+                }
+                else
+                {
+                    chatItUp("Now you're in for it!");
+                }
+            }
+            else
+            {
+                this.teleTimer -= 10;
+            }
+
+            becomeAngryAt(ds.getEntity());
         }
         else
         {
-            this.teleport(this.posX, this.posY, this.posZ, 8);
-            this.extinguish();
+            teleport(this.posX, this.posY, this.posZ, 8);
+            extinguish();
             return false;
         }
+
+        boolean flag = super.attackEntityFrom(ds, i);
+
+        if ((flag) && (this.health <= 0))
+        {
+            int pokey = this.rand.nextInt(3);
+            this.isDead = true;
+
+            if (this.boss)
+            {
+                this.isDead = false;
+                unlockDoor();
+                unlockTreasure();
+                chatItUp("You are truly... a mighty warrior...");
+            }
+            else if (pokey == 2)
+            {
+                chatItUp("Alright, alright! You win!");
+            }
+            else if (pokey == 1)
+            {
+                chatItUp("Okay, I give up! Geez!");
+            }
+            else
+            {
+                chatItUp("Oww! Fine, here's your medal...");
+            }
+
+            spawnExplosionParticle();
+        }
+
+        return flag;
     }
 
-    /**
-     * Basic mob attack. Default to touch of death in EntityCreature. Overridden by each mob to define their attack.
-     */
-    protected void attackEntity(Entity var1, float var2)
+    protected void attackEntity(Entity entity, float f)
     {
-        if (this.attackTime <= 0 && var2 < 2.75F && var1.boundingBox.maxY > this.boundingBox.minY && var1.boundingBox.minY < this.boundingBox.maxY)
+        if ((this.attackTime <= 0) && (f < 2.75F) && (entity.boundingBox.maxY > this.boundingBox.minY) && (entity.boundingBox.minY < this.boundingBox.maxY))
         {
             this.attackTime = 20;
-            this.swingArm();
-            var1.attackEntityFrom(DamageSource.causeMobDamage(this), this.attackStrength);
+            swingArm();
+            entity.attackEntityFrom(DamageSource.causeMobDamage(this), this.attackStrength);
 
-            if (var1 != null && this.entityToAttack != null && var1 == this.entityToAttack && var1 instanceof EntityLiving)
+            if ((entity != null) && (this.entityToAttack != null) && (entity == this.entityToAttack) && ((entity instanceof EntityLiving)))
             {
-                EntityLiving var3 = (EntityLiving)var1;
+                EntityLiving e1 = (EntityLiving)entity;
 
-                if (var3.getHealth() <= 0)
+                if (e1.getHealth() <= 0)
                 {
                     this.entityToAttack = null;
                     this.angerLevel = 0;
-                    int var4 = this.rand.nextInt(3);
+                    int pokey = this.rand.nextInt(3);
                     this.chatTime = 0;
 
                     if (this.boss)
                     {
-                        this.chatItUp("As expected of a human.");
-                        this.unlockDoor();
+                        chatItUp("As expected of a human.");
+                        unlockDoor();
                     }
-                    else if (var4 == 2)
+                    else if (pokey == 2)
                     {
-                        this.chatItUp("You want a medallion? Try being less pathetic.");
+                        chatItUp("You want a medallion? Try being less pathetic.");
                     }
-                    else if (var4 == 1 && var3 instanceof EntityPlayer)
+                    else if ((pokey == 1) && ((e1 instanceof EntityPlayer)))
                     {
-                        EntityPlayer var5 = (EntityPlayer)var3;
-                        String var6 = var5.username;
-                        this.chatItUp("Maybe some day, " + var6 + "... maybe some day.");
+                        EntityPlayer ep = (EntityPlayer)e1;
+                        String s = ep.username;
+                        chatItUp("Maybe some day, " + s + "... maybe some day.");
                     }
                     else
                     {
-                        this.chatItUp("Humans aren\'t nearly as cute when they\'re dead.");
+                        chatItUp("Humans aren't nearly as cute when they're dead.");
                     }
                 }
             }
         }
     }
 
-    /**
-     * Drop 0-2 items of this living's type. @param par1 - Whether this entity has recently been hit by a player. @param
-     * par2 - Level of Looting used to kill this mob.
-     */
     protected void dropFewItems(boolean var1, int var2)
     {
         if (this.boss)
         {
-            this.entityDropItem(new ItemStack(AetherItems.Key, 1, 1), 0.0F);
-            this.dropItem(Item.swordGold.itemID, 1);
+            entityDropItem(new ItemStack(AetherItems.Key, 1, 1), 0.0F);
+            dropItem(Item.swordGold.itemID, 1);
         }
         else
         {
-            this.dropItem(AetherItems.VictoryMedal.itemID, 1);
+            dropItem(AetherItems.VictoryMedal.itemID, 1);
         }
     }
 
-    /**
-     * Called when the mob is falling. Calculates and applies fall damage.
-     */
-    public void fall(float var1) {}
+    public void fall(float f)
+    {
+    }
 
     public boolean otherDimension()
     {
         return true;
     }
 
-    public boolean isAirySpace(int var1, int var2, int var3)
+    public boolean isAirySpace(int x, int y, int z)
     {
-        int var4 = this.worldObj.getBlockId(var1, var2, var3);
-        return var4 == 0 || Block.blocksList[var4].getCollisionBoundingBoxFromPool(this.worldObj, var1, var2, var3) == null;
+        int p = this.worldObj.getBlockId(x, y, z);
+        return (p == 0) || (Block.blocksList[p].getCollisionBoundingBoxFromPool(this.worldObj, x, y, z) == null);
     }
 
-    /**
-     * Determines if an entity can be despawned, used on idle far away entities
-     */
     public boolean canDespawn()
     {
         return !this.boss;
@@ -673,34 +644,28 @@ public class EntityValkyrie extends EntityDungeonMob implements IAetherBoss
         return this;
     }
 
-    /**
-     * Checks if the entity's current position is a valid location to spawn this entity.
-     */
     public boolean getCanSpawnHere()
     {
-        int var1 = MathHelper.floor_double(this.posX);
-        int var2 = MathHelper.floor_double(this.boundingBox.minY);
-        int var3 = MathHelper.floor_double(this.posZ);
-        return this.worldObj.getFullBlockLightValue(var1, var2, var3) > 8 && this.worldObj.checkNoEntityCollision(this.boundingBox) && this.worldObj.getCollidingBoundingBoxes(this, this.boundingBox).size() == 0 && !this.worldObj.isAnyLiquid(this.boundingBox);
+        int i = MathHelper.floor_double(this.posX);
+        int j = MathHelper.floor_double(this.boundingBox.minY);
+        int k = MathHelper.floor_double(this.posZ);
+        return (this.worldObj.getFullBlockLightValue(i, j, k) > 8) && (this.worldObj.checkNoEntityCollision(this.boundingBox)) && (this.worldObj.getCollidingBoundingBoxes(this, this.boundingBox).size() == 0) && (!this.worldObj.isAnyLiquid(this.boundingBox));
     }
 
     public int getMedals()
     {
-        int var1 = 0;
-        ItemStack[] var2 = this.mc.thePlayer.inventory.mainInventory;
-        int var3 = var2.length;
+        int medals = 0;
 
-        for (int var4 = 0; var4 < var3; ++var4)
+        for (ItemStack item : this.mc.thePlayer.bK.mainInventory)
         {
-            ItemStack var5 = var2[var4];
-
-            if (var5 != null && var5.itemID == AetherItems.VictoryMedal.itemID)
+            if ((item != null) &&
+                    (item.itemID == AetherItems.VictoryMedal.itemID))
             {
-                var1 += var5.stackSize;
+                medals += item.stackSize;
             }
         }
 
-        return var1;
+        return medals;
     }
 
     public int getBossHP()
@@ -733,3 +698,4 @@ public class EntityValkyrie extends EntityDungeonMob implements IAetherBoss
         return EnumBossType.BOSS;
     }
 }
+

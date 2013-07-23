@@ -15,38 +15,39 @@ import net.minecraft.network.packet.Packet250CustomPayload;
 
 public class PacketDungeonTimerStart extends AetherPacket
 {
-    public PacketDungeonTimerStart(int var1)
+    public PacketDungeonTimerStart(int packetID)
     {
-        super(var1);
+        super(packetID);
     }
 
-    public void onPacketReceived(Packet250CustomPayload var1, Player var2)
+    public void onPacketReceived(Packet250CustomPayload packet, Player player)
     {
-        DataInputStream var3 = new DataInputStream(new ByteArrayInputStream(var1.data));
-        new BufferedReader(new InputStreamReader(var3));
+        DataInputStream dat = new DataInputStream(new ByteArrayInputStream(packet.data));
+        BufferedReader buf = new BufferedReader(new InputStreamReader(dat));
 
         try
         {
-            byte var5 = var3.readByte();
-            int var6 = var3.readInt();
-            String var7 = var3.readUTF();
-            int var8 = var3.readInt();
-            Side var9 = FMLCommonHandler.instance().getEffectiveSide();
+            byte packetType = dat.readByte();
+            int dungeonID = dat.readInt();
+            String partyName = dat.readUTF();
+            int timerLength = dat.readInt();
+            Side side = FMLCommonHandler.instance().getEffectiveSide();
 
-            if (var9.isClient())
+            if (side.isClient())
             {
-                Party var10 = PartyController.instance().getParty(var7);
-                Dungeon var11 = DungeonHandler.instance().getDungeon(var6);
+                Party party = PartyController.instance().getParty(partyName);
+                Dungeon dungeon = DungeonHandler.instance().getDungeon(dungeonID);
 
-                if (var10 != null && var11 != null)
+                if ((party != null) && (dungeon != null))
                 {
-                    DungeonHandler.instance().startTimer(var11, var10, var8);
+                    DungeonHandler.instance().startTimer(dungeon, party, timerLength);
                 }
             }
         }
-        catch (Exception var12)
+        catch (Exception ex)
         {
-            var12.printStackTrace();
+            ex.printStackTrace();
         }
     }
 }
+

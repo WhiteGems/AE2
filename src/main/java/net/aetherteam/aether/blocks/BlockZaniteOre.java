@@ -6,56 +6,51 @@ import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.stats.StatList;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 
-public class BlockZaniteOre extends BlockAether implements IAetherBlock
+public class BlockZaniteOre extends BlockAether
+    implements IAetherBlock
 {
-    protected BlockZaniteOre(int var1)
+    protected BlockZaniteOre(int blockID)
     {
-        super(var1, Material.rock);
-        this.setHardness(3.0F);
-        this.setStepSound(Block.soundStoneFootstep);
+        super(blockID, Material.rock);
+        setHardness(3.0F);
+        setStepSound(Block.soundStoneFootstep);
     }
 
-    public boolean canSilkHarvest(World var1, EntityPlayer var2, int var3, int var4, int var5, int var6)
+    public boolean canSilkHarvest(World world, EntityPlayer player, int x, int y, int z, int meta)
     {
         return true;
     }
 
-    /**
-     * Called when the player destroys a block with an item that can harvest it. (i, j, k) are the coordinates of the
-     * block and l is the block's subtype/damage.
-     */
-    public void harvestBlock(World var1, EntityPlayer var2, int var3, int var4, int var5, int var6)
+    public void harvestBlock(World world, EntityPlayer player, int x, int y, int z, int meta)
     {
-        var2.addStat(StatList.mineBlockStatArray[this.blockID], 1);
-        var2.addExhaustion(0.025F);
-        ItemStack var7 = null;
-        int var8 = EnchantmentHelper.getFortuneModifier(var2) != 0 ? EnchantmentHelper.getFortuneModifier(var2) : 1;
+        player.addStat(net.minecraft.stats.StatList.mineBlockStatArray[this.blockID], 1);
+        player.addExhaustion(0.025F);
+        ItemStack itemstack = null;
+        int fortune = EnchantmentHelper.getFortuneModifier(player) != 0 ? EnchantmentHelper.getFortuneModifier(player) : 1;
 
-        if (EnchantmentHelper.getSilkTouchModifier(var2))
+        if (EnchantmentHelper.getSilkTouchModifier(player))
         {
-            var7 = this.createStackedBlock(var6);
+            itemstack = createStackedBlock(meta);
         }
         else
         {
-            var7 = new ItemStack(AetherItems.ZaniteGemstone.itemID, MathHelper.clamp_int((new Random()).nextInt(var8 * 2), 1, var8 * 2 + 1), 0);
+            itemstack = new ItemStack(AetherItems.ZaniteGemstone.itemID, MathHelper.clamp_int(new Random().nextInt(fortune * 2), 1, fortune * 2 + 1), 0);
         }
 
-        if (var7 != null)
+        if (itemstack != null)
         {
-            this.dropBlockAsItem_do(var1, var3, var4, var5, var7);
+            dropBlockAsItem_do(world, x, y, z, itemstack);
         }
     }
 
-    /**
-     * Returns the ID of the items to drop on destruction.
-     */
-    public int idDropped(int var1, Random var2, int var3)
+    public int idDropped(int i, Random random, int k)
     {
         return AetherItems.ZaniteGemstone.itemID;
     }
 }
+

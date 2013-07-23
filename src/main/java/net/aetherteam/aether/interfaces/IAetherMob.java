@@ -1,5 +1,6 @@
 package net.aetherteam.aether.interfaces;
 
-public interface IAetherMob
+public abstract interface IAetherMob
 {
 }
+

@@ -3,7 +3,6 @@ package net.aetherteam.aether.items;
 import java.util.ArrayList;
 import java.util.Random;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
@@ -11,38 +10,37 @@ import net.minecraft.world.World;
 public class ItemContinuum extends ItemAether
 {
     private static ArrayList banList = new ArrayList();
+
     private static Random random = new Random();
 
-    protected ItemContinuum(int var1)
+    protected ItemContinuum(int i)
     {
-        super(var1);
-        this.setMaxStackSize(1);
+        super(i);
+        setMaxStackSize(1);
     }
 
-    /**
-     * Called whenever this item is equipped and the right mouse button is pressed. Args: itemStack, world, entityPlayer
-     */
-    public ItemStack onItemRightClick(ItemStack var1, World var2, EntityPlayer var3)
+    public ItemStack onItemRightClick(ItemStack itemstack, World world, EntityPlayer entityplayer)
     {
-        int var4;
+        int count;
 
         do
         {
-            var4 = 256 + random.nextInt(31744);
+            count = 256 + random.nextInt(31744);
         }
-        while (Item.itemsList[var4] == null || Item.itemsList[var4] != null && (new ItemStack(var4, 1, 0)).getItem() instanceof ItemBlock || banList.contains(Integer.valueOf(var4)));
+        while ((net.minecraft.item.Item.itemsList[count] == null) || ((net.minecraft.item.Item.itemsList[count] != null) && ((new ItemStack(count, 1, 0).getItem() instanceof ItemBlock))) || (banList.contains(Integer.valueOf(count))));
 
-        var1.itemID = var4;
-        return var1;
+        itemstack.itemID = count;
+        return itemstack;
     }
 
-    public static void addBan(int var0)
+    public static void addBan(int ID)
     {
-        banList.add(Integer.valueOf(var0));
+        banList.add(Integer.valueOf(ID));
     }
 
-    public static void removeBan(int var0)
+    public static void removeBan(int ID)
     {
-        banList.remove(var0);
+        banList.remove(ID);
     }
 }
+

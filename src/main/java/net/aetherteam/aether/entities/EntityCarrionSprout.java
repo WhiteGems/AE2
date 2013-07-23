@@ -1,58 +1,50 @@
 package net.aetherteam.aether.entities;
 
+import java.util.Random;
 import net.aetherteam.aether.interfaces.IAetherMob;
 import net.aetherteam.aether.items.AetherItems;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityAgeable;
+import net.minecraft.entity.EntityLiving;
+import net.minecraft.item.Item;
 import net.minecraft.world.World;
 
-public class EntityCarrionSprout extends EntityAetherAnimal implements IAetherMob
+public class EntityCarrionSprout extends EntityAetherAnimal
+    implements IAetherMob
 {
     public float sinage;
 
-    public EntityCarrionSprout(World var1)
+    public EntityCarrionSprout(World world)
     {
-        super(var1);
-        this.setSize(1.0F, 1.25F);
+        super(world);
+        setSize(1.0F, 1.25F);
         this.jumpMovementFactor = 0.0F;
         this.moveSpeed = 0.0F;
-        this.texture = this.dir + "/mobs/carrionsprout/sprout.png";
-        this.sinage = this.rand.nextFloat() * 6.0F;
+        this.texture = (this.dir + "/mobs/carrionsprout/sprout.png");
+        this.sinage = (this.rand.nextFloat() * 6.0F);
     }
 
-    /**
-     * Causes this entity to do an upwards motion (jumping).
-     */
-    protected void jump() {}
+    protected void jump()
+    {
+    }
 
-    /**
-     * Drop 0-2 items of this living's type. @param par1 - Whether this entity has recently been hit by a player. @param
-     * par2 - Level of Looting used to kill this mob.
-     */
     protected void dropFewItems(boolean var1, int var2)
     {
-        this.dropItem(AetherItems.Wyndberry.itemID, 2);
+        dropItem(AetherItems.Wyndberry.itemID, 2);
     }
 
-    /**
-     * Called frequently so the entity can update its state every tick as required. For example, zombies and skeletons
-     * use this to react to sunlight and start to burn.
-     */
     public void onLivingUpdate()
     {
         super.onLivingUpdate();
 
         if (this.health <= 0)
         {
-            if (this.health <= 0)
-            {
-                return;
-            }
+            if (this.health > 0);
         }
         else
         {
-            ++this.entityAge;
-            this.despawnEntity();
+            this.entityAge += 1;
+            despawnEntity();
         }
 
         if (this.hurtTime > 0)
@@ -69,30 +61,25 @@ public class EntityCarrionSprout extends EntityAetherAnimal implements IAetherMo
             this.sinage -= ((float)Math.PI * 2F);
         }
 
-        if (!this.isDead && !this.isCollided)
+        if ((!this.isDead) && (!this.isCollided))
         {
-            this.motionX = this.motionZ = 0.0D;
+            this.motionX = (this.motionZ = 0.0D);
         }
     }
 
-    /**
-     * Adds to the current velocity of the entity. Args: x, y, z
-     */
-    public void addVelocity(double var1, double var3, double var5) {}
-
-    /**
-     * knocks back this entity
-     */
-    public void knockBack(Entity var1, int var2, double var3, double var5) {}
-
-    /**
-     * Applies a velocity to each of the entities pushing them away from each other. Args: entity
-     */
-    public void applyEntityCollision(Entity var1)
+    public void addVelocity(double d, double d1, double d2)
     {
-        if (var1 instanceof EntityCarrionSprout)
+    }
+
+    public void knockBack(Entity entity, int i, double d, double d1)
+    {
+    }
+
+    public void applyEntityCollision(Entity entity)
+    {
+        if ((entity instanceof EntityCarrionSprout))
         {
-            super.applyEntityCollision(var1);
+            super.applyEntityCollision(entity);
         }
     }
 
@@ -101,8 +88,9 @@ public class EntityCarrionSprout extends EntityAetherAnimal implements IAetherMo
         return 10;
     }
 
-    public EntityAgeable createChild(EntityAgeable var1)
+    public EntityAgeable createChild(EntityAgeable entityageable)
     {
         return null;
     }
 }
+

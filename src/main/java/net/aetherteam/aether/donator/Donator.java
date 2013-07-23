@@ -8,10 +8,10 @@ public class Donator
     String RSA;
     public HashMap choices = new HashMap();
 
-    public Donator(String var1, String var2)
+    public Donator(String username, String RSA)
     {
-        this.username = var1;
-        this.RSA = var2;
+        this.username = username;
+        this.RSA = RSA;
     }
 
     public String getRSA()
@@ -19,31 +19,42 @@ public class Donator
         return this.RSA;
     }
 
-    public void addChoice(DonatorChoice var1)
+    public void addChoice(DonatorChoice choice)
     {
-        if (this.choices.get(var1.type) != null)
+        if (this.choices.get(choice.type) != null)
         {
-            this.choices.remove(var1.type);
+            this.choices.remove(choice.type);
         }
 
-        this.choices.put(var1.type, var1);
+        this.choices.put(choice.type, choice);
     }
 
-    public void removeChoiceType(EnumChoiceType var1)
+    public void removeChoiceType(EnumChoiceType type)
     {
-        if (this.choices.get(var1) != null)
+        if (this.choices.get(type) != null)
         {
-            this.choices.remove(var1);
+            this.choices.remove(type);
         }
     }
 
-    public boolean containsChoiceType(EnumChoiceType var1)
+    public boolean containsChoiceType(EnumChoiceType type)
     {
-        return this.choices.get(var1) != null;
+        if (this.choices.get(type) != null)
+        {
+            return true;
+        }
+
+        return false;
     }
 
-    public DonatorChoice getChoiceFromType(EnumChoiceType var1)
+    public DonatorChoice getChoiceFromType(EnumChoiceType type)
     {
-        return this.choices.get(var1) != null ? (DonatorChoice)this.choices.get(var1) : null;
+        if (this.choices.get(type) != null)
+        {
+            return (DonatorChoice)this.choices.get(type);
+        }
+
+        return null;
     }
 }
+

@@ -68,9 +68,9 @@ import net.aetherteam.aether.entities.mounts.EntityPhyg;
 import net.aetherteam.aether.entities.mounts.EntitySwet;
 import net.aetherteam.aether.entities.npc.EntityBasicNPC;
 import net.aetherteam.aether.oldcode.EntityMiniCloud;
-import net.minecraft.client.model.ModelSlime;
-import net.minecraft.client.renderer.entity.RenderLightningBolt;
-import net.minecraft.client.renderer.entity.RenderLiving;
+import net.minecraft.client.entity.render.RenderMinecartMobSpawner;
+import net.minecraft.client.renderer.entity.RenderMagmaCube;
+import net.minecraft.src.bcp;
 
 public class AetherEntityRenderers
 {
@@ -94,14 +94,14 @@ public class AetherEntityRenderers
         RenderingRegistry.registerEntityRenderingHandler(EntityDartEnchanted.class, new RenderDartEnchanted());
         RenderingRegistry.registerEntityRenderingHandler(EntityDartPoison.class, new RenderDartPoison());
         RenderingRegistry.registerEntityRenderingHandler(EntityProjectileSentry.class, new RenderProjectileSentry());
-        RenderingRegistry.registerEntityRenderingHandler(EntitySentry.class, new RenderSentry(new ModelSlime(0), 0.2F));
-        RenderingRegistry.registerEntityRenderingHandler(EntityBattleSentry.class, new RenderBattleSentry(new ModelSlime(0), 0.2F));
+        RenderingRegistry.registerEntityRenderingHandler(EntitySentry.class, new RenderSentry(new bcp(0), 0.2F));
+        RenderingRegistry.registerEntityRenderingHandler(EntityBattleSentry.class, new RenderBattleSentry(new bcp(0), 0.2F));
         RenderingRegistry.registerEntityRenderingHandler(EntityLightningKnife.class, new RenderLightningKnife());
         RenderingRegistry.registerEntityRenderingHandler(EntityMimic.class, new RenderMimic(new ModelMimic(), 1.0F));
-        RenderingRegistry.registerEntityRenderingHandler(EntityMiniCloud.class, new RenderLiving(new ModelMiniCloud(0.0F, 20.0F), 0.35F));
+        RenderingRegistry.registerEntityRenderingHandler(EntityMiniCloud.class, new RenderMinecartMobSpawner(new ModelMiniCloud(0.0F, 20.0F), 0.35F));
         RenderingRegistry.registerEntityRenderingHandler(EntityTNTPresent.class, new RenderTNTPresent());
-        RenderingRegistry.registerEntityRenderingHandler(EntityAetherLightning.class, new RenderLightningBolt());
-        RenderingRegistry.registerEntityRenderingHandler(EntitySwet.class, new RenderSwet(new ModelSlime(16), new ModelSlime(0), 0.3F));
+        RenderingRegistry.registerEntityRenderingHandler(EntityAetherLightning.class, new RenderMagmaCube());
+        RenderingRegistry.registerEntityRenderingHandler(EntitySwet.class, new RenderSwet(new bcp(16), new bcp(0), 0.3F));
         RenderingRegistry.registerEntityRenderingHandler(EntityTrackingGolem.class, new RenderTrackingGolem(new ModelSentryGolem(), 1.0F));
         RenderingRegistry.registerEntityRenderingHandler(EntitySentryGolem.class, new RenderSentryGolem(new ModelSentryGolem(), 1.0F));
         RenderingRegistry.registerEntityRenderingHandler(EntitySentryGuardian.class, new RenderSentryGuardian(new ModelSentryGolemBoss(), 1.0F));
@@ -122,3 +122,4 @@ public class AetherEntityRenderers
         RenderingRegistry.registerEntityRenderingHandler(EntityBasicNPC.class, new RenderNPC(new ModelAngel(), 1.0F));
     }
 }
+

@@ -21,11 +21,9 @@ public class AetherFoodTab extends CreativeTabs
         return "Aether Food";
     }
 
-    /**
-     * Gets the translated Label.
-     */
     public String getTranslatedTabLabel()
     {
-        return this.getTabLabel();
+        return getTabLabel();
     }
 }
+

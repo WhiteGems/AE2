@@ -16,48 +16,51 @@ import net.minecraft.network.packet.Packet250CustomPayload;
 
 public class PacketPartyTypeChange extends AetherPacket
 {
-    public PacketPartyTypeChange(int var1)
+    public PacketPartyTypeChange(int packetID)
     {
-        super(var1);
+        super(packetID);
     }
 
-    public void onPacketReceived(Packet250CustomPayload var1, Player var2)
+    public void onPacketReceived(Packet250CustomPayload packet, Player player)
     {
-        DataInputStream var3 = new DataInputStream(new ByteArrayInputStream(var1.data));
-        new BufferedReader(new InputStreamReader(var3));
+        DataInputStream dat = new DataInputStream(new ByteArrayInputStream(packet.data));
+        BufferedReader buf = new BufferedReader(new InputStreamReader(dat));
 
         try
         {
-            byte var5 = var3.readByte();
-            String var6 = var3.readUTF();
-            PartyType var7 = PartyType.getTypeFromString(var3.readUTF());
-            Side var8 = FMLCommonHandler.instance().getEffectiveSide();
-            Party var9;
+            byte packetType = dat.readByte();
+            String partyName = dat.readUTF();
+            PartyType newType = PartyType.getTypeFromString(dat.readUTF());
+            Side side = FMLCommonHandler.instance().getEffectiveSide();
 
-            if (var8.isClient())
+            if (side.isClient())
             {
-                var9 = PartyController.instance().getParty(var6);
+                Party party = PartyController.instance().getParty(partyName);
 
-                if (var9 != null)
+                if (party != null)
                 {
-                    PartyController.instance().changePartyType(var9, var7, false);
+                    PartyController.instance().changePartyType(party, newType, false);
                 }
             }
             else
             {
-                var9 = PartyController.instance().getParty(var6);
-                PartyMember var10 = PartyController.instance().getMember((EntityPlayer)var2);
+                Party party = PartyController.instance().getParty(partyName);
+                PartyMember potentialLeader = PartyController.instance().getMember((EntityPlayer)player);
 
-                if (var9 != null && var10 != null && var9.isLeader(var10))
+                if ((party != null) && (potentialLeader != null))
                 {
-                    PartyController.instance().changePartyType(var9, var7, false);
-                    this.sendPacketToAllExcept(AetherPacketHandler.sendPartyTypeChange(var6, var7), var2);
+                    if (party.isLeader(potentialLeader))
+                    {
+                        PartyController.instance().changePartyType(party, newType, false);
+                        sendPacketToAllExcept(AetherPacketHandler.sendPartyTypeChange(partyName, newType), player);
+                    }
                 }
             }
         }
-        catch (Exception var11)
+        catch (Exception ex)
         {
-            var11.printStackTrace();
+            ex.printStackTrace();
         }
     }
 }
+

@@ -18,107 +18,101 @@ import net.minecraft.world.World;
 
 public class ItemValkyriePickaxe extends ItemPickaxe
 {
-    private int weaponDamage = 1;
+    private int weaponDamage;
     private static Random random = new Random();
 
-    protected ItemValkyriePickaxe(int var1, EnumToolMaterial var2)
+    protected ItemValkyriePickaxe(int i, EnumToolMaterial enumtoolmaterial)
     {
-        super(var1, var2);
+        super(i, enumtoolmaterial);
+        this.weaponDamage = 1;
     }
 
-    public Item setIconName(String var1)
+    public Item setIconName(String name)
     {
-        return this.setUnlocalizedName("Aether:" + var1);
+        return setUnlocalizedName("Aether:" + name);
     }
 
-    /**
-     * Returns the damage against a given entity.
-     */
-    public int getDamageVsEntity(Entity var1)
+    public int getDamageVsEntity(Entity entity)
     {
         return 0;
     }
 
-    /**
-     * returns the action that specifies what animation to play when the items is being used
-     */
-    public EnumAction getItemUseAction(ItemStack var1)
+    public EnumAction getItemUseAction(ItemStack par1ItemStack)
     {
         return EnumAction.none;
     }
 
-    /**
-     * Current implementations of this method in child classes do not use the entry argument beside ev. They just raise
-     * the damage on the stack.
-     */
-    public boolean hitEntity(ItemStack var1, EntityLiving var2, EntityLiving var3)
+    public boolean hitEntity(ItemStack itemstack, EntityLiving entityliving, EntityLiving entityliving1)
     {
         return false;
     }
 
-    /**
-     * Called each tick as long the item is on a player inventory. Uses by maps to check if is on a player hand and
-     * update it's contents.
-     */
-    public void onUpdate(ItemStack var1, World var2, Entity var3, int var4, boolean var5)
+    public void onUpdate(ItemStack itemstack, World world, Entity entity, int i, boolean flag)
     {
-        if (var5)
+        if (!flag)
         {
-            if (var3 instanceof EntityPlayer)
+            return;
+        }
+
+        if (!(entity instanceof EntityPlayer))
+        {
+            return;
+        }
+
+        EntityPlayer player = (EntityPlayer)entity;
+
+        if (player.swingProgressInt == -1)
+        {
+            Vec3 look = player.getLookVec();
+            double dist = 8.0D;
+            AxisAlignedBB aabb = player.boundingBox.expand(dist, dist, dist);
+            List list = world.getEntitiesWithinAABB(Entity.class, aabb);
+            Entity found = null;
+            double foundLen = 0.0D;
+
+            for (Iterator i$ = list.iterator(); i$.hasNext();)
             {
-                EntityPlayer var6 = (EntityPlayer)var3;
+                Object o = i$.next();
 
-                if (var6.swingProgressInt == -1)
+                if (o != player)
                 {
-                    Vec3 var7 = var6.getLookVec();
-                    double var8 = 8.0D;
-                    AxisAlignedBB var10 = var6.boundingBox.expand(var8, var8, var8);
-                    List var11 = var2.getEntitiesWithinAABB(Entity.class, var10);
-                    Entity var12 = null;
-                    double var13 = 0.0D;
-                    Iterator var15 = var11.iterator();
+                    Entity ent = (Entity)o;
 
-                    while (var15.hasNext())
+                    if (ent.canBeCollidedWith())
                     {
-                        Object var16 = var15.next();
+                        Vec3 vec = Vec3.createVectorHelper(ent.posX - player.posX, ent.boundingBox.minY + ent.height / 2.0F - player.posY - player.getEyeHeight(), ent.posZ - player.posZ);
+                        double len = vec.lengthVector();
 
-                        if (var16 != var6)
+                        if (len <= dist)
                         {
-                            Entity var17 = (Entity)var16;
+                            vec = vec.normalize();
+                            double dot = look.dotProduct(vec);
 
-                            if (var17.canBeCollidedWith())
+                            if ((dot >= 1.0D - 0.125D / len) && (player.canEntityBeSeen(ent)))
                             {
-                                Vec3 var18 = Vec3.createVectorHelper(var17.posX - var6.posX, var17.boundingBox.minY + (double)(var17.height / 2.0F) - var6.posY - (double)var6.getEyeHeight(), var17.posZ - var6.posZ);
-                                double var19 = var18.lengthVector();
-
-                                if (var19 <= var8)
+                                if ((foundLen == 0.0D) || (len < foundLen))
                                 {
-                                    var18 = var18.normalize();
-                                    double var21 = var7.dotProduct(var18);
-
-                                    if (var21 >= 1.0D - 0.125D / var19 && var6.canEntityBeSeen(var17) && (var13 == 0.0D || var19 < var13))
-                                    {
-                                        var12 = var17;
-                                        var13 = var19;
-                                    }
+                                    found = ent;
+                                    foundLen = len;
                                 }
                             }
                         }
                     }
-
-                    if (var12 == null)
-                    {
-                        return;
-                    }
-
-                    var12.attackEntityFrom(DamageSource.causePlayerDamage(var6), this.weaponDamage);
-
-                    if (var12 instanceof EntityLiving)
-                    {
-                        var1.damageItem(1, (EntityLiving)var12);
-                    }
                 }
+            }
+
+            if (found == null)
+            {
+                return;
+            }
+
+            found.attackEntityFrom(DamageSource.causePlayerDamage(player), this.weaponDamage);
+
+            if ((found instanceof EntityLiving))
+            {
+                itemstack.damageItem(1, (EntityLiving)found);
             }
         }
     }
 }
+

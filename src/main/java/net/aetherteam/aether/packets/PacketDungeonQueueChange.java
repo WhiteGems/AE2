@@ -8,114 +8,115 @@ import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.DataInputStream;
 import java.io.InputStreamReader;
+import java.io.PrintStream;
 import java.util.Iterator;
+import java.util.List;
 import net.aetherteam.aether.dungeons.Dungeon;
 import net.aetherteam.aether.dungeons.DungeonHandler;
 import net.aetherteam.aether.party.Party;
 import net.aetherteam.aether.party.PartyController;
 import net.aetherteam.aether.party.members.PartyMember;
 import net.aetherteam.aether.tile_entities.TileEntityEntranceController;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.network.packet.Packet250CustomPayload;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.management.ServerConfigurationManager;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.MathHelper;
+import net.minecraft.world.World;
+import net.minecraft.world.WorldProvider;
 
 public class PacketDungeonQueueChange extends AetherPacket
 {
-    public PacketDungeonQueueChange(int var1)
+    public PacketDungeonQueueChange(int packetID)
     {
-        super(var1);
+        super(packetID);
     }
 
-    public void onPacketReceived(Packet250CustomPayload var1, Player var2)
+    public void onPacketReceived(Packet250CustomPayload packet, Player player)
     {
-        DataInputStream var3 = new DataInputStream(new ByteArrayInputStream(var1.data));
-        new BufferedReader(new InputStreamReader(var3));
+        DataInputStream dat = new DataInputStream(new ByteArrayInputStream(packet.data));
+        BufferedReader buf = new BufferedReader(new InputStreamReader(dat));
 
         try
         {
-            byte var5 = var3.readByte();
-            boolean var6 = var3.readBoolean();
-            int var7 = var3.readInt();
-            String var8 = var3.readUTF();
-            int var9 = var3.readInt();
-            int var10 = var3.readInt();
-            int var11 = var3.readInt();
-            Side var12 = FMLCommonHandler.instance().getEffectiveSide();
-            Party var13;
+            byte packetType = dat.readByte();
+            boolean adding = dat.readBoolean();
+            int dungeonID = dat.readInt();
+            String partyName = dat.readUTF();
+            int tileX = dat.readInt();
+            int tileY = dat.readInt();
+            int tileZ = dat.readInt();
+            Side side = FMLCommonHandler.instance().getEffectiveSide();
 
-            if (var12.isClient())
+            if (side.isClient())
             {
-                var13 = PartyController.instance().getParty(var8);
-                Dungeon var14 = DungeonHandler.instance().getDungeon(var7);
-                PartyMember var15 = PartyController.instance().getMember((EntityPlayer)var2);
-                EntityPlayer var16 = (EntityPlayer)var2;
+                Party party = PartyController.instance().getParty(partyName);
+                Dungeon dungeon = DungeonHandler.instance().getDungeon(dungeonID);
+                PartyMember potentialLeader = PartyController.instance().getMember((EntityPlayer)player);
+                EntityPlayer entityPlayer = (EntityPlayer)player;
 
-                if (var13 != null && var14 != null)
+                if ((party != null) && (dungeon != null))
                 {
-                    if (var6)
+                    if (adding)
                     {
-                        DungeonHandler.instance().queueParty(var14, var13, var9, var10, var11, false);
+                        DungeonHandler.instance().queueParty(dungeon, party, tileX, tileY, tileZ, false);
                     }
                     else
                     {
-                        DungeonHandler.instance().disbandQueue(var14, var13, var9, var10, var11, var15, false);
+                        DungeonHandler.instance().disbandQueue(dungeon, party, tileX, tileY, tileZ, potentialLeader, false);
                     }
                 }
             }
             else
             {
-                var13 = PartyController.instance().getParty(var8);
-                PartyMember var27 = PartyController.instance().getMember((EntityPlayer)var2);
-                EntityPlayerMP var26 = (EntityPlayerMP)var2;
-                Dungeon var28 = DungeonHandler.instance().getDungeon(var7);
-                TileEntityEntranceController var17 = (TileEntityEntranceController)var26.worldObj.getBlockTileEntity(MathHelper.floor_double((double)var9), MathHelper.floor_double((double)var10), MathHelper.floor_double((double)var11));
-                MinecraftServer var18 = FMLCommonHandler.instance().getMinecraftServerInstance();
-                ServerConfigurationManager var19 = var18.getConfigurationManager();
-                Iterator var20 = var19.playerEntityList.iterator();
+                Party party = PartyController.instance().getParty(partyName);
+                PartyMember potentialLeader = PartyController.instance().getMember((EntityPlayer)player);
+                EntityPlayerMP entityPlayer = (EntityPlayerMP)player;
+                Dungeon dungeon = DungeonHandler.instance().getDungeon(dungeonID);
+                TileEntityEntranceController controller = (TileEntityEntranceController)entityPlayer.worldObj.getBlockTileEntity(MathHelper.floor_double(tileX), MathHelper.floor_double(tileY), MathHelper.floor_double(tileZ));
+                MinecraftServer server = FMLCommonHandler.instance().getMinecraftServerInstance();
+                ServerConfigurationManager configManager = server.getConfigurationManager();
 
-                while (var20.hasNext())
+                for (Iterator i$ = configManager.playerEntityList.iterator(); i$.hasNext();)
                 {
-                    Object var21 = var20.next();
+                    Object obj = i$.next();
 
-                    if (var21 instanceof EntityPlayer)
+                    if ((obj instanceof EntityPlayer))
                     {
-                        EntityPlayer var22 = (EntityPlayer)var21;
+                        EntityPlayer entityPlayer1 = (EntityPlayer)obj;
 
-                        if (!var22.equals(var26) && PartyController.instance().getParty((EntityPlayer)var26).hasMember(PartyController.instance().getMember(var22)) && var22.worldObj.provider.dimensionId != 3)
+                        if ((!entityPlayer1.equals(entityPlayer)) && (PartyController.instance().getParty(entityPlayer).hasMember(PartyController.instance().getMember(entityPlayer1))) &&
+                                (entityPlayer1.worldObj.provider.dimensionId != 3))
                         {
-                            PacketDispatcher.sendPacketToPlayer(AetherPacketHandler.sendDungeonQueueChange(false, var28, var9, var10, var11, var13), var2);
-                            var26.addChatMessage("\u00a7o All of your party members aren\'t in the Aether!");
+                            PacketDispatcher.sendPacketToPlayer(AetherPacketHandler.sendDungeonQueueChange(false, dungeon, tileX, tileY, tileZ, party), player);
+                            entityPlayer.addChatMessage("§o All of your party members aren't in the Aether!");
                             return;
                         }
                     }
                 }
 
-                if (var13 != null && var28 != null && var27 != null)
+                if ((party != null) && (dungeon != null) && (potentialLeader != null))
                 {
-                    int var25;
-                    int var24;
-                    int var29;
-
-                    if (var13.isLeader(var27) && var6 && var17 != null && !var28.hasAnyConqueredDungeon(var13.getMembers()))
+                    if ((party.isLeader(potentialLeader)) && (adding) && (controller != null) && (!dungeon.hasAnyConqueredDungeon(party.getMembers())))
                     {
-                        var29 = MathHelper.floor_double((double)var17.xCoord);
-                        var25 = MathHelper.floor_double((double)var17.yCoord);
-                        var24 = MathHelper.floor_double((double)var17.zCoord);
-                        System.out.println("Leader was validated, adding the party " + var13.getName() + " to the Dungeon\'s queue.");
-                        DungeonHandler.instance().queueParty(var28, var13, var29, var25, var24, false);
-                        this.sendPacketToAllExcept(AetherPacketHandler.sendDungeonQueueChange(var6, var28, var29, var25, var24, var13), var2);
+                        int x = MathHelper.floor_double(controller.xCoord);
+                        int y = MathHelper.floor_double(controller.yCoord);
+                        int z = MathHelper.floor_double(controller.zCoord);
+                        System.out.println("Leader was validated, adding the party " + party.getName() + " to the Dungeon's queue.");
+                        DungeonHandler.instance().queueParty(dungeon, party, x, y, z, false);
+                        sendPacketToAllExcept(AetherPacketHandler.sendDungeonQueueChange(adding, dungeon, x, y, z, party), player);
                     }
-                    else if (!var6)
+                    else if (!adding)
                     {
-                        var29 = MathHelper.floor_double((double)var17.xCoord);
-                        var25 = MathHelper.floor_double((double)var17.yCoord);
-                        var24 = MathHelper.floor_double((double)var17.zCoord);
-                        System.out.println("No validation needed, removing party " + var8 + " from the Dungeon queue.");
-                        DungeonHandler.instance().disbandQueue(var28, var13, var29, var25, var24, var27, false);
-                        this.sendPacketToAllExcept(AetherPacketHandler.sendDungeonQueueChange(var6, var28, var29, var25, var24, var13), var2);
+                        int x = MathHelper.floor_double(controller.xCoord);
+                        int y = MathHelper.floor_double(controller.yCoord);
+                        int z = MathHelper.floor_double(controller.zCoord);
+                        System.out.println("No validation needed, removing party " + partyName + " from the Dungeon queue.");
+                        DungeonHandler.instance().disbandQueue(dungeon, party, x, y, z, potentialLeader, false);
+                        sendPacketToAllExcept(AetherPacketHandler.sendDungeonQueueChange(adding, dungeon, x, y, z, party), player);
                     }
                     else
                     {
@@ -124,9 +125,10 @@ public class PacketDungeonQueueChange extends AetherPacket
                 }
             }
         }
-        catch (Exception var23)
+        catch (Exception ex)
         {
-            var23.printStackTrace();
+            ex.printStackTrace();
         }
     }
 }
+

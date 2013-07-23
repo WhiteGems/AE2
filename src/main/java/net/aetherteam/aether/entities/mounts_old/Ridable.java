@@ -1,6 +1,7 @@
 package net.aetherteam.aether.entities.mounts_old;
 
-public interface Ridable
+public abstract interface Ridable
 {
-    RidingHandler getRidingHandler();
+    public abstract RidingHandler getRidingHandler();
 }
+

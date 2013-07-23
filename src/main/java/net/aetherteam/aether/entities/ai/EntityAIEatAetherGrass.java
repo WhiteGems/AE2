@@ -1,8 +1,12 @@
 package net.aetherteam.aether.entities.ai;
 
+import java.util.Random;
 import net.aetherteam.aether.blocks.AetherBlocks;
+import net.minecraft.block.Block;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.ai.EntityAIBase;
+import net.minecraft.pathfinding.PathNavigate;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 
@@ -12,34 +16,26 @@ public class EntityAIEatAetherGrass extends EntityAIBase
     private World theWorld;
     int eatGrassTick = 0;
 
-    public EntityAIEatAetherGrass(EntityLiving var1)
+    public EntityAIEatAetherGrass(EntityLiving par1EntityLiving)
     {
-        this.theEntity = var1;
-        this.theWorld = var1.worldObj;
-        this.setMutexBits(7);
+        this.theEntity = par1EntityLiving;
+        this.theWorld = par1EntityLiving.worldObj;
+        setMutexBits(7);
     }
 
-    /**
-     * Returns whether the EntityAIBase should begin execution.
-     */
     public boolean shouldExecute()
     {
         if (this.theEntity.getRNG().nextInt(this.theEntity.isChild() ? 50 : 1000) != 0)
         {
             return false;
         }
-        else
-        {
-            int var1 = MathHelper.floor_double(this.theEntity.posX);
-            int var2 = MathHelper.floor_double(this.theEntity.posY);
-            int var3 = MathHelper.floor_double(this.theEntity.posZ);
-            return this.theWorld.getBlockId(var1, var2, var3) == AetherBlocks.TallAetherGrass.blockID && this.theWorld.getBlockMetadata(var1, var2, var3) == 1 ? true : this.theWorld.getBlockId(var1, var2 - 1, var3) == AetherBlocks.AetherGrass.blockID;
-        }
+
+        int i = MathHelper.floor_double(this.theEntity.posX);
+        int j = MathHelper.floor_double(this.theEntity.posY);
+        int k = MathHelper.floor_double(this.theEntity.posZ);
+        return (this.theWorld.getBlockId(i, j, k) == AetherBlocks.TallAetherGrass.blockID) && (this.theWorld.getBlockMetadata(i, j, k) == 1);
     }
 
-    /**
-     * Execute a one shot task or start executing a continuous task
-     */
     public void startExecuting()
     {
         this.eatGrassTick = 40;
@@ -47,17 +43,11 @@ public class EntityAIEatAetherGrass extends EntityAIBase
         this.theEntity.getNavigator().clearPathEntity();
     }
 
-    /**
-     * Resets the task
-     */
     public void resetTask()
     {
         this.eatGrassTick = 0;
     }
 
-    /**
-     * Returns whether an in-progress EntityAIBase should continue executing
-     */
     public boolean continueExecuting()
     {
         return this.eatGrassTick > 0;
@@ -68,30 +58,28 @@ public class EntityAIEatAetherGrass extends EntityAIBase
         return this.eatGrassTick;
     }
 
-    /**
-     * Updates the task
-     */
     public void updateTask()
     {
         this.eatGrassTick = Math.max(0, this.eatGrassTick - 1);
 
         if (this.eatGrassTick == 4)
         {
-            int var1 = MathHelper.floor_double(this.theEntity.posX);
-            int var2 = MathHelper.floor_double(this.theEntity.posY);
-            int var3 = MathHelper.floor_double(this.theEntity.posZ);
+            int i = MathHelper.floor_double(this.theEntity.posX);
+            int j = MathHelper.floor_double(this.theEntity.posY);
+            int k = MathHelper.floor_double(this.theEntity.posZ);
 
-            if (this.theWorld.getBlockId(var1, var2, var3) == AetherBlocks.TallAetherGrass.blockID)
+            if (this.theWorld.getBlockId(i, j, k) == AetherBlocks.TallAetherGrass.blockID)
             {
-                this.theWorld.destroyBlock(var1, var2, var3, false);
+                this.theWorld.destroyBlock(i, j, k, false);
                 this.theEntity.eatGrassBonus();
             }
-            else if (this.theWorld.getBlockId(var1, var2 - 1, var3) == AetherBlocks.AetherGrass.blockID)
+            else if (this.theWorld.getBlockId(i, j - 1, k) == AetherBlocks.AetherGrass.blockID)
             {
-                this.theWorld.playAuxSFX(2001, var1, var2 - 1, var3, AetherBlocks.AetherGrass.blockID);
-                this.theWorld.setBlock(var1, var2 - 1, var3, AetherBlocks.AetherDirt.blockID, 0, 2);
+                this.theWorld.playAuxSFX(2001, i, j - 1, k, AetherBlocks.AetherGrass.blockID);
+                this.theWorld.setBlock(i, j - 1, k, AetherBlocks.AetherDirt.blockID, 0, 2);
                 this.theEntity.eatGrassBonus();
             }
         }
     }
 }
+

@@ -8,42 +8,43 @@ import net.minecraft.item.EnumToolMaterial;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemSpade;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.ItemTool;
 import net.minecraft.world.World;
 
 public class ItemHolystoneShovel extends ItemSpade
 {
     private static Random random = new Random();
-    public static final Block[] blocksEffectiveAgainst = new Block[] {Block.grass, Block.dirt, Block.sand, Block.gravel, Block.snow, Block.blockSnow, Block.blockClay, Block.tilledField, Block.slowSand, Block.mycelium, AetherBlocks.AetherDirt, AetherBlocks.AetherGrass};
 
-    public ItemHolystoneShovel(int var1, EnumToolMaterial var2)
+    public static final Block[] blocksEffectiveAgainst = { Block.grass, Block.dirt, Block.sand, Block.gravel, Block.snow, Block.blockSnow, Block.blockClay, Block.tilledField, Block.slowSand, Block.mycelium, AetherBlocks.AetherDirt, AetherBlocks.AetherGrass };
+
+    public ItemHolystoneShovel(int i, EnumToolMaterial enumtoolmaterial)
     {
-        super(var1, var2);
+        super(i, enumtoolmaterial);
     }
 
-    public Item setIconName(String var1)
+    public Item setIconName(String name)
     {
-        return this.setUnlocalizedName("Aether:" + var1);
+        return setUnlocalizedName("Aether:" + name);
     }
 
-    public boolean onBlockDestroyed(ItemStack var1, World var2, int var3, int var4, int var5, int var6, EntityLiving var7)
+    public boolean onBlockDestroyed(ItemStack itemstack, World world, int i, int j, int k, int l, EntityLiving entityliving)
     {
-        if (random.nextInt(20) == 0 && !var2.isRemote)
+        if (random.nextInt(20) == 0)
         {
-            var7.dropItemWithOffset(AetherItems.AmbrosiumShard.itemID, 1, 0.0F);
+            if (!world.isRemote)
+            {
+                entityliving.dropItemWithOffset(AetherItems.AmbrosiumShard.itemID, 1, 0.0F);
+            }
         }
 
-        return super.onBlockDestroyed(var1, var2, var3, var4, var5, var6, var7);
+        return super.onBlockDestroyed(itemstack, world, i, j, k, l, entityliving);
     }
 
-    /**
-     * Returns the strength of the stack against a given block. 1.0F base, (Quality+1)*2 if correct blocktype, 1.5F if
-     * sword
-     */
-    public float getStrVsBlock(ItemStack var1, Block var2)
+    public float getStrVsBlock(ItemStack par1ItemStack, Block par2Block)
     {
-        for (int var3 = 0; var3 < blocksEffectiveAgainst.length; ++var3)
+        for (int i = 0; i < blocksEffectiveAgainst.length; i++)
         {
-            if (blocksEffectiveAgainst[var3] == var2)
+            if (blocksEffectiveAgainst[i] == par2Block)
             {
                 return this.efficiencyOnProperMaterial;
             }
@@ -52,3 +53,4 @@ public class ItemHolystoneShovel extends ItemSpade
         return 1.0F;
     }
 }
+

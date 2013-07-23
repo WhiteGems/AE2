@@ -1,8 +1,9 @@
 package net.aetherteam.aether.entities.mounts;
 
-public interface Mount
+public abstract interface Mount
 {
-    int getHealthTracked();
+    public abstract int getHealthTracked();
 
-    void setHealthTracked();
+    public abstract void setHealthTracked();
 }
+

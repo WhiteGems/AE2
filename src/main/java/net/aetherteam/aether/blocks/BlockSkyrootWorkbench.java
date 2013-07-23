@@ -4,6 +4,7 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.aetherteam.aether.Aether;
 import net.aetherteam.aether.AetherGuiHandler;
+import net.minecraft.block.Block;
 import net.minecraft.block.BlockWorkbench;
 import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.entity.player.EntityPlayer;
@@ -13,52 +14,40 @@ import net.minecraft.world.World;
 public class BlockSkyrootWorkbench extends BlockWorkbench
 {
     @SideOnly(Side.CLIENT)
-    private Icon workbenchIconTop;
-    @SideOnly(Side.CLIENT)
-    private Icon workbenchIconFront;
+    private Icon field_94385_a;
 
-    protected BlockSkyrootWorkbench(int var1)
+    @SideOnly(Side.CLIENT)
+    private Icon field_94384_b;
+
+    protected BlockSkyrootWorkbench(int par1)
     {
-        super(var1);
+        super(par1);
     }
 
     @SideOnly(Side.CLIENT)
-
-    /**
-     * From the specified side and block metadata retrieves the blocks texture. Args: side, metadata
-     */
-    public Icon getIcon(int var1, int var2)
+    public Icon getIcon(int par1, int par2)
     {
-        return var1 == 1 ? this.workbenchIconTop : (var1 == 0 ? AetherBlocks.SkyrootPlank.getBlockTextureFromSide(var1) : (var1 != 2 && var1 != 4 ? this.blockIcon : this.workbenchIconFront));
+        return (par1 != 2) && (par1 != 4) ? this.blockIcon : par1 == 0 ? AetherBlocks.SkyrootPlank.getBlockTextureFromSide(par1) : par1 == 1 ? this.field_94385_a : this.field_94384_b;
     }
 
     @SideOnly(Side.CLIENT)
-
-    /**
-     * When this method is called, your block should register all the icons it needs with the given IconRegister. This
-     * is the only chance you get to register icons.
-     */
-    public void registerIcons(IconRegister var1)
+    public void registerIcons(IconRegister par1IconRegister)
     {
-        this.blockIcon = var1.registerIcon("Aether:Skyroot Workbench Side");
-        this.workbenchIconTop = var1.registerIcon("Aether:Skyroot Workbench Top");
-        this.workbenchIconFront = var1.registerIcon("Aether:Skyroot Workbench Front");
+        this.blockIcon = par1IconRegister.registerIcon("Aether:Skyroot Workbench Side");
+        this.field_94385_a = par1IconRegister.registerIcon("Aether:Skyroot Workbench Top");
+        this.field_94384_b = par1IconRegister.registerIcon("Aether:Skyroot Workbench Front");
     }
 
-    /**
-     * Called upon block activation (right click on the block.)
-     */
-    public boolean onBlockActivated(World var1, int var2, int var3, int var4, EntityPlayer var5, int var6, float var7, float var8, float var9)
+    public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int par6, float par7, float par8, float par9)
     {
-        if (var1.isRemote)
+        if (world.isRemote)
         {
             return true;
         }
-        else
-        {
-            int var10 = AetherGuiHandler.craftingID;
-            var5.openGui(Aether.instance, var10, var1, var2, var3, var4);
-            return true;
-        }
+
+        int guiID = AetherGuiHandler.craftingID;
+        player.openGui(Aether.instance, guiID, world, x, y, z);
+        return true;
     }
 }
+

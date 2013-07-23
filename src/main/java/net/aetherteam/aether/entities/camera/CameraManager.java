@@ -12,19 +12,19 @@ public class CameraManager
     private static Camera activeCamera;
     private static Entity viewingEntity = mc.renderViewEntity;
 
-    public static void useCamera(World var0, Camera var1)
+    public static void useCamera(World world, Camera camera)
     {
-        if (!var0.isRemote)
+        if (!world.isRemote)
         {
-            activeCamera = var1;
-            var0.spawnEntityInWorld(activeCamera);
-            mc.renderViewEntity = var1;
+            activeCamera = camera;
+            world.spawnEntityInWorld(activeCamera);
+            mc.renderViewEntity = camera;
         }
     }
 
-    public static void turnOffCamera(World var0)
+    public static void turnOffCamera(World world)
     {
-        if (!var0.isRemote)
+        if (!world.isRemote)
         {
             mc.renderViewEntity = player;
             activeCamera.setDead();
@@ -32,3 +32,4 @@ public class CameraManager
         }
     }
 }
+

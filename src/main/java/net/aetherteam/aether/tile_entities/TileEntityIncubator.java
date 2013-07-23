@@ -6,8 +6,10 @@ import net.aetherteam.aether.AetherMoaColour;
 import net.aetherteam.aether.blocks.AetherBlocks;
 import net.aetherteam.aether.entities.mounts.EntityMoa;
 import net.aetherteam.aether.items.AetherItems;
+import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
@@ -15,175 +17,148 @@ import net.minecraft.network.INetworkManager;
 import net.minecraft.network.packet.Packet;
 import net.minecraft.network.packet.Packet132TileEntityData;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.common.ISidedInventory;
 
-public class TileEntityIncubator extends TileEntity implements IInventory, ISidedInventory
+public class TileEntityIncubator extends TileEntity
+    implements IInventory, ISidedInventory
 {
-    private ItemStack[] IncubatorItemStacks = new ItemStack[2];
+    private ItemStack[] IncubatorItemStacks;
     public int torchPower;
-    public int progress = 0;
+    public int progress;
     public int ticksRequired = 6000;
     public EntityPlayer playerUsing;
 
-    /**
-     * Returns the number of slots in the inventory.
-     */
+    public TileEntityIncubator()
+    {
+        this.IncubatorItemStacks = new ItemStack[2];
+        this.progress = 0;
+    }
+
     public int getSizeInventory()
     {
         return this.IncubatorItemStacks.length;
     }
 
-    /**
-     * Returns the stack in slot i
-     */
-    public ItemStack getStackInSlot(int var1)
+    public ItemStack getStackInSlot(int i)
     {
-        return this.IncubatorItemStacks[var1];
+        return this.IncubatorItemStacks[i];
     }
 
-    /**
-     * Removes from an inventory slot (first arg) up to a specified number (second arg) of items and returns them in a
-     * new stack.
-     */
-    public ItemStack decrStackSize(int var1, int var2)
+    public ItemStack decrStackSize(int i, int j)
     {
-        if (this.IncubatorItemStacks[var1] != null)
+        if (this.IncubatorItemStacks[i] != null)
         {
-            ItemStack var3;
-
-            if (this.IncubatorItemStacks[var1].stackSize <= var2)
+            if (this.IncubatorItemStacks[i].stackSize <= j)
             {
-                var3 = this.IncubatorItemStacks[var1];
-                this.IncubatorItemStacks[var1] = null;
-                return var3;
+                ItemStack itemstack = this.IncubatorItemStacks[i];
+                this.IncubatorItemStacks[i] = null;
+                return itemstack;
             }
-            else
+
+            ItemStack itemstack1 = this.IncubatorItemStacks[i].splitStack(j);
+
+            if (this.IncubatorItemStacks[i].stackSize == 0)
             {
-                var3 = this.IncubatorItemStacks[var1].splitStack(var2);
-
-                if (this.IncubatorItemStacks[var1].stackSize == 0)
-                {
-                    this.IncubatorItemStacks[var1] = null;
-                }
-
-                return var3;
+                this.IncubatorItemStacks[i] = null;
             }
+
+            return itemstack1;
         }
-        else
-        {
-            return null;
-        }
+
+        return null;
     }
 
-    /**
-     * When some containers are closed they call this on each slot, then drop whatever it returns as an EntityItem -
-     * like when you close a workbench GUI.
-     */
-    public ItemStack getStackInSlotOnClosing(int var1)
+    public ItemStack getStackInSlotOnClosing(int par1)
     {
-        if (this.IncubatorItemStacks[var1] != null)
+        if (this.IncubatorItemStacks[par1] != null)
         {
-            ItemStack var2 = this.IncubatorItemStacks[var1];
-            this.IncubatorItemStacks[var1] = null;
+            ItemStack var2 = this.IncubatorItemStacks[par1];
+            this.IncubatorItemStacks[par1] = null;
             return var2;
         }
-        else
-        {
-            return null;
-        }
+
+        return null;
     }
 
-    /**
-     * Sets the given item stack to the specified slot in the inventory (can be crafting or armor sections).
-     */
-    public void setInventorySlotContents(int var1, ItemStack var2)
+    public void setInventorySlotContents(int i, ItemStack itemstack)
     {
-        this.IncubatorItemStacks[var1] = var2;
+        this.IncubatorItemStacks[i] = itemstack;
 
-        if (var2 != null && var2.stackSize > this.getInventoryStackLimit())
+        if ((itemstack != null) && (itemstack.stackSize > getInventoryStackLimit()))
         {
-            var2.stackSize = this.getInventoryStackLimit();
+            itemstack.stackSize = getInventoryStackLimit();
         }
     }
 
-    /**
-     * Returns the name of the inventory.
-     */
     public String getInvName()
     {
         return "Incubator";
     }
 
-    /**
-     * Reads a tile entity from NBT.
-     */
-    public void readFromNBT(NBTTagCompound var1)
+    public void readFromNBT(NBTTagCompound nbttagcompound)
     {
-        super.readFromNBT(var1);
-        NBTTagList var2 = var1.getTagList("Items");
-        this.IncubatorItemStacks = new ItemStack[this.getSizeInventory()];
+        super.readFromNBT(nbttagcompound);
+        NBTTagList nbttaglist = nbttagcompound.getTagList("Items");
+        this.IncubatorItemStacks = new ItemStack[getSizeInventory()];
 
-        for (int var3 = 0; var3 < var2.tagCount(); ++var3)
+        for (int i = 0; i < nbttaglist.tagCount(); i++)
         {
-            NBTTagCompound var4 = (NBTTagCompound)var2.tagAt(var3);
-            byte var5 = var4.getByte("Slot");
+            NBTTagCompound nbttagcompound1 = (NBTTagCompound)nbttaglist.tagAt(i);
+            byte byte0 = nbttagcompound1.getByte("Slot");
 
-            if (var5 >= 0 && var5 < this.IncubatorItemStacks.length)
+            if ((byte0 >= 0) && (byte0 < this.IncubatorItemStacks.length))
             {
-                this.IncubatorItemStacks[var5] = ItemStack.loadItemStackFromNBT(var4);
+                this.IncubatorItemStacks[byte0] = ItemStack.loadItemStackFromNBT(nbttagcompound1);
             }
         }
 
-        this.progress = var1.getShort("BurnTime");
+        this.progress = nbttagcompound.getShort("BurnTime");
+    }
+    public void openChest()
+    {
     }
 
-    public void openChest() {}
-
-    public void closeChest() {}
-
-    /**
-     * Writes a tile entity to NBT.
-     */
-    public void writeToNBT(NBTTagCompound var1)
+    public void closeChest()
     {
-        super.writeToNBT(var1);
-        var1.setShort("BurnTime", (short)this.progress);
-        NBTTagList var2 = new NBTTagList();
+    }
 
-        for (int var3 = 0; var3 < this.IncubatorItemStacks.length; ++var3)
+    public void writeToNBT(NBTTagCompound nbttagcompound)
+    {
+        super.writeToNBT(nbttagcompound);
+        nbttagcompound.setShort("BurnTime", (short)this.progress);
+        NBTTagList nbttaglist = new NBTTagList();
+
+        for (int i = 0; i < this.IncubatorItemStacks.length; i++)
         {
-            if (this.IncubatorItemStacks[var3] != null)
+            if (this.IncubatorItemStacks[i] != null)
             {
-                NBTTagCompound var4 = new NBTTagCompound();
-                var4.setByte("Slot", (byte)var3);
-                this.IncubatorItemStacks[var3].writeToNBT(var4);
-                var2.appendTag(var4);
+                NBTTagCompound nbttagcompound1 = new NBTTagCompound();
+                nbttagcompound1.setByte("Slot", (byte)i);
+                this.IncubatorItemStacks[i].writeToNBT(nbttagcompound1);
+                nbttaglist.appendTag(nbttagcompound1);
             }
         }
 
-        var1.setTag("Items", var2);
+        nbttagcompound.setTag("Items", nbttaglist);
     }
 
-    /**
-     * Returns the maximum stack size for a inventory slot. Seems to always be 64, possibly will be extended. *Isn't
-     * this more of a set than a get?*
-     */
     public int getInventoryStackLimit()
     {
         return 64;
     }
 
     @SideOnly(Side.CLIENT)
-    public int getCookProgressScaled(int var1)
+    public int getCookProgressScaled(int i)
     {
-        return this.progress * var1 / this.ticksRequired;
+        return this.progress * i / this.ticksRequired;
     }
 
     @SideOnly(Side.CLIENT)
-    public int getBurnTimeRemainingScaled(int var1)
+    public int getBurnTimeRemainingScaled(int i)
     {
-        return this.torchPower * var1 / 500;
+        return this.torchPower * i / 500;
     }
 
     public boolean isBurning()
@@ -191,103 +166,100 @@ public class TileEntityIncubator extends TileEntity implements IInventory, ISide
         return this.torchPower > 0;
     }
 
-    /**
-     * Allows the entity to update its state. Overridden in most subclasses, e.g. the mob spawner uses this to count
-     * ticks and creates a new spawn inside its implementation.
-     */
     public void updateEntity()
     {
         if (this.torchPower > 0)
         {
-            --this.torchPower;
+            this.torchPower -= 1;
 
-            if (this.getStackInSlot(1) != null)
+            if (getStackInSlot(1) != null)
             {
-                ++this.progress;
+                this.progress += 1;
             }
         }
 
-        if (this.IncubatorItemStacks[1] == null || this.IncubatorItemStacks[1].itemID != AetherItems.MoaEgg.itemID)
+        if ((this.IncubatorItemStacks[1] == null) || (this.IncubatorItemStacks[1].itemID != AetherItems.MoaEgg.itemID))
         {
             this.progress = 0;
         }
 
         if (this.progress >= this.ticksRequired)
         {
-            if (this.IncubatorItemStacks[1] != null && !this.worldObj.isRemote)
+            if (this.IncubatorItemStacks[1] != null)
             {
-                EntityMoa var1 = new EntityMoa(this.worldObj, true, false, false, AetherMoaColour.getColour(this.IncubatorItemStacks[1].getItemDamage()), this.playerUsing);
-                var1.setPosition((double)this.xCoord + 0.5D, (double)this.yCoord + 1.5D, (double)this.zCoord + 0.5D);
-                this.worldObj.spawnEntityInWorld(var1);
+                if (!this.worldObj.isRemote)
+                {
+                    EntityMoa moa = new EntityMoa(this.worldObj, true, false, false, AetherMoaColour.getColour(this.IncubatorItemStacks[1].getItemDamage()), this.playerUsing);
+                    moa.setPosition(this.xCoord + 0.5D, this.yCoord + 1.5D, this.zCoord + 0.5D);
+                    this.worldObj.spawnEntityInWorld(moa);
+                }
             }
 
             if (!this.worldObj.isRemote)
             {
-                this.decrStackSize(1, 1);
+                decrStackSize(1, 1);
             }
 
             this.progress = 0;
         }
 
-        if (this.torchPower <= 0 && this.IncubatorItemStacks[1] != null && this.IncubatorItemStacks[1].itemID == AetherItems.MoaEgg.itemID && this.getStackInSlot(0) != null && this.getStackInSlot(0).itemID == AetherBlocks.AmbrosiumTorch.blockID)
+        if ((this.torchPower <= 0) && (this.IncubatorItemStacks[1] != null) && (this.IncubatorItemStacks[1].itemID == AetherItems.MoaEgg.itemID) && (getStackInSlot(0) != null) && (getStackInSlot(0).itemID == AetherBlocks.AmbrosiumTorch.blockID))
         {
             this.torchPower += 1000;
 
             if (!this.worldObj.isRemote)
             {
-                this.decrStackSize(0, 1);
+                decrStackSize(0, 1);
             }
         }
     }
 
-    /**
-     * Do not make give this method the name canInteractWith because it clashes with Container
-     */
-    public boolean isUseableByPlayer(EntityPlayer var1)
+    public boolean isUseableByPlayer(EntityPlayer par1EntityPlayer)
     {
-        this.playerUsing = var1;
-        return this.worldObj.getBlockTileEntity(this.xCoord, this.yCoord, this.zCoord) != this ? false : var1.getDistanceSq((double)this.xCoord + 0.5D, (double)this.yCoord + 0.5D, (double)this.zCoord + 0.5D) <= 64.0D;
+        this.playerUsing = par1EntityPlayer;
+        return this.worldObj.getBlockTileEntity(this.xCoord, this.yCoord, this.zCoord) == this;
     }
 
-    public int getStartInventorySide(ForgeDirection var1)
+    public int getStartInventorySide(ForgeDirection side)
     {
-        return var1 == ForgeDirection.DOWN ? 1 : (var1 == ForgeDirection.UP ? 0 : 2);
+        if (side == ForgeDirection.DOWN)
+        {
+            return 1;
+        }
+
+        if (side == ForgeDirection.UP)
+        {
+            return 0;
+        }
+
+        return 2;
     }
 
-    public int getSizeInventorySide(ForgeDirection var1)
+    public int getSizeInventorySide(ForgeDirection side)
     {
         return 1;
     }
 
-    public void onDataPacket(INetworkManager var1, Packet132TileEntityData var2)
+    public void onDataPacket(INetworkManager net, Packet132TileEntityData pkt)
     {
-        this.readFromNBT(var2.customParam1);
+        readFromNBT(pkt.customParam1);
     }
 
-    /**
-     * Overriden in a sign to provide the text.
-     */
     public Packet getDescriptionPacket()
     {
         NBTTagCompound var1 = new NBTTagCompound();
-        this.writeToNBT(var1);
+        writeToNBT(var1);
         return new Packet132TileEntityData(this.xCoord, this.yCoord, this.zCoord, 1, var1);
     }
 
-    /**
-     * If this returns false, the inventory name will be used as an unlocalized name, and translated into the player's
-     * language. Otherwise it will be used directly.
-     */
     public boolean isInvNameLocalized()
     {
         return false;
     }
 
-    /**
-     * Returns true if automation is allowed to insert the given stack (ignoring stack size) into the given slot.
-     */
-    public boolean isStackValidForSlot(int var1, ItemStack var2)
+    public boolean isStackValidForSlot(int i, ItemStack itemstack)
     {
         return false;
     }
 }
+

@@ -1,6 +1,7 @@
 package net.aetherteam.aether.items;
 
 import net.aetherteam.aether.Aether;
+import net.aetherteam.aether.PlayerBaseAetherServer;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -8,37 +9,58 @@ import net.minecraft.world.World;
 
 public class ItemCloudParachute extends ItemAether
 {
-    public ItemCloudParachute(int var1, int var2)
+    public ItemCloudParachute(int i, int damage)
     {
-        super(var1);
+        super(i);
         this.maxStackSize = 1;
-        this.setMaxDamage(var2);
+        setMaxDamage(damage);
     }
 
-    public Item setIconName(String var1)
+    public Item setIconName(String name)
     {
-        return this.setUnlocalizedName("Aether:" + var1);
+        return setUnlocalizedName("Aether:" + name);
     }
 
-    /**
-     * Called whenever this item is equipped and the right mouse button is pressed. Args: itemStack, world, entityPlayer
-     */
-    public ItemStack onItemRightClick(ItemStack var1, World var2, EntityPlayer var3)
+    public ItemStack onItemRightClick(ItemStack itemstack, World world, EntityPlayer entityplayer)
     {
-        if (Aether.getServerPlayer(var3) == null)
+        if (Aether.getServerPlayer(entityplayer) == null)
         {
-            return var1;
+            return itemstack;
         }
-        else
-        {
-            Aether.getServerPlayer(var3).setParachuting(true, this.getParachuteType());
-            --var1.stackSize;
-            return var1;
-        }
+
+        Aether.getServerPlayer(entityplayer).setParachuting(true, getParachuteType());
+        itemstack.stackSize -= 1;
+        return itemstack;
     }
 
     private int getParachuteType()
     {
-        return this.itemID == AetherItems.CloudParachute.itemID ? 0 : (this.itemID == AetherItems.GoldenCloudParachute.itemID ? 1 : (this.itemID == AetherItems.PurpleCloudParachute.itemID ? 2 : (this.itemID == AetherItems.GreenCloudParachute.itemID ? 3 : (this.itemID == AetherItems.BlueCloudParachute.itemID ? 4 : 0))));
+        if (this.itemID == AetherItems.CloudParachute.itemID)
+        {
+            return 0;
+        }
+
+        if (this.itemID == AetherItems.GoldenCloudParachute.itemID)
+        {
+            return 1;
+        }
+
+        if (this.itemID == AetherItems.PurpleCloudParachute.itemID)
+        {
+            return 2;
+        }
+
+        if (this.itemID == AetherItems.GreenCloudParachute.itemID)
+        {
+            return 3;
+        }
+
+        if (this.itemID == AetherItems.BlueCloudParachute.itemID)
+        {
+            return 4;
+        }
+
+        return 0;
     }
 }
+

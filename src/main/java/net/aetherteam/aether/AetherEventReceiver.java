@@ -6,8 +6,9 @@ import net.minecraftforge.event.ForgeSubscribe;
 
 public class AetherEventReceiver
 {
-    @ForgeSubscribe(
-        priority = EventPriority.NORMAL
-    )
-    public void onRenderGui(RenderGameOverlayEvent var1) {}
+    @ForgeSubscribe(priority = EventPriority.NORMAL)
+    public void onRenderGui(RenderGameOverlayEvent event)
+    {
+    }
 }
+

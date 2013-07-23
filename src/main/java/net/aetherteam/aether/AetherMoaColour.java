@@ -4,7 +4,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import net.aetherteam.aether.donator.Donator;
+import net.aetherteam.aether.donator.DonatorChoice;
+import net.aetherteam.aether.donator.DonatorTexture;
 import net.aetherteam.aether.donator.EnumChoiceType;
+import net.aetherteam.aether.donator.SyncDonatorList;
 import net.aetherteam.aether.donator.choices.MoaChoice;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.potion.Potion;
@@ -21,66 +24,66 @@ public class AetherMoaColour
     public static List colours = new ArrayList();
     private static Random random = new Random();
 
-    public AetherMoaColour(int var1, int var2, int var3, int var4, String var5)
+    public AetherMoaColour(int i, int j, int k, int l, String s)
     {
-        this.ID = var1;
-        this.colour = var2;
-        this.jumps = var3;
-        this.chance = var4;
-        totalChance += var4;
-        this.name = var5;
+        this.ID = i;
+        this.colour = j;
+        this.jumps = k;
+        this.chance = l;
+        totalChance += l;
+        this.name = s;
         colours.add(this);
         names.add(this.name);
     }
 
-    public String getTexture(boolean var1)
+    public String getTexture(boolean saddled)
     {
-        return "/net/aetherteam/aether/client/sprites/moa/" + (var1 ? "saddle_" : "moa_") + this.name + ".png";
+        return "/net/aetherteam/aether/client/sprites/moa/" + (saddled ? "saddle_" : "moa_") + this.name + ".png";
     }
 
-    public String getTexture(boolean var1, EntityPlayer var2)
+    public String getTexture(boolean saddled, EntityPlayer player)
     {
-        if (Aether.syncDonatorList.isDonator(var2.username) && var1)
+        if ((Aether.syncDonatorList.isDonator(player.username)) && (saddled))
         {
             Aether.getInstance();
-            Donator var3 = Aether.syncDonatorList.getDonator(var2.username);
-            boolean var4 = var3.containsChoiceType(EnumChoiceType.MOA);
-            MoaChoice var5 = null;
+            Donator donator = Aether.syncDonatorList.getDonator(player.username);
+            boolean hasChoice = donator.containsChoiceType(EnumChoiceType.MOA);
+            DonatorChoice choice = null;
 
-            if (var4)
+            if (hasChoice)
             {
-                var5 = (MoaChoice)var3.getChoiceFromType(EnumChoiceType.MOA);
-                return var5.textureFile.localURL;
+                choice = (MoaChoice)donator.getChoiceFromType(EnumChoiceType.MOA);
+                return choice.textureFile.localURL;
             }
         }
 
-        return "/net/aetherteam/aether/client/sprites/moa/" + (var1 && !var2.isPotionActive(Potion.invisibility) ? "saddle_" : "moa_") + this.name + ".png";
+        return "/net/aetherteam/aether/client/sprites/moa/" + ((saddled) && (!player.isPotionActive(Potion.invisibility)) ? "saddle_" : "moa_") + this.name + ".png";
     }
 
     public static AetherMoaColour pickRandomMoa()
     {
-        int var0 = random.nextInt(totalChance);
+        int i = random.nextInt(totalChance);
 
-        for (int var1 = 0; var1 < colours.size(); ++var1)
+        for (int j = 0; j < colours.size(); j++)
         {
-            if (var0 < ((AetherMoaColour)colours.get(var1)).chance)
+            if (i < ((AetherMoaColour)colours.get(j)).chance)
             {
-                return (AetherMoaColour)colours.get(var1);
+                return (AetherMoaColour)colours.get(j);
             }
 
-            var0 -= ((AetherMoaColour)colours.get(var1)).chance;
+            i -= ((AetherMoaColour)colours.get(j)).chance;
         }
 
         return (AetherMoaColour)colours.get(0);
     }
 
-    public static AetherMoaColour getColour(int var0)
+    public static AetherMoaColour getColour(int ID)
     {
-        for (int var1 = 0; var1 < colours.size(); ++var1)
+        for (int i = 0; i < colours.size(); i++)
         {
-            if (((AetherMoaColour)colours.get(var1)).ID == var0)
+            if (((AetherMoaColour)colours.get(i)).ID == ID)
             {
-                return (AetherMoaColour)colours.get(var1);
+                return (AetherMoaColour)colours.get(i);
             }
         }
 
@@ -89,9 +92,9 @@ public class AetherMoaColour
 
     public static String[] getNames()
     {
-        String[] var0 = new String[names.size()];
-        var0 = (String[])names.toArray(var0);
-        return var0;
+        String[] namesArray = new String[names.size()];
+        namesArray = (String[])names.toArray(namesArray);
+        return namesArray;
     }
 
     static
@@ -101,3 +104,4 @@ public class AetherMoaColour
         new AetherMoaColour(2, 2236962, 8, 5, "Black");
     }
 }
+

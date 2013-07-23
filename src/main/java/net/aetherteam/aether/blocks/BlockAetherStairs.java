@@ -4,32 +4,31 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockStairs;
 import net.minecraft.util.Icon;
 
-public class BlockAetherStairs extends BlockStairs implements IAetherBlock
+public class BlockAetherStairs extends BlockStairs
+    implements IAetherBlock
 {
     private Block modelBlock;
     private int modelMeta;
 
-    protected BlockAetherStairs(int var1, Block var2, int var3)
+    protected BlockAetherStairs(int par1, Block par2Block, int metadata)
     {
-        super(var1, var2, var3);
-        this.modelBlock = var2;
-        this.modelMeta = var3;
-        this.setHardness(var2.blockHardness);
-        this.setResistance(var2.blockResistance / 3.0F);
-        this.setStepSound(var2.stepSound);
-        this.setLightOpacity(0);
+        super(par1, par2Block, metadata);
+        this.modelBlock = par2Block;
+        this.modelMeta = metadata;
+        setHardness(par2Block.blockHardness);
+        setResistance(par2Block.blockResistance / 3.0F);
+        setStepSound(par2Block.stepSound);
+        setLightOpacity(0);
     }
 
-    public Block setIconName(String var1)
+    public Block setIconName(String name)
     {
-        return this.setUnlocalizedName("Aether:" + var1);
+        return setUnlocalizedName("Aether:" + name);
     }
 
-    /**
-     * From the specified side and block metadata retrieves the blocks texture. Args: side, metadata
-     */
-    public Icon getIcon(int var1, int var2)
+    public Icon getIcon(int par1, int par2)
     {
-        return this.modelBlock.getIcon(var1, this.modelMeta);
+        return this.modelBlock.getIcon(par1, this.modelMeta);
     }
 }
+

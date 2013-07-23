@@ -11,25 +11,26 @@ public class AetherGenOrangeFruit extends WorldGenerator
 {
     private int placementChance;
 
-    public AetherGenOrangeFruit(int var1)
+    public AetherGenOrangeFruit(int chance)
     {
-        this.placementChance = var1;
+        this.placementChance = chance;
     }
 
-    public boolean generate(World var1, Random var2, int var3, int var4, int var5)
+    public boolean generate(World world, Random random, int i, int j, int k)
     {
-        for (int var6 = 0; var6 < this.placementChance; ++var6)
+        for (int l = 0; l < this.placementChance; l++)
         {
-            int var7 = var3 + var2.nextInt(8) - var2.nextInt(8);
-            int var8 = var4 + var2.nextInt(4) - var2.nextInt(4);
-            int var9 = var5 + var2.nextInt(8) - var2.nextInt(8);
+            int i1 = i + random.nextInt(8) - random.nextInt(8);
+            int j1 = j + random.nextInt(4) - random.nextInt(4);
+            int k1 = k + random.nextInt(8) - random.nextInt(8);
 
-            if (var1.isAirBlock(var7, var8, var9) && ((BlockAetherFlower)Block.blocksList[AetherBlocks.BlockOrangeTree.blockID]).canBlockStay(var1, var7, var8, var9) && var1.getBlockId(var7, var8 + 1, var9) == 0)
+            if ((world.isAirBlock(i1, j1, k1)) && (((BlockAetherFlower)Block.blocksList[AetherBlocks.BlockOrangeTree.blockID]).canBlockStay(world, i1, j1, k1)) && (world.getBlockId(i1, j1 + 1, k1) == 0))
             {
-                var1.setBlock(var7, var8, var9, AetherBlocks.BlockOrangeTree.blockID, 0, ChunkProviderAether.placementFlagType);
+                world.setBlock(i1, j1, k1, AetherBlocks.BlockOrangeTree.blockID, 0, ChunkProviderAether.placementFlagType);
             }
         }
 
         return true;
     }
 }
+

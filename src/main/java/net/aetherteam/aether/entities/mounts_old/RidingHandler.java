@@ -11,18 +11,18 @@ public class RidingHandler
     protected Entity mount;
     protected EntityLiving rider;
 
-    public RidingHandler(Entity var1)
+    public RidingHandler(Entity entity)
     {
-        this.mount = var1;
+        this.mount = entity;
     }
 
-    public void setRider(EntityPlayer var1)
+    public void setRider(EntityPlayer player)
     {
-        if (!(this.rider instanceof EntityPlayer) && Aether.getPlayerBase(var1).riddenBy == null)
+        if ((!(this.rider instanceof EntityPlayer)) && (Aether.getPlayerBase(player).riddenBy == null))
         {
-            Aether.getPlayerBase(var1).rideEntity(this.mount, this);
-            this.rider = var1;
-            this.onMount();
+            Aether.getPlayerBase(player).rideEntity(this.mount, this);
+            this.rider = player;
+            onMount();
         }
     }
 
@@ -31,19 +31,19 @@ public class RidingHandler
         return this.rider != null;
     }
 
-    public boolean jump(AetherCommonPlayerHandler var1, EntityPlayer var2)
+    public boolean jump(AetherCommonPlayerHandler aetherCommonPlayerHandler, EntityPlayer player)
     {
         return true;
     }
 
     public void update()
     {
-        if (this.isBeingRidden())
+        if (isBeingRidden())
         {
             this.mount.setPositionAndRotation(this.rider.posX, this.rider.posY, this.rider.posZ, this.rider.rotationYaw, this.rider.rotationPitch);
-            this.mount.motionY = this.rider.posY - this.mount.posY - 1.63D;
-            this.mount.motionX = this.rider.posX - this.mount.posX;
-            this.mount.motionZ = this.rider.posZ - this.mount.posZ;
+            this.mount.motionY = (this.rider.posY - this.mount.posY - 1.63D);
+            this.mount.motionX = (this.rider.posX - this.mount.posX);
+            this.mount.motionZ = (this.rider.posZ - this.mount.posZ);
             this.rider.shouldRiderSit();
         }
     }
@@ -53,13 +53,15 @@ public class RidingHandler
         return -1.0F;
     }
 
-    public void onMount() {}
+    public void onMount()
+    {
+    }
 
     public void onUnMount()
     {
-        if (this.rider instanceof EntityPlayer)
+        if ((this.rider instanceof EntityPlayer))
         {
-            Aether.getPlayerBase((EntityPlayer)this.rider).rideEntity((Entity)null, this);
+            Aether.getPlayerBase((EntityPlayer)this.rider).rideEntity(null, this);
         }
 
         this.rider = null;
@@ -100,3 +102,4 @@ public class RidingHandler
         return 0.0D;
     }
 }
+

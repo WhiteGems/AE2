@@ -15,108 +15,100 @@ public class NotificationHandler
 {
     private ArrayList receivedList = new ArrayList();
     private ArrayList sentList = new ArrayList();
+
     private static NotificationHandler clientNotifications = new NotificationHandler();
     private static NotificationHandler serverNotifications = new NotificationHandler();
 
     public static NotificationHandler instance()
     {
-        Side var0 = FMLCommonHandler.instance().getEffectiveSide();
-        return var0.isClient() ? clientNotifications : serverNotifications;
+        Side side = FMLCommonHandler.instance().getEffectiveSide();
+
+        if (side.isClient())
+        {
+            return clientNotifications;
+        }
+
+        return serverNotifications;
     }
 
-    public void sendNotification(Notification var1)
+    public void sendNotification(Notification notification)
     {
-        Side var2 = FMLCommonHandler.instance().getEffectiveSide();
+        Side side = FMLCommonHandler.instance().getEffectiveSide();
 
-        if (!this.hasSentToBefore(var1.getReceiverName(), var1.getType(), var1.getSenderName()))
+        if (!hasSentToBefore(notification.getReceiverName(), notification.getType(), notification.getSenderName()))
         {
-            this.sentList.add(var1);
+            this.sentList.add(notification);
 
-            if (var2.isClient())
+            if (side.isClient())
             {
-                PacketDispatcher.sendPacketToServer(AetherPacketHandler.sendNotificationChange(var1, true));
-                ClientNotificationHandler.queueReceivedNotification(new Notification(NotificationType.GENERIC, "Request Sent!", "", var1.getReceiverName()));
+                PacketDispatcher.sendPacketToServer(AetherPacketHandler.sendNotificationChange(notification, true));
+                ClientNotificationHandler.queueReceivedNotification(new Notification(NotificationType.GENERIC, "Request Sent!", "", notification.getReceiverName()));
             }
         }
     }
 
-    public void receiveNotification(Notification var1)
+    public void receiveNotification(Notification notification)
     {
-        Side var2 = FMLCommonHandler.instance().getEffectiveSide();
+        Side side = FMLCommonHandler.instance().getEffectiveSide();
 
-        if (!this.hasReceivedFromBefore(var1.getSenderName(), var1.getType()))
+        if (!hasReceivedFromBefore(notification.getSenderName(), notification.getType()))
         {
-            this.receivedList.add(var1);
+            this.receivedList.add(notification);
 
-            if (var2.isClient())
+            if (side.isClient())
             {
-                ClientNotificationHandler.queueReceivedNotification(var1);
+                ClientNotificationHandler.queueReceivedNotification(notification);
             }
         }
     }
 
-    public void removeNotification(Notification var1)
+    public void removeNotification(Notification notification)
     {
-        this.receivedList.remove(var1);
+        this.receivedList.remove(notification);
     }
 
-    public void removeSentNotification(Notification var1, boolean var2)
+    public void removeSentNotification(Notification notification, boolean sendPackets)
     {
-        Side var3 = FMLCommonHandler.instance().getEffectiveSide();
-        Iterator var4 = this.sentList.iterator();
+        Side side = FMLCommonHandler.instance().getEffectiveSide();
 
-        while (var4.hasNext())
+        for (Notification notif : this.sentList)
         {
-            Notification var5 = (Notification)var4.next();
-
-            if (var5.getType() == var1.getType() && var5.getReceiverName().equalsIgnoreCase(var1.getReceiverName()) && var5.getSenderName().equalsIgnoreCase(var1.getSenderName()))
+            if ((notif.getType() == notification.getType()) && (notif.getReceiverName().equalsIgnoreCase(notification.getReceiverName())) && (notif.getSenderName().equalsIgnoreCase(notification.getSenderName())))
             {
-                this.sentList.remove(var5);
+                this.sentList.remove(notif);
             }
         }
 
-        if (var2 && var3 == Side.CLIENT)
+        if ((sendPackets) && (side == Side.CLIENT))
         {
-            PacketDispatcher.sendPacketToServer(AetherPacketHandler.sendNotificationChange(var1, false));
+            PacketDispatcher.sendPacketToServer(AetherPacketHandler.sendNotificationChange(notification, false));
         }
     }
 
-    public boolean hasSentToBefore(String var1, NotificationType var2, String var3)
+    public boolean hasSentToBefore(String receivingPlayer, NotificationType type, String sendingPlayer)
     {
-        Iterator var4 = this.sentList.iterator();
-        Notification var5;
-
-        do
+        for (Notification notification : this.sentList)
         {
-            if (!var4.hasNext())
+            if ((notification.getType() == type) && (notification.getReceiverName().equalsIgnoreCase(receivingPlayer)) && (notification.getSenderName().equalsIgnoreCase(sendingPlayer)))
             {
-                return false;
+                return true;
             }
-
-            var5 = (Notification)var4.next();
         }
-        while (var5.getType() != var2 || !var5.getReceiverName().equalsIgnoreCase(var1) || !var5.getSenderName().equalsIgnoreCase(var3));
 
-        return true;
+        return false;
     }
 
-    public boolean hasReceivedFromBefore(String var1, NotificationType var2)
+    public boolean hasReceivedFromBefore(String sendingPlayer, NotificationType type)
     {
-        Iterator var3 = this.receivedList.iterator();
-        Notification var4;
-
-        do
+        for (Notification notification : this.receivedList)
         {
-            if (!var3.hasNext())
+            if ((notification.getType() == type) && (notification.getSenderName().equalsIgnoreCase(sendingPlayer)))
             {
-                return false;
+                return true;
             }
-
-            var4 = (Notification)var3.next();
         }
-        while (var4.getType() != var2 || !var4.getSenderName().equalsIgnoreCase(var1));
 
-        return true;
+        return false;
     }
 
     public boolean isEmpty()
@@ -131,21 +123,22 @@ public class NotificationHandler
 
     public void clearNotifications()
     {
-        Side var1 = FMLCommonHandler.instance().getEffectiveSide();
+        Side side = FMLCommonHandler.instance().getEffectiveSide();
 
-        if (var1.isClient() && this.getNotifications().size() > 0)
+        if ((side.isClient()) && (getNotifications().size() > 0))
         {
-            Iterator var2 = this.getNotifications().iterator();
+            Iterator it = getNotifications().iterator();
 
-            while (var2.hasNext())
+            while (it.hasNext())
             {
-                Notification var3 = (Notification)var2.next();
-                PartyMember var4 = PartyController.instance().getMember(var3.getSenderName());
-                Party var5 = PartyController.instance().getParty(var4);
-                this.removeSentNotification(var3, true);
-                PartyController.instance().removePlayerRequest(var5, var4, var3.getReceiverName(), true);
-                var2.remove();
+                Notification notification = (Notification)it.next();
+                PartyMember recruiter = PartyController.instance().getMember(notification.getSenderName());
+                Party party = PartyController.instance().getParty(recruiter);
+                removeSentNotification(notification, true);
+                PartyController.instance().removePlayerRequest(party, recruiter, notification.getReceiverName(), true);
+                it.remove();
             }
         }
     }
 }
+

@@ -8,143 +8,147 @@ import net.minecraft.world.gen.structure.StructureComponent;
 
 public class StructureBronzeDungeonPieces
 {
-    static boolean PreviousRoomHadThisAttached(List var0, Class var1)
+    static boolean PreviousRoomHadThisAttached(List roomsLinkedToTheRoom, Class room)
     {
-        Iterator var2 = var0.iterator();
+        Iterator var2 = roomsLinkedToTheRoom.iterator();
+        StructureComponent var3;
 
-        while (var2.hasNext())
+        do
         {
-            StructureComponent var3 = (StructureComponent)var2.next();
-
-            if (var1.isInstance(var3))
+            if (!var2.hasNext())
             {
-                return true;
+                return false;
             }
-        }
 
-        return false;
+            var3 = (StructureComponent)var2.next();
+        }
+        while (!room.isInstance(var3));
+
+        return true;
     }
 
-    private static StructureComponent getRandomComponent(StructureBronzeDungeonStart var0, ComponentDungeonBronzeRoom var1, List var2, Random var3, int var4, int var5, int var6, int var7, int var8)
+    private static StructureComponent getRandomComponent(StructureBronzeDungeonStart structureAsAWhole, ComponentDungeonBronzeRoom previousStructor, List components, Random random, int i, int j, int k, int direction, int componentNumber)
     {
-        int var9 = var3.nextInt(100);
-        StructureBoundingBox var10;
+        int var7 = random.nextInt(100);
 
-        if (!(var1 instanceof ComponentDungeonEntranceTop) && !PreviousRoomHadThisAttached(var1.roomsLinkedToTheRoom, ComponentDungeonEntranceTop.class) && var3.nextInt(1000) < var8 * var8)
+        if ((!(previousStructor instanceof ComponentDungeonEntranceTop)) && (!PreviousRoomHadThisAttached(previousStructor.roomsLinkedToTheRoom, ComponentDungeonEntranceTop.class)))
         {
-            var10 = ComponentDungeonEntranceTop.findValidPlacement(var2, var3, var4, var5, var6, var7);
-
-            if (var10 != null)
+            if (random.nextInt(1000) < componentNumber * componentNumber)
             {
-                ComponentDungeonEntranceTop var11 = new ComponentDungeonEntranceTop(var8, var1, var0, var3, var10, var7);
+                StructureBoundingBox var8 = ComponentDungeonEntranceTop.findValidPlacement(components, random, i, j, k, direction);
 
-                if (doRoomsHaveIntersectingEntrances(var1, var11))
+                if (var8 != null)
                 {
-                    return var11;
-                }
-            }
-        }
+                    ComponentDungeonBronzeRoom room = new ComponentDungeonEntranceTop(componentNumber, previousStructor, structureAsAWhole, random, var8, direction);
 
-        if (var3.nextInt(100) < var8 * var8)
-        {
-            var10 = ComponentDungeonBronzeCog.findValidPlacement(var2, var3, var4, var5, var6, var7);
-
-            if (var10 != null && numberOfCertainRoom(var2, ComponentDungeonBronzeCog.class) < 1)
-            {
-                ComponentDungeonBronzeCog var12 = new ComponentDungeonBronzeCog(var8, var1, var0, var3, var10, var7);
-
-                if (doRoomsHaveIntersectingEntrances(var1, var12))
-                {
-                    return var12;
-                }
-            }
-        }
-
-        if (var3.nextInt(100) < var8 * var8)
-        {
-            var10 = ComponentDungeonBronzeSentryGuard.findValidPlacement(var2, var3, var4, var5, var6, var7);
-
-            if (var10 != null && numberOfCertainRoom(var2, ComponentDungeonBronzeSentryGuard.class) < 2)
-            {
-                ComponentDungeonBronzeSentryGuard var15 = new ComponentDungeonBronzeSentryGuard(var8, var1, var0, var3, var10, var7);
-
-                if (doRoomsHaveIntersectingEntrances(var1, var15))
-                {
-                    return var15;
-                }
-            }
-        }
-
-        if (var3.nextInt(100) < var8 * var8)
-        {
-            var10 = ComponentDungeonBronzeHost.findValidPlacement(var2, var3, var4, var5, var6, var7);
-
-            if (var10 != null && numberOfCertainRoom(var2, ComponentDungeonBronzeHost.class) < 2)
-            {
-                ComponentDungeonBronzeHost var16 = new ComponentDungeonBronzeHost(var8, var1, var0, var3, var10, var7);
-
-                if (doRoomsHaveIntersectingEntrances(var1, var16))
-                {
-                    return var16;
-                }
-            }
-        }
-        else if (var9 < 30)
-        {
-            var10 = ComponentDungeonCorridor.findValidPlacement(var2, var3, var4, var5, var6, var7);
-
-            if (var10 != null)
-            {
-                ComponentDungeonCorridor var13 = new ComponentDungeonCorridor(var8, var1, var0, var3, var10, var7);
-
-                if (doRoomsHaveIntersectingEntrances(var1, var13))
-                {
-                    return var13;
-                }
-            }
-        }
-        else if (var9 < 50)
-        {
-            var10 = ComponentDungeonBronzeChest.findValidPlacement(var2, var3, var4, var5, var6, var7);
-
-            if (var10 != null)
-            {
-                ComponentDungeonBronzeChest var14 = new ComponentDungeonBronzeChest(var8, var1, var0, var3, var10, var7);
-
-                if (doRoomsHaveIntersectingEntrances(var1, var14))
-                {
-                    return var14;
-                }
-            }
-        }
-        else if (var9 < 70)
-        {
-            if (!(var1 instanceof ComponentDungeonStair))
-            {
-                var10 = ComponentDungeonStair.findValidPlacement(var2, var3, var4, var5, var6, var7);
-
-                if (var10 != null)
-                {
-                    ComponentDungeonStair var17 = new ComponentDungeonStair(var8, var1, var0, var3, var10, var7);
-
-                    if (doRoomsHaveIntersectingEntrances(var1, var17))
+                    if (doRoomsHaveIntersectingEntrances(previousStructor, room))
                     {
-                        return var17;
+                        return room;
                     }
                 }
             }
         }
-        else if (var9 >= 70)
+
+        if (random.nextInt(100) < componentNumber * componentNumber)
         {
-            var10 = ComponentDungeonBronzeLight.findValidPlacement(var2, var3, var4, var5, var6, var7);
+            StructureBoundingBox var8 = ComponentDungeonBronzeCog.findValidPlacement(components, random, i, j, k, direction);
 
-            if (var10 != null)
+            if ((var8 != null) && (numberOfCertainRoom(components, ComponentDungeonBronzeCog.class) < 1))
             {
-                ComponentDungeonBronzeLight var18 = new ComponentDungeonBronzeLight(var8, var1, var0, var3, var10, var7);
+                ComponentDungeonBronzeCog room = new ComponentDungeonBronzeCog(componentNumber, previousStructor, structureAsAWhole, random, var8, direction);
 
-                if (doRoomsHaveIntersectingEntrances(var1, var18))
+                if (doRoomsHaveIntersectingEntrances(previousStructor, room))
                 {
-                    return var18;
+                    return room;
+                }
+            }
+        }
+
+        if (random.nextInt(100) < componentNumber * componentNumber)
+        {
+            StructureBoundingBox var8 = ComponentDungeonBronzeSentryGuard.findValidPlacement(components, random, i, j, k, direction);
+
+            if ((var8 != null) && (numberOfCertainRoom(components, ComponentDungeonBronzeSentryGuard.class) < 2))
+            {
+                ComponentDungeonBronzeSentryGuard room = new ComponentDungeonBronzeSentryGuard(componentNumber, previousStructor, structureAsAWhole, random, var8, direction);
+
+                if (doRoomsHaveIntersectingEntrances(previousStructor, room))
+                {
+                    return room;
+                }
+            }
+        }
+
+        if (random.nextInt(100) < componentNumber * componentNumber)
+        {
+            StructureBoundingBox var8 = ComponentDungeonBronzeHost.findValidPlacement(components, random, i, j, k, direction);
+
+            if ((var8 != null) && (numberOfCertainRoom(components, ComponentDungeonBronzeHost.class) < 2))
+            {
+                ComponentDungeonBronzeHost room = new ComponentDungeonBronzeHost(componentNumber, previousStructor, structureAsAWhole, random, var8, direction);
+
+                if (doRoomsHaveIntersectingEntrances(previousStructor, room))
+                {
+                    return room;
+                }
+            }
+        }
+        else if (var7 < 30)
+        {
+            StructureBoundingBox var8 = ComponentDungeonCorridor.findValidPlacement(components, random, i, j, k, direction);
+
+            if (var8 != null)
+            {
+                ComponentDungeonBronzeRoom room = new ComponentDungeonCorridor(componentNumber, previousStructor, structureAsAWhole, random, var8, direction);
+
+                if (doRoomsHaveIntersectingEntrances(previousStructor, room))
+                {
+                    return room;
+                }
+            }
+        }
+        else if (var7 < 50)
+        {
+            StructureBoundingBox var8 = ComponentDungeonBronzeChest.findValidPlacement(components, random, i, j, k, direction);
+
+            if (var8 != null)
+            {
+                ComponentDungeonBronzeRoom room = new ComponentDungeonBronzeChest(componentNumber, previousStructor, structureAsAWhole, random, var8, direction);
+
+                if (doRoomsHaveIntersectingEntrances(previousStructor, room))
+                {
+                    return room;
+                }
+            }
+        }
+        else if (var7 < 70)
+        {
+            if (!(previousStructor instanceof ComponentDungeonStair))
+            {
+                StructureBoundingBox var8 = ComponentDungeonStair.findValidPlacement(components, random, i, j, k, direction);
+
+                if (var8 != null)
+                {
+                    ComponentDungeonBronzeRoom room = new ComponentDungeonStair(componentNumber, previousStructor, structureAsAWhole, random, var8, direction);
+
+                    if (doRoomsHaveIntersectingEntrances(previousStructor, room))
+                    {
+                        return room;
+                    }
+                }
+            }
+        }
+        else if (var7 >= 70)
+        {
+            StructureBoundingBox var8 = ComponentDungeonBronzeLight.findValidPlacement(components, random, i, j, k, direction);
+
+            if (var8 != null)
+            {
+                ComponentDungeonBronzeRoom room = new ComponentDungeonBronzeLight(componentNumber, previousStructor, structureAsAWhole, random, var8, direction);
+
+                if (doRoomsHaveIntersectingEntrances(previousStructor, room))
+                {
+                    return room;
                 }
             }
         }
@@ -152,38 +156,41 @@ public class StructureBronzeDungeonPieces
         return null;
     }
 
-    public static int numberOfCertainRoom(List var0, Class var1)
+    public static int numberOfCertainRoom(List components, Class room)
     {
-        Iterator var2 = var0.iterator();
-        int var4 = 0;
+        Iterator var2 = components.iterator();
+        int max = 0;
 
-        while (var2.hasNext())
+        while (true)
         {
+            if (!var2.hasNext())
+            {
+                return max;
+            }
+
             StructureComponent var3 = (StructureComponent)var2.next();
 
-            if (var1.isInstance(var3))
+            if (room.isInstance(var3))
             {
-                ++var4;
+                max++;
             }
         }
-
-        return var4;
     }
 
-    public static boolean doRoomsHaveIntersectingEntrances(ComponentDungeonBronzeRoom var0, ComponentDungeonBronzeRoom var1)
+    public static boolean doRoomsHaveIntersectingEntrances(ComponentDungeonBronzeRoom room1, ComponentDungeonBronzeRoom room2)
     {
-        Iterator var2 = var0.entrances.iterator();
+        Iterator iterMyEntrance = room1.entrances.iterator();
 
-        while (var2.hasNext())
+        while (iterMyEntrance.hasNext())
         {
-            StructureBoundingBox var3 = (StructureBoundingBox)var2.next();
-            Iterator var4 = var1.entrances.iterator();
+            StructureBoundingBox myCube = (StructureBoundingBox)iterMyEntrance.next();
+            Iterator iterRoomEntrance = room2.entrances.iterator();
 
-            while (var4.hasNext())
+            while (iterRoomEntrance.hasNext())
             {
-                StructureBoundingBox var5 = findIntercetingCube(var3, (StructureBoundingBox)var4.next());
+                StructureBoundingBox cube = findIntercetingCube(myCube, (StructureBoundingBox)iterRoomEntrance.next());
 
-                if (var5 != null)
+                if (cube != null)
                 {
                     return true;
                 }
@@ -193,42 +200,48 @@ public class StructureBronzeDungeonPieces
         return false;
     }
 
-    public static StructureBoundingBox findIntercetingCube(StructureBoundingBox var0, StructureBoundingBox var1)
+    public static StructureBoundingBox findIntercetingCube(StructureBoundingBox b1, StructureBoundingBox b2)
     {
-        int var2 = Math.max(var0.minX, var1.minX);
-        int var3 = Math.max(var0.minY, var1.minY);
-        int var4 = Math.max(var0.minZ, var1.minZ);
-        int var5 = Math.min(var0.maxX, var1.maxX);
-        int var6 = Math.min(var0.maxY, var1.maxY);
-        int var7 = Math.min(var0.maxZ, var1.maxZ);
-        return var2 < var5 && var3 < var6 && var4 < var7 ? new StructureBoundingBox(var2, var3, var4, var5, var6, var7) : null;
+        int minX = Math.max(b1.minX, b2.minX);
+        int minY = Math.max(b1.minY, b2.minY);
+        int minZ = Math.max(b1.minZ, b2.minZ);
+        int maxX = Math.min(b1.maxX, b2.maxX);
+        int maxY = Math.min(b1.maxY, b2.maxY);
+        int maxZ = Math.min(b1.maxZ, b2.maxZ);
+
+        if ((minX < maxX) && (minY < maxY) && (minZ < maxZ))
+        {
+            return new StructureBoundingBox(minX, minY, minZ, maxX, maxY, maxZ);
+        }
+
+        return null;
     }
 
-    private static StructureComponent getNextMineShaftComponent(StructureBronzeDungeonStart var0, StructureComponent var1, List var2, Random var3, int var4, int var5, int var6, int var7, int var8)
+    private static StructureComponent getNextMineShaftComponent(StructureBronzeDungeonStart structureAsAWhole, StructureComponent previousStructor, List components, Random random, int i, int j, int k, int direction, int componentNumber)
     {
-        if (var8 > 8)
+        if (componentNumber > 8)
         {
             return null;
         }
-        else if (Math.abs(var4 - var0.X) <= 80 && Math.abs(var6 - var0.Z) <= 80)
-        {
-            StructureComponent var9 = getRandomComponent(var0, (ComponentDungeonBronzeRoom)var1, var2, var3, var4, var5, var6, var7, var8 + 1);
 
-            if (var9 != null)
+        if ((Math.abs(i - structureAsAWhole.X) <= 80) && (Math.abs(k - structureAsAWhole.Z) <= 80))
+        {
+            StructureComponent var8 = getRandomComponent(structureAsAWhole, (ComponentDungeonBronzeRoom)previousStructor, components, random, i, j, k, direction, componentNumber + 1);
+
+            if (var8 != null)
             {
-                var2.add(var9);
+                components.add(var8);
             }
 
-            return var9;
+            return var8;
         }
-        else
-        {
-            return null;
-        }
+
+        return null;
     }
 
-    static StructureComponent getNextComponent(StructureBronzeDungeonStart var0, StructureComponent var1, List var2, Random var3, int var4, int var5, int var6, int var7, int var8)
+    static StructureComponent getNextComponent(StructureBronzeDungeonStart structureAsAWhole, StructureComponent par0StructureComponent, List par1List, Random par2Random, int par3, int par4, int par5, int par6, int par7)
     {
-        return getNextMineShaftComponent(var0, var1, var2, var3, var4, var5, var6, var7, var8);
+        return getNextMineShaftComponent(structureAsAWhole, par0StructureComponent, par1List, par2Random, par3, par4, par5, par6, par7);
     }
 }
+

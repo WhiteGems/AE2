@@ -1,97 +1,72 @@
 package net.aetherteam.aether.entities.ai;
 
+import java.util.Random;
 import net.minecraft.block.Block;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityCreature;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.ai.EntityAIBase;
+import net.minecraft.entity.ai.EntityJumpHelper;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.pathfinding.PathFinder;
 import net.minecraft.pathfinding.PathPoint;
 import net.minecraft.util.MathHelper;
+import net.minecraft.world.World;
 
 public class AIEntityControlledByPlayerPhyg extends EntityAIBase
 {
-    private final EntityLiving thisEntity;
-    private final float maxSpeed;
-    private float currentSpeed = 0.0F;
+    private final EntityLiving field_82640_a;
+    private final float field_82638_b;
+    private float field_82639_c = 0.0F;
+    private boolean field_82636_d = false;
+    private int field_82637_e = 0;
+    private int field_82635_f = 0;
 
-    /** Whether the entity's speed is boosted. */
-    private boolean speedBoosted = false;
-
-    /**
-     * Counter for speed boosting, upon reaching maxSpeedBoostTime the speed boost will be disabled
-     */
-    private int speedBoostTime = 0;
-
-    /** Maximum time the entity's speed should be boosted for. */
-    private int maxSpeedBoostTime = 0;
-
-    public AIEntityControlledByPlayerPhyg(EntityLiving var1, float var2)
+    public AIEntityControlledByPlayerPhyg(EntityLiving par1EntityLiving, float par2)
     {
-        this.thisEntity = var1;
-        this.maxSpeed = var2;
-        this.setMutexBits(1);
+        this.field_82640_a = par1EntityLiving;
+        this.field_82638_b = par2;
+        setMutexBits(1);
     }
 
-    /**
-     * Execute a one shot task or start executing a continuous task
-     */
     public void startExecuting()
     {
-        this.currentSpeed = 0.0F;
+        this.field_82639_c = 0.0F;
     }
 
-    /**
-     * Resets the task
-     */
     public void resetTask()
     {
-        this.speedBoosted = false;
-        this.currentSpeed = 0.0F;
+        this.field_82636_d = false;
+        this.field_82639_c = 0.0F;
     }
 
-    /**
-     * Return whether the entity's speed is boosted.
-     */
-    public boolean isSpeedBoosted()
+    public boolean func_82634_f()
     {
-        return this.speedBoosted;
+        return this.field_82636_d;
     }
 
-    /**
-     * Boost the entity's movement speed.
-     */
-    public void boostSpeed()
+    public void func_82632_g()
     {
-        this.speedBoosted = true;
-        this.speedBoostTime = 0;
-        this.maxSpeedBoostTime = this.thisEntity.getRNG().nextInt(841) + 140;
+        this.field_82636_d = true;
+        this.field_82637_e = 0;
+        this.field_82635_f = (this.field_82640_a.getRNG().nextInt(841) + 140);
     }
 
-    /**
-     * Return whether the entity is being controlled by a player.
-     */
-    public boolean isControlledByPlayer()
+    public boolean func_82633_h()
     {
-        return !this.isSpeedBoosted() && this.currentSpeed > this.maxSpeed * 0.3F;
+        return (!func_82634_f()) && (this.field_82639_c > this.field_82638_b * 0.3F);
     }
 
-    /**
-     * Returns whether the EntityAIBase should begin execution.
-     */
     public boolean shouldExecute()
     {
-        return this.thisEntity.isEntityAlive() && this.thisEntity.riddenByEntity != null && this.thisEntity.riddenByEntity instanceof EntityPlayer && (this.speedBoosted || this.thisEntity.canBeSteered());
+        return (this.field_82640_a.isEntityAlive()) && (this.field_82640_a.riddenByEntity != null) && ((this.field_82640_a.riddenByEntity instanceof EntityPlayer)) && ((this.field_82636_d) || (this.field_82640_a.canBeSteered()));
     }
 
-    /**
-     * Updates the task
-     */
     public void updateTask()
     {
-        EntityPlayer var1 = (EntityPlayer)this.thisEntity.riddenByEntity;
-        EntityCreature var2 = (EntityCreature)this.thisEntity;
-        float var3 = MathHelper.wrapAngleTo180_float(var1.rotationYaw - this.thisEntity.rotationYaw) * 0.5F;
+        EntityPlayer var1 = (EntityPlayer)this.field_82640_a.riddenByEntity;
+        EntityCreature var2 = (EntityCreature)this.field_82640_a;
+        float var3 = MathHelper.wrapAngleTo180_float(var1.rotationYaw - this.field_82640_a.rotationYaw) * 0.5F;
 
         if (var3 > 5.0F)
         {
@@ -103,39 +78,39 @@ public class AIEntityControlledByPlayerPhyg extends EntityAIBase
             var3 = -5.0F;
         }
 
-        this.setPositionPlusAngle(var3);
+        setPositionPlusAngle(var3);
 
-        if (this.currentSpeed < this.maxSpeed)
+        if (this.field_82639_c < this.field_82638_b)
         {
-            this.currentSpeed += (this.maxSpeed - this.currentSpeed) * 0.01F;
+            this.field_82639_c += (this.field_82638_b - this.field_82639_c) * 0.01F;
         }
 
-        if (this.currentSpeed > this.maxSpeed)
+        if (this.field_82639_c > this.field_82638_b)
         {
-            this.currentSpeed = this.maxSpeed;
+            this.field_82639_c = this.field_82638_b;
         }
 
-        int var4 = MathHelper.floor_double(this.thisEntity.posX);
-        int var5 = MathHelper.floor_double(this.thisEntity.posY);
-        int var6 = MathHelper.floor_double(this.thisEntity.posZ);
-        float var7 = this.currentSpeed;
+        int var4 = MathHelper.floor_double(this.field_82640_a.posX);
+        int var5 = MathHelper.floor_double(this.field_82640_a.posY);
+        int var6 = MathHelper.floor_double(this.field_82640_a.posZ);
+        float var7 = this.field_82639_c;
 
-        if (this.speedBoosted)
+        if (this.field_82636_d)
         {
-            if (this.speedBoostTime++ > this.maxSpeedBoostTime)
+            if (this.field_82637_e++ > this.field_82635_f)
             {
-                this.speedBoosted = false;
+                this.field_82636_d = false;
             }
 
-            var7 += var7 * 1.15F * MathHelper.sin((float)this.speedBoostTime / (float)this.maxSpeedBoostTime * (float)Math.PI);
+            var7 += var7 * 1.15F * MathHelper.sin(this.field_82637_e / this.field_82635_f * (float)Math.PI);
         }
 
         float var8 = 0.91F;
 
-        if (this.thisEntity.onGround)
+        if (this.field_82640_a.onGround)
         {
-            var8 = 0.54600006F;
-            int var9 = this.thisEntity.worldObj.getBlockId(MathHelper.floor_float((float)var4), MathHelper.floor_float((float)var5) - 1, MathHelper.floor_float((float)var6));
+            var8 = 0.5460001F;
+            int var9 = this.field_82640_a.worldObj.getBlockId(MathHelper.floor_float(var4), MathHelper.floor_float(var5) - 1, MathHelper.floor_float(var6));
 
             if (var9 > 0)
             {
@@ -143,10 +118,10 @@ public class AIEntityControlledByPlayerPhyg extends EntityAIBase
             }
         }
 
-        float var22 = 0.16277136F / (var8 * var8 * var8);
+        float var21 = 0.1627714F / (var8 * var8 * var8);
         float var10 = MathHelper.sin(var2.rotationYaw * (float)Math.PI / 180.0F);
         float var11 = MathHelper.cos(var2.rotationYaw * (float)Math.PI / 180.0F);
-        float var12 = var2.getAIMoveSpeed() * var22;
+        float var12 = var2.getAIMoveSpeed() * var21;
         float var13 = Math.max(var7, 1.0F);
         var13 = var12 / var13;
         float var14 = var7 * var13;
@@ -157,12 +132,12 @@ public class AIEntityControlledByPlayerPhyg extends EntityAIBase
         {
             if (var15 < 0.0F)
             {
-                var15 -= this.thisEntity.width / 2.0F;
+                var15 -= this.field_82640_a.width / 2.0F;
             }
 
             if (var15 > 0.0F)
             {
-                var15 += this.thisEntity.width / 2.0F;
+                var15 += this.field_82640_a.width / 2.0F;
             }
 
             var16 = 0.0F;
@@ -173,53 +148,53 @@ public class AIEntityControlledByPlayerPhyg extends EntityAIBase
 
             if (var16 < 0.0F)
             {
-                var16 -= this.thisEntity.width / 2.0F;
+                var16 -= this.field_82640_a.width / 2.0F;
             }
 
             if (var16 > 0.0F)
             {
-                var16 += this.thisEntity.width / 2.0F;
+                var16 += this.field_82640_a.width / 2.0F;
             }
         }
 
-        int var17 = MathHelper.floor_double(this.thisEntity.posX + (double)var15);
-        int var18 = MathHelper.floor_double(this.thisEntity.posZ + (double)var16);
-        PathPoint var19 = new PathPoint(MathHelper.floor_float(this.thisEntity.width + 1.0F), MathHelper.floor_float(this.thisEntity.height + var1.height + 1.0F), MathHelper.floor_float(this.thisEntity.width + 1.0F));
+        int var17 = MathHelper.floor_double(this.field_82640_a.posX + var15);
+        int var18 = MathHelper.floor_double(this.field_82640_a.posZ + var16);
+        PathPoint var19 = new PathPoint(MathHelper.floor_float(this.field_82640_a.width + 1.0F), MathHelper.floor_float(this.field_82640_a.height + var1.height + 1.0F), MathHelper.floor_float(this.field_82640_a.width + 1.0F));
 
-        if ((var4 != var17 || var6 != var18) && PathFinder.func_82565_a(this.thisEntity, var17, var5, var18, var19, false, false, true) == 0 && PathFinder.func_82565_a(this.thisEntity, var4, var5 + 1, var6, var19, false, false, true) == 1 && PathFinder.func_82565_a(this.thisEntity, var17, var5 + 1, var18, var19, false, false, true) == 1)
+        if (((var4 != var17) || (var6 != var18)) && (PathFinder.func_82565_a(this.field_82640_a, var17, var5, var18, var19, false, false, true) == 0) && (PathFinder.func_82565_a(this.field_82640_a, var4, var5 + 1, var6, var19, false, false, true) == 1) && (PathFinder.func_82565_a(this.field_82640_a, var17, var5 + 1, var18, var19, false, false, true) == 1))
         {
             var2.getJumpHelper().setJumping();
         }
 
-        boolean var20 = false;
-        byte var21 = 0;
-        int var23;
+        boolean jpress = false;
+        int jrem = 0;
 
-        if (this.thisEntity.onGround && var1.isJumping)
+        if ((this.field_82640_a.onGround) && (var1.isJumping))
         {
-            this.thisEntity.onGround = false;
-            this.thisEntity.motionY = 1.4D;
-            var20 = true;
-            var23 = var21 - 1;
+            this.field_82640_a.onGround = false;
+            this.field_82640_a.motionY = 1.4D;
+            jpress = true;
+            jrem--;
         }
-        else if (this.thisEntity.handleWaterMovement() && var1.isJumping)
+        else if ((this.field_82640_a.handleWaterMovement()) && (var1.isJumping))
         {
-            this.thisEntity.motionY = 0.5D;
-            var20 = true;
-            var23 = var21 - 1;
+            this.field_82640_a.motionY = 0.5D;
+            jpress = true;
+            jrem--;
         }
-        else if (var21 > 0 && !var20 && var1.isJumping)
+        else if ((jrem > 0) && (!jpress) && (var1.isJumping))
         {
-            this.thisEntity.motionY = 1.2D;
-            var20 = true;
-            var23 = var21 - 1;
+            this.field_82640_a.motionY = 1.2D;
+            jpress = true;
+            jrem--;
         }
 
-        this.thisEntity.moveEntityWithHeading(0.0F, var7);
+        this.field_82640_a.moveEntityWithHeading(0.0F, var7);
     }
 
     public void setPositionPlusAngle(float var1)
     {
-        this.thisEntity.rotationYaw = MathHelper.wrapAngleTo180_float(this.thisEntity.rotationYaw + var1);
+        this.field_82640_a.rotationYaw = MathHelper.wrapAngleTo180_float(this.field_82640_a.rotationYaw + var1);
     }
 }
+

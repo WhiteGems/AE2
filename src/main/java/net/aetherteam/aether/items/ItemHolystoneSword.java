@@ -1,42 +1,47 @@
 package net.aetherteam.aether.items;
 
 import java.util.Random;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.EnumToolMaterial;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemSword;
+import net.minecraft.world.World;
 
 public class ItemHolystoneSword extends ItemSword
 {
-    public ItemHolystoneSword(int var1, EnumToolMaterial var2)
+    public ItemHolystoneSword(int itemID, EnumToolMaterial mat)
     {
-        super(var1, var2);
+        super(itemID, mat);
     }
 
-    /**
-     * Current implementations of this method in child classes do not use the entry argument beside ev. They just raise
-     * the damage on the stack.
-     */
-    public boolean hitEntity(ItemStack var1, EntityLiving var2, EntityLiving var3)
+    public boolean hitEntity(ItemStack itemstack, EntityLiving entityliving, EntityLiving entityliving1)
     {
-        if ((new Random()).nextInt(20) == 0 && var3 != null && var3 instanceof EntityPlayer && var2.hurtTime > 0 && var2.deathTime <= 0)
+        if (new Random().nextInt(20) == 0)
         {
-            if (!var2.worldObj.isRemote)
+            if ((entityliving1 != null) && ((entityliving1 instanceof EntityPlayer)))
             {
-                var2.dropItemWithOffset(AetherItems.AmbrosiumShard.itemID, 1, 0.0F);
-            }
+                if ((entityliving.hurtTime > 0) && (entityliving.deathTime <= 0))
+                {
+                    if (!entityliving.worldObj.isRemote)
+                    {
+                        entityliving.dropItemWithOffset(AetherItems.AmbrosiumShard.itemID, 1, 0.0F);
+                    }
 
-            var1.damageItem(1, var3);
+                    itemstack.damageItem(1, entityliving1);
+                }
+            }
         }
 
-        var1.damageItem(1, var3);
+        itemstack.damageItem(1, entityliving1);
         return true;
     }
 
-    public Item setIconName(String var1)
+    public Item setIconName(String name)
     {
-        return this.setUnlocalizedName("Aether:" + var1);
+        return setUnlocalizedName("Aether:" + name);
     }
 }
+

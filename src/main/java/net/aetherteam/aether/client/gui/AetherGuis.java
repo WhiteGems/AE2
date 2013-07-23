@@ -16,3 +16,4 @@ public class AetherGuis
         AetherGuiHandler.registerGui(GuiSkyrootCrafting.class, ContainerSkyrootWorkbench.class);
     }
 }
+

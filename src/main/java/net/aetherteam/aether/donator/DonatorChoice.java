@@ -9,31 +9,32 @@ public class DonatorChoice
     public DonatorTexture textureFile;
     public static ArrayList choices = new ArrayList();
 
-    public DonatorChoice(String var1, EnumChoiceType var2, DonatorTexture var3)
+    public DonatorChoice(String name, EnumChoiceType type, DonatorTexture texture)
     {
-        this.name = var1;
-        this.type = var2;
-        var3.localURL = var2.localTexturePath + var3.localURL;
-        var3.onlineURL = var2.onlineTexturePath + var3.onlineURL;
-        this.textureFile = var3;
+        this.name = name;
+        this.type = type;
+        texture.localURL = (type.localTexturePath + texture.localURL);
+        texture.onlineURL = (type.onlineTexturePath + texture.onlineURL);
+        this.textureFile = texture;
         choices.add(this);
     }
 
-    public static DonatorChoice getChoiceFromString(String var0)
+    public static DonatorChoice getChoiceFromString(String name)
     {
-        for (int var1 = 0; var1 < choices.size(); ++var1)
+        for (int i = 0; i < choices.size(); i++)
         {
-            if (((DonatorChoice)choices.get(var1)).name.equalsIgnoreCase(var0))
+            if (((DonatorChoice)choices.get(i)).name.equalsIgnoreCase(name))
             {
-                return (DonatorChoice)choices.get(var1);
+                return (DonatorChoice)choices.get(i);
             }
         }
 
         return null;
     }
 
-    public boolean isType(EnumChoiceType var1)
+    public boolean isType(EnumChoiceType type)
     {
-        return this.type == var1;
+        return this.type == type;
     }
 }
+

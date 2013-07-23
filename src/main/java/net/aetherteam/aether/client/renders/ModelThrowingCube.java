@@ -1,20 +1,22 @@
 package net.aetherteam.aether.client.renders;
 
-import net.minecraft.client.model.ModelBase;
-import net.minecraft.client.model.ModelRenderer;
+import net.minecraft.client.model.ModelMinecart;
 import net.minecraft.entity.Entity;
+import net.minecraft.src.bdi;
 
-public class ModelThrowingCube extends ModelBase
+public class ModelThrowingCube extends ModelMinecart
 {
-    ModelRenderer cube = new ModelRenderer(this, 0, 0);
+    bdi cube;
 
     public ModelThrowingCube()
     {
-        this.cube.addBox(0.0F, 0.0F, 0.0F, 8, 8, 8);
+        this.cube = new bdi(this, 0, 0);
+        this.cube.a(0.0F, 0.0F, 0.0F, 8, 8, 8);
     }
 
-    public void render(Entity var1, float var2)
+    public void render(Entity par1Entity, float par7)
     {
-        this.cube.render(var2);
+        this.cube.a(par7);
     }
 }
+

@@ -1,5 +1,6 @@
 package net.aetherteam.aether.oldcode;
 
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
@@ -8,31 +9,32 @@ import net.minecraft.world.World;
 
 public class ItemAetherBanBlock extends ItemBlock
 {
-    private int dimensionToBan;
+    private int dimensionToBan = 3;
 
-    public ItemAetherBanBlock(int var1)
+    public ItemAetherBanBlock(int par1)
     {
-        super(var1);
-        this.dimensionToBan = 3;
+        super(par1);
     }
 
-    public ItemAetherBanBlock(int var1, int var2)
+    public ItemAetherBanBlock(int par1, int dimensionToBan)
     {
-        this(var1);
-        this.dimensionToBan = var2;
+        this(par1);
+        this.dimensionToBan = dimensionToBan;
     }
 
-    /**
-     * Callback for item usage. If the item does something special on right clicking, he will have one of those. Return
-     * True if something happen and false if it don't. This is for ITEMS, not BLOCKS
-     */
-    public boolean onItemUse(ItemStack var1, EntityPlayer var2, World var3, int var4, int var5, int var6, int var7, float var8, float var9, float var10)
+    public boolean onItemUse(ItemStack par1ItemStack, EntityPlayer par2EntityPlayer, World par3World, int par4, int par5, int par6, int par7, float par8, float par9, float par10)
     {
-        return var2.dimension != this.dimensionToBan ? super.onItemUse(var1, var2, var3, var4, var5, var6, var7, var8, var9, var10) : false;
+        if (par2EntityPlayer.dimension != this.dimensionToBan)
+        {
+            return super.onItemUse(par1ItemStack, par2EntityPlayer, par3World, par4, par5, par6, par7, par8, par9, par10);
+        }
+
+        return false;
     }
 
-    public Item setIconName(String var1)
+    public Item setIconName(String name)
     {
-        return this.setUnlocalizedName("Aether:" + var1);
+        return setUnlocalizedName("Aether:" + name);
     }
 }
+

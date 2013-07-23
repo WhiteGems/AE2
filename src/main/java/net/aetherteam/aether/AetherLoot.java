@@ -1,78 +1,74 @@
 package net.aetherteam.aether;
 
 import java.util.Random;
-
 import net.aetherteam.aether.blocks.AetherBlocks;
 import net.aetherteam.aether.items.AetherItems;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
 public enum AetherLoot
 {
-    NORMAL(new Choice[]{new Choice(new ItemStack(AetherItems.ZanitePickaxe), 10.0F), new Choice(new ItemStack(AetherItems.GummieSwet, getRandomStacksize(7) + 1, getRandomStacksize(2)), 10.0F), new Choice(new ItemStack(AetherItems.SkyrootBucket, 1, 2), 8.0F), new Choice(new ItemStack(AetherItems.DartShooter), 10.0F), new Choice(new ItemStack(AetherItems.MoaEgg, 1, 0), 7.0F), new Choice(new ItemStack(AetherItems.AmbrosiumShard, getRandomStacksize(10) + 1), 12.0F), new Choice(new ItemStack(AetherItems.Dart, getRandomStacksize(5) + 1, 0), 10.0F), new Choice(new ItemStack(AetherItems.Dart, getRandomStacksize(3) + 1, 1), 10.0F), new Choice(new ItemStack(AetherItems.Dart, getRandomStacksize(3) + 1, 2), 10.0F), new Choice(new ItemStack(AetherItems.AetherMusicDisk), 5.0F), new Choice(new ItemStack(AetherItems.SkyrootBucket), 12.0F), new Choice(new ItemStack(AetherItems.SkyrootBucket), 12.0F), new Choice(new ItemStack(Item.itemsList[Item.record13.itemID + getRandomStacksize(2)]), 5.0F), new Choice(new ItemStack(AetherItems.ZaniteBoots), 8.0F), new Choice(new ItemStack(AetherItems.ZaniteHelmet), 8.0F), new Choice(new ItemStack(AetherItems.ZaniteLeggings), 8.0F), new Choice(new ItemStack(AetherItems.ZaniteChestplate), 8.0F), new Choice(new ItemStack(AetherItems.IronPendant), 10.0F), new Choice(new ItemStack(AetherItems.GoldenPendant), 9.0F), new Choice(new ItemStack(AetherItems.ZaniteRing), 8.0F), new Choice(new ItemStack(AetherBlocks.AmbrosiumTorch, getRandomStacksize(4) + 1), 10.0F), new Choice(new ItemStack(AetherItems.SwetCape), 6.0F)}),
-    BRONZE(new Choice[]{new Choice(new ItemStack(AetherItems.HammerOfNotch), 6.0F), new Choice(new ItemStack(AetherItems.LightningKnife, getRandomStacksize(15) + 1), 8.0F), new Choice(new ItemStack(AetherItems.LightningSword), 8.0F), new Choice(new ItemStack(AetherItems.AgilityCape), 6.0F), new Choice(new ItemStack(AetherItems.DexterityCape), 6.0F), new Choice(new ItemStack(AetherItems.SentryBoots), 6.0F), new Choice(new ItemStack(AetherItems.RegenerationStone), 8.0F), new Choice(new ItemStack(AetherItems.NeptuneGloves), 8.0F), new Choice(new ItemStack(AetherItems.NeptuneHelmet), 8.0F), new Choice(new ItemStack(AetherItems.NeptuneChestplate), 6.0F), new Choice(new ItemStack(AetherItems.NeptuneLeggings), 8.0F), new Choice(new ItemStack(AetherItems.NeptuneBoots), 8.0F)}),
-    SILVER(new Choice[]{new Choice(new ItemStack(AetherItems.ValkyrieAxe), 8.0F), new Choice(new ItemStack(AetherItems.ValkyrieShovel), 8.0F), new Choice(new ItemStack(AetherItems.ValkyriePickaxe), 8.0F), new Choice(new ItemStack(AetherItems.ValkyrieLance), 6.0F), new Choice(new ItemStack(AetherItems.HolySword), 10.0F), new Choice(new ItemStack(AetherItems.ValkyrieGloves), 8.0F), new Choice(new ItemStack(AetherItems.ValkyrieHelmet), 8.0F), new Choice(new ItemStack(AetherItems.ValkyrieChestplate), 6.0F), new Choice(new ItemStack(AetherItems.ValkyrieLeggings), 8.0F), new Choice(new ItemStack(AetherItems.ValkyrieBoots), 8.0F), new Choice(new ItemStack(AetherItems.ValkyrieMusicDisk), 6.0F), new Choice(new ItemStack(AetherItems.InvisibilityCloak), 4.0F)}),
-    GOLD(new Choice[]{new Choice(new ItemStack(AetherItems.VampireBlade), 8.0F), new Choice(new ItemStack(AetherItems.ShardOfLife), 8.0F), new Choice(new ItemStack(AetherItems.FlamingSword), 8.0F), new Choice(new ItemStack(AetherItems.PigSlayer), 6.0F), new Choice(new ItemStack(AetherItems.IronBubble), 6.0F), new Choice(new ItemStack(AetherItems.DartShooter, 1, 3), 10.0F), new Choice(new ItemStack(AetherItems.PhoenixGloves), 8.0F), new Choice(new ItemStack(AetherItems.PhoenixHelmet), 8.0F), new Choice(new ItemStack(AetherItems.PhoenixChestplate), 6.0F), new Choice(new ItemStack(AetherItems.PhoenixLeggings), 8.0F), new Choice(new ItemStack(AetherItems.PhoenixBoots), 8.0F)});
+    NORMAL(new Choice[] { new Choice(new ItemStack(AetherItems.ZanitePickaxe), 10.0F), new Choice(new ItemStack(AetherItems.GummieSwet, getRandomStacksize(7) + 1, getRandomStacksize(2)), 10.0F), new Choice(new ItemStack(AetherItems.SkyrootBucket, 1, 2), 8.0F), new Choice(new ItemStack(AetherItems.DartShooter), 10.0F), new Choice(new ItemStack(AetherItems.MoaEgg, 1, 0), 7.0F), new Choice(new ItemStack(AetherItems.AmbrosiumShard, getRandomStacksize(10) + 1), 12.0F), new Choice(new ItemStack(AetherItems.Dart, getRandomStacksize(5) + 1, 0), 10.0F), new Choice(new ItemStack(AetherItems.Dart, getRandomStacksize(3) + 1, 1), 10.0F), new Choice(new ItemStack(AetherItems.Dart, getRandomStacksize(3) + 1, 2), 10.0F), new Choice(new ItemStack(AetherItems.AetherMusicDisk), 5.0F), new Choice(new ItemStack(AetherItems.SkyrootBucket), 12.0F), new Choice(new ItemStack(AetherItems.SkyrootBucket), 12.0F), new Choice(new ItemStack(net.minecraft.item.Item.itemsList[(net.minecraft.item.Item.record13.itemID + getRandomStacksize(2))]), 5.0F), new Choice(new ItemStack(AetherItems.ZaniteBoots), 8.0F), new Choice(new ItemStack(AetherItems.ZaniteHelmet), 8.0F), new Choice(new ItemStack(AetherItems.ZaniteLeggings), 8.0F), new Choice(new ItemStack(AetherItems.ZaniteChestplate), 8.0F), new Choice(new ItemStack(AetherItems.IronPendant), 10.0F), new Choice(new ItemStack(AetherItems.GoldenPendant), 9.0F), new Choice(new ItemStack(AetherItems.ZaniteRing), 8.0F), new Choice(new ItemStack(AetherBlocks.AmbrosiumTorch, getRandomStacksize(4) + 1), 10.0F), new Choice(new ItemStack(AetherItems.SwetCape), 6.0F) }),
+
+    BRONZE(new Choice[] { new Choice(new ItemStack(AetherItems.HammerOfNotch), 6.0F), new Choice(new ItemStack(AetherItems.LightningKnife, getRandomStacksize(15) + 1), 8.0F), new Choice(new ItemStack(AetherItems.LightningSword), 8.0F), new Choice(new ItemStack(AetherItems.AgilityCape), 6.0F), new Choice(new ItemStack(AetherItems.DexterityCape), 6.0F), new Choice(new ItemStack(AetherItems.SentryBoots), 6.0F), new Choice(new ItemStack(AetherItems.RegenerationStone), 8.0F), new Choice(new ItemStack(AetherItems.NeptuneGloves), 8.0F), new Choice(new ItemStack(AetherItems.NeptuneHelmet), 8.0F), new Choice(new ItemStack(AetherItems.NeptuneChestplate), 6.0F), new Choice(new ItemStack(AetherItems.NeptuneLeggings), 8.0F), new Choice(new ItemStack(AetherItems.NeptuneBoots), 8.0F) }),
+
+    SILVER(new Choice[] { new Choice(new ItemStack(AetherItems.ValkyrieAxe), 8.0F), new Choice(new ItemStack(AetherItems.ValkyrieShovel), 8.0F), new Choice(new ItemStack(AetherItems.ValkyriePickaxe), 8.0F), new Choice(new ItemStack(AetherItems.ValkyrieLance), 6.0F), new Choice(new ItemStack(AetherItems.HolySword), 10.0F), new Choice(new ItemStack(AetherItems.ValkyrieGloves), 8.0F), new Choice(new ItemStack(AetherItems.ValkyrieHelmet), 8.0F), new Choice(new ItemStack(AetherItems.ValkyrieChestplate), 6.0F), new Choice(new ItemStack(AetherItems.ValkyrieLeggings), 8.0F), new Choice(new ItemStack(AetherItems.ValkyrieBoots), 8.0F), new Choice(new ItemStack(AetherItems.ValkyrieMusicDisk), 6.0F), new Choice(new ItemStack(AetherItems.InvisibilityCloak), 4.0F) }),
+
+    GOLD(new Choice[] { new Choice(new ItemStack(AetherItems.VampireBlade), 8.0F), new Choice(new ItemStack(AetherItems.ShardOfLife), 8.0F), new Choice(new ItemStack(AetherItems.FlamingSword), 8.0F), new Choice(new ItemStack(AetherItems.PigSlayer), 6.0F), new Choice(new ItemStack(AetherItems.IronBubble), 6.0F), new Choice(new ItemStack(AetherItems.DartShooter, 1, 3), 10.0F), new Choice(new ItemStack(AetherItems.PhoenixGloves), 8.0F), new Choice(new ItemStack(AetherItems.PhoenixHelmet), 8.0F), new Choice(new ItemStack(AetherItems.PhoenixChestplate), 6.0F), new Choice(new ItemStack(AetherItems.PhoenixLeggings), 8.0F), new Choice(new ItemStack(AetherItems.PhoenixBoots), 8.0F) });
+
     private final Choice[] choices;
     private final float total;
 
-    private AetherLoot(Choice... var3)
+    private AetherLoot(Choice[] choices)
     {
-        this.choices = var3;
-        this.total = this.getTotalWeight();
+        this.choices = choices;
+        this.total = getTotalWeight();
     }
 
     private float getTotalWeight()
     {
-        float var1 = 0.0F;
-        Choice[] var2 = this.choices;
-        int var3 = var2.length;
+        float weight = 0.0F;
 
-        for (int var4 = 0; var4 < var3; ++var4)
+        for (Choice c : this.choices)
         {
-            Choice var5 = var2[var4];
-            var1 += var5.getWeight();
+            weight += c.getWeight();
         }
 
-        return var1;
+        return weight;
     }
 
-    private static int getRandomStacksize(int var0)
+    private static int getRandomStacksize(int size)
     {
-        Random var1 = new Random();
-        int var2 = var1.nextInt(var0);
-        return var2;
+        Random random = new Random();
+        int randomStacksize = random.nextInt(size);
+        return randomStacksize;
     }
 
-    public ItemStack getRandomItem(Random var1)
+    public ItemStack getRandomItem(Random rand)
     {
-        float var2 = var1.nextFloat() * this.total;
-        Choice[] var3 = this.choices;
-        int var4 = var3.length;
+        float randNum = rand.nextFloat() * this.total;
 
-        for (int var5 = 0; var5 < var4; ++var5)
+        for (Choice c : this.choices)
         {
-            Choice var6 = var3[var5];
-            var2 -= var6.getWeight();
+            randNum -= c.getWeight();
 
-            if (var2 < 0.0F)
+            if (randNum < 0.0F)
             {
-                return var6.getStack();
+                return c.getStack();
             }
         }
 
         return null;
     }
 
-    public class Choice
+    public static class Choice
     {
         private ItemStack stack;
         private float weight;
 
-        public Choice(ItemStack var1, float var2)
+        public Choice(ItemStack stack, float weight)
         {
-            this.stack = var1;
-            this.weight = var2;
+            this.stack = stack;
+            this.weight = weight;
         }
 
         public ItemStack getStack()
@@ -85,5 +81,5 @@ public enum AetherLoot
             return this.weight;
         }
     }
-
 }
+

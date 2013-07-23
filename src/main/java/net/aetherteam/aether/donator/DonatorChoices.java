@@ -21,3 +21,4 @@ public class DonatorChoices
         this.moaChoices.add(new ClassicMoaChoice());
     }
 }
+

@@ -1,55 +1,50 @@
 package net.aetherteam.aether.client.renders;
 
 import net.aetherteam.aether.entities.EntitySheepuff;
-import net.minecraft.client.model.ModelBase;
-import net.minecraft.client.renderer.entity.RenderLiving;
+import net.minecraft.client.entity.render.RenderMinecartMobSpawner;
+import net.minecraft.client.model.ModelMinecart;
 import net.minecraft.entity.EntityLiving;
-import net.minecraft.entity.passive.EntitySheep;
 import org.lwjgl.opengl.GL11;
 
-public class RenderSheepuff extends RenderLiving
+public class RenderSheepuff extends RenderMinecartMobSpawner
 {
-    private ModelBase wool;
-    private ModelBase puffed;
+    private ModelMinecart wool;
+    private ModelMinecart puffed;
 
-    public RenderSheepuff(ModelBase var1, ModelBase var2, ModelBase var3, float var4)
+    public RenderSheepuff(ModelMinecart modelbase, ModelMinecart modelbase1, ModelMinecart modelbase2, float f)
     {
-        super(var2, var4);
-        this.setRenderPassModel(var1);
-        this.wool = var1;
-        this.puffed = var3;
+        super(modelbase1, f);
+        a(modelbase);
+        this.wool = modelbase;
+        this.puffed = modelbase2;
     }
 
-    protected int setWoolColorAndRender(EntitySheepuff var1, int var2, float var3)
+    protected int setWoolColorAndRender(EntitySheepuff entitysheep, int i, float f)
     {
-        if (var2 == 0 && !var1.getSheared())
+        if ((i == 0) && (!entitysheep.getSheared()))
         {
-            if (var1.getPuffed())
+            if (entitysheep.getPuffed())
             {
-                this.setRenderPassModel(this.puffed);
+                a(this.puffed);
             }
             else
             {
-                this.setRenderPassModel(this.wool);
+                a(this.wool);
             }
 
-            this.loadTexture("/net/aetherteam/aether/client/sprites/mobs/sheepuff/fur.png");
-            float var4 = var1.getBrightness(var3);
-            int var5 = var1.getFleeceColor();
-            GL11.glColor3f(var4 * EntitySheep.fleeceColorTable[var5][0], var4 * EntitySheep.fleeceColorTable[var5][1], var4 * EntitySheep.fleeceColorTable[var5][2]);
+            loadTexture("/net/aetherteam/aether/client/sprites/mobs/sheepuff/fur.png");
+            float f1 = entitysheep.getBrightness(f);
+            int j = entitysheep.getFleeceColor();
+            GL11.glColor3f(f1 * net.minecraft.entity.passive.EntitySheep.fleeceColorTable[j][0], f1 * net.minecraft.entity.passive.EntitySheep.fleeceColorTable[j][1], f1 * net.minecraft.entity.passive.EntitySheep.fleeceColorTable[j][2]);
             return 1;
         }
-        else
-        {
-            return -1;
-        }
+
+        return -1;
     }
 
-    /**
-     * Queries whether should render the specified pass or not.
-     */
-    protected int shouldRenderPass(EntityLiving var1, int var2, float var3)
+    protected int a(EntityLiving entityliving, int i, float f)
     {
-        return this.setWoolColorAndRender((EntitySheepuff)var1, var2, var3);
+        return setWoolColorAndRender((EntitySheepuff)entityliving, i, f);
     }
 }
+

@@ -9,28 +9,28 @@ import net.minecraft.item.ItemSword;
 
 public class ItemGravititeSword extends ItemSword
 {
-    public ItemGravititeSword(int var1, EnumToolMaterial var2)
+    public ItemGravititeSword(int itemID, EnumToolMaterial mat)
     {
-        super(var1, var2);
+        super(itemID, mat);
     }
 
-    public Item setIconName(String var1)
+    public Item setIconName(String name)
     {
-        return this.setUnlocalizedName("Aether:" + var1);
+        return setUnlocalizedName("Aether:" + name);
     }
 
-    /**
-     * Current implementations of this method in child classes do not use the entry argument beside ev. They just raise
-     * the damage on the stack.
-     */
-    public boolean hitEntity(ItemStack var1, EntityLiving var2, EntityLiving var3)
+    public boolean hitEntity(ItemStack itemstack, EntityLiving hitentity, EntityLiving player)
     {
-        if (var3 != null && var3 instanceof EntityPlayer && (var2.hurtTime > 0 || var2.deathTime > 0))
+        if ((player != null) && ((player instanceof EntityPlayer)))
         {
-            var2.addVelocity(0.0D, 1.0D, 0.0D);
-            var1.damageItem(1, var3);
+            if ((hitentity.hurtTime > 0) || (hitentity.deathTime > 0))
+            {
+                hitentity.addVelocity(0.0D, 1.0D, 0.0D);
+                itemstack.damageItem(1, player);
+            }
         }
 
         return true;
     }
 }
+

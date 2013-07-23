@@ -6,31 +6,32 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
 
 public class ItemCloudStaff extends ItemAether
 {
-    public ItemCloudStaff(int var1)
+    public ItemCloudStaff(int i)
     {
-        super(var1);
+        super(i);
         this.maxStackSize = 1;
-        this.setMaxDamage(60);
+        setMaxDamage(60);
     }
 
-    public Item setIconName(String var1)
+    public Item setIconName(String name)
     {
-        return this.setUnlocalizedName("Aether:" + var1);
+        return setUnlocalizedName("Aether:" + name);
     }
 
-    private boolean cloudsExist(World var1, EntityPlayer var2)
+    private boolean cloudsExist(World world, EntityPlayer entityplayer)
     {
-        List var3 = var1.getEntitiesWithinAABBExcludingEntity(var2, var2.boundingBox.expand(128.0D, 128.0D, 128.0D));
+        List list = world.getEntitiesWithinAABBExcludingEntity(entityplayer, entityplayer.boundingBox.expand(128.0D, 128.0D, 128.0D));
 
-        for (int var4 = 0; var4 < var3.size(); ++var4)
+        for (int j = 0; j < list.size(); j++)
         {
-            Entity var5 = (Entity)var3.get(var4);
+            Entity entity1 = (Entity)list.get(j);
 
-            if (var5 instanceof EntityMiniCloud)
+            if ((entity1 instanceof EntityMiniCloud))
             {
                 return true;
             }
@@ -39,20 +40,18 @@ public class ItemCloudStaff extends ItemAether
         return false;
     }
 
-    /**
-     * Called whenever this item is equipped and the right mouse button is pressed. Args: itemStack, world, entityPlayer
-     */
-    public ItemStack onItemRightClick(ItemStack var1, World var2, EntityPlayer var3)
+    public ItemStack onItemRightClick(ItemStack itemstack, World world, EntityPlayer entityplayer)
     {
-        if (!this.cloudsExist(var2, var3))
+        if (!cloudsExist(world, entityplayer))
         {
-            EntityMiniCloud var4 = new EntityMiniCloud(var2, var3, false);
-            EntityMiniCloud var5 = new EntityMiniCloud(var2, var3, true);
-            var2.spawnEntityInWorld(var4);
-            var2.spawnEntityInWorld(var5);
-            var1.damageItem(1, var3);
+            EntityMiniCloud c1 = new EntityMiniCloud(world, entityplayer, false);
+            EntityMiniCloud c2 = new EntityMiniCloud(world, entityplayer, true);
+            world.spawnEntityInWorld(c1);
+            world.spawnEntityInWorld(c2);
+            itemstack.damageItem(1, entityplayer);
         }
 
-        return var1;
+        return itemstack;
     }
 }
+

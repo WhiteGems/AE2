@@ -8,89 +8,81 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
 
-public class BlockBerryBushStem extends BlockAetherFlower implements IAetherBlock
+public class BlockBerryBushStem extends BlockAetherFlower
+    implements IAetherBlock
 {
-    protected BlockBerryBushStem(int var1)
+    protected BlockBerryBushStem(int blockID)
     {
-        super(var1);
-        float var2 = 0.4F;
-        this.setBlockBounds(0.5F - var2, 0.0F, 0.5F - var2, 0.5F + var2, var2 * 2.0F, 0.5F + var2);
-        this.setHardness(0.2F);
-        this.setStepSound(Block.soundGrassFootstep);
+        super(blockID);
+        float f = 0.4F;
+        setBlockBounds(0.5F - f, 0.0F, 0.5F - f, 0.5F + f, f * 2.0F, 0.5F + f);
+        setHardness(0.2F);
+        setStepSound(Block.soundGrassFootstep);
     }
 
-    public void onBlockPlaced(World var1, int var2, int var3, int var4, int var5)
+    public void onBlockPlaced(World world, int i, int j, int k, int l)
     {
-        this.checkFlowerChange(var1, var2, var3, var4);
+        checkFlowerChange(world, i, j, k);
     }
 
-    /**
-     * Ticks the block if it's been scheduled
-     */
-    public void updateTick(World var1, int var2, int var3, int var4, Random var5)
+    public void updateTick(World world, int i, int j, int k, Random random)
     {
-        if (!var1.isRemote)
+        if (world.isRemote)
         {
-            super.updateTick(var1, var2, var3, var4, var5);
+            return;
+        }
 
-            if (var1.getBlockLightValue(var2, var3 + 1, var4) >= 9 && var5.nextInt(30) == 0)
-            {
-                var1.setBlock(var2, var3, var4, AetherBlocks.BerryBush.blockID);
-            }
+        super.updateTick(world, i, j, k, random);
+
+        if ((world.getBlockLightValue(i, j + 1, k) >= 9) && (random.nextInt(30) == 0))
+        {
+            world.setBlock(i, j, k, AetherBlocks.BerryBush.blockID);
         }
     }
 
-    /**
-     * Returns a bounding box from the pool of bounding boxes (this means this box can change after the pool has been
-     * cleared to be reused)
-     */
-    public AxisAlignedBB getCollisionBoundingBoxFromPool(World var1, int var2, int var3, int var4)
+    public AxisAlignedBB getCollisionBoundingBoxFromPool(World world, int i, int j, int k)
     {
-        return AxisAlignedBB.getBoundingBox((double)var2 + this.minX, (double)var3 + this.minY, (double)var4 + this.minZ, (double)var2 + this.maxX, (double)var3 + this.maxY, (double)var4 + this.maxZ);
+        return AxisAlignedBB.getBoundingBox(i + this.minX, j + this.minY, k + this.minZ, i + this.maxX, j + this.maxY, k + this.maxZ);
     }
 
-    public boolean blockActivated(World var1, int var2, int var3, int var4, EntityPlayer var5)
+    public boolean blockActivated(World world, int i, int j, int k, EntityPlayer entityPlayer)
     {
-        if (var1.isRemote)
+        if (world.isRemote)
         {
             return false;
         }
-        else if (var5 == null)
+
+        if (entityPlayer == null)
         {
             return false;
         }
-        else
-        {
-            ItemStack var6 = var5.getCurrentEquippedItem();
 
-            if (var6 == null)
-            {
-                return false;
-            }
-            else if (var6.itemID != Item.dyePowder.itemID)
-            {
-                return false;
-            }
-            else if (var6.getItemDamage() != 15)
-            {
-                return false;
-            }
-            else
-            {
-                --var6.stackSize;
-                var1.setBlock(var2, var3, var4, 0);
-                var1.setBlock(var2, var3, var4, AetherBlocks.BerryBush.blockID);
-                return true;
-            }
+        ItemStack itemStack = entityPlayer.cd();
+
+        if (itemStack == null)
+        {
+            return false;
         }
+
+        if (itemStack.itemID != Item.dyePowder.itemID)
+        {
+            return false;
+        }
+
+        if (itemStack.getItemDamage() != 15)
+        {
+            return false;
+        }
+
+        itemStack.stackSize -= 1;
+        world.setBlock(i, j, k, 0);
+        world.setBlock(i, j, k, AetherBlocks.BerryBush.blockID);
+        return true;
     }
 
-    /**
-     * Gets passed in the blockID of the block below and supposed to return true if its allowed to grow on the type of
-     * blockID passed in. Args: blockID
-     */
-    protected boolean canThisPlantGrowOnThisBlockID(int var1)
+    protected boolean canThisPlantGrowOnThisBlockID(int i)
     {
-        return var1 == AetherBlocks.AetherGrass.blockID || var1 == AetherBlocks.AetherDirt.blockID;
+        return (i == AetherBlocks.AetherGrass.blockID) || (i == AetherBlocks.AetherDirt.blockID);
     }
 }
+

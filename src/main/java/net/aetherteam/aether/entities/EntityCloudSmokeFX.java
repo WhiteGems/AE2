@@ -1,54 +1,53 @@
 package net.aetherteam.aether.entities;
 
 import net.minecraft.client.particle.EntityFX;
-import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.particle.EntityNoteFX;
+import net.minecraft.client.renderer.texture.Rect2i;
+import net.minecraft.entity.Entity;
 import net.minecraft.world.World;
 
-public class EntityCloudSmokeFX extends EntityFX
+public class EntityCloudSmokeFX extends EntityNoteFX
 {
     float smokeParticleScale;
 
-    public EntityCloudSmokeFX(World var1, double var2, double var4, double var6, double var8, double var10, double var12, float var14, float var15, float var16, float var17)
+    public EntityCloudSmokeFX(World world, double x, double y, double z, double initialMotionX, double initialMotionY, double intialMotionZ, float size, float red, float blue, float green)
     {
-        super(var1, var2, var4, var6, 0.0D, 0.0D, 0.0D);
-        this.motionX *= 0.10000000149011612D;
-        this.motionY *= 0.10000000149011612D;
-        this.motionZ *= 0.10000000149011612D;
-        this.motionX += var8;
-        this.motionY += var10;
-        this.motionZ += var12;
-        this.particleRed = var15;
-        this.particleBlue = var16;
-        this.particleGreen = var17;
+        super(world, x, y, z, 0.0D, 0.0D, 0.0D);
+        this.motionX *= 0.1000000014901161D;
+        this.motionY *= 0.1000000014901161D;
+        this.motionZ *= 0.1000000014901161D;
+        this.motionX += initialMotionX;
+        this.motionY += initialMotionY;
+        this.motionZ += intialMotionZ;
+        this.particleRed = red;
+        this.particleBlue = blue;
+        this.particleGreen = green;
         this.particleScale *= 0.75F;
-        this.particleScale *= var14;
+        this.particleScale *= size;
         this.smokeParticleScale = this.particleScale;
-        this.particleMaxAge = (int)(8.0D / (Math.random() * 0.8D + 0.2D));
-        this.particleMaxAge = (int)((float)this.particleMaxAge * var14);
+        this.particleMaxAge = ((int)(8.0D / (Math.random() * 0.8D + 0.2D)));
+        this.particleMaxAge = ((int)(this.particleMaxAge * size));
         this.noClip = true;
     }
 
-    public void renderParticle(Tessellator var1, float var2, float var3, float var4, float var5, float var6, float var7)
+    public void a(Rect2i tessellator, float f, float f1, float f2, float f3, float f4, float f5)
     {
-        float var8 = ((float)this.particleAge + var2) / (float)this.particleMaxAge * 32.0F;
+        float f6 = (this.particleAge + f) / this.particleMaxAge * 32.0F;
 
-        if (var8 < 0.0F)
+        if (f6 < 0.0F)
         {
-            var8 = 0.0F;
+            f6 = 0.0F;
         }
 
-        if (var8 > 1.0F)
+        if (f6 > 1.0F)
         {
-            var8 = 1.0F;
+            f6 = 1.0F;
         }
 
-        this.particleScale = this.smokeParticleScale * var8;
-        super.renderParticle(var1, var2, var3, var4, var5, var6, var7);
+        this.particleScale = (this.smokeParticleScale * f6);
+        super.a(tessellator, f, f1, f2, f3, f4, f5);
     }
 
-    /**
-     * Called to update the entity's position/logic.
-     */
     public void onUpdate()
     {
         this.prevPosX = this.posX;
@@ -57,12 +56,12 @@ public class EntityCloudSmokeFX extends EntityFX
 
         if (this.particleAge++ >= this.particleMaxAge)
         {
-            this.setDead();
+            setDead();
         }
 
-        this.setParticleTextureIndex(7 - this.particleAge * 8 / this.particleMaxAge);
+        setParticleTextureIndex(7 - this.particleAge * 8 / this.particleMaxAge);
         this.motionY += 0.004D;
-        this.moveEntity(this.motionX, this.motionY, this.motionZ);
+        moveEntity(this.motionX, this.motionY, this.motionZ);
 
         if (this.posY == this.prevPosY)
         {
@@ -81,3 +80,4 @@ public class EntityCloudSmokeFX extends EntityFX
         }
     }
 }
+

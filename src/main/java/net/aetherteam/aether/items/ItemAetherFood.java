@@ -10,31 +10,32 @@ import net.minecraft.world.World;
 
 public class ItemAetherFood extends ItemFood
 {
-    public ItemAetherFood(int var1, int var2, boolean var3)
+    public ItemAetherFood(int i, int j, boolean flag)
     {
-        super(var1, var2, var3);
+        super(i, j, flag);
     }
 
-    public ItemAetherFood(int var1, int var2, int var3, int var4, boolean var5)
+    public ItemAetherFood(int i, int j, int k, int l, boolean flag)
     {
-        super(var1, var2, var5);
+        super(i, j, flag);
     }
 
-    protected void onFoodEaten(ItemStack var1, World var2, EntityPlayer var3)
+    protected void onFoodEaten(ItemStack par1ItemStack, World par2World, EntityPlayer par3EntityPlayer)
     {
-        if (!var2.isRemote && var1.itemID == AetherItems.Strawberry.itemID)
+        if ((!par2World.isRemote) && (par1ItemStack.itemID == AetherItems.Strawberry.itemID))
         {
-            var3.addPotionEffect(new PotionEffect(Potion.resistance.id, 200, 1));
-            var3.addPotionEffect(new PotionEffect(Potion.digSpeed.id, 200, 1));
+            par3EntityPlayer.addPotionEffect(new PotionEffect(Potion.resistance.id, 200, 1));
+            par3EntityPlayer.addPotionEffect(new PotionEffect(Potion.digSpeed.id, 200, 1));
         }
         else
         {
-            super.onFoodEaten(var1, var2, var3);
+            super.onFoodEaten(par1ItemStack, par2World, par3EntityPlayer);
         }
     }
 
-    public Item setIconName(String var1)
+    public Item setIconName(String name)
     {
-        return this.setUnlocalizedName("Aether:" + var1);
+        return setUnlocalizedName("Aether:" + name);
     }
 }
+

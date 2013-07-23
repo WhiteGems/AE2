@@ -6,111 +6,108 @@ import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferInt;
 import java.awt.image.ImageObserver;
-import net.minecraft.client.renderer.IImageBuffer;
-import net.minecraft.client.renderer.ImageBufferDownload;
+import java.awt.image.WritableRaster;
+import net.minecraft.client.renderer.CallableParticlePositionInfo;
+import net.minecraft.client.renderer.ThreadDownloadImage;
 
 @SideOnly(Side.CLIENT)
-public class ImageBufferDownloadAether extends ImageBufferDownload implements IImageBuffer
+public class ImageBufferDownloadAether extends CallableParticlePositionInfo
+    implements ThreadDownloadImage
 {
     private int[] imageData;
     private int imageWidth;
     private int imageHeight;
 
-    public ImageBufferDownloadAether setResolution(int var1, int var2)
+    public ImageBufferDownloadAether setResolution(int width, int height)
     {
-        this.imageWidth = var1;
-        this.imageHeight = var2;
+        this.imageWidth = width;
+        this.imageHeight = height;
         return this;
     }
 
-    public BufferedImage parseUserSkin(BufferedImage var1)
+    public BufferedImage a(BufferedImage par1BufferedImage)
     {
-        if (var1 == null)
+        if (par1BufferedImage == null)
         {
             return null;
         }
-        else
+
+        BufferedImage bufferedimage1 = new BufferedImage(this.imageWidth, this.imageHeight, 2);
+        Graphics graphics = bufferedimage1.getGraphics();
+        graphics.drawImage(par1BufferedImage, 0, 0, (ImageObserver)null);
+        graphics.dispose();
+        this.imageData = ((DataBufferInt)bufferedimage1.getRaster().getDataBuffer()).getData();
+        setAreaOpaque(0, 0, this.imageWidth, this.imageWidth / 2);
+        setAreaTransparent(this.imageWidth, 0, this.imageHeight, this.imageWidth);
+        setAreaOpaque(0, this.imageWidth / 2, this.imageHeight, this.imageWidth);
+        boolean flag = false;
+
+        for (int i = 32; i < 64; i++)
         {
-            BufferedImage var2 = new BufferedImage(this.imageWidth, this.imageHeight, 2);
-            Graphics var3 = var2.getGraphics();
-            var3.drawImage(var1, 0, 0, (ImageObserver)null);
-            var3.dispose();
-            this.imageData = ((DataBufferInt)var2.getRaster().getDataBuffer()).getData();
-            this.setAreaOpaque(0, 0, this.imageWidth, this.imageWidth / 2);
-            this.setAreaTransparent(this.imageWidth, 0, this.imageHeight, this.imageWidth);
-            this.setAreaOpaque(0, this.imageWidth / 2, this.imageHeight, this.imageWidth);
-            boolean var4 = false;
-            int var5;
-            int var6;
-            int var7;
-
-            for (var5 = 32; var5 < 64; ++var5)
+            for (int j = 0; j < 16; j++)
             {
-                for (var6 = 0; var6 < 16; ++var6)
-                {
-                    var7 = this.imageData[var5 + var6 * 64];
+                int k = this.imageData[(i + j * 64)];
 
-                    if ((var7 >> 24 & 255) < 128)
+                if ((k >> 24 & 0xFF) < 128)
+                {
+                    flag = true;
+                }
+            }
+        }
+
+        if (!flag)
+        {
+            for (i = 32; i < 64; i++)
+            {
+                for (int j = 0; j < 16; j++)
+                {
+                    int k = this.imageData[(i + j * 64)];
+
+                    if ((k >> 24 & 0xFF) < 128)
                     {
-                        var4 = true;
+                        flag = true;
                     }
                 }
             }
-
-            if (!var4)
-            {
-                for (var5 = 32; var5 < 64; ++var5)
-                {
-                    for (var6 = 0; var6 < 16; ++var6)
-                    {
-                        var7 = this.imageData[var5 + var6 * 64];
-
-                        if ((var7 >> 24 & 255) < 128)
-                        {
-                            var4 = true;
-                        }
-                    }
-                }
-            }
-
-            return var2;
         }
+
+        return bufferedimage1;
     }
 
-    private void setAreaTransparent(int var1, int var2, int var3, int var4)
+    private void setAreaTransparent(int par1, int par2, int par3, int par4)
     {
-        if (!this.hasTransparency(var1, var2, var3, var4))
+        if (!hasTransparency(par1, par2, par3, par4))
         {
-            for (int var5 = var1; var5 < var3; ++var5)
+            for (int i1 = par1; i1 < par3; i1++)
             {
-                for (int var6 = var2; var6 < var4; ++var6)
+                for (int j1 = par2; j1 < par4; j1++)
                 {
-                    this.imageData[var5 + var6 * this.imageWidth] &= 16777215;
+                    this.imageData[(i1 + j1 * this.imageWidth)] &= 16777215;
                 }
             }
         }
     }
 
-    private void setAreaOpaque(int var1, int var2, int var3, int var4)
+    private void setAreaOpaque(int par1, int par2, int par3, int par4)
     {
-        for (int var5 = var1; var5 < var3; ++var5)
+        for (int i1 = par1; i1 < par3; i1++)
         {
-            for (int var6 = var2; var6 < var4; ++var6)
+            for (int j1 = par2; j1 < par4; j1++)
             {
-                this.imageData[var5 + var6 * this.imageWidth] |= -16777216;
+                this.imageData[(i1 + j1 * this.imageWidth)] |= -16777216;
             }
         }
     }
 
-    private boolean hasTransparency(int var1, int var2, int var3, int var4)
+    private boolean hasTransparency(int par1, int par2, int par3, int par4)
     {
-        for (int var5 = var1; var5 < var3; ++var5)
+        for (int i1 = par1; i1 < par3; i1++)
         {
-            for (int var6 = var2; var6 < var4; ++var6)
+            for (int j1 = par2; j1 < par4; j1++)
             {
-                int var7 = this.imageData[var5 + var6 * this.imageWidth];
+                int k1 = this.imageData[(i1 + j1 * this.imageWidth)];
 
-                if ((var7 >> 24 & 255) < 128)
+                if ((k1 >> 24 & 0xFF) < 128)
                 {
                     return true;
                 }
@@ -120,3 +117,4 @@ public class ImageBufferDownloadAether extends ImageBufferDownload implements II
         return false;
     }
 }
+

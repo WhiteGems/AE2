@@ -4,131 +4,136 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.aetherteam.aether.PlayerBaseAetherServer;
 import net.aetherteam.aether.client.PlayerBaseAetherClient;
+import net.minecraft.block.material.Material;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.MathHelper;
+import net.minecraft.world.World;
 
 public class ItemIceAccessory extends ItemAccessory
 {
-    public ItemIceAccessory(int var1, int var2, int var3, int var4)
+    public ItemIceAccessory(int i, int j, int k, int l)
     {
-        super(var1, var2, var3, var4, 16777215);
+        super(i, j, k, l, 16777215);
     }
 
-    public ItemIceAccessory(int var1, int var2, String var3, int var4)
+    public ItemIceAccessory(int i, int j, String path, int l)
     {
-        super(var1, var2, 0, var4);
-        this.texture = var3;
+        super(i, j, 0, l);
+        this.texture = path;
     }
 
-    public ItemIceAccessory(int var1, int var2, String var3, int var4, int var5)
+    public ItemIceAccessory(int i, int j, String path, int l, int m)
     {
-        super(var1, var2, 0, var4, var5);
-        this.texture = var3;
+        super(i, j, 0, l, m);
+        this.texture = path;
     }
 
-    public ItemIceAccessory(int var1, int var2, String var3, int var4, int var5, boolean var6)
+    public ItemIceAccessory(int i, int j, String path, int l, int m, boolean flag)
     {
-        super(var1, var2, var3, var4, var5);
-        this.colouriseRender = var6;
+        super(i, j, path, l, m);
+        this.colouriseRender = flag;
     }
 
-    public void activateServerPassive(EntityPlayer var1, PlayerBaseAetherServer var2)
+    public void activateServerPassive(EntityPlayer player, PlayerBaseAetherServer playerBase)
     {
-        int var3 = MathHelper.floor_double(var1.posX);
-        int var4 = MathHelper.floor_double(var1.boundingBox.minY);
-        int var5 = MathHelper.floor_double(var1.posZ);
-        double var10000 = var1.posY - (double)var4;
-        var1.worldObj.getBlockMaterial(var3, var4, var5);
-        var1.worldObj.getBlockMaterial(var3, var4 - 1, var5);
+        int i = MathHelper.floor_double(player.posX);
+        int j = MathHelper.floor_double(player.boundingBox.minY);
+        int k = MathHelper.floor_double(player.posZ);
+        double yoff = player.posY - j;
+        Material mat0 = player.worldObj.getBlockMaterial(i, j, k);
+        Material mat1 = player.worldObj.getBlockMaterial(i, j - 1, k);
 
-        for (int var10 = var3 - 1; var10 <= var3 + 1; ++var10)
+        for (int l = i - 1; l <= i + 1; l++)
         {
-            for (int var11 = var4 - 1; var11 <= var4 + 1; ++var11)
+            for (int i1 = j - 1; i1 <= j + 1; i1++)
             {
-                for (int var12 = var5 - 1; var12 <= var5 + 1; ++var12)
+                for (int j1 = k - 1; j1 <= k + 1; j1++)
                 {
-                    if (var1.worldObj.getBlockId(var10, var11, var12) == 8)
+                    if (player.worldObj.getBlockId(l, i1, j1) == 8)
                     {
-                        if (var1.worldObj.getBlockMetadata(var10, var11, var12) == 0)
+                        if (player.worldObj.getBlockMetadata(l, i1, j1) == 0)
                         {
-                            var1.worldObj.setBlock(var10, var11, var12, 79);
+                            player.worldObj.setBlock(l, i1, j1, 79);
                         }
                         else
                         {
-                            var1.worldObj.setBlock(var10, var11, var12, 0);
+                            player.worldObj.setBlock(l, i1, j1, 0);
                         }
 
-                        if (var2.getSlotStack(this.itemID) != null)
+                        if (playerBase.getSlotStack(this.itemID) != null)
                         {
-                            var2.getSlotStack(this.itemID).damageItem(1, var1);
+                            playerBase.getSlotStack(this.itemID).damageItem(1, player);
 
-                            if (var2.getSlotStack(this.itemID).stackSize < 1)
+                            if (playerBase.getSlotStack(this.itemID).stackSize < 1)
                             {
-                                var2.setSlotStack(var2.getSlotIndex(this.itemID), (ItemStack)null);
+                                playerBase.setSlotStack(playerBase.getSlotIndex(this.itemID), null);
                             }
                         }
                     }
-                    else if (var1.worldObj.getBlockId(var10, var11, var12) == 9)
+                    else if (player.worldObj.getBlockId(l, i1, j1) == 9)
                     {
-                        if (var1.worldObj.getBlockMetadata(var10, var11, var12) == 0)
+                        if (player.worldObj.getBlockMetadata(l, i1, j1) == 0)
                         {
-                            var1.worldObj.setBlock(var10, var11, var12, 79);
+                            player.worldObj.setBlock(l, i1, j1, 79);
                         }
                         else
                         {
-                            var1.worldObj.setBlock(var10, var11, var12, 0);
+                            player.worldObj.setBlock(l, i1, j1, 0);
                         }
 
-                        if (var2.getSlotStack(this.itemID) != null)
+                        if (playerBase.getSlotStack(this.itemID) != null)
                         {
-                            var2.getSlotStack(this.itemID).damageItem(1, var1);
+                            playerBase.getSlotStack(this.itemID).damageItem(1, player);
 
-                            if (var2.getSlotStack(this.itemID).stackSize < 1)
+                            if (playerBase.getSlotStack(this.itemID).stackSize < 1)
                             {
-                                var2.setSlotStack(var2.getSlotIndex(this.itemID), (ItemStack)null);
+                                playerBase.setSlotStack(playerBase.getSlotIndex(this.itemID), null);
                             }
                         }
                     }
-                    else if (var1.worldObj.getBlockId(var10, var11, var12) == 10)
+                    else if (player.worldObj.getBlockId(l, i1, j1) == 10)
                     {
-                        if (var1.worldObj.getBlockMetadata(var10, var11, var12) == 0)
+                        if (player.worldObj.getBlockMetadata(l, i1, j1) == 0)
                         {
-                            var1.worldObj.setBlock(var10, var11, var12, 49);
+                            player.worldObj.setBlock(l, i1, j1, 49);
                         }
                         else
                         {
-                            var1.worldObj.setBlock(var10, var11, var12, 0);
+                            player.worldObj.setBlock(l, i1, j1, 0);
                         }
 
-                        if (var2.getSlotStack(this.itemID) != null)
+                        if (playerBase.getSlotStack(this.itemID) != null)
                         {
-                            var2.getSlotStack(this.itemID).damageItem(1, var1);
+                            playerBase.getSlotStack(this.itemID).damageItem(1, player);
 
-                            if (var2.getSlotStack(this.itemID).stackSize < 1)
+                            if (playerBase.getSlotStack(this.itemID).stackSize < 1)
                             {
-                                var2.setSlotStack(var2.getSlotIndex(this.itemID), (ItemStack)null);
+                                playerBase.setSlotStack(playerBase.getSlotIndex(this.itemID), null);
                             }
                         }
                     }
-                    else if (var1.worldObj.getBlockId(var10, var11, var12) == 11)
+                    else if (player.worldObj.getBlockId(l, i1, j1) == 11)
                     {
-                        if (var1.worldObj.getBlockMetadata(var10, var11, var12) == 0)
+                        if (player.worldObj.getBlockMetadata(l, i1, j1) == 0)
                         {
-                            var1.worldObj.setBlock(var10, var11, var12, 49);
+                            player.worldObj.setBlock(l, i1, j1, 49);
                         }
                         else
                         {
-                            var1.worldObj.setBlock(var10, var11, var12, 0);
+                            player.worldObj.setBlock(l, i1, j1, 0);
                         }
 
-                        if (var2.getSlotStack(this.itemID) != null)
+                        if (playerBase.getSlotStack(this.itemID) != null)
                         {
-                            var2.getSlotStack(this.itemID).damageItem(1, var1);
+                            playerBase.getSlotStack(this.itemID).damageItem(1, player);
 
-                            if (var2.getSlotStack(this.itemID).stackSize < 1)
+                            if (playerBase.getSlotStack(this.itemID).stackSize < 1)
                             {
-                                var2.setSlotStack(var2.getSlotIndex(this.itemID), (ItemStack)null);
+                                playerBase.setSlotStack(playerBase.getSlotIndex(this.itemID), null);
                             }
                         }
                     }
@@ -138,102 +143,102 @@ public class ItemIceAccessory extends ItemAccessory
     }
 
     @SideOnly(Side.CLIENT)
-    public void activateClientPassive(EntityPlayer var1, PlayerBaseAetherClient var2)
+    public void activateClientPassive(EntityPlayer player, PlayerBaseAetherClient playerBase)
     {
-        int var3 = MathHelper.floor_double(var1.posX);
-        int var4 = MathHelper.floor_double(var1.boundingBox.minY);
-        int var5 = MathHelper.floor_double(var1.posZ);
-        double var10000 = var1.posY - (double)var4;
-        var1.worldObj.getBlockMaterial(var3, var4, var5);
-        var1.worldObj.getBlockMaterial(var3, var4 - 1, var5);
+        int i = MathHelper.floor_double(player.posX);
+        int j = MathHelper.floor_double(player.boundingBox.minY);
+        int k = MathHelper.floor_double(player.posZ);
+        double yoff = player.posY - j;
+        Material mat0 = player.worldObj.getBlockMaterial(i, j, k);
+        Material mat1 = player.worldObj.getBlockMaterial(i, j - 1, k);
 
-        for (int var10 = var3 - 1; var10 <= var3 + 1; ++var10)
+        for (int l = i - 1; l <= i + 1; l++)
         {
-            for (int var11 = var4 - 1; var11 <= var4 + 1; ++var11)
+            for (int i1 = j - 1; i1 <= j + 1; i1++)
             {
-                for (int var12 = var5 - 1; var12 <= var5 + 1; ++var12)
+                for (int j1 = k - 1; j1 <= k + 1; j1++)
                 {
-                    if (var1.worldObj.getBlockId(var10, var11, var12) == 8)
+                    if (player.worldObj.getBlockId(l, i1, j1) == 8)
                     {
-                        if (var1.worldObj.getBlockMetadata(var10, var11, var12) == 0)
+                        if (player.worldObj.getBlockMetadata(l, i1, j1) == 0)
                         {
-                            var1.worldObj.setBlock(var10, var11, var12, 79);
+                            player.worldObj.setBlock(l, i1, j1, 79);
                         }
                         else
                         {
-                            var1.worldObj.setBlock(var10, var11, var12, 0);
+                            player.worldObj.setBlock(l, i1, j1, 0);
                         }
 
-                        if (var2.getSlotStack(this.itemID) != null)
+                        if (playerBase.getSlotStack(this.itemID) != null)
                         {
-                            var2.getSlotStack(this.itemID).damageItem(1, var1);
+                            playerBase.getSlotStack(this.itemID).damageItem(1, player);
 
-                            if (var2.getSlotStack(this.itemID).stackSize < 1)
+                            if (playerBase.getSlotStack(this.itemID).stackSize < 1)
                             {
-                                var2.setSlotStack(var2.getSlotIndex(this.itemID), (ItemStack)null);
+                                playerBase.setSlotStack(playerBase.getSlotIndex(this.itemID), null);
                             }
                         }
                     }
-                    else if (var1.worldObj.getBlockId(var10, var11, var12) == 9)
+                    else if (player.worldObj.getBlockId(l, i1, j1) == 9)
                     {
-                        if (var1.worldObj.getBlockMetadata(var10, var11, var12) == 0)
+                        if (player.worldObj.getBlockMetadata(l, i1, j1) == 0)
                         {
-                            var1.worldObj.setBlock(var10, var11, var12, 79);
+                            player.worldObj.setBlock(l, i1, j1, 79);
                         }
                         else
                         {
-                            var1.worldObj.setBlock(var10, var11, var12, 0);
+                            player.worldObj.setBlock(l, i1, j1, 0);
                         }
 
-                        if (var2.getSlotStack(this.itemID) != null)
+                        if (playerBase.getSlotStack(this.itemID) != null)
                         {
-                            var2.getSlotStack(this.itemID).damageItem(1, var1);
+                            playerBase.getSlotStack(this.itemID).damageItem(1, player);
 
-                            if (var2.getSlotStack(this.itemID).stackSize < 1)
+                            if (playerBase.getSlotStack(this.itemID).stackSize < 1)
                             {
-                                var2.setSlotStack(var2.getSlotIndex(this.itemID), (ItemStack)null);
+                                playerBase.setSlotStack(playerBase.getSlotIndex(this.itemID), null);
                             }
                         }
                     }
-                    else if (var1.worldObj.getBlockId(var10, var11, var12) == 10)
+                    else if (player.worldObj.getBlockId(l, i1, j1) == 10)
                     {
-                        if (var1.worldObj.getBlockMetadata(var10, var11, var12) == 0)
+                        if (player.worldObj.getBlockMetadata(l, i1, j1) == 0)
                         {
-                            var1.worldObj.setBlock(var10, var11, var12, 49);
+                            player.worldObj.setBlock(l, i1, j1, 49);
                         }
                         else
                         {
-                            var1.worldObj.setBlock(var10, var11, var12, 0);
+                            player.worldObj.setBlock(l, i1, j1, 0);
                         }
 
-                        if (var2.getSlotStack(this.itemID) != null)
+                        if (playerBase.getSlotStack(this.itemID) != null)
                         {
-                            var2.getSlotStack(this.itemID).damageItem(1, var1);
+                            playerBase.getSlotStack(this.itemID).damageItem(1, player);
 
-                            if (var2.getSlotStack(this.itemID).stackSize < 1)
+                            if (playerBase.getSlotStack(this.itemID).stackSize < 1)
                             {
-                                var2.setSlotStack(var2.getSlotIndex(this.itemID), (ItemStack)null);
+                                playerBase.setSlotStack(playerBase.getSlotIndex(this.itemID), null);
                             }
                         }
                     }
-                    else if (var1.worldObj.getBlockId(var10, var11, var12) == 11)
+                    else if (player.worldObj.getBlockId(l, i1, j1) == 11)
                     {
-                        if (var1.worldObj.getBlockMetadata(var10, var11, var12) == 0)
+                        if (player.worldObj.getBlockMetadata(l, i1, j1) == 0)
                         {
-                            var1.worldObj.setBlock(var10, var11, var12, 49);
+                            player.worldObj.setBlock(l, i1, j1, 49);
                         }
                         else
                         {
-                            var1.worldObj.setBlock(var10, var11, var12, 0);
+                            player.worldObj.setBlock(l, i1, j1, 0);
                         }
 
-                        if (var2.getSlotStack(this.itemID) != null)
+                        if (playerBase.getSlotStack(this.itemID) != null)
                         {
-                            var2.getSlotStack(this.itemID).damageItem(1, var1);
+                            playerBase.getSlotStack(this.itemID).damageItem(1, player);
 
-                            if (var2.getSlotStack(this.itemID).stackSize < 1)
+                            if (playerBase.getSlotStack(this.itemID).stackSize < 1)
                             {
-                                var2.setSlotStack(var2.getSlotIndex(this.itemID), (ItemStack)null);
+                                playerBase.setSlotStack(playerBase.getSlotIndex(this.itemID), null);
                             }
                         }
                     }
@@ -242,3 +247,4 @@ public class ItemIceAccessory extends ItemAccessory
         }
     }
 }
+

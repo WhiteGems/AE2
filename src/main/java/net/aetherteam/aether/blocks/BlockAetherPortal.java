@@ -5,6 +5,8 @@ import cpw.mods.fml.relauncher.SideOnly;
 import java.util.List;
 import java.util.Random;
 import net.aetherteam.aether.Aether;
+import net.aetherteam.aether.CommonProxy;
+import net.aetherteam.aether.PlayerBaseAetherServer;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockPortal;
 import net.minecraft.client.renderer.texture.IconRegister;
@@ -14,201 +16,168 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 
-public class BlockAetherPortal extends BlockPortal implements IAetherBlock
+public class BlockAetherPortal extends BlockPortal
+    implements IAetherBlock
 {
-    public BlockAetherPortal(int var1)
+    public BlockAetherPortal(int blockID)
     {
-        super(var1);
-        this.setHardness(-1.0F);
-        this.setResistance(6000000.0F);
-        this.setUnlocalizedName("Aether:Aether Portal");
+        super(blockID);
+        setHardness(-1.0F);
+        setResistance(6000000.0F);
+        setUnlocalizedName("Aether:Aether Portal");
     }
 
     @SideOnly(Side.CLIENT)
-    public int getDimNumber(EntityPlayer var1)
+    public int getDimNumber(EntityPlayer player)
     {
-        return var1.dimension == 0 ? 3 : 0;
+        return player.dimension == 0 ? 3 : 0;
     }
 
-    /**
-     * When this method is called, your block should register all the icons it needs with the given IconRegister. This
-     * is the only chance you get to register icons.
-     */
-    public void registerIcons(IconRegister var1)
+    public void registerIcons(IconRegister par1IconRegister)
     {
-        this.blockIcon = var1.registerIcon("Aether:Aether Portal");
+        this.blockIcon = par1IconRegister.registerIcon("Aether:Aether Portal");
     }
 
-    public Block setIconName(String var1)
+    public Block setIconName(String name)
     {
-        return this.setUnlocalizedName("Aether:" + var1);
+        return setUnlocalizedName("Aether:" + name);
     }
 
-    /**
-     * returns a list of blocks with the same ID, but different meta (eg: wood returns 4 blocks)
-     */
-    public void getSubBlocks(int var1, CreativeTabs var2, List var3)
+    public void getSubBlocks(int par1, CreativeTabs par2CreativeTabs, List par3List)
     {
-        var3.add(new ItemStack(this));
+        par3List.add(new ItemStack(this));
     }
 
-    /**
-     * Triggered whenever an entity collides with this block (enters into the block). Args: world, x, y, z, entity
-     */
-    public void onEntityCollidedWithBlock(World var1, int var2, int var3, int var4, Entity var5)
+    public void onEntityCollidedWithBlock(World world, int x, int y, int z, Entity entity)
     {
-        if (var5.ridingEntity == null && var5.riddenByEntity == null)
-        {
-            if (var5 instanceof EntityPlayer)
+        if ((entity.ridingEntity == null) && (entity.riddenByEntity == null))
+            if ((entity instanceof EntityPlayer))
             {
-                if (var5.timeUntilPortal <= 0 && !var1.isRemote)
+                if ((entity.timeUntilPortal <= 0) &&
+                        (!world.isRemote))
                 {
-                    Aether.getServerPlayer((EntityPlayer)var5).Z();
+                    Aether.getServerPlayer((EntityPlayer)entity).Z();
                 }
             }
-            else if (var5.timeUntilPortal <= 0)
+            else if (entity.timeUntilPortal <= 0)
             {
-                Aether.teleportEntityToAether(var5);
+                Aether.teleportEntityToAether(entity);
             }
+    }
+
+    public void onNeighborBlockChange(World world, int i, int j, int k, int l)
+    {
+        int i1 = 0;
+        int j1 = 1;
+
+        if ((world.getBlockId(i - 1, j, k) == this.blockID) || (world.getBlockId(i + 1, j, k) == this.blockID))
+        {
+            i1 = 1;
+            j1 = 0;
+        }
+
+        for (int k1 = j; world.getBlockId(i, k1 - 1, k) == this.blockID; k1--);
+
+        if (world.getBlockId(i, k1 - 1, k) != Block.glowStone.blockID)
+        {
+            world.setBlock(i, j, k, 0);
+            return;
+        }
+
+        for (int l1 = 1; (l1 < 4) && (world.getBlockId(i, k1 + l1, k) == this.blockID); l1++);
+
+        if ((l1 != 3) || (world.getBlockId(i, k1 + l1, k) != Block.glowStone.blockID))
+        {
+            world.setBlock(i, j, k, 0);
+            return;
+        }
+
+        boolean flag = (world.getBlockId(i - 1, j, k) == this.blockID) || (world.getBlockId(i + 1, j, k) == this.blockID);
+        boolean flag1 = (world.getBlockId(i, j, k - 1) == this.blockID) || (world.getBlockId(i, j, k + 1) == this.blockID);
+
+        if ((flag) && (flag1))
+        {
+            world.setBlock(i, j, k, 0);
+            return;
+        }
+
+        if (((world.getBlockId(i + i1, j, k + j1) != Block.glowStone.blockID) || (world.getBlockId(i - i1, j, k - j1) != this.blockID)) && ((world.getBlockId(i - i1, j, k - j1) != Block.glowStone.blockID) || (world.getBlockId(i + i1, j, k + j1) != this.blockID)))
+        {
+            world.setBlock(i, j, k, 0);
+            return;
         }
     }
 
-    /**
-     * Lets the block know when one of its neighbor changes. Doesn't know which neighbor changed (coordinates passed are
-     * their own) Args: x, y, z, neighbor blockID
-     */
-    public void onNeighborBlockChange(World var1, int var2, int var3, int var4, int var5)
+    public void randomDisplayTick(World world, int x, int y, int z, Random random)
     {
-        byte var6 = 0;
-        byte var7 = 1;
-
-        if (var1.getBlockId(var2 - 1, var3, var4) == this.blockID || var1.getBlockId(var2 + 1, var3, var4) == this.blockID)
+        if (random.nextInt(250) == 0)
         {
-            var6 = 1;
-            var7 = 0;
+            world.playSound(x + 0.5D, y + 0.5D, z + 0.5D, "aeportal.aeportal", 0.5F, random.nextFloat() * 0.4F + 0.8F, false);
         }
 
-        int var8;
-
-        for (var8 = var3; var1.getBlockId(var2, var8 - 1, var4) == this.blockID; --var8)
-        {
-            ;
-        }
-
-        if (var1.getBlockId(var2, var8 - 1, var4) != Block.glowStone.blockID)
-        {
-            var1.setBlock(var2, var3, var4, 0);
-        }
-        else
-        {
-            int var9;
-
-            for (var9 = 1; var9 < 4 && var1.getBlockId(var2, var8 + var9, var4) == this.blockID; ++var9)
-            {
-                ;
-            }
-
-            if (var9 == 3 && var1.getBlockId(var2, var8 + var9, var4) == Block.glowStone.blockID)
-            {
-                boolean var10 = var1.getBlockId(var2 - 1, var3, var4) == this.blockID || var1.getBlockId(var2 + 1, var3, var4) == this.blockID;
-                boolean var11 = var1.getBlockId(var2, var3, var4 - 1) == this.blockID || var1.getBlockId(var2, var3, var4 + 1) == this.blockID;
-
-                if (var10 && var11)
-                {
-                    var1.setBlock(var2, var3, var4, 0);
-                }
-                else if ((var1.getBlockId(var2 + var6, var3, var4 + var7) != Block.glowStone.blockID || var1.getBlockId(var2 - var6, var3, var4 - var7) != this.blockID) && (var1.getBlockId(var2 - var6, var3, var4 - var7) != Block.glowStone.blockID || var1.getBlockId(var2 + var6, var3, var4 + var7) != this.blockID))
-                {
-                    var1.setBlock(var2, var3, var4, 0);
-                }
-            }
-            else
-            {
-                var1.setBlock(var2, var3, var4, 0);
-            }
-        }
+        Aether.proxy.spawnPortalParticles(world, x, y, z, random, this.blockID);
     }
 
-    /**
-     * A randomly called display update to be able to add particles or other items for display
-     */
-    public void randomDisplayTick(World var1, int var2, int var3, int var4, Random var5)
+    public boolean tryToCreatePortal(World par1World, int par2, int par3, int par4)
     {
-        if (var5.nextInt(250) == 0)
+        byte b0 = 0;
+        byte b1 = 0;
+
+        if ((par1World.getBlockId(par2 - 1, par3, par4) == Block.glowStone.blockID) || (par1World.getBlockId(par2 + 1, par3, par4) == Block.glowStone.blockID))
         {
-            var1.playSound((double)var2 + 0.5D, (double)var3 + 0.5D, (double)var4 + 0.5D, "aeportal.aeportal", 0.5F, var5.nextFloat() * 0.4F + 0.8F, false);
+            b0 = 1;
         }
 
-        Aether.proxy.spawnPortalParticles(var1, var2, var3, var4, var5, this.blockID);
-    }
-
-    /**
-     * Checks to see if this location is valid to create a portal and will return True if it does. Args: world, x, y, z
-     */
-    public boolean tryToCreatePortal(World var1, int var2, int var3, int var4)
-    {
-        byte var5 = 0;
-        byte var6 = 0;
-
-        if (var1.getBlockId(var2 - 1, var3, var4) == Block.glowStone.blockID || var1.getBlockId(var2 + 1, var3, var4) == Block.glowStone.blockID)
+        if ((par1World.getBlockId(par2, par3, par4 - 1) == Block.glowStone.blockID) || (par1World.getBlockId(par2, par3, par4 + 1) == Block.glowStone.blockID))
         {
-            var5 = 1;
+            b1 = 1;
         }
 
-        if (var1.getBlockId(var2, var3, var4 - 1) == Block.glowStone.blockID || var1.getBlockId(var2, var3, var4 + 1) == Block.glowStone.blockID)
-        {
-            var6 = 1;
-        }
-
-        if (var5 == var6)
+        if (b0 == b1)
         {
             return false;
         }
-        else
+
+        if (par1World.getBlockId(par2 - b0, par3, par4 - b1) == 0)
         {
-            if (var1.getBlockId(var2 - var5, var3, var4 - var6) == 0)
-            {
-                var2 -= var5;
-                var4 -= var6;
-            }
+            par2 -= b0;
+            par4 -= b1;
+        }
 
-            int var7;
-            int var8;
-
-            for (var7 = -1; var7 <= 2; ++var7)
+        for (int l = -1; l <= 2; l++)
+        {
+            for (int i1 = -1; i1 <= 3; i1++)
             {
-                for (var8 = -1; var8 <= 3; ++var8)
+                boolean flag = (l == -1) || (l == 2) || (i1 == -1) || (i1 == 3);
+
+                if (((l != -1) && (l != 2)) || ((i1 != -1) && (i1 != 3)))
                 {
-                    boolean var9 = var7 == -1 || var7 == 2 || var8 == -1 || var8 == 3;
+                    int j1 = par1World.getBlockId(par2 + b0 * l, par3 + i1, par4 + b1 * l);
 
-                    if (var7 != -1 && var7 != 2 || var8 != -1 && var8 != 3)
+                    if (flag)
                     {
-                        int var10 = var1.getBlockId(var2 + var5 * var7, var3 + var8, var4 + var6 * var7);
-
-                        if (var9)
-                        {
-                            if (var10 != Block.glowStone.blockID)
-                            {
-                                return false;
-                            }
-                        }
-                        else if (var10 != 0 && var10 != Block.waterMoving.blockID)
+                        if (j1 != Block.glowStone.blockID)
                         {
                             return false;
                         }
                     }
+                    else if ((j1 != 0) && (j1 != Block.waterMoving.blockID))
+                    {
+                        return false;
+                    }
                 }
             }
-
-            for (var7 = 0; var7 < 2; ++var7)
-            {
-                for (var8 = 0; var8 < 3; ++var8)
-                {
-                    var1.setBlock(var2 + var5 * var7, var3 + var8, var4 + var6 * var7, AetherBlocks.AetherPortal.blockID, 0, 2);
-                }
-            }
-
-            return true;
         }
+
+        for (l = 0; l < 2; l++)
+        {
+            for (int i1 = 0; i1 < 3; i1++)
+            {
+                par1World.setBlock(par2 + b0 * l, par3 + i1, par4 + b1 * l, AetherBlocks.AetherPortal.blockID, 0, 2);
+            }
+        }
+
+        return true;
     }
 }
+

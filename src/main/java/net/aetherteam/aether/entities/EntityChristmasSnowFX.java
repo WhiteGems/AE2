@@ -1,13 +1,14 @@
 package net.aetherteam.aether.entities;
 
-import net.minecraft.client.particle.EntityPortalFX;
+import net.minecraft.client.particle.EntityCloudFX;
 import net.minecraft.world.World;
 
-public class EntityChristmasSnowFX extends EntityPortalFX
+public class EntityChristmasSnowFX extends EntityCloudFX
 {
-    public EntityChristmasSnowFX(World var1, double var2, double var4, double var6, double var8, double var10, double var12)
+    public EntityChristmasSnowFX(World world, double d, double d1, double d2, double d3, double d4, double d5)
     {
-        super(var1, var2, var4, var6, var8, var10, var12);
-        this.particleRed = this.particleGreen = this.particleBlue = 1.0F;
+        super(world, d, d1, d2, d3, d4, d5);
+        this.particleRed = (this.particleGreen = this.particleBlue = 1.0F);
     }
 }
+

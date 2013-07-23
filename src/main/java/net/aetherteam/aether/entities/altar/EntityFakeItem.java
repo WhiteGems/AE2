@@ -1,299 +1,255 @@
 package net.aetherteam.aether.entities.altar;
 
 import java.util.Iterator;
+import java.util.List;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
+import net.minecraft.entity.DataWatcher;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.logging.ILogAgent;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.StatCollector;
 import net.minecraft.world.World;
 
 public class EntityFakeItem extends EntityItem
 {
-    /**
-     * The age of this EntityItem (used to animate it up and down as well as expire it)
-     */
-    public int age;
-    public int delayBeforeCanPickup;
+    public int a;
+    public int b;
     private int health;
+    public float c;
 
-    /** The EntityItem's random initial float height. */
-    public float hoverStart;
-
-    public EntityFakeItem(World var1, double var2, double var4, double var6)
+    public EntityFakeItem(World par1World, double par2, double par4, double par6)
     {
-        super(var1);
+        super(par1World);
         this.age = 0;
         this.health = 5;
-        this.hoverStart = (float)(Math.random() * Math.PI * 2.0D);
-        this.setSize(0.25F, 0.25F);
-        this.yOffset = this.height / 2.0F;
-        this.setPosition(var2, var4, var6);
+        this.hoverStart = ((float)(Math.random() * Math.PI * 2.0D));
+        setSize(0.25F, 0.25F);
+        this.yOffset = (this.height / 2.0F);
+        setPosition(par2, par4, par6);
         this.rotationYaw = 0.0F;
     }
 
-    public EntityFakeItem(World var1, double var2, double var4, double var6, ItemStack var8)
+    public EntityFakeItem(World par1World, double par2, double par4, double par6, ItemStack par8ItemStack)
     {
-        this(var1, var2, var4, var6);
-        this.setEntityItemStack(var8);
+        this(par1World, par2, par4, par6);
+        setEntityItemStack(par8ItemStack);
     }
 
-    /**
-     * returns if this entity triggers Block.onEntityWalking on the blocks they walk on. used for spiders and wolves to
-     * prevent them from trampling crops
-     */
     protected boolean canTriggerWalking()
     {
         return false;
     }
 
-    public EntityFakeItem(World var1)
+    public EntityFakeItem(World par1World)
     {
-        super(var1);
+        super(par1World);
         this.age = 0;
         this.health = 5;
-        this.hoverStart = (float)(Math.random() * Math.PI * 2.0D);
-        this.setSize(0.25F, 0.25F);
-        this.yOffset = this.height / 2.0F;
+        this.hoverStart = ((float)(Math.random() * Math.PI * 2.0D));
+        setSize(0.25F, 0.25F);
+        this.yOffset = (this.height / 2.0F);
     }
 
     protected void entityInit()
     {
-        this.getDataWatcher().addObjectByDataType(10, 5);
+        getDataWatcher().addObjectByDataType(10, 5);
     }
 
-    /**
-     * Called to update the entity's position/logic.
-     */
     public void onUpdate()
     {
         this.prevPosX = this.posX;
         this.prevPosY = this.posY;
         this.prevPosZ = this.posZ;
         this.noClip = true;
-        ++this.age;
-        ItemStack var1 = this.getDataWatcher().getWatchableObjectItemStack(10);
+        this.age += 1;
+        ItemStack item = getDataWatcher().getWatchableObjectItemStack(10);
 
-        if (var1 != null && var1.stackSize <= 0)
+        if ((item != null) && (item.stackSize <= 0))
         {
-            this.setDead();
+            setDead();
         }
     }
 
     private void searchForOtherItemsNearby()
     {
-        Iterator var1 = this.worldObj.getEntitiesWithinAABB(EntityFakeItem.class, this.boundingBox.expand(0.5D, 0.0D, 0.5D)).iterator();
+        Iterator iterator = this.worldObj.getEntitiesWithinAABB(EntityFakeItem.class, this.boundingBox.expand(0.5D, 0.0D, 0.5D)).iterator();
 
-        while (var1.hasNext())
+        while (iterator.hasNext())
         {
-            EntityFakeItem var2 = (EntityFakeItem)var1.next();
-            this.combineItems(var2);
+            EntityFakeItem entityitem = (EntityFakeItem)iterator.next();
+            combineItems(entityitem);
         }
     }
 
-    public boolean combineItems(EntityFakeItem var1)
+    public boolean combineItems(EntityFakeItem par1EntityItem)
     {
-        if (var1 == this)
+        if (par1EntityItem == this)
         {
             return false;
         }
-        else if (var1.isEntityAlive() && this.isEntityAlive())
-        {
-            ItemStack var2 = this.getEntityItem();
-            ItemStack var3 = var1.getEntityItem();
 
-            if (var3.getItem() != var2.getItem())
-            {
-                return false;
-            }
-            else if (var3.hasTagCompound() ^ var2.hasTagCompound())
-            {
-                return false;
-            }
-            else if (var3.hasTagCompound() && !var3.getTagCompound().equals(var2.getTagCompound()))
-            {
-                return false;
-            }
-            else if (var3.getItem().getHasSubtypes() && var3.getItemDamage() != var2.getItemDamage())
-            {
-                return false;
-            }
-            else if (var3.stackSize < var2.stackSize)
-            {
-                return var1.combineItems(this);
-            }
-            else if (var3.stackSize + var2.stackSize > var3.getMaxStackSize())
-            {
-                return false;
-            }
-            else
-            {
-                var3.stackSize += var2.stackSize;
-                var1.delayBeforeCanPickup = Math.max(var1.delayBeforeCanPickup, this.delayBeforeCanPickup);
-                var1.age = Math.min(var1.age, this.age);
-                var1.setEntityItemStack(var3);
-                this.setDead();
-                return true;
-            }
-        }
-        else
+        if ((par1EntityItem.isEntityAlive()) && (isEntityAlive()))
         {
-            return false;
+            ItemStack itemstack = getEntityItem();
+            ItemStack itemstack1 = par1EntityItem.getEntityItem();
+
+            if (itemstack1.getItem() != itemstack.getItem())
+            {
+                return false;
+            }
+
+            if ((itemstack1.hasTagCompound() ^ itemstack.hasTagCompound()))
+            {
+                return false;
+            }
+
+            if ((itemstack1.hasTagCompound()) && (!itemstack1.getTagCompound().equals(itemstack.getTagCompound())))
+            {
+                return false;
+            }
+
+            if ((itemstack1.getItem().getHasSubtypes()) && (itemstack1.getItemDamage() != itemstack.getItemDamage()))
+            {
+                return false;
+            }
+
+            if (itemstack1.stackSize < itemstack.stackSize)
+            {
+                return par1EntityItem.combineItems(this);
+            }
+
+            if (itemstack1.stackSize + itemstack.stackSize > itemstack1.getMaxStackSize())
+            {
+                return false;
+            }
+
+            itemstack1.stackSize += itemstack.stackSize;
+            par1EntityItem.delayBeforeCanPickup = Math.max(par1EntityItem.delayBeforeCanPickup, this.delayBeforeCanPickup);
+            par1EntityItem.age = Math.min(par1EntityItem.age, this.age);
+            par1EntityItem.setEntityItemStack(itemstack1);
+            setDead();
+            return true;
         }
+
+        return false;
     }
 
-    /**
-     * sets the age of the item so that it'll despawn one minute after it has been dropped (instead of five). Used when
-     * items are dropped from players in creative mode
-     */
     public void setAgeToCreativeDespawnTime()
     {
         this.age = 4800;
     }
 
-    /**
-     * Returns if this entity is in water and will end up adding the waters velocity to the entity
-     */
     public boolean handleWaterMovement()
     {
         return this.worldObj.handleMaterialAcceleration(this.boundingBox, Material.water, this);
     }
 
-    /**
-     * Will deal the specified amount of damage to the entity if the entity isn't immune to fire damage. Args:
-     * amountDamage
-     */
-    protected void dealFireDamage(int var1)
+    protected void dealFireDamage(int par1)
     {
-        this.attackEntityFrom(DamageSource.inFire, var1);
+        attackEntityFrom(DamageSource.inFire, par1);
     }
 
-    /**
-     * Called when the entity is attacked.
-     */
-    public boolean attackEntityFrom(DamageSource var1, int var2)
+    public boolean attackEntityFrom(DamageSource par1DamageSource, int par2)
     {
-        if (this.isEntityInvulnerable())
+        if (isEntityInvulnerable())
         {
             return false;
         }
-        else if (this.getEntityItem() != null && this.getEntityItem().itemID == Item.netherStar.itemID && var1.isExplosion())
+
+        if ((getEntityItem() != null) && (getEntityItem().itemID == Item.netherStar.itemID) && (par1DamageSource.isExplosion()))
         {
             return false;
         }
-        else
+
+        setBeenAttacked();
+        this.health -= par2;
+
+        if (this.health <= 0)
         {
-            this.setBeenAttacked();
-            this.health -= var2;
-
-            if (this.health <= 0)
-            {
-                this.setDead();
-            }
-
-            return false;
+            setDead();
         }
+
+        return false;
     }
 
-    /**
-     * (abstract) Protected helper method to write subclass entity data to NBT.
-     */
-    public void writeEntityToNBT(NBTTagCompound var1)
+    public void writeEntityToNBT(NBTTagCompound par1NBTTagCompound)
     {
-        var1.setShort("Health", (short)((byte)this.health));
-        var1.setShort("Age", (short)this.age);
+        par1NBTTagCompound.setShort("Health", (short)(byte)this.health);
+        par1NBTTagCompound.setShort("Age", (short)this.age);
 
-        if (this.getEntityItem() != null)
+        if (getEntityItem() != null)
         {
-            var1.setCompoundTag("Item", this.getEntityItem().writeToNBT(new NBTTagCompound()));
+            par1NBTTagCompound.setCompoundTag("Item", getEntityItem().writeToNBT(new NBTTagCompound()));
         }
     }
 
-    /**
-     * (abstract) Protected helper method to read subclass entity data from NBT.
-     */
-    public void readEntityFromNBT(NBTTagCompound var1)
+    public void readEntityFromNBT(NBTTagCompound par1NBTTagCompound)
     {
-        this.setDead();
-        this.health = var1.getShort("Health") & 255;
-        this.age = var1.getShort("Age");
-        NBTTagCompound var2 = var1.getCompoundTag("Item");
-        this.setEntityItemStack(ItemStack.loadItemStackFromNBT(var2));
-        ItemStack var3 = this.getDataWatcher().getWatchableObjectItemStack(10);
+        setDead();
+        this.health = (par1NBTTagCompound.getShort("Health") & 0xFF);
+        this.age = par1NBTTagCompound.getShort("Age");
+        NBTTagCompound nbttagcompound1 = par1NBTTagCompound.getCompoundTag("Item");
+        setEntityItemStack(ItemStack.loadItemStackFromNBT(nbttagcompound1));
+        ItemStack item = getDataWatcher().getWatchableObjectItemStack(10);
 
-        if (var3 == null || var3.stackSize <= 0)
+        if ((item == null) || (item.stackSize <= 0))
         {
-            this.setDead();
+            setDead();
         }
     }
 
-    /**
-     * Called by a player entity when they collide with an entity
-     */
-    public void onCollideWithPlayer(EntityPlayer var1) {}
+    public void onCollideWithPlayer(EntityPlayer par1EntityPlayer)
+    {
+    }
 
-    /**
-     * Gets the username of the entity.
-     */
     public String getEntityName()
     {
-        return StatCollector.translateToLocal("item." + this.getEntityItem().getItemName());
+        return StatCollector.translateToLocal("item." + getEntityItem().getItemName());
     }
 
-    /**
-     * If returns false, the item will not inflict any damage against entities.
-     */
     public boolean canAttackWithItem()
     {
         return false;
     }
 
-    /**
-     * Teleports the entity to another dimension. Params: Dimension number to teleport to
-     */
-    public void travelToDimension(int var1)
+    public void travelToDimension(int par1)
     {
-        super.travelToDimension(var1);
+        super.travelToDimension(par1);
 
         if (!this.worldObj.isRemote)
         {
-            this.searchForOtherItemsNearby();
+            searchForOtherItemsNearby();
         }
     }
 
-    /**
-     * Returns the ItemStack corresponding to the Entity (Note: if no item exists, will log an error but still return an
-     * ItemStack containing Block.stone)
-     */
     public ItemStack getEntityItem()
     {
-        ItemStack var1 = this.getDataWatcher().getWatchableObjectItemStack(10);
+        ItemStack itemstack = getDataWatcher().getWatchableObjectItemStack(10);
 
-        if (var1 == null)
+        if (itemstack == null)
         {
             if (this.worldObj != null)
             {
-                this.worldObj.getWorldLogAgent().logSevere("Item entity " + this.entityId + " has no item?!");
+                this.worldObj.X().logSevere("Item entity " + this.entityId + " has no item?!");
             }
 
             return new ItemStack(Block.stone);
         }
-        else
-        {
-            return var1;
-        }
+
+        return itemstack;
     }
 
-    /**
-     * Sets the ItemStack for this entity
-     */
-    public void setEntityItemStack(ItemStack var1)
+    public void setEntityItemStack(ItemStack par1ItemStack)
     {
-        this.getDataWatcher().updateObject(10, var1);
-        this.getDataWatcher().setObjectWatched(10);
+        getDataWatcher().updateObject(10, par1ItemStack);
+        getDataWatcher().setObjectWatched(10);
     }
 }
+

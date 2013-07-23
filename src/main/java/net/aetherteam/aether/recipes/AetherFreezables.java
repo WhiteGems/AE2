@@ -21,8 +21,9 @@ public class AetherFreezables
         addFreezable(new ItemStack(AetherItems.IronPendant, 1), new ItemStack(AetherItems.IcePendant, 1), 2500);
     }
 
-    public static void addFreezable(ItemStack var0, ItemStack var1, int var2)
+    public static void addFreezable(ItemStack from, ItemStack to, int i)
     {
-        TileEntityFreezer.addFreezable(var0, var1, var2);
+        TileEntityFreezer.addFreezable(from, to, i);
     }
 }
+

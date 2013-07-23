@@ -7,132 +7,121 @@ import net.minecraft.block.material.Material;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.stats.StatList;
 import net.minecraft.world.World;
 
-public class BlockAetherDirt extends BlockAether implements IAetherBlock
+public class BlockAetherDirt extends BlockAether
+    implements IAetherBlock
 {
-    public BlockAetherDirt(int var1)
+    public BlockAetherDirt(int blockID)
     {
-        super(var1, Material.ground);
-        this.setHardness(0.5F);
-        this.setStepSound(Block.soundGravelFootstep);
+        super(blockID, Material.ground);
+        setHardness(0.5F);
+        setStepSound(Block.soundGravelFootstep);
     }
 
-    /**
-     * returns a list of blocks with the same ID, but different meta (eg: wood returns 4 blocks)
-     */
-    public void getSubBlocks(int var1, CreativeTabs var2, List var3)
+    public void getSubBlocks(int par1, CreativeTabs par2CreativeTabs, List par3List)
     {
-        var3.add(new ItemStack(var1, 1, 1));
+        par3List.add(new ItemStack(par1, 1, 1));
     }
 
-    /**
-     * Called when the player destroys a block with an item that can harvest it. (i, j, k) are the coordinates of the
-     * block and l is the block's subtype/damage.
-     */
-    public void harvestBlock(World var1, EntityPlayer var2, int var3, int var4, int var5, int var6)
+    public void harvestBlock(World world, EntityPlayer entityplayer, int x, int y, int z, int meta)
     {
-        var2.addStat(StatList.mineBlockStatArray[this.blockID], 1);
-        var2.addExhaustion(0.025F);
+        entityplayer.addStat(net.minecraft.stats.StatList.mineBlockStatArray[this.blockID], 1);
+        entityplayer.addExhaustion(0.025F);
 
-        if (!var1.isRemote)
+        if (!world.isRemote)
         {
-            ItemStack var7;
-
-            if (var6 == 0)
+            if (meta == 0)
             {
-                if (var2.getCurrentEquippedItem() != null && var2.getCurrentEquippedItem().itemID == AetherItems.SkyrootShovel.itemID)
+                if ((entityplayer.cd() != null) && (entityplayer.cd().itemID == AetherItems.SkyrootShovel.itemID))
                 {
-                    var2.addStat(StatList.mineBlockStatArray[this.blockID], 1);
-                    var7 = new ItemStack(AetherBlocks.AetherDirt.blockID, 2, 1);
-                    this.dropBlockAsItem_do(var1, var3, var4, var5, var7);
+                    entityplayer.addStat(net.minecraft.stats.StatList.mineBlockStatArray[this.blockID], 1);
+                    ItemStack stack = new ItemStack(AetherBlocks.AetherDirt.blockID, 2, 1);
+                    dropBlockAsItem_do(world, x, y, z, stack);
                 }
                 else
                 {
-                    var7 = new ItemStack(AetherBlocks.AetherDirt.blockID, 1, 1);
-                    this.dropBlockAsItem_do(var1, var3, var4, var5, var7);
+                    ItemStack stack = new ItemStack(AetherBlocks.AetherDirt.blockID, 1, 1);
+                    dropBlockAsItem_do(world, x, y, z, stack);
                 }
             }
             else
             {
-                var7 = new ItemStack(AetherBlocks.AetherDirt.blockID, 1, var6);
-                this.dropBlockAsItem_do(var1, var3, var4, var5, var7);
+                ItemStack stack = new ItemStack(AetherBlocks.AetherDirt.blockID, 1, meta);
+                dropBlockAsItem_do(world, x, y, z, stack);
             }
         }
     }
 
-    /**
-     * Is this block (a) opaque and (b) a full 1m cube?  This determines whether or not to render the shared face of two
-     * adjacent blocks and also whether the player can attach torches, redstone wire, etc to this block.
-     */
     public boolean isOpaqueCube()
     {
         return true;
     }
 
-    /**
-     * Called upon block activation (right click on the block.)
-     */
-    public boolean onBlockActivated(World var1, int var2, int var3, int var4, EntityPlayer var5, int var6, float var7, float var8, float var9)
+    public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer entityPlayer, int par6, float par7, float par8, float par9)
     {
-        ItemStack var10 = var5.getCurrentEquippedItem();
+        ItemStack itemStack = entityPlayer.cd();
 
-        if (var10 == null)
+        if (itemStack == null)
         {
             return false;
         }
-        else
-        {
-            if (var10.itemID == AetherItems.SwettyBall.itemID)
-            {
-                int var11 = 0;
 
-                for (int var12 = var2 - 1; var12 <= var2 + 1; ++var12)
+        if (itemStack.itemID == AetherItems.SwettyBall.itemID)
+        {
+            int grassCount = 0;
+
+            for (int x1 = x - 1; x1 <= x + 1; x1++)
+            {
+                for (int z1 = z - 1; z1 <= z + 1; z1++)
                 {
-                    for (int var13 = var4 - 1; var13 <= var4 + 1; ++var13)
+                    if (world.getBlockId(x1, y, z1) == this.blockID)
                     {
-                        if (var1.getBlockId(var12, var3, var13) == this.blockID)
+                        if (world.getBlockId(x1, y + 1, z1) == this.blockID)
                         {
-                            if (var1.getBlockId(var12, var3 + 1, var13) == this.blockID)
+                            if (world.getBlockId(x1, y + 2, z1) == 0)
                             {
-                                if (var1.getBlockId(var12, var3 + 2, var13) == 0 && !var1.isRemote)
+                                if (!world.isRemote)
                                 {
-                                    var1.setBlock(var12, var3 + 1, var13, AetherBlocks.AetherGrass.blockID);
-                                    ++var11;
+                                    world.setBlock(x1, y + 1, z1, AetherBlocks.AetherGrass.blockID);
+                                    grassCount++;
                                 }
                             }
-                            else if (var1.getBlockId(var12, var3 + 1, var13) == 0 && !var1.isRemote)
-                            {
-                                var1.setBlock(var12, var3, var13, AetherBlocks.AetherGrass.blockID);
-                                ++var11;
-                            }
                         }
-                        else if (var1.getBlockId(var12, var3, var13) == 0 && var1.getBlockId(var12, var3 - 1, var13) == this.blockID && !var1.isRemote)
+                        else if ((world.getBlockId(x1, y + 1, z1) == 0) &&
+                                 (!world.isRemote))
                         {
-                            var1.setBlock(var12, var3 - 1, var13, AetherBlocks.AetherGrass.blockID);
-                            ++var11;
+                            world.setBlock(x1, y, z1, AetherBlocks.AetherGrass.blockID);
+                            grassCount++;
                         }
                     }
-
-                    if (var11 > 0)
+                    else if ((world.getBlockId(x1, y, z1) == 0) &&
+                             (world.getBlockId(x1, y - 1, z1) == this.blockID))
                     {
-                        --var10.stackSize;
+                        if (!world.isRemote)
+                        {
+                            world.setBlock(x1, y - 1, z1, AetherBlocks.AetherGrass.blockID);
+                            grassCount++;
+                        }
                     }
                 }
-            }
 
-            return false;
+                if (grassCount > 0)
+                {
+                    itemStack.stackSize -= 1;
+                }
+            }
         }
+
+        return false;
     }
 
-    /**
-     * Called when the block is placed in the world.
-     */
-    public void onBlockPlacedBy(World var1, int var2, int var3, int var4, EntityLiving var5, ItemStack var6)
+    public void onBlockPlacedBy(World world, int x, int y, int z, EntityLiving entityliving, ItemStack stack)
     {
-        var1.setBlock(var2, var3, var4, this.blockID);
-        var1.setBlockMetadataWithNotify(var2, var3, var4, 1, 16);
+        world.setBlock(x, y, z, this.blockID);
+        world.setBlockMetadataWithNotify(x, y, z, 1, 16);
     }
 }
+

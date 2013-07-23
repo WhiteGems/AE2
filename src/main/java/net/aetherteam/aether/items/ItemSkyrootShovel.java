@@ -7,31 +7,29 @@ import net.minecraft.item.EnumToolMaterial;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemSpade;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.ItemTool;
 
 public class ItemSkyrootShovel extends ItemSpade
 {
     private static Random random = new Random();
-    public static final Block[] blocksEffectiveAgainst = new Block[] {Block.grass, Block.dirt, Block.sand, Block.gravel, Block.snow, Block.blockSnow, Block.blockClay, Block.tilledField, Block.slowSand, Block.mycelium, AetherBlocks.AetherDirt, AetherBlocks.AetherGrass};
 
-    public ItemSkyrootShovel(int var1, EnumToolMaterial var2)
+    public static final Block[] blocksEffectiveAgainst = { Block.grass, Block.dirt, Block.sand, Block.gravel, Block.snow, Block.blockSnow, Block.blockClay, Block.tilledField, Block.slowSand, Block.mycelium, AetherBlocks.AetherDirt, AetherBlocks.AetherGrass };
+
+    public ItemSkyrootShovel(int i, EnumToolMaterial enumtoolmaterial)
     {
-        super(var1, var2);
+        super(i, enumtoolmaterial);
     }
 
-    public Item setIconName(String var1)
+    public Item setIconName(String name)
     {
-        return this.setUnlocalizedName("Aether:" + var1);
+        return setUnlocalizedName("Aether:" + name);
     }
 
-    /**
-     * Returns the strength of the stack against a given block. 1.0F base, (Quality+1)*2 if correct blocktype, 1.5F if
-     * sword
-     */
-    public float getStrVsBlock(ItemStack var1, Block var2)
+    public float getStrVsBlock(ItemStack par1ItemStack, Block par2Block)
     {
-        for (int var3 = 0; var3 < blocksEffectiveAgainst.length; ++var3)
+        for (int i = 0; i < blocksEffectiveAgainst.length; i++)
         {
-            if (blocksEffectiveAgainst[var3] == var2)
+            if (blocksEffectiveAgainst[i] == par2Block)
             {
                 return this.efficiencyOnProperMaterial;
             }
@@ -40,3 +38,4 @@ public class ItemSkyrootShovel extends ItemSpade
         return 1.0F;
     }
 }
+

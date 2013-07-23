@@ -3,19 +3,20 @@ package net.aetherteam.aether.interfaces;
 import net.aetherteam.aether.enums.EnumBossType;
 import net.minecraft.entity.Entity;
 
-public interface IAetherBoss
+public abstract interface IAetherBoss
 {
-    int getBossHP();
+    public abstract int getBossHP();
 
-    int getBossMaxHP();
+    public abstract int getBossMaxHP();
 
-    int getBossEntityID();
+    public abstract int getBossEntityID();
 
-    String getBossTitle();
+    public abstract String getBossTitle();
 
-    Entity getBossEntity();
+    public abstract Entity getBossEntity();
 
-    int getBossStage();
+    public abstract int getBossStage();
 
-    EnumBossType getBossType();
+    public abstract EnumBossType getBossType();
 }
+

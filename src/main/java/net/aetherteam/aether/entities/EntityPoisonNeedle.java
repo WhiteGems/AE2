@@ -1,23 +1,25 @@
 package net.aetherteam.aether.entities;
 
+import java.util.Random;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.world.World;
 
 public class EntityPoisonNeedle extends EntityDartPoison
 {
-    public EntityPoisonNeedle(World var1)
+    public EntityPoisonNeedle(World world)
     {
-        super(var1);
+        super(world);
     }
 
-    public EntityPoisonNeedle(World var1, double var2, double var4, double var6)
+    public EntityPoisonNeedle(World world, double x, double y, double z)
     {
-        super(var1, var2, var4, var6);
+        super(world, x, y, z);
     }
 
-    public EntityPoisonNeedle(World var1, EntityLiving var2)
+    public EntityPoisonNeedle(World world, EntityLiving ent)
     {
-        super(var1, var2);
+        super(world, ent);
     }
 
     public void entityInit()
@@ -35,3 +37,4 @@ public class EntityPoisonNeedle extends EntityDartPoison
         return this.victim == null;
     }
 }
+

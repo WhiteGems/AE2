@@ -5,34 +5,36 @@ import cpw.mods.fml.common.network.Player;
 import java.io.ByteArrayInputStream;
 import java.io.DataInputStream;
 import java.io.IOException;
+import java.io.PrintStream;
 import net.aetherteam.aether.Aether;
+import net.aetherteam.aether.donator.Donator;
 import net.aetherteam.aether.donator.EnumChoiceType;
 import net.aetherteam.aether.donator.SyncDonatorList;
 import net.minecraft.network.packet.Packet250CustomPayload;
 
 public class PacketDonatorTypeRemoval extends AetherPacket
 {
-    public PacketDonatorTypeRemoval(int var1)
+    public PacketDonatorTypeRemoval(int packetID)
     {
-        super(var1);
+        super(packetID);
     }
 
-    public void onPacketReceived(Packet250CustomPayload var1, Player var2)
+    public void onPacketReceived(Packet250CustomPayload packet, Player player)
     {
-        DataInputStream var3 = new DataInputStream(new ByteArrayInputStream(var1.data));
+        DataInputStream dat = new DataInputStream(new ByteArrayInputStream(packet.data));
 
         try
         {
-            byte var4 = var3.readByte();
-            String var5 = var3.readUTF();
-            String var6 = var3.readUTF();
-            byte var7 = var3.readByte();
+            byte packetType = dat.readByte();
+            String username = dat.readUTF();
+            String typeName = dat.readUTF();
+            byte proxy = dat.readByte();
 
-            if (var7 >= 1)
+            if (proxy >= 1)
             {
-                EnumChoiceType var8 = EnumChoiceType.getTypeFromString(var6);
+                EnumChoiceType type = EnumChoiceType.getTypeFromString(typeName);
 
-                if (var8 == null)
+                if (type == null)
                 {
                     System.out.println("Choice type was null! Packet handling unsuccessful.");
                     return;
@@ -41,23 +43,23 @@ public class PacketDonatorTypeRemoval extends AetherPacket
                 System.out.println("Choice type transferred!");
                 Aether.getInstance();
 
-                if (Aether.syncDonatorList.getDonator(var5) != null)
+                if (Aether.syncDonatorList.getDonator(username) != null)
                 {
                     Aether.getInstance();
-                    Aether.syncDonatorList.getDonator(var5).removeChoiceType(var8);
+                    Aether.syncDonatorList.getDonator(username).removeChoiceType(type);
                 }
             }
             else
             {
-                Aether var10000 = Aether.instance;
-                SyncDonatorList var10 = Aether.syncDonatorList;
-                PacketDispatcher.sendPacketToAllPlayers(AetherPacketHandler.sendDonatorTypeRemoval(var5, EnumChoiceType.getTypeFromString(var6), (byte)1));
-                System.out.println("Server received \'Remove Type\' packet, dispatching to players!");
+                SyncDonatorList donators = Aether.syncDonatorList;
+                PacketDispatcher.sendPacketToAllPlayers(AetherPacketHandler.sendDonatorTypeRemoval(username, EnumChoiceType.getTypeFromString(typeName), (byte)1));
+                System.out.println("Server received 'Remove Type' packet, dispatching to players!");
             }
         }
-        catch (IOException var9)
+        catch (IOException e)
         {
-            var9.printStackTrace();
+            e.printStackTrace();
         }
     }
 }
+

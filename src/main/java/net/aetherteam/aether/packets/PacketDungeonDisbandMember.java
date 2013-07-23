@@ -16,49 +16,53 @@ import net.minecraft.network.packet.Packet250CustomPayload;
 
 public class PacketDungeonDisbandMember extends AetherPacket
 {
-    public PacketDungeonDisbandMember(int var1)
+    public PacketDungeonDisbandMember(int packetID)
     {
-        super(var1);
+        super(packetID);
     }
 
-    public void onPacketReceived(Packet250CustomPayload var1, Player var2)
+    public void onPacketReceived(Packet250CustomPayload packet, Player player)
     {
-        DataInputStream var3 = new DataInputStream(new ByteArrayInputStream(var1.data));
-        new BufferedReader(new InputStreamReader(var3));
+        DataInputStream dat = new DataInputStream(new ByteArrayInputStream(packet.data));
+        BufferedReader buf = new BufferedReader(new InputStreamReader(dat));
 
         try
         {
-            byte var5 = var3.readByte();
-            int var6 = var3.readInt();
-            String var7 = var3.readUTF();
-            Side var8 = FMLCommonHandler.instance().getEffectiveSide();
+            byte packetType = dat.readByte();
+            int dungeonID = dat.readInt();
+            String memberName = dat.readUTF();
+            Side side = FMLCommonHandler.instance().getEffectiveSide();
 
-            if (var8.isClient())
+            if (side.isClient())
             {
-                Dungeon var9 = DungeonHandler.instance().getDungeon(var6);
-                PartyMember var10 = PartyController.instance().getMember(var7);
+                Dungeon dungeon = DungeonHandler.instance().getDungeon(dungeonID);
+                PartyMember leavingMember = PartyController.instance().getMember(memberName);
 
-                if (var9 != null && var10 != null)
+                if ((dungeon != null) && (leavingMember != null))
                 {
-                    DungeonHandler.instance().disbandMember(var9, var10, false);
+                    DungeonHandler.instance().disbandMember(dungeon, leavingMember, false);
                 }
             }
             else
             {
-                PartyMember var14 = PartyController.instance().getMember(var7);
-                EntityPlayer var13 = (EntityPlayer)var2;
-                Dungeon var11 = DungeonHandler.instance().getDungeon(var6);
+                PartyMember leavingMember = PartyController.instance().getMember(memberName);
+                EntityPlayer actualMember = (EntityPlayer)player;
+                Dungeon dungeon = DungeonHandler.instance().getDungeon(dungeonID);
 
-                if (var11 != null && var11.isActive() && var14 != null && var14.username.equalsIgnoreCase(var13.username))
+                if ((dungeon != null) && (dungeon.isActive()))
                 {
-                    DungeonHandler.instance().disbandMember(var11, var14, false);
-                    this.sendPacketToAllExcept(AetherPacketHandler.sendDungeonDisbandMember(var11, var14), var2);
+                    if ((leavingMember != null) && (leavingMember.username.equalsIgnoreCase(actualMember.username)))
+                    {
+                        DungeonHandler.instance().disbandMember(dungeon, leavingMember, false);
+                        sendPacketToAllExcept(AetherPacketHandler.sendDungeonDisbandMember(dungeon, leavingMember), player);
+                    }
                 }
             }
         }
-        catch (Exception var12)
+        catch (Exception ex)
         {
-            var12.printStackTrace();
+            ex.printStackTrace();
         }
     }
 }
+
