@@ -143,8 +143,8 @@ public class GuiMenu extends GuiScreen
             GL11.glBindTexture(GL11.GL_TEXTURE_2D, this.backgroundTexture);
             this.drawTexturedModalRect(centerX + 13, centerY + 40, 141, 131, 115, 125);
             this.mc.renderEngine.resetBoundTexture();
-            drawString(this.fontRenderer, "注定孤独一生 :(", centerX + 26, centerY + 10, 15658734);
-            drawString(this.fontRenderer, "(单人游戏)", centerX + 31, centerY + 22, 15658734);
+            drawString(this.fontRenderer, "注定孤独一生 :(", centerX + 20, centerY + 100, 16750199);
+            drawString(this.fontRenderer, "(单人游戏)", centerX + 25, centerY + 112, 16750199);
             this.buttonList.add(new GuiButton(2, this.xParty - 60, this.yParty - 40 - 35, 120, 20, "选项"));
         }
         else
