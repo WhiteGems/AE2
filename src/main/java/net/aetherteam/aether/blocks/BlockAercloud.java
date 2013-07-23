@@ -30,8 +30,11 @@ public class BlockAercloud extends BlockAether implements IAetherBlock
     private Icon rightArrow;
     private Icon upArrow;
     private Icon downArrow;
-    private HashMap icons = new HashMap();
-    public static final String[] names = new String[] {"Cold Aercloud", "Blue Aercloud", "Golden Aercloud", "Green Aercloud", "Storm Aercloud"};
+    private Icon coldcloud;
+    private Icon bluecloud;
+    private Icon goldencloud;
+    private Icon greencloud;
+    private Icon stormcloud; 
     public static final int bouncingMeta = 1;
     public static final int sinkingMeta = 2;
     public static final int randomMeta = 3;
@@ -367,11 +370,29 @@ public class BlockAercloud extends BlockAether implements IAetherBlock
     /**
      * From the specified side and block metadata retrieves the blocks texture. Args: side, metadata
      */
-    public Icon getIcon(int var1, int var2)
-    {
-        if (var2 == 5 || var2 == 9)
+    
+    @Override
+    @SideOnly(Side.CLIENT)
+    public Icon getIcon(int side, int meta)
+	{
+
+    	switch(meta)
+    	{
+    	case 0:
+    		return this.coldcloud;
+    	case 1:
+    		return this.bluecloud;
+    	case 2:
+    		return this.goldencloud;
+    	case 3:
+    		return this.greencloud;
+    	case 4:
+    		return this.stormcloud;
+        }
+    	
+    	if (meta == 5)
         {
-            switch (var1)
+            switch (side)
             {
                 case 0:
                     return this.upArrow;
@@ -391,84 +412,10 @@ public class BlockAercloud extends BlockAether implements IAetherBlock
                 case 5:
                     return this.rightArrow;
             }
-        }
-
-        if (var2 == 6 || var2 == 10)
-        {
-            switch (var1)
-            {
-                case 0:
-                    return this.rightArrow;
-
-                case 1:
-                    return this.rightArrow;
-
-                case 2:
-                    return this.leftArrow;
-
-                case 3:
-                    return this.rightArrow;
-
-                case 4:
-                    return this.backTexture;
-
-                case 5:
-                    return this.frontTexture;
-            }
-        }
-
-        if (var2 == 7 || var2 == 11)
-        {
-            switch (var1)
-            {
-                case 0:
-                    return this.downArrow;
-
-                case 1:
-                    return this.downArrow;
-
-                case 2:
-                    return this.backTexture;
-
-                case 3:
-                    return this.frontTexture;
-
-                case 4:
-                    return this.rightArrow;
-
-                case 5:
-                    return this.leftArrow;
-            }
-        }
-
-        if (var2 == 8 || var2 == 12)
-        {
-            switch (var1)
-            {
-                case 0:
-                    return this.leftArrow;
-
-                case 1:
-                    return this.leftArrow;
-
-                case 2:
-                    return this.rightArrow;
-
-                case 3:
-                    return this.leftArrow;
-
-                case 4:
-                    return this.frontTexture;
-
-                case 5:
-                    return this.backTexture;
-            }
-        }
-
-        ItemStack var3 = new ItemStack(AetherBlocks.Aercloud, 1, var2);
-        String var4 = var3.getItem().getItemDisplayName(var3);
-        return (Icon)this.icons.get(var4);
-    }
+        } 
+        
+        return this.bluecloud;
+	} 
 
     /**
      * Called upon block activation (right click on the block.)
@@ -483,18 +430,21 @@ public class BlockAercloud extends BlockAether implements IAetherBlock
      * When this method is called, your block should register all the icons it needs with the given IconRegister. This
      * is the only chance you get to register icons.
      */
-    public void registerIcons(IconRegister var1)
+    @Override
+	@SideOnly(Side.CLIENT)
+    public void registerIcons(IconRegister ir)
     {
-        this.frontTexture = var1.registerIcon("Aether:Purple Aercloud Front");
-        this.backTexture = var1.registerIcon("Aether:Purple Aercloud Back");
-        this.upArrow = var1.registerIcon("Aether:Purple Aercloud Up");
-        this.downArrow = var1.registerIcon("Aether:Purple Aercloud Down");
-        this.leftArrow = var1.registerIcon("Aether:Purple Aercloud Left");
-        this.rightArrow = var1.registerIcon("Aether:Purple Aercloud Right");
-
-        for (int var2 = 0; var2 < names.length; ++var2)
-        {
-            this.icons.put(names[var2], var1.registerIcon("Aether:" + names[var2]));
-        }
+        this.frontTexture = ir.registerIcon("Aether:Purple Aercloud Front");
+        this.backTexture = ir.registerIcon("Aether:Purple Aercloud Back");
+        this.upArrow = ir.registerIcon("Aether:Purple Aercloud Up");
+        this.downArrow = ir.registerIcon("Aether:Purple Aercloud Down");
+        this.leftArrow = ir.registerIcon("Aether:Purple Aercloud Left");
+        this.rightArrow = ir.registerIcon("Aether:Purple Aercloud Right");
+        
+        this.coldcloud = ir.registerIcon("Aether:Cold Aercloud");
+        this.bluecloud = ir.registerIcon("Aether:Blue Aercloud");
+        this.goldencloud = ir.registerIcon("Aether:Golden Aercloud");
+        this.greencloud = ir.registerIcon("Aether:Green Aercloud");
+        this.stormcloud = ir.registerIcon("Aether:Storm Aercloud");
     }
 }
