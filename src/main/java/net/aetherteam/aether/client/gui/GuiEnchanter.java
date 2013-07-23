@@ -2,11 +2,7 @@ package net.aetherteam.aether.client.gui;
 
 import net.aetherteam.aether.containers.ContainerEnchanter;
 import net.aetherteam.aether.tile_entities.TileEntityEnchanter;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.FontRenderer;
-import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.inventory.GuiContainer;
-import net.minecraft.client.renderer.RenderEngine;
 import net.minecraft.entity.player.InventoryPlayer;
 import org.lwjgl.opengl.GL11;
 
@@ -14,10 +10,10 @@ public class GuiEnchanter extends GuiContainer
 {
     private TileEntityEnchanter enchanterInventory;
 
-    public GuiEnchanter(InventoryPlayer inventoryplayer, TileEntityEnchanter tileentityEnchanter)
+    public GuiEnchanter(InventoryPlayer var1, TileEntityEnchanter var2)
     {
-        super(new ContainerEnchanter(inventoryplayer, tileentityEnchanter));
-        this.enchanterInventory = tileentityEnchanter;
+        super(new ContainerEnchanter(var1, var2));
+        this.enchanterInventory = var2;
     }
 
     protected void drawGuiContainerForegroundLayer()
@@ -26,24 +22,25 @@ public class GuiEnchanter extends GuiContainer
         this.fontRenderer.drawString("Inventory", 8, this.ySize - 96 + 2, 4210752);
     }
 
-    protected void drawGuiContainerBackgroundLayer(float f, int ia, int ib)
+    /**
+     * Draw the background layer for the GuiContainer (everything behind the items)
+     */
+    protected void drawGuiContainerBackgroundLayer(float var1, int var2, int var3)
     {
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
         this.mc.renderEngine.bindTexture("/net/aetherteam/aether/client/sprites/gui/enchanter.png");
-        int j = (this.width - this.xSize) / 2;
-        int k = (this.height - this.ySize) / 2;
-        drawTexturedModalRect(j, k, 0, 0, this.xSize, this.ySize);
+        int var4 = (this.width - this.xSize) / 2;
+        int var5 = (this.height - this.ySize) / 2;
+        this.drawTexturedModalRect(var4, var5, 0, 0, this.xSize, this.ySize);
+        int var6;
+
         if (this.enchanterInventory.isBurning())
         {
-            int l = this.enchanterInventory.getBurnTimeRemainingScaled(12);
-            drawTexturedModalRect(j + 57, k + 47 - l, 176, 12 - l, 14, l + 2);
+            var6 = this.enchanterInventory.getBurnTimeRemainingScaled(12);
+            this.drawTexturedModalRect(var4 + 57, var5 + 47 - var6, 176, 12 - var6, 14, var6 + 2);
         }
-        int i1 = this.enchanterInventory.getCookProgressScaled(24);
-        drawTexturedModalRect(j + 79, k + 35, 176, 14, i1 + 1, 16);
+
+        var6 = this.enchanterInventory.getCookProgressScaled(24);
+        this.drawTexturedModalRect(var4 + 79, var5 + 35, 176, 14, var6 + 1, 16);
     }
 }
-
-/* Location:           D:\Dev\Mc\forge_orl\mcp\jars\bin\aether.jar
- * Qualified Name:     net.aetherteam.aether.client.gui.GuiEnchanter
- * JD-Core Version:    0.6.2
- */

@@ -1,7 +1,6 @@
 package net.aetherteam.aether.worldgen;
 
 import java.util.Random;
-
 import net.aetherteam.aether.blocks.AetherBlocks;
 import net.minecraft.block.Block;
 import net.minecraft.world.World;
@@ -25,7 +24,8 @@ public class AetherGenLiquids extends WorldGenerator
                 if (var1.getBlockId(var3, var4, var5) != 0 && (var1.getBlockId(var3, var4, var5) != AetherBlocks.Holystone.blockID || var1.getBlockMetadata(var3, var4, var5) >= 2))
                 {
                     return false;
-                } else
+                }
+                else
                 {
                     int var6 = 0;
 
@@ -81,11 +81,13 @@ public class AetherGenLiquids extends WorldGenerator
 
                     return true;
                 }
-            } else
+            }
+            else
             {
                 return false;
             }
-        } else
+        }
+        else
         {
             return false;
         }

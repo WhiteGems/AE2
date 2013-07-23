@@ -99,10 +99,11 @@ public class ModelSliderMimicHost extends ModelBase
         super.render(var1, var2, var3, var4, var5, var6, var7);
         this.setRotationAngles(var2, var3, var4, var5, var6, var7, var1);
 
-        if (var1 instanceof EntitySliderHostMimic && !((EntitySliderHostMimic) var1).isAwake())
+        if (var1 instanceof EntitySliderHostMimic && !((EntitySliderHostMimic)var1).isAwake())
         {
             this.fakeBody.render(var7);
-        } else
+        }
+        else
         {
             this.body3.render(var7);
             this.frontLeftLeg.render(var7);
@@ -133,11 +134,11 @@ public class ModelSliderMimicHost extends ModelBase
     {
         super.setRotationAngles(var1, var2, var3, var4, var5, var6, var7);
         this.frontRightLeg.rotateAngleX = MathHelper.cos(var1 * 0.6662F) * 1.4F * var2;
-        this.frontLeftLeg.rotateAngleX = MathHelper.cos(var1 * 0.6662F + (float) Math.PI) * 1.4F * var2;
+        this.frontLeftLeg.rotateAngleX = MathHelper.cos(var1 * 0.6662F + (float)Math.PI) * 1.4F * var2;
         this.frontRightLeg.rotateAngleY = 0.0F;
         this.frontLeftLeg.rotateAngleY = 0.0F;
         this.backRightLeg.rotateAngleX = MathHelper.cos(var1 * 0.6662F) * 1.4F * var2;
-        this.backLeftLeg.rotateAngleX = MathHelper.cos(var1 * 0.6662F + (float) Math.PI) * 1.4F * var2;
+        this.backLeftLeg.rotateAngleX = MathHelper.cos(var1 * 0.6662F + (float)Math.PI) * 1.4F * var2;
         this.backRightLeg.rotateAngleY = 0.0F;
         this.backLeftLeg.rotateAngleY = 0.0F;
     }

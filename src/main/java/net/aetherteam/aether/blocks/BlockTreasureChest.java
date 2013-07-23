@@ -1,7 +1,6 @@
 package net.aetherteam.aether.blocks;
 
 import java.util.Random;
-
 import net.aetherteam.aether.Aether;
 import net.aetherteam.aether.AetherGuiHandler;
 import net.aetherteam.aether.items.AetherItems;
@@ -38,7 +37,7 @@ public class BlockTreasureChest extends BlockChest implements IAetherBlock
      */
     public boolean onBlockActivated(World var1, int var2, int var3, int var4, EntityPlayer var5, int var6, float var7, float var8, float var9)
     {
-        TileEntityTreasureChest var10 = (TileEntityTreasureChest) var1.getBlockTileEntity(var2, var3, var4);
+        TileEntityTreasureChest var10 = (TileEntityTreasureChest)var1.getBlockTileEntity(var2, var3, var4);
 
         if (var10.isLocked())
         {
@@ -77,7 +76,8 @@ public class BlockTreasureChest extends BlockChest implements IAetherBlock
         try
         {
             return new TileEntityTreasureChest();
-        } catch (Exception var3)
+        }
+        catch (Exception var3)
         {
             throw new RuntimeException(var3);
         }

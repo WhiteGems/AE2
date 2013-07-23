@@ -33,7 +33,8 @@ public class AIEntityArrowAttackSentry extends EntityAIBase
         if (!(var1 instanceof EntityLiving))
         {
             throw new IllegalArgumentException("ArrowAttackGoal requires Mob implements RangedAttackMob");
-        } else
+        }
+        else
         {
             this.rangedAttackEntityHost = var1;
             this.entityHost = var1;
@@ -56,7 +57,8 @@ public class AIEntityArrowAttackSentry extends EntityAIBase
         if (var1 == null)
         {
             return false;
-        } else
+        }
+        else
         {
             this.attackTarget = var1;
             return true;
@@ -91,19 +93,20 @@ public class AIEntityArrowAttackSentry extends EntityAIBase
         if (var3)
         {
             ++this.seeTimer;
-        } else
+        }
+        else
         {
             this.seeTimer = 0;
         }
 
-        if (var1 <= (double) this.runRange && this.seeTimer >= 20)
+        if (var1 <= (double)this.runRange && this.seeTimer >= 20)
         {
             this.running = true;
         }
 
-        if (this.running && var1 <= (double) this.minAttackRange && this.seeTimer >= 20)
+        if (this.running && var1 <= (double)this.minAttackRange && this.seeTimer >= 20)
         {
-            Vec3 var4 = RandomPositionGenerator.findRandomTargetBlockAwayFrom((EntityCreature) this.entityHost, 16, 7, this.entityHost.worldObj.getWorldVec3Pool().getVecFromPool(this.attackTarget.posX, this.attackTarget.posY, this.attackTarget.posZ));
+            Vec3 var4 = RandomPositionGenerator.findRandomTargetBlockAwayFrom((EntityCreature)this.entityHost, 16, 7, this.entityHost.worldObj.getWorldVec3Pool().getVecFromPool(this.attackTarget.posX, this.attackTarget.posY, this.attackTarget.posZ));
 
             if (var4 != null)
             {
@@ -113,11 +116,13 @@ public class AIEntityArrowAttackSentry extends EntityAIBase
             }
 
             this.entityHost.getNavigator().tryMoveToXYZ(this.i, this.j, this.k, this.entityMoveSpeed);
-        } else if (var1 <= (double) this.maxAttackRange && this.seeTimer >= 20)
+        }
+        else if (var1 <= (double)this.maxAttackRange && this.seeTimer >= 20)
         {
             this.running = false;
             this.entityHost.getNavigator().clearPathEntity();
-        } else
+        }
+        else
         {
             this.running = false;
             this.entityHost.getNavigator().tryMoveToEntityLiving(this.attackTarget, this.entityMoveSpeed);
@@ -134,24 +139,24 @@ public class AIEntityArrowAttackSentry extends EntityAIBase
 
         if (this.rangedAttackTime <= 30)
         {
-            this.rangedAttackEntityHost.setHandState((byte) 1);
+            this.rangedAttackEntityHost.setHandState((byte)1);
         }
 
         if (this.rangedAttackTime <= 20)
         {
-            this.rangedAttackEntityHost.setHandState((byte) 1);
+            this.rangedAttackEntityHost.setHandState((byte)1);
         }
 
         if (this.rangedAttackTime <= 10)
         {
-            this.rangedAttackEntityHost.setHandState((byte) 1);
+            this.rangedAttackEntityHost.setHandState((byte)1);
         }
 
-        if (this.rangedAttackTime <= 0 && var1 <= (double) this.maxAttackRange && var3)
+        if (this.rangedAttackTime <= 0 && var1 <= (double)this.maxAttackRange && var3)
         {
             this.rangedAttackEntityHost.attackEntityWithRangedAttack(this.attackTarget, 1.0F);
             this.rangedAttackTime = this.maxRangedAttackTime;
-            this.rangedAttackEntityHost.setHandState((byte) 2);
+            this.rangedAttackEntityHost.setHandState((byte)2);
         }
     }
 }

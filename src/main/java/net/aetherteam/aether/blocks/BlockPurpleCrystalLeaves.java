@@ -3,19 +3,18 @@ package net.aetherteam.aether.blocks;
 import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
-
-import net.aetherteam.aether.entities.EntityBlueFX;
+import net.aetherteam.aether.entities.EntityPurpleFX;
 import net.aetherteam.aether.items.AetherItems;
 import net.aetherteam.aether.util.Loc;
 import net.minecraft.block.Block;
-import net.minecraft.block.material.Material;
+import net.minecraft.block.BlockLeaves;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
@@ -25,27 +24,26 @@ import net.minecraft.util.Icon;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
-public class BlockCrystalLeaves extends BlockAether implements IAetherBlock
+public class BlockPurpleCrystalLeaves extends BlockLeaves implements IAetherBlock
 {
     private HashMap icons = new HashMap();
-    public static final String[] names = new String[]{"Crystal Leaves", "Crystal Fruit Leaves"};
+    public static final String[] names = new String[] {"Purple Crystal Leaves", "Purple Fruit Leaves"};
 
-    public BlockCrystalLeaves(int var1)
+    public BlockPurpleCrystalLeaves(int var1)
     {
-        super(var1, Material.leaves);
+        super(var1);
         this.setTickRandomly(true);
         this.setHardness(0.2F);
+        this.setLightOpacity(1);
         this.setStepSound(Block.soundGrassFootstep);
     }
 
-    /**
-     * returns a list of blocks with the same ID, but different meta (eg: wood returns 4 blocks)
-     */
-    public void getSubBlocks(int var1, CreativeTabs var2, List var3)
+    public Block setIconName(String var1)
     {
-        var3.add(new ItemStack(var1, 1, 0));
-        var3.add(new ItemStack(var1, 1, 1));
+        return this.setUnlocalizedName("Aether:" + var1);
     }
+
+    @SideOnly(Side.CLIENT)
 
     /**
      * When this method is called, your block should register all the icons it needs with the given IconRegister. This
@@ -56,17 +54,55 @@ public class BlockCrystalLeaves extends BlockAether implements IAetherBlock
         for (int var2 = 0; var2 < names.length; ++var2)
         {
             this.icons.put(names[var2], var1.registerIcon("Aether:" + names[var2]));
+            this.icons.put(names[var2] + "_Opaque", var1.registerIcon("Aether:" + names[var2] + "_Opaque"));
         }
     }
+
+    /**
+     * Returns the color this block should be rendered. Used by leaves.
+     */
+    public int getRenderColor(int var1)
+    {
+        return 16777215;
+    }
+
+    @SideOnly(Side.CLIENT)
 
     /**
      * From the specified side and block metadata retrieves the blocks texture. Args: side, metadata
      */
     public Icon getIcon(int var1, int var2)
     {
-        ItemStack var3 = new ItemStack(AetherBlocks.CrystalLeaves, 1, var2);
+        this.setGraphicsLevel(Minecraft.getMinecraft().gameSettings.fancyGraphics);
+        ItemStack var3 = new ItemStack(AetherBlocks.PurpleCrystalLeaves, 1, var2);
         String var4 = var3.getItem().getItemDisplayName(var3);
-        return (Icon) this.icons.get(var4);
+        return (Icon)this.icons.get(this.graphicsLevel ? var4 : var4 + "_Opaque");
+    }
+
+    @SideOnly(Side.CLIENT)
+    public int getBlockColor()
+    {
+        return 16777215;
+    }
+
+    @SideOnly(Side.CLIENT)
+
+    /**
+     * Returns a integer with hex for 0xrrggbb with this color multiplied against the blocks color. Note only called
+     * when first determining what to render.
+     */
+    public int colorMultiplier(IBlockAccess var1, int var2, int var3, int var4)
+    {
+        return 16777215;
+    }
+
+    /**
+     * returns a list of blocks with the same ID, but different meta (eg: wood returns 4 blocks)
+     */
+    public void getSubBlocks(int var1, CreativeTabs var2, List var3)
+    {
+        var3.add(new ItemStack(var1, 1, 0));
+        var3.add(new ItemStack(var1, 1, 1));
     }
 
     /**
@@ -84,15 +120,6 @@ public class BlockCrystalLeaves extends BlockAether implements IAetherBlock
         }
     }
 
-    /**
-     * Is this block (a) opaque and (b) a full 1m cube?  This determines whether or not to render the shared face of two
-     * adjacent blocks and also whether the player can attach torches, redstone wire, etc to this block.
-     */
-    public boolean isOpaqueCube()
-    {
-        return false;
-    }
-
     private boolean nearTrunk(World var1, int var2, int var3, int var4)
     {
         Loc var5 = new Loc(var2, var3, var4);
@@ -103,7 +130,7 @@ public class BlockCrystalLeaves extends BlockAether implements IAetherBlock
 
         while (!var6.isEmpty())
         {
-            Loc var9 = (Loc) var6.poll();
+            Loc var9 = (Loc)var6.poll();
 
             if (!var7.contains(var9))
             {
@@ -147,20 +174,20 @@ public class BlockCrystalLeaves extends BlockAether implements IAetherBlock
     {
         super.randomDisplayTick(var1, var2, var3, var4, var5);
 
-        if (var5.nextInt(10) == 0 && var1.isRemote)
+        if (var5.nextInt(10) == 0 && Minecraft.getMinecraft().gameSettings.particleSetting != 2 && var1.isRemote)
         {
             for (int var6 = 0; var6 < 15; ++var6)
             {
-                double var7 = (double) var2 + ((double) var5.nextFloat() - 0.5D) * 6.0D;
-                double var9 = (double) var3 + ((double) var5.nextFloat() - 0.5D) * 6.0D;
-                double var11 = (double) var4 + ((double) var5.nextFloat() - 0.5D) * 6.0D;
+                double var7 = (double)var2 + ((double)var5.nextFloat() - 0.5D) * 6.0D;
+                double var9 = (double)var3 + ((double)var5.nextFloat() - 0.5D) * 6.0D;
+                double var11 = (double)var4 + ((double)var5.nextFloat() - 0.5D) * 6.0D;
                 double var13 = 0.0D;
                 double var15 = 0.0D;
                 double var17 = 0.0D;
-                var13 = ((double) var5.nextFloat() - 0.5D) * 0.5D;
-                var15 = ((double) var5.nextFloat() - 0.5D) * 0.5D;
-                var17 = ((double) var5.nextFloat() - 0.5D) * 0.5D;
-                EntityBlueFX var19 = new EntityBlueFX(var1, var7, var9, var11, var13, var15, var17);
+                var13 = ((double)var5.nextFloat() - 0.5D) * 0.5D;
+                var15 = ((double)var5.nextFloat() - 0.5D) * 0.5D;
+                var17 = ((double)var5.nextFloat() - 0.5D) * 0.5D;
+                EntityPurpleFX var19 = new EntityPurpleFX(var1, var7, var9, var11, var13, var15, var17);
                 FMLClientHandler.instance().getClient().effectRenderer.addEffect(var19);
             }
         }
@@ -169,16 +196,6 @@ public class BlockCrystalLeaves extends BlockAether implements IAetherBlock
     private void removeLeaves(World var1, int var2, int var3, int var4)
     {
         var1.setBlock(var2, var3, var4, 0);
-    }
-
-    /**
-     * Returns true if the given side of this block type should be rendered, if the adjacent block is at the given
-     * coordinates.  Args: blockAccess, x, y, z, side
-     */
-    public boolean shouldSideBeRendered(IBlockAccess var1, int var2, int var3, int var4, int var5)
-    {
-        var1.getBlockId(var2, var3, var4);
-        return true;
     }
 
     /**

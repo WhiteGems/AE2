@@ -53,7 +53,8 @@ public class TileEntitySkyrootChest extends TileEntity implements IInventory
                 this.getChestContents()[var1] = null;
                 this.onInventoryChanged();
                 return var3;
-            } else
+            }
+            else
             {
                 var3 = this.getChestContents()[var1].splitStack(var2);
 
@@ -65,7 +66,8 @@ public class TileEntitySkyrootChest extends TileEntity implements IInventory
                 this.onInventoryChanged();
                 return var3;
             }
-        } else
+        }
+        else
         {
             return null;
         }
@@ -82,7 +84,8 @@ public class TileEntitySkyrootChest extends TileEntity implements IInventory
             ItemStack var2 = this.getChestContents()[var1];
             this.getChestContents()[var1] = null;
             return var2;
-        } else
+        }
+        else
         {
             return null;
         }
@@ -122,7 +125,7 @@ public class TileEntitySkyrootChest extends TileEntity implements IInventory
 
         for (int var3 = 0; var3 < var2.tagCount(); ++var3)
         {
-            NBTTagCompound var4 = (NBTTagCompound) var2.tagAt(var3);
+            NBTTagCompound var4 = (NBTTagCompound)var2.tagAt(var3);
             int var5 = var4.getByte("Slot") & 255;
 
             if (var5 >= 0 && var5 < this.getChestContents().length)
@@ -145,7 +148,7 @@ public class TileEntitySkyrootChest extends TileEntity implements IInventory
             if (this.getChestContents()[var3] != null)
             {
                 NBTTagCompound var4 = new NBTTagCompound();
-                var4.setByte("Slot", (byte) var3);
+                var4.setByte("Slot", (byte)var3);
                 this.getChestContents()[var3].writeToNBT(var4);
                 var2.appendTag(var4);
             }
@@ -168,7 +171,7 @@ public class TileEntitySkyrootChest extends TileEntity implements IInventory
      */
     public boolean isUseableByPlayer(EntityPlayer var1)
     {
-        return this.worldObj.getBlockTileEntity(this.xCoord, this.yCoord, this.zCoord) != this ? false : var1.getDistanceSq((double) this.xCoord + 0.5D, (double) this.yCoord + 0.5D, (double) this.zCoord + 0.5D) <= 64.0D;
+        return this.worldObj.getBlockTileEntity(this.xCoord, this.yCoord, this.zCoord) != this ? false : var1.getDistanceSq((double)this.xCoord + 0.5D, (double)this.yCoord + 0.5D, (double)this.zCoord + 0.5D) <= 64.0D;
     }
 
     /**
@@ -193,22 +196,22 @@ public class TileEntitySkyrootChest extends TileEntity implements IInventory
 
             if (this.worldObj.getBlockId(this.xCoord - 1, this.yCoord, this.zCoord) == AetherBlocks.SkyrootChest.blockID)
             {
-                this.adjacentChestXNeg = (TileEntitySkyrootChest) this.worldObj.getBlockTileEntity(this.xCoord - 1, this.yCoord, this.zCoord);
+                this.adjacentChestXNeg = (TileEntitySkyrootChest)this.worldObj.getBlockTileEntity(this.xCoord - 1, this.yCoord, this.zCoord);
             }
 
             if (this.worldObj.getBlockId(this.xCoord + 1, this.yCoord, this.zCoord) == AetherBlocks.SkyrootChest.blockID)
             {
-                this.adjacentChestXPos = (TileEntitySkyrootChest) this.worldObj.getBlockTileEntity(this.xCoord + 1, this.yCoord, this.zCoord);
+                this.adjacentChestXPos = (TileEntitySkyrootChest)this.worldObj.getBlockTileEntity(this.xCoord + 1, this.yCoord, this.zCoord);
             }
 
             if (this.worldObj.getBlockId(this.xCoord, this.yCoord, this.zCoord - 1) == AetherBlocks.SkyrootChest.blockID)
             {
-                this.adjacentChestZNeg = (TileEntitySkyrootChest) this.worldObj.getBlockTileEntity(this.xCoord, this.yCoord, this.zCoord - 1);
+                this.adjacentChestZNeg = (TileEntitySkyrootChest)this.worldObj.getBlockTileEntity(this.xCoord, this.yCoord, this.zCoord - 1);
             }
 
             if (this.worldObj.getBlockId(this.xCoord, this.yCoord, this.zCoord + 1) == AetherBlocks.SkyrootChest.blockID)
             {
-                this.adjacentChestZPosition = (TileEntitySkyrootChest) this.worldObj.getBlockTileEntity(this.xCoord, this.yCoord, this.zCoord + 1);
+                this.adjacentChestZPosition = (TileEntitySkyrootChest)this.worldObj.getBlockTileEntity(this.xCoord, this.yCoord, this.zCoord + 1);
             }
 
             if (this.adjacentChestZNeg != null)
@@ -253,8 +256,8 @@ public class TileEntitySkyrootChest extends TileEntity implements IInventory
 
         if (this.numUsingPlayers > 0 && this.lidAngle == 0.0F && this.adjacentChestZNeg == null && this.adjacentChestXNeg == null)
         {
-            double var4 = (double) this.xCoord + 0.5D;
-            var2 = (double) this.zCoord + 0.5D;
+            double var4 = (double)this.xCoord + 0.5D;
+            var2 = (double)this.zCoord + 0.5D;
 
             if (this.adjacentChestZPosition != null)
             {
@@ -266,7 +269,7 @@ public class TileEntitySkyrootChest extends TileEntity implements IInventory
                 var4 += 0.5D;
             }
 
-            this.worldObj.playSoundEffect(var4, (double) this.yCoord + 0.5D, var2, "random.chestopen", 0.5F, this.worldObj.rand.nextFloat() * 0.1F + 0.9F);
+            this.worldObj.playSoundEffect(var4, (double)this.yCoord + 0.5D, var2, "random.chestopen", 0.5F, this.worldObj.rand.nextFloat() * 0.1F + 0.9F);
         }
 
         if (this.numUsingPlayers == 0 && this.lidAngle > 0.0F || this.numUsingPlayers > 0 && this.lidAngle < 1.0F)
@@ -276,7 +279,8 @@ public class TileEntitySkyrootChest extends TileEntity implements IInventory
             if (this.numUsingPlayers > 0)
             {
                 this.lidAngle += var1;
-            } else
+            }
+            else
             {
                 this.lidAngle -= var1;
             }
@@ -290,8 +294,8 @@ public class TileEntitySkyrootChest extends TileEntity implements IInventory
 
             if (this.lidAngle < var5 && var8 >= var5 && this.adjacentChestZNeg == null && this.adjacentChestXNeg == null)
             {
-                var2 = (double) this.xCoord + 0.5D;
-                double var6 = (double) this.zCoord + 0.5D;
+                var2 = (double)this.xCoord + 0.5D;
+                double var6 = (double)this.zCoord + 0.5D;
 
                 if (this.adjacentChestZPosition != null)
                 {
@@ -303,7 +307,7 @@ public class TileEntitySkyrootChest extends TileEntity implements IInventory
                     var2 += 0.5D;
                 }
 
-                this.worldObj.playSoundEffect(var2, (double) this.yCoord + 0.5D, var6, "random.chestclosed", 0.5F, this.worldObj.rand.nextFloat() * 0.1F + 0.9F);
+                this.worldObj.playSoundEffect(var2, (double)this.yCoord + 0.5D, var6, "random.chestclosed", 0.5F, this.worldObj.rand.nextFloat() * 0.1F + 0.9F);
             }
 
             if (this.lidAngle < 0.0F)

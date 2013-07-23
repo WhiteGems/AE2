@@ -2,7 +2,6 @@ package net.aetherteam.aether.blocks;
 
 import java.util.HashMap;
 import java.util.List;
-
 import net.aetherteam.aether.dungeons.DungeonHandler;
 import net.aetherteam.aether.items.AetherItems;
 import net.minecraft.block.Block;
@@ -20,7 +19,7 @@ import net.minecraft.world.World;
 public class BlockDungeonHolystone extends BlockAether implements IAetherBlock
 {
     private HashMap icons = new HashMap();
-    public static final String[] names = new String[]{"Dungeon Holystone", "Dungeon Mossy Holystone"};
+    public static final String[] names = new String[] {"Dungeon Holystone", "Dungeon Mossy Holystone"};
 
     protected BlockDungeonHolystone(int var1)
     {
@@ -46,7 +45,7 @@ public class BlockDungeonHolystone extends BlockAether implements IAetherBlock
     {
         ItemStack var3 = new ItemStack(AetherBlocks.DungeonHolystone, 1, var2);
         String var4 = var3.getItem().getItemDisplayName(var3);
-        return (Icon) this.icons.get(var4);
+        return (Icon)this.icons.get(var4);
     }
 
     /**
@@ -81,24 +80,28 @@ public class BlockDungeonHolystone extends BlockAether implements IAetherBlock
                     var2.addStat(StatList.mineBlockStatArray[this.blockID], 1);
                     var7 = new ItemStack(AetherBlocks.Holystone.blockID, 2, 1);
                     this.dropBlockAsItem_do(var1, var3, var4, var5, var7);
-                } else
+                }
+                else
                 {
                     var7 = new ItemStack(AetherBlocks.Holystone.blockID, 1, 1);
                     this.dropBlockAsItem_do(var1, var3, var4, var5, var7);
                 }
-            } else if (var6 == 2)
+            }
+            else if (var6 == 2)
             {
                 if (var2.getCurrentEquippedItem() != null && var2.getCurrentEquippedItem().itemID == AetherItems.SkyrootPickaxe.itemID)
                 {
                     var2.addStat(StatList.mineBlockStatArray[this.blockID], 1);
                     var7 = new ItemStack(AetherBlocks.Holystone.blockID, 2, 3);
                     this.dropBlockAsItem_do(var1, var3, var4, var5, var7);
-                } else
+                }
+                else
                 {
                     var7 = new ItemStack(AetherBlocks.Holystone.blockID, 1, 3);
                     this.dropBlockAsItem_do(var1, var3, var4, var5, var7);
                 }
-            } else
+            }
+            else
             {
                 var7 = new ItemStack(AetherBlocks.Holystone.blockID, 1, var6);
                 this.dropBlockAsItem_do(var1, var3, var4, var5, var7);
@@ -116,7 +119,7 @@ public class BlockDungeonHolystone extends BlockAether implements IAetherBlock
      */
     public void onBlockAdded(World var1, int var2, int var3, int var4)
     {
-        if (DungeonHandler.instance().getInstanceAt(MathHelper.floor_double((double) var2), MathHelper.floor_double((double) var3), MathHelper.floor_double((double) var4)) == null)
+        if (DungeonHandler.instance().getInstanceAt(MathHelper.floor_double((double)var2), MathHelper.floor_double((double)var3), MathHelper.floor_double((double)var4)) == null)
         {
             var1.setBlockToAir(var2, var3, var4);
         }

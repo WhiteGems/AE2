@@ -1,7 +1,6 @@
 package net.aetherteam.aether.donator.choices;
 
 import java.util.Random;
-
 import net.aetherteam.aether.AetherMoaColour;
 import net.aetherteam.aether.donator.DonatorChoice;
 import net.aetherteam.aether.donator.DonatorTexture;
@@ -13,14 +12,14 @@ public class MoaChoice extends DonatorChoice
     AetherMoaColour colour = null;
     boolean overrideAll = true;
 
-    public MoaChoice(String name, EnumChoiceType type, DonatorTexture texture)
+    public MoaChoice(String var1, EnumChoiceType var2, DonatorTexture var3)
     {
-        super(name, type, texture);
+        super(var1, var2, var3);
     }
 
-    public void setOverrideAll(boolean all)
+    public void setOverrideAll(boolean var1)
     {
-        this.overrideAll = all;
+        this.overrideAll = var1;
     }
 
     public boolean getOverrideAll()
@@ -33,17 +32,10 @@ public class MoaChoice extends DonatorChoice
         return this.colour;
     }
 
-    public void setOverridingColour(AetherMoaColour colour)
+    public void setOverridingColour(AetherMoaColour var1)
     {
-        this.colour = colour;
+        this.colour = var1;
     }
 
-    public void spawnParticleEffects(Random random, EntityPlayer player)
-    {
-    }
+    public void spawnParticleEffects(Random var1, EntityPlayer var2) {}
 }
-
-/* Location:           D:\Dev\Mc\forge_orl\mcp\jars\bin\aether.jar
- * Qualified Name:     net.aetherteam.aether.donator.choices.MoaChoice
- * JD-Core Version:    0.6.2
- */

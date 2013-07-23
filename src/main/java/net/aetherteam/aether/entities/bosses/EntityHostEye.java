@@ -66,14 +66,12 @@ public class EntityHostEye extends EntityMiniBoss implements IAetherMob
      * Takes in the distance the entity has fallen this tick and whether its on the ground to update the fall distance
      * and deal fall damage if landing on the ground.  Args: distanceFallenThisTick, onGround
      */
-    protected void updateFallState(double var1, boolean var3)
-    {}
+    protected void updateFallState(double var1, boolean var3) {}
 
     /**
      * Called when the mob is falling. Calculates and applies fall damage.
      */
-    protected void fall(float var1)
-    {}
+    protected void fall(float var1) {}
 
     /**
      * Determines if an entity can be despawned, used on idle far away entities
@@ -114,8 +112,8 @@ public class EntityHostEye extends EntityMiniBoss implements IAetherMob
     {
         super.writeEntityToNBT(var1);
         var1.setFloat("Speedy", this.speedy);
-        var1.setShort("MoveTimer", (short) this.moveTimer);
-        var1.setShort("Direction", (short) this.direction);
+        var1.setShort("MoveTimer", (short)this.moveTimer);
+        var1.setShort("Direction", (short)this.direction);
         var1.setBoolean("GotMovement", this.gotMovement);
     }
 
@@ -142,7 +140,7 @@ public class EntityHostEye extends EntityMiniBoss implements IAetherMob
 
         if (this.target != null && this.target instanceof EntityLiving)
         {
-            EntityLiving var1 = (EntityLiving) this.target;
+            EntityLiving var1 = (EntityLiving)this.target;
 
             if (var1.getHealth() <= 0 || !this.canEntityBeSeen(var1))
             {
@@ -151,7 +149,8 @@ public class EntityHostEye extends EntityMiniBoss implements IAetherMob
                 this.moveTimer = 0;
                 return;
             }
-        } else
+        }
+        else
         {
             if (this.target != null && this.target.isDead)
             {
@@ -193,7 +192,8 @@ public class EntityHostEye extends EntityMiniBoss implements IAetherMob
                 {
                     this.setDead();
                 }
-            } else
+            }
+            else
             {
                 this.fallDistance = 0.0F;
                 double var3;
@@ -215,7 +215,8 @@ public class EntityHostEye extends EntityMiniBoss implements IAetherMob
                         }
 
                         this.stop();
-                    } else
+                    }
+                    else
                     {
                         if (this.speedy < 2.0F)
                         {
@@ -228,52 +229,57 @@ public class EntityHostEye extends EntityMiniBoss implements IAetherMob
 
                         if (this.direction == 0)
                         {
-                            this.motionY = (double) this.speedy;
+                            this.motionY = (double)this.speedy;
 
                             if (this.boundingBox.minY > this.target.boundingBox.minY + 0.35D)
                             {
                                 this.stop();
                                 this.moveTimer = 8;
                             }
-                        } else if (this.direction == 1)
+                        }
+                        else if (this.direction == 1)
                         {
-                            this.motionY = (double) (-this.speedy);
+                            this.motionY = (double)(-this.speedy);
 
                             if (this.boundingBox.minY < this.target.boundingBox.minY - 0.25D)
                             {
                                 this.stop();
                                 this.moveTimer = 8;
                             }
-                        } else if (this.direction == 2)
+                        }
+                        else if (this.direction == 2)
                         {
-                            this.motionX = (double) this.speedy;
+                            this.motionX = (double)this.speedy;
 
                             if (this.posX > this.target.posX + 0.125D)
                             {
                                 this.stop();
                                 this.moveTimer = 8;
                             }
-                        } else if (this.direction == 3)
+                        }
+                        else if (this.direction == 3)
                         {
-                            this.motionX = (double) (-this.speedy);
+                            this.motionX = (double)(-this.speedy);
 
                             if (this.posX < this.target.posX - 0.125D)
                             {
                                 this.stop();
                                 this.moveTimer = 8;
                             }
-                        } else if (this.direction == 4)
+                        }
+                        else if (this.direction == 4)
                         {
-                            this.motionZ = (double) this.speedy;
+                            this.motionZ = (double)this.speedy;
 
                             if (this.posZ > this.target.posZ + 0.125D)
                             {
                                 this.stop();
                                 this.moveTimer = 8;
                             }
-                        } else if (this.direction == 5)
+                        }
+                        else if (this.direction == 5)
                         {
-                            this.motionZ = (double) (-this.speedy);
+                            this.motionZ = (double)(-this.speedy);
 
                             if (this.posZ < this.target.posZ - 0.125D)
                             {
@@ -282,7 +288,8 @@ public class EntityHostEye extends EntityMiniBoss implements IAetherMob
                             }
                         }
                     }
-                } else
+                }
+                else
                 {
                     this.motionY = 0.0D;
 
@@ -292,7 +299,8 @@ public class EntityHostEye extends EntityMiniBoss implements IAetherMob
                         this.motionX = 0.0D;
                         this.motionY = 0.0D;
                         this.motionZ = 0.0D;
-                    } else
+                    }
+                    else
                     {
                         var7 = Math.abs(this.posX - this.target.posX);
                         var3 = Math.abs(this.boundingBox.minY - this.target.boundingBox.minY);
@@ -306,7 +314,8 @@ public class EntityHostEye extends EntityMiniBoss implements IAetherMob
                             {
                                 this.direction = 3;
                             }
-                        } else
+                        }
+                        else
                         {
                             this.direction = 4;
 
@@ -335,7 +344,8 @@ public class EntityHostEye extends EntityMiniBoss implements IAetherMob
                     this.harvey *= 0.8F;
                 }
             }
-        } else
+        }
+        else
         {
             this.target = null;
             this.stop();
@@ -368,7 +378,7 @@ public class EntityHostEye extends EntityMiniBoss implements IAetherMob
 
                 if (var1 instanceof EntityCreature || var1 instanceof EntityPlayer)
                 {
-                    EntityLiving var3 = (EntityLiving) var1;
+                    EntityLiving var3 = (EntityLiving)var1;
                     var3.motionY += 0.35D;
                     var3.motionX *= 2.0D;
                     var3.motionZ *= 2.0D;
@@ -383,8 +393,7 @@ public class EntityHostEye extends EntityMiniBoss implements IAetherMob
      * Drop 0-2 items of this living's type. @param par1 - Whether this entity has recently been hit by a player. @param
      * par2 - Level of Looting used to kill this mob.
      */
-    protected void dropFewItems(boolean var1, int var2)
-    {}
+    protected void dropFewItems(boolean var1, int var2) {}
 
     public void stop()
     {
@@ -408,22 +417,20 @@ public class EntityHostEye extends EntityMiniBoss implements IAetherMob
     /**
      * Adds to the current velocity of the entity. Args: x, y, z
      */
-    public void addVelocity(double var1, double var3, double var5)
-    {}
+    public void addVelocity(double var1, double var3, double var5) {}
 
     /**
      * knocks back this entity
      */
-    public void knockBack(Entity var1, int var2, double var3, double var5)
-    {}
+    public void knockBack(Entity var1, int var2, double var3, double var5) {}
 
     public void addSquirrelButts(int var1, int var2, int var3)
     {
         if (this.worldObj.isRemote)
         {
-            double var4 = (double) var1 + 0.5D + (double) (this.rand.nextFloat() - this.rand.nextFloat()) * 0.375D;
-            double var6 = (double) var2 + 0.5D + (double) (this.rand.nextFloat() - this.rand.nextFloat()) * 0.375D;
-            double var8 = (double) var3 + 0.5D + (double) (this.rand.nextFloat() - this.rand.nextFloat()) * 0.375D;
+            double var4 = (double)var1 + 0.5D + (double)(this.rand.nextFloat() - this.rand.nextFloat()) * 0.375D;
+            double var6 = (double)var2 + 0.5D + (double)(this.rand.nextFloat() - this.rand.nextFloat()) * 0.375D;
+            double var8 = (double)var3 + 0.5D + (double)(this.rand.nextFloat() - this.rand.nextFloat()) * 0.375D;
             this.worldObj.spawnParticle("explode", var4, var6, var8, 0.0D, 0.0D, 0.0D);
         }
     }

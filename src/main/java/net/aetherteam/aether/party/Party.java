@@ -2,8 +2,8 @@ package net.aetherteam.aether.party;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.Random;
-
 import net.aetherteam.aether.party.members.MemberType;
 import net.aetherteam.aether.party.members.PartyMember;
 
@@ -11,22 +11,18 @@ public class Party implements Serializable
 {
     private String name;
     private PartyMember leader;
-    private ArrayList<PartyMember> members = new ArrayList();
-
+    private ArrayList members = new ArrayList();
     private ArrayList requestedMembers = new ArrayList();
-
     private int memberSizeLimit = 20;
+    private PartyType TYPE;
 
-    private PartyType TYPE = PartyType.OPEN;
-
-    public Party(String name, PartyMember leader)
+    public Party(String var1, PartyMember var2)
     {
-        this.name = name;
-        this.leader = leader;
-
+        this.TYPE = PartyType.OPEN;
+        this.name = var1;
+        this.leader = var2;
         this.leader.promoteTo(MemberType.LEADER);
-
-        join(leader);
+        this.join(var2);
     }
 
     public String getName()
@@ -34,9 +30,9 @@ public class Party implements Serializable
         return this.name;
     }
 
-    public void setName(String text)
+    public void setName(String var1)
     {
-        this.name = text;
+        this.name = var1;
     }
 
     public int getMemberSizeLimit()
@@ -44,9 +40,9 @@ public class Party implements Serializable
         return this.memberSizeLimit;
     }
 
-    public void setMemberSizeLimit(int size)
+    public void setMemberSizeLimit(int var1)
     {
-        this.memberSizeLimit = size;
+        this.memberSizeLimit = var1;
     }
 
     public PartyType getType()
@@ -54,10 +50,9 @@ public class Party implements Serializable
         return this.TYPE;
     }
 
-    public Party setType(PartyType type)
+    public Party setType(PartyType var1)
     {
-        this.TYPE = type;
-
+        this.TYPE = var1;
         return this;
     }
 
@@ -76,23 +71,27 @@ public class Party implements Serializable
         return this.leader != null;
     }
 
-    public boolean isLeader(PartyMember member)
+    public boolean isLeader(PartyMember var1)
     {
-        return (member != null) && (this.leader == member);
+        return var1 != null && this.leader == var1;
     }
 
-    public boolean hasMember(PartyMember member)
+    public boolean hasMember(PartyMember var1)
     {
-        return (member != null) && (hasMember(member.username));
+        return var1 != null && this.hasMember(var1.username);
     }
 
-    public boolean hasMember(String username)
+    public boolean hasMember(String var1)
     {
-        if ((this.members != null) && (username != null))
+        if (this.members != null && var1 != null)
         {
-            for (PartyMember iteratedMember : this.members)
+            Iterator var2 = this.members.iterator();
+
+            while (var2.hasNext())
             {
-                if (iteratedMember.username.equalsIgnoreCase(username))
+                PartyMember var3 = (PartyMember)var2.next();
+
+                if (var3.username.equalsIgnoreCase(var1))
                 {
                     return true;
                 }
@@ -102,79 +101,79 @@ public class Party implements Serializable
         return false;
     }
 
-    public void promoteMember(PartyMember member, MemberType type)
+    public void promoteMember(PartyMember var1, MemberType var2)
     {
-        if (hasMember(member))
+        if (this.hasMember(var1))
         {
-            member.promoteTo(type);
+            var1.promoteTo(var2);
 
-            if ((type == MemberType.LEADER) && (hasLeader()))
+            if (var2 == MemberType.LEADER && this.hasLeader())
             {
                 this.leader.promoteTo(MemberType.MEMBER);
-                this.leader = member;
+                this.leader = var1;
             }
         }
     }
 
-    public ArrayList<PartyMember> getMembers()
+    public ArrayList getMembers()
     {
         return this.members;
     }
 
-    public void queueRequestedPlayer(String playerUsername)
+    public void queueRequestedPlayer(String var1)
     {
-        this.requestedMembers.add(playerUsername.toLowerCase());
+        this.requestedMembers.add(var1.toLowerCase());
     }
 
-    public void removeRequestedPlayer(String playerUsername)
+    public void removeRequestedPlayer(String var1)
     {
-        this.requestedMembers.remove(playerUsername.toLowerCase());
+        this.requestedMembers.remove(var1.toLowerCase());
     }
 
-    public boolean isRequestedPlayer(String playerUsername)
+    public boolean isRequestedPlayer(String var1)
     {
-        return this.requestedMembers.contains(playerUsername.toLowerCase());
+        return this.requestedMembers.contains(var1.toLowerCase());
     }
 
-    public void join(PartyMember member)
+    public void join(PartyMember var1)
     {
-        if ((member != null) && (this.members.size() < this.memberSizeLimit) && (!hasMember(member)))
+        if (var1 != null && this.members.size() < this.memberSizeLimit && !this.hasMember(var1))
         {
-            Party party;
-            if (PartyController.instance().inParty(member.username))
+            if (PartyController.instance().inParty(var1.username))
             {
-                party = PartyController.instance().getParty(PartyController.instance().getMember(member.username));
+                PartyController.instance().getParty(PartyController.instance().getMember(var1.username));
             }
 
-            if (isRequestedPlayer(member.username))
+            if (this.isRequestedPlayer(var1.username))
             {
-                removeRequestedPlayer(member.username);
+                this.removeRequestedPlayer(var1.username);
             }
 
-            this.members.add(member);
+            this.members.add(var1);
         }
     }
 
-    public void leave(PartyMember member)
+    public void leave(PartyMember var1)
     {
-        if (hasMember(member))
+        if (this.hasMember(var1))
         {
-            if ((member.isLeader()) && (this.members.size() > 1))
+            if (var1.isLeader() && this.members.size() > 1)
             {
-                Random rand = new Random();
-                PartyMember newLeader = null;
+                Random var2 = new Random();
+                PartyMember var3;
 
-                while ((newLeader == null) || (newLeader == member))
+                for (var3 = null; var3 == null || var3 == var1; var3 = (PartyMember)this.members.get(var2.nextInt(this.members.size())))
                 {
-                    newLeader = (PartyMember) this.members.get(rand.nextInt(this.members.size()));
+                    ;
                 }
 
-                if (newLeader != null)
+                if (var3 != null)
                 {
-                    PartyController.instance().promoteMember(PartyController.instance().getMember(newLeader.username), MemberType.LEADER, true);
+                    PartyController.instance().promoteMember(PartyController.instance().getMember(var3.username), MemberType.LEADER, true);
                 }
             }
-            this.members.remove(member);
+
+            this.members.remove(var1);
 
             if (this.members.size() <= 0)
             {
@@ -183,8 +182,3 @@ public class Party implements Serializable
         }
     }
 }
-
-/* Location:           D:\Dev\Mc\forge_orl\mcp\jars\bin\aether.jar
- * Qualified Name:     net.aetherteam.aether.party.Party
- * JD-Core Version:    0.6.2
- */

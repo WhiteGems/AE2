@@ -17,7 +17,7 @@ public class TileEntityTreasureChestRenderer extends TileEntityChestRenderer
 
     public void renderTileEntityAt(TileEntity var1, double var2, double var4, double var6, float var8)
     {
-        this.renderTileEntityChestAt((TileEntityChest) var1, var2, var4, var6, var8);
+        this.renderTileEntityChestAt((TileEntityChest)var1, var2, var4, var6, var8);
     }
 
     /**
@@ -30,14 +30,15 @@ public class TileEntityTreasureChestRenderer extends TileEntityChestRenderer
         if (var1.worldObj == null)
         {
             var9 = 0;
-        } else
+        }
+        else
         {
             Block var10 = var1.getBlockType();
             var9 = var1.getBlockMetadata();
 
             if (var10 != null && var9 == 0)
             {
-                ((BlockChest) var10).unifyAdjacentChests(var1.worldObj, var1.xCoord, var1.yCoord, var1.zCoord);
+                ((BlockChest)var10).unifyAdjacentChests(var1.worldObj, var1.xCoord, var1.yCoord, var1.zCoord);
                 var9 = var1.getBlockMetadata();
             }
 
@@ -52,7 +53,8 @@ public class TileEntityTreasureChestRenderer extends TileEntityChestRenderer
             {
                 var14 = this.chestModel;
                 this.bindTextureByName("/net/aetherteam/aether/client/sprites/tile_entities/treasureChest.png");
-            } else
+            }
+            else
             {
                 var14 = this.largeChestModel;
                 this.bindTextureByName("/net/aetherteam/aether/client/sprites/tile_entities/treasureChest.png");
@@ -60,7 +62,7 @@ public class TileEntityTreasureChestRenderer extends TileEntityChestRenderer
 
             GL11.glPushMatrix();
             GL11.glEnable(GL12.GL_RESCALE_NORMAL);
-            GL11.glTranslatef((float) var2, (float) var4 + 1.0F, (float) var6 + 1.0F);
+            GL11.glTranslatef((float)var2, (float)var4 + 1.0F, (float)var6 + 1.0F);
             GL11.glScalef(1.0F, -1.0F, -1.0F);
             GL11.glTranslatef(0.5F, 0.5F, 0.5F);
             short var11 = 0;
@@ -95,7 +97,7 @@ public class TileEntityTreasureChestRenderer extends TileEntityChestRenderer
                 GL11.glTranslatef(0.0F, 0.0F, -1.0F);
             }
 
-            GL11.glRotatef((float) var11, 0.0F, 1.0F, 0.0F);
+            GL11.glRotatef((float)var11, 0.0F, 1.0F, 0.0F);
             GL11.glTranslatef(-0.5F, -0.5F, -0.5F);
             float var12 = var1.prevLidAngle + (var1.lidAngle - var1.prevLidAngle) * var8;
             float var13;
@@ -122,7 +124,7 @@ public class TileEntityTreasureChestRenderer extends TileEntityChestRenderer
 
             var12 = 1.0F - var12;
             var12 = 1.0F - var12 * var12 * var12;
-            var14.chestLid.rotateAngleX = -(var12 * (float) Math.PI / 2.0F);
+            var14.chestLid.rotateAngleX = -(var12 * (float)Math.PI / 2.0F);
             var14.renderAll();
             GL11.glPopMatrix();
         }

@@ -19,7 +19,7 @@ public class ItemZaniteSword extends ItemSword
      */
     public float getStrVsBlock(ItemStack var1, Block var2)
     {
-        return super.getStrVsBlock(var1, var2) * (2.0F * (float) var1.getItemDamage() / (float) var1.getItem().getMaxDamage() + 0.5F);
+        return super.getStrVsBlock(var1, var2) * (2.0F * (float)var1.getItemDamage() / (float)var1.getItem().getMaxDamage() + 0.5F);
     }
 
     public Item setIconName(String var1)

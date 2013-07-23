@@ -67,14 +67,16 @@ public class EntityMiniCloud extends EntityFlying
             this.targetX = this.dude.posX;
             this.targetY = this.dude.posY - 0.10000000149011612D;
             this.targetZ = this.dude.posZ;
-        } else
+        }
+        else
         {
-            double var1 = (double) this.dude.rotationYaw;
+            double var1 = (double)this.dude.rotationYaw;
 
             if (this.toLeft)
             {
                 var1 -= 90.0D;
-            } else
+            }
+            else
             {
                 var1 += 90.0D;
             }
@@ -118,8 +120,8 @@ public class EntityMiniCloud extends EntityFlying
     public void writeEntityToNBT(NBTTagCompound var1)
     {
         super.writeEntityToNBT(var1);
-        var1.setShort("LifeSpan", (short) this.lifeSpan);
-        var1.setShort("ShotTimer", (short) this.shotTimer);
+        var1.setShort("LifeSpan", (short)this.lifeSpan);
+        var1.setShort("ShotTimer", (short)this.shotTimer);
         this.gotPlayer = this.dude != null;
         var1.setBoolean("GotPlayer", this.gotPlayer);
         var1.setBoolean("ToLeft", this.toLeft);
@@ -146,7 +148,8 @@ public class EntityMiniCloud extends EntityFlying
         {
             this.spawnExplosionParticle();
             this.isDead = true;
-        } else
+        }
+        else
         {
             if (this.shotTimer > 0)
             {
@@ -156,7 +159,7 @@ public class EntityMiniCloud extends EntityFlying
             if (this.gotPlayer && this.dude == null)
             {
                 this.gotPlayer = false;
-                this.dude = (EntityLiving) this.findPlayer();
+                this.dude = (EntityLiving)this.findPlayer();
             }
 
             if (this.dude != null && !this.dude.isDead)
@@ -171,12 +174,12 @@ public class EntityMiniCloud extends EntityFlying
                     this.rotationYaw = this.dude.rotationYaw + (this.toLeft ? 1.0F : -1.0F);
                     this.rotationPitch = this.dude.rotationPitch;
 
-                    if (this.shotTimer <= 0 && this.dude instanceof EntityPlayer && ((EntityPlayer) this.dude).swingProgress > 0.0F)
+                    if (this.shotTimer <= 0 && this.dude instanceof EntityPlayer && ((EntityPlayer)this.dude).swingProgress > 0.0F)
                     {
                         float var7 = this.rotationYaw - (this.toLeft ? 1.0F : -1.0F);
-                        double var1 = this.posX + Math.sin((double) var7 / -(180D / Math.PI)) * 1.6D;
+                        double var1 = this.posX + Math.sin((double)var7 / -(180D / Math.PI)) * 1.6D;
                         double var3 = this.posY - 0.25D;
-                        double var5 = this.posZ + Math.cos((double) var7 / -(180D / Math.PI)) * 1.6D;
+                        double var5 = this.posZ + Math.cos((double)var7 / -(180D / Math.PI)) * 1.6D;
                         EntityFiroBall var8 = new EntityFiroBall(this.worldObj, var1, var3, var5, true, true);
                         this.worldObj.spawnEntityInWorld(var8);
                         Vec3 var9 = this.getLookVec();
@@ -192,11 +195,13 @@ public class EntityMiniCloud extends EntityFlying
                         this.worldObj.playSoundAtEntity(this, "mob.zephyr.zephyrshoot", 0.75F, (this.rand.nextFloat() - this.rand.nextFloat()) * 0.2F + 1.0F);
                         this.shotTimer = 40;
                     }
-                } else
+                }
+                else
                 {
                     this.approachTarget();
                 }
-            } else
+            }
+            else
             {
                 this.spawnExplosionParticle();
                 this.isDead = true;

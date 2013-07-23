@@ -4,9 +4,9 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 
-public class ItemBlockCrystalLeaves extends ItemBlock
+public class ItemBlockPurpleCrystalLeaves extends ItemBlock
 {
-    public ItemBlockCrystalLeaves(int var1)
+    public ItemBlockPurpleCrystalLeaves(int var1)
     {
         super(var1);
         this.setHasSubtypes(true);

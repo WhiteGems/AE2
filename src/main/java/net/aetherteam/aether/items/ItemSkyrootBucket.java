@@ -2,9 +2,7 @@ package net.aetherteam.aether.items;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
-
 import java.util.List;
-
 import net.aetherteam.aether.entities.EntityAechorPlant;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
@@ -25,7 +23,7 @@ import net.minecraft.world.World;
 
 public class ItemSkyrootBucket extends ItemAether
 {
-    public static final String[] names = new String[]{"Skyroot Bucket", "Skyroot Milk Bucket", "Skyroot Poison Bucket", "Skyroot Remedy Bucket", "Skyroot Water Bucket"};
+    public static final String[] names = new String[] {"Skyroot Bucket", "Skyroot Milk Bucket", "Skyroot Poison Bucket", "Skyroot Remedy Bucket", "Skyroot Water Bucket"};
     @SideOnly(Side.CLIENT)
     private Icon[] icons;
     private int waterMoving = 4;
@@ -91,18 +89,18 @@ public class ItemSkyrootBucket extends ItemAether
         float var4 = 1.0F;
         float var5 = var3.prevRotationPitch + (var3.rotationPitch - var3.prevRotationPitch) * var4;
         float var6 = var3.prevRotationYaw + (var3.rotationYaw - var3.prevRotationYaw) * var4;
-        double var7 = var3.prevPosX + (var3.posX - var3.prevPosX) * (double) var4;
-        double var9 = var3.prevPosY + (var3.posY - var3.prevPosY) * (double) var4 + 1.62D - (double) var3.yOffset;
-        double var11 = var3.prevPosZ + (var3.posZ - var3.prevPosZ) * (double) var4;
+        double var7 = var3.prevPosX + (var3.posX - var3.prevPosX) * (double)var4;
+        double var9 = var3.prevPosY + (var3.posY - var3.prevPosY) * (double)var4 + 1.62D - (double)var3.yOffset;
+        double var11 = var3.prevPosZ + (var3.posZ - var3.prevPosZ) * (double)var4;
         Vec3 var13 = Vec3.createVectorHelper(var7, var9, var11);
-        float var14 = MathHelper.cos(-var6 * 0.01745329F - (float) Math.PI);
-        float var15 = MathHelper.sin(-var6 * 0.01745329F - (float) Math.PI);
+        float var14 = MathHelper.cos(-var6 * 0.01745329F - (float)Math.PI);
+        float var15 = MathHelper.sin(-var6 * 0.01745329F - (float)Math.PI);
         float var16 = -MathHelper.cos(-var5 * 0.01745329F);
         float var17 = MathHelper.sin(-var5 * 0.01745329F);
         float var18 = var15 * var16;
         float var20 = var14 * var16;
         double var21 = 5.0D;
-        Vec3 var23 = var13.addVector((double) var18 * var21, (double) var17 * var21, (double) var20 * var21);
+        Vec3 var23 = var13.addVector((double)var18 * var21, (double)var17 * var21, (double)var20 * var21);
         MovingObjectPosition var24 = var2.rayTraceBlocks_do(var13, var23, var1.getItemDamage() == 0);
 
         if (var1.getItemDamage() == 2 && (var24 == null || var24.entityHit == null || !(var24.entityHit instanceof EntityAechorPlant)))
@@ -115,7 +113,8 @@ public class ItemSkyrootBucket extends ItemAether
 
             var1.setItemDamage(0);
             return var1;
-        } else if (var1.getItemDamage() == 3)
+        }
+        else if (var1.getItemDamage() == 3)
         {
             if (!var2.isRemote)
             {
@@ -123,7 +122,8 @@ public class ItemSkyrootBucket extends ItemAether
             }
 
             return new ItemStack(AetherItems.SkyrootBucket);
-        } else
+        }
+        else
         {
             if (var24 != null && var24.typeOfHit == EnumMovingObjectType.TILE && (var1.getItemDamage() == 0 || var1.getItemDamage() == this.waterMoving))
             {
@@ -144,7 +144,8 @@ public class ItemSkyrootBucket extends ItemAether
                         var1.setItemDamage(this.waterMoving);
                         return var1;
                     }
-                } else
+                }
+                else
                 {
                     if (var1.getItemDamage() <= 3 && var1.getItemDamage() != 0)
                     {
@@ -189,9 +190,10 @@ public class ItemSkyrootBucket extends ItemAether
 
                             for (int var28 = 0; var28 < 8; ++var28)
                             {
-                                var2.spawnParticle("largesmoke", (double) var25 + Math.random(), (double) var26 + Math.random(), (double) var27 + Math.random(), 0.0D, 0.0D, 0.0D);
+                                var2.spawnParticle("largesmoke", (double)var25 + Math.random(), (double)var26 + Math.random(), (double)var27 + Math.random(), 0.0D, 0.0D, 0.0D);
                             }
-                        } else
+                        }
+                        else
                         {
                             var2.setBlock(var25, var26, var27, Block.waterMoving.blockID, 0, 4);
                         }
@@ -199,7 +201,8 @@ public class ItemSkyrootBucket extends ItemAether
                         return new ItemStack(AetherItems.SkyrootBucket);
                     }
                 }
-            } else if (var1.getItemDamage() == 0 && var24 != null && var24.entityHit != null && var24.entityHit instanceof EntityCow)
+            }
+            else if (var1.getItemDamage() == 0 && var24 != null && var24.entityHit != null && var24.entityHit instanceof EntityCow)
             {
                 var1.setItemDamage(1);
                 return var1;

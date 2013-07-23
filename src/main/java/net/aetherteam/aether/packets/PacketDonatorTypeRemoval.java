@@ -2,63 +2,62 @@ package net.aetherteam.aether.packets;
 
 import cpw.mods.fml.common.network.PacketDispatcher;
 import cpw.mods.fml.common.network.Player;
-
 import java.io.ByteArrayInputStream;
 import java.io.DataInputStream;
 import java.io.IOException;
-import java.io.PrintStream;
-
 import net.aetherteam.aether.Aether;
-import net.aetherteam.aether.donator.Donator;
 import net.aetherteam.aether.donator.EnumChoiceType;
 import net.aetherteam.aether.donator.SyncDonatorList;
 import net.minecraft.network.packet.Packet250CustomPayload;
 
 public class PacketDonatorTypeRemoval extends AetherPacket
 {
-    public PacketDonatorTypeRemoval(int packetID)
+    public PacketDonatorTypeRemoval(int var1)
     {
-        super(packetID);
+        super(var1);
     }
 
-    public void onPacketReceived(Packet250CustomPayload packet, Player player)
+    public void onPacketReceived(Packet250CustomPayload var1, Player var2)
     {
-        DataInputStream dat = new DataInputStream(new ByteArrayInputStream(packet.data));
+        DataInputStream var3 = new DataInputStream(new ByteArrayInputStream(var1.data));
+
         try
         {
-            byte packetType = dat.readByte();
-            String username = dat.readUTF();
-            String typeName = dat.readUTF();
-            byte proxy = dat.readByte();
+            byte var4 = var3.readByte();
+            String var5 = var3.readUTF();
+            String var6 = var3.readUTF();
+            byte var7 = var3.readByte();
 
-            if (proxy >= 1)
+            if (var7 >= 1)
             {
-                EnumChoiceType type = EnumChoiceType.getTypeFromString(typeName);
+                EnumChoiceType var8 = EnumChoiceType.getTypeFromString(var6);
 
-                if (type == null)
+                if (var8 == null)
                 {
                     System.out.println("Choice type was null! Packet handling unsuccessful.");
                     return;
                 }
 
                 System.out.println("Choice type transferred!");
-
                 Aether.getInstance();
-                Aether.syncDonatorList.getDonator(username).removeChoiceType(type);
-            } else
-            {
-                SyncDonatorList donators = Aether.syncDonatorList;
-                PacketDispatcher.sendPacketToAllPlayers(AetherPacketHandler.sendDonatorTypeRemoval(username, EnumChoiceType.getTypeFromString(typeName), (byte) 1));
-                System.out.println("Server received 'Remove Type' packet, dispatching to players!");
+
+                if (Aether.syncDonatorList.getDonator(var5) != null)
+                {
+                    Aether.getInstance();
+                    Aether.syncDonatorList.getDonator(var5).removeChoiceType(var8);
+                }
             }
-        } catch (IOException e)
+            else
+            {
+                Aether var10000 = Aether.instance;
+                SyncDonatorList var10 = Aether.syncDonatorList;
+                PacketDispatcher.sendPacketToAllPlayers(AetherPacketHandler.sendDonatorTypeRemoval(var5, EnumChoiceType.getTypeFromString(var6), (byte)1));
+                System.out.println("Server received \'Remove Type\' packet, dispatching to players!");
+            }
+        }
+        catch (IOException var9)
         {
-            e.printStackTrace();
+            var9.printStackTrace();
         }
     }
 }
-
-/* Location:           D:\Dev\Mc\forge_orl\mcp\jars\bin\aether.jar
- * Qualified Name:     net.aetherteam.aether.packets.PacketDonatorTypeRemoval
- * JD-Core Version:    0.6.2
- */

@@ -4,16 +4,12 @@ import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.network.PacketDispatcher;
 import cpw.mods.fml.common.network.Player;
 import cpw.mods.fml.relauncher.Side;
-
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.DataInputStream;
 import java.io.InputStreamReader;
-import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.List;
-
 import net.aetherteam.aether.notifications.Notification;
 import net.aetherteam.aether.notifications.NotificationHandler;
 import net.aetherteam.aether.notifications.NotificationType;
@@ -27,110 +23,108 @@ import net.minecraft.server.management.ServerConfigurationManager;
 
 public class PacketNotificationChange extends AetherPacket
 {
-    public PacketNotificationChange(int packetID)
+    public PacketNotificationChange(int var1)
     {
-        super(packetID);
+        super(var1);
     }
 
-    public void onPacketReceived(Packet250CustomPayload packet, Player player)
+    public void onPacketReceived(Packet250CustomPayload var1, Player var2)
     {
-        DataInputStream dat = new DataInputStream(new ByteArrayInputStream(packet.data));
-        BufferedReader buf = new BufferedReader(new InputStreamReader(dat));
+        DataInputStream var3 = new DataInputStream(new ByteArrayInputStream(var1.data));
+        new BufferedReader(new InputStreamReader(var3));
+
         try
         {
-            byte packetType = dat.readByte();
-            boolean adding = dat.readBoolean();
+            byte var5 = var3.readByte();
+            boolean var6 = var3.readBoolean();
+            String var7 = var3.readUTF();
+            String var8 = var3.readUTF();
+            String var9 = var3.readUTF();
+            String var10 = var3.readUTF();
+            NotificationType var11 = NotificationType.getTypeFromString(var7);
+            EntityPlayer var12 = (EntityPlayer)var2;
+            Side var13 = FMLCommonHandler.instance().getEffectiveSide();
 
-            String notificationType = dat.readUTF();
-            String headerText = dat.readUTF();
-
-            String sendingPlayer = dat.readUTF();
-            String receivingPlayer = dat.readUTF();
-
-            NotificationType type = NotificationType.getTypeFromString(notificationType);
-
-            EntityPlayer realSendingPlayer = (EntityPlayer) player;
-
-            Side side = FMLCommonHandler.instance().getEffectiveSide();
-
-            if (side.isClient())
+            if (var13.isClient())
             {
-                Notification notification = new Notification(type, "Notification Received!", sendingPlayer, receivingPlayer);
+                Notification var14 = new Notification(var11, "Notification Received!", var9, var10);
 
-                if ((!NotificationHandler.instance().hasReceivedFromBefore(sendingPlayer, type)) && (adding))
+                if (!NotificationHandler.instance().hasReceivedFromBefore(var9, var11) && var6)
                 {
-                    NotificationHandler.instance().receiveNotification(notification);
-                } else if (!adding) NotificationHandler.instance().removeSentNotification(notification, false);
-            } else
+                    NotificationHandler.instance().receiveNotification(var14);
+                }
+                else if (!var6)
+                {
+                    NotificationHandler.instance().removeSentNotification(var14, false);
+                }
+            }
+            else
             {
-                MinecraftServer server = FMLCommonHandler.instance().getMinecraftServerInstance();
-                ServerConfigurationManager configManager = server.getConfigurationManager();
+                MinecraftServer var22 = FMLCommonHandler.instance().getMinecraftServerInstance();
+                ServerConfigurationManager var15 = var22.getConfigurationManager();
+                ArrayList var16 = new ArrayList();
+                Iterator var17 = var15.playerEntityList.iterator();
 
-                ArrayList<EntityPlayer> playerList = new ArrayList();
-
-                for (Iterator i$ = configManager.playerEntityList.iterator(); i$.hasNext(); )
+                while (var17.hasNext())
                 {
-                    Object obj = i$.next();
+                    Object var18 = var17.next();
 
-                    if ((obj instanceof EntityPlayer))
+                    if (var18 instanceof EntityPlayer)
                     {
-                        playerList.add((EntityPlayer) obj);
+                        var16.add((EntityPlayer)var18);
                     }
                 }
 
-                EntityPlayer realReceivingPlayer = null;
+                EntityPlayer var23 = null;
+                Iterator var26 = var16.iterator();
 
-                for (EntityPlayer iteratedPlayer : playerList)
+                while (var26.hasNext())
                 {
-                    if (iteratedPlayer.username.toLowerCase().equalsIgnoreCase(adding ? receivingPlayer : sendingPlayer))
+                    EntityPlayer var19 = (EntityPlayer)var26.next();
+
+                    if (var19.username.toLowerCase().equalsIgnoreCase(var6 ? var10 : var9))
                     {
-                        realReceivingPlayer = iteratedPlayer;
+                        var23 = var19;
                     }
                 }
 
-                PartyMember recruiter = PartyController.instance().getMember(realSendingPlayer);
-                Party party = PartyController.instance().getParty(recruiter);
-
+                PartyMember var25 = PartyController.instance().getMember(var12);
+                Party var24 = PartyController.instance().getParty(var25);
                 System.out.println("Trying!");
 
-                if ((party != null) && (recruiter != null))
+                if (var24 != null && var25 != null)
                 {
-                    System.out.println("Party: " + party);
-                    System.out.println("Recruiter: " + recruiter.username);
+                    System.out.println("Party: " + var24);
+                    System.out.println("Recruiter: " + var25.username);
                 }
 
-                if ((!NotificationHandler.instance().hasSentToBefore(receivingPlayer, type, sendingPlayer)) && (realSendingPlayer.username.toLowerCase().equalsIgnoreCase(sendingPlayer)) && (realReceivingPlayer != null))
+                Notification var20;
+
+                if (!NotificationHandler.instance().hasSentToBefore(var10, var11, var9) && var12.username.toLowerCase().equalsIgnoreCase(var9) && var23 != null)
                 {
                     System.out.println("Validated!");
 
-                    if ((party != null) && (!party.isLeader(recruiter)))
+                    if (var24 != null && !var24.isLeader(var25))
                     {
                         System.out.println("Oops! :(");
                         return;
                     }
 
-                    Notification notification = new Notification(type, "Notification Received!", sendingPlayer, receivingPlayer);
-
-                    NotificationHandler.instance().receiveNotification(notification);
-
-                    PacketDispatcher.sendPacketToPlayer(AetherPacketHandler.sendNotificationChange(notification, adding), (Player) realReceivingPlayer);
-                } else if (!adding)
+                    var20 = new Notification(var11, "Notification Received!", var9, var10);
+                    NotificationHandler.instance().receiveNotification(var20);
+                    PacketDispatcher.sendPacketToPlayer(AetherPacketHandler.sendNotificationChange(var20, var6), (Player)var23);
+                }
+                else if (!var6)
                 {
-                    Notification notification = new Notification(type, "Notification Received!", sendingPlayer, receivingPlayer);
-
-                    NotificationHandler.instance().removeSentNotification(notification, false);
-
-                    PacketDispatcher.sendPacketToPlayer(AetherPacketHandler.sendNotificationChange(notification, adding), (Player) realReceivingPlayer);
+                    var20 = new Notification(var11, "Notification Received!", var9, var10);
+                    NotificationHandler.instance().removeSentNotification(var20, false);
+                    PacketDispatcher.sendPacketToPlayer(AetherPacketHandler.sendNotificationChange(var20, var6), (Player)var23);
                 }
             }
-        } catch (Exception ex)
+        }
+        catch (Exception var21)
         {
-            ex.printStackTrace();
+            var21.printStackTrace();
         }
     }
 }
-
-/* Location:           D:\Dev\Mc\forge_orl\mcp\jars\bin\aether.jar
- * Qualified Name:     net.aetherteam.aether.packets.PacketNotificationChange
- * JD-Core Version:    0.6.2
- */

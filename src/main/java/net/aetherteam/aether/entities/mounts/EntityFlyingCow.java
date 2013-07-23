@@ -1,7 +1,6 @@
 package net.aetherteam.aether.entities.mounts;
 
 import java.util.ArrayList;
-
 import net.aetherteam.aether.Aether;
 import net.aetherteam.aether.PlayerBaseAetherServer;
 import net.aetherteam.aether.entities.EntityAetherAnimal;
@@ -96,7 +95,7 @@ public class EntityFlyingCow extends EntityAetherAnimal implements Mount
     protected void entityInit()
     {
         super.entityInit();
-        this.dataWatcher.addObject(16, Byte.valueOf((byte) 0));
+        this.dataWatcher.addObject(16, Byte.valueOf((byte)0));
         this.dataWatcher.addObject(17, Integer.valueOf(this.health));
     }
 
@@ -106,8 +105,8 @@ public class EntityFlyingCow extends EntityAetherAnimal implements Mount
     public void writeEntityToNBT(NBTTagCompound var1)
     {
         super.writeEntityToNBT(var1);
-        var1.setShort("Jumps", (short) this.jumps);
-        var1.setShort("Remaining", (short) this.jumpsRemaining);
+        var1.setShort("Jumps", (short)this.jumps);
+        var1.setShort("Remaining", (short)this.jumpsRemaining);
         var1.setBoolean("getSaddled", this.getSaddled());
     }
 
@@ -140,7 +139,7 @@ public class EntityFlyingCow extends EntityAetherAnimal implements Mount
                 this.moveStrafing = 0.0F;
                 this.isJumping = false;
                 this.riddenByEntity.fallDistance = 0.0F;
-                EntityPlayer var1 = (EntityPlayer) this.riddenByEntity;
+                EntityPlayer var1 = (EntityPlayer)this.riddenByEntity;
                 this.setRotation(this.riddenByEntity.rotationYaw, this.riddenByEntity.rotationPitch);
                 double var2 = 0.40499999701976774D;
 
@@ -149,7 +148,7 @@ public class EntityFlyingCow extends EntityAetherAnimal implements Mount
                     var2 = 0.15D;
                 }
 
-                float var4 = (float) Math.PI;
+                float var4 = (float)Math.PI;
                 float var5 = var4 / 180.0F;
                 PlayerBaseAetherServer var6 = Aether.getServerPlayer(var1);
 
@@ -166,25 +165,27 @@ public class EntityFlyingCow extends EntityAetherAnimal implements Mount
                     if (var8)
                     {
                         var13 = var1.rotationYaw * var5;
-                        this.motionX += -Math.sin((double) var13) * var2;
-                        this.motionZ += Math.cos((double) var13) * var2;
-                    } else if (var9)
+                        this.motionX += -Math.sin((double)var13) * var2;
+                        this.motionZ += Math.cos((double)var13) * var2;
+                    }
+                    else if (var9)
                     {
                         var13 = var1.rotationYaw * var5;
-                        this.motionX += Math.sin((double) var13) * var2;
-                        this.motionZ += -Math.cos((double) var13) * var2;
+                        this.motionX += Math.sin((double)var13) * var2;
+                        this.motionZ += -Math.cos((double)var13) * var2;
                     }
 
                     if (var10)
                     {
                         var13 = var1.rotationYaw * var5;
-                        this.motionX += Math.cos((double) var13) * var2;
-                        this.motionZ += Math.sin((double) var13) * var2;
-                    } else if (var11)
+                        this.motionX += Math.cos((double)var13) * var2;
+                        this.motionZ += Math.sin((double)var13) * var2;
+                    }
+                    else if (var11)
                     {
                         var13 = var1.rotationYaw * var5;
-                        this.motionX += -Math.cos((double) var13) * var2;
-                        this.motionZ += -Math.sin((double) var13) * var2;
+                        this.motionX += -Math.cos((double)var13) * var2;
+                        this.motionZ += -Math.sin((double)var13) * var2;
                     }
 
                     if (this.onGround && var12)
@@ -192,7 +193,8 @@ public class EntityFlyingCow extends EntityAetherAnimal implements Mount
                         this.onGround = false;
                         this.jump();
                         this.riderJumped = true;
-                    } else if (this.handleWaterMovement() && var12)
+                    }
+                    else if (this.handleWaterMovement() && var12)
                     {
                         this.jump();
                         this.riderJumped = true;
@@ -204,15 +206,16 @@ public class EntityFlyingCow extends EntityAetherAnimal implements Mount
                     }
                 }
 
-                double var15 = Math.abs(Math.sqrt(this.motionX * this.motionX + this.motionZ * this.motionZ));
+                double var14 = Math.abs(Math.sqrt(this.motionX * this.motionX + this.motionZ * this.motionZ));
 
-                if (var15 > var2)
+                if (var14 > var2)
                 {
-                    double var14 = var2 / var15;
-                    this.motionX *= var14;
-                    this.motionZ *= var14;
+                    double var15 = var2 / var14;
+                    this.motionX *= var15;
+                    this.motionZ *= var15;
                 }
-            } else
+            }
+            else
             {
                 super.updateEntityActionState();
             }
@@ -277,14 +280,15 @@ public class EntityFlyingCow extends EntityAetherAnimal implements Mount
             {
                 if (this.riddenByEntity instanceof EntityPlayer)
                 {
-                    EntityPlayer var1 = (EntityPlayer) this.riddenByEntity;
+                    EntityPlayer var1 = (EntityPlayer)this.riddenByEntity;
 
                     if (!var1.isSneaking())
                     {
                         this.motionY *= 0.6375D;
                     }
                 }
-            } else
+            }
+            else
             {
                 this.motionY *= 0.6D;
             }
@@ -296,13 +300,14 @@ public class EntityFlyingCow extends EntityAetherAnimal implements Mount
             this.aimingForFold = 0.1F;
             this.jpress = false;
             this.jumpsRemaining = this.jumps;
-        } else
+        }
+        else
         {
             this.aimingForFold = 1.0F;
         }
 
         ++this.ticks;
-        this.wingAngle = this.wingFold * (float) Math.sin((double) ((float) this.ticks / 31.830988F));
+        this.wingAngle = this.wingFold * (float)Math.sin((double)((float)this.ticks / 31.830988F));
         this.wingFold += (this.aimingForFold - this.wingFold) / 5.0F;
         this.fallDistance = 0.0F;
 
@@ -364,14 +369,16 @@ public class EntityFlyingCow extends EntityAetherAnimal implements Mount
     {
         if (!this.getSaddled() && var1.inventory.getCurrentItem() != null && var1.inventory.getCurrentItem().itemID == Item.saddle.itemID && !this.isChild())
         {
-            var1.inventory.setInventorySlotContents(var1.inventory.currentItem, (ItemStack) null);
+            var1.inventory.setInventorySlotContents(var1.inventory.currentItem, (ItemStack)null);
             this.setSaddled(true);
             this.texture = this.dir + "/mobs/flyingcow/saddle.png";
             return true;
-        } else if (!this.getSaddled())
+        }
+        else if (!this.getSaddled())
         {
             return super.interact(var1);
-        } else if (this.getSaddled() && (this.riddenByEntity == null || var1 == this.riddenByEntity))
+        }
+        else if (this.getSaddled() && (this.riddenByEntity == null || var1 == this.riddenByEntity))
         {
             if (!var1.worldObj.isRemote)
             {
@@ -380,7 +387,8 @@ public class EntityFlyingCow extends EntityAetherAnimal implements Mount
             }
 
             return true;
-        } else
+        }
+        else
         {
             return true;
         }
@@ -395,11 +403,12 @@ public class EntityFlyingCow extends EntityAetherAnimal implements Mount
     {
         if (var1)
         {
-            this.dataWatcher.updateObject(16, Byte.valueOf((byte) 1));
+            this.dataWatcher.updateObject(16, Byte.valueOf((byte)1));
             this.health = this.getMaxHealth();
-        } else
+        }
+        else
         {
-            this.dataWatcher.updateObject(16, Byte.valueOf((byte) 0));
+            this.dataWatcher.updateObject(16, Byte.valueOf((byte)0));
         }
     }
 

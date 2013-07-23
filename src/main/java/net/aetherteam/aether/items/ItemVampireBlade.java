@@ -1,7 +1,6 @@
 package net.aetherteam.aether.items;
 
 import java.util.Random;
-
 import net.aetherteam.aether.Aether;
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
@@ -53,12 +52,13 @@ public class ItemVampireBlade extends ItemSword
      */
     public boolean hitEntity(ItemStack var1, EntityLiving var2, EntityLiving var3)
     {
-        EntityPlayer var4 = (EntityPlayer) var3;
+        EntityPlayer var4 = (EntityPlayer)var3;
 
         if (Aether.getServerPlayer(var4) == null)
         {
             return true;
-        } else
+        }
+        else
         {
             if (var4.getHealth() < Aether.getServerPlayer(var4).maxHealth && var2.hurtTime > 0 && var2.deathTime <= 0)
             {

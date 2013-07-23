@@ -1,7 +1,6 @@
 package net.aetherteam.aether.items;
 
 import java.util.Random;
-
 import net.aetherteam.aether.blocks.AetherBlocks;
 import net.minecraft.block.Block;
 import net.minecraft.item.EnumToolMaterial;
@@ -12,7 +11,7 @@ import net.minecraft.item.ItemStack;
 public class ItemSkyrootShovel extends ItemSpade
 {
     private static Random random = new Random();
-    public static final Block[] blocksEffectiveAgainst = new Block[]{Block.grass, Block.dirt, Block.sand, Block.gravel, Block.snow, Block.blockSnow, Block.blockClay, Block.tilledField, Block.slowSand, Block.mycelium, AetherBlocks.AetherDirt, AetherBlocks.AetherGrass};
+    public static final Block[] blocksEffectiveAgainst = new Block[] {Block.grass, Block.dirt, Block.sand, Block.gravel, Block.snow, Block.blockSnow, Block.blockClay, Block.tilledField, Block.slowSand, Block.mycelium, AetherBlocks.AetherDirt, AetherBlocks.AetherGrass};
 
     public ItemSkyrootShovel(int var1, EnumToolMaterial var2)
     {

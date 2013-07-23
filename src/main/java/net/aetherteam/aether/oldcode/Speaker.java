@@ -28,7 +28,8 @@ public class Speaker implements Runnable
                 {
                     this.update();
                 }
-            } catch (InterruptedException var2)
+            }
+            catch (InterruptedException var2)
             {
                 var2.printStackTrace();
             }
@@ -37,7 +38,7 @@ public class Speaker implements Runnable
 
     public void update() throws InterruptedException
     {
-        this.voiceLine = (SpeakerLine) this.voiceQueue.get(0);
+        this.voiceLine = (SpeakerLine)this.voiceQueue.get(0);
         this.voiceThread.wait(this.voiceLine.duration);
         this.voiceQueue.remove(this.voiceLine);
     }

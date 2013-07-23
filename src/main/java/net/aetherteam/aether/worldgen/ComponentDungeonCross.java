@@ -4,7 +4,6 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
-
 import net.aetherteam.aether.blocks.AetherBlocks;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.structure.StructureBoundingBox;
@@ -125,7 +124,8 @@ public class ComponentDungeonCross extends StructureComponent
         if (this.isLiquidInStructureBoundingBox(var1, var3))
         {
             return false;
-        } else
+        }
+        else
         {
             if (this.isMultipleFloors)
             {
@@ -134,14 +134,15 @@ public class ComponentDungeonCross extends StructureComponent
                 this.fillWithBlocks(var1, var3, this.boundingBox.minX + 1, this.boundingBox.maxY - 2, this.boundingBox.minZ, this.boundingBox.maxX - 1, this.boundingBox.maxY, this.boundingBox.maxZ, 0, 0, false);
                 this.fillWithBlocks(var1, var3, this.boundingBox.minX, this.boundingBox.maxY - 2, this.boundingBox.minZ + 1, this.boundingBox.maxX, this.boundingBox.maxY, this.boundingBox.maxZ - 1, 0, 0, false);
                 this.fillWithBlocks(var1, var3, this.boundingBox.minX + 1, this.boundingBox.minY + 3, this.boundingBox.minZ + 1, this.boundingBox.maxX - 1, this.boundingBox.minY + 3, this.boundingBox.maxZ - 1, 0, 0, false);
-            } else
+            }
+            else
             {
                 this.fillWithBlocks(var1, var3, this.boundingBox.minX + 1, this.boundingBox.minY, this.boundingBox.minZ, this.boundingBox.maxX - 1, this.boundingBox.maxY, this.boundingBox.maxZ, 0, 0, false);
                 this.fillWithBlocks(var1, var3, this.boundingBox.minX, this.boundingBox.minY, this.boundingBox.minZ + 1, this.boundingBox.maxX, this.boundingBox.maxY, this.boundingBox.maxZ - 1, 0, 0, false);
             }
 
-            int var5;
             int var4;
+            int var5;
 
             for (var4 = this.boundingBox.minX; var4 <= this.boundingBox.maxX; ++var4)
             {
@@ -195,12 +196,12 @@ public class ComponentDungeonCross extends StructureComponent
                 }
             }
 
-            Iterator var7 = this.roomsLinkedToTheRoom.iterator();
+            Iterator var6 = this.roomsLinkedToTheRoom.iterator();
 
-            while (var7.hasNext())
+            while (var6.hasNext())
             {
-                StructureBoundingBox var6 = (StructureBoundingBox) var7.next();
-                this.fillWithBlocks(var1, var3, var6.minX, var6.maxY, var6.minZ, var6.maxX, var6.maxY, var6.maxZ, 0, 0, false);
+                StructureBoundingBox var7 = (StructureBoundingBox)var6.next();
+                this.fillWithBlocks(var1, var3, var7.minX, var7.maxY, var7.minZ, var7.maxX, var7.maxY, var7.maxZ, 0, 0, false);
             }
 
             return true;

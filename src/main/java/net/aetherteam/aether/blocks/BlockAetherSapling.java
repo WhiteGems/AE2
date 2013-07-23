@@ -1,7 +1,6 @@
 package net.aetherteam.aether.blocks;
 
 import java.util.Random;
-
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
@@ -33,23 +32,28 @@ public class BlockAetherSapling extends BlockAetherFlower implements IAetherBloc
         if (var1.isRemote)
         {
             return false;
-        } else if (var5 == null)
+        }
+        else if (var5 == null)
         {
             return false;
-        } else
+        }
+        else
         {
             ItemStack var10 = var5.getCurrentEquippedItem();
 
             if (var10 == null)
             {
                 return false;
-            } else if (var10.itemID != Item.dyePowder.itemID)
+            }
+            else if (var10.itemID != Item.dyePowder.itemID)
             {
                 return false;
-            } else if (var10.getItemDamage() != 15)
+            }
+            else if (var10.getItemDamage() != 15)
             {
                 return false;
-            } else
+            }
+            else
             {
                 this.growTree(var1, var2, var3, var4, var1.rand);
                 --var10.stackSize;
@@ -77,11 +81,14 @@ public class BlockAetherSapling extends BlockAetherFlower implements IAetherBloc
 
     public void growTree(World var1, int var2, int var3, int var4, Random var5)
     {
-        var1.setBlock(var2, var3, var4, 0);
-
-        if (!((WorldGenerator) this.treeGenObject).generate(var1, var5, var2, var3, var4))
+        if (!var1.isRemote)
         {
-            var1.setBlock(var2, var3, var4, this.blockID);
+            var1.setBlock(var2, var3, var4, 0);
+
+            if (((WorldGenerator)this.treeGenObject).generate(var1, var5, var2, var3, var4))
+            {
+                var1.setBlock(var2, var3, var4, this.blockID);
+            }
         }
     }
 

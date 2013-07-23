@@ -21,11 +21,13 @@ public class ItemShardOfLife extends ItemAether
         if (Aether.getServerPlayer(var3) == null)
         {
             return var1;
-        } else if (Aether.getServerPlayer(var3).maxHealth >= 40)
+        }
+        else if (Aether.getServerPlayer(var3).maxHealth >= 40)
         {
             Aether.proxy.displayMessage(var3, "You cannot add anymore hearts.");
             return var1;
-        } else
+        }
+        else
         {
             Aether.getServerPlayer(var3).increaseMaxHP(2);
             --var1.stackSize;

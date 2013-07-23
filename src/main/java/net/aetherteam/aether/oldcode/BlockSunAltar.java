@@ -26,7 +26,8 @@ public class BlockSunAltar extends BlockAether implements IAetherBlock
         {
             var5.addChatMessage("block.SunAltar.notPossibleHere");
             return true;
-        } else
+        }
+        else
         {
             return true;
         }

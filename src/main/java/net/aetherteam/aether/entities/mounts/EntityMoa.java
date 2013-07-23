@@ -2,9 +2,7 @@ package net.aetherteam.aether.entities.mounts;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
-
 import java.util.ArrayList;
-
 import net.aetherteam.aether.Aether;
 import net.aetherteam.aether.AetherMoaColour;
 import net.aetherteam.aether.PlayerBaseAetherServer;
@@ -37,7 +35,7 @@ public class EntityMoa extends EntityAetherAnimal implements Mount
 
     public EntityMoa(World var1)
     {
-        this(var1, false, false, false, (EntityPlayer) null);
+        this(var1, false, false, false, (EntityPlayer)null);
     }
 
     public EntityMoa(World var1, boolean var2, boolean var3, boolean var4, AetherMoaColour var5, EntityPlayer var6, String var7)
@@ -93,12 +91,12 @@ public class EntityMoa extends EntityAetherAnimal implements Mount
     protected void entityInit()
     {
         super.entityInit();
-        this.dataWatcher.addObject(16, Byte.valueOf((byte) 0));
-        this.dataWatcher.addObject(17, Byte.valueOf((byte) 0));
-        this.dataWatcher.addObject(18, Byte.valueOf((byte) 0));
+        this.dataWatcher.addObject(16, Byte.valueOf((byte)0));
+        this.dataWatcher.addObject(17, Byte.valueOf((byte)0));
+        this.dataWatcher.addObject(18, Byte.valueOf((byte)0));
         this.dataWatcher.addObject(19, Integer.valueOf(0));
-        this.dataWatcher.addObject(20, Short.valueOf((short) 0));
-        this.dataWatcher.addObject(21, Byte.valueOf((byte) 0));
+        this.dataWatcher.addObject(20, Short.valueOf((short)0));
+        this.dataWatcher.addObject(21, Byte.valueOf((byte)0));
         this.dataWatcher.addObject(22, String.valueOf(this.texture));
         this.dataWatcher.addObject(23, Integer.valueOf(this.getColour().jumps));
         this.dataWatcher.addObject(24, Integer.valueOf(this.health));
@@ -157,9 +155,10 @@ public class EntityMoa extends EntityAetherAnimal implements Mount
         if (this.riddenByEntity == null)
         {
             this.setTexture(this.getColour().getTexture(this.getSaddled()));
-        } else
+        }
+        else
         {
-            this.setTexture(this.getColour().getTexture(this.getSaddled(), (EntityPlayer) this.riddenByEntity));
+            this.setTexture(this.getColour().getTexture(this.getSaddled(), (EntityPlayer)this.riddenByEntity));
         }
 
         this.fallDistance = 0.0F;
@@ -177,7 +176,8 @@ public class EntityMoa extends EntityAetherAnimal implements Mount
             if (var1)
             {
                 this.entityDropItem(new ItemStack(AetherItems.MoaMusicDisk, 1, 0), 0.0F);
-            } else
+            }
+            else
             {
                 this.entityDropItem(new ItemStack(AetherItems.MoaEgg, 1, this.getColour().ID), 0.0F);
             }
@@ -204,14 +204,15 @@ public class EntityMoa extends EntityAetherAnimal implements Mount
             {
                 if (this.riddenByEntity instanceof EntityPlayer)
                 {
-                    EntityPlayer var2 = (EntityPlayer) this.riddenByEntity;
+                    EntityPlayer var2 = (EntityPlayer)this.riddenByEntity;
 
                     if (!var2.isSneaking())
                     {
                         this.motionY *= 0.6375D;
                     }
                 }
-            } else
+            }
+            else
             {
                 this.motionY *= 0.6D;
             }
@@ -236,7 +237,7 @@ public class EntityMoa extends EntityAetherAnimal implements Mount
                 this.moveStrafing = 0.0F;
                 this.isJumping = false;
                 this.riddenByEntity.fallDistance = 0.0F;
-                EntityPlayer var1 = (EntityPlayer) this.riddenByEntity;
+                EntityPlayer var1 = (EntityPlayer)this.riddenByEntity;
                 this.setRotation(this.riddenByEntity.rotationYaw, this.riddenByEntity.rotationPitch);
                 double var2 = 0.40499999701976774D;
 
@@ -245,7 +246,7 @@ public class EntityMoa extends EntityAetherAnimal implements Mount
                     var2 = 0.15D;
                 }
 
-                float var4 = (float) Math.PI;
+                float var4 = (float)Math.PI;
                 float var5 = var4 / 180.0F;
                 PlayerBaseAetherServer var6 = Aether.getServerPlayer(var1);
 
@@ -262,25 +263,27 @@ public class EntityMoa extends EntityAetherAnimal implements Mount
                     if (var8)
                     {
                         var13 = var1.rotationYaw * var5;
-                        this.motionX += -Math.sin((double) var13) * var2;
-                        this.motionZ += Math.cos((double) var13) * var2;
-                    } else if (var9)
+                        this.motionX += -Math.sin((double)var13) * var2;
+                        this.motionZ += Math.cos((double)var13) * var2;
+                    }
+                    else if (var9)
                     {
                         var13 = var1.rotationYaw * var5;
-                        this.motionX += Math.sin((double) var13) * var2;
-                        this.motionZ += -Math.cos((double) var13) * var2;
+                        this.motionX += Math.sin((double)var13) * var2;
+                        this.motionZ += -Math.cos((double)var13) * var2;
                     }
 
                     if (var10)
                     {
                         var13 = var1.rotationYaw * var5;
-                        this.motionX += Math.cos((double) var13) * var2;
-                        this.motionZ += Math.sin((double) var13) * var2;
-                    } else if (var11)
+                        this.motionX += Math.cos((double)var13) * var2;
+                        this.motionZ += Math.sin((double)var13) * var2;
+                    }
+                    else if (var11)
                     {
                         var13 = var1.rotationYaw * var5;
-                        this.motionX += -Math.cos((double) var13) * var2;
-                        this.motionZ += -Math.sin((double) var13) * var2;
+                        this.motionX += -Math.cos((double)var13) * var2;
+                        this.motionZ += -Math.sin((double)var13) * var2;
                     }
 
                     if (this.onGround && var12)
@@ -289,12 +292,14 @@ public class EntityMoa extends EntityAetherAnimal implements Mount
                         this.motionY = 0.875D;
                         this.riderJumped = true;
                         this.setJumpsRemaining(this.getJumpsRemaining() - 1);
-                    } else if (this.handleWaterMovement() && var12)
+                    }
+                    else if (this.handleWaterMovement() && var12)
                     {
                         this.motionY = 0.5D;
                         this.riderJumped = true;
                         this.setJumpsRemaining(this.getJumpsRemaining() - 1);
-                    } else if (this.getJumpsRemaining() > 0 && !this.riderJumped && var12)
+                    }
+                    else if (this.getJumpsRemaining() > 0 && !this.riderJumped && var12)
                     {
                         this.motionY = 0.75D;
                         this.riderJumped = true;
@@ -307,15 +312,16 @@ public class EntityMoa extends EntityAetherAnimal implements Mount
                     }
                 }
 
-                double var15 = Math.abs(Math.sqrt(this.motionX * this.motionX + this.motionZ * this.motionZ));
+                double var14 = Math.abs(Math.sqrt(this.motionX * this.motionX + this.motionZ * this.motionZ));
 
-                if (var15 > var2)
+                if (var14 > var2)
                 {
-                    double var14 = var2 / var15;
-                    this.motionX *= var14;
-                    this.motionZ *= var14;
+                    double var15 = var2 / var14;
+                    this.motionX *= var15;
+                    this.motionZ *= var15;
                 }
-            } else
+            }
+            else
             {
                 super.updateEntityActionState();
             }
@@ -336,7 +342,7 @@ public class EntityMoa extends EntityAetherAnimal implements Mount
     public void writeEntityToNBT(NBTTagCompound var1)
     {
         super.writeEntityToNBT(var1);
-        var1.setShort("ColourNumber", (short) this.getColour().ID);
+        var1.setShort("ColourNumber", (short)this.getColour().ID);
         var1.setBoolean("Saddled", this.getSaddled());
         var1.setBoolean("Grown", this.isGrown());
         var1.setBoolean("Baby", this.isBaby());
@@ -395,7 +401,7 @@ public class EntityMoa extends EntityAetherAnimal implements Mount
     {
         if (this.canAddSaddle() && var1.inventory.getCurrentItem() != null && var1.inventory.getCurrentItem().itemID == Item.saddle.itemID)
         {
-            var1.inventory.setInventorySlotContents(var1.inventory.currentItem, (ItemStack) null);
+            var1.inventory.setInventorySlotContents(var1.inventory.currentItem, (ItemStack)null);
 
             if (!this.worldObj.isRemote)
             {
@@ -405,14 +411,16 @@ public class EntityMoa extends EntityAetherAnimal implements Mount
             }
 
             return true;
-        } else if (this.getSaddled() && (this.riddenByEntity == null || var1 == this.riddenByEntity))
+        }
+        else if (this.getSaddled() && (this.riddenByEntity == null || var1 == this.riddenByEntity))
         {
             if (!var1.worldObj.isRemote)
             {
                 if (this.riddenByEntity == null)
                 {
                     this.setTexture(this.getColour().getTexture(this.getSaddled(), var1));
-                } else
+                }
+                else
                 {
                     this.setTexture(this.getColour().getTexture(this.getSaddled()));
                 }
@@ -422,7 +430,8 @@ public class EntityMoa extends EntityAetherAnimal implements Mount
             }
 
             return true;
-        } else
+        }
+        else
         {
             ItemStack var2 = var1.inventory.getCurrentItem();
 
@@ -439,7 +448,8 @@ public class EntityMoa extends EntityAetherAnimal implements Mount
                         {
                             this.setBaby(false);
                             this.setGrown(true);
-                        } else
+                        }
+                        else
                         {
                             this.setWellFed(true);
                         }
@@ -454,7 +464,8 @@ public class EntityMoa extends EntityAetherAnimal implements Mount
                     {
                         this.followPlayer = true;
                         this.entityToAttack = var1;
-                    } else
+                    }
+                    else
                     {
                         this.followPlayer = false;
                         this.entityToAttack = null;
@@ -470,7 +481,7 @@ public class EntityMoa extends EntityAetherAnimal implements Mount
     {
         this.field_756_e = this.field_752_b;
         this.field_757_d = this.destPos;
-        this.destPos = (float) ((double) this.destPos + (double) (this.onGround ? -1 : 4) * 0.05D);
+        this.destPos = (float)((double)this.destPos + (double)(this.onGround ? -1 : 4) * 0.05D);
 
         if (this.destPos < 0.01F)
         {
@@ -492,7 +503,7 @@ public class EntityMoa extends EntityAetherAnimal implements Mount
             this.field_755_h = 1.0F;
         }
 
-        this.field_755_h = (float) ((double) this.field_755_h * 0.9D);
+        this.field_755_h = (float)((double)this.field_755_h * 0.9D);
         this.field_752_b += this.field_755_h * 2.0F;
     }
 
@@ -505,11 +516,12 @@ public class EntityMoa extends EntityAetherAnimal implements Mount
     {
         if (var1)
         {
-            this.dataWatcher.updateObject(16, Byte.valueOf((byte) 1));
+            this.dataWatcher.updateObject(16, Byte.valueOf((byte)1));
             this.health = this.getMaxHealth();
-        } else
+        }
+        else
         {
-            this.dataWatcher.updateObject(16, Byte.valueOf((byte) 0));
+            this.dataWatcher.updateObject(16, Byte.valueOf((byte)0));
         }
     }
 
@@ -522,10 +534,11 @@ public class EntityMoa extends EntityAetherAnimal implements Mount
     {
         if (var1)
         {
-            this.dataWatcher.updateObject(17, Byte.valueOf((byte) 1));
-        } else
+            this.dataWatcher.updateObject(17, Byte.valueOf((byte)1));
+        }
+        else
         {
-            this.dataWatcher.updateObject(17, Byte.valueOf((byte) 0));
+            this.dataWatcher.updateObject(17, Byte.valueOf((byte)0));
         }
     }
 
@@ -538,10 +551,11 @@ public class EntityMoa extends EntityAetherAnimal implements Mount
     {
         if (var1)
         {
-            this.dataWatcher.updateObject(18, Byte.valueOf((byte) 1));
-        } else
+            this.dataWatcher.updateObject(18, Byte.valueOf((byte)1));
+        }
+        else
         {
-            this.dataWatcher.updateObject(18, Byte.valueOf((byte) 0));
+            this.dataWatcher.updateObject(18, Byte.valueOf((byte)0));
         }
     }
 
@@ -567,7 +581,7 @@ public class EntityMoa extends EntityAetherAnimal implements Mount
 
     public void setColour(AetherMoaColour var1)
     {
-        this.dataWatcher.updateObject(20, Short.valueOf((short) var1.ID));
+        this.dataWatcher.updateObject(20, Short.valueOf((short)var1.ID));
     }
 
     public boolean isWellFed()
@@ -579,10 +593,11 @@ public class EntityMoa extends EntityAetherAnimal implements Mount
     {
         if (var1)
         {
-            this.dataWatcher.updateObject(21, Byte.valueOf((byte) 1));
-        } else
+            this.dataWatcher.updateObject(21, Byte.valueOf((byte)1));
+        }
+        else
         {
-            this.dataWatcher.updateObject(21, Byte.valueOf((byte) 0));
+            this.dataWatcher.updateObject(21, Byte.valueOf((byte)0));
         }
     }
 
@@ -664,8 +679,7 @@ public class EntityMoa extends EntityAetherAnimal implements Mount
     /**
      * Called when the mob is falling. Calculates and applies fall damage.
      */
-    protected void fall(float var1)
-    {}
+    protected void fall(float var1) {}
 
     public int getMaxHealth()
     {

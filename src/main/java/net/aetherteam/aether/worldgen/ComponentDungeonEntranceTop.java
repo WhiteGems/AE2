@@ -2,7 +2,6 @@ package net.aetherteam.aether.worldgen;
 
 import java.util.List;
 import java.util.Random;
-
 import net.aetherteam.aether.blocks.AetherBlocks;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.structure.StructureBoundingBox;
@@ -61,8 +60,8 @@ public class ComponentDungeonEntranceTop extends ComponentDungeonBronzeEntrance
         this.fillWithBlocks(var1, var3, this.boundingBox.minX, this.boundingBox.minY, this.boundingBox.minZ, this.boundingBox.maxX, this.boundingBox.maxY, this.boundingBox.maxZ, AetherBlocks.LockedDungeonStone.blockID, 0, false);
         this.fillWithBlocks(var1, var3, this.boundingBox.minX + 1, this.boundingBox.minY + 1, this.boundingBox.minZ + 1, this.boundingBox.maxX - 1, this.boundingBox.maxY - 1, this.boundingBox.maxZ - 1, 0, 0, false);
         int var4 = (this.boundingBox.maxY - this.boundingBox.minY) / 5;
-        int var6;
         int var5;
+        int var6;
 
         for (var5 = 1; var5 < var4; ++var5)
         {
@@ -189,7 +188,8 @@ public class ComponentDungeonEntranceTop extends ComponentDungeonBronzeEntrance
         if (var1.nextInt(8) != 0)
         {
             var9 = new StructureBoundingBox(var2, var3, var4, var2, var3 + var8, var4);
-        } else
+        }
+        else
         {
             var9 = new StructureBoundingBox(var2, var3 - var8 + 4, var4, var2, var3 + 4, var4);
         }

@@ -1,12 +1,14 @@
 package net.aetherteam.aether.blocks;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import java.util.Iterator;
 import java.util.Random;
-
 import net.aetherteam.aether.tile_entities.TileEntitySkyrootChest;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
+import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.item.EntityItem;
@@ -77,16 +79,20 @@ public class BlockSkyrootChest extends BlockContainer
         if (var1.getBlockId(var2, var3, var4 - 1) == this.blockID)
         {
             this.setBlockBounds(0.0625F, 0.0F, 0.0F, 0.9375F, 0.875F, 0.9375F);
-        } else if (var1.getBlockId(var2, var3, var4 + 1) == this.blockID)
+        }
+        else if (var1.getBlockId(var2, var3, var4 + 1) == this.blockID)
         {
             this.setBlockBounds(0.0625F, 0.0F, 0.0625F, 0.9375F, 0.875F, 1.0F);
-        } else if (var1.getBlockId(var2 - 1, var3, var4) == this.blockID)
+        }
+        else if (var1.getBlockId(var2 - 1, var3, var4) == this.blockID)
         {
             this.setBlockBounds(0.0F, 0.0F, 0.0625F, 0.9375F, 0.875F, 0.9375F);
-        } else if (var1.getBlockId(var2 + 1, var3, var4) == this.blockID)
+        }
+        else if (var1.getBlockId(var2 + 1, var3, var4) == this.blockID)
         {
             this.setBlockBounds(0.0625F, 0.0F, 0.0625F, 1.0F, 0.875F, 0.9375F);
-        } else
+        }
+        else
         {
             this.setBlockBounds(0.0625F, 0.0F, 0.0625F, 0.9375F, 0.875F, 0.9375F);
         }
@@ -135,7 +141,7 @@ public class BlockSkyrootChest extends BlockContainer
         int var9 = var1.getBlockId(var2 - 1, var3, var4);
         int var10 = var1.getBlockId(var2 + 1, var3, var4);
         byte var11 = 0;
-        int var12 = MathHelper.floor_double((double) (var5.rotationYaw * 4.0F / 360.0F) + 0.5D) & 3;
+        int var12 = MathHelper.floor_double((double)(var5.rotationYaw * 4.0F / 360.0F) + 0.5D) & 3;
 
         if (var12 == 0)
         {
@@ -160,14 +166,16 @@ public class BlockSkyrootChest extends BlockContainer
         if (var7 != this.blockID && var8 != this.blockID && var9 != this.blockID && var10 != this.blockID)
         {
             var1.setBlockMetadataWithNotify(var2, var3, var4, var11, 3);
-        } else
+        }
+        else
         {
             if ((var7 == this.blockID || var8 == this.blockID) && (var11 == 4 || var11 == 5))
             {
                 if (var7 == this.blockID)
                 {
                     var1.setBlockMetadataWithNotify(var2, var3, var4 - 1, var11, 3);
-                } else
+                }
+                else
                 {
                     var1.setBlockMetadataWithNotify(var2, var3, var4 + 1, var11, 3);
                 }
@@ -180,7 +188,8 @@ public class BlockSkyrootChest extends BlockContainer
                 if (var9 == this.blockID)
                 {
                     var1.setBlockMetadataWithNotify(var2 - 1, var3, var4, var11, 3);
-                } else
+                }
+                else
                 {
                     var1.setBlockMetadataWithNotify(var2 + 1, var3, var4, var11, 3);
                 }
@@ -201,9 +210,9 @@ public class BlockSkyrootChest extends BlockContainer
             boolean var9 = true;
             int var10;
             int var11;
-            int var14;
             boolean var12;
             byte var13;
+            int var14;
 
             if (var5 != this.blockID && var6 != this.blockID)
             {
@@ -230,7 +239,8 @@ public class BlockSkyrootChest extends BlockContainer
                     {
                         var13 = 4;
                     }
-                } else
+                }
+                else
                 {
                     var10 = var1.getBlockId(var7 == this.blockID ? var2 - 1 : var2 + 1, var3, var4 - 1);
                     var11 = var1.getBlockId(var7 == this.blockID ? var2 - 1 : var2 + 1, var3, var4 + 1);
@@ -240,7 +250,8 @@ public class BlockSkyrootChest extends BlockContainer
                     if (var7 == this.blockID)
                     {
                         var14 = var1.getBlockMetadata(var2 - 1, var3, var4);
-                    } else
+                    }
+                    else
                     {
                         var14 = var1.getBlockMetadata(var2 + 1, var3, var4);
                     }
@@ -260,7 +271,8 @@ public class BlockSkyrootChest extends BlockContainer
                         var13 = 2;
                     }
                 }
-            } else
+            }
+            else
             {
                 var10 = var1.getBlockId(var2 - 1, var3, var5 == this.blockID ? var4 - 1 : var4 + 1);
                 var11 = var1.getBlockId(var2 + 1, var3, var5 == this.blockID ? var4 - 1 : var4 + 1);
@@ -270,7 +282,8 @@ public class BlockSkyrootChest extends BlockContainer
                 if (var5 == this.blockID)
                 {
                     var14 = var1.getBlockMetadata(var2, var3, var4 - 1);
-                } else
+                }
+                else
                 {
                     var14 = var1.getBlockMetadata(var2, var3, var4 + 1);
                 }
@@ -337,7 +350,7 @@ public class BlockSkyrootChest extends BlockContainer
     public void onNeighborBlockChange(World var1, int var2, int var3, int var4, int var5)
     {
         super.onNeighborBlockChange(var1, var2, var3, var4, var5);
-        TileEntitySkyrootChest var6 = (TileEntitySkyrootChest) var1.getBlockTileEntity(var2, var3, var4);
+        TileEntitySkyrootChest var6 = (TileEntitySkyrootChest)var1.getBlockTileEntity(var2, var3, var4);
 
         if (var6 != null)
         {
@@ -350,7 +363,7 @@ public class BlockSkyrootChest extends BlockContainer
      */
     public void breakBlock(World var1, int var2, int var3, int var4, int var5, int var6)
     {
-        TileEntitySkyrootChest var7 = (TileEntitySkyrootChest) var1.getBlockTileEntity(var2, var3, var4);
+        TileEntitySkyrootChest var7 = (TileEntitySkyrootChest)var1.getBlockTileEntity(var2, var3, var4);
 
         if (var7 != null)
         {
@@ -374,15 +387,15 @@ public class BlockSkyrootChest extends BlockContainer
                         }
 
                         var9.stackSize -= var14;
-                        var12 = new EntityItem(var1, (double) ((float) var2 + var10), (double) ((float) var3 + var11), (double) ((float) var4 + var13), new ItemStack(var9.itemID, var14, var9.getItemDamage()));
+                        var12 = new EntityItem(var1, (double)((float)var2 + var10), (double)((float)var3 + var11), (double)((float)var4 + var13), new ItemStack(var9.itemID, var14, var9.getItemDamage()));
                         float var15 = 0.05F;
-                        var12.motionX = (double) ((float) this.random.nextGaussian() * var15);
-                        var12.motionY = (double) ((float) this.random.nextGaussian() * var15 + 0.2F);
-                        var12.motionZ = (double) ((float) this.random.nextGaussian() * var15);
+                        var12.motionX = (double)((float)this.random.nextGaussian() * var15);
+                        var12.motionY = (double)((float)this.random.nextGaussian() * var15 + 0.2F);
+                        var12.motionZ = (double)((float)this.random.nextGaussian() * var15);
 
                         if (var9.hasTagCompound())
                         {
-                            var12.getEntityItem().setTagCompound((NBTTagCompound) var9.getTagCompound().copy());
+                            var12.getEntityItem().setTagCompound((NBTTagCompound)var9.getTagCompound().copy());
                         }
                     }
                 }
@@ -402,7 +415,8 @@ public class BlockSkyrootChest extends BlockContainer
         if (var1.isRemote)
         {
             return true;
-        } else
+        }
+        else
         {
             IInventory var10 = this.getInventory(var1, var2, var3, var4);
 
@@ -421,53 +435,71 @@ public class BlockSkyrootChest extends BlockContainer
      */
     public IInventory getInventory(World var1, int var2, int var3, int var4)
     {
-        Object var5 = (TileEntitySkyrootChest) var1.getBlockTileEntity(var2, var3, var4);
+        Object var5 = (TileEntitySkyrootChest)var1.getBlockTileEntity(var2, var3, var4);
 
         if (var5 == null)
         {
             return null;
-        } else if (var1.isBlockSolidOnSide(var2, var3 + 1, var4, ForgeDirection.DOWN))
+        }
+        else if (var1.isBlockSolidOnSide(var2, var3 + 1, var4, ForgeDirection.DOWN))
         {
             return null;
-        } else if (isOcelotBlockingChest(var1, var2, var3, var4))
+        }
+        else if (isOcelotBlockingChest(var1, var2, var3, var4))
         {
             return null;
-        } else if (var1.getBlockId(var2 - 1, var3, var4) == this.blockID && (var1.isBlockSolidOnSide(var2 - 1, var3 + 1, var4, ForgeDirection.DOWN) || isOcelotBlockingChest(var1, var2 - 1, var3, var4)))
+        }
+        else if (var1.getBlockId(var2 - 1, var3, var4) == this.blockID && (var1.isBlockSolidOnSide(var2 - 1, var3 + 1, var4, ForgeDirection.DOWN) || isOcelotBlockingChest(var1, var2 - 1, var3, var4)))
         {
             return null;
-        } else if (var1.getBlockId(var2 + 1, var3, var4) == this.blockID && (var1.isBlockSolidOnSide(var2 + 1, var3 + 1, var4, ForgeDirection.DOWN) || isOcelotBlockingChest(var1, var2 + 1, var3, var4)))
+        }
+        else if (var1.getBlockId(var2 + 1, var3, var4) == this.blockID && (var1.isBlockSolidOnSide(var2 + 1, var3 + 1, var4, ForgeDirection.DOWN) || isOcelotBlockingChest(var1, var2 + 1, var3, var4)))
         {
             return null;
-        } else if (var1.getBlockId(var2, var3, var4 - 1) == this.blockID && (var1.isBlockSolidOnSide(var2, var3 + 1, var4 - 1, ForgeDirection.DOWN) || isOcelotBlockingChest(var1, var2, var3, var4 - 1)))
+        }
+        else if (var1.getBlockId(var2, var3, var4 - 1) == this.blockID && (var1.isBlockSolidOnSide(var2, var3 + 1, var4 - 1, ForgeDirection.DOWN) || isOcelotBlockingChest(var1, var2, var3, var4 - 1)))
         {
             return null;
-        } else if (var1.getBlockId(var2, var3, var4 + 1) == this.blockID && (var1.isBlockSolidOnSide(var2, var3 + 1, var4 + 1, ForgeDirection.DOWN) || isOcelotBlockingChest(var1, var2, var3, var4 + 1)))
+        }
+        else if (var1.getBlockId(var2, var3, var4 + 1) == this.blockID && (var1.isBlockSolidOnSide(var2, var3 + 1, var4 + 1, ForgeDirection.DOWN) || isOcelotBlockingChest(var1, var2, var3, var4 + 1)))
         {
             return null;
-        } else
+        }
+        else
         {
             if (var1.getBlockId(var2 - 1, var3, var4) == this.blockID)
             {
-                var5 = new InventoryLargeChest("container.chestDouble", (TileEntitySkyrootChest) var1.getBlockTileEntity(var2 - 1, var3, var4), (IInventory) var5);
+                var5 = new InventoryLargeChest("container.chestDouble", (TileEntitySkyrootChest)var1.getBlockTileEntity(var2 - 1, var3, var4), (IInventory)var5);
             }
 
             if (var1.getBlockId(var2 + 1, var3, var4) == this.blockID)
             {
-                var5 = new InventoryLargeChest("container.chestDouble", (IInventory) var5, (TileEntitySkyrootChest) var1.getBlockTileEntity(var2 + 1, var3, var4));
+                var5 = new InventoryLargeChest("container.chestDouble", (IInventory)var5, (TileEntitySkyrootChest)var1.getBlockTileEntity(var2 + 1, var3, var4));
             }
 
             if (var1.getBlockId(var2, var3, var4 - 1) == this.blockID)
             {
-                var5 = new InventoryLargeChest("container.chestDouble", (TileEntitySkyrootChest) var1.getBlockTileEntity(var2, var3, var4 - 1), (IInventory) var5);
+                var5 = new InventoryLargeChest("container.chestDouble", (TileEntitySkyrootChest)var1.getBlockTileEntity(var2, var3, var4 - 1), (IInventory)var5);
             }
 
             if (var1.getBlockId(var2, var3, var4 + 1) == this.blockID)
             {
-                var5 = new InventoryLargeChest("container.chestDouble", (IInventory) var5, (TileEntitySkyrootChest) var1.getBlockTileEntity(var2, var3, var4 + 1));
+                var5 = new InventoryLargeChest("container.chestDouble", (IInventory)var5, (TileEntitySkyrootChest)var1.getBlockTileEntity(var2, var3, var4 + 1));
             }
 
-            return (IInventory) var5;
+            return (IInventory)var5;
         }
+    }
+
+    @SideOnly(Side.CLIENT)
+
+    /**
+     * When this method is called, your block should register all the icons it needs with the given IconRegister. This
+     * is the only chance you get to register icons.
+     */
+    public void registerIcons(IconRegister var1)
+    {
+        this.blockIcon = var1.registerIcon("Aether:Skyroot Plank");
     }
 
     /**
@@ -497,9 +529,10 @@ public class BlockSkyrootChest extends BlockContainer
         if (!this.canProvidePower())
         {
             return 0;
-        } else
+        }
+        else
         {
-            int var6 = ((TileEntitySkyrootChest) var1.getBlockTileEntity(var2, var3, var4)).numUsingPlayers;
+            int var6 = ((TileEntitySkyrootChest)var1.getBlockTileEntity(var2, var3, var4)).numUsingPlayers;
             return MathHelper.clamp_int(var6, 0, 15);
         }
     }
@@ -515,11 +548,11 @@ public class BlockSkyrootChest extends BlockContainer
 
     public static boolean isOcelotBlockingChest(World var0, int var1, int var2, int var3)
     {
-        Iterator var4 = var0.getEntitiesWithinAABB(EntityOcelot.class, AxisAlignedBB.getAABBPool().getAABB((double) var1, (double) (var2 + 1), (double) var3, (double) (var1 + 1), (double) (var2 + 2), (double) (var3 + 1))).iterator();
+        Iterator var4 = var0.getEntitiesWithinAABB(EntityOcelot.class, AxisAlignedBB.getAABBPool().getAABB((double)var1, (double)(var2 + 1), (double)var3, (double)(var1 + 1), (double)(var2 + 2), (double)(var3 + 1))).iterator();
 
         while (var4.hasNext())
         {
-            EntityOcelot var6 = (EntityOcelot) var4.next();
+            EntityOcelot var6 = (EntityOcelot)var4.next();
 
             if (var6.isSitting())
             {

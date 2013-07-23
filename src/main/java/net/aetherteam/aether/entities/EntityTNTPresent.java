@@ -22,10 +22,10 @@ public class EntityTNTPresent extends Entity
     {
         this(var1);
         this.setPosition(var2, var4, var6);
-        float var8 = (float) (Math.random() * Math.PI * 2.0D);
-        this.motionX = (double) (-MathHelper.sin(var8 * (float) Math.PI / 180.0F) * 0.02F);
+        float var8 = (float)(Math.random() * Math.PI * 2.0D);
+        this.motionX = (double)(-MathHelper.sin(var8 * (float)Math.PI / 180.0F) * 0.02F);
         this.motionY = 0.20000000298023224D;
-        this.motionZ = (double) (-MathHelper.cos(var8 * (float) Math.PI / 180.0F) * 0.02F);
+        this.motionZ = (double)(-MathHelper.cos(var8 * (float)Math.PI / 180.0F) * 0.02F);
         this.fuse = 80;
         this.prevPosX = var2;
         this.prevPosY = var4;
@@ -79,7 +79,8 @@ public class EntityTNTPresent extends Entity
                 this.setDead();
                 this.explode();
             }
-        } else
+        }
+        else
         {
             this.worldObj.spawnParticle("smoke", this.posX, this.posY + 0.5D, this.posZ, 0.0D, 0.0D, 0.0D);
         }
@@ -88,7 +89,7 @@ public class EntityTNTPresent extends Entity
     private void explode()
     {
         float var1 = 0.5F;
-        this.worldObj.createExplosion((Entity) null, this.posX, this.posY, this.posZ, var1, false);
+        this.worldObj.createExplosion((Entity)null, this.posX, this.posY, this.posZ, var1, false);
     }
 
     /**
@@ -96,7 +97,7 @@ public class EntityTNTPresent extends Entity
      */
     protected void writeEntityToNBT(NBTTagCompound var1)
     {
-        var1.setByte("Fuse", (byte) this.fuse);
+        var1.setByte("Fuse", (byte)this.fuse);
     }
 
     /**

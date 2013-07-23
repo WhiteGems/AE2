@@ -1,7 +1,6 @@
 package net.aetherteam.aether.entities;
 
 import java.util.List;
-
 import net.aetherteam.aether.blocks.AetherBlocks;
 import net.aetherteam.aether.blocks.BlockFloating;
 import net.minecraft.block.Block;
@@ -114,7 +113,8 @@ public class EntityFloatingBlock extends Entity
         if (this.getBlockID() == 0)
         {
             this.setDead();
-        } else
+        }
+        else
         {
             this.prevPosX = this.posX;
             this.prevPosY = this.posY;
@@ -163,7 +163,8 @@ public class EntityFloatingBlock extends Entity
                         this.worldObj.spawnEntityInWorld(new EntityItem(this.worldObj, this.posX, this.posY, this.posZ, var6));
                     }
                 }
-            } else if (this.flytime > 100)
+            }
+            else if (this.flytime > 100)
             {
                 var6 = new ItemStack(this.getBlockID(), 1, this.getMetadata());
 

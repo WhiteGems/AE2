@@ -1,6 +1,5 @@
 package net.aetherteam.aether.notifications;
 
-import net.aetherteam.aether.notifications.actions.NotificationAction;
 import net.aetherteam.aether.notifications.description.NotificationContents;
 
 public class Notification
@@ -10,20 +9,20 @@ public class Notification
     private String receiverName;
     private NotificationType type;
 
-    public Notification(NotificationType type, String senderName, String receiverName)
+    public Notification(NotificationType var1, String var2, String var3)
     {
         this.headerText = "Notification Received!";
-        this.senderName = senderName;
-        this.receiverName = receiverName;
-        this.type = type;
+        this.senderName = var2;
+        this.receiverName = var3;
+        this.type = var1;
     }
 
-    public Notification(NotificationType type, String headerText, String senderName, String receiverName)
+    public Notification(NotificationType var1, String var2, String var3, String var4)
     {
-        this.headerText = headerText;
-        this.senderName = senderName;
-        this.receiverName = receiverName;
-        this.type = type;
+        this.headerText = var2;
+        this.senderName = var3;
+        this.receiverName = var4;
+        this.type = var1;
     }
 
     public String getHeaderText()
@@ -56,16 +55,15 @@ public class Notification
         return this.type;
     }
 
-    public void executeAction(boolean accept)
+    public void executeAction(boolean var1)
     {
-        if (accept)
+        if (var1)
         {
             this.type.action.executeAccept(this);
-        } else this.type.action.executeDecline(this);
+        }
+        else
+        {
+            this.type.action.executeDecline(this);
+        }
     }
 }
-
-/* Location:           D:\Dev\Mc\forge_orl\mcp\jars\bin\aether.jar
- * Qualified Name:     net.aetherteam.aether.notifications.Notification
- * JD-Core Version:    0.6.2
- */

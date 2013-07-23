@@ -1,7 +1,6 @@
 package net.aetherteam.aether.entities.mounts;
 
 import java.util.Random;
-
 import net.aetherteam.aether.Aether;
 import net.aetherteam.aether.blocks.AetherBlocks;
 import net.aetherteam.aether.entities.EntityAetherAnimal;
@@ -133,7 +132,8 @@ public class EntityAerbunny extends EntityAetherAnimal implements Ridable
         {
             this.jumps = 1;
             this.jumpTicks = 10;
-        } else if (this.jumpTicks > 0)
+        }
+        else if (this.jumpTicks > 0)
         {
             --this.jumpTicks;
         }
@@ -155,8 +155,7 @@ public class EntityAerbunny extends EntityAetherAnimal implements Ridable
     /**
      * Called when the mob is falling. Calculates and applies fall damage.
      */
-    protected void fall(float var1)
-    {}
+    protected void fall(float var1) {}
 
     /**
      * Checks if this entity is inside of an opaque block
@@ -173,8 +172,8 @@ public class EntityAerbunny extends EntityAetherAnimal implements Ridable
     {
         super.writeEntityToNBT(var1);
         var1.setBoolean("Fear", this.fear);
-        var1.setShort("RepAge", (short) this.age);
-        var1.setShort("RepMate", (short) this.mate);
+        var1.setShort("RepAge", (short)this.age);
+        var1.setShort("RepMate", (short)this.mate);
     }
 
     /**
@@ -198,8 +197,8 @@ public class EntityAerbunny extends EntityAetherAnimal implements Ridable
 
     public void cloudPoop()
     {
-        double var1 = (double) (this.rand.nextFloat() - 0.5F);
-        double var5 = (double) (this.rand.nextFloat() - 0.5F);
+        double var1 = (double)(this.rand.nextFloat() - 0.5F);
+        double var5 = (double)(this.rand.nextFloat() - 0.5F);
         double var7 = this.posX + var1 * 0.4000000059604645D;
         double var9 = this.boundingBox.minY;
         double var11 = this.posZ + var1 * 0.4000000059604645D;
@@ -234,13 +233,15 @@ public class EntityAerbunny extends EntityAetherAnimal implements Ridable
         if (var2 != null && this.isWheat(var2))
         {
             return super.interact(var1);
-        } else
+        }
+        else
         {
             if (this.riddenByEntity == null && !this.getRidingHandler().isBeingRidden())
             {
                 this.getRidingHandler().setRider(var1);
                 this.worldObj.playSoundAtEntity(this, "aemob.aerbunny.lift", 1.0F, (this.rand.nextFloat() - this.rand.nextFloat()) * 0.2F + 1.0F);
-            } else
+            }
+            else
             {
                 this.getRidingHandler().onUnMount();
             }

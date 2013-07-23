@@ -2,9 +2,7 @@ package net.aetherteam.aether.items;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
-
 import java.util.ArrayList;
-
 import net.aetherteam.aether.client.gui.GuiLore;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -14,7 +12,7 @@ import net.minecraft.world.World;
 
 public class ItemLoreBook extends ItemAether
 {
-    public static final String[] names = new String[]{"Golden Gummie Swet", "Blue Gummie Swet"};
+    public static final String[] names = new String[] {"Golden Gummie Swet", "Blue Gummie Swet"};
     @SideOnly(Side.CLIENT)
     private Icon[] icons;
 

@@ -53,7 +53,8 @@ public class BlockSkyrootWorkbench extends BlockWorkbench
         if (var1.isRemote)
         {
             return true;
-        } else
+        }
+        else
         {
             int var10 = AetherGuiHandler.craftingID;
             var5.openGui(Aether.instance, var10, var1, var2, var3, var4);

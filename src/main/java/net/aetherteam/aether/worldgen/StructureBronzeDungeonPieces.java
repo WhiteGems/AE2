@@ -3,7 +3,6 @@ package net.aetherteam.aether.worldgen;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
-
 import net.minecraft.world.gen.structure.StructureBoundingBox;
 import net.minecraft.world.gen.structure.StructureComponent;
 
@@ -15,7 +14,7 @@ public class StructureBronzeDungeonPieces
 
         while (var2.hasNext())
         {
-            StructureComponent var3 = (StructureComponent) var2.next();
+            StructureComponent var3 = (StructureComponent)var2.next();
 
             if (var1.isInstance(var3))
             {
@@ -52,11 +51,11 @@ public class StructureBronzeDungeonPieces
 
             if (var10 != null && numberOfCertainRoom(var2, ComponentDungeonBronzeCog.class) < 1)
             {
-                ComponentDungeonBronzeCog var16 = new ComponentDungeonBronzeCog(var8, var1, var0, var3, var10, var7);
+                ComponentDungeonBronzeCog var12 = new ComponentDungeonBronzeCog(var8, var1, var0, var3, var10, var7);
 
-                if (doRoomsHaveIntersectingEntrances(var1, var16))
+                if (doRoomsHaveIntersectingEntrances(var1, var12))
                 {
-                    return var16;
+                    return var12;
                 }
             }
         }
@@ -82,14 +81,15 @@ public class StructureBronzeDungeonPieces
 
             if (var10 != null && numberOfCertainRoom(var2, ComponentDungeonBronzeHost.class) < 2)
             {
-                ComponentDungeonBronzeHost var14 = new ComponentDungeonBronzeHost(var8, var1, var0, var3, var10, var7);
+                ComponentDungeonBronzeHost var16 = new ComponentDungeonBronzeHost(var8, var1, var0, var3, var10, var7);
 
-                if (doRoomsHaveIntersectingEntrances(var1, var14))
+                if (doRoomsHaveIntersectingEntrances(var1, var16))
                 {
-                    return var14;
+                    return var16;
                 }
             }
-        } else if (var9 < 30)
+        }
+        else if (var9 < 30)
         {
             var10 = ComponentDungeonCorridor.findValidPlacement(var2, var3, var4, var5, var6, var7);
 
@@ -102,20 +102,22 @@ public class StructureBronzeDungeonPieces
                     return var13;
                 }
             }
-        } else if (var9 < 50)
+        }
+        else if (var9 < 50)
         {
             var10 = ComponentDungeonBronzeChest.findValidPlacement(var2, var3, var4, var5, var6, var7);
 
             if (var10 != null)
             {
-                ComponentDungeonBronzeChest var12 = new ComponentDungeonBronzeChest(var8, var1, var0, var3, var10, var7);
+                ComponentDungeonBronzeChest var14 = new ComponentDungeonBronzeChest(var8, var1, var0, var3, var10, var7);
 
-                if (doRoomsHaveIntersectingEntrances(var1, var12))
+                if (doRoomsHaveIntersectingEntrances(var1, var14))
                 {
-                    return var12;
+                    return var14;
                 }
             }
-        } else if (var9 < 70)
+        }
+        else if (var9 < 70)
         {
             if (!(var1 instanceof ComponentDungeonStair))
             {
@@ -123,25 +125,26 @@ public class StructureBronzeDungeonPieces
 
                 if (var10 != null)
                 {
-                    ComponentDungeonStair var18 = new ComponentDungeonStair(var8, var1, var0, var3, var10, var7);
+                    ComponentDungeonStair var17 = new ComponentDungeonStair(var8, var1, var0, var3, var10, var7);
 
-                    if (doRoomsHaveIntersectingEntrances(var1, var18))
+                    if (doRoomsHaveIntersectingEntrances(var1, var17))
                     {
-                        return var18;
+                        return var17;
                     }
                 }
             }
-        } else if (var9 >= 70)
+        }
+        else if (var9 >= 70)
         {
             var10 = ComponentDungeonBronzeLight.findValidPlacement(var2, var3, var4, var5, var6, var7);
 
             if (var10 != null)
             {
-                ComponentDungeonBronzeLight var17 = new ComponentDungeonBronzeLight(var8, var1, var0, var3, var10, var7);
+                ComponentDungeonBronzeLight var18 = new ComponentDungeonBronzeLight(var8, var1, var0, var3, var10, var7);
 
-                if (doRoomsHaveIntersectingEntrances(var1, var17))
+                if (doRoomsHaveIntersectingEntrances(var1, var18))
                 {
-                    return var17;
+                    return var18;
                 }
             }
         }
@@ -156,7 +159,7 @@ public class StructureBronzeDungeonPieces
 
         while (var2.hasNext())
         {
-            StructureComponent var3 = (StructureComponent) var2.next();
+            StructureComponent var3 = (StructureComponent)var2.next();
 
             if (var1.isInstance(var3))
             {
@@ -173,12 +176,12 @@ public class StructureBronzeDungeonPieces
 
         while (var2.hasNext())
         {
-            StructureBoundingBox var3 = (StructureBoundingBox) var2.next();
+            StructureBoundingBox var3 = (StructureBoundingBox)var2.next();
             Iterator var4 = var1.entrances.iterator();
 
             while (var4.hasNext())
             {
-                StructureBoundingBox var5 = findIntercetingCube(var3, (StructureBoundingBox) var4.next());
+                StructureBoundingBox var5 = findIntercetingCube(var3, (StructureBoundingBox)var4.next());
 
                 if (var5 != null)
                 {
@@ -206,9 +209,10 @@ public class StructureBronzeDungeonPieces
         if (var8 > 8)
         {
             return null;
-        } else if (Math.abs(var4 - var0.X) <= 80 && Math.abs(var6 - var0.Z) <= 80)
+        }
+        else if (Math.abs(var4 - var0.X) <= 80 && Math.abs(var6 - var0.Z) <= 80)
         {
-            StructureComponent var9 = getRandomComponent(var0, (ComponentDungeonBronzeRoom) var1, var2, var3, var4, var5, var6, var7, var8 + 1);
+            StructureComponent var9 = getRandomComponent(var0, (ComponentDungeonBronzeRoom)var1, var2, var3, var4, var5, var6, var7, var8 + 1);
 
             if (var9 != null)
             {
@@ -216,7 +220,8 @@ public class StructureBronzeDungeonPieces
             }
 
             return var9;
-        } else
+        }
+        else
         {
             return null;
         }

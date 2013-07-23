@@ -1,10 +1,20 @@
 package net.aetherteam.aether.entities;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import java.util.Random;
-
+import net.aetherteam.aether.entities.ai.EntityAIEatAetherGrass;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockCloth;
 import net.minecraft.entity.EntityAgeable;
+import net.minecraft.entity.ai.EntityAIFollowParent;
+import net.minecraft.entity.ai.EntityAILookIdle;
+import net.minecraft.entity.ai.EntityAIMate;
+import net.minecraft.entity.ai.EntityAIPanic;
+import net.minecraft.entity.ai.EntityAISwimming;
+import net.minecraft.entity.ai.EntityAITempt;
+import net.minecraft.entity.ai.EntityAIWander;
+import net.minecraft.entity.ai.EntityAIWatchClosest;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.passive.EntityAnimal;
 import net.minecraft.entity.player.EntityPlayer;
@@ -16,7 +26,9 @@ import net.minecraft.world.World;
 
 public class EntitySheepuff extends EntityAetherAnimal
 {
-    public static final float[][] fleeceColorTable = new float[][]{{1.0F, 1.0F, 1.0F}, {0.975F, 0.85F, 0.6F}, {0.95F, 0.75F, 0.925F}, {0.8F, 0.85F, 0.975F}, {0.95F, 0.95F, 0.6F}, {0.75F, 0.9F, 0.55F}, {0.975F, 0.85F, 0.9F}, {0.65F, 0.65F, 0.65F}, {0.8F, 0.8F, 0.8F}, {0.65F, 0.8F, 0.85F}, {0.85F, 0.7F, 0.95F}, {0.6F, 0.7F, 0.9F}, {0.75F, 0.7F, 0.65F}, {0.7F, 0.75F, 0.6F}, {0.9F, 0.65F, 0.65F}, {0.55F, 0.55F, 0.55F}};
+    private EntityAIEatAetherGrass aiEatGrass = new EntityAIEatAetherGrass(this);
+    private int sheepTimer;
+    public static final float[][] fleeceColorTable = new float[][] {{1.0F, 1.0F, 1.0F}, {0.975F, 0.85F, 0.6F}, {0.95F, 0.75F, 0.925F}, {0.8F, 0.85F, 0.975F}, {0.95F, 0.95F, 0.6F}, {0.75F, 0.9F, 0.55F}, {0.975F, 0.85F, 0.9F}, {0.65F, 0.65F, 0.65F}, {0.8F, 0.8F, 0.8F}, {0.65F, 0.8F, 0.85F}, {0.85F, 0.7F, 0.95F}, {0.6F, 0.7F, 0.9F}, {0.75F, 0.7F, 0.65F}, {0.7F, 0.75F, 0.6F}, {0.9F, 0.65F, 0.65F}, {0.55F, 0.55F, 0.55F}};
     private int amountEaten;
 
     public EntitySheepuff(World var1)
@@ -25,13 +37,37 @@ public class EntitySheepuff extends EntityAetherAnimal
         this.texture = this.dir + "/mobs/sheepuff/sheepuff.png";
         this.setSize(0.9F, 1.3F);
         this.setFleeceColor(getRandomFleeceColor(this.rand));
+        float var2 = 0.23F;
+        this.tasks.addTask(0, new EntityAISwimming(this));
+        this.tasks.addTask(1, new EntityAIPanic(this, 0.38F));
+        this.tasks.addTask(2, new EntityAIMate(this, var2));
+        this.tasks.addTask(3, new EntityAITempt(this, 0.25F, Item.wheat.itemID, false));
+        this.tasks.addTask(4, new EntityAIFollowParent(this, 0.25F));
+        this.tasks.addTask(5, this.aiEatGrass);
+        this.tasks.addTask(6, new EntityAIWander(this, var2));
+        this.tasks.addTask(7, new EntityAIWatchClosest(this, EntityPlayer.class, 6.0F));
+        this.tasks.addTask(8, new EntityAILookIdle(this));
         this.amountEaten = 0;
+    }
+
+    /**
+     * Returns true if the newer Entity AI code should be run
+     */
+    protected boolean isAIEnabled()
+    {
+        return true;
+    }
+
+    protected void updateAITasks()
+    {
+        this.sheepTimer = this.aiEatGrass.getEatGrassTick();
+        super.updateAITasks();
     }
 
     protected void entityInit()
     {
         super.entityInit();
-        this.dataWatcher.addObject(16, new Byte((byte) 0));
+        this.dataWatcher.addObject(16, new Byte((byte)0));
     }
 
     /**
@@ -66,7 +102,8 @@ public class EntitySheepuff extends EntityAetherAnimal
         if (var2 != null && this.isWheat(var2))
         {
             return super.interact(var1);
-        } else
+        }
+        else
         {
             int var3;
 
@@ -85,11 +122,12 @@ public class EntitySheepuff extends EntityAetherAnimal
                         for (var4 = 0; var4 < var3; ++var4)
                         {
                             var5 = this.entityDropItem(new ItemStack(Block.cloth.blockID, 1, this.getFleeceColor()), 1.0F);
-                            var5.motionY += (double) (this.rand.nextFloat() * 0.05F);
-                            var5.motionX += (double) ((this.rand.nextFloat() - this.rand.nextFloat()) * 0.1F);
-                            var5.motionZ += (double) ((this.rand.nextFloat() - this.rand.nextFloat()) * 0.1F);
+                            var5.motionY += (double)(this.rand.nextFloat() * 0.05F);
+                            var5.motionX += (double)((this.rand.nextFloat() - this.rand.nextFloat()) * 0.1F);
+                            var5.motionZ += (double)((this.rand.nextFloat() - this.rand.nextFloat()) * 0.1F);
                         }
-                    } else
+                    }
+                    else
                     {
                         this.setSheared(true);
                         var3 = 2 + this.rand.nextInt(3);
@@ -97,9 +135,9 @@ public class EntitySheepuff extends EntityAetherAnimal
                         for (var4 = 0; var4 < var3; ++var4)
                         {
                             var5 = this.entityDropItem(new ItemStack(Block.cloth.blockID, 1, this.getFleeceColor()), 1.0F);
-                            var5.motionY += (double) (this.rand.nextFloat() * 0.05F);
-                            var5.motionX += (double) ((this.rand.nextFloat() - this.rand.nextFloat()) * 0.1F);
-                            var5.motionZ += (double) ((this.rand.nextFloat() - this.rand.nextFloat()) * 0.1F);
+                            var5.motionY += (double)(this.rand.nextFloat() * 0.05F);
+                            var5.motionX += (double)((this.rand.nextFloat() - this.rand.nextFloat()) * 0.1F);
+                            var5.motionZ += (double)((this.rand.nextFloat() - this.rand.nextFloat()) * 0.1F);
                         }
                     }
                 }
@@ -117,7 +155,8 @@ public class EntitySheepuff extends EntityAetherAnimal
                     {
                         this.setFleeceColor(var3);
                         var2.stackSize -= 2;
-                    } else if (!this.getPuffed())
+                    }
+                    else if (!this.getPuffed())
                     {
                         this.setFleeceColor(var3);
                         --var2.stackSize;
@@ -139,9 +178,43 @@ public class EntitySheepuff extends EntityAetherAnimal
             this.motionY = 1.8D;
             this.motionX += this.rand.nextGaussian() * 0.5D;
             this.motionZ += this.rand.nextGaussian() * 0.5D;
-        } else
+        }
+        else
         {
             this.motionY = 0.41999998688697815D;
+        }
+    }
+
+    @SideOnly(Side.CLIENT)
+    public void handleHealthUpdate(byte var1)
+    {
+        if (var1 == 10)
+        {
+            this.sheepTimer = 40;
+        }
+        else
+        {
+            super.handleHealthUpdate(var1);
+        }
+    }
+
+    @SideOnly(Side.CLIENT)
+    public float func_70894_j(float var1)
+    {
+        return this.sheepTimer <= 0 ? 0.0F : (this.sheepTimer >= 4 && this.sheepTimer <= 36 ? 1.0F : (this.sheepTimer < 4 ? ((float)this.sheepTimer - var1) / 4.0F : -((float)(this.sheepTimer - 40) - var1) / 4.0F));
+    }
+
+    @SideOnly(Side.CLIENT)
+    public float func_70890_k(float var1)
+    {
+        if (this.sheepTimer > 4 && this.sheepTimer <= 36)
+        {
+            float var2 = ((float)(this.sheepTimer - 4) - var1) / 32.0F;
+            return ((float)Math.PI / 5F) + ((float)Math.PI * 7F / 100F) * MathHelper.sin(var2 * 28.7F);
+        }
+        else
+        {
+            return this.sheepTimer > 0 ? ((float)Math.PI / 5F) : this.rotationPitch / (180F / (float)Math.PI);
         }
     }
 
@@ -151,6 +224,11 @@ public class EntitySheepuff extends EntityAetherAnimal
     public void onUpdate()
     {
         super.onUpdate();
+
+        if (this.worldObj.isRemote)
+        {
+            this.sheepTimer = Math.max(0, this.sheepTimer - 1);
+        }
 
         if (this.getPuffed())
         {
@@ -162,30 +240,9 @@ public class EntitySheepuff extends EntityAetherAnimal
             }
         }
 
-        if (this.rand.nextInt(100) == 0)
+        if (this.onGround)
         {
-            int var1 = MathHelper.floor_double(this.posX);
-            int var2 = MathHelper.floor_double(this.posY);
-            int var3 = MathHelper.floor_double(this.posZ);
-
-            if (this.worldObj.getBlockId(var1, var2 - 1, var3) == Block.grass.blockID)
-            {
-                this.worldObj.setBlock(var1, var2 - 1, var3, Block.dirt.blockID);
-                ++this.amountEaten;
-            }
-        }
-
-        if (this.amountEaten == 5 && !this.getSheared() && !this.getPuffed())
-        {
-            this.setPuffed(true);
-            this.amountEaten = 0;
-        }
-
-        if (this.amountEaten == 10 && this.getSheared() && !this.getPuffed())
-        {
-            this.setSheared(false);
-            this.setFleeceColor(0);
-            this.amountEaten = 0;
+            this.setPuffed(false);
         }
     }
 
@@ -197,7 +254,7 @@ public class EntitySheepuff extends EntityAetherAnimal
         super.writeEntityToNBT(var1);
         var1.setBoolean("Sheared", this.getSheared());
         var1.setBoolean("Puffed", this.getPuffed());
-        var1.setByte("Color", (byte) this.getFleeceColor());
+        var1.setByte("Color", (byte)this.getFleeceColor());
     }
 
     /**
@@ -209,6 +266,29 @@ public class EntitySheepuff extends EntityAetherAnimal
         this.setSheared(var1.getBoolean("Sheared"));
         this.setPuffed(var1.getBoolean("Puffed"));
         this.setFleeceColor(var1.getByte("Color"));
+    }
+
+    /**
+     * This function applies the benefits of growing back wool and faster growing up to the acting entity. (This
+     * function is used in the AIEatGrass)
+     */
+    public void eatGrassBonus()
+    {
+        this.setSheared(false);
+        this.setPuffed(true);
+        this.jump();
+
+        if (this.isChild())
+        {
+            int var1 = this.getGrowingAge() + 1200;
+
+            if (var1 > 0)
+            {
+                var1 = 0;
+            }
+
+            this.setGrowingAge(var1);
+        }
     }
 
     /**
@@ -243,7 +323,7 @@ public class EntitySheepuff extends EntityAetherAnimal
     public void setFleeceColor(int var1)
     {
         byte var2 = this.dataWatcher.getWatchableObjectByte(16);
-        this.dataWatcher.updateObject(16, Byte.valueOf((byte) (var2 & 240 | var1 & 15)));
+        this.dataWatcher.updateObject(16, Byte.valueOf((byte)(var2 & 240 | var1 & 15)));
     }
 
     public boolean getSheared()
@@ -257,10 +337,11 @@ public class EntitySheepuff extends EntityAetherAnimal
 
         if (var1)
         {
-            this.dataWatcher.updateObject(16, Byte.valueOf((byte) (var2 | 16)));
-        } else
+            this.dataWatcher.updateObject(16, Byte.valueOf((byte)(var2 | 16)));
+        }
+        else
         {
-            this.dataWatcher.updateObject(16, Byte.valueOf((byte) (var2 & -17)));
+            this.dataWatcher.updateObject(16, Byte.valueOf((byte)(var2 & -17)));
         }
     }
 
@@ -275,10 +356,11 @@ public class EntitySheepuff extends EntityAetherAnimal
 
         if (var1)
         {
-            this.dataWatcher.updateObject(16, Byte.valueOf((byte) (var2 | 32)));
-        } else
+            this.dataWatcher.updateObject(16, Byte.valueOf((byte)(var2 | 32)));
+        }
+        else
         {
-            this.dataWatcher.updateObject(16, Byte.valueOf((byte) (var2 & -33)));
+            this.dataWatcher.updateObject(16, Byte.valueOf((byte)(var2 & -33)));
         }
     }
 

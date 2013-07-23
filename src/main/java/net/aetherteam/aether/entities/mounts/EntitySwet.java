@@ -1,7 +1,6 @@
 package net.aetherteam.aether.entities.mounts;
 
 import java.util.List;
-
 import net.aetherteam.aether.entities.EntityAetherAnimal;
 import net.aetherteam.aether.items.AetherItems;
 import net.minecraft.entity.Entity;
@@ -37,7 +36,8 @@ public class EntitySwet extends EntityAetherAnimal
             if (this.rand.nextInt(2) == 0)
             {
                 this.textureNum = 2;
-            } else
+            }
+            else
             {
                 this.textureNum = 1;
             }
@@ -49,7 +49,8 @@ public class EntitySwet extends EntityAetherAnimal
         {
             this.texture = this.dir + "/mobs/swet/swet_blue.png";
             this.moveSpeed = 1.5F;
-        } else
+        }
+        else
         {
             this.texture = this.dir + "/mobs/swet/swet_golden.png";
             this.moveSpeed = 3.0F;
@@ -80,7 +81,7 @@ public class EntitySwet extends EntityAetherAnimal
 
     public void updateRiderPosition()
     {
-        this.riddenByEntity.setPosition(this.posX, this.boundingBox.minY - 0.30000001192092896D + (double) this.riddenByEntity.yOffset, this.posZ);
+        this.riddenByEntity.setPosition(this.posX, this.boundingBox.minY - 0.30000001192092896D + (double)this.riddenByEntity.yOffset, this.posZ);
     }
 
     /**
@@ -93,9 +94,9 @@ public class EntitySwet extends EntityAetherAnimal
             for (int var1 = 0; var1 < 3; ++var1)
             {
                 float var2 = 0.01745278F;
-                double var3 = (double) ((float) this.posX + (this.rand.nextFloat() - this.rand.nextFloat()) * 0.3F);
-                double var5 = (double) ((float) this.posY + this.height);
-                double var7 = (double) ((float) this.posZ + (this.rand.nextFloat() - this.rand.nextFloat()) * 0.3F);
+                double var3 = (double)((float)this.posX + (this.rand.nextFloat() - this.rand.nextFloat()) * 0.3F);
+                double var5 = (double)((float)this.posY + this.height);
+                double var7 = (double)((float)this.posZ + (this.rand.nextFloat() - this.rand.nextFloat()) * 0.3F);
                 this.worldObj.spawnParticle("splash", var3, var5 - 0.25D, var7, 0.0D, 0.0D, 0.0D);
             }
         }
@@ -114,7 +115,7 @@ public class EntitySwet extends EntityAetherAnimal
 
             if (var10 < var9.size())
             {
-                Entity var11 = (Entity) var9.get(var10);
+                Entity var11 = (Entity)var9.get(var10);
                 this.capturePrey(var11);
             }
 
@@ -166,16 +167,16 @@ public class EntitySwet extends EntityAetherAnimal
     {
         for (int var1 = 0; var1 < 50; ++var1)
         {
-            float var2 = this.rand.nextFloat() * (float) Math.PI * 2.0F;
+            float var2 = this.rand.nextFloat() * (float)Math.PI * 2.0F;
             float var3 = this.rand.nextFloat() * 0.5F + 0.25F;
             float var4 = MathHelper.sin(var2) * var3;
             float var5 = MathHelper.cos(var2) * var3;
-            this.worldObj.spawnParticle("splash", this.posX + (double) var4, this.boundingBox.minY + 1.25D, this.posZ + (double) var5, (double) var4 * 1.5D + this.motionX, 4.0D, (double) var5 * 1.5D + this.motionZ);
+            this.worldObj.spawnParticle("splash", this.posX + (double)var4, this.boundingBox.minY + 1.25D, this.posZ + (double)var5, (double)var4 * 1.5D + this.motionX, 4.0D, (double)var5 * 1.5D + this.motionZ);
         }
 
         if (this.riddenByEntity != null)
         {
-            this.riddenByEntity.posY += (double) (this.riddenByEntity.yOffset - 0.3F);
+            this.riddenByEntity.posY += (double)(this.riddenByEntity.yOffset - 0.3F);
             this.riddenByEntity.mountEntity(this);
         }
 
@@ -224,7 +225,8 @@ public class EntitySwet extends EntityAetherAnimal
                 {
                     this.kickoff = true;
                 }
-            } else
+            }
+            else
             {
                 this.riddenByEntity.attackEntityFrom(DamageSource.causeMobDamage(this), var2);
 
@@ -238,7 +240,8 @@ public class EntitySwet extends EntityAetherAnimal
         if (var3 && this.health <= 0)
         {
             this.dissolve();
-        } else if (var3 && var1 instanceof EntityLiving && var1.getHealth() > 0 && (this.riddenByEntity == null || var1 != this.riddenByEntity))
+        }
+        else if (var3 && var1 instanceof EntityLiving && var1.getHealth() > 0 && (this.riddenByEntity == null || var1 != this.riddenByEntity))
         {
             this.entityToAttack = var1;
             this.faceEntity(var1, 180.0F, 180.0F);
@@ -269,7 +272,8 @@ public class EntitySwet extends EntityAetherAnimal
                     this.worldObj.playSoundAtEntity(this, this.getJumpSound(), this.getSoundVolume(), ((this.rand.nextFloat() - this.rand.nextFloat()) * 0.2F + 1.0F) * 0.8F);
                     this.moveStrafing = 1.0F - this.rand.nextFloat() * 2.0F;
                     this.moveForward = 16.0F;
-                } else
+                }
+                else
                 {
                     this.isJumping = false;
 
@@ -283,12 +287,14 @@ public class EntitySwet extends EntityAetherAnimal
             if (!this.onGround && this.isJumping)
             {
                 this.isJumping = false;
-            } else if (this.onGround)
+            }
+            else if (this.onGround)
             {
                 if (this.moveForward > 0.05F)
                 {
                     this.moveForward *= 0.75F;
-                } else
+                }
+                else
                 {
                     this.moveForward = 0.0F;
                 }
@@ -313,7 +319,8 @@ public class EntitySwet extends EntityAetherAnimal
             if (this.ticker < 4)
             {
                 ++this.ticker;
-            } else
+            }
+            else
             {
                 if (this.onGround && this.riddenByEntity == null && this.hops != 0 && this.hops != 3)
                 {
@@ -328,7 +335,8 @@ public class EntitySwet extends EntityAetherAnimal
                     {
                         this.entityToAttack = var1;
                     }
-                } else if (this.entityToAttack != null && this.riddenByEntity == null)
+                }
+                else if (this.entityToAttack != null && this.riddenByEntity == null)
                 {
                     if (this.getDistanceToEntity(this.entityToAttack) <= 9.0F)
                     {
@@ -340,13 +348,15 @@ public class EntitySwet extends EntityAetherAnimal
                             this.moveForward = 1.0F;
                             this.rotationYaw += 5.0F * (this.rand.nextFloat() - this.rand.nextFloat());
                         }
-                    } else
+                    }
+                    else
                     {
                         this.entityToAttack = null;
                         this.isJumping = false;
                         this.moveForward = 0.0F;
                     }
-                } else if (this.riddenByEntity != null && this.onGround)
+                }
+                else if (this.riddenByEntity != null && this.onGround)
                 {
                     if (this.hops == 0)
                     {
@@ -357,7 +367,8 @@ public class EntitySwet extends EntityAetherAnimal
                         this.hops = 1;
                         this.flutter = 5;
                         this.rotationYaw += 20.0F * (this.rand.nextFloat() - this.rand.nextFloat());
-                    } else if (this.hops == 1)
+                    }
+                    else if (this.hops == 1)
                     {
                         this.splotch();
                         this.onGround = false;
@@ -366,7 +377,8 @@ public class EntitySwet extends EntityAetherAnimal
                         this.hops = 2;
                         this.flutter = 5;
                         this.rotationYaw += 20.0F * (this.rand.nextFloat() - this.rand.nextFloat());
-                    } else if (this.hops == 2)
+                    }
+                    else if (this.hops == 2)
                     {
                         this.splotch();
                         this.onGround = false;
@@ -399,8 +411,8 @@ public class EntitySwet extends EntityAetherAnimal
     public void writeEntityToNBT(NBTTagCompound var1)
     {
         super.writeEntityToNBT(var1);
-        var1.setShort("Hops", (short) this.hops);
-        var1.setShort("Flutter", (short) this.flutter);
+        var1.setShort("Hops", (short)this.hops);
+        var1.setShort("Flutter", (short)this.flutter);
 
         if (this.riddenByEntity != null)
         {
@@ -410,7 +422,7 @@ public class EntitySwet extends EntityAetherAnimal
         var1.setBoolean("GotRider", this.gotrider);
         var1.setBoolean("Friendly", this.friendly);
         var1.setBoolean("textureSet", this.textureSet);
-        var1.setShort("textureNum", (short) this.textureNum);
+        var1.setShort("textureNum", (short)this.textureNum);
     }
 
     /**
@@ -430,7 +442,8 @@ public class EntitySwet extends EntityAetherAnimal
         {
             this.texture = "/aether/mobs/swets.png";
             this.moveSpeed = 1.5F;
-        } else
+        }
+        else
         {
             this.texture = "/aether/mobs/goldswets.png";
             this.moveSpeed = 3.0F;
@@ -520,7 +533,7 @@ public class EntitySwet extends EntityAetherAnimal
                 return null;
             }
 
-            var3 = (Entity) var1.get(var2);
+            var3 = (Entity)var1.get(var2);
 
             if (var3 instanceof EntityLiving && !(var3 instanceof EntitySwet))
             {
@@ -530,7 +543,8 @@ public class EntitySwet extends EntityAetherAnimal
                     {
                         break;
                     }
-                } else if (!(var3 instanceof EntityMob))
+                }
+                else if (!(var3 instanceof EntityMob))
                 {
                     break;
                 }

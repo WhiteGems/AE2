@@ -2,12 +2,10 @@ package net.aetherteam.aether.blocks;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
-
 import net.aetherteam.aether.Aether;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
@@ -33,7 +31,7 @@ public class BlockAercloud extends BlockAether implements IAetherBlock
     private Icon upArrow;
     private Icon downArrow;
     private HashMap icons = new HashMap();
-    public static final String[] names = new String[]{"Cold Aercloud", "Blue Aercloud", "Golden Aercloud", "Green Aercloud", "Storm Aercloud"};
+    public static final String[] names = new String[] {"Cold Aercloud", "Blue Aercloud", "Golden Aercloud", "Green Aercloud", "Storm Aercloud"};
     public static final int bouncingMeta = 1;
     public static final int sinkingMeta = 2;
     public static final int randomMeta = 3;
@@ -77,7 +75,7 @@ public class BlockAercloud extends BlockAether implements IAetherBlock
 
             if (var1.getBlockMetadata(var2, var3, var4) == 4 && var5.nextInt(155) == 0 && var1.getWorldInfo().isRaining())
             {
-                var1.addWeatherEffect(new EntityLightningBolt(var1, (double) var2, (double) (var3 + 1), (double) var4));
+                var1.addWeatherEffect(new EntityLightningBolt(var1, (double)var2, (double)(var3 + 1), (double)var4));
             }
         }
     }
@@ -88,7 +86,7 @@ public class BlockAercloud extends BlockAether implements IAetherBlock
      */
     public AxisAlignedBB getCollisionBoundingBoxFromPool(World var1, int var2, int var3, int var4)
     {
-        return var1.getBlockMetadata(var2, var3, var4) != 1 && var1.getBlockMetadata(var2, var3, var4) != 2 && var1.getBlockMetadata(var2, var3, var4) < 5 ? AxisAlignedBB.getBoundingBox((double) var2, (double) var3, (double) var4, (double) (var2 + 1), (double) var3, (double) (var4 + 1)) : AxisAlignedBB.getBoundingBox((double) var2, (double) var3, (double) var4, (double) var2, (double) var3, (double) var4);
+        return var1.getBlockMetadata(var2, var3, var4) != 1 && var1.getBlockMetadata(var2, var3, var4) != 2 && var1.getBlockMetadata(var2, var3, var4) < 5 ? AxisAlignedBB.getBoundingBox((double)var2, (double)var3, (double)var4, (double)(var2 + 1), (double)var3, (double)(var4 + 1)) : AxisAlignedBB.getBoundingBox((double)var2, (double)var3, (double)var4, (double)var2, (double)var3, (double)var4);
     }
 
     /**
@@ -122,7 +120,7 @@ public class BlockAercloud extends BlockAether implements IAetherBlock
 
             if (var5 instanceof EntityPlayer)
             {
-                var7 = (EntityPlayer) var5;
+                var7 = (EntityPlayer)var5;
 
                 if (var7.isSneaking())
                 {
@@ -135,7 +133,7 @@ public class BlockAercloud extends BlockAether implements IAetherBlock
                 }
             }
 
-            if (var6 >= 5 && var5.posY <= (double) var3 + 1.6D && var5.posY >= (double) var3 - 0.2D)
+            if (var6 >= 5 && var5.posY <= (double)var3 + 1.6D && var5.posY >= (double)var3 - 0.2D)
             {
                 var5.motionY = 0.1D;
             }
@@ -150,15 +148,18 @@ public class BlockAercloud extends BlockAether implements IAetherBlock
                         {
                             var5.motionX = -2.5D;
                         }
-                    } else
+                    }
+                    else
                     {
                         var5.motionZ = 2.5D;
                     }
-                } else
+                }
+                else
                 {
                     var5.motionX = 2.5D;
                 }
-            } else
+            }
+            else
             {
                 var5.motionZ = -2.5D;
             }
@@ -171,25 +172,28 @@ public class BlockAercloud extends BlockAether implements IAetherBlock
                 {
                     Aether.proxy.spawnRainParticles(var1, var2, var3, var4, this.rand, 15);
                 }
-            } else if (var6 == 2)
+            }
+            else if (var6 == 2)
             {
                 var5.motionY = -1.5D;
-            } else if (var6 == 3)
+            }
+            else if (var6 == 3)
             {
                 var5.motionX *= 5.0E-10D;
                 var5.motionZ *= 5.0E-10D;
 
                 if (var5 instanceof EntityPlayer)
                 {
-                    var7 = (EntityPlayer) var5;
+                    var7 = (EntityPlayer)var5;
 
                     if (!var7.isJumping)
                     {
-                        var5.setPosition((double) var2 + 0.5D, (double) ((float) var3 + var5.height), (double) var4 + 0.5D);
+                        var5.setPosition((double)var2 + 0.5D, (double)((float)var3 + var5.height), (double)var4 + 0.5D);
                     }
-                } else
+                }
+                else
                 {
-                    var5.setPosition((double) var2 + 0.5D, (double) var3, (double) var4 + 0.5D);
+                    var5.setPosition((double)var2 + 0.5D, (double)var3, (double)var4 + 0.5D);
                 }
 
                 Random var9 = new Random();
@@ -198,17 +202,21 @@ public class BlockAercloud extends BlockAether implements IAetherBlock
                 if (var8 == 0)
                 {
                     var5.motionZ = -2.5D;
-                } else if (var8 == 1)
+                }
+                else if (var8 == 1)
                 {
                     var5.motionX = 2.5D;
-                } else if (var8 == 2)
+                }
+                else if (var8 == 2)
                 {
                     var5.motionZ = 2.5D;
-                } else if (var8 == 3)
+                }
+                else if (var8 == 3)
                 {
                     var5.motionX = -2.5D;
                 }
-            } else if (var5.motionY < 0.0D)
+            }
+            else if (var5.motionY < 0.0D)
             {
                 var5.motionY *= 0.005D;
             }
@@ -287,9 +295,9 @@ public class BlockAercloud extends BlockAether implements IAetherBlock
      */
     public void onBlockPlacedBy(World var1, int var2, int var3, int var4, EntityLiving var5, ItemStack var6)
     {
-        int var7 = MathHelper.floor_double((double) (var5.rotationYaw * 4.0F / 360.0F) + 0.5D) & 3;
+        int var7 = MathHelper.floor_double((double)(var5.rotationYaw * 4.0F / 360.0F) + 0.5D) & 3;
 
-        if (((EntityPlayer) var5).inventory.getCurrentItem().getItemDamage() >= 5)
+        if (((EntityPlayer)var5).inventory.getCurrentItem().getItemDamage() >= 5)
         {
             switch (var7)
             {
@@ -318,9 +326,9 @@ public class BlockAercloud extends BlockAether implements IAetherBlock
      */
     public void randomDisplayTick(World var1, int var2, int var3, int var4, Random var5)
     {
-        float var6 = (float) var2 + 0.5F;
-        float var7 = (float) var3 + 0.0F + var5.nextFloat() * 10.0F / 16.0F;
-        float var8 = (float) var4 + 0.5F;
+        float var6 = (float)var2 + 0.5F;
+        float var7 = (float)var3 + 0.0F + var5.nextFloat() * 10.0F / 16.0F;
+        float var8 = (float)var4 + 0.5F;
         int var9 = var1.getBlockMetadata(var2, var3, var4);
         float var10 = var5.nextFloat() * 0.9F;
         float var11 = var5.nextFloat() * 0.2F;
@@ -333,23 +341,26 @@ public class BlockAercloud extends BlockAether implements IAetherBlock
                 {
                     if (var9 == 8 || var9 == 12)
                     {
-                        var1.spawnParticle("reddust", (double) (var6 - var10), (double) var7, (double) (var8 + var11), 1.0D, 1.0D, 1.0D);
-                        var1.spawnParticle("reddust", (double) (var6 - var10 * var5.nextFloat() / 0.4F), (double) var7, (double) (var8 + var11), 1.0D, 1.0D, 1.0D);
+                        var1.spawnParticle("reddust", (double)(var6 - var10), (double)var7, (double)(var8 + var11), 1.0D, 1.0D, 1.0D);
+                        var1.spawnParticle("reddust", (double)(var6 - var10 * var5.nextFloat() / 0.4F), (double)var7, (double)(var8 + var11), 1.0D, 1.0D, 1.0D);
                     }
-                } else
-                {
-                    var1.spawnParticle("reddust", (double) (var6 + var11), (double) var7, (double) (var8 + var10), 1.0D, 1.0D, 1.0D);
-                    var1.spawnParticle("reddust", (double) (var6 + var11 * var5.nextFloat() / 0.4F), (double) var7, (double) (var8 + var10), 1.0D, 1.0D, 1.0D);
                 }
-            } else
-            {
-                var1.spawnParticle("reddust", (double) (var6 + var10), (double) var7, (double) (var8 + var11), 1.0D, 1.0D, 1.0D);
-                var1.spawnParticle("reddust", (double) (var6 + var10 * var5.nextFloat() / 0.4F), (double) var7, (double) (var8 + var11), 1.0D, 1.0D, 1.0D);
+                else
+                {
+                    var1.spawnParticle("reddust", (double)(var6 + var11), (double)var7, (double)(var8 + var10), 1.0D, 1.0D, 1.0D);
+                    var1.spawnParticle("reddust", (double)(var6 + var11 * var5.nextFloat() / 0.4F), (double)var7, (double)(var8 + var10), 1.0D, 1.0D, 1.0D);
+                }
             }
-        } else
+            else
+            {
+                var1.spawnParticle("reddust", (double)(var6 + var10), (double)var7, (double)(var8 + var11), 1.0D, 1.0D, 1.0D);
+                var1.spawnParticle("reddust", (double)(var6 + var10 * var5.nextFloat() / 0.4F), (double)var7, (double)(var8 + var11), 1.0D, 1.0D, 1.0D);
+            }
+        }
+        else
         {
-            var1.spawnParticle("reddust", (double) (var6 + var11), (double) var7, (double) (var8 - var10), 1.0D, 1.0D, 1.0D);
-            var1.spawnParticle("reddust", (double) (var6 + var11 * var5.nextFloat() / 0.4F), (double) var7, (double) (var8 - var10), 1.0D, 1.0D, 1.0D);
+            var1.spawnParticle("reddust", (double)(var6 + var11), (double)var7, (double)(var8 - var10), 1.0D, 1.0D, 1.0D);
+            var1.spawnParticle("reddust", (double)(var6 + var11 * var5.nextFloat() / 0.4F), (double)var7, (double)(var8 - var10), 1.0D, 1.0D, 1.0D);
         }
     }
 
@@ -456,7 +467,7 @@ public class BlockAercloud extends BlockAether implements IAetherBlock
 
         ItemStack var3 = new ItemStack(AetherBlocks.Aercloud, 1, var2);
         String var4 = var3.getItem().getItemDisplayName(var3);
-        return (Icon) this.icons.get(var4);
+        return (Icon)this.icons.get(var4);
     }
 
     /**

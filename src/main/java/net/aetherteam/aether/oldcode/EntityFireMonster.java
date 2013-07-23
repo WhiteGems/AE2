@@ -1,7 +1,6 @@
 package net.aetherteam.aether.oldcode;
 
 import java.util.List;
-
 import net.aetherteam.aether.AetherNameGen;
 import net.aetherteam.aether.blocks.AetherBlocks;
 import net.aetherteam.aether.enums.EnumBossType;
@@ -38,7 +37,7 @@ public class EntityFireMonster extends EntityFlying implements IAetherBoss
     public Entity target;
     public boolean gotTarget;
     public String bossName;
-    public static final float jimz = (180F / (float) Math.PI);
+    public static final float jimz = (180F / (float)Math.PI);
 
     public EntityFireMonster(World var1)
     {
@@ -51,7 +50,7 @@ public class EntityFireMonster extends EntityFlying implements IAetherBoss
         this.orgZ = MathHelper.floor_double(this.posZ);
         this.wideness = 10;
         this.health = this.getMaxHealth();
-        this.speedness = 0.5D - (double) this.health / 70.0D * 0.2D;
+        this.speedness = 0.5D - (double)this.health / 70.0D * 0.2D;
         this.direction = 0;
         this.entCount = this.rand.nextInt(6);
         this.bossName = AetherNameGen.gen();
@@ -67,15 +66,15 @@ public class EntityFireMonster extends EntityFlying implements IAetherBoss
         super(var1);
         this.texture = "/aether/mobs/firemonster.png";
         this.setSize(2.25F, 2.5F);
-        this.setPosition((double) var2 + 0.5D, (double) var3, (double) var4 + 0.5D);
+        this.setPosition((double)var2 + 0.5D, (double)var3, (double)var4 + 0.5D);
         this.wideness = var5 - 2;
         this.orgX = var2;
         this.orgY = var3;
         this.orgZ = var4;
         this.noClip = true;
-        this.rotary = (double) this.rand.nextFloat() * 360.0D;
+        this.rotary = (double)this.rand.nextFloat() * 360.0D;
         this.health = 50;
-        this.speedness = 0.5D - (double) this.health / 70.0D * 0.2D;
+        this.speedness = 0.5D - (double)this.health / 70.0D * 0.2D;
         this.direction = var6;
         this.entCount = this.rand.nextInt(6);
         this.bossName = AetherNameGen.gen();
@@ -98,9 +97,9 @@ public class EntityFireMonster extends EntityFlying implements IAetherBoss
 
         if (this.health > 0)
         {
-            double var1 = (double) (this.rand.nextFloat() - 0.5F);
-            double var3 = (double) this.rand.nextFloat();
-            double var5 = (double) (this.rand.nextFloat() - 0.5F);
+            double var1 = (double)(this.rand.nextFloat() - 0.5F);
+            double var3 = (double)this.rand.nextFloat();
+            double var5 = (double)(this.rand.nextFloat() - 0.5F);
             double var7 = this.posX + var1 * var3;
             double var9 = this.boundingBox.minY + var3 - 0.5D;
             double var11 = this.posZ + var5 * var3;
@@ -149,30 +148,33 @@ public class EntityFireMonster extends EntityFlying implements IAetherBoss
 
         if (this.target == null)
         {
-            this.setPosition((double) this.orgX + 0.5D, (double) this.orgY, (double) this.orgZ + 0.5D);
+            this.setPosition((double)this.orgX + 0.5D, (double)this.orgY, (double)this.orgZ + 0.5D);
             this.setDoor(0);
-        } else
+        }
+        else
         {
             this.renderYawOffset = this.rotationYaw;
-            this.setPosition(this.posX, (double) this.orgY, this.posZ);
+            this.setPosition(this.posX, (double)this.orgY, this.posZ);
             this.motionY = 0.0D;
             boolean var1 = false;
 
-            if (this.motionX > 0.0D && (int) Math.floor(this.posX) > this.orgX + this.wideness)
+            if (this.motionX > 0.0D && (int)Math.floor(this.posX) > this.orgX + this.wideness)
             {
                 this.rotary = 360.0D - this.rotary;
                 var1 = true;
-            } else if (this.motionX < 0.0D && (int) Math.floor(this.posX) < this.orgX - this.wideness)
+            }
+            else if (this.motionX < 0.0D && (int)Math.floor(this.posX) < this.orgX - this.wideness)
             {
                 this.rotary = 360.0D - this.rotary;
                 var1 = true;
             }
 
-            if (this.motionZ > 0.0D && (int) Math.floor(this.posZ) > this.orgZ + this.wideness)
+            if (this.motionZ > 0.0D && (int)Math.floor(this.posZ) > this.orgZ + this.wideness)
             {
                 this.rotary = 180.0D - this.rotary;
                 var1 = true;
-            } else if (this.motionZ < 0.0D && (int) Math.floor(this.posZ) < this.orgZ - this.wideness)
+            }
+            else if (this.motionZ < 0.0D && (int)Math.floor(this.posZ) < this.orgZ - this.wideness)
             {
                 this.rotary = 180.0D - this.rotary;
                 var1 = true;
@@ -181,7 +183,8 @@ public class EntityFireMonster extends EntityFlying implements IAetherBoss
             if (this.rotary > 360.0D)
             {
                 this.rotary -= 360.0D;
-            } else if (this.rotary < 0.0D)
+            }
+            else if (this.rotary < 0.0D)
             {
                 this.rotary += 360.0D;
             }
@@ -202,7 +205,7 @@ public class EntityFireMonster extends EntityFlying implements IAetherBoss
 
                 if (this.rand.nextInt(3) == 0)
                 {
-                    this.rotary += (double) (this.rand.nextFloat() - this.rand.nextFloat()) * 60.0D;
+                    this.rotary += (double)(this.rand.nextFloat() - this.rand.nextFloat()) * 60.0D;
                 }
             }
 
@@ -211,7 +214,8 @@ public class EntityFireMonster extends EntityFlying implements IAetherBoss
             if (this.flameCount == 40 && this.rand.nextInt(2) == 0)
             {
                 this.poopFire();
-            } else if (this.flameCount >= 55 + this.health / 2 && this.target != null && this.target instanceof EntityLiving)
+            }
+            else if (this.flameCount >= 55 + this.health / 2 && this.target != null && this.target instanceof EntityLiving)
             {
                 this.makeFireBall(1);
                 this.flameCount = 0;
@@ -219,7 +223,7 @@ public class EntityFireMonster extends EntityFlying implements IAetherBoss
 
             if (this.target != null && this.target.isDead)
             {
-                this.setPosition((double) this.orgX + 0.5D, (double) this.orgY, (double) this.orgZ + 0.5D);
+                this.setPosition((double)this.orgX + 0.5D, (double)this.orgY, (double)this.orgZ + 0.5D);
                 this.motionX = 0.0D;
                 this.motionY = 0.0D;
                 this.motionZ = 0.0D;
@@ -237,7 +241,7 @@ public class EntityFireMonster extends EntityFlying implements IAetherBoss
 
         for (int var2 = 0; var2 < var1.size(); ++var2)
         {
-            Entity var3 = (Entity) var1.get(var2);
+            Entity var3 = (Entity)var1.get(var2);
 
             if (var3 instanceof EntityLiving && !var3.isImmuneToFire())
             {
@@ -264,11 +268,11 @@ public class EntityFireMonster extends EntityFlying implements IAetherBoss
                     if (this.worldObj.getBlockMaterial(var4, var7, var5) == Material.water)
                     {
                         this.worldObj.setBlock(var4, var7, var5, 0);
-                        this.worldObj.playSoundEffect((double) ((float) var4 + 0.5F), (double) ((float) var7 + 0.5F), (double) ((float) var5 + 0.5F), "random.fizz", 0.5F, 2.6F + (this.rand.nextFloat() - this.rand.nextFloat()) * 0.8F);
+                        this.worldObj.playSoundEffect((double)((float)var4 + 0.5F), (double)((float)var7 + 0.5F), (double)((float)var5 + 0.5F), "random.fizz", 0.5F, 2.6F + (this.rand.nextFloat() - this.rand.nextFloat()) * 0.8F);
 
                         for (int var8 = 0; var8 < 8; ++var8)
                         {
-                            this.worldObj.spawnParticle("largesmoke", (double) var4 + Math.random(), (double) var7 + 0.75D, (double) var5 + Math.random(), 0.0D, 0.0D, 0.0D);
+                            this.worldObj.spawnParticle("largesmoke", (double)var4 + Math.random(), (double)var7 + 0.75D, (double)var5 + Math.random(), 0.0D, 0.0D, 0.0D);
                         }
                     }
                 }
@@ -313,15 +317,15 @@ public class EntityFireMonster extends EntityFlying implements IAetherBoss
     public void writeEntityToNBT(NBTTagCompound var1)
     {
         super.writeEntityToNBT(var1);
-        var1.setShort("OriginX", (short) this.orgX);
-        var1.setShort("OriginY", (short) this.orgY);
-        var1.setShort("OriginZ", (short) this.orgZ);
-        var1.setShort("Wideness", (short) this.wideness);
-        var1.setShort("FlameCount", (short) this.flameCount);
-        var1.setShort("BallCount", (short) this.ballCount);
-        var1.setShort("ChatLog", (short) this.chatLog);
-        var1.setShort("Direction", (short) this.direction);
-        var1.setFloat("Rotary", (float) this.rotary);
+        var1.setShort("OriginX", (short)this.orgX);
+        var1.setShort("OriginY", (short)this.orgY);
+        var1.setShort("OriginZ", (short)this.orgZ);
+        var1.setShort("Wideness", (short)this.wideness);
+        var1.setShort("FlameCount", (short)this.flameCount);
+        var1.setShort("BallCount", (short)this.ballCount);
+        var1.setShort("ChatLog", (short)this.chatLog);
+        var1.setShort("Direction", (short)this.direction);
+        var1.setFloat("Rotary", (float)this.rotary);
         this.gotTarget = this.target != null;
         var1.setBoolean("GotTarget", this.gotTarget);
         var1.setString("BossName", this.bossName);
@@ -341,9 +345,9 @@ public class EntityFireMonster extends EntityFlying implements IAetherBoss
         this.ballCount = var1.getShort("BallCount");
         this.chatLog = var1.getShort("ChatLog");
         this.direction = var1.getShort("Direction");
-        this.rotary = (double) var1.getFloat("Rotary");
+        this.rotary = (double)var1.getFloat("Rotary");
         this.gotTarget = var1.getBoolean("GotTarget");
-        this.speedness = 0.5D - (double) this.health / 70.0D * 0.2D;
+        this.speedness = 0.5D - (double)this.health / 70.0D * 0.2D;
         this.bossName = var1.getString("BossName");
     }
 
@@ -358,50 +362,59 @@ public class EntityFireMonster extends EntityFlying implements IAetherBoss
                 this.chatLine("\u00a7cYou are certainly a brave soul to have entered this chamber.");
                 this.chatLog = 1;
                 this.chatCount = 100;
-            } else if (this.chatLog == 1)
+            }
+            else if (this.chatLog == 1)
             {
                 this.chatLine("\u00a7cBegone human, you serve no purpose here.");
                 this.chatLog = 2;
                 this.chatCount = 100;
-            } else if (this.chatLog == 2)
+            }
+            else if (this.chatLog == 2)
             {
                 this.chatLine("\u00a7cYour presence annoys me. Do you not fear my burning aura?");
                 this.chatLog = 3;
                 this.chatCount = 100;
-            } else if (this.chatLog == 3)
+            }
+            else if (this.chatLog == 3)
             {
                 this.chatLine("\u00a7cI have nothing to offer you, fool. Leave me at peace.");
                 this.chatLog = 4;
                 this.chatCount = 100;
-            } else if (this.chatLog == 4)
+            }
+            else if (this.chatLog == 4)
             {
                 this.chatLine("\u00a7cPerhaps you are ignorant. Do you wish to know who I am?");
                 this.chatLog = 5;
                 this.chatCount = 100;
-            } else if (this.chatLog == 5)
+            }
+            else if (this.chatLog == 5)
             {
                 this.chatLine("\u00a7cI am a sun spirit, embodiment of Aether\'s eternal daylight.");
                 this.chatLine("\u00a7cAs long as I am alive, the sun will never set on this world.");
                 this.chatLog = 6;
                 this.chatCount = 100;
-            } else if (this.chatLog == 6)
+            }
+            else if (this.chatLog == 6)
             {
                 this.chatLine("\u00a7cMy body burns with the anger of a thousand beasts.");
                 this.chatLine("\u00a7cNo man, hero, or villain can harm me. You are no exception.");
                 this.chatLog = 7;
                 this.chatCount = 100;
-            } else if (this.chatLog == 7)
+            }
+            else if (this.chatLog == 7)
             {
                 this.chatLine("\u00a7cYou wish to challenge the might of the sun? You are mad.");
                 this.chatLine("\u00a7cDo not further insult me or you will feel my wrath.");
                 this.chatLog = 8;
                 this.chatCount = 100;
-            } else if (this.chatLog == 8)
+            }
+            else if (this.chatLog == 8)
             {
                 this.chatLine("\u00a7cThis is your final warning. Leave now, or prepare to burn.");
                 this.chatLog = 9;
                 this.chatCount = 100;
-            } else
+            }
+            else
             {
                 if (this.chatLog == 9)
                 {
@@ -433,7 +446,8 @@ public class EntityFireMonster extends EntityFlying implements IAetherBoss
             this.target = var1;
             this.setDoor(AetherBlocks.LockedDungeonStone.blockID);
             return true;
-        } else
+        }
+        else
         {
             return false;
         }
@@ -442,14 +456,12 @@ public class EntityFireMonster extends EntityFlying implements IAetherBoss
     /**
      * Adds to the current velocity of the entity. Args: x, y, z
      */
-    public void addVelocity(double var1, double var3, double var5)
-    {}
+    public void addVelocity(double var1, double var3, double var5) {}
 
     /**
      * knocks back this entity
      */
-    public void knockBack(Entity var1, int var2, double var3, double var5)
-    {}
+    public void knockBack(Entity var1, int var2, double var3, double var5) {}
 
     /**
      * Called when the entity is attacked.
@@ -458,7 +470,7 @@ public class EntityFireMonster extends EntityFlying implements IAetherBoss
     {
         if (var1.getEntity() != null && var1.getEntity() instanceof EntityFiroBall)
         {
-            this.speedness = 0.5D - (double) this.health / 70.0D * 0.2D;
+            this.speedness = 0.5D - (double)this.health / 70.0D * 0.2D;
             boolean var3 = super.attackEntityFrom(var1, var2);
 
             if (var3)
@@ -480,7 +492,8 @@ public class EntityFireMonster extends EntityFlying implements IAetherBoss
             }
 
             return var3;
-        } else
+        }
+        else
         {
             return false;
         }
@@ -497,8 +510,8 @@ public class EntityFireMonster extends EntityFlying implements IAetherBoss
 
     private void setDoor(int var1)
     {
-        int var3;
         int var2;
+        int var3;
 
         if (this.direction / 2 == 0)
         {
@@ -509,7 +522,8 @@ public class EntityFireMonster extends EntityFlying implements IAetherBoss
                     this.worldObj.setBlock(this.orgX + (this.direction == 0 ? -11 : 11), var2, var3, var1, 2, 4);
                 }
             }
-        } else
+        }
+        else
         {
             for (var2 = this.orgY - 1; var2 < this.orgY + 2; ++var2)
             {
@@ -535,7 +549,8 @@ public class EntityFireMonster extends EntityFlying implements IAetherBoss
                     this.worldObj.setBlock(this.orgX + (this.direction == 0 ? 11 : -11), var1, var2, 0);
                 }
             }
-        } else
+        }
+        else
         {
             for (var1 = this.orgY - 1; var1 < this.orgY + 2; ++var1)
             {

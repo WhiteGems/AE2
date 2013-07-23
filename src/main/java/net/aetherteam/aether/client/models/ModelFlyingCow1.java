@@ -26,7 +26,7 @@ public class ModelFlyingCow1 extends ModelQuadruped
         this.udders = new ModelRenderer(this, 52, 0);
         this.udders.addBox(-2.0F, -3.0F, 0.0F, 4, 6, 2, 0.0F);
         this.udders.setRotationPoint(0.0F, 14.0F, 6.0F);
-        this.udders.rotateAngleX = ((float) Math.PI / 2F);
+        this.udders.rotateAngleX = ((float)Math.PI / 2F);
         this.body = new ModelRenderer(this, 18, 4);
         this.body.addBox(-6.0F, -10.0F, -7.0F, 12, 18, 10, 0.0F);
         this.body.setRotationPoint(0.0F, 5.0F, 2.0F);
@@ -57,7 +57,8 @@ public class ModelFlyingCow1 extends ModelQuadruped
             this.horn1.render(var7);
             this.horn2.render(var7);
             this.udders.render(var7);
-        } else
+        }
+        else
         {
             this.horn1.render(var7);
             this.horn2.render(var7);

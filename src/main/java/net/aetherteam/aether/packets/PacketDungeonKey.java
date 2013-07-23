@@ -4,12 +4,10 @@ import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.network.PacketDispatcher;
 import cpw.mods.fml.common.network.Player;
 import cpw.mods.fml.relauncher.Side;
-
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.DataInputStream;
 import java.io.InputStreamReader;
-
 import net.aetherteam.aether.dungeons.Dungeon;
 import net.aetherteam.aether.dungeons.DungeonHandler;
 import net.aetherteam.aether.dungeons.keys.DungeonKey;
@@ -17,77 +15,69 @@ import net.aetherteam.aether.dungeons.keys.EnumKeyType;
 import net.aetherteam.aether.party.Party;
 import net.aetherteam.aether.party.PartyController;
 import net.aetherteam.aether.tile_entities.TileEntityBronzeDoorController;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.network.packet.Packet250CustomPayload;
-import net.minecraft.world.World;
 
 public class PacketDungeonKey extends AetherPacket
 {
-    public PacketDungeonKey(int packetID)
+    public PacketDungeonKey(int var1)
     {
-        super(packetID);
+        super(var1);
     }
 
-    public void onPacketReceived(Packet250CustomPayload packet, Player player)
+    public void onPacketReceived(Packet250CustomPayload var1, Player var2)
     {
-        DataInputStream dat = new DataInputStream(new ByteArrayInputStream(packet.data));
-        BufferedReader buf = new BufferedReader(new InputStreamReader(dat));
+        DataInputStream var3 = new DataInputStream(new ByteArrayInputStream(var1.data));
+        new BufferedReader(new InputStreamReader(var3));
+
         try
         {
-            byte packetType = dat.readByte();
-            boolean adding = dat.readBoolean();
+            byte var5 = var3.readByte();
+            boolean var6 = var3.readBoolean();
+            int var7 = var3.readInt();
+            String var8 = var3.readUTF();
+            DungeonKey var9 = new DungeonKey(EnumKeyType.getTypeFromString(var3.readUTF()));
+            Side var10 = FMLCommonHandler.instance().getEffectiveSide();
+            Party var11;
+            Dungeon var12;
 
-            int dungeonID = dat.readInt();
-            String partyName = dat.readUTF();
-
-            DungeonKey key = new DungeonKey(EnumKeyType.getTypeFromString(dat.readUTF()));
-
-            Side side = FMLCommonHandler.instance().getEffectiveSide();
-
-            if (side.isClient())
+            if (var10.isClient())
             {
-                Party party = PartyController.instance().getParty(partyName);
-                Dungeon dungeon = DungeonHandler.instance().getDungeon(dungeonID);
+                var11 = PartyController.instance().getParty(var8);
+                var12 = DungeonHandler.instance().getDungeon(var7);
 
-                if ((party != null) && (dungeon != null) && (key != null))
+                if (var11 != null && var12 != null && var9 != null)
                 {
-                    if (adding)
+                    if (var6)
                     {
-                        DungeonHandler.instance().addKey(dungeon, party, key);
-                    } else DungeonHandler.instance().removeKey(dungeon, party, key);
-                }
-            } else if (!adding)
-            {
-                Party party = PartyController.instance().getParty(partyName);
-                Dungeon dungeon = DungeonHandler.instance().getDungeon(dungeonID);
-
-                EntityPlayer sendingPlayer = (EntityPlayer) player;
-
-                int x = dat.readInt();
-                int y = dat.readInt();
-                int z = dat.readInt();
-
-                TileEntityBronzeDoorController bronzeDoor = (TileEntityBronzeDoorController) sendingPlayer.worldObj.getBlockTileEntity(x, y, z);
-
-                if ((party != null) && (dungeon != null) && (key != null))
-                {
-                    if (dungeon.getQueuedParty().hasMember(PartyController.instance().getMember(sendingPlayer)))
+                        DungeonHandler.instance().addKey(var12, var11, var9);
+                    }
+                    else
                     {
-                        DungeonHandler.instance().removeKey(dungeon, party, key);
-
-                        PacketDispatcher.sendPacketToAllPlayers(AetherPacketHandler.removeDungeonKey(dungeon, party, key.getType(), bronzeDoor));
+                        DungeonHandler.instance().removeKey(var12, var11, var9);
                     }
                 }
             }
-        } catch (Exception ex)
+            else if (!var6)
+            {
+                var11 = PartyController.instance().getParty(var8);
+                var12 = DungeonHandler.instance().getDungeon(var7);
+                EntityPlayer var13 = (EntityPlayer)var2;
+                int var14 = var3.readInt();
+                int var15 = var3.readInt();
+                int var16 = var3.readInt();
+                TileEntityBronzeDoorController var17 = (TileEntityBronzeDoorController)var13.worldObj.getBlockTileEntity(var14, var15, var16);
+
+                if (var11 != null && var12 != null && var9 != null && var12.getQueuedParty().hasMember(PartyController.instance().getMember(var13)))
+                {
+                    DungeonHandler.instance().removeKey(var12, var11, var9);
+                    PacketDispatcher.sendPacketToAllPlayers(AetherPacketHandler.removeDungeonKey(var12, var11, var9.getType(), var17));
+                }
+            }
+        }
+        catch (Exception var18)
         {
-            ex.printStackTrace();
+            var18.printStackTrace();
         }
     }
 }
-
-/* Location:           D:\Dev\Mc\forge_orl\mcp\jars\bin\aether.jar
- * Qualified Name:     net.aetherteam.aether.packets.PacketDungeonKey
- * JD-Core Version:    0.6.2
- */

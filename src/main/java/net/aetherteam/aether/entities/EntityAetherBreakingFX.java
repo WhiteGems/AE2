@@ -9,7 +9,7 @@ public class EntityAetherBreakingFX extends EntityBreakingFX
 {
     public EntityAetherBreakingFX(World var1, double var2, double var4, double var6, Item var8)
     {
-        super(var1, var2, var4, var6, 0.0D, 0.0D, 0.0D, var8, (RenderEngine) null);
+        super(var1, var2, var4, var6, 0.0D, 0.0D, 0.0D, var8, (RenderEngine)null);
         this.noClip = true;
     }
 }

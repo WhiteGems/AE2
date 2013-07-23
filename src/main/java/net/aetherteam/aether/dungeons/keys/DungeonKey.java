@@ -4,9 +4,9 @@ public class DungeonKey
 {
     EnumKeyType type;
 
-    public DungeonKey(EnumKeyType type)
+    public DungeonKey(EnumKeyType var1)
     {
-        this.type = type;
+        this.type = var1;
     }
 
     public EnumKeyType getType()
@@ -14,8 +14,3 @@ public class DungeonKey
         return this.type;
     }
 }
-
-/* Location:           D:\Dev\Mc\forge_orl\mcp\jars\bin\aether.jar
- * Qualified Name:     net.aetherteam.aether.dungeons.keys.DungeonKey
- * JD-Core Version:    0.6.2
- */

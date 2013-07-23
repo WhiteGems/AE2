@@ -21,11 +21,11 @@ public class RenderMiniSlider extends RenderLiving
      */
     protected void preRenderCallback(EntityLiving var1, float var2)
     {
-        EntityMiniSlider var3 = (EntityMiniSlider) var1;
+        EntityMiniSlider var3 = (EntityMiniSlider)var1;
 
         if (var3.harvey > 0.01F)
         {
-            GL11.glRotatef(var3.harvey * -30.0F, (float) var3.rennis, 0.0F, (float) var3.dennis);
+            GL11.glRotatef(var3.harvey * -30.0F, (float)var3.rennis, 0.0F, (float)var3.dennis);
         }
     }
 
@@ -34,7 +34,8 @@ public class RenderMiniSlider extends RenderLiving
         if (var2 != 0)
         {
             return -1;
-        } else
+        }
+        else
         {
             this.loadTexture("/net/aetherteam/aether/client/sprites/mobs/host/hosteye.png");
             float var4 = 1.0F;
@@ -44,7 +45,7 @@ public class RenderMiniSlider extends RenderLiving
             char var5 = 61680;
             int var6 = var5 % 65536;
             int var7 = var5 / 65536;
-            OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, (float) var6 / 1.0F, (float) var7 / 1.0F);
+            OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, (float)var6 / 1.0F, (float)var7 / 1.0F);
             GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
             GL11.glColor4f(1.0F, 1.0F, 1.0F, var4);
             return 1;
@@ -56,6 +57,6 @@ public class RenderMiniSlider extends RenderLiving
      */
     protected int shouldRenderPass(EntityLiving var1, int var2, float var3)
     {
-        return this.setSliderEyeBrightness((EntityMiniSlider) var1, var2, var3);
+        return this.setSliderEyeBrightness((EntityMiniSlider)var1, var2, var3);
     }
 }

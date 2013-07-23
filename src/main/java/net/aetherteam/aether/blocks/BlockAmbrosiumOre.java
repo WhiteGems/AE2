@@ -1,7 +1,6 @@
 package net.aetherteam.aether.blocks;
 
 import java.util.Random;
-
 import net.aetherteam.aether.items.AetherItems;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
@@ -44,12 +43,14 @@ public class BlockAmbrosiumOre extends BlockAether implements IAetherBlock
                 {
                     this.dropBlockAsItem_do(var1, var3, var4, var5, var8);
                 }
-            } else if (var6 == 0 && var2.getCurrentEquippedItem() != null && var2.getCurrentEquippedItem().itemID == AetherItems.SkyrootPickaxe.itemID)
+            }
+            else if (var6 == 0 && var2.getCurrentEquippedItem() != null && var2.getCurrentEquippedItem().itemID == AetherItems.SkyrootPickaxe.itemID)
             {
                 var8 = new ItemStack(AetherItems.AmbrosiumShard.itemID, MathHelper.clamp_int((new Random()).nextInt(var7 * 5), 1, var7 * 5 + 1), 0);
                 var2.addStat(StatList.mineBlockStatArray[this.blockID], 1);
                 this.dropBlockAsItem_do(var1, var3, var4, var5, var8);
-            } else
+            }
+            else
             {
                 var8 = new ItemStack(AetherItems.AmbrosiumShard.itemID, MathHelper.clamp_int((new Random()).nextInt(var7), 1, var7 + 1), 0);
                 this.dropBlockAsItem_do(var1, var3, var4, var5, var8);

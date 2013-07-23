@@ -1,7 +1,6 @@
 package net.aetherteam.aether.blocks;
 
 import java.util.Random;
-
 import net.aetherteam.aether.entities.EntityTNTPresent;
 import net.aetherteam.aether.items.AetherItems;
 import net.minecraft.block.Block;
@@ -28,7 +27,7 @@ public class BlockPresent extends BlockAether implements IAetherBlock
     public BlockPresent(int var1)
     {
         super(var1, Material.wood);
-        this.range = (long) this.randEnd - (long) this.randStart + 1L;
+        this.range = (long)this.randEnd - (long)this.randStart + 1L;
         this.setHardness(0.1F);
         this.setStepSound(Block.soundGrassFootstep);
     }
@@ -50,9 +49,9 @@ public class BlockPresent extends BlockAether implements IAetherBlock
         Random var7 = new Random();
         byte var8 = 6;
         byte var9 = 9;
-        long var10 = (long) var9 - (long) var8 + 1L;
-        long var12 = (long) ((double) var10 * var7.nextDouble());
-        int var14 = (int) (var12 + (long) var8);
+        long var10 = (long)var9 - (long)var8 + 1L;
+        long var12 = (long)((double)var10 * var7.nextDouble());
+        int var14 = (int)(var12 + (long)var8);
         int var15 = var7.nextInt(4);
         int var16;
 
@@ -60,23 +59,26 @@ public class BlockPresent extends BlockAether implements IAetherBlock
         {
             for (var16 = 1; var16 <= var14; ++var16)
             {
-                var1.spawnEntityInWorld(new EntityXPOrb(var1, (double) var3, (double) var4, (double) var5, 1));
+                var1.spawnEntityInWorld(new EntityXPOrb(var1, (double)var3, (double)var4, (double)var5, 1));
             }
-        } else if (var15 == 1)
+        }
+        else if (var15 == 1)
         {
             if (var7.nextInt(9) == 0)
             {
                 this.dropBlockAsItem_do(var1, var3, var4, var5, new ItemStack(AetherItems.CandyCaneSword, 1));
-            } else
+            }
+            else
             {
                 for (var16 = 1; var16 <= var14; ++var16)
                 {
                     this.dropBlockAsItem_do(var1, var3, var4, var5, new ItemStack(AetherItems.GingerBreadMan, 1));
                 }
             }
-        } else if (!var1.isRemote)
+        }
+        else if (!var1.isRemote)
         {
-            EntityTNTPresent var17 = new EntityTNTPresent(var1, (double) ((float) var3 + 0.5F), (double) ((float) var4 + 0.5F), (double) ((float) var5 + 0.5F));
+            EntityTNTPresent var17 = new EntityTNTPresent(var1, (double)((float)var3 + 0.5F), (double)((float)var4 + 0.5F), (double)((float)var5 + 0.5F));
             var17.fuse = var1.rand.nextInt(var17.fuse / 4) + var17.fuse / 8;
             var1.spawnEntityInWorld(var17);
             var1.playSoundAtEntity(var17, "random.fuse", 1.0F, 1.0F);
@@ -94,8 +96,8 @@ public class BlockPresent extends BlockAether implements IAetherBlock
     public void onBlockPlaced(World var1, int var2, int var3, int var4, int var5)
     {
         Random var6 = new Random();
-        this.fraction = (long) ((double) this.range * var6.nextDouble());
-        this.randomNumber = (int) (this.fraction + (long) this.randStart);
+        this.fraction = (long)((double)this.range * var6.nextDouble());
+        this.randomNumber = (int)(this.fraction + (long)this.randStart);
         this.crateType = var6.nextInt(4);
         this.rarity = var6.nextInt(9);
     }

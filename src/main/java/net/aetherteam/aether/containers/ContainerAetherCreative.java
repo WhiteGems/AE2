@@ -2,7 +2,6 @@ package net.aetherteam.aether.containers;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import net.aetherteam.aether.Aether;
 import net.aetherteam.aether.client.gui.GuiAetherContainerCreative;
 import net.minecraft.entity.player.EntityPlayer;
@@ -67,7 +66,7 @@ public class ContainerAetherCreative extends Container
     public void scrollTo(float var1)
     {
         int var2 = this.itemList.size() / 9 - 5 + 1;
-        int var3 = (int) ((double) (var1 * (float) var2) + 0.5D);
+        int var3 = (int)((double)(var1 * (float)var2) + 0.5D);
 
         if (var3 < 0)
         {
@@ -82,10 +81,11 @@ public class ContainerAetherCreative extends Container
 
                 if (var6 >= 0 && var6 < this.itemList.size())
                 {
-                    GuiAetherContainerCreative.getInventory().setInventorySlotContents(var5 + var4 * 9, (ItemStack) this.itemList.get(var6));
-                } else
+                    GuiAetherContainerCreative.getInventory().setInventorySlotContents(var5 + var4 * 9, (ItemStack)this.itemList.get(var6));
+                }
+                else
                 {
-                    GuiAetherContainerCreative.getInventory().setInventorySlotContents(var5 + var4 * 9, (ItemStack) null);
+                    GuiAetherContainerCreative.getInventory().setInventorySlotContents(var5 + var4 * 9, (ItemStack)null);
                 }
             }
         }
@@ -113,11 +113,11 @@ public class ContainerAetherCreative extends Container
     {
         if (var2 >= this.inventorySlots.size() - 9 && var2 < this.inventorySlots.size())
         {
-            Slot var3 = (Slot) this.inventorySlots.get(var2);
+            Slot var3 = (Slot)this.inventorySlots.get(var2);
 
             if (var3 != null && var3.getHasStack())
             {
-                var3.putStack((ItemStack) null);
+                var3.putStack((ItemStack)null);
             }
         }
 

@@ -29,11 +29,12 @@ public class AetherSkyProvider extends IRenderHandler
 
         try
         {
-            this.starGLCallList = ObfuscationReflectionHelper.getPrivateValue(RenderGlobal.class, var2, new String[]{"starGLCallList"});
-            this.glSkyList = ObfuscationReflectionHelper.getPrivateValue(RenderGlobal.class, var2, new String[]{"glSkyList"});
-            this.glSkyList2 = ObfuscationReflectionHelper.getPrivateValue(RenderGlobal.class, var2, new String[]{"glSkyList2"});
+            this.starGLCallList = ((Integer)ObfuscationReflectionHelper.getPrivateValue(RenderGlobal.class, var2, new String[] {"starGLCallList"})).intValue();
+            this.glSkyList = ((Integer)ObfuscationReflectionHelper.getPrivateValue(RenderGlobal.class, var2, new String[] {"glSkyList"})).intValue();
+            this.glSkyList2 = ((Integer)ObfuscationReflectionHelper.getPrivateValue(RenderGlobal.class, var2, new String[] {"glSkyList2"})).intValue();
             this.inited = true;
-        } catch (Exception var4)
+        }
+        catch (Exception var4)
         {
             this.inited = false;
         }
@@ -45,9 +46,9 @@ public class AetherSkyProvider extends IRenderHandler
         {
             GL11.glDisable(GL11.GL_TEXTURE_2D);
             Vec3 var4 = var2.getSkyColor(var3.renderViewEntity, var1);
-            float var5 = (float) var4.xCoord;
-            float var6 = (float) var4.yCoord;
-            float var7 = (float) var4.zCoord;
+            float var5 = (float)var4.xCoord;
+            float var6 = (float)var4.yCoord;
+            float var7 = (float)var4.zCoord;
             float var8;
 
             if (var3.gameSettings.anaglyph)
@@ -61,7 +62,7 @@ public class AetherSkyProvider extends IRenderHandler
             }
 
             GL11.glColor3f(var5, var6, var7);
-            Tessellator var28 = Tessellator.instance;
+            Tessellator var25 = Tessellator.instance;
             GL11.glDepthMask(false);
             GL11.glEnable(GL11.GL_FOG);
             GL11.glColor3f(var5, var6, var7);
@@ -71,16 +72,16 @@ public class AetherSkyProvider extends IRenderHandler
             GL11.glEnable(GL11.GL_BLEND);
             GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
             RenderHelper.disableStandardItemLighting();
-            float[] var25 = var2.provider.calcSunriseSunsetColors(var2.getCelestialAngle(var1), var1);
+            float[] var26 = var2.provider.calcSunriseSunsetColors(var2.getCelestialAngle(var1), var1);
             float var11;
-            float var13;
             float var12;
+            float var13;
             float var14;
             int var17;
-            float var18;
             float var19;
+            float var18;
 
-            if (var25 != null)
+            if (var26 != null)
             {
                 GL11.glDisable(GL11.GL_TEXTURE_2D);
                 GL11.glShadeModel(GL11.GL_SMOOTH);
@@ -88,9 +89,9 @@ public class AetherSkyProvider extends IRenderHandler
                 GL11.glRotatef(90.0F, 1.0F, 0.0F, 0.0F);
                 GL11.glRotatef(MathHelper.sin(var2.getCelestialAngleRadians(var1)) < 0.0F ? 180.0F : 0.0F, 0.0F, 0.0F, 1.0F);
                 GL11.glRotatef(90.0F, 0.0F, 0.0F, 1.0F);
-                var8 = var25[0];
-                var11 = var25[1];
-                var12 = var25[2];
+                var8 = var26[0];
+                var11 = var26[1];
+                var12 = var26[2];
                 float var15;
 
                 if (var3.gameSettings.anaglyph)
@@ -103,21 +104,21 @@ public class AetherSkyProvider extends IRenderHandler
                     var12 = var15;
                 }
 
-                var28.startDrawing(6);
-                var28.setColorRGBA_F(var8, var11, var12, var25[3]);
-                var28.addVertex(0.0D, 100.0D, 0.0D);
+                var25.startDrawing(6);
+                var25.setColorRGBA_F(var8, var11, var12, var26[3]);
+                var25.addVertex(0.0D, 100.0D, 0.0D);
                 byte var16 = 16;
-                var28.setColorRGBA_F(var25[0], var25[1], var25[2], 0.0F);
+                var25.setColorRGBA_F(var26[0], var26[1], var26[2], 0.0F);
 
                 for (var17 = 0; var17 <= var16; ++var17)
                 {
-                    var15 = (float) var17 * (float) Math.PI * 2.0F / (float) var16;
+                    var15 = (float)var17 * (float)Math.PI * 2.0F / (float)var16;
                     var18 = MathHelper.sin(var15);
                     var19 = MathHelper.cos(var15);
-                    var28.addVertex((double) (var18 * 120.0F), (double) (var19 * 120.0F), (double) (-var19 * 40.0F * var25[3]));
+                    var25.addVertex((double)(var18 * 120.0F), (double)(var19 * 120.0F), (double)(-var19 * 40.0F * var26[3]));
                 }
 
-                var28.draw();
+                var25.draw();
                 GL11.glPopMatrix();
                 GL11.glShadeModel(GL11.GL_FLAT);
             }
@@ -135,27 +136,27 @@ public class AetherSkyProvider extends IRenderHandler
             GL11.glRotatef(var2.getCelestialAngle(var1) * 360.0F, 1.0F, 0.0F, 0.0F);
             var14 = 30.0F;
             GL11.glBindTexture(GL11.GL_TEXTURE_2D, var3.renderEngine.getTexture("/environment/sun.png"));
-            var28.startDrawingQuads();
-            var28.addVertexWithUV((double) (-var14), 100.0D, (double) (-var14), 0.0D, 0.0D);
-            var28.addVertexWithUV((double) var14, 100.0D, (double) (-var14), 1.0D, 0.0D);
-            var28.addVertexWithUV((double) var14, 100.0D, (double) var14, 1.0D, 1.0D);
-            var28.addVertexWithUV((double) (-var14), 100.0D, (double) var14, 0.0D, 1.0D);
-            var28.draw();
+            var25.startDrawingQuads();
+            var25.addVertexWithUV((double)(-var14), 100.0D, (double)(-var14), 0.0D, 0.0D);
+            var25.addVertexWithUV((double)var14, 100.0D, (double)(-var14), 1.0D, 0.0D);
+            var25.addVertexWithUV((double)var14, 100.0D, (double)var14, 1.0D, 1.0D);
+            var25.addVertexWithUV((double)(-var14), 100.0D, (double)var14, 0.0D, 1.0D);
+            var25.draw();
             var14 = 20.0F;
             GL11.glBindTexture(GL11.GL_TEXTURE_2D, var3.renderEngine.getTexture("/environment/moon_phases.png"));
-            int var26 = var2.getMoonPhase();
-            int var27 = var26 % 4;
-            var17 = var26 / 4 % 2;
-            var18 = (float) (var27 + 0) / 4.0F;
-            var19 = (float) (var17 + 0) / 2.0F;
-            float var20 = (float) (var27 + 1) / 4.0F;
-            float var21 = (float) (var17 + 1) / 2.0F;
-            var28.startDrawingQuads();
-            var28.addVertexWithUV((double) (-var14), -100.0D, (double) var14, (double) var20, (double) var21);
-            var28.addVertexWithUV((double) var14, -100.0D, (double) var14, (double) var18, (double) var21);
-            var28.addVertexWithUV((double) var14, -100.0D, (double) (-var14), (double) var18, (double) var19);
-            var28.addVertexWithUV((double) (-var14), -100.0D, (double) (-var14), (double) var20, (double) var19);
-            var28.draw();
+            int var28 = var2.getMoonPhase();
+            int var27 = var28 % 4;
+            var17 = var28 / 4 % 2;
+            var18 = (float)(var27 + 0) / 4.0F;
+            var19 = (float)(var17 + 0) / 2.0F;
+            float var20 = (float)(var27 + 1) / 4.0F;
+            float var21 = (float)(var17 + 1) / 2.0F;
+            var25.startDrawingQuads();
+            var25.addVertexWithUV((double)(-var14), -100.0D, (double)var14, (double)var20, (double)var21);
+            var25.addVertexWithUV((double)var14, -100.0D, (double)var14, (double)var18, (double)var21);
+            var25.addVertexWithUV((double)var14, -100.0D, (double)(-var14), (double)var18, (double)var19);
+            var25.addVertexWithUV((double)(-var14), -100.0D, (double)(-var14), (double)var20, (double)var19);
+            var25.draw();
             GL11.glDisable(GL11.GL_TEXTURE_2D);
             float var22 = 1000000.0F + var2.getStarBrightness(var1) * var8;
 
@@ -178,42 +179,43 @@ public class AetherSkyProvider extends IRenderHandler
             GL11.glCallList(this.glSkyList2);
             GL11.glPopMatrix();
             var12 = 1.0F;
-            var13 = -((float) (var23 + 65.0D));
+            var13 = -((float)(var23 + 65.0D));
             var14 = -var12;
-            var28.startDrawingQuads();
-            var28.setColorRGBA_F((float) var4.xCoord, (float) var4.yCoord, (float) var4.zCoord, 1.0F);
-            var28.addVertex((double) (-var12), (double) var13, (double) var12);
-            var28.addVertex((double) var12, (double) var13, (double) var12);
-            var28.addVertex((double) var12, (double) var14, (double) var12);
-            var28.addVertex((double) (-var12), (double) var14, (double) var12);
-            var28.addVertex((double) (-var12), (double) var14, (double) (-var12));
-            var28.addVertex((double) var12, (double) var14, (double) (-var12));
-            var28.addVertex((double) var12, (double) var13, (double) (-var12));
-            var28.addVertex((double) (-var12), (double) var13, (double) (-var12));
-            var28.addVertex((double) var12, (double) var14, (double) (-var12));
-            var28.addVertex((double) var12, (double) var14, (double) var12);
-            var28.addVertex((double) var12, (double) var13, (double) var12);
-            var28.addVertex((double) var12, (double) var13, (double) (-var12));
-            var28.addVertex((double) (-var12), (double) var13, (double) (-var12));
-            var28.addVertex((double) (-var12), (double) var13, (double) var12);
-            var28.addVertex((double) (-var12), (double) var14, (double) var12);
-            var28.addVertex((double) (-var12), (double) var14, (double) (-var12));
-            var28.addVertex((double) (-var12), (double) var14, (double) (-var12));
-            var28.addVertex((double) (-var12), (double) var14, (double) var12);
-            var28.addVertex((double) var12, (double) var14, (double) var12);
-            var28.addVertex((double) var12, (double) var14, (double) (-var12));
-            var28.draw();
+            var25.startDrawingQuads();
+            var25.setColorRGBA_F((float)var4.xCoord, (float)var4.yCoord, (float)var4.zCoord, 1.0F);
+            var25.addVertex((double)(-var12), (double)var13, (double)var12);
+            var25.addVertex((double)var12, (double)var13, (double)var12);
+            var25.addVertex((double)var12, (double)var14, (double)var12);
+            var25.addVertex((double)(-var12), (double)var14, (double)var12);
+            var25.addVertex((double)(-var12), (double)var14, (double)(-var12));
+            var25.addVertex((double)var12, (double)var14, (double)(-var12));
+            var25.addVertex((double)var12, (double)var13, (double)(-var12));
+            var25.addVertex((double)(-var12), (double)var13, (double)(-var12));
+            var25.addVertex((double)var12, (double)var14, (double)(-var12));
+            var25.addVertex((double)var12, (double)var14, (double)var12);
+            var25.addVertex((double)var12, (double)var13, (double)var12);
+            var25.addVertex((double)var12, (double)var13, (double)(-var12));
+            var25.addVertex((double)(-var12), (double)var13, (double)(-var12));
+            var25.addVertex((double)(-var12), (double)var13, (double)var12);
+            var25.addVertex((double)(-var12), (double)var14, (double)var12);
+            var25.addVertex((double)(-var12), (double)var14, (double)(-var12));
+            var25.addVertex((double)(-var12), (double)var14, (double)(-var12));
+            var25.addVertex((double)(-var12), (double)var14, (double)var12);
+            var25.addVertex((double)var12, (double)var14, (double)var12);
+            var25.addVertex((double)var12, (double)var14, (double)(-var12));
+            var25.draw();
 
             if (var2.provider.isSkyColored())
             {
                 GL11.glColor3f(var5 * 0.9F + 0.04F, var6 * 0.0F + 0.0F, var7 * 0.0F + 0.0F);
-            } else
+            }
+            else
             {
                 GL11.glColor3f(var5, var6, var7);
             }
 
             GL11.glPushMatrix();
-            GL11.glTranslatef(0.0F, -((float) (var23 - 16.0D)), 0.0F);
+            GL11.glTranslatef(0.0F, -((float)(var23 - 16.0D)), 0.0F);
             GL11.glCallList(this.glSkyList2);
             GL11.glPopMatrix();
             GL11.glEnable(GL11.GL_TEXTURE_2D);

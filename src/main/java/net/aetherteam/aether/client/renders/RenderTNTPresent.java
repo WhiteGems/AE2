@@ -20,12 +20,12 @@ public class RenderTNTPresent extends Render
     public void renderPrimedTNT(EntityTNTPresent var1, double var2, double var4, double var6, float var8, float var9)
     {
         GL11.glPushMatrix();
-        GL11.glTranslatef((float) var2, (float) var4, (float) var6);
+        GL11.glTranslatef((float)var2, (float)var4, (float)var6);
         float var10;
 
-        if ((float) var1.fuse - var9 + 1.0F < 10.0F)
+        if ((float)var1.fuse - var9 + 1.0F < 10.0F)
         {
-            var10 = 1.0F - ((float) var1.fuse - var9 + 1.0F) / 10.0F;
+            var10 = 1.0F - ((float)var1.fuse - var9 + 1.0F) / 10.0F;
 
             if (var10 < 0.0F)
             {
@@ -43,7 +43,7 @@ public class RenderTNTPresent extends Render
             GL11.glScalef(1.0F, 1.0F, 1.0F);
         }
 
-        var10 = (1.0F - ((float) var1.fuse - var9 + 1.0F) / 100.0F) * 0.8F;
+        var10 = (1.0F - ((float)var1.fuse - var9 + 1.0F) / 100.0F) * 0.8F;
         this.loadTexture("/terrain.png");
         this.blockRenderer.renderBlockAsItem(AetherBlocks.Present, 0, var1.getBrightness(var9));
 
@@ -72,6 +72,6 @@ public class RenderTNTPresent extends Render
      */
     public void doRender(Entity var1, double var2, double var4, double var6, float var8, float var9)
     {
-        this.renderPrimedTNT((EntityTNTPresent) var1, var2, var4, var6, var8, var9);
+        this.renderPrimedTNT((EntityTNTPresent)var1, var2, var4, var6, var8, var9);
     }
 }

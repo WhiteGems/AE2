@@ -3,24 +3,19 @@ package net.aetherteam.aether.interfaces;
 import net.aetherteam.aether.enums.EnumBossType;
 import net.minecraft.entity.Entity;
 
-public abstract interface IAetherBoss
+public interface IAetherBoss
 {
-    public abstract int getBossHP();
+    int getBossHP();
 
-    public abstract int getBossMaxHP();
+    int getBossMaxHP();
 
-    public abstract int getBossEntityID();
+    int getBossEntityID();
 
-    public abstract String getBossTitle();
+    String getBossTitle();
 
-    public abstract Entity getBossEntity();
+    Entity getBossEntity();
 
-    public abstract int getBossStage();
+    int getBossStage();
 
-    public abstract EnumBossType getBossType();
+    EnumBossType getBossType();
 }
-
-/* Location:           D:\Dev\Mc\forge_orl\mcp\jars\bin\aether.jar
- * Qualified Name:     net.aetherteam.aether.interfaces.IAetherBoss
- * JD-Core Version:    0.6.2
- */

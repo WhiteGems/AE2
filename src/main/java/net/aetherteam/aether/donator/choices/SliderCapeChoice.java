@@ -11,8 +11,3 @@ public class SliderCapeChoice extends DonatorChoice
         super("Slider Cape", EnumChoiceType.CAPE, new DonatorTexture("cape_Slider.png", "Slider.png", 256, 128));
     }
 }
-
-/* Location:           D:\Dev\Mc\forge_orl\mcp\jars\bin\aether.jar
- * Qualified Name:     net.aetherteam.aether.donator.choices.SliderCapeChoice
- * JD-Core Version:    0.6.2
- */

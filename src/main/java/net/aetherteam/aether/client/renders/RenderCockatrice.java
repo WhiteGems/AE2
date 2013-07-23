@@ -29,7 +29,7 @@ public class RenderCockatrice extends RenderLiving
      */
     protected float handleRotationFloat(EntityLiving var1, float var2)
     {
-        return this.getWingRotation((EntityCockatrice) var1, var2);
+        return this.getWingRotation((EntityCockatrice)var1, var2);
     }
 
     protected void scalemoa()
@@ -51,7 +51,8 @@ public class RenderCockatrice extends RenderLiving
         if (var2 != 0)
         {
             return -1;
-        } else
+        }
+        else
         {
             this.loadTexture("/net/aetherteam/aether/client/sprites/mobs/cockatrice/markings.png");
             float var4 = 1.0F;
@@ -61,7 +62,8 @@ public class RenderCockatrice extends RenderLiving
             if (!var1.getActivePotionEffects().isEmpty())
             {
                 GL11.glDepthMask(false);
-            } else
+            }
+            else
             {
                 GL11.glDepthMask(true);
             }
@@ -69,7 +71,7 @@ public class RenderCockatrice extends RenderLiving
             char var5 = 61680;
             int var6 = var5 % 65536;
             int var7 = var5 / 65536;
-            OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, (float) var6 / 1.0F, (float) var7 / 1.0F);
+            OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, (float)var6 / 1.0F, (float)var7 / 1.0F);
             GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
             GL11.glColor4f(1.0F, 1.0F, 1.0F, var4);
             return 1;
@@ -81,6 +83,6 @@ public class RenderCockatrice extends RenderLiving
      */
     protected int shouldRenderPass(EntityLiving var1, int var2, float var3)
     {
-        return this.setMarkingBrightness((EntityCockatrice) var1, var2, var3);
+        return this.setMarkingBrightness((EntityCockatrice)var1, var2, var3);
     }
 }

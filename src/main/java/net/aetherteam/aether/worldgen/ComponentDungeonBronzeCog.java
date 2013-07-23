@@ -2,7 +2,6 @@ package net.aetherteam.aether.worldgen;
 
 import java.util.List;
 import java.util.Random;
-
 import net.aetherteam.aether.blocks.AetherBlocks;
 import net.aetherteam.aether.dungeons.Dungeon;
 import net.aetherteam.aether.dungeons.DungeonHandler;
@@ -30,8 +29,8 @@ public class ComponentDungeonBronzeCog extends ComponentDungeonBronzeRoom
      */
     public boolean addComponentParts(World var1, Random var2, StructureBoundingBox var3)
     {
-        int var5;
         int var4;
+        int var5;
         int var6;
 
         for (var4 = this.boundingBox.minY; var4 <= this.boundingBox.maxY; ++var4)
@@ -53,21 +52,25 @@ public class ComponentDungeonBronzeCog extends ComponentDungeonBronzeRoom
         int var9 = this.boundingBox.minZ + (this.boundingBox.maxZ - this.boundingBox.minZ) / 2 + 2;
         this.fillWithBlocksWithNotify(var1, var3, this.boundingBox.minX + 1, this.boundingBox.minY + 1, this.boundingBox.minZ + 1, this.boundingBox.maxX - 1, this.boundingBox.maxY - 1, this.boundingBox.maxZ - 1, 0, 0, false);
         this.fillWithBlocksWithNotify(var1, var3, var4, var5, var6, var7, var8, var9, AetherBlocks.LockedDungeonStone.blockID, 0, false);
-        int var10 = this.boundingBox.minX + (this.boundingBox.maxX - this.boundingBox.minX) / 2;
-        int var11 = this.boundingBox.minY + 2;
-        int var12 = this.boundingBox.minZ + (this.boundingBox.maxZ - this.boundingBox.minZ) / 2;
 
-        if (var3.isVecInside(var10 + 1, var11, var12 + 1))
+        if (var3.isVecInside(this.boundingBox.minX + (this.boundingBox.maxX - this.boundingBox.minX) / 2 + 1, var8 + 2, this.boundingBox.minZ + (this.boundingBox.maxZ - this.boundingBox.minZ) / 2 + 1))
         {
-            EntityLabyrinthEye var13 = new EntityLabyrinthEye(var1);
-            var13.setPosition((double) ((float) var10 + 1.0F), (double) (var11 + 2), (double) ((float) var12 + 1.0F));
-            var1.spawnEntityInWorld(var13);
+            EntityLabyrinthEye var10 = new EntityLabyrinthEye(var1);
+            int var11 = this.boundingBox.minX + (this.boundingBox.maxX - this.boundingBox.minX) / 2;
+            int var12 = this.boundingBox.minY + 2;
+            int var13 = this.boundingBox.minZ + (this.boundingBox.maxZ - this.boundingBox.minZ) / 2;
+            var10.setPosition((double)((float)var11 + 1.0F), (double)(var12 + 2), (double)((float)var13 + 1.0F));
             DungeonHandler var14 = DungeonHandler.instance();
-            Dungeon var15 = var14.getInstanceAt(MathHelper.floor_double((double) ((float) var10 + 1.0F)), MathHelper.floor_double((double) (var11 + 2)), MathHelper.floor_double((double) ((float) var12 + 1.0F)));
+            Dungeon var15 = var14.getInstanceAt(MathHelper.floor_double((double)((float)var11 + 1.0F)), MathHelper.floor_double((double)(var12 + 2)), MathHelper.floor_double((double)((float)var13 + 1.0F)));
 
             if (var15 != null)
             {
-                var15.registerEntity((float) var10 + 1.0F, (float) var11 + 2.0F, (float) var12 + 1.0F, var13);
+                var15.registerEntity((float)var11 + 1.0F, (float)var12 + 2.0F, (float)var13 + 1.0F, var10);
+            }
+
+            if (!var1.isRemote)
+            {
+                var1.spawnEntityInWorld(var10);
             }
         }
 
@@ -104,7 +107,8 @@ public class ComponentDungeonBronzeCog extends ComponentDungeonBronzeRoom
                         if (var12 != var4 && var12 != var7 && var13 != var3 && var13 != var6 && var14 != var5 && var14 != var8)
                         {
                             this.placeBlockAtCurrentPositionWithNotify(var1, var10, 0, var13, var12, var14, var2);
-                        } else
+                        }
+                        else
                         {
                             this.placeBlockAtCurrentPositionWithNotify(var1, var9, 0, var13, var12, var14, var2);
                         }
@@ -148,7 +152,7 @@ public class ComponentDungeonBronzeCog extends ComponentDungeonBronzeRoom
 
         if (var7.isVecInside(var8, var9, var10))
         {
-            var1.setBlock(var8, var9, var10, var2, var3, 2);
+            var1.setBlock(var8, var9, var10, var2, var3, ChunkProviderAether.placementFlagType);
         }
     }
 

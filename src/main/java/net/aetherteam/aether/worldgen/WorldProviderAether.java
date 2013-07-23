@@ -2,7 +2,6 @@ package net.aetherteam.aether.worldgen;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
-import net.aetherteam.aether.client.renders.AetherSkyProvider;
 import net.minecraft.block.Block;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.Vec3;
@@ -21,20 +20,21 @@ public class WorldProviderAether extends WorldProviderSurface
     public float[] calcSunriseSunsetColors(float var1, float var2)
     {
         float var3 = 0.4F;
-        float var4 = MathHelper.cos(var1 * (float) Math.PI * 2.0F) - 0.0F;
+        float var4 = MathHelper.cos(var1 * (float)Math.PI * 2.0F) - 0.0F;
         float var5 = -0.0F;
 
         if (var4 >= var5 - var3 && var4 <= var5 + var3)
         {
             float var6 = (var4 - var5) / var3 * 0.5F + 0.5F;
-            float var7 = 1.0F - (1.0F - MathHelper.sin(var6 * (float) Math.PI)) * 0.99F;
+            float var7 = 1.0F - (1.0F - MathHelper.sin(var6 * (float)Math.PI)) * 0.99F;
             var7 *= var7;
             this.colorsSunriseSunset[0] = var6 * 0.3F + 0.1F;
             this.colorsSunriseSunset[1] = var6 * var6 * 0.7F + 0.2F;
             this.colorsSunriseSunset[2] = var6 * var6 * 0.7F + 0.2F;
             this.colorsSunriseSunset[3] = var7;
             return this.colorsSunriseSunset;
-        } else
+        }
+        else
         {
             return null;
         }
@@ -45,7 +45,7 @@ public class WorldProviderAether extends WorldProviderSurface
      */
     public boolean isSurfaceWorld()
     {
-        return false;
+        return true;
     }
 
     /**
@@ -98,7 +98,7 @@ public class WorldProviderAether extends WorldProviderSurface
             var3 = 104890528;
         }
 
-        float var4 = MathHelper.cos(var1 * (float) Math.PI * 2.0F) * 2.0F + 0.5F;
+        float var4 = MathHelper.cos(var1 * (float)Math.PI * 2.0F) * 2.0F + 0.5F;
 
         if (var4 < 0.0F)
         {
@@ -110,13 +110,13 @@ public class WorldProviderAether extends WorldProviderSurface
             var4 = 1.0F;
         }
 
-        float var5 = (float) (var3 >> 16 & 255) / 255.0F;
-        float var6 = (float) (var3 >> 8 & 255) / 255.0F;
-        float var7 = (float) (var3 & 255) / 255.0F;
+        float var5 = (float)(var3 >> 16 & 255) / 255.0F;
+        float var6 = (float)(var3 >> 8 & 255) / 255.0F;
+        float var7 = (float)(var3 & 255) / 255.0F;
         var5 *= var4 * 0.94F + 0.06F;
         var6 *= var4 * 0.94F + 0.06F;
         var7 *= var4 * 0.91F + 0.09F;
-        return this.worldObj.getWorldVec3Pool().getVecFromPool((double) var5, (double) var6, (double) var7);
+        return this.worldObj.getWorldVec3Pool().getVecFromPool((double)var5, (double)var6, (double)var7);
     }
 
     public String getSaveFolder()
@@ -164,7 +164,7 @@ public class WorldProviderAether extends WorldProviderSurface
     @SideOnly(Side.CLIENT)
     public IRenderHandler getSkyRenderer()
     {
-        return new AetherSkyProvider();
+        return super.getSkyRenderer();
     }
 
     public double getHorizon()

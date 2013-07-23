@@ -25,7 +25,7 @@ public class EntityKey extends Entity
         super(var1);
         this.age = 0;
         this.health = 5;
-        this.hoverStart = (float) (Math.random() * Math.PI * 2.0D);
+        this.hoverStart = (float)(Math.random() * Math.PI * 2.0D);
         this.setSize(0.25F, 0.25F);
         this.yOffset = this.height / 2.0F;
         this.setPosition(var2, var4, var6);
@@ -51,7 +51,7 @@ public class EntityKey extends Entity
         super(var1);
         this.age = 0;
         this.health = 5;
-        this.hoverStart = (float) (Math.random() * Math.PI * 2.0D);
+        this.hoverStart = (float)(Math.random() * Math.PI * 2.0D);
         this.setSize(0.25F, 0.25F);
         this.yOffset = this.height / 2.0F;
     }
@@ -95,8 +95,7 @@ public class EntityKey extends Entity
      * Will deal the specified amount of damage to the entity if the entity isn't immune to fire damage. Args:
      * amountDamage
      */
-    protected void dealFireDamage(int var1)
-    {}
+    protected void dealFireDamage(int var1) {}
 
     /**
      * Called when the entity is attacked.
@@ -111,8 +110,8 @@ public class EntityKey extends Entity
      */
     public void writeEntityToNBT(NBTTagCompound var1)
     {
-        var1.setShort("Health", (short) ((byte) this.health));
-        var1.setShort("Age", (short) this.age);
+        var1.setShort("Health", (short)((byte)this.health));
+        var1.setShort("Age", (short)this.age);
     }
 
     /**
@@ -145,8 +144,7 @@ public class EntityKey extends Entity
     /**
      * Teleports the entity to another dimension. Params: Dimension number to teleport to
      */
-    public void travelToDimension(int var1)
-    {}
+    public void travelToDimension(int var1) {}
 
     public void setKeyName(String var1)
     {

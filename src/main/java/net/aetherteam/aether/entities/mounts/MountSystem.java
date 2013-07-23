@@ -1,9 +1,7 @@
 package net.aetherteam.aether.entities.mounts;
 
 import cpw.mods.fml.common.network.PacketDispatcher;
-
 import java.util.ArrayList;
-
 import net.aetherteam.aether.packets.AetherPacketHandler;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
@@ -53,7 +51,8 @@ public class MountSystem
                 mountInput.add(var0);
                 sendInputPacket();
             }
-        } else if (mountInput.contains(var0))
+        }
+        else if (mountInput.contains(var0))
         {
             mountInput.remove(var0);
             sendInputPacket();

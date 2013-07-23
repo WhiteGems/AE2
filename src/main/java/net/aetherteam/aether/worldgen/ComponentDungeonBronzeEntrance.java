@@ -2,7 +2,6 @@ package net.aetherteam.aether.worldgen;
 
 import java.util.List;
 import java.util.Random;
-
 import net.aetherteam.aether.blocks.AetherBlocks;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.structure.StructureBoundingBox;
@@ -87,10 +86,10 @@ public class ComponentDungeonBronzeEntrance extends ComponentDungeonBronzeRoom
                 var4 = true;
         }
 
-        byte var14 = 0;
-        byte var12 = 0;
         byte var11 = 0;
+        byte var12 = 0;
         byte var13 = 0;
+        byte var14 = 0;
 
         for (int var8 = this.boundingBox.minX; var8 <= this.boundingBox.maxX; ++var8)
         {
@@ -106,7 +105,7 @@ public class ComponentDungeonBronzeEntrance extends ComponentDungeonBronzeRoom
             }
         }
 
-        this.fillWithBlocks(var1, var3, this.boundingBox.minX + 1 + var11, this.boundingBox.minY + 1, this.boundingBox.minZ + 1 + var13, this.boundingBox.maxX - 1 + var14, this.boundingBox.maxY - 1, this.boundingBox.maxZ - 1 + var12, 0, 0, false);
+        this.fillWithBlocks(var1, var3, this.boundingBox.minX + 1 + var13, this.boundingBox.minY + 1, this.boundingBox.minZ + 1 + var14, this.boundingBox.maxX - 1 + var11, this.boundingBox.maxY - 1, this.boundingBox.maxZ - 1 + var12, 0, 0, false);
         this.cutHolesForEntrances(var1, var2, var3);
         return true;
     }

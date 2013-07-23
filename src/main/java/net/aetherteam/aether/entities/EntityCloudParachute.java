@@ -1,7 +1,6 @@
 package net.aetherteam.aether.entities;
 
 import java.util.Random;
-
 import net.aetherteam.aether.Aether;
 import net.aetherteam.aether.entities.mounts_old.RidingHandler;
 import net.aetherteam.aether.entities.mounts_old.RidingHandlerParachute;
@@ -51,7 +50,7 @@ public class EntityCloudParachute extends Entity
 
     protected void entityInit()
     {
-        this.dataWatcher.addObject(16, new Byte((byte) 0));
+        this.dataWatcher.addObject(16, new Byte((byte)0));
     }
 
     public boolean getColor()
@@ -62,7 +61,7 @@ public class EntityCloudParachute extends Entity
     public void setColor(boolean var1)
     {
         byte var2 = this.dataWatcher.getWatchableObjectByte(16);
-        this.dataWatcher.updateObject(16, Byte.valueOf((byte) (var1 ? 1 : 0)));
+        this.dataWatcher.updateObject(16, Byte.valueOf((byte)(var1 ? 1 : 0)));
     }
 
     /**
@@ -116,12 +115,14 @@ public class EntityCloudParachute extends Entity
         if (super.interact(var1))
         {
             return super.interact(var1);
-        } else
+        }
+        else
         {
             if (this.riddenByEntity == null && !this.getRidingHandler().isBeingRidden())
             {
                 this.getRidingHandler().setRider(var1);
-            } else
+            }
+            else
             {
                 this.getRidingHandler().onUnMount();
             }
@@ -150,8 +151,7 @@ public class EntityCloudParachute extends Entity
     /**
      * Called by a player entity when they collide with an entity
      */
-    public void onCollideWithPlayer(EntityPlayer var1)
-    {}
+    public void onCollideWithPlayer(EntityPlayer var1) {}
 
     public RidingHandler getRidingHandler()
     {
@@ -161,12 +161,10 @@ public class EntityCloudParachute extends Entity
     /**
      * (abstract) Protected helper method to read subclass entity data from NBT.
      */
-    protected void readEntityFromNBT(NBTTagCompound var1)
-    {}
+    protected void readEntityFromNBT(NBTTagCompound var1) {}
 
     /**
      * (abstract) Protected helper method to write subclass entity data to NBT.
      */
-    protected void writeEntityToNBT(NBTTagCompound var1)
-    {}
+    protected void writeEntityToNBT(NBTTagCompound var1) {}
 }

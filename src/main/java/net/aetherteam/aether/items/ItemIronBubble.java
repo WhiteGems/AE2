@@ -1,5 +1,7 @@
 package net.aetherteam.aether.items;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.aetherteam.aether.PlayerBaseAetherServer;
 import net.aetherteam.aether.client.PlayerBaseAetherClient;
 import net.minecraft.entity.player.EntityPlayer;
@@ -34,6 +36,7 @@ public class ItemIronBubble extends ItemAccessory
         var1.setAir(0);
     }
 
+    @SideOnly(Side.CLIENT)
     public void activateClientPassive(EntityPlayer var1, PlayerBaseAetherClient var2)
     {
         var1.setAir(0);

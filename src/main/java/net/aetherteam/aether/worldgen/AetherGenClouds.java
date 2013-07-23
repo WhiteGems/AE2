@@ -1,7 +1,6 @@
 package net.aetherteam.aether.worldgen;
 
 import java.util.Random;
-
 import net.minecraft.world.World;
 import net.minecraft.world.gen.feature.WorldGenerator;
 

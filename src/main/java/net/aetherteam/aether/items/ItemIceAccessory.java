@@ -1,5 +1,7 @@
 package net.aetherteam.aether.items;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.aetherteam.aether.PlayerBaseAetherServer;
 import net.aetherteam.aether.client.PlayerBaseAetherClient;
 import net.minecraft.entity.player.EntityPlayer;
@@ -36,7 +38,7 @@ public class ItemIceAccessory extends ItemAccessory
         int var3 = MathHelper.floor_double(var1.posX);
         int var4 = MathHelper.floor_double(var1.boundingBox.minY);
         int var5 = MathHelper.floor_double(var1.posZ);
-        double var10000 = var1.posY - (double) var4;
+        double var10000 = var1.posY - (double)var4;
         var1.worldObj.getBlockMaterial(var3, var4, var5);
         var1.worldObj.getBlockMaterial(var3, var4 - 1, var5);
 
@@ -51,7 +53,8 @@ public class ItemIceAccessory extends ItemAccessory
                         if (var1.worldObj.getBlockMetadata(var10, var11, var12) == 0)
                         {
                             var1.worldObj.setBlock(var10, var11, var12, 79);
-                        } else
+                        }
+                        else
                         {
                             var1.worldObj.setBlock(var10, var11, var12, 0);
                         }
@@ -62,15 +65,17 @@ public class ItemIceAccessory extends ItemAccessory
 
                             if (var2.getSlotStack(this.itemID).stackSize < 1)
                             {
-                                var2.setSlotStack(var2.getSlotIndex(this.itemID), (ItemStack) null);
+                                var2.setSlotStack(var2.getSlotIndex(this.itemID), (ItemStack)null);
                             }
                         }
-                    } else if (var1.worldObj.getBlockId(var10, var11, var12) == 9)
+                    }
+                    else if (var1.worldObj.getBlockId(var10, var11, var12) == 9)
                     {
                         if (var1.worldObj.getBlockMetadata(var10, var11, var12) == 0)
                         {
                             var1.worldObj.setBlock(var10, var11, var12, 79);
-                        } else
+                        }
+                        else
                         {
                             var1.worldObj.setBlock(var10, var11, var12, 0);
                         }
@@ -81,15 +86,17 @@ public class ItemIceAccessory extends ItemAccessory
 
                             if (var2.getSlotStack(this.itemID).stackSize < 1)
                             {
-                                var2.setSlotStack(var2.getSlotIndex(this.itemID), (ItemStack) null);
+                                var2.setSlotStack(var2.getSlotIndex(this.itemID), (ItemStack)null);
                             }
                         }
-                    } else if (var1.worldObj.getBlockId(var10, var11, var12) == 10)
+                    }
+                    else if (var1.worldObj.getBlockId(var10, var11, var12) == 10)
                     {
                         if (var1.worldObj.getBlockMetadata(var10, var11, var12) == 0)
                         {
                             var1.worldObj.setBlock(var10, var11, var12, 49);
-                        } else
+                        }
+                        else
                         {
                             var1.worldObj.setBlock(var10, var11, var12, 0);
                         }
@@ -100,15 +107,17 @@ public class ItemIceAccessory extends ItemAccessory
 
                             if (var2.getSlotStack(this.itemID).stackSize < 1)
                             {
-                                var2.setSlotStack(var2.getSlotIndex(this.itemID), (ItemStack) null);
+                                var2.setSlotStack(var2.getSlotIndex(this.itemID), (ItemStack)null);
                             }
                         }
-                    } else if (var1.worldObj.getBlockId(var10, var11, var12) == 11)
+                    }
+                    else if (var1.worldObj.getBlockId(var10, var11, var12) == 11)
                     {
                         if (var1.worldObj.getBlockMetadata(var10, var11, var12) == 0)
                         {
                             var1.worldObj.setBlock(var10, var11, var12, 49);
-                        } else
+                        }
+                        else
                         {
                             var1.worldObj.setBlock(var10, var11, var12, 0);
                         }
@@ -119,7 +128,7 @@ public class ItemIceAccessory extends ItemAccessory
 
                             if (var2.getSlotStack(this.itemID).stackSize < 1)
                             {
-                                var2.setSlotStack(var2.getSlotIndex(this.itemID), (ItemStack) null);
+                                var2.setSlotStack(var2.getSlotIndex(this.itemID), (ItemStack)null);
                             }
                         }
                     }
@@ -128,12 +137,13 @@ public class ItemIceAccessory extends ItemAccessory
         }
     }
 
+    @SideOnly(Side.CLIENT)
     public void activateClientPassive(EntityPlayer var1, PlayerBaseAetherClient var2)
     {
         int var3 = MathHelper.floor_double(var1.posX);
         int var4 = MathHelper.floor_double(var1.boundingBox.minY);
         int var5 = MathHelper.floor_double(var1.posZ);
-        double var10000 = var1.posY - (double) var4;
+        double var10000 = var1.posY - (double)var4;
         var1.worldObj.getBlockMaterial(var3, var4, var5);
         var1.worldObj.getBlockMaterial(var3, var4 - 1, var5);
 
@@ -148,7 +158,8 @@ public class ItemIceAccessory extends ItemAccessory
                         if (var1.worldObj.getBlockMetadata(var10, var11, var12) == 0)
                         {
                             var1.worldObj.setBlock(var10, var11, var12, 79);
-                        } else
+                        }
+                        else
                         {
                             var1.worldObj.setBlock(var10, var11, var12, 0);
                         }
@@ -159,15 +170,17 @@ public class ItemIceAccessory extends ItemAccessory
 
                             if (var2.getSlotStack(this.itemID).stackSize < 1)
                             {
-                                var2.setSlotStack(var2.getSlotIndex(this.itemID), (ItemStack) null);
+                                var2.setSlotStack(var2.getSlotIndex(this.itemID), (ItemStack)null);
                             }
                         }
-                    } else if (var1.worldObj.getBlockId(var10, var11, var12) == 9)
+                    }
+                    else if (var1.worldObj.getBlockId(var10, var11, var12) == 9)
                     {
                         if (var1.worldObj.getBlockMetadata(var10, var11, var12) == 0)
                         {
                             var1.worldObj.setBlock(var10, var11, var12, 79);
-                        } else
+                        }
+                        else
                         {
                             var1.worldObj.setBlock(var10, var11, var12, 0);
                         }
@@ -178,15 +191,17 @@ public class ItemIceAccessory extends ItemAccessory
 
                             if (var2.getSlotStack(this.itemID).stackSize < 1)
                             {
-                                var2.setSlotStack(var2.getSlotIndex(this.itemID), (ItemStack) null);
+                                var2.setSlotStack(var2.getSlotIndex(this.itemID), (ItemStack)null);
                             }
                         }
-                    } else if (var1.worldObj.getBlockId(var10, var11, var12) == 10)
+                    }
+                    else if (var1.worldObj.getBlockId(var10, var11, var12) == 10)
                     {
                         if (var1.worldObj.getBlockMetadata(var10, var11, var12) == 0)
                         {
                             var1.worldObj.setBlock(var10, var11, var12, 49);
-                        } else
+                        }
+                        else
                         {
                             var1.worldObj.setBlock(var10, var11, var12, 0);
                         }
@@ -197,15 +212,17 @@ public class ItemIceAccessory extends ItemAccessory
 
                             if (var2.getSlotStack(this.itemID).stackSize < 1)
                             {
-                                var2.setSlotStack(var2.getSlotIndex(this.itemID), (ItemStack) null);
+                                var2.setSlotStack(var2.getSlotIndex(this.itemID), (ItemStack)null);
                             }
                         }
-                    } else if (var1.worldObj.getBlockId(var10, var11, var12) == 11)
+                    }
+                    else if (var1.worldObj.getBlockId(var10, var11, var12) == 11)
                     {
                         if (var1.worldObj.getBlockMetadata(var10, var11, var12) == 0)
                         {
                             var1.worldObj.setBlock(var10, var11, var12, 49);
-                        } else
+                        }
+                        else
                         {
                             var1.worldObj.setBlock(var10, var11, var12, 0);
                         }
@@ -216,7 +233,7 @@ public class ItemIceAccessory extends ItemAccessory
 
                             if (var2.getSlotStack(this.itemID).stackSize < 1)
                             {
-                                var2.setSlotStack(var2.getSlotIndex(this.itemID), (ItemStack) null);
+                                var2.setSlotStack(var2.getSlotIndex(this.itemID), (ItemStack)null);
                             }
                         }
                     }

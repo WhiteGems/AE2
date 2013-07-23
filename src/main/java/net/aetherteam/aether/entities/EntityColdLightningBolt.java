@@ -2,9 +2,7 @@ package net.aetherteam.aether.entities;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
-
 import java.util.List;
-
 import net.aetherteam.aether.blocks.AetherBlocks;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.effect.EntityWeatherEffect;
@@ -76,7 +74,8 @@ public class EntityColdLightningBolt extends EntityWeatherEffect
             if (this.boltLivingTime == 0)
             {
                 this.setDead();
-            } else if (this.lightningState < -this.rand.nextInt(10))
+            }
+            else if (this.lightningState < -this.rand.nextInt(10))
             {
                 --this.boltLivingTime;
                 this.lightningState = 1;
@@ -101,15 +100,16 @@ public class EntityColdLightningBolt extends EntityWeatherEffect
             if (this.worldObj.isRemote)
             {
                 this.worldObj.lastLightningBolt = 2;
-            } else
+            }
+            else
             {
-                double var7 = 3.0D;
-                List var6 = this.worldObj.getEntitiesWithinAABBExcludingEntity(this, AxisAlignedBB.getAABBPool().getAABB(this.posX - var7, this.posY - var7, this.posZ - var7, this.posX + var7, this.posY + 6.0D + var7, this.posZ + var7));
+                double var6 = 3.0D;
+                List var7 = this.worldObj.getEntitiesWithinAABBExcludingEntity(this, AxisAlignedBB.getAABBPool().getAABB(this.posX - var6, this.posY - var6, this.posZ - var6, this.posX + var6, this.posY + 6.0D + var6, this.posZ + var6));
 
-                for (int var4 = 0; var4 < var6.size(); ++var4)
+                for (int var4 = 0; var4 < var7.size(); ++var4)
                 {
-                    Entity var5 = (Entity) var6.get(var4);
-                    this.damageSource = (new CustomDamageSource(" has been struck with frost bite", var5, this)).setDeathMessage(" has been struck with frost bite");
+                    Entity var5 = (Entity)var7.get(var4);
+                    this.damageSource = (new CustomDamageSource(" has been struck with frost bite", var5, (Entity)null)).setDeathMessage(" has been struck with frost bite");
 
                     if (!(var5 instanceof EntityTempest) && !(var5 instanceof EntityItem))
                     {
@@ -125,14 +125,12 @@ public class EntityColdLightningBolt extends EntityWeatherEffect
     /**
      * (abstract) Protected helper method to read subclass entity data from NBT.
      */
-    protected void readEntityFromNBT(NBTTagCompound var1)
-    {}
+    protected void readEntityFromNBT(NBTTagCompound var1) {}
 
     /**
      * (abstract) Protected helper method to write subclass entity data to NBT.
      */
-    protected void writeEntityToNBT(NBTTagCompound var1)
-    {}
+    protected void writeEntityToNBT(NBTTagCompound var1) {}
 
     @SideOnly(Side.CLIENT)
 

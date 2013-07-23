@@ -1,7 +1,6 @@
 package net.aetherteam.aether.entities.bosses;
 
 import java.util.Random;
-
 import net.aetherteam.aether.dungeons.Dungeon;
 import net.aetherteam.aether.dungeons.DungeonHandler;
 import net.aetherteam.aether.entities.EntityAetherCoin;
@@ -58,13 +57,15 @@ public abstract class EntityBossMob extends EntityCreature implements IMob, IAet
         {
             Party var8 = var3.getQueuedParty();
             int var5 = var3.getQueuedMembers().size() + 1;
-            float var6 = (float) (var5 - 1) * 0.075F;
-            int var7 = MathHelper.clamp_int((int) ((float) var2 - (float) var2 * var6), 1, var2);
+            float var6 = (float)(var5 - 1) * 0.075F;
+            int var7 = MathHelper.clamp_int((int)((float)var2 - (float)var2 * var6), 1, var2);
             return super.attackEntityFrom(var1, var7);
-        } else if (!super.attackEntityFrom(var1, var2))
+        }
+        else if (!super.attackEntityFrom(var1, var2))
         {
             return false;
-        } else
+        }
+        else
         {
             Entity var4 = var1.getEntity();
 
@@ -137,8 +138,8 @@ public abstract class EntityBossMob extends EntityCreature implements IMob, IAet
 
         if (var1 instanceof EntityLiving)
         {
-            var2 += EnchantmentHelper.getEnchantmentModifierLiving(this, (EntityLiving) var1);
-            var3 += EnchantmentHelper.getKnockbackModifier(this, (EntityLiving) var1);
+            var2 += EnchantmentHelper.getEnchantmentModifierLiving(this, (EntityLiving)var1);
+            var3 += EnchantmentHelper.getKnockbackModifier(this, (EntityLiving)var1);
         }
 
         boolean var4 = var1.attackEntityFrom(DamageSource.causeMobDamage(this), var2);
@@ -147,7 +148,7 @@ public abstract class EntityBossMob extends EntityCreature implements IMob, IAet
         {
             if (var3 > 0)
             {
-                var1.addVelocity((double) (-MathHelper.sin(this.rotationYaw * (float) Math.PI / 180.0F) * (float) var3 * 0.5F), 0.1D, (double) (MathHelper.cos(this.rotationYaw * (float) Math.PI / 180.0F) * (float) var3 * 0.5F));
+                var1.addVelocity((double)(-MathHelper.sin(this.rotationYaw * (float)Math.PI / 180.0F) * (float)var3 * 0.5F), 0.1D, (double)(MathHelper.cos(this.rotationYaw * (float)Math.PI / 180.0F) * (float)var3 * 0.5F));
                 this.motionX *= 0.6D;
                 this.motionZ *= 0.6D;
             }
@@ -193,7 +194,8 @@ public abstract class EntityBossMob extends EntityCreature implements IMob, IAet
         if (this.worldObj.getSavedLightValue(EnumSkyBlock.Sky, var1, var2, var3) > this.rand.nextInt(32))
         {
             return false;
-        } else
+        }
+        else
         {
             int var4 = this.worldObj.getBlockLightValue(var1, var2, var3);
 

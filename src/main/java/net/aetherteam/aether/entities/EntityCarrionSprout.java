@@ -23,8 +23,7 @@ public class EntityCarrionSprout extends EntityAetherAnimal implements IAetherMo
     /**
      * Causes this entity to do an upwards motion (jumping).
      */
-    protected void jump()
-    {}
+    protected void jump() {}
 
     /**
      * Drop 0-2 items of this living's type. @param par1 - Whether this entity has recently been hit by a player. @param
@@ -32,7 +31,7 @@ public class EntityCarrionSprout extends EntityAetherAnimal implements IAetherMo
      */
     protected void dropFewItems(boolean var1, int var2)
     {
-        this.dropItem(AetherItems.Strawberry.itemID, 2);
+        this.dropItem(AetherItems.Wyndberry.itemID, 2);
     }
 
     /**
@@ -49,7 +48,8 @@ public class EntityCarrionSprout extends EntityAetherAnimal implements IAetherMo
             {
                 return;
             }
-        } else
+        }
+        else
         {
             ++this.entityAge;
             this.despawnEntity();
@@ -58,14 +58,15 @@ public class EntityCarrionSprout extends EntityAetherAnimal implements IAetherMo
         if (this.hurtTime > 0)
         {
             this.sinage += 0.9F;
-        } else
+        }
+        else
         {
             this.sinage += 0.15F;
         }
 
-        if (this.sinage > ((float) Math.PI * 2F))
+        if (this.sinage > ((float)Math.PI * 2F))
         {
-            this.sinage -= ((float) Math.PI * 2F);
+            this.sinage -= ((float)Math.PI * 2F);
         }
 
         if (!this.isDead && !this.isCollided)
@@ -77,14 +78,12 @@ public class EntityCarrionSprout extends EntityAetherAnimal implements IAetherMo
     /**
      * Adds to the current velocity of the entity. Args: x, y, z
      */
-    public void addVelocity(double var1, double var3, double var5)
-    {}
+    public void addVelocity(double var1, double var3, double var5) {}
 
     /**
      * knocks back this entity
      */
-    public void knockBack(Entity var1, int var2, double var3, double var5)
-    {}
+    public void knockBack(Entity var1, int var2, double var3, double var5) {}
 
     /**
      * Applies a velocity to each of the entities pushing them away from each other. Args: entity

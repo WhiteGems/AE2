@@ -2,7 +2,6 @@ package net.aetherteam.aether.worldgen;
 
 import java.util.List;
 import java.util.Random;
-
 import net.aetherteam.aether.blocks.AetherBlocks;
 import net.aetherteam.aether.dungeons.Dungeon;
 import net.aetherteam.aether.dungeons.DungeonHandler;
@@ -62,7 +61,7 @@ public class ComponentDungeonBronzeBoss extends ComponentDungeonBronzeRoom
         int var9 = this.boundingBox.minZ + (this.boundingBox.maxZ - this.boundingBox.minZ) / 2 + 2;
         this.fillWithBlocksWithNotify(var1, var3, this.boundingBox.minX + 1 + this.entranceOffset, var5, this.boundingBox.minZ + 1, this.boundingBox.maxX - 1, this.boundingBox.maxY - 1, this.boundingBox.maxZ - 1, 0, 0, false);
         this.fillWithBlocksWithNotify(var1, var3, this.boundingBox.minX + 1, var5, this.boundingBox.minZ + 1, this.boundingBox.minX - 1 + this.entranceOffset, this.boundingBox.maxY - 1, this.boundingBox.maxZ - 1, 0, 0, false);
-        Dungeon var10 = DungeonHandler.instance().getInstanceAt(MathHelper.floor_double((double) (this.boundingBox.minX + this.entranceOffset)), MathHelper.floor_double((double) var5), MathHelper.floor_double((double) (this.boundingBox.minZ + (this.boundingBox.maxZ - this.boundingBox.minZ) / 2 - 2)));
+        Dungeon var10 = DungeonHandler.instance().getInstanceAt(MathHelper.floor_double((double)(this.boundingBox.minX + this.entranceOffset)), MathHelper.floor_double((double)var5), MathHelper.floor_double((double)(this.boundingBox.minZ + (this.boundingBox.maxZ - this.boundingBox.minZ) / 2 - 2)));
         var10.registerSafeBlock(this.boundingBox.minX + this.entranceOffset, var5 + 1, this.boundingBox.minZ + (this.boundingBox.maxZ - this.boundingBox.minZ) / 2, AetherBlocks.BronzeDoor.blockID, 1);
         this.fillBlocksAndRegister(var1, var3, this.boundingBox.minX + this.entranceOffset, var5, this.boundingBox.minZ + (this.boundingBox.maxZ - this.boundingBox.minZ) / 2 - 2, this.boundingBox.minX + this.entranceOffset, var5 + 3, this.boundingBox.minZ + (this.boundingBox.maxZ - this.boundingBox.minZ) / 2 + 2, AetherBlocks.BronzeDoor.blockID, 0, false, var10);
         this.placeBlockAtCurrentPosition(var1, AetherBlocks.BronzeDoor.blockID, 1, this.boundingBox.minX + this.entranceOffset, var5 + 1, this.boundingBox.minZ + (this.boundingBox.maxZ - this.boundingBox.minZ) / 2, var3);
@@ -71,13 +70,13 @@ public class ComponentDungeonBronzeBoss extends ComponentDungeonBronzeRoom
 
         if (var3.isVecInside(this.boundingBox.minX + this.entranceOffset + (this.boundingBox.maxX - (this.boundingBox.minX + this.entranceOffset)) / 2 + 1, var8 + 2, this.boundingBox.minZ + (this.boundingBox.maxZ - this.boundingBox.minZ) / 2 + 1))
         {
-            EntitySlider var11 = new EntitySlider(var1, (double) (this.boundingBox.minX + this.entranceOffset + (this.boundingBox.maxX - (this.boundingBox.minX + this.entranceOffset)) / 2 + 1), (double) (var8 + 2), (double) (this.boundingBox.minZ + (this.boundingBox.maxZ - this.boundingBox.minZ) / 2 + 1));
+            EntitySlider var11 = new EntitySlider(var1, (double)(this.boundingBox.minX + this.entranceOffset + (this.boundingBox.maxX - (this.boundingBox.minX + this.entranceOffset)) / 2 + 1), (double)(var8 + 2), (double)(this.boundingBox.minZ + (this.boundingBox.maxZ - this.boundingBox.minZ) / 2 + 1));
             DungeonHandler var12 = DungeonHandler.instance();
             Dungeon var13 = var12.getInstanceAt(MathHelper.floor_double(var11.posX), MathHelper.floor_double(var11.posY), MathHelper.floor_double(var11.posZ));
             int var14 = MathHelper.floor_double(var11.posX);
             int var15 = MathHelper.floor_double(var11.posY);
             int var16 = MathHelper.floor_double(var11.posZ);
-            var13.registerEntity((float) var14, (float) var15, (float) var16, var11);
+            var13.registerEntity((float)var14, (float)var15, (float)var16, var11);
             var13.registerSafeBlock(this.boundingBox.minX + this.entranceOffset, var5 + 1, this.boundingBox.minZ + (this.boundingBox.maxZ - this.boundingBox.minZ) / 2, AetherBlocks.BronzeDoor.blockID, 1);
             var13.registerSafeBlock(this.boundingBox.minX + this.entranceOffset + 1, var5 - 1, this.boundingBox.minZ + (this.boundingBox.maxZ - this.boundingBox.minZ) / 2, AetherBlocks.BronzeDoorController.blockID, 0);
             var1.spawnEntityInWorld(var11);
@@ -88,7 +87,7 @@ public class ComponentDungeonBronzeBoss extends ComponentDungeonBronzeRoom
         if (var3.isVecInside(var4 + 1, var5 - 2, var6 + 1))
         {
             var1.setBlock(var4 + 1, var5 - 2, var6 + 1, AetherBlocks.TreasureChest.blockID);
-            TileEntityChest var17 = (TileEntityChest) ((TileEntityChest) var1.getBlockTileEntity(var4 + 1, var5 - 2, var6 + 1));
+            TileEntityChest var17 = (TileEntityChest)((TileEntityChest)var1.getBlockTileEntity(var4 + 1, var5 - 2, var6 + 1));
         }
 
         this.cutHolesForEntrances(var1, var2, var3);
@@ -124,7 +123,8 @@ public class ComponentDungeonBronzeBoss extends ComponentDungeonBronzeRoom
                         if (var12 != var4 && var12 != var7 && var13 != var3 && var13 != var6 && var14 != var5 && var14 != var8)
                         {
                             this.placeBlockAtCurrentPositionWithNotify(var1, var10, 0, var13, var12, var14, var2);
-                        } else
+                        }
+                        else
                         {
                             this.placeBlockAtCurrentPositionWithNotify(var1, var9, 0, var13, var12, var14, var2);
                         }
@@ -148,7 +148,8 @@ public class ComponentDungeonBronzeBoss extends ComponentDungeonBronzeRoom
                         {
                             this.placeBlockAtCurrentPositionWithNotify(var1, var10, 0, var14, var13, var15, var2);
                             var12.registerSafeBlock(var14, var13, var15, var9, 0);
-                        } else
+                        }
+                        else
                         {
                             this.placeBlockAtCurrentPositionWithNotify(var1, var9, 0, var14, var13, var15, var2);
                             var12.registerSafeBlock(var14, var13, var15, var9, 0);
@@ -193,7 +194,7 @@ public class ComponentDungeonBronzeBoss extends ComponentDungeonBronzeRoom
 
         if (var7.isVecInside(var8, var9, var10))
         {
-            var1.setBlock(var8, var9, var10, var2, var3, 2);
+            var1.setBlock(var8, var9, var10, var2, var3, ChunkProviderAether.placementFlagType);
         }
     }
 

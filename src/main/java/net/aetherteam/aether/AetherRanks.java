@@ -4,9 +4,12 @@ import java.util.ArrayList;
 
 public enum AetherRanks
 {
-    DEVELOPER("Aether II Developer", Aether.developers, 2342342), HELPER("Aether II Helper", Aether.helper, 2344), DEFAULT("", new ArrayList(), 0);
-
+    DEVELOPER("Aether II Developer", Aether.developers, 2342342),
+    HELPER("Aether II Helper", Aether.helper, 2344),
+    DEFAULT("", new ArrayList(), 0);
     private ArrayList members = new ArrayList();
+    private int descriptionColor;
+    private String description;
 
     public static void addAllRanks()
     {
@@ -19,22 +22,38 @@ public enum AetherRanks
         Aether.developers.add("ozzar0th");
         Aether.helper.add("ijevin");
         Aether.helper.add("mr360games");
+        Aether.helper.add("captainsparklez");
         Aether.helper.add("clashjtm");
         Aether.helper.add("chimneyswift");
+        Aether.helper.add("craftnode");
+        Aether.helper.add("wyld");
+        Aether.helper.add("themattabase");
     }
 
-    private AetherRanks(String description, ArrayList members, int descriptionColor)
+    private AetherRanks(String var3, ArrayList var4, int var5)
     {
-        this.members = members;
+        this.members = var4;
+        this.description = var3;
+        this.descriptionColor = var5;
     }
 
-    public static AetherRanks getRankFromMember(String member)
+    public int getDescriptionColor()
     {
-        for (int i = 0; i < values().length; i++)
+        return this.descriptionColor;
+    }
+
+    public String getDescription()
+    {
+        return this.description;
+    }
+
+    public static AetherRanks getRankFromMember(String var0)
+    {
+        for (int var1 = 0; var1 < values().length; ++var1)
         {
-            if (values()[i].getMembers().contains(member.toLowerCase()))
+            if (values()[var1].getMembers().contains(var0.toLowerCase()))
             {
-                return values()[i];
+                return values()[var1];
             }
         }
 
@@ -46,8 +65,3 @@ public enum AetherRanks
         return this.members;
     }
 }
-
-/* Location:           D:\Dev\Mc\forge_orl\mcp\jars\bin\aether.jar
- * Qualified Name:     net.aetherteam.aether.AetherRanks
- * JD-Core Version:    0.6.2
- */

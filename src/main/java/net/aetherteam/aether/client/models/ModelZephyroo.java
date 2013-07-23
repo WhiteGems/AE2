@@ -80,7 +80,7 @@ public class ModelZephyroo extends ModelBase
         this.Pouch.setRotationPoint(-4.5F, 10.0F, -4.0F);
         this.Pouch.setTextureSize(128, 64);
         this.Pouch.mirror = true;
-        this.setRotation(this.Pouch, -((float) Math.PI / 4F), 0.0F, 0.0F);
+        this.setRotation(this.Pouch, -((float)Math.PI / 4F), 0.0F, 0.0F);
         this.Snout = new ModelRenderer(this, 0, 22);
         this.Snout.addBox(0.0F, 0.0F, 0.0F, 4, 4, 9);
         this.Snout.setRotationPoint(-2.0F, -2.0F, -14.5F);
@@ -158,7 +158,7 @@ public class ModelZephyroo extends ModelBase
         this.Body.setRotationPoint(-5.0F, -2.0F, -4.0F);
         this.Body.setTextureSize(128, 64);
         this.Body.mirror = true;
-        this.setRotation(this.Body, -((float) Math.PI / 4F), 0.0F, 0.0F);
+        this.setRotation(this.Body, -((float)Math.PI / 4F), 0.0F, 0.0F);
     }
 
     /**
@@ -209,11 +209,12 @@ public class ModelZephyroo extends ModelBase
 
         if (var7.motionX != 0.0D && var7.motionZ != 0.0D)
         {
-            this.RightLeg.rotateAngleX = (float) Math.cos((double) (((EntityZephyroo) var7).getTimeTilJump() * 0.5F));
-            this.LeftLeg.rotateAngleX = (float) Math.cos((double) (((EntityZephyroo) var7).getTimeTilJump() * 0.5F));
+            this.RightLeg.rotateAngleX = (float)Math.cos((double)(((EntityZephyroo)var7).getTimeTilJump() * 0.5F));
+            this.LeftLeg.rotateAngleX = (float)Math.cos((double)(((EntityZephyroo)var7).getTimeTilJump() * 0.5F));
             this.RightFoot.rotateAngleX = this.RightLeg.rotateAngleX + 0.25F;
             this.LeftFoot.rotateAngleX = this.RightLeg.rotateAngleX + 0.25F;
-        } else
+        }
+        else
         {
             this.RightLeg.rotateAngleX = 0.0F;
             this.LeftLeg.rotateAngleX = 0.0F;

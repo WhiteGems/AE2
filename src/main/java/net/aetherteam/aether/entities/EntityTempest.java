@@ -36,9 +36,9 @@ public class EntityTempest extends EntityAetherMob implements IMob
 
         if (this.health > 0)
         {
-            double var1 = (double) (this.rand.nextFloat() - 0.5F);
-            double var3 = (double) this.rand.nextFloat();
-            double var5 = (double) (this.rand.nextFloat() - 0.5F);
+            double var1 = (double)(this.rand.nextFloat() - 0.5F);
+            double var3 = (double)this.rand.nextFloat();
+            double var5 = (double)(this.rand.nextFloat() - 0.5F);
             double var7 = this.posX + var1 * var3;
             double var9 = this.boundingBox.minY + var3 - 0.30000001192092896D;
             double var11 = this.posZ + var5 * var3;
@@ -74,10 +74,10 @@ public class EntityTempest extends EntityAetherMob implements IMob
             if (this.heightOffsetUpdateTime <= 0)
             {
                 this.heightOffsetUpdateTime = 100;
-                this.heightOffset = 1.5F + (float) this.rand.nextGaussian() * 3.0F;
+                this.heightOffset = 1.5F + (float)this.rand.nextGaussian() * 3.0F;
             }
 
-            if (this.getEntityToAttack() != null && this.getEntityToAttack().posY + (double) this.getEntityToAttack().getEyeHeight() > this.posY + (double) this.getEyeHeight() + (double) this.heightOffset)
+            if (this.getEntityToAttack() != null && this.getEntityToAttack().posY + (double)this.getEntityToAttack().getEyeHeight() > this.posY + (double)this.getEyeHeight() + (double)this.heightOffset)
             {
                 this.motionY += (0.700000011920929D - this.motionY) * 0.700000011920929D;
             }
@@ -91,14 +91,15 @@ public class EntityTempest extends EntityAetherMob implements IMob
         if (this.hurtTime > 0)
         {
             this.sinage += 0.9F;
-        } else
+        }
+        else
         {
             this.sinage += 0.2F;
         }
 
-        if (this.sinage > ((float) Math.PI * 2F))
+        if (this.sinage > ((float)Math.PI * 2F))
         {
-            this.sinage -= ((float) Math.PI * 2F);
+            this.sinage -= ((float)Math.PI * 2F);
         }
 
         super.onLivingUpdate();
@@ -109,39 +110,42 @@ public class EntityTempest extends EntityAetherMob implements IMob
      */
     protected void attackEntity(Entity var1, float var2)
     {
-        EntityLiving var3 = (EntityLiving) var1;
-
-        if (var2 < 10.0F)
+        if (var1 instanceof EntityLiving)
         {
-            double var4 = var1.posX - this.posX;
-            double var6 = var1.posZ - this.posZ;
+            EntityLiving var3 = (EntityLiving)var1;
 
-            if (var3 != null)
+            if (var2 < 10.0F)
             {
-                if (var3.isDead || (double) var3.getDistanceToEntity(this) > 12.0D || var3 instanceof EntityNewZephyr || var3 instanceof EntityTempest)
+                double var4 = var1.posX - this.posX;
+                double var6 = var1.posZ - this.posZ;
+
+                if (var3 != null)
                 {
-                    var3 = null;
-                    this.entityToAttack = null;
-                    return;
+                    if (var3.isDead || (double)var3.getDistanceToEntity(this) > 12.0D || var3 instanceof EntityNewZephyr || var3 instanceof EntityTempest)
+                    {
+                        var3 = null;
+                        this.entityToAttack = null;
+                        return;
+                    }
+
+                    if (this.attackTime >= this.timeUntilShoot)
+                    {
+                        this.shootTarget(var3);
+                    }
+
+                    if (this.attackTime >= this.timeUntilShoot && this.canEntityBeSeen(var3))
+                    {
+                        this.attackTime = -10;
+                    }
+
+                    if (this.attackTime < this.timeUntilShoot)
+                    {
+                        ++this.attackTime;
+                    }
                 }
 
-                if (this.attackTime >= this.timeUntilShoot)
-                {
-                    this.shootTarget(var3);
-                }
-
-                if (this.attackTime >= this.timeUntilShoot && this.canEntityBeSeen(var3))
-                {
-                    this.attackTime = -10;
-                }
-
-                if (this.attackTime < this.timeUntilShoot)
-                {
-                    ++this.attackTime;
-                }
+                this.rotationYaw = (float)(Math.atan2(var6, var4) * 180.0D / Math.PI) - 90.0F;
             }
-
-            this.rotationYaw = (float) (Math.atan2(var6, var4) * 180.0D / Math.PI) - 90.0F;
         }
     }
 
@@ -150,7 +154,7 @@ public class EntityTempest extends EntityAetherMob implements IMob
         if (this.worldObj.difficultySetting != 0)
         {
             double var2 = var1.posX - this.posX;
-            double var4 = var1.boundingBox.minY + (double) (var1.height / 2.0F) - (this.posY + (double) (this.height / 2.0F));
+            double var4 = var1.boundingBox.minY + (double)(var1.height / 2.0F) - (this.posY + (double)(this.height / 2.0F));
             double var6 = var1.posZ - this.posZ;
             double var8 = var1.posX - this.posX;
             double var10 = var1.posZ - this.posZ;
@@ -172,14 +176,12 @@ public class EntityTempest extends EntityAetherMob implements IMob
     /**
      * Called when the mob is falling. Calculates and applies fall damage.
      */
-    protected void fall(float var1)
-    {}
+    protected void fall(float var1) {}
 
     /**
      * Causes this entity to do an upwards motion (jumping).
      */
-    protected void jump()
-    {}
+    protected void jump() {}
 
     public int getMaxHealth()
     {

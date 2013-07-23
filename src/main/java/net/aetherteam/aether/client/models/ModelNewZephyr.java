@@ -125,8 +125,8 @@ public class ModelNewZephyr extends ModelBase
         super.setRotationAngles(var1, var2, var3, var4, var5, var6, var7);
         float var8 = this.sinage2;
         float var9 = 5.5F;
-        float var10 = (float) (Math.sin((double) (var1 * 20.0F) / (180D / Math.PI)) * (double) var2 * 0.5D);
-        float var11 = (float) Math.PI;
+        float var10 = (float)(Math.sin((double)(var1 * 20.0F) / (180D / Math.PI)) * (double)var2 * 0.5D);
+        float var11 = (float)Math.PI;
         float var12 = var11 / 2.0F;
         float var13 = var11 * 3.0F / 11.0F;
         this.FRcloud.rotationPointY = var10 + 10.0F;
@@ -137,13 +137,13 @@ public class ModelNewZephyr extends ModelBase
         this.Shape2.rotationPointX = -var10 * 0.5F;
         this.Shape1.rotationPointY = 10.0F + var10;
         this.Shape1.rotationPointX = var10 * 0.5F;
-        this.tail1.rotationPointX = (float) (Math.sin((double) (var1 * 20.0F) / (180D / Math.PI)) * (double) var2 * 0.75D);
-        this.tail1.rotateAngleY = (float) Math.pow(0.9900000095367432D, -4.0D) * 1.0F * var11 / 4.0F * MathHelper.cos(-0.055F * var1 + var12);
+        this.tail1.rotationPointX = (float)(Math.sin((double)(var1 * 20.0F) / (180D / Math.PI)) * (double)var2 * 0.75D);
+        this.tail1.rotateAngleY = (float)Math.pow(0.9900000095367432D, -4.0D) * 1.0F * var11 / 4.0F * MathHelper.cos(-0.055F * var1 + var12);
         this.tail1.rotationPointY = 10.0F - var10;
-        this.tail2.rotationPointX = (float) Math.pow(0.9900000095367432D, 1.0D) * 1.0F * var11 / 4.0F * MathHelper.cos(-0.055F * var1 + var12);
+        this.tail2.rotationPointX = (float)Math.pow(0.9900000095367432D, 1.0D) * 1.0F * var11 / 4.0F * MathHelper.cos(-0.055F * var1 + var12);
         this.tail2.rotationPointY = 10.0F - var10 * 1.25F;
         this.tail2.rotateAngleY = this.tail1.rotateAngleY + 0.25F;
-        this.Shape3.rotationPointY = (float) (8 + ((EntityNewZephyr) var7).attackTime + 1);
+        this.Shape3.rotationPointY = (float)(8 + ((EntityNewZephyr)var7).attackTime + 1);
         this.mainbody.rotationPointY = var8 + var9 + this.sinage * 2.0F;
         this.RBcloud.rotationPointY = var8 + var9 + this.sinage * 2.0F;
         this.LBcloud.rotationPointY = var8 + var9 + this.sinage * 2.0F;

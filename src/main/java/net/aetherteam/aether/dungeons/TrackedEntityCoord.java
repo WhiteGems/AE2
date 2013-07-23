@@ -1,7 +1,6 @@
 package net.aetherteam.aether.dungeons;
 
 import java.io.Serializable;
-
 import net.minecraft.entity.EntityList;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.world.World;
@@ -13,18 +12,17 @@ public class TrackedEntityCoord implements Serializable
     private float y;
     private float z;
 
-    public TrackedEntityCoord(float x, float y, float z, String entityName)
+    public TrackedEntityCoord(float var1, float var2, float var3, String var4)
     {
-        this.x = x;
-        this.y = y;
-        this.z = z;
-
-        this.entityName = entityName;
+        this.x = var1;
+        this.y = var2;
+        this.z = var3;
+        this.entityName = var4;
     }
 
-    public EntityLiving getTrackedEntity(World world)
+    public EntityLiving getTrackedEntity(World var1)
     {
-        return (EntityLiving) EntityList.createEntityByName(this.entityName, world);
+        return (EntityLiving)EntityList.createEntityByName(this.entityName, var1);
     }
 
     public float getX()
@@ -42,8 +40,3 @@ public class TrackedEntityCoord implements Serializable
         return this.z;
     }
 }
-
-/* Location:           D:\Dev\Mc\forge_orl\mcp\jars\bin\aether.jar
- * Qualified Name:     net.aetherteam.aether.dungeons.TrackedEntityCoord
- * JD-Core Version:    0.6.2
- */

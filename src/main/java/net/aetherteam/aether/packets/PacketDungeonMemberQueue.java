@@ -3,85 +3,75 @@ package net.aetherteam.aether.packets;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.network.Player;
 import cpw.mods.fml.relauncher.Side;
-
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.DataInputStream;
 import java.io.InputStreamReader;
-import java.io.PrintStream;
-
 import net.aetherteam.aether.dungeons.Dungeon;
 import net.aetherteam.aether.dungeons.DungeonHandler;
 import net.aetherteam.aether.party.Party;
 import net.aetherteam.aether.party.PartyController;
 import net.aetherteam.aether.party.members.PartyMember;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.network.packet.Packet250CustomPayload;
 
 public class PacketDungeonMemberQueue extends AetherPacket
 {
-    public PacketDungeonMemberQueue(int packetID)
+    public PacketDungeonMemberQueue(int var1)
     {
-        super(packetID);
+        super(var1);
     }
 
-    public void onPacketReceived(Packet250CustomPayload packet, Player player)
+    public void onPacketReceived(Packet250CustomPayload var1, Player var2)
     {
-        DataInputStream dat = new DataInputStream(new ByteArrayInputStream(packet.data));
-        BufferedReader buf = new BufferedReader(new InputStreamReader(dat));
+        DataInputStream var3 = new DataInputStream(new ByteArrayInputStream(var1.data));
+        new BufferedReader(new InputStreamReader(var3));
+
         try
         {
-            byte packetType = dat.readByte();
+            byte var5 = var3.readByte();
+            int var6 = var3.readInt();
+            String var7 = var3.readUTF();
+            Side var8 = FMLCommonHandler.instance().getEffectiveSide();
+            PartyMember var9;
+            Party var10;
 
-            int dungeonID = dat.readInt();
-            String memberName = dat.readUTF();
-
-            Side side = FMLCommonHandler.instance().getEffectiveSide();
-
-            if (side.isClient())
+            if (var8.isClient())
             {
-                PartyMember potentialMember = PartyController.instance().getMember(memberName);
-                Party party = PartyController.instance().getParty(potentialMember);
+                var9 = PartyController.instance().getMember(var7);
+                var10 = PartyController.instance().getParty(var9);
+                Dungeon var11 = DungeonHandler.instance().getDungeon(var6);
 
-                Dungeon dungeon = DungeonHandler.instance().getDungeon(dungeonID);
-
-                if ((party != null) && (dungeon != null))
+                if (var10 != null && var11 != null)
                 {
-                    DungeonHandler.instance().queueMember(dungeon, potentialMember, false);
+                    DungeonHandler.instance().queueMember(var11, var9, false);
                 }
-            } else
+            }
+            else
             {
-                PartyMember potentialMember = PartyController.instance().getMember(memberName);
-                Party party = PartyController.instance().getParty(potentialMember);
+                var9 = PartyController.instance().getMember(var7);
+                var10 = PartyController.instance().getParty(var9);
+                EntityPlayerMP var14 = (EntityPlayerMP)var2;
+                Dungeon var12 = DungeonHandler.instance().getDungeon(var6);
 
-                EntityPlayerMP entityPlayer = (EntityPlayerMP) player;
-
-                Dungeon dungeon = DungeonHandler.instance().getDungeon(dungeonID);
-
-                if ((party != null) && (dungeon != null))
+                if (var10 != null && var12 != null)
                 {
-                    if (entityPlayer.username.equalsIgnoreCase(memberName))
+                    if (var14.username.equalsIgnoreCase(var7))
                     {
-                        System.out.println("No validation needed, adding party member '" + memberName + "' to the Dungeon.");
-
-                        DungeonHandler.instance().queueMember(dungeon, potentialMember, false);
-
-                        sendPacketToAllExcept(AetherPacketHandler.sendDungeonMemberQueue(dungeon, potentialMember), player);
-                    } else
+                        System.out.println("No validation needed, adding party member \'" + var7 + "\' to the Dungeon.");
+                        DungeonHandler.instance().queueMember(var12, var9, false);
+                        this.sendPacketToAllExcept(AetherPacketHandler.sendDungeonMemberQueue(var12, var9), var2);
+                    }
+                    else
                     {
                         System.out.println("Something went wrong, the validation of the leader was incorrect. Party not added/removed from Dungeon Instance.");
                     }
                 }
             }
-        } catch (Exception ex)
+        }
+        catch (Exception var13)
         {
-            ex.printStackTrace();
+            var13.printStackTrace();
         }
     }
 }
-
-/* Location:           D:\Dev\Mc\forge_orl\mcp\jars\bin\aether.jar
- * Qualified Name:     net.aetherteam.aether.packets.PacketDungeonMemberQueue
- * JD-Core Version:    0.6.2
- */

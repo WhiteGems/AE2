@@ -9,21 +9,16 @@ public class AetherEnchantment
     public int enchantAmbrosiumNeeded;
     public boolean limitStackToOne;
 
-    public AetherEnchantment(ItemStack from, ItemStack to, int i)
+    public AetherEnchantment(ItemStack var1, ItemStack var2, int var3)
     {
-        this(from, to, i, false);
+        this(var1, var2, var3, false);
     }
 
-    public AetherEnchantment(ItemStack from, ItemStack to, int i, boolean limit)
+    public AetherEnchantment(ItemStack var1, ItemStack var2, int var3, boolean var4)
     {
-        this.enchantFrom = from;
-        this.enchantTo = to;
-        this.enchantAmbrosiumNeeded = i;
-        this.limitStackToOne = limit;
+        this.enchantFrom = var1;
+        this.enchantTo = var2;
+        this.enchantAmbrosiumNeeded = var3;
+        this.limitStackToOne = var4;
     }
 }
-
-/* Location:           D:\Dev\Mc\forge_orl\mcp\jars\bin\aether.jar
- * Qualified Name:     net.aetherteam.aether.AetherEnchantment
- * JD-Core Version:    0.6.2
- */

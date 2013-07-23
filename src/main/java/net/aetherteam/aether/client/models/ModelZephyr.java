@@ -130,8 +130,8 @@ public class ModelZephyr extends ModelBase
     public void setRotationAngles(float var1, float var2, float var3, float var4, float var5, float var6, Entity var7)
     {
         super.setRotationAngles(var1, var2, var3, var4, var5, var6, var7);
-        float var8 = (float) (Math.sin((double) (var1 * 20.0F) / (180D / Math.PI)) * (double) var2 * 0.5D);
-        float var9 = (float) Math.PI;
+        float var8 = (float)(Math.sin((double)(var1 * 20.0F) / (180D / Math.PI)) * (double)var2 * 0.5D);
+        float var9 = (float)Math.PI;
         float var10 = var9 / 2.0F;
         float var11 = var9 * 3.0F / 11.0F;
         this.LeftFace.rotationPointY = var8 + 8.0F;
@@ -142,13 +142,13 @@ public class ModelZephyr extends ModelBase
         this.RightFace.rotationPointX = -var8 * 0.5F;
         this.BodyRightSide1.rotationPointY = 8.0F - var8 * 0.5F;
         this.BodyRightSide2.rotationPointY = 9.0F + var8 * 0.5F;
-        this.Tail1.rotationPointX = (float) (Math.sin((double) (var1 * 20.0F) / (180D / Math.PI)) * (double) var2 * 0.75D);
-        this.Tail1.rotateAngleY = (float) Math.pow(0.9900000095367432D, -4.0D) * 1.0F * var9 / 4.0F * MathHelper.cos(-0.055F * var1 + var10);
+        this.Tail1.rotationPointX = (float)(Math.sin((double)(var1 * 20.0F) / (180D / Math.PI)) * (double)var2 * 0.75D);
+        this.Tail1.rotateAngleY = (float)Math.pow(0.9900000095367432D, -4.0D) * 1.0F * var9 / 4.0F * MathHelper.cos(-0.055F * var1 + var10);
         this.Tail1.rotationPointY = 8.0F - var8;
-        this.Tail2.rotationPointX = (float) Math.pow(0.9900000095367432D, 1.0D) * 1.0F * var9 / 4.0F * MathHelper.cos(-0.055F * var1 + var10);
+        this.Tail2.rotationPointX = (float)Math.pow(0.9900000095367432D, 1.0D) * 1.0F * var9 / 4.0F * MathHelper.cos(-0.055F * var1 + var10);
         this.Tail2.rotationPointY = var8 * 1.25F;
         this.Tail2.rotateAngleY = this.Tail1.rotateAngleY + 0.25F;
-        this.Tail3.rotationPointX = (float) Math.pow(0.9900000095367432D, 2.0D) * 1.0F * var9 / 4.0F * MathHelper.cos(-0.055F * var1 + var10);
+        this.Tail3.rotationPointX = (float)Math.pow(0.9900000095367432D, 2.0D) * 1.0F * var9 / 4.0F * MathHelper.cos(-0.055F * var1 + var10);
         this.Tail3.rotationPointY = -var8;
         this.Tail3.rotateAngleY = this.Tail2.rotateAngleY + 0.35F;
     }

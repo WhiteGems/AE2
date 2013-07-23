@@ -8,14 +8,10 @@ import net.minecraft.world.World;
 
 class BronzeSpawnerBaseLogic extends MobSpawnerBaseLogic
 {
-    /**
-     * The mob spawner we deal with
-     */
+    /** The mob spawner we deal with */
     final TileEntityMobSpawner mobSpawnerEntity;
 
-    /**
-     * A counter for spawn tries.
-     */
+    /** A counter for spawn tries. */
     private int spawnCount = 9;
 
     BronzeSpawnerBaseLogic(TileEntityMobSpawner var1)

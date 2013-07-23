@@ -56,9 +56,9 @@ public class ModelAetherWings extends ModelBiped
         this.wingRight.rotateAngleY = 0.2F;
         this.wingLeft.rotateAngleZ = -0.125F;
         this.wingRight.rotateAngleZ = 0.125F;
-        this.wingLeft.rotateAngleY = (float) ((double) this.wingLeft.rotateAngleY + Math.sin((double) this.sinage) / 6.0D);
-        this.wingRight.rotateAngleY = (float) ((double) this.wingRight.rotateAngleY - Math.sin((double) this.sinage) / 6.0D);
-        this.wingLeft.rotateAngleZ = (float) ((double) this.wingLeft.rotateAngleZ + Math.cos((double) this.sinage) / (double) (this.gonRound ? 8.0F : 3.0F));
-        this.wingRight.rotateAngleZ = (float) ((double) this.wingRight.rotateAngleZ - Math.cos((double) this.sinage) / (double) (this.gonRound ? 8.0F : 3.0F));
+        this.wingLeft.rotateAngleY = (float)((double)this.wingLeft.rotateAngleY + Math.sin((double)this.sinage) / 6.0D);
+        this.wingRight.rotateAngleY = (float)((double)this.wingRight.rotateAngleY - Math.sin((double)this.sinage) / 6.0D);
+        this.wingLeft.rotateAngleZ = (float)((double)this.wingLeft.rotateAngleZ + Math.cos((double)this.sinage) / (double)(this.gonRound ? 8.0F : 3.0F));
+        this.wingRight.rotateAngleZ = (float)((double)this.wingRight.rotateAngleZ - Math.cos((double)this.sinage) / (double)(this.gonRound ? 8.0F : 3.0F));
     }
 }

@@ -21,13 +21,11 @@ public class AetherArmourTab extends CreativeTabs
         return "Aether Armour";
     }
 
+    /**
+     * Gets the translated Label.
+     */
     public String getTranslatedTabLabel()
     {
-        return getTabLabel();
+        return this.getTabLabel();
     }
 }
-
-/* Location:           D:\Dev\Mc\forge_orl\mcp\jars\bin\aether.jar
- * Qualified Name:     net.aetherteam.aether.creative_tabs.AetherArmourTab
- * JD-Core Version:    0.6.2
- */

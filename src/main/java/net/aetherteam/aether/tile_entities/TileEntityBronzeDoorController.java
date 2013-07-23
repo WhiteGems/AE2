@@ -3,11 +3,9 @@ package net.aetherteam.aether.tile_entities;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.network.PacketDispatcher;
 import cpw.mods.fml.relauncher.Side;
-
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Random;
-
 import net.aetherteam.aether.Aether;
 import net.aetherteam.aether.blocks.AetherBlocks;
 import net.aetherteam.aether.dungeons.Dungeon;
@@ -84,7 +82,7 @@ public class TileEntityBronzeDoorController extends TileEntity
 
         for (int var2 = 0; var2 < this.keyList.size(); ++var2)
         {
-            var1.setString("Key" + var2, ((DungeonKey) this.keyList.get(var2)).getType().name());
+            var1.setString("Key" + var2, ((DungeonKey)this.keyList.get(var2)).getType().name());
         }
 
         var1.setInteger("dungeonId", this.dungeonID);
@@ -121,7 +119,7 @@ public class TileEntityBronzeDoorController extends TileEntity
 
                 if (this.keyList.size() < keysRequired && var3 instanceof DungeonKey)
                 {
-                    DungeonKey var4 = (DungeonKey) var3;
+                    DungeonKey var4 = (DungeonKey)var3;
                     this.keyList.add(var4);
                 }
             }
@@ -132,7 +130,7 @@ public class TileEntityBronzeDoorController extends TileEntity
             {
                 for (int var6 = 0; var6 < var1.size(); ++var6)
                 {
-                    PacketDispatcher.sendPacketToAllPlayers(AetherPacketHandler.removeDungeonKey(this.getDungeon(), this.getDungeon().getQueuedParty(), ((DungeonKey) var1.get(var6)).getType(), this));
+                    PacketDispatcher.sendPacketToAllPlayers(AetherPacketHandler.removeDungeonKey(this.getDungeon(), this.getDungeon().getQueuedParty(), ((DungeonKey)var1.get(var6)).getType(), this));
                 }
 
                 this.getDungeon().getKeys().clear();
@@ -167,7 +165,7 @@ public class TileEntityBronzeDoorController extends TileEntity
 
         if (this.dungeonID == -1 && var1.isServer())
         {
-            Dungeon var2 = DungeonHandler.instance().getInstanceAt(MathHelper.floor_double((double) this.xCoord), MathHelper.floor_double((double) this.yCoord), MathHelper.floor_double((double) this.zCoord));
+            Dungeon var2 = DungeonHandler.instance().getInstanceAt(MathHelper.floor_double((double)this.xCoord), MathHelper.floor_double((double)this.yCoord), MathHelper.floor_double((double)this.zCoord));
 
             if (var2 != null)
             {
@@ -197,18 +195,18 @@ public class TileEntityBronzeDoorController extends TileEntity
 
                 while (var7.hasNext())
                 {
-                    PartyMember var8 = (PartyMember) var7.next();
+                    PartyMember var8 = (PartyMember)var7.next();
 
-                    if (var6 instanceof EntityPlayerMP && ((EntityPlayerMP) var6).username.equalsIgnoreCase(var8.username))
+                    if (var6 instanceof EntityPlayerMP && ((EntityPlayerMP)var6).username.equalsIgnoreCase(var8.username))
                     {
-                        ((EntityPlayerMP) var6).setPositionAndUpdate((double) ((float) ((double) this.xCoord + 0.5D)), (double) ((float) ((double) this.yCoord + 1.0D)), (double) ((float) ((double) this.zCoord + 0.5D)));
+                        ((EntityPlayerMP)var6).setPositionAndUpdate((double)((float)((double)this.xCoord + 0.5D)), (double)((float)((double)this.yCoord + 1.0D)), (double)((float)((double)this.zCoord + 0.5D)));
                     }
                 }
             }
         }
 
-        this.worldObj.playSoundEffect((double) this.xCoord, (double) this.yCoord, (double) this.zCoord, "aeboss.slider.awake", 1.0F, 1.0F / (this.rand.nextFloat() * 0.2F + 0.9F));
-        this.worldObj.playSoundEffect((double) this.xCoord, (double) this.yCoord, (double) this.zCoord, "aeboss.slider.unlock", 1.0F, 1.0F / (this.rand.nextFloat() * 0.2F + 0.9F));
+        this.worldObj.playSoundEffect((double)this.xCoord, (double)this.yCoord, (double)this.zCoord, "aeboss.slider.awake", 1.0F, 1.0F / (this.rand.nextFloat() * 0.2F + 0.9F));
+        this.worldObj.playSoundEffect((double)this.xCoord, (double)this.yCoord, (double)this.zCoord, "aeboss.slider.unlock", 1.0F, 1.0F / (this.rand.nextFloat() * 0.2F + 0.9F));
     }
 
     public void unlockDoor()
@@ -229,8 +227,8 @@ public class TileEntityBronzeDoorController extends TileEntity
             }
         }
 
-        this.worldObj.playSoundEffect((double) this.xCoord, (double) this.yCoord, (double) this.zCoord, "aeboss.slider.awake", 2.5F, 1.0F / (this.rand.nextFloat() * 0.2F + 0.9F));
-        this.worldObj.playSoundEffect((double) this.xCoord, (double) this.yCoord, (double) this.zCoord, "aeboss.slider.unlock", 2.5F, 1.0F / (this.rand.nextFloat() * 0.2F + 0.9F));
+        this.worldObj.playSoundEffect((double)this.xCoord, (double)this.yCoord, (double)this.zCoord, "aeboss.slider.awake", 2.5F, 1.0F / (this.rand.nextFloat() * 0.2F + 0.9F));
+        this.worldObj.playSoundEffect((double)this.xCoord, (double)this.yCoord, (double)this.zCoord, "aeboss.slider.unlock", 2.5F, 1.0F / (this.rand.nextFloat() * 0.2F + 0.9F));
 
         if (var1.isServer())
         {
@@ -240,7 +238,7 @@ public class TileEntityBronzeDoorController extends TileEntity
 
     public boolean isUseableByPlayer(EntityPlayer var1)
     {
-        return this.worldObj.getBlockTileEntity(this.xCoord, this.yCoord, this.zCoord) != this ? false : var1.getDistanceSq((double) this.xCoord + 0.5D, (double) this.yCoord + 0.5D, (double) this.zCoord + 0.5D) <= 64.0D;
+        return this.worldObj.getBlockTileEntity(this.xCoord, this.yCoord, this.zCoord) != this ? false : var1.getDistanceSq((double)this.xCoord + 0.5D, (double)this.yCoord + 0.5D, (double)this.zCoord + 0.5D) <= 64.0D;
     }
 
     public void openChest() {}
@@ -275,7 +273,7 @@ public class TileEntityBronzeDoorController extends TileEntity
         while (var3.hasNext())
         {
             Object var4 = var3.next();
-            EntityPlayerMP var5 = (EntityPlayerMP) var4;
+            EntityPlayerMP var5 = (EntityPlayerMP)var4;
 
             if (var5.worldObj == this.worldObj)
             {

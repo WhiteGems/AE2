@@ -1,7 +1,6 @@
 package net.aetherteam.aether.oldcode;
 
 import java.util.Random;
-
 import net.aetherteam.aether.AetherLoot;
 import net.aetherteam.aether.blocks.AetherBlocks;
 import net.aetherteam.aether.entities.bosses.EntitySlider;
@@ -53,21 +52,22 @@ public class AetherGenDungeonBronze extends AetherGenBuildings
             this.setBlocks(this.lockedBlockID1, this.lockedBlockID2, 20);
             this.addHollowBox(var1, var2, var3, var4, var5, 16, 12, 16);
             this.addHollowBox(var1, var2, var3 + 6, var4 - 2, var5 + 6, 4, 4, 4);
-            EntitySlider var6 = new EntitySlider(var1, (double) (var3 + 8), (double) (var4 + 2), (double) (var5 + 8));
+            EntitySlider var6 = new EntitySlider(var1, (double)(var3 + 8), (double)(var4 + 2), (double)(var5 + 8));
             var6.setDungeon(var3, var4, var5);
             var1.spawnEntityInWorld(var6);
             int var7 = var3 + 7 + var2.nextInt(2);
             int var8 = var4 - 1;
             int var9 = var5 + 7 + var2.nextInt(2);
             var1.setBlock(var7, var8, var9, AetherBlocks.TreasureChest.blockID);
-            TileEntityChest var10 = (TileEntityChest) ((TileEntityChest) var1.getBlockTileEntity(var7, var8, var9));
+            TileEntityChest var10 = (TileEntityChest)((TileEntityChest)var1.getBlockTileEntity(var7, var8, var9));
             var7 = var3 + 20;
             var9 = var5 + 2;
 
             if (!this.isBoxSolid(var1, var7, var4, var9, 12, 12, 12))
             {
                 return true;
-            } else
+            }
+            else
             {
                 this.setBlocks(this.wallBlockID1, this.wallBlockID2, 20);
                 this.addHollowBox(var1, var2, var7, var4, var9, 12, 12, 12);
@@ -94,7 +94,8 @@ public class AetherGenDungeonBronze extends AetherGenBuildings
 
                 return true;
             }
-        } else
+        }
+        else
         {
             return false;
         }
@@ -106,7 +107,8 @@ public class AetherGenDungeonBronze extends AetherGenBuildings
         {
             this.endCorridor(var1, var2, var3, var4, var5);
             return false;
-        } else
+        }
+        else
         {
             int var6 = var2.nextInt(4);
             int var7 = var3;
@@ -140,14 +142,15 @@ public class AetherGenDungeonBronze extends AetherGenBuildings
             if (!this.isBoxSolid(var1, var7, var4, var9, 12, 8, 12))
             {
                 return false;
-            } else
+            }
+            else
             {
                 this.setBlocks(this.wallBlockID1, this.wallBlockID2, 20);
                 this.setMetadata(0, 0);
                 this.addHollowBox(var1, var2, var7, var4, var9, 12, 8, 12);
-                int var12;
-                int var11;
                 int var10;
+                int var11;
+                int var12;
 
                 for (var10 = var7; var10 < var7 + 12; ++var10)
                 {
@@ -186,7 +189,7 @@ public class AetherGenDungeonBronze extends AetherGenBuildings
                         if (var1.getBlockId(var11, var8 + 2, var12) == 0)
                         {
                             var1.setBlock(var11, var8 + 2, var12, Block.chest.blockID);
-                            TileEntityChest var13 = (TileEntityChest) var1.getBlockTileEntity(var11, var8 + 2, var12);
+                            TileEntityChest var13 = (TileEntityChest)var1.getBlockTileEntity(var11, var8 + 2, var12);
 
                             for (var11 = 0; var11 < 3 + var2.nextInt(3); ++var11)
                             {
@@ -221,7 +224,8 @@ public class AetherGenDungeonBronze extends AetherGenBuildings
                 if (!this.generateNextRoom(var1, var2, var7, var8, var9))
                 {
                     return false;
-                } else
+                }
+                else
                 {
                     return this.generateNextRoom(var1, var2, var7, var8, var9);
                 }
@@ -257,7 +261,8 @@ public class AetherGenDungeonBronze extends AetherGenBuildings
                     if (var1.getBlockId(var9 + 1, var10, var11) != this.wallBlockID1 && var1.getBlockId(var9 + 1, var10, var11) != this.wallBlockID2 && var1.getBlockId(var9 + 1, var10, var11) != this.lockedBlockID1 && var1.getBlockId(var9 + 1, var10, var11) != this.lockedBlockID2)
                     {
                         var7 = false;
-                    } else
+                    }
+                    else
                     {
                         ++var9;
                     }
@@ -289,7 +294,8 @@ public class AetherGenDungeonBronze extends AetherGenBuildings
                     if (var1.getBlockId(var9, var10, var11 + 1) != this.wallBlockID1 && var1.getBlockId(var9, var10, var11 + 1) != this.wallBlockID2 && var1.getBlockId(var9, var10, var11 + 1) != this.lockedBlockID1 && var1.getBlockId(var9, var10, var11 + 1) != this.lockedBlockID2)
                     {
                         var7 = false;
-                    } else
+                    }
+                    else
                     {
                         ++var11;
                     }
@@ -321,7 +327,8 @@ public class AetherGenDungeonBronze extends AetherGenBuildings
                     if (var1.getBlockId(var9, var10, var11 - 1) != this.wallBlockID1 && var1.getBlockId(var9, var10, var11 - 1) != this.wallBlockID2 && var1.getBlockId(var9, var10, var11 - 1) != this.lockedBlockID1 && var1.getBlockId(var9, var10, var11 - 1) != this.lockedBlockID2)
                     {
                         var7 = false;
-                    } else
+                    }
+                    else
                     {
                         --var11;
                     }

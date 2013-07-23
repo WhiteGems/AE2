@@ -16,7 +16,7 @@ public class RidingHandlerAerbunny extends RidingHandler
     public RidingHandlerAerbunny(EntityAerbunny var1)
     {
         super(var1);
-        this.animal = (EntityLiving) this.mount;
+        this.animal = (EntityLiving)this.mount;
     }
 
     public void update()
@@ -39,11 +39,11 @@ public class RidingHandlerAerbunny extends RidingHandler
     public void onUnMount()
     {
         this.animal.tasks.addTask(1, new EntityAISwimming(this.animal));
-        this.animal.tasks.addTask(2, new EntityAIAvoidEntity((EntityAerbunny) this.animal, EntityPlayer.class, 16.0F, 2.6F, 2.8F));
-        this.animal.tasks.addTask(3, new EntityAIWander((EntityAerbunny) this.animal, 2.5F));
+        this.animal.tasks.addTask(2, new EntityAIAvoidEntity((EntityAerbunny)this.animal, EntityPlayer.class, 16.0F, 2.6F, 2.8F));
+        this.animal.tasks.addTask(3, new EntityAIWander((EntityAerbunny)this.animal, 2.5F));
         this.animal.tasks.addTask(4, new EntityAIWatchClosest(this.animal, EntityPlayer.class, 10.0F));
-        this.animal.tasks.addTask(5, ((EntityAerbunny) this.animal).aiEatGrass);
-        this.animal.tasks.addTask(6, new AIEntityAerbunnyHop((EntityAerbunny) this.animal));
+        this.animal.tasks.addTask(5, ((EntityAerbunny)this.animal).aiEatGrass);
+        this.animal.tasks.addTask(6, new AIEntityAerbunnyHop((EntityAerbunny)this.animal));
         super.onUnMount();
     }
 

@@ -3,12 +3,10 @@ package net.aetherteam.aether.packets;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.network.Player;
 import cpw.mods.fml.relauncher.Side;
-
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.DataInputStream;
 import java.io.InputStreamReader;
-
 import net.aetherteam.aether.party.Party;
 import net.aetherteam.aether.party.PartyController;
 import net.aetherteam.aether.party.PartyType;
@@ -18,55 +16,48 @@ import net.minecraft.network.packet.Packet250CustomPayload;
 
 public class PacketPartyTypeChange extends AetherPacket
 {
-    public PacketPartyTypeChange(int packetID)
+    public PacketPartyTypeChange(int var1)
     {
-        super(packetID);
+        super(var1);
     }
 
-    public void onPacketReceived(Packet250CustomPayload packet, Player player)
+    public void onPacketReceived(Packet250CustomPayload var1, Player var2)
     {
-        DataInputStream dat = new DataInputStream(new ByteArrayInputStream(packet.data));
-        BufferedReader buf = new BufferedReader(new InputStreamReader(dat));
+        DataInputStream var3 = new DataInputStream(new ByteArrayInputStream(var1.data));
+        new BufferedReader(new InputStreamReader(var3));
+
         try
         {
-            byte packetType = dat.readByte();
+            byte var5 = var3.readByte();
+            String var6 = var3.readUTF();
+            PartyType var7 = PartyType.getTypeFromString(var3.readUTF());
+            Side var8 = FMLCommonHandler.instance().getEffectiveSide();
+            Party var9;
 
-            String partyName = dat.readUTF();
-            PartyType newType = PartyType.getTypeFromString(dat.readUTF());
-
-            Side side = FMLCommonHandler.instance().getEffectiveSide();
-
-            if (side.isClient())
+            if (var8.isClient())
             {
-                Party party = PartyController.instance().getParty(partyName);
+                var9 = PartyController.instance().getParty(var6);
 
-                if (party != null)
+                if (var9 != null)
                 {
-                    PartyController.instance().changePartyType(party, newType, false);
-                }
-            } else
-            {
-                Party party = PartyController.instance().getParty(partyName);
-                PartyMember potentialLeader = PartyController.instance().getMember((EntityPlayer) player);
-
-                if ((party != null) && (potentialLeader != null))
-                {
-                    if (party.isLeader(potentialLeader))
-                    {
-                        PartyController.instance().changePartyType(party, newType, false);
-
-                        sendPacketToAllExcept(AetherPacketHandler.sendPartyTypeChange(partyName, newType), player);
-                    }
+                    PartyController.instance().changePartyType(var9, var7, false);
                 }
             }
-        } catch (Exception ex)
+            else
+            {
+                var9 = PartyController.instance().getParty(var6);
+                PartyMember var10 = PartyController.instance().getMember((EntityPlayer)var2);
+
+                if (var9 != null && var10 != null && var9.isLeader(var10))
+                {
+                    PartyController.instance().changePartyType(var9, var7, false);
+                    this.sendPacketToAllExcept(AetherPacketHandler.sendPartyTypeChange(var6, var7), var2);
+                }
+            }
+        }
+        catch (Exception var11)
         {
-            ex.printStackTrace();
+            var11.printStackTrace();
         }
     }
 }
-
-/* Location:           D:\Dev\Mc\forge_orl\mcp\jars\bin\aether.jar
- * Qualified Name:     net.aetherteam.aether.packets.PacketPartyTypeChange
- * JD-Core Version:    0.6.2
- */

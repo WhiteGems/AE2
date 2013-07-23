@@ -3,12 +3,10 @@ package net.aetherteam.aether.packets;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.network.Player;
 import cpw.mods.fml.relauncher.Side;
-
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.DataInputStream;
 import java.io.InputStreamReader;
-
 import net.aetherteam.aether.dungeons.Dungeon;
 import net.aetherteam.aether.dungeons.DungeonHandler;
 import net.aetherteam.aether.party.PartyController;
@@ -18,60 +16,49 @@ import net.minecraft.network.packet.Packet250CustomPayload;
 
 public class PacketDungeonDisbandMember extends AetherPacket
 {
-    public PacketDungeonDisbandMember(int packetID)
+    public PacketDungeonDisbandMember(int var1)
     {
-        super(packetID);
+        super(var1);
     }
 
-    public void onPacketReceived(Packet250CustomPayload packet, Player player)
+    public void onPacketReceived(Packet250CustomPayload var1, Player var2)
     {
-        DataInputStream dat = new DataInputStream(new ByteArrayInputStream(packet.data));
-        BufferedReader buf = new BufferedReader(new InputStreamReader(dat));
+        DataInputStream var3 = new DataInputStream(new ByteArrayInputStream(var1.data));
+        new BufferedReader(new InputStreamReader(var3));
+
         try
         {
-            byte packetType = dat.readByte();
+            byte var5 = var3.readByte();
+            int var6 = var3.readInt();
+            String var7 = var3.readUTF();
+            Side var8 = FMLCommonHandler.instance().getEffectiveSide();
 
-            int dungeonID = dat.readInt();
-            String memberName = dat.readUTF();
-
-            Side side = FMLCommonHandler.instance().getEffectiveSide();
-
-            if (side.isClient())
+            if (var8.isClient())
             {
-                Dungeon dungeon = DungeonHandler.instance().getDungeon(dungeonID);
+                Dungeon var9 = DungeonHandler.instance().getDungeon(var6);
+                PartyMember var10 = PartyController.instance().getMember(var7);
 
-                PartyMember leavingMember = PartyController.instance().getMember(memberName);
-
-                if ((dungeon != null) && (leavingMember != null))
+                if (var9 != null && var10 != null)
                 {
-                    DungeonHandler.instance().disbandMember(dungeon, leavingMember, false);
-                }
-            } else
-            {
-                PartyMember leavingMember = PartyController.instance().getMember(memberName);
-
-                EntityPlayer actualMember = (EntityPlayer) player;
-
-                Dungeon dungeon = DungeonHandler.instance().getDungeon(dungeonID);
-
-                if ((dungeon != null) && (dungeon.isActive()))
-                {
-                    if ((leavingMember != null) && (leavingMember.username.equalsIgnoreCase(actualMember.username)))
-                    {
-                        DungeonHandler.instance().disbandMember(dungeon, leavingMember, false);
-
-                        sendPacketToAllExcept(AetherPacketHandler.sendDungeonDisbandMember(dungeon, leavingMember), player);
-                    }
+                    DungeonHandler.instance().disbandMember(var9, var10, false);
                 }
             }
-        } catch (Exception ex)
+            else
+            {
+                PartyMember var14 = PartyController.instance().getMember(var7);
+                EntityPlayer var13 = (EntityPlayer)var2;
+                Dungeon var11 = DungeonHandler.instance().getDungeon(var6);
+
+                if (var11 != null && var11.isActive() && var14 != null && var14.username.equalsIgnoreCase(var13.username))
+                {
+                    DungeonHandler.instance().disbandMember(var11, var14, false);
+                    this.sendPacketToAllExcept(AetherPacketHandler.sendDungeonDisbandMember(var11, var14), var2);
+                }
+            }
+        }
+        catch (Exception var12)
         {
-            ex.printStackTrace();
+            var12.printStackTrace();
         }
     }
 }
-
-/* Location:           D:\Dev\Mc\forge_orl\mcp\jars\bin\aether.jar
- * Qualified Name:     net.aetherteam.aether.packets.PacketDungeonDisbandMember
- * JD-Core Version:    0.6.2
- */

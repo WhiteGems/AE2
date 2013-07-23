@@ -2,9 +2,7 @@ package net.aetherteam.aether.items;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
-
 import java.util.List;
-
 import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
@@ -18,7 +16,7 @@ import net.minecraft.world.World;
 
 public class ItemGummieSwet extends ItemAetherFood
 {
-    public static final String[] names = new String[]{"Blue Gummie Swet", "Golden Gummie Swet"};
+    public static final String[] names = new String[] {"Blue Gummie Swet", "Golden Gummie Swet"};
     @SideOnly(Side.CLIENT)
     private Icon[] icons;
     private int healAmount;

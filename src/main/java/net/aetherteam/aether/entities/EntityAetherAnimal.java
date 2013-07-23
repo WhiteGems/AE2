@@ -1,7 +1,6 @@
 package net.aetherteam.aether.entities;
 
 import java.util.Random;
-
 import net.aetherteam.aether.blocks.AetherBlocks;
 import net.aetherteam.aether.interfaces.IAetherMob;
 import net.minecraft.entity.passive.EntityAnimal;
@@ -29,16 +28,7 @@ public abstract class EntityAetherAnimal extends EntityAnimal implements IAether
      */
     public float getBlockPathWeight(int var1, int var2, int var3)
     {
-        float var4 = 0.0F;
-
-        if (this.worldObj.getBlockId(var1, var2 - 1, var3) == AetherBlocks.AetherGrass.blockID)
-        {
-            var4 += 10.0F;
-        }
-
-        var4 += this.worldObj.getLightBrightness(var1, var2, var3) - 0.5F;
-        var4 = (float) ((double) var4 + ((double) var2 - this.posY));
-        return var4;
+        return this.worldObj.getBlockId(var1, var2 - 1, var3) == AetherBlocks.AetherGrass.blockID ? 10.0F : this.worldObj.getLightBrightness(var1, var2, var3) - 0.5F;
     }
 
     /**
@@ -65,7 +55,7 @@ public abstract class EntityAetherAnimal extends EntityAnimal implements IAether
         int var1 = MathHelper.floor_double(this.posX);
         int var2 = MathHelper.floor_double(this.boundingBox.minY);
         int var3 = MathHelper.floor_double(this.posZ);
-        return this.worldObj.checkNoEntityCollision(this.boundingBox) && this.worldObj.getCollidingBoundingBoxes(this, this.boundingBox).size() == 0 && !this.worldObj.isAnyLiquid(this.boundingBox) && this.worldObj.getBlockId(var1, var2 - 1, var3) == AetherBlocks.AetherGrass.blockID && this.worldObj.getFullBlockLightValue(var1, var2, var3) > 8 && this.getBlockPathWeight(var1, var2, var3) >= 0.0F;
+        return this.worldObj.getBlockId(var1, var2 - 1, var3) == AetherBlocks.AetherGrass.blockID && this.worldObj.getFullBlockLightValue(var1, var2, var3) > 8 && super.getCanSpawnHere() && this.getBlockPathWeight(var1, var2, var3) >= 0.0F && this.getBlockPathWeight(var1, var2, var3) >= 0.0F && this.worldObj.checkNoEntityCollision(this.boundingBox) && this.worldObj.getCollidingBoundingBoxes(this, this.boundingBox).isEmpty() && !this.worldObj.isAnyLiquid(this.boundingBox);
     }
 
     public EntityAnimal spawnBabyAnimal(EntityAnimal var1)

@@ -12,53 +12,52 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.Iterator;
-
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.world.WorldServer;
-import net.minecraft.world.storage.ISaveHandler;
 
 public class SerialDataHandler
 {
     private String path;
     private String fileName;
 
-    public SerialDataHandler(String path, String fileName)
+    public SerialDataHandler(String var1, String var2)
     {
-        this.path = path;
-        this.fileName = fileName;
+        this.path = var1;
+        this.fileName = var2;
     }
 
-    public SerialDataHandler(String fileName)
+    public SerialDataHandler(String var1)
     {
-        this.path = (serverIsUp() ? MinecraftServer.getServer().worldServers[0].getSaveHandler().getMapFileFromName(MinecraftServer.getServer().getFolderName()).getAbsolutePath().replace(MinecraftServer.getServer().getFolderName() + ".dat", "") : null);
-        this.fileName = fileName;
+        this.path = this.serverIsUp() ? MinecraftServer.getServer().worldServers[0].getSaveHandler().getMapFileFromName(MinecraftServer.getServer().getFolderName()).getAbsolutePath().replace(MinecraftServer.getServer().getFolderName() + ".dat", "") : null;
+        this.fileName = var1;
     }
 
     public boolean serverIsUp()
     {
-        return (MinecraftServer.getServer() != null) && (MinecraftServer.getServer().worldServers != null) && (MinecraftServer.getServer().worldServers[0] != null);
+        return MinecraftServer.getServer() != null && MinecraftServer.getServer().worldServers != null && MinecraftServer.getServer().worldServers[0] != null;
     }
 
-    public void serializeObjects(ArrayList objects)
+    public void serializeObjects(ArrayList var1)
     {
         try
         {
-            ObjectOutputStream objectOut = new ObjectOutputStream(new BufferedOutputStream(new FileOutputStream(this.path + this.fileName)));
+            ObjectOutputStream var2 = new ObjectOutputStream(new BufferedOutputStream(new FileOutputStream(this.path + this.fileName)));
+            Iterator var3 = var1.iterator();
 
-            for (Iterator i$ = objects.iterator(); i$.hasNext(); )
+            while (var3.hasNext())
             {
-                Object object = i$.next();
-
-                objectOut.writeObject(object);
+                Object var4 = var3.next();
+                var2.writeObject(var4);
             }
 
-            objectOut.close();
-        } catch (FileNotFoundException e)
+            var2.close();
+        }
+        catch (FileNotFoundException var5)
         {
-            e.printStackTrace();
-        } catch (IOException e)
+            var5.printStackTrace();
+        }
+        catch (IOException var6)
         {
-            e.printStackTrace();
+            var6.printStackTrace();
         }
     }
 
@@ -66,49 +65,51 @@ public class SerialDataHandler
     {
         try
         {
-            File file = new File(this.path + this.fileName);
+            File var1 = new File(this.path + this.fileName);
 
-            if (file.exists())
+            if (var1.exists())
             {
-                FileInputStream inputStream = new FileInputStream(this.path + this.fileName);
+                FileInputStream var2 = new FileInputStream(this.path + this.fileName);
+                ArrayList var4 = new ArrayList();
+                ObjectInputStream var3 = new ObjectInputStream(new BufferedInputStream(var2));
+                Object var5 = null;
+                boolean var6 = true;
 
-                ArrayList objects = new ArrayList();
-
-                ObjectInputStream objectIn = new ObjectInputStream(new BufferedInputStream(inputStream));
-
-                Object obj = null;
-
-                boolean catchBool = true;
                 try
                 {
-                    while (true) if (catchBool) try
+                    while (var6)
                     {
-                        if ((obj = objectIn.readObject()) != null)
+                        try
                         {
-                            objects.add(obj);
-                        } else catchBool = false;
-                    } catch (EOFException exc)
-                    {
+                            if ((var5 = var3.readObject()) != null)
+                            {
+                                var4.add(var5);
+                            }
+                            else
+                            {
+                                var6 = false;
+                            }
+                        }
+                        catch (EOFException var8)
+                        {
+                            break;
+                        }
                     }
-                } catch (ClassNotFoundException e)
+                }
+                catch (ClassNotFoundException var9)
                 {
-                    e.printStackTrace();
+                    var9.printStackTrace();
                 }
 
-                objectIn.close();
-
-                return objects;
+                var3.close();
+                return var4;
             }
-        } catch (IOException e)
+        }
+        catch (IOException var10)
         {
-            e.printStackTrace();
+            var10.printStackTrace();
         }
 
         return null;
     }
 }
-
-/* Location:           D:\Dev\Mc\forge_orl\mcp\jars\bin\aether.jar
- * Qualified Name:     net.aetherteam.aether.data.SerialDataHandler
- * JD-Core Version:    0.6.2
- */

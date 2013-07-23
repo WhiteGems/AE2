@@ -3,12 +3,10 @@ package net.aetherteam.aether.client.gui;
 import cpw.mods.fml.common.network.PacketDispatcher;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
-
 import net.aetherteam.aether.Aether;
 import net.aetherteam.aether.AetherGuiHandler;
 import net.aetherteam.aether.client.gui.donator.GuiDonatorMenu;
@@ -22,6 +20,7 @@ import net.minecraft.client.gui.achievement.GuiAchievements;
 import net.minecraft.client.gui.achievement.GuiStats;
 import net.minecraft.client.gui.inventory.CreativeCrafting;
 import net.minecraft.client.gui.inventory.GuiInventory;
+import net.minecraft.client.renderer.InventoryEffectRenderer;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.settings.GameSettings;
 import net.minecraft.creativetab.CreativeTabs;
@@ -42,7 +41,7 @@ import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
 
 @SideOnly(Side.CLIENT)
-public class GuiAetherContainerCreative extends AetherInventoryEffectRenderer
+public class GuiAetherContainerCreative extends InventoryEffectRenderer
 {
     private static InventoryBasic inventory = new InventoryBasic("tmp", true, 45);
     private static int selectedTabIndex = CreativeTabs.tabBlock.getTabIndex();
@@ -85,8 +84,8 @@ public class GuiAetherContainerCreative extends AetherInventoryEffectRenderer
         this.field_74234_w = true;
         boolean var5 = var4 == 1;
         var4 = var2 == -999 && var4 == 0 ? 4 : var4;
-        InventoryPlayer var7;
         ItemStack var6;
+        InventoryPlayer var7;
 
         if (var1 == null && selectedTabIndex != CreativeTabs.tabInventory.getTabIndex() && var4 != 5)
         {
@@ -98,7 +97,7 @@ public class GuiAetherContainerCreative extends AetherInventoryEffectRenderer
                 {
                     this.mc.thePlayer.dropPlayerItem(var7.getItemStack());
                     this.mc.playerController.func_78752_a(var7.getItemStack());
-                    var7.setItemStack((ItemStack) null);
+                    var7.setItemStack((ItemStack)null);
                 }
 
                 if (var3 == 1)
@@ -109,11 +108,12 @@ public class GuiAetherContainerCreative extends AetherInventoryEffectRenderer
 
                     if (var7.getItemStack().stackSize == 0)
                     {
-                        var7.setItemStack((ItemStack) null);
+                        var7.setItemStack((ItemStack)null);
                     }
                 }
             }
-        } else
+        }
+        else
         {
             int var8;
 
@@ -121,9 +121,10 @@ public class GuiAetherContainerCreative extends AetherInventoryEffectRenderer
             {
                 for (var8 = 0; var8 < this.mc.thePlayer.inventoryContainer.getInventory().size(); ++var8)
                 {
-                    this.mc.playerController.sendSlotPacket((ItemStack) null, var8);
+                    this.mc.playerController.sendSlotPacket((ItemStack)null, var8);
                 }
-            } else
+            }
+            else
             {
                 ItemStack var9;
 
@@ -131,25 +132,29 @@ public class GuiAetherContainerCreative extends AetherInventoryEffectRenderer
                 {
                     if (var1 == this.field_74235_v)
                     {
-                        this.mc.thePlayer.inventory.setItemStack((ItemStack) null);
-                    } else if (var4 == 4 && var1 != null && var1.getHasStack())
+                        this.mc.thePlayer.inventory.setItemStack((ItemStack)null);
+                    }
+                    else if (var4 == 4 && var1 != null && var1.getHasStack())
                     {
                         var9 = var1.decrStackSize(var3 == 0 ? 1 : var1.getStack().getMaxStackSize());
                         this.mc.thePlayer.dropPlayerItem(var9);
                         this.mc.playerController.func_78752_a(var9);
-                    } else if (var4 == 4 && this.mc.thePlayer.inventory.getItemStack() != null)
+                    }
+                    else if (var4 == 4 && this.mc.thePlayer.inventory.getItemStack() != null)
                     {
                         this.mc.thePlayer.dropPlayerItem(this.mc.thePlayer.inventory.getItemStack());
                         this.mc.playerController.func_78752_a(this.mc.thePlayer.inventory.getItemStack());
-                        this.mc.thePlayer.inventory.setItemStack((ItemStack) null);
-                    } else
+                        this.mc.thePlayer.inventory.setItemStack((ItemStack)null);
+                    }
+                    else
                     {
-                        this.mc.thePlayer.inventoryContainer.slotClick(var1 == null ? var2 : SlotAetherCreativeInventory.func_75240_a((SlotAetherCreativeInventory) var1).slotNumber, var3, var4, this.mc.thePlayer);
+                        this.mc.thePlayer.inventoryContainer.slotClick(var1 == null ? var2 : SlotAetherCreativeInventory.func_75240_a((SlotAetherCreativeInventory)var1).slotNumber, var3, var4, this.mc.thePlayer);
                         this.mc.thePlayer.inventoryContainer.detectAndSendChanges();
                     }
 
-                    PacketDispatcher.sendPacketToServer(AetherPacketHandler.sendAccessoryChange(Aether.getClientPlayer(this.player).inv.writeToNBT(new NBTTagList()), false, true, Collections.singleton(this.player.username), (byte) 0));
-                } else if (var4 != 5 && var1.inventory == inventory)
+                    PacketDispatcher.sendPacketToServer(AetherPacketHandler.sendAccessoryChange(Aether.getClientPlayer(this.player).inv.writeToNBT(new NBTTagList()), false, true, Collections.singleton(this.player.username), (byte)0));
+                }
+                else if (var4 != 5 && var1.inventory == inventory)
                 {
                     var7 = this.mc.thePlayer.inventory;
                     var6 = var7.getItemStack();
@@ -201,18 +206,22 @@ public class GuiAetherContainerCreative extends AetherInventoryEffectRenderer
                             if (var5)
                             {
                                 var6.stackSize = var6.getMaxStackSize();
-                            } else if (var6.stackSize < var6.getMaxStackSize())
+                            }
+                            else if (var6.stackSize < var6.getMaxStackSize())
                             {
                                 ++var6.stackSize;
                             }
-                        } else if (var6.stackSize <= 1)
+                        }
+                        else if (var6.stackSize <= 1)
                         {
-                            var7.setItemStack((ItemStack) null);
-                        } else
+                            var7.setItemStack((ItemStack)null);
+                        }
+                        else
                         {
                             --var6.stackSize;
                         }
-                    } else if (var10 != null && var6 == null)
+                    }
+                    else if (var10 != null && var6 == null)
                     {
                         var7.setItemStack(ItemStack.copyItemStack(var10));
                         var6 = var7.getItemStack();
@@ -221,11 +230,13 @@ public class GuiAetherContainerCreative extends AetherInventoryEffectRenderer
                         {
                             var6.stackSize = var6.getMaxStackSize();
                         }
-                    } else
-                    {
-                        var7.setItemStack((ItemStack) null);
                     }
-                } else
+                    else
+                    {
+                        var7.setItemStack((ItemStack)null);
+                    }
+                }
+                else
                 {
                     this.inventorySlots.slotClick(var1 == null ? var2 : var1.slotNumber, var3, var4, this.mc.thePlayer);
 
@@ -235,7 +246,8 @@ public class GuiAetherContainerCreative extends AetherInventoryEffectRenderer
                         {
                             this.mc.playerController.sendSlotPacket(this.inventorySlots.getSlot(45 + var8).getStack(), 36 + var8);
                         }
-                    } else if (var1 != null)
+                    }
+                    else if (var1 != null)
                     {
                         var9 = this.inventorySlots.getSlot(var1.slotNumber).getStack();
                         this.mc.playerController.sendSlotPacket(var9, var1.slotNumber - this.inventorySlots.inventorySlots.size() + 9 + 36);
@@ -279,7 +291,8 @@ public class GuiAetherContainerCreative extends AetherInventoryEffectRenderer
             this.buttonList.add(var3);
             this.buttonList.add(new GuiButton(6, this.guiLeft + 85, this.guiTop + 132, 48, 20, "Social"));
             this.buttonList.add(new GuiButton(7, this.guiLeft + 138, this.guiTop + 132, 50, 20, "Donator"));
-        } else
+        }
+        else
         {
             this.mc.displayGuiScreen(new GuiInventory(this.mc.thePlayer));
         }
@@ -310,11 +323,13 @@ public class GuiAetherContainerCreative extends AetherInventoryEffectRenderer
             if (GameSettings.isKeyDown(this.mc.gameSettings.keyBindChat))
             {
                 this.setCurrentCreativeTab(CreativeTabs.tabAllSearch);
-            } else
+            }
+            else
             {
                 super.keyTyped(var1, var2);
             }
-        } else
+        }
+        else
         {
             if (this.field_74234_w)
             {
@@ -327,7 +342,8 @@ public class GuiAetherContainerCreative extends AetherInventoryEffectRenderer
                 if (this.searchField.textboxKeyTyped(var1, var2))
                 {
                     this.updateCreativeSearch();
-                } else
+                }
+                else
                 {
                     super.keyTyped(var1, var2);
                 }
@@ -337,7 +353,7 @@ public class GuiAetherContainerCreative extends AetherInventoryEffectRenderer
 
     private void updateCreativeSearch()
     {
-        ContainerAetherCreative var1 = (ContainerAetherCreative) this.inventorySlots;
+        ContainerAetherCreative var1 = (ContainerAetherCreative)this.inventorySlots;
         var1.itemList.clear();
         Item[] var2 = Item.itemsList;
         int var3 = var2.length;
@@ -349,7 +365,7 @@ public class GuiAetherContainerCreative extends AetherInventoryEffectRenderer
 
             if (var5 != null && var5.getCreativeTab() != null)
             {
-                var5.getSubItems(var5.itemID, (CreativeTabs) null, var1.itemList);
+                var5.getSubItems(var5.itemID, (CreativeTabs)null, var1.itemList);
             }
         }
 
@@ -371,7 +387,7 @@ public class GuiAetherContainerCreative extends AetherInventoryEffectRenderer
 
         while (var13.hasNext())
         {
-            ItemStack var8 = (ItemStack) var13.next();
+            ItemStack var8 = (ItemStack)var13.next();
             boolean var9 = false;
             Iterator var10 = var8.getTooltip(this.mc.thePlayer, this.mc.gameSettings.advancedItemTooltips).iterator();
 
@@ -379,7 +395,7 @@ public class GuiAetherContainerCreative extends AetherInventoryEffectRenderer
             {
                 if (var10.hasNext())
                 {
-                    String var11 = (String) var10.next();
+                    String var11 = (String)var10.next();
 
                     if (!var11.toLowerCase().contains(var7))
                     {
@@ -402,6 +418,9 @@ public class GuiAetherContainerCreative extends AetherInventoryEffectRenderer
         var1.scrollTo(0.0F);
     }
 
+    /**
+     * Draw the foreground layer for the GuiContainer (everything in front of the items)
+     */
     protected void drawGuiContainerForegroundLayer(int var1, int var2)
     {
         CreativeTabs var3 = CreativeTabs.creativeTabArray[selectedTabIndex];
@@ -468,7 +487,7 @@ public class GuiAetherContainerCreative extends AetherInventoryEffectRenderer
 
     private boolean needsScrollBars()
     {
-        return CreativeTabs.creativeTabArray[selectedTabIndex] == null ? false : selectedTabIndex != CreativeTabs.tabInventory.getTabIndex() && CreativeTabs.creativeTabArray[selectedTabIndex].shouldHidePlayerInventory() && ((ContainerAetherCreative) this.inventorySlots).hasMoreThan1PageOfItemsInList();
+        return CreativeTabs.creativeTabArray[selectedTabIndex] == null ? false : selectedTabIndex != CreativeTabs.tabInventory.getTabIndex() && CreativeTabs.creativeTabArray[selectedTabIndex].shouldHidePlayerInventory() && ((ContainerAetherCreative)this.inventorySlots).hasMoreThan1PageOfItemsInList();
     }
 
     private void setCurrentCreativeTab(CreativeTabs var1)
@@ -477,7 +496,7 @@ public class GuiAetherContainerCreative extends AetherInventoryEffectRenderer
         {
             int var2 = selectedTabIndex;
             selectedTabIndex = var1.getTabIndex();
-            ContainerAetherCreative var3 = (ContainerAetherCreative) this.inventorySlots;
+            ContainerAetherCreative var3 = (ContainerAetherCreative)this.inventorySlots;
             this.field_94077_p.clear();
             var3.itemList.clear();
             var1.displayAllReleventItems(var3.itemList);
@@ -495,11 +514,11 @@ public class GuiAetherContainerCreative extends AetherInventoryEffectRenderer
 
                 for (int var5 = 0; var5 < var4.inventorySlots.size() - 8; ++var5)
                 {
-                    SlotAetherCreativeInventory var6 = new SlotAetherCreativeInventory(this, (Slot) var4.inventorySlots.get(var5), var5);
+                    SlotAetherCreativeInventory var6 = new SlotAetherCreativeInventory(this, (Slot)var4.inventorySlots.get(var5), var5);
                     var3.inventorySlots.add(var6);
                     int var7;
-                    int var9;
                     int var8;
+                    int var9;
 
                     if (var5 >= 5 && var5 < 9)
                     {
@@ -508,11 +527,13 @@ public class GuiAetherContainerCreative extends AetherInventoryEffectRenderer
                         var9 = var7 % 2;
                         var6.xDisplayPosition = 45 + var8 * 18;
                         var6.yDisplayPosition = 6 + var9 * 27;
-                    } else if (var5 >= 0 && var5 < 5)
+                    }
+                    else if (var5 >= 0 && var5 < 5)
                     {
                         var6.yDisplayPosition = -2000;
                         var6.xDisplayPosition = -2000;
-                    } else if (var5 < var4.inventorySlots.size())
+                    }
+                    else if (var5 < var4.inventorySlots.size())
                     {
                         var7 = var5 - 9;
                         var8 = var7 % 9;
@@ -522,15 +543,18 @@ public class GuiAetherContainerCreative extends AetherInventoryEffectRenderer
                         if (var5 >= 36 && var5 <= 44)
                         {
                             var6.yDisplayPosition = 112;
-                        } else if (var5 > 44 && var5 <= 48)
+                        }
+                        else if (var5 > 44 && var5 <= 48)
                         {
                             var6.xDisplayPosition = 81 + var8 * 18;
                             var6.yDisplayPosition = 6;
-                        } else if (var5 > 48)
+                        }
+                        else if (var5 > 48)
                         {
                             var6.xDisplayPosition = 81 + (var8 - 4) * 18;
                             var6.yDisplayPosition = 33;
-                        } else
+                        }
+                        else
                         {
                             var6.yDisplayPosition = 54 + var9 * 18;
                         }
@@ -539,7 +563,8 @@ public class GuiAetherContainerCreative extends AetherInventoryEffectRenderer
 
                 this.field_74235_v = new Slot(inventory, 0, 173, 112);
                 var3.inventorySlots.add(this.field_74235_v);
-            } else if (var2 == CreativeTabs.tabInventory.getTabIndex())
+            }
+            else if (var2 == CreativeTabs.tabInventory.getTabIndex())
             {
                 var3.inventorySlots = this.backupContainerSlots;
                 this.backupContainerSlots = null;
@@ -554,7 +579,8 @@ public class GuiAetherContainerCreative extends AetherInventoryEffectRenderer
                     this.searchField.setFocused(true);
                     this.searchField.setText("");
                     this.updateCreativeSearch();
-                } else
+                }
+                else
                 {
                     this.searchField.setVisible(false);
                     this.searchField.setCanLoseFocus(true);
@@ -577,7 +603,7 @@ public class GuiAetherContainerCreative extends AetherInventoryEffectRenderer
 
         if (var1 != 0 && this.needsScrollBars())
         {
-            int var2 = ((ContainerAetherCreative) this.inventorySlots).itemList.size() / 9 - 5 + 1;
+            int var2 = ((ContainerAetherCreative)this.inventorySlots).itemList.size() / 9 - 5 + 1;
 
             if (var1 > 0)
             {
@@ -589,7 +615,7 @@ public class GuiAetherContainerCreative extends AetherInventoryEffectRenderer
                 var1 = -1;
             }
 
-            this.currentScroll = (float) ((double) this.currentScroll - (double) var1 / (double) var2);
+            this.currentScroll = (float)((double)this.currentScroll - (double)var1 / (double)var2);
 
             if (this.currentScroll < 0.0F)
             {
@@ -601,7 +627,7 @@ public class GuiAetherContainerCreative extends AetherInventoryEffectRenderer
                 this.currentScroll = 1.0F;
             }
 
-            ((ContainerAetherCreative) this.inventorySlots).scrollTo(this.currentScroll);
+            ((ContainerAetherCreative)this.inventorySlots).scrollTo(this.currentScroll);
         }
     }
 
@@ -632,7 +658,7 @@ public class GuiAetherContainerCreative extends AetherInventoryEffectRenderer
 
         if (this.isScrolling)
         {
-            this.currentScroll = ((float) (var2 - var8) - 7.5F) / ((float) (var10 - var8) - 15.0F);
+            this.currentScroll = ((float)(var2 - var8) - 7.5F) / ((float)(var10 - var8) - 15.0F);
 
             if (this.currentScroll < 0.0F)
             {
@@ -644,7 +670,7 @@ public class GuiAetherContainerCreative extends AetherInventoryEffectRenderer
                 this.currentScroll = 1.0F;
             }
 
-            ((ContainerAetherCreative) this.inventorySlots).scrollTo(this.currentScroll);
+            ((ContainerAetherCreative)this.inventorySlots).scrollTo(this.currentScroll);
         }
 
         super.drawScreen(var1, var2, var3);
@@ -682,7 +708,7 @@ public class GuiAetherContainerCreative extends AetherInventoryEffectRenderer
 
         if (this.maxPages != 0)
         {
-            String var18 = String.format("%d / %d", new Object[]{Integer.valueOf(tabPage + 1), Integer.valueOf(this.maxPages + 1)});
+            String var18 = String.format("%d / %d", new Object[] {Integer.valueOf(tabPage + 1), Integer.valueOf(this.maxPages + 1)});
             int var17 = this.fontRenderer.getStringWidth(var18);
             GL11.glDisable(GL11.GL_LIGHTING);
             this.zLevel = 300.0F;
@@ -696,6 +722,9 @@ public class GuiAetherContainerCreative extends AetherInventoryEffectRenderer
         GL11.glDisable(GL11.GL_LIGHTING);
     }
 
+    /**
+     * Draw the background layer for the GuiContainer (everything behind the items)
+     */
     protected void drawGuiContainerBackgroundLayer(float var1, int var2, int var3)
     {
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
@@ -750,7 +779,7 @@ public class GuiAetherContainerCreative extends AetherInventoryEffectRenderer
 
         if (var4.shouldHidePlayerInventory())
         {
-            this.drawTexturedModalRect(var10, var6 + (int) ((float) (var7 - var6 - 17) * this.currentScroll), 232 + (this.needsScrollBars() ? 0 : 12), 0, 12, 15);
+            this.drawTexturedModalRect(var10, var6 + (int)((float)(var7 - var6 - 17) * this.currentScroll), 232 + (this.needsScrollBars() ? 0 : 12), 0, 12, 15);
         }
 
         if (var4 != null && var4.getTabPage() == tabPage || var4 == CreativeTabs.tabAllSearch || var4 == CreativeTabs.tabInventory)
@@ -759,7 +788,7 @@ public class GuiAetherContainerCreative extends AetherInventoryEffectRenderer
 
             if (var4 == CreativeTabs.tabInventory)
             {
-                GuiInventory.drawPlayerOnGui(this.mc, this.guiLeft + 25, this.guiTop + 46, 20, (float) (this.guiLeft + 43 - var2), (float) (this.guiTop + 45 - 30 - var3));
+                GuiInventory.drawPlayerOnGui(this.mc, this.guiLeft + 25, this.guiTop + 46, 20, (float)(this.guiLeft + 43 - var2), (float)(this.guiTop + 45 - 30 - var3));
             }
         }
     }
@@ -769,7 +798,8 @@ public class GuiAetherContainerCreative extends AetherInventoryEffectRenderer
         if (var1.getTabPage() != tabPage && var1 != CreativeTabs.tabAllSearch && var1 != CreativeTabs.tabInventory)
         {
             return false;
-        } else
+        }
+        else
         {
             int var4 = var1.getTabColumn();
             int var5 = 28 * var4;
@@ -778,7 +808,8 @@ public class GuiAetherContainerCreative extends AetherInventoryEffectRenderer
             if (var4 == 5)
             {
                 var5 = this.xSize - 28 + 2;
-            } else if (var4 > 0)
+            }
+            else if (var4 > 0)
             {
                 var5 += var4;
             }
@@ -788,7 +819,8 @@ public class GuiAetherContainerCreative extends AetherInventoryEffectRenderer
             if (var1.isTabInFirstRow())
             {
                 var7 = var6 - 32;
-            } else
+            }
+            else
             {
                 var7 = var6 + this.ySize;
             }
@@ -806,7 +838,8 @@ public class GuiAetherContainerCreative extends AetherInventoryEffectRenderer
         if (var4 == 5)
         {
             var5 = this.xSize - 28 + 2;
-        } else if (var4 > 0)
+        }
+        else if (var4 > 0)
         {
             var5 += var4;
         }
@@ -816,7 +849,8 @@ public class GuiAetherContainerCreative extends AetherInventoryEffectRenderer
         if (var1.isTabInFirstRow())
         {
             var7 = var6 - 32;
-        } else
+        }
+        else
         {
             var7 = var6 + this.ySize;
         }
@@ -825,7 +859,8 @@ public class GuiAetherContainerCreative extends AetherInventoryEffectRenderer
         {
             this.drawCreativeTabHoveringText(var1.getTranslatedTabLabel(), var2, var3);
             return true;
-        } else
+        }
+        else
         {
             return false;
         }
@@ -850,7 +885,8 @@ public class GuiAetherContainerCreative extends AetherInventoryEffectRenderer
         if (var4 == 5)
         {
             var7 = this.guiLeft + this.xSize - 28;
-        } else if (var4 > 0)
+        }
+        else if (var4 > 0)
         {
             var7 += var4;
         }
@@ -858,7 +894,8 @@ public class GuiAetherContainerCreative extends AetherInventoryEffectRenderer
         if (var3)
         {
             var8 -= 28;
-        } else
+        }
+        else
         {
             var6 += 64;
             var8 += this.ySize - 4;
@@ -898,7 +935,8 @@ public class GuiAetherContainerCreative extends AetherInventoryEffectRenderer
         if (var1.id == 101)
         {
             tabPage = Math.max(tabPage - 1, 0);
-        } else if (var1.id == 102)
+        }
+        else if (var1.id == 102)
         {
             tabPage = Math.min(tabPage + 1, this.maxPages);
         }

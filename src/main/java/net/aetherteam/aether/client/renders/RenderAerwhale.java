@@ -20,7 +20,7 @@ public class RenderAerwhale extends Render
     {
         GL11.glPushMatrix();
         this.loadTexture("/net/aetherteam/aether/client/sprites/mobs/aerwhale/aerwhale.png");
-        GL11.glTranslatef((float) var2, (float) var4, (float) var6);
+        GL11.glTranslatef((float)var2, (float)var4, (float)var6);
         GL11.glRotatef(90.0F - var1.rotationYaw, 0.0F, 1.0F, 0.0F);
         GL11.glRotatef(180.0F - var1.rotationPitch, 1.0F, 0.0F, 0.0F);
         GL11.glScalef(2.0F, 2.0F, 2.0F);

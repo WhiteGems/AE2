@@ -3,10 +3,8 @@ package net.aetherteam.aether.entities.bosses;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.network.PacketDispatcher;
 import cpw.mods.fml.relauncher.Side;
-
 import java.util.ArrayList;
 import java.util.List;
-
 import net.aetherteam.aether.Aether;
 import net.aetherteam.aether.AetherCommonPlayerHandler;
 import net.aetherteam.aether.AetherNameGen;
@@ -55,8 +53,8 @@ public class EntitySliderHostMimic extends EntityMiniBoss implements IAetherBoss
     public void entityInit()
     {
         super.entityInit();
-        this.dataWatcher.addObject(16, Byte.valueOf((byte) 0));
-        this.dataWatcher.addObject(17, Byte.valueOf((byte) 0));
+        this.dataWatcher.addObject(16, Byte.valueOf((byte)0));
+        this.dataWatcher.addObject(17, Byte.valueOf((byte)0));
     }
 
     public boolean isAwake()
@@ -70,10 +68,11 @@ public class EntitySliderHostMimic extends EntityMiniBoss implements IAetherBoss
         {
             this.scareItUp();
             this.worldObj.playSoundAtEntity(this, "aeboss.slider.awake", 2.5F, 1.0F / (this.rand.nextFloat() * 0.2F + 0.9F));
-            this.dataWatcher.updateObject(16, Byte.valueOf((byte) 1));
-        } else
+            this.dataWatcher.updateObject(16, Byte.valueOf((byte)1));
+        }
+        else
         {
-            this.dataWatcher.updateObject(16, Byte.valueOf((byte) 0));
+            this.dataWatcher.updateObject(16, Byte.valueOf((byte)0));
         }
     }
 
@@ -86,10 +85,11 @@ public class EntitySliderHostMimic extends EntityMiniBoss implements IAetherBoss
     {
         if (var1)
         {
-            this.dataWatcher.updateObject(17, Byte.valueOf((byte) 1));
-        } else
+            this.dataWatcher.updateObject(17, Byte.valueOf((byte)1));
+        }
+        else
         {
-            this.dataWatcher.updateObject(17, Byte.valueOf((byte) 0));
+            this.dataWatcher.updateObject(17, Byte.valueOf((byte)0));
         }
     }
 
@@ -223,21 +223,24 @@ public class EntitySliderHostMimic extends EntityMiniBoss implements IAetherBoss
                 {
                     if (this.sendDelay <= 0 && !this.worldObj.isRemote)
                     {
-                        this.sendEye((EntityLiving) this.entityToAttack);
+                        this.sendEye((EntityLiving)this.entityToAttack);
                     }
-                } else if (this.sendRespawnDelay <= 0)
+                }
+                else if (this.sendRespawnDelay <= 0)
                 {
                     if (!this.worldObj.isRemote)
                     {
-                        this.sendEye((EntityLiving) this.entityToAttack);
+                        this.sendEye((EntityLiving)this.entityToAttack);
                         this.sendRespawnDelay = 100;
                     }
-                } else
+                }
+                else
                 {
                     this.setSendMode(false);
                 }
             }
-        } else
+        }
+        else
         {
             this.entityToAttack = null;
             this.hasBeenAttacked = false;
@@ -254,7 +257,7 @@ public class EntitySliderHostMimic extends EntityMiniBoss implements IAetherBoss
 
         if (this.Eyes.size() > this.eyeCap)
         {
-            ((Entity) this.Eyes.remove(0)).setDead();
+            ((Entity)this.Eyes.remove(0)).setDead();
         }
 
         if (this.hasBeenAttacked || this.entityToAttack != null && this.canEntityBeSeen(this.entityToAttack))
@@ -283,7 +286,7 @@ public class EntitySliderHostMimic extends EntityMiniBoss implements IAetherBoss
      */
     protected void attackEntity(Entity var1, float var2)
     {
-        EntityLiving var3 = (EntityLiving) var1;
+        EntityLiving var3 = (EntityLiving)var1;
 
         if (var2 < 8.5F && this.canEntityBeSeen(var3))
         {
@@ -303,7 +306,7 @@ public class EntitySliderHostMimic extends EntityMiniBoss implements IAetherBoss
                 }
             }
 
-            this.rotationYaw = (float) (Math.atan2(var6, var4) * 180.0D / Math.PI) - 90.0F;
+            this.rotationYaw = (float)(Math.atan2(var6, var4) * 180.0D / Math.PI) - 90.0F;
             this.hasAttacked = true;
         }
     }
@@ -312,7 +315,7 @@ public class EntitySliderHostMimic extends EntityMiniBoss implements IAetherBoss
     {
         while (this.Eyes.size() > this.eyeCap)
         {
-            ((Entity) this.Eyes.remove(0)).setDead();
+            ((Entity)this.Eyes.remove(0)).setDead();
         }
 
         this.hasBeenAttacked = true;
@@ -333,7 +336,7 @@ public class EntitySliderHostMimic extends EntityMiniBoss implements IAetherBoss
     {
         while (this.Eyes.size() != 0)
         {
-            ((Entity) this.Eyes.remove(0)).setDead();
+            ((Entity)this.Eyes.remove(0)).setDead();
         }
     }
 
@@ -379,18 +382,19 @@ public class EntitySliderHostMimic extends EntityMiniBoss implements IAetherBoss
 
         if (var3 != null && var1.isProjectile())
         {
-            if (var4 instanceof EntityPlayer && ((EntityPlayer) var4).getCurrentEquippedItem() != null)
+            if (var4 instanceof EntityPlayer && ((EntityPlayer)var4).getCurrentEquippedItem() != null)
             {
-                this.chatItUp((EntityPlayer) var4, "Better switch to a sword, my " + ((EntityPlayer) var4).getCurrentEquippedItem().getItem().getItemDisplayName(((EntityPlayer) var4).getCurrentEquippedItem()) + " doesn\'t seem to affect it.");
+                this.chatItUp((EntityPlayer)var4, "Better switch to a sword, my " + ((EntityPlayer)var4).getCurrentEquippedItem().getItem().getItemDisplayName(((EntityPlayer)var4).getCurrentEquippedItem()) + " doesn\'t seem to affect it.");
                 this.chatTime = 60;
             }
 
             return false;
-        } else
+        }
+        else
         {
             if (var4 instanceof EntityPlayer)
             {
-                EntityPlayer var5 = (EntityPlayer) var4;
+                EntityPlayer var5 = (EntityPlayer)var4;
                 AetherCommonPlayerHandler var6 = Aether.getPlayerBase(var5);
                 PartyMember var7 = PartyController.instance().getMember(var5);
                 Party var8 = PartyController.instance().getParty(var7);
@@ -463,7 +467,7 @@ public class EntitySliderHostMimic extends EntityMiniBoss implements IAetherBoss
 
         if (var1.getEntity() instanceof EntityPlayer)
         {
-            EntityPlayer var2 = (EntityPlayer) var1.getEntity();
+            EntityPlayer var2 = (EntityPlayer)var1.getEntity();
             Party var3 = PartyController.instance().getParty(PartyController.instance().getMember(var2));
             Dungeon var4 = DungeonHandler.instance().getInstanceAt(MathHelper.floor_double(this.posX), MathHelper.floor_double(this.posY), MathHelper.floor_double(this.posZ));
 

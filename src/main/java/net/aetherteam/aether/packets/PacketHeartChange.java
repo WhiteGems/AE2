@@ -1,54 +1,54 @@
 package net.aetherteam.aether.packets;
 
 import cpw.mods.fml.common.network.Player;
-
 import java.io.ByteArrayInputStream;
 import java.io.DataInputStream;
 import java.util.HashMap;
-
 import net.aetherteam.aether.Aether;
-import net.aetherteam.aether.CommonProxy;
 import net.minecraft.network.packet.Packet250CustomPayload;
 
 public class PacketHeartChange extends AetherPacket
 {
-    public PacketHeartChange(int packetID)
+    public PacketHeartChange(int var1)
     {
-        super(packetID);
+        super(var1);
     }
 
-    public void onPacketReceived(Packet250CustomPayload packet, Player player)
+    public void onPacketReceived(Packet250CustomPayload var1, Player var2)
     {
-        DataInputStream dat = new DataInputStream(new ByteArrayInputStream(packet.data));
+        DataInputStream var3 = new DataInputStream(new ByteArrayInputStream(var1.data));
+
         try
         {
-            byte packetType = dat.readByte();
-            boolean clearFirst = dat.readBoolean();
-            boolean adding = dat.readBoolean();
-            short length = dat.readShort();
-            int maxHealth = dat.readInt();
+            byte var4 = var3.readByte();
+            boolean var5 = var3.readBoolean();
+            boolean var6 = var3.readBoolean();
+            short var7 = var3.readShort();
+            int var8 = var3.readInt();
+            HashMap var9 = Aether.proxy.getClientExtraHearts();
 
-            HashMap extraHearts = Aether.proxy.getClientExtraHearts();
-
-            if (clearFirst)
+            if (var5)
             {
-                extraHearts.clear();
+                var9.clear();
             }
 
-            for (int i = 0; i < length; i++)
+            for (int var10 = 0; var10 < var7; ++var10)
             {
-                String username = dat.readUTF();
-                if (adding) extraHearts.put(username, Integer.valueOf(maxHealth));
-                else extraHearts.remove(username);
+                String var11 = var3.readUTF();
+
+                if (var6)
+                {
+                    var9.put(var11, Integer.valueOf(var8));
+                }
+                else
+                {
+                    var9.remove(var11);
+                }
             }
-        } catch (Exception ex)
+        }
+        catch (Exception var12)
         {
-            ex.printStackTrace();
+            var12.printStackTrace();
         }
     }
 }
-
-/* Location:           D:\Dev\Mc\forge_orl\mcp\jars\bin\aether.jar
- * Qualified Name:     net.aetherteam.aether.packets.PacketHeartChange
- * JD-Core Version:    0.6.2
- */

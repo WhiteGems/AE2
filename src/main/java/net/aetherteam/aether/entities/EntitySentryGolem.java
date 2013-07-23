@@ -49,7 +49,7 @@ public class EntitySentryGolem extends EntityDungeonMob implements IAetherMob, I
     protected void entityInit()
     {
         super.entityInit();
-        this.dataWatcher.addObject(18, new Byte((byte) 2));
+        this.dataWatcher.addObject(18, new Byte((byte)2));
         this.dataWatcher.addObject(19, new Integer(0));
     }
 
@@ -114,6 +114,12 @@ public class EntitySentryGolem extends EntityDungeonMob implements IAetherMob, I
     public void onUpdate()
     {
         super.onUpdate();
+        EntityPlayer var1 = this.worldObj.getClosestPlayerToEntity(this, 8.0D);
+
+        if (this.entityToAttack == null && var1 != null && this.canEntityBeSeen(var1) && !var1.isDead && !var1.capabilities.isCreativeMode)
+        {
+            this.entityToAttack = var1;
+        }
 
         if (this.timeTilToss == 50 && this.tossCoolDown == 0 && this.entityToAttack != null)
         {
@@ -123,7 +129,8 @@ public class EntitySentryGolem extends EntityDungeonMob implements IAetherMob, I
         if (this.timeTilToss != 0 && this.tossCoolDown == 0)
         {
             --this.timeTilToss;
-        } else if (this.tossCoolDown == 0)
+        }
+        else if (this.tossCoolDown == 0)
         {
             this.timeTilToss = 50;
             this.tossCoolDown = 25;
@@ -135,7 +142,7 @@ public class EntitySentryGolem extends EntityDungeonMob implements IAetherMob, I
      */
     protected void attackEntity(Entity var1, float var2)
     {
-        this.target = (EntityLiving) var1;
+        this.target = (EntityLiving)var1;
 
         if (var2 < 10.0F)
         {
@@ -144,7 +151,7 @@ public class EntitySentryGolem extends EntityDungeonMob implements IAetherMob, I
 
             if (this.target != null)
             {
-                if (this.target.isDead || (double) this.target.getDistanceToEntity(this) > 12.0D)
+                if (this.target.isDead || (double)this.target.getDistanceToEntity(this) > 12.0D)
                 {
                     this.target = null;
                     this.attackTime = 0;
@@ -161,7 +168,7 @@ public class EntitySentryGolem extends EntityDungeonMob implements IAetherMob, I
                 }
             }
 
-            this.rotationYaw = (float) (Math.atan2(var5, var3) * 180.0D / Math.PI) - 90.0F;
+            this.rotationYaw = (float)(Math.atan2(var5, var3) * 180.0D / Math.PI) - 90.0F;
         }
     }
 
@@ -215,19 +222,18 @@ public class EntitySentryGolem extends EntityDungeonMob implements IAetherMob, I
             double var7 = Math.sqrt(var3 * var3 + var5 * var5) + (this.posY - this.entityToAttack.posY);
             double var10000 = var3 * var7;
             var10000 = var5 * var7;
-            EntityProjectileSentry var9 = new EntityProjectileSentry(this.worldObj, this.posX - 0.25D, this.posY + 2.35D, this.posZ - 0.25D, this);
+            EntityProjectileSentry var9 = new EntityProjectileSentry(this.worldObj, this.posX, this.posY + 2.35D, this.posZ, this);
             var9.rotationYaw = this.renderYawOffset;
             var9.renderYawOffset = this.renderYawOffset;
             var9.rotationPitch = this.rotationPitch;
-            double var10 = this.entityToAttack.posX + this.entityToAttack.motionX - this.posX;
-            double var12 = this.entityToAttack.posY + -this.posY;
-            double var14 = this.entityToAttack.posZ + this.entityToAttack.motionZ - this.posZ;
+            double var10 = var1.posX + var1.motionX - this.posX;
+            double var12 = var1.posY - this.posY;
+            double var14 = var1.posZ + var1.motionZ - this.posZ;
             float var16 = MathHelper.sqrt_double(var10 * var10 + var14 * var14);
 
             if (!this.worldObj.isRemote)
             {
-                float var17 = var16 * 0.075F;
-                var9.setThrowableHeading(var10, var12 + (double) (var16 * 0.2F), var14, var17, 0.0F);
+                var9.setThrowableHeading(var10, var12 + (double)(var16 * 0.2F), var14, 0.75F, 8.0F);
                 this.worldObj.spawnEntityInWorld(var9);
             }
         }

@@ -2,11 +2,9 @@ package net.aetherteam.aether.tile_entities;
 
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.relauncher.Side;
-
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Random;
-
 import net.aetherteam.aether.Aether;
 import net.aetherteam.aether.dungeons.Dungeon;
 import net.aetherteam.aether.dungeons.DungeonHandler;
@@ -105,9 +103,9 @@ public class TileEntityEntranceController extends TileEntity
     {
         if (this.isSoundOn())
         {
-            float var10002 = (float) this.xCoord;
-            float var10003 = (float) this.yCoord;
-            Aether.proxy.getClient().sndManager.playStreaming(var1, var10002, var10003, (float) this.zCoord);
+            float var10002 = (float)this.xCoord;
+            float var10003 = (float)this.yCoord;
+            Aether.proxy.getClient().sndManager.playStreaming(var1, var10002, var10003, (float)this.zCoord);
         }
     }
 
@@ -127,11 +125,11 @@ public class TileEntityEntranceController extends TileEntity
 
                 while (var8.hasNext())
                 {
-                    PartyMember var9 = (PartyMember) var8.next();
+                    PartyMember var9 = (PartyMember)var8.next();
 
-                    if (var7 instanceof EntityPlayerMP && ((EntityPlayerMP) var7).username.equalsIgnoreCase(var9.username))
+                    if (var7 instanceof EntityPlayerMP && ((EntityPlayerMP)var7).username.equalsIgnoreCase(var9.username))
                     {
-                        ((EntityPlayerMP) var7).setPositionAndUpdate((double) ((float) ((double) this.xCoord + 0.5D)), (double) ((float) ((double) this.yCoord + 1.0D)), (double) ((float) ((double) this.zCoord + 0.5D + (var2 ? 3.0D : 0.0D))));
+                        ((EntityPlayerMP)var7).setPositionAndUpdate((double)((float)((double)this.xCoord + 0.5D)), (double)((float)((double)this.yCoord + 1.0D)), (double)((float)((double)this.zCoord + 0.5D + (var2 ? 3.0D : 0.0D))));
                     }
                 }
             }
@@ -139,8 +137,8 @@ public class TileEntityEntranceController extends TileEntity
 
         if (!var2)
         {
-            this.worldObj.playSoundEffect((double) this.xCoord, (double) this.yCoord, (double) this.zCoord, "aeboss.slider.awake", 1.0F, 1.0F / (this.rand.nextFloat() * 0.2F + 0.9F));
-            this.worldObj.playSoundEffect((double) this.xCoord, (double) this.yCoord, (double) this.zCoord, "aeboss.slider.unlock", 1.0F, 1.0F / (this.rand.nextFloat() * 0.2F + 0.9F));
+            this.worldObj.playSoundEffect((double)this.xCoord, (double)this.yCoord, (double)this.zCoord, "aeboss.slider.awake", 1.0F, 1.0F / (this.rand.nextFloat() * 0.2F + 0.9F));
+            this.worldObj.playSoundEffect((double)this.xCoord, (double)this.yCoord, (double)this.zCoord, "aeboss.slider.unlock", 1.0F, 1.0F / (this.rand.nextFloat() * 0.2F + 0.9F));
         }
     }
 
@@ -175,7 +173,7 @@ public class TileEntityEntranceController extends TileEntity
 
         if (this.dungeonID == -1)
         {
-            Dungeon var1 = DungeonHandler.instance().getInstanceAt(MathHelper.floor_double((double) this.xCoord), MathHelper.floor_double((double) this.yCoord), MathHelper.floor_double((double) this.zCoord));
+            Dungeon var1 = DungeonHandler.instance().getInstanceAt(MathHelper.floor_double((double)this.xCoord), MathHelper.floor_double((double)this.yCoord), MathHelper.floor_double((double)this.zCoord));
 
             if (var1 != null)
             {
@@ -191,7 +189,7 @@ public class TileEntityEntranceController extends TileEntity
 
     public boolean isUseableByPlayer(EntityPlayer var1)
     {
-        return this.worldObj.getBlockTileEntity(this.xCoord, this.yCoord, this.zCoord) != this ? false : var1.getDistanceSq((double) this.xCoord + 0.5D, (double) this.yCoord + 0.5D, (double) this.zCoord + 0.5D) <= 64.0D;
+        return this.worldObj.getBlockTileEntity(this.xCoord, this.yCoord, this.zCoord) != this ? false : var1.getDistanceSq((double)this.xCoord + 0.5D, (double)this.yCoord + 0.5D, (double)this.zCoord + 0.5D) <= 64.0D;
     }
 
     public void onDataPacket(INetworkManager var1, Packet132TileEntityData var2)
@@ -217,7 +215,7 @@ public class TileEntityEntranceController extends TileEntity
         while (var3.hasNext())
         {
             Object var4 = var3.next();
-            EntityPlayerMP var5 = (EntityPlayerMP) var4;
+            EntityPlayerMP var5 = (EntityPlayerMP)var4;
 
             if (var5.worldObj == this.worldObj)
             {

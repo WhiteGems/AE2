@@ -3,13 +3,10 @@ package net.aetherteam.aether.packets;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.network.Player;
 import cpw.mods.fml.relauncher.Side;
-
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.DataInputStream;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
-
 import net.aetherteam.aether.party.Party;
 import net.aetherteam.aether.party.PartyController;
 import net.aetherteam.aether.party.PartyType;
@@ -19,62 +16,51 @@ import net.minecraft.network.packet.Packet250CustomPayload;
 
 public class PacketSyncAllParties extends AetherPacket
 {
-    public PacketSyncAllParties(int packetID)
+    public PacketSyncAllParties(int var1)
     {
-        super(packetID);
+        super(var1);
     }
 
-    public void onPacketReceived(Packet250CustomPayload packet, Player player)
+    public void onPacketReceived(Packet250CustomPayload var1, Player var2)
     {
-        DataInputStream dat = new DataInputStream(new ByteArrayInputStream(packet.data));
-        BufferedReader buf = new BufferedReader(new InputStreamReader(dat));
+        DataInputStream var3 = new DataInputStream(new ByteArrayInputStream(var1.data));
+        new BufferedReader(new InputStreamReader(var3));
+
         try
         {
-            Side side = FMLCommonHandler.instance().getEffectiveSide();
+            Side var5 = FMLCommonHandler.instance().getEffectiveSide();
 
-            if (side.isClient())
+            if (var5.isClient())
             {
                 PartyController.instance().getParties().clear();
+                byte var6 = var3.readByte();
+                int var7 = var3.readInt();
 
-                byte packetType = dat.readByte();
-
-                int partyAmount = dat.readInt();
-
-                for (int i = 0; i < partyAmount; i++)
+                for (int var8 = 0; var8 < var7; ++var8)
                 {
-                    String partyName = dat.readUTF();
-                    String leaderUsername = dat.readUTF();
-                    String leaderSkinUrl = "";
+                    String var9 = var3.readUTF();
+                    String var10 = var3.readUTF();
+                    String var11 = "";
+                    PartyType var12 = PartyType.getTypeFromString(var3.readUTF());
+                    int var13 = var3.readInt();
+                    Party var14 = (new Party(var9, new PartyMember(var10, var11))).setType(var12);
+                    PartyController.instance().addParty(var14, false);
+                    int var15 = var3.readInt();
 
-                    PartyType partyType = PartyType.getTypeFromString(dat.readUTF());
-                    int memberSizeLimit = dat.readInt();
-
-                    Party party = new Party(partyName, new PartyMember(leaderUsername, leaderSkinUrl)).setType(partyType);
-
-                    PartyController.instance().addParty(party, false);
-
-                    int memberAmount = dat.readInt();
-
-                    for (int j = 0; j < memberAmount; j++)
+                    for (int var16 = 0; var16 < var15; ++var16)
                     {
-                        String memberUsername = dat.readUTF();
-                        String skinUrl = "";
-                        MemberType memberType = MemberType.getTypeFromString(dat.readUTF());
-
-                        PartyMember member = new PartyMember(memberUsername, skinUrl).promoteTo(memberType);
-
-                        PartyController.instance().joinParty(party, member, false);
+                        String var17 = var3.readUTF();
+                        String var18 = "";
+                        MemberType var19 = MemberType.getTypeFromString(var3.readUTF());
+                        PartyMember var20 = (new PartyMember(var17, var18)).promoteTo(var19);
+                        PartyController.instance().joinParty(var14, var20, false);
                     }
                 }
             }
-        } catch (Exception ex)
+        }
+        catch (Exception var21)
         {
-            ex.printStackTrace();
+            var21.printStackTrace();
         }
     }
 }
-
-/* Location:           D:\Dev\Mc\forge_orl\mcp\jars\bin\aether.jar
- * Qualified Name:     net.aetherteam.aether.packets.PacketSyncAllParties
- * JD-Core Version:    0.6.2
- */

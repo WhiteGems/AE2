@@ -1,9 +1,7 @@
 package net.aetherteam.aether.containers;
 
 import cpw.mods.fml.common.network.PacketDispatcher;
-
 import java.util.Collections;
-
 import net.aetherteam.aether.Aether;
 import net.aetherteam.aether.interfaces.IAetherAccessory;
 import net.aetherteam.aether.items.ItemAccessory;
@@ -85,7 +83,8 @@ public class InventoryAether implements IInventory
                 this.slots[var1] = null;
                 this.onInventoryChanged();
                 return var3;
-            } else
+            }
+            else
             {
                 var3 = this.slots[var1].splitStack(var2);
 
@@ -97,7 +96,8 @@ public class InventoryAether implements IInventory
                 this.onInventoryChanged();
                 return var3;
             }
-        } else
+        }
+        else
         {
             return null;
         }
@@ -178,7 +178,7 @@ public class InventoryAether implements IInventory
                 int var10 = var8 - var9;
                 var2 += var10;
                 var3 += var8;
-                int var11 = ((ItemAccessory) var7.getItem()).damageReduceAmount;
+                int var11 = ((ItemAccessory)var7.getItem()).damageReduceAmount;
                 var1 += var11;
             }
         }
@@ -186,7 +186,8 @@ public class InventoryAether implements IInventory
         if (var3 == 0)
         {
             return 0;
-        } else
+        }
+        else
         {
             return (var1 - 1) * var2 / var3 + 1;
         }
@@ -207,7 +208,7 @@ public class InventoryAether implements IInventory
     {
         if (!this.player.worldObj.isRemote)
         {
-            PacketDispatcher.sendPacketToAllPlayers(AetherPacketHandler.sendAccessoryChange(Aether.getServerPlayer((EntityPlayerMP) this.player).inv.writeToNBT(new NBTTagList()), false, true, Collections.singleton(this.player.username), (byte) 1));
+            PacketDispatcher.sendPacketToAllPlayers(AetherPacketHandler.sendAccessoryChange(Aether.getServerPlayer((EntityPlayerMP)this.player).inv.writeToNBT(new NBTTagList()), false, true, Collections.singleton(this.player.username), (byte)1));
         }
     }
 
@@ -219,7 +220,7 @@ public class InventoryAether implements IInventory
 
         for (int var2 = 0; var2 < var1.tagCount(); ++var2)
         {
-            NBTTagCompound var3 = (NBTTagCompound) var1.tagAt(var2);
+            NBTTagCompound var3 = (NBTTagCompound)var1.tagAt(var2);
             int var4 = var3.getByte("Slot") & 255;
             ItemStack var5 = ItemStack.loadItemStackFromNBT(var3);
 
@@ -240,7 +241,7 @@ public class InventoryAether implements IInventory
     {
         for (int var2 = 0; var2 < var1.tagCount(); ++var2)
         {
-            NBTTagCompound var3 = (NBTTagCompound) var1.tagAt(var2);
+            NBTTagCompound var3 = (NBTTagCompound)var1.tagAt(var2);
             int var4 = var3.getByte("Slot") & 255;
             ItemStack var5 = ItemStack.loadItemStackFromNBT(var3);
 
@@ -258,7 +259,7 @@ public class InventoryAether implements IInventory
             if (this.slots[var2] != null)
             {
                 NBTTagCompound var3 = new NBTTagCompound();
-                var3.setByte("Slot", (byte) var2);
+                var3.setByte("Slot", (byte)var2);
                 this.slots[var2].writeToNBT(var3);
                 var1.appendTag(var3);
             }
@@ -296,32 +297,33 @@ public class InventoryAether implements IInventory
      */
     public boolean isStackValidForSlot(int var1, ItemStack var2)
     {
-        Slot var3 = (Slot) this.player.inventoryContainer.inventorySlots.get(var1);
+        Slot var3 = (Slot)this.player.inventoryContainer.inventorySlots.get(var1);
 
         if (var3 != null && var3.getHasStack() && !(var3 instanceof SlotMoreArmor))
         {
             int var4;
 
-            if (var2.getItem() instanceof ItemArmor && !((Slot) this.player.inventoryContainer.inventorySlots.get(5 + ((ItemArmor) var2.getItem()).armorType)).getHasStack())
+            if (var2.getItem() instanceof ItemArmor && !((Slot)this.player.inventoryContainer.inventorySlots.get(5 + ((ItemArmor)var2.getItem()).armorType)).getHasStack())
             {
-                var4 = 5 + ((ItemArmor) var2.getItem()).armorType;
-            } else
+                var4 = 5 + ((ItemArmor)var2.getItem()).armorType;
+            }
+            else
             {
-                if (var2.getItem() instanceof IAetherAccessory && this.slots[((ItemAccessory) var2.getItem()).getSlotType()[0]] == null)
+                if (var2.getItem() instanceof IAetherAccessory && this.slots[((ItemAccessory)var2.getItem()).getSlotType()[0]] == null)
                 {
-                    var4 = ((ItemAccessory) var2.getItem()).getSlotType()[0];
+                    var4 = ((ItemAccessory)var2.getItem()).getSlotType()[0];
                     this.slots[var4] = var2;
-                    var3.putStack((ItemStack) null);
+                    var3.putStack((ItemStack)null);
                     var3.onSlotChanged();
                     this.onInventoryChanged();
                     return true;
                 }
 
-                if (var2.getItem() instanceof IAetherAccessory && this.slots[((ItemAccessory) var2.getItem()).getSlotType()[1]] == null)
+                if (var2.getItem() instanceof IAetherAccessory && this.slots[((ItemAccessory)var2.getItem()).getSlotType()[1]] == null)
                 {
-                    var4 = ((ItemAccessory) var2.getItem()).getSlotType()[1];
+                    var4 = ((ItemAccessory)var2.getItem()).getSlotType()[1];
                     this.slots[var4] = var2;
-                    var3.putStack((ItemStack) null);
+                    var3.putStack((ItemStack)null);
                     var3.onSlotChanged();
                     this.onInventoryChanged();
                     return true;

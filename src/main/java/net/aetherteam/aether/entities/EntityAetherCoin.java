@@ -20,9 +20,7 @@ public class EntityAetherCoin extends Entity
     private int xpOrbHealth = 5;
     private EntityPlayer closestPlayer;
 
-    /**
-     * Threshold color for tracking players
-     */
+    /** Threshold color for tracking players */
     private int xpTargetColor;
 
     public EntityAetherCoin(World var1, double var2, double var4, double var6, int var8)
@@ -31,10 +29,10 @@ public class EntityAetherCoin extends Entity
         this.setSize(0.5F, 0.5F);
         this.yOffset = this.height / 2.0F;
         this.setPosition(var2, var4, var6);
-        this.rotationYaw = (float) (Math.random() * 360.0D);
-        this.motionX = (double) ((float) (Math.random() * 0.20000000298023224D - 0.10000000149011612D) * 2.0F);
-        this.motionY = (double) ((float) (Math.random() * 0.2D) * 2.0F);
-        this.motionZ = (double) ((float) (Math.random() * 0.20000000298023224D - 0.10000000149011612D) * 2.0F);
+        this.rotationYaw = (float)(Math.random() * 360.0D);
+        this.motionX = (double)((float)(Math.random() * 0.20000000298023224D - 0.10000000149011612D) * 2.0F);
+        this.motionY = (double)((float)(Math.random() * 0.2D) * 2.0F);
+        this.motionZ = (double)((float)(Math.random() * 0.20000000298023224D - 0.10000000149011612D) * 2.0F);
         this.setCoinValue(var8);
 
         if (this.getCoinValue() <= 0)
@@ -61,7 +59,7 @@ public class EntityAetherCoin extends Entity
 
     protected void entityInit()
     {
-        this.dataWatcher.addObject(16, Short.valueOf((short) 0));
+        this.dataWatcher.addObject(16, Short.valueOf((short)0));
     }
 
     public int getCoinValue()
@@ -71,7 +69,7 @@ public class EntityAetherCoin extends Entity
 
     public void setCoinValue(int var1)
     {
-        this.dataWatcher.updateObject(16, Short.valueOf((short) var1));
+        this.dataWatcher.updateObject(16, Short.valueOf((short)var1));
     }
 
     @SideOnly(Side.CLIENT)
@@ -92,7 +90,7 @@ public class EntityAetherCoin extends Entity
         int var3 = super.getBrightnessForRender(var1);
         int var4 = var3 & 255;
         int var5 = var3 >> 16 & 255;
-        var4 += (int) (var2 * 15.0F * 16.0F);
+        var4 += (int)(var2 * 15.0F * 16.0F);
 
         if (var4 > 240)
         {
@@ -123,8 +121,8 @@ public class EntityAetherCoin extends Entity
         if (this.worldObj.getBlockMaterial(MathHelper.floor_double(this.posX), MathHelper.floor_double(this.posY), MathHelper.floor_double(this.posZ)) == Material.lava)
         {
             this.motionY = 0.20000000298023224D;
-            this.motionX = (double) ((this.rand.nextFloat() - this.rand.nextFloat()) * 0.2F);
-            this.motionZ = (double) ((this.rand.nextFloat() - this.rand.nextFloat()) * 0.2F);
+            this.motionX = (double)((this.rand.nextFloat() - this.rand.nextFloat()) * 0.2F);
+            this.motionZ = (double)((this.rand.nextFloat() - this.rand.nextFloat()) * 0.2F);
             this.worldObj.playSoundAtEntity(this, "random.fizz", 0.4F, 2.0F + this.rand.nextFloat() * 0.4F);
         }
 
@@ -134,7 +132,7 @@ public class EntityAetherCoin extends Entity
         if (this.closestPlayer != null)
         {
             double var3 = (this.closestPlayer.posX - this.posX) / var1;
-            double var5 = (this.closestPlayer.posY + (double) this.closestPlayer.getEyeHeight() - this.posY) / var1;
+            double var5 = (this.closestPlayer.posY + (double)this.closestPlayer.getEyeHeight() - this.posY) / var1;
             double var7 = (this.closestPlayer.posZ - this.posZ) / var1;
             double var9 = Math.sqrt(var3 * var3 + var5 * var5 + var7 * var7);
             double var11 = 1.0D - var9;
@@ -162,9 +160,9 @@ public class EntityAetherCoin extends Entity
             }
         }
 
-        this.motionX *= (double) var13;
+        this.motionX *= (double)var13;
         this.motionY *= 0.9800000190734863D;
-        this.motionZ *= (double) var13;
+        this.motionZ *= (double)var13;
 
         if (this.onGround)
         {
@@ -217,9 +215,9 @@ public class EntityAetherCoin extends Entity
      */
     public void writeEntityToNBT(NBTTagCompound var1)
     {
-        var1.setShort("Health", (short) ((byte) this.xpOrbHealth));
-        var1.setShort("Age", (short) this.xpOrbAge);
-        var1.setShort("Value", (short) this.getCoinValue());
+        var1.setShort("Health", (short)((byte)this.xpOrbHealth));
+        var1.setShort("Age", (short)this.xpOrbAge);
+        var1.setShort("Value", (short)this.getCoinValue());
     }
 
     /**

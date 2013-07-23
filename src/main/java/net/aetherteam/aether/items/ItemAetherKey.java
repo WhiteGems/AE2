@@ -2,9 +2,7 @@ package net.aetherteam.aether.items;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
-
 import java.util.List;
-
 import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.ItemStack;
@@ -13,7 +11,7 @@ import net.minecraft.util.MathHelper;
 
 public class ItemAetherKey extends ItemAether
 {
-    public static final String[] keyNames = new String[]{"Bronze Key", "Silver Key", "Golden Key", "Guardian Key", "Host Key", "Cog Key"};
+    public static final String[] keyNames = new String[] {"Bronze Key", "Silver Key", "Golden Key", "Guardian Key", "Host Key", "Cog Key"};
     public static final int bronzeKey = 0;
     public static final int silverKey = 1;
     public static final int goldenKey = 2;

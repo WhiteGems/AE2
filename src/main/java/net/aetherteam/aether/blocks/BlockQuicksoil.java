@@ -6,6 +6,8 @@ import net.minecraft.block.material.Material;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.stats.StatList;
+import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
 
 public class BlockQuicksoil extends BlockAether implements IAetherBlock
@@ -19,12 +21,28 @@ public class BlockQuicksoil extends BlockAether implements IAetherBlock
     }
 
     /**
-     * Called whenever an entity is walking on top of this block. Args: world, x, y, z, entity
+     * Returns a bounding box from the pool of bounding boxes (this means this box can change after the pool has been
+     * cleared to be reused)
      */
-    public void onEntityWalking(World var1, int var2, int var3, int var4, Entity var5)
+    public AxisAlignedBB getCollisionBoundingBoxFromPool(World var1, int var2, int var3, int var4)
     {
-        var5.motionX *= 1.1D;
-        var5.motionZ *= 1.1D;
+        float var5 = 0.125F;
+        return AxisAlignedBB.getBoundingBox((double)var2, (double)var3, (double)var4, (double)(var2 + 1), (double)((float)(var3 + 1) - var5), (double)(var4 + 1));
+    }
+
+    /**
+     * Triggered whenever an entity collides with this block (enters into the block). Args: world, x, y, z, entity
+     */
+    public void onEntityCollidedWithBlock(World var1, int var2, int var3, int var4, Entity var5)
+    {
+        Vec3 var6 = var5.getLookVec();
+
+        if (var6 != null)
+        {
+            var5.motionX += var6.xCoord;
+            var5.motionZ += var6.zCoord;
+            var5.velocityChanged = true;
+        }
     }
 
     /**

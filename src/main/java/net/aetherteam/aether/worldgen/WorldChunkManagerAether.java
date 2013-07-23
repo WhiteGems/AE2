@@ -3,7 +3,6 @@ package net.aetherteam.aether.worldgen;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
-
 import net.aetherteam.aether.Aether;
 import net.minecraft.world.ChunkPosition;
 import net.minecraft.world.biome.BiomeGenBase;

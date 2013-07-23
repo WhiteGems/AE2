@@ -1,7 +1,6 @@
 package net.aetherteam.aether.items;
 
 import java.util.ArrayList;
-
 import net.minecraft.item.EnumArmorMaterial;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemArmor;

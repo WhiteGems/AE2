@@ -1,7 +1,6 @@
 package net.aetherteam.aether.entities.altar;
 
 import java.util.Iterator;
-
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.item.EntityItem;
@@ -22,9 +21,7 @@ public class EntityFakeItem extends EntityItem
     public int delayBeforeCanPickup;
     private int health;
 
-    /**
-     * The EntityItem's random initial float height.
-     */
+    /** The EntityItem's random initial float height. */
     public float hoverStart;
 
     public EntityFakeItem(World var1, double var2, double var4, double var6)
@@ -32,7 +29,7 @@ public class EntityFakeItem extends EntityItem
         super(var1);
         this.age = 0;
         this.health = 5;
-        this.hoverStart = (float) (Math.random() * Math.PI * 2.0D);
+        this.hoverStart = (float)(Math.random() * Math.PI * 2.0D);
         this.setSize(0.25F, 0.25F);
         this.yOffset = this.height / 2.0F;
         this.setPosition(var2, var4, var6);
@@ -59,7 +56,7 @@ public class EntityFakeItem extends EntityItem
         super(var1);
         this.age = 0;
         this.health = 5;
-        this.hoverStart = (float) (Math.random() * Math.PI * 2.0D);
+        this.hoverStart = (float)(Math.random() * Math.PI * 2.0D);
         this.setSize(0.25F, 0.25F);
         this.yOffset = this.height / 2.0F;
     }
@@ -93,7 +90,7 @@ public class EntityFakeItem extends EntityItem
 
         while (var1.hasNext())
         {
-            EntityFakeItem var2 = (EntityFakeItem) var1.next();
+            EntityFakeItem var2 = (EntityFakeItem)var1.next();
             this.combineItems(var2);
         }
     }
@@ -103,7 +100,8 @@ public class EntityFakeItem extends EntityItem
         if (var1 == this)
         {
             return false;
-        } else if (var1.isEntityAlive() && this.isEntityAlive())
+        }
+        else if (var1.isEntityAlive() && this.isEntityAlive())
         {
             ItemStack var2 = this.getEntityItem();
             ItemStack var3 = var1.getEntityItem();
@@ -111,22 +109,28 @@ public class EntityFakeItem extends EntityItem
             if (var3.getItem() != var2.getItem())
             {
                 return false;
-            } else if (var3.hasTagCompound() ^ var2.hasTagCompound())
+            }
+            else if (var3.hasTagCompound() ^ var2.hasTagCompound())
             {
                 return false;
-            } else if (var3.hasTagCompound() && !var3.getTagCompound().equals(var2.getTagCompound()))
+            }
+            else if (var3.hasTagCompound() && !var3.getTagCompound().equals(var2.getTagCompound()))
             {
                 return false;
-            } else if (var3.getItem().getHasSubtypes() && var3.getItemDamage() != var2.getItemDamage())
+            }
+            else if (var3.getItem().getHasSubtypes() && var3.getItemDamage() != var2.getItemDamage())
             {
                 return false;
-            } else if (var3.stackSize < var2.stackSize)
+            }
+            else if (var3.stackSize < var2.stackSize)
             {
                 return var1.combineItems(this);
-            } else if (var3.stackSize + var2.stackSize > var3.getMaxStackSize())
+            }
+            else if (var3.stackSize + var2.stackSize > var3.getMaxStackSize())
             {
                 return false;
-            } else
+            }
+            else
             {
                 var3.stackSize += var2.stackSize;
                 var1.delayBeforeCanPickup = Math.max(var1.delayBeforeCanPickup, this.delayBeforeCanPickup);
@@ -135,7 +139,8 @@ public class EntityFakeItem extends EntityItem
                 this.setDead();
                 return true;
             }
-        } else
+        }
+        else
         {
             return false;
         }
@@ -175,10 +180,12 @@ public class EntityFakeItem extends EntityItem
         if (this.isEntityInvulnerable())
         {
             return false;
-        } else if (this.getEntityItem() != null && this.getEntityItem().itemID == Item.netherStar.itemID && var1.isExplosion())
+        }
+        else if (this.getEntityItem() != null && this.getEntityItem().itemID == Item.netherStar.itemID && var1.isExplosion())
         {
             return false;
-        } else
+        }
+        else
         {
             this.setBeenAttacked();
             this.health -= var2;
@@ -197,8 +204,8 @@ public class EntityFakeItem extends EntityItem
      */
     public void writeEntityToNBT(NBTTagCompound var1)
     {
-        var1.setShort("Health", (short) ((byte) this.health));
-        var1.setShort("Age", (short) this.age);
+        var1.setShort("Health", (short)((byte)this.health));
+        var1.setShort("Age", (short)this.age);
 
         if (this.getEntityItem() != null)
         {
@@ -227,8 +234,7 @@ public class EntityFakeItem extends EntityItem
     /**
      * Called by a player entity when they collide with an entity
      */
-    public void onCollideWithPlayer(EntityPlayer var1)
-    {}
+    public void onCollideWithPlayer(EntityPlayer var1) {}
 
     /**
      * Gets the username of the entity.
@@ -275,7 +281,8 @@ public class EntityFakeItem extends EntityItem
             }
 
             return new ItemStack(Block.stone);
-        } else
+        }
+        else
         {
             return var1;
         }

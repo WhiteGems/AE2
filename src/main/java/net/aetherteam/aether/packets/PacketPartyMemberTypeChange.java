@@ -3,13 +3,10 @@ package net.aetherteam.aether.packets;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.network.Player;
 import cpw.mods.fml.relauncher.Side;
-
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.DataInputStream;
 import java.io.InputStreamReader;
-import java.io.PrintStream;
-
 import net.aetherteam.aether.party.Party;
 import net.aetherteam.aether.party.PartyController;
 import net.aetherteam.aether.party.members.MemberType;
@@ -19,69 +16,68 @@ import net.minecraft.network.packet.Packet250CustomPayload;
 
 public class PacketPartyMemberTypeChange extends AetherPacket
 {
-    public PacketPartyMemberTypeChange(int packetID)
+    public PacketPartyMemberTypeChange(int var1)
     {
-        super(packetID);
+        super(var1);
     }
 
-    public void onPacketReceived(Packet250CustomPayload packet, Player player)
+    public void onPacketReceived(Packet250CustomPayload var1, Player var2)
     {
-        DataInputStream dat = new DataInputStream(new ByteArrayInputStream(packet.data));
-        BufferedReader buf = new BufferedReader(new InputStreamReader(dat));
+        DataInputStream var3 = new DataInputStream(new ByteArrayInputStream(var1.data));
+        new BufferedReader(new InputStreamReader(var3));
+
         try
         {
-            byte packetType = dat.readByte();
+            byte var5 = var3.readByte();
+            String var6 = var3.readUTF();
+            MemberType var7 = MemberType.getTypeFromString(var3.readUTF());
+            Side var8 = FMLCommonHandler.instance().getEffectiveSide();
+            PartyMember var9;
 
-            String username = dat.readUTF();
-            MemberType newType = MemberType.getTypeFromString(dat.readUTF());
-
-            Side side = FMLCommonHandler.instance().getEffectiveSide();
-
-            if (side.isClient())
+            if (var8.isClient())
             {
                 PartyController.instance();
-                PartyMember affectedMember = PartyController.instance().getMember(username);
-
+                var9 = PartyController.instance().getMember(var6);
                 PartyController.instance();
-                Party party = PartyController.instance().getParty(affectedMember);
+                Party var10 = PartyController.instance().getParty(var9);
 
-                if (party != null)
+                if (var10 != null)
                 {
                     PartyController.instance();
-                    PartyController.instance().promoteMember(affectedMember, newType, false);
+                    PartyController.instance().promoteMember(var9, var7, false);
                 }
-            } else
+            }
+            else
             {
                 PartyController.instance();
-                PartyMember affectedMember = PartyController.instance().getMember(username);
+                var9 = PartyController.instance().getMember(var6);
                 PartyController.instance();
-                PartyMember potentialLeader = PartyController.instance().getMember((EntityPlayer) player);
-
+                PartyMember var13 = PartyController.instance().getMember((EntityPlayer)var2);
                 PartyController.instance();
-                Party party = PartyController.instance().getParty(potentialLeader);
+                Party var11 = PartyController.instance().getParty(var13);
 
-                if ((party != null) && (potentialLeader != null))
+                if (var11 != null && var13 != null)
                 {
-                    if (party.isLeader(potentialLeader))
+                    if (var11.isLeader(var13))
                     {
                         PartyController.instance();
-                        PartyController.instance().promoteMember(affectedMember, newType, false);
-
-                        sendPacketToAllExcept(AetherPacketHandler.sendMemberTypeChange(username, newType), player);
-                    } else
-                    {
-                        System.out.println(potentialLeader.username + " was not the leader of the " + party.getName() + " party! Cannot promote member.");
+                        PartyController.instance().promoteMember(var9, var7, false);
+                        this.sendPacketToAllExcept(AetherPacketHandler.sendMemberTypeChange(var6, var7), var2);
                     }
-                } else System.out.println("Something went wrong! Party was null while trying to promote a member.");
+                    else
+                    {
+                        System.out.println(var13.username + " was not the leader of the " + var11.getName() + " party! Cannot promote member.");
+                    }
+                }
+                else
+                {
+                    System.out.println("Something went wrong! Party was null while trying to promote a member.");
+                }
             }
-        } catch (Exception ex)
+        }
+        catch (Exception var12)
         {
-            ex.printStackTrace();
+            var12.printStackTrace();
         }
     }
 }
-
-/* Location:           D:\Dev\Mc\forge_orl\mcp\jars\bin\aether.jar
- * Qualified Name:     net.aetherteam.aether.packets.PacketPartyMemberTypeChange
- * JD-Core Version:    0.6.2
- */

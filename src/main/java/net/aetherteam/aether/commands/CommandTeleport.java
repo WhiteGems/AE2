@@ -1,7 +1,6 @@
 package net.aetherteam.aether.commands;
 
 import java.util.List;
-
 import net.aetherteam.aether.dungeons.Dungeon;
 import net.aetherteam.aether.dungeons.DungeonHandler;
 import net.aetherteam.aether.party.Party;
@@ -42,14 +41,16 @@ public class CommandTeleport extends CommandBase
         if (var2.length < 1)
         {
             throw new WrongUsageException("commands.tp.usage", new Object[0]);
-        } else
+        }
+        else
         {
             EntityPlayerMP var3;
 
             if (var2.length != 2 && var2.length != 4)
             {
                 var3 = getCommandSenderAsPlayer(var1);
-            } else
+            }
+            else
             {
                 var3 = func_82359_c(var1, var2[0]);
 
@@ -81,11 +82,12 @@ public class CommandTeleport extends CommandBase
                         return;
                     }
 
-                    var3.mountEntity((Entity) null);
+                    var3.mountEntity((Entity)null);
                     var3.playerNetServerHandler.setPlayerLocation(var11.posX, var11.posY, var11.posZ, var11.rotationYaw, var11.rotationPitch);
-                    notifyAdmins(var1, "commands.tp.success", new Object[]{var3.getEntityName(), var11.getEntityName()});
+                    notifyAdmins(var1, "commands.tp.success", new Object[] {var3.getEntityName(), var11.getEntityName()});
                 }
-            } else if (var3.worldObj != null)
+            }
+            else if (var3.worldObj != null)
             {
                 int var4 = var2.length - 3;
                 double var5 = this.func_82368_a(var1, var3.posX, var2[var4++]);
@@ -97,22 +99,22 @@ public class CommandTeleport extends CommandBase
                     return;
                 }
 
-                var3.mountEntity((Entity) null);
+                var3.mountEntity((Entity)null);
                 var3.setPositionAndUpdate(var5, var7, var9);
-                notifyAdmins(var1, "commands.tp.success.coordinates", new Object[]{var3.getEntityName(), Double.valueOf(var5), Double.valueOf(var7), Double.valueOf(var9)});
+                notifyAdmins(var1, "commands.tp.success.coordinates", new Object[] {var3.getEntityName(), Double.valueOf(var5), Double.valueOf(var7), Double.valueOf(var9)});
             }
         }
     }
 
     public boolean dungeonCheck(EntityPlayerMP var1, ICommandSender var2, double var3, double var5, double var7)
     {
-        Party var9 = PartyController.instance().getParty((EntityPlayer) var1);
+        Party var9 = PartyController.instance().getParty((EntityPlayer)var1);
         Dungeon var10 = DungeonHandler.instance().getDungeon(var9);
         Dungeon var11 = DungeonHandler.instance().getInstanceAt(MathHelper.floor_double(var3), MathHelper.floor_double(var5), MathHelper.floor_double(var7));
 
         if (var1.dimension == 3)
         {
-            if (var9 != null && var10 != null && var10.hasMember(PartyController.instance().getMember((EntityPlayer) var1)) && var11 == null)
+            if (var9 != null && var10 != null && var10.hasMember(PartyController.instance().getMember((EntityPlayer)var1)) && var11 == null)
             {
                 notifyAdmins(var2, "You cannot teleport " + var1.username + " out side of a dungeon!", new Object[0]);
                 return false;
@@ -163,14 +165,14 @@ public class CommandTeleport extends CommandBase
 
         if (var5 != 0 || var6 != 0)
         {
-            if (var8 < (double) var5)
+            if (var8 < (double)var5)
             {
-                throw new NumberInvalidException("commands.generic.double.tooSmall", new Object[]{Double.valueOf(var8), Integer.valueOf(var5)});
+                throw new NumberInvalidException("commands.generic.double.tooSmall", new Object[] {Double.valueOf(var8), Integer.valueOf(var5)});
             }
 
-            if (var8 > (double) var6)
+            if (var8 > (double)var6)
             {
-                throw new NumberInvalidException("commands.generic.double.tooBig", new Object[]{Double.valueOf(var8), Integer.valueOf(var6)});
+                throw new NumberInvalidException("commands.generic.double.tooBig", new Object[] {Double.valueOf(var8), Integer.valueOf(var6)});
             }
         }
 

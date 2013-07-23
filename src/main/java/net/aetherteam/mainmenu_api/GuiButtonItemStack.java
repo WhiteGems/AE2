@@ -6,6 +6,7 @@ import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.renderer.entity.RenderItem;
 import net.minecraft.item.ItemStack;
 import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL12;
 
 public class GuiButtonItemStack extends GuiButton
 {
@@ -14,19 +15,22 @@ public class GuiButtonItemStack extends GuiButton
     protected static Minecraft mc;
     protected static ItemStack is;
 
-    public GuiButtonItemStack(FontRenderer fontRenderer, Minecraft mc, int par1, int par2, int par3, ItemStack item)
+    public GuiButtonItemStack(FontRenderer var1, Minecraft var2, int var3, int var4, int var5, ItemStack var6)
     {
-        super(par1, par2, par3, 20, 20, "");
-        this.fontRenderer = fontRenderer;
-        this.mc = mc;
-        is = item;
+        super(var3, var4, var5, 20, 20, "");
+        fontRenderer = var1;
+        mc = var2;
+        is = var6;
     }
 
-    public void drawButton(Minecraft par1Minecraft, int par2, int par3)
+    /**
+     * Draws this button to the screen.
+     */
+    public void drawButton(Minecraft var1, int var2, int var3)
     {
-        super.drawButton(par1Minecraft, par2, par3);
+        super.drawButton(var1, var2, var3);
         GL11.glPushMatrix();
-        GL11.glEnable(32826);
+        GL11.glEnable(GL12.GL_RESCALE_NORMAL);
         itemRenderer.renderItemAndEffectIntoGUI(fontRenderer, mc.renderEngine, is, this.xPosition + 2, this.yPosition + 2);
         GL11.glPopMatrix();
     }

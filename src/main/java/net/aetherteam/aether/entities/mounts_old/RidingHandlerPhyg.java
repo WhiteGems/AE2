@@ -18,7 +18,7 @@ public class RidingHandlerPhyg extends RidingHandler
     public RidingHandlerPhyg(EntityPhyg var1)
     {
         super(var1);
-        this.animal = (EntityLiving) this.mount;
+        this.animal = (EntityLiving)this.mount;
     }
 
     public void update()
@@ -48,8 +48,8 @@ public class RidingHandlerPhyg extends RidingHandler
     {
         this.rider.stepHeight = 0.5F;
         this.animal.tasks.addTask(0, new EntityAISwimming(this.animal));
-        this.animal.tasks.addTask(1, new EntityAIPanic((EntityCreature) this.animal, 0.38F));
-        this.animal.tasks.addTask(2, new EntityAIWander((EntityCreature) this.animal, 0.3F));
+        this.animal.tasks.addTask(1, new EntityAIPanic((EntityCreature)this.animal, 0.38F));
+        this.animal.tasks.addTask(2, new EntityAIWander((EntityCreature)this.animal, 0.3F));
         this.animal.tasks.addTask(4, new EntityAIWatchClosest(this.animal, EntityPlayer.class, 6.0F));
         this.animal.tasks.addTask(5, new EntityAILookIdle(this.animal));
         super.onUnMount();

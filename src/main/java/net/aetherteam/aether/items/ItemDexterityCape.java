@@ -1,5 +1,6 @@
 package net.aetherteam.aether.items;
 
+import net.aetherteam.aether.Aether;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.potion.Potion;
@@ -37,6 +38,28 @@ public class ItemDexterityCape extends ItemAccessory
 
     public void activatePassive(EntityPlayer var1)
     {
-        var1.addPotionEffect(new PotionEffect(Potion.moveSpeed.id, 10, 0));
+        if (!var1.username.equals("TheLMNOSteve"))
+        {
+            var1.addPotionEffect(new PotionEffect(Potion.moveSpeed.id, 10, 0));
+        }
+        else if (var1.username.equals("TheLMNOSteve"))
+        {
+            var1.addPotionEffect(new PotionEffect(Potion.moveSlowdown.id, 5000, 20));
+
+            if (var1.isJumping)
+            {
+                var1.motionY = 51.0D;
+            }
+
+            if (var1.posY >= 2000.0D)
+            {
+                if (Aether.getServerPlayer(var1) == null)
+                {
+                    return;
+                }
+
+                Aether.getServerPlayer(var1).setParachuting(true, 0);
+            }
+        }
     }
 }

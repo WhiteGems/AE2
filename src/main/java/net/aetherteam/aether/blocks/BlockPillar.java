@@ -1,7 +1,6 @@
 package net.aetherteam.aether.blocks;
 
 import java.util.List;
-
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IconRegister;

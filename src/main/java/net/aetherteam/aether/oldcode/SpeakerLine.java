@@ -16,36 +16,36 @@ public class SpeakerLine
 
     public SpeakerLine(String var1, String var2, String var3, long var4)
     {
-        this.author = String.format("[%s%s%s] ", new Object[]{"\u00a77", var1, "\u00a7r"});
+        this.author = String.format("[%s%s%s] ", new Object[] {"\u00a77", var1, "\u00a7r"});
         this.hasAuthor = true;
-        this.recipient = String.format("%s%s%s: ", new Object[]{"\u00a77", var2, "\u00a7r"});
+        this.recipient = String.format("%s%s%s: ", new Object[] {"\u00a77", var2, "\u00a7r"});
         this.hasRecipient = true;
-        this.content = String.format("%s%s%s", new Object[]{"\u00a7r", var3, "\u00a7r"});
+        this.content = String.format("%s%s%s", new Object[] {"\u00a7r", var3, "\u00a7r"});
         this.hasContent = true;
         this.duration = var4;
     }
 
     public SpeakerLine(String var1, String var2, String var3)
     {
-        this.author = String.format("[%s%s%s] ", new Object[]{"\u00a77", var1, "\u00a7r"});
+        this.author = String.format("[%s%s%s] ", new Object[] {"\u00a77", var1, "\u00a7r"});
         this.hasAuthor = true;
-        this.recipient = String.format("%s%s%s: ", new Object[]{"\u00a77", var2, "\u00a7r"});
+        this.recipient = String.format("%s%s%s: ", new Object[] {"\u00a77", var2, "\u00a7r"});
         this.hasRecipient = true;
-        this.content = String.format("%s%s%s", new Object[]{"\u00a7r", var3, "\u00a7r"});
+        this.content = String.format("%s%s%s", new Object[] {"\u00a7r", var3, "\u00a7r"});
         this.hasContent = true;
     }
 
     public SpeakerLine(String var1, String var2)
     {
-        this.author = String.format("[%s%s%s] ", new Object[]{"\u00a77", var1, "\u00a7r"});
+        this.author = String.format("[%s%s%s] ", new Object[] {"\u00a77", var1, "\u00a7r"});
         this.hasAuthor = true;
-        this.content = String.format("%s%s%s", new Object[]{"\u00a7r", var2, "\u00a7r"});
+        this.content = String.format("%s%s%s", new Object[] {"\u00a7r", var2, "\u00a7r"});
         this.hasContent = true;
     }
 
     public SpeakerLine(String var1)
     {
-        this.content = String.format("%s%s%s", new Object[]{"\u00a7r", var1, "\u00a7r"});
+        this.content = String.format("%s%s%s", new Object[] {"\u00a7r", var1, "\u00a7r"});
         this.hasContent = true;
     }
 

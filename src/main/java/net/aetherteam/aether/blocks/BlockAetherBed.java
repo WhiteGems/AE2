@@ -1,7 +1,6 @@
 package net.aetherteam.aether.blocks;
 
 import java.util.Iterator;
-
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockBed;
 import net.minecraft.entity.player.EntityPlayer;
@@ -11,7 +10,7 @@ import net.minecraft.world.World;
 
 public class BlockAetherBed extends BlockBed implements IAetherBlock
 {
-    public static final int[][] footBlockToHeadBlockMap = new int[][]{{0, 1}, {-1, 0}, {0, -1}, {1, 0}};
+    public static final int[][] footBlockToHeadBlockMap = new int[][] {{0, 1}, { -1, 0}, {0, -1}, {1, 0}};
 
     public BlockAetherBed(int var1)
     {
@@ -31,7 +30,8 @@ public class BlockAetherBed extends BlockBed implements IAetherBlock
         if (var1.isRemote)
         {
             return true;
-        } else
+        }
+        else
         {
             int var10 = var1.getBlockMetadata(var2, var3, var4);
 
@@ -53,7 +53,8 @@ public class BlockAetherBed extends BlockBed implements IAetherBlock
             {
                 var5.addChatMessage("Cannot sleep in this dimension.");
                 return true;
-            } else
+            }
+            else
             {
                 if (isBedOccupied(var10))
                 {
@@ -62,7 +63,7 @@ public class BlockAetherBed extends BlockBed implements IAetherBlock
 
                     while (var12.hasNext())
                     {
-                        EntityPlayer var13 = (EntityPlayer) var12.next();
+                        EntityPlayer var13 = (EntityPlayer)var12.next();
 
                         if (var13.isPlayerSleeping())
                         {
@@ -90,12 +91,14 @@ public class BlockAetherBed extends BlockBed implements IAetherBlock
                 {
                     setBedOccupied(var1, var2, var3, var4, true);
                     return true;
-                } else
+                }
+                else
                 {
                     if (var16 == EnumStatus.NOT_POSSIBLE_NOW)
                     {
                         var5.addChatMessage("tile.bed.noSleep");
-                    } else if (var16 == EnumStatus.NOT_SAFE)
+                    }
+                    else if (var16 == EnumStatus.NOT_SAFE)
                     {
                         var5.addChatMessage("tile.bed.notSafe");
                     }

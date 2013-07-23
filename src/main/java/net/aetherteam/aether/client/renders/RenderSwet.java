@@ -25,7 +25,8 @@ public class RenderSwet extends RenderLiving
             GL11.glEnable(GL11.GL_BLEND);
             GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
             return 1;
-        } else
+        }
+        else
         {
             if (var2 == 1)
             {
@@ -49,13 +50,15 @@ public class RenderSwet extends RenderLiving
             {
                 var4 = 1.425F;
                 var3 = 0.575F;
-            } else if (var1.motionY < -0.8500000238418579D)
+            }
+            else if (var1.motionY < -0.8500000238418579D)
             {
                 var4 = 0.575F;
                 var3 = 1.425F;
-            } else
+            }
+            else
             {
-                float var6 = (float) var1.motionY * 0.5F;
+                float var6 = (float)var1.motionY * 0.5F;
                 var4 += var6;
                 var3 -= var6;
             }
@@ -75,7 +78,7 @@ public class RenderSwet extends RenderLiving
      */
     protected void preRenderCallback(EntityLiving var1, float var2)
     {
-        this.a((EntitySwet) var1, var2);
+        this.a((EntitySwet)var1, var2);
     }
 
     /**
@@ -83,6 +86,6 @@ public class RenderSwet extends RenderLiving
      */
     protected int shouldRenderPass(EntityLiving var1, int var2, float var3)
     {
-        return this.a((EntitySwet) var1, var2, var3);
+        return this.a((EntitySwet)var1, var2, var3);
     }
 }

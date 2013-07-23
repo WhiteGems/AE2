@@ -1,21 +1,11 @@
 package net.aetherteam.aether.client.gui.social;
 
 import cpw.mods.fml.client.FMLClientHandler;
-
-import java.util.ArrayList;
-import java.util.List;
-
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.GuiTextField;
 import net.minecraft.client.gui.ScaledResolution;
-import net.minecraft.client.multiplayer.WorldClient;
-import net.minecraft.client.renderer.RenderEngine;
-import net.minecraft.client.settings.GameSettings;
-import net.minecraft.client.settings.KeyBinding;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
@@ -38,49 +28,63 @@ public class GuiParty extends GuiScreen
     private static final int DIALOGUE_NONE = 4;
     private static final int DIALOGUE_INVITE = 5;
     private static final int DIALOGUE_REMOVE = 6;
-    private int dialogueState = 4;
-    private boolean dialogue = false;
+    private int dialogueState;
+    private boolean dialogue;
     private final PartyData pm;
     private GuiTextField partyNameField;
     private GuiTextField dialogueInput;
     private GuiYSlider sbar;
-    private float sbarVal = 0.0F;
-    private String name = "Aether Party";
+    private float sbarVal;
+    private String name;
     private int backgroundTexture;
     private int dialogueTexture;
     private int xParty;
     private int yParty;
     private int wParty;
     private int hParty;
-    Minecraft f;
+
+    /** Reference to the Minecraft object. */
+    Minecraft mc;
 
     public GuiParty()
     {
         this(new PartyData());
     }
 
-    public GuiParty(PartyData pm)
+    public GuiParty(PartyData var1)
     {
+        this.dialogueState = 4;
+        this.dialogue = false;
+        this.sbarVal = 0.0F;
+        this.name = "Aether Party";
         this.mc = FMLClientHandler.instance().getClient();
-        this.pm = pm;
+        this.pm = var1;
         this.backgroundTexture = this.mc.renderEngine.getTexture("/net/aetherteam/aether/client/sprites/gui/party.png");
         this.dialogueTexture = this.mc.renderEngine.getTexture("/net/aetherteam/aether/client/sprites/gui/dialogue.png");
         this.wParty = 256;
         this.hParty = 256;
-        updateScreen();
-        pm.pList_online.add(this.mc.thePlayer);
-        pm.pList_online.add(this.mc.thePlayer);
-        pm.pList_offline.add(this.mc.thePlayer);
-        pm.pList_offline.add(this.mc.thePlayer);
-        pm.pList_offline.add(this.mc.thePlayer);
+        this.updateScreen();
+        var1.pList_online.add(this.mc.thePlayer);
+        var1.pList_online.add(this.mc.thePlayer);
+        var1.pList_offline.add(this.mc.thePlayer);
+        var1.pList_offline.add(this.mc.thePlayer);
+        var1.pList_offline.add(this.mc.thePlayer);
     }
 
+    /**
+     * Adds the buttons (and other controls) to the screen in question.
+     */
     public void initGui()
     {
         Keyboard.enableRepeatEvents(true);
-        updateScreen();
+        this.updateScreen();
         this.buttonList.clear();
-        if (this.sbar != null) this.sbarVal = this.sbar.sliderValue;
+
+        if (this.sbar != null)
+        {
+            this.sbarVal = this.sbar.sliderValue;
+        }
+
         this.sbar = new GuiYSlider(-1, this.xParty + 46, this.yParty - 54, 10, 103);
         this.sbar.sliderValue = this.sbarVal;
         this.buttonList.add(new GuiButton(0, this.xParty - 58, this.yParty + 85 - 28, 52, 20, "Invite"));
@@ -90,79 +94,112 @@ public class GuiParty extends GuiScreen
         this.partyNameField.setMaxStringLength(16);
         this.partyNameField.setText(this.name);
         this.partyNameField.setEnableBackgroundDrawing(false);
-        if (this.dialogue) openDialogue();
+
+        if (this.dialogue)
+        {
+            this.openDialogue();
+        }
     }
 
-    protected void keyTyped(char charTyped, int keyTyped)
+    /**
+     * Fired when a key is typed. This is the equivalent of KeyListener.keyTyped(KeyEvent e).
+     */
+    protected void keyTyped(char var1, int var2)
     {
         if (this.partyNameField.isFocused())
         {
-            this.partyNameField.textboxKeyTyped(charTyped, keyTyped);
+            this.partyNameField.textboxKeyTyped(var1, var2);
             this.name = this.partyNameField.getText();
         }
+
         if (this.dialogue)
         {
-            this.dialogueInput.textboxKeyTyped(charTyped, keyTyped);
+            this.dialogueInput.textboxKeyTyped(var1, var2);
         }
-        super.keyTyped(charTyped, keyTyped);
 
-        if (keyTyped == Minecraft.getMinecraft().gameSettings.keyBindInventory.keyCode)
+        super.keyTyped(var1, var2);
+
+        if (var2 == Minecraft.getMinecraft().gameSettings.keyBindInventory.keyCode)
         {
-            this.mc.displayGuiScreen((GuiScreen) null);
+            this.mc.displayGuiScreen((GuiScreen)null);
             this.mc.setIngameFocus();
         }
     }
 
-    protected void mouseClicked(int par1, int par2, int par3)
+    /**
+     * Called when the mouse is clicked.
+     */
+    protected void mouseClicked(int var1, int var2, int var3)
     {
-        this.partyNameField.mouseClicked(par1, par2, par3);
-        if (!this.dialogue) this.sbar.mousePressed(this.mc, par1, par2);
-        super.mouseClicked(par1, par2, par3);
+        this.partyNameField.mouseClicked(var1, var2, var3);
+
+        if (!this.dialogue)
+        {
+            this.sbar.mousePressed(this.mc, var1, var2);
+        }
+
+        super.mouseClicked(var1, var2, var3);
     }
 
-    protected void mouseMovedOrUp(int par1, int par2, int par3)
+    /**
+     * Called when the mouse is moved or a mouse button is released.  Signature: (mouseX, mouseY, which) which==-1 is
+     * mouseMove, which==0 or which==1 is mouseUp
+     */
+    protected void mouseMovedOrUp(int var1, int var2, int var3)
     {
-        if (par3 == 0) this.sbar.mouseReleased(par1, par2);
-        super.mouseMovedOrUp(par1, par2, par3);
+        if (var3 == 0)
+        {
+            this.sbar.mouseReleased(var1, var2);
+        }
+
+        super.mouseMovedOrUp(var1, var2, var3);
     }
 
-    protected void actionPerformed(GuiButton btn)
+    /**
+     * Fired when a control is clicked. This is the equivalent of ActionListener.actionPerformed(ActionEvent e).
+     */
+    protected void actionPerformed(GuiButton var1)
     {
-        switch (btn.id)
+        switch (var1.id)
         {
             case 0:
                 if (!this.dialogue)
                 {
                     this.dialogue = true;
                     this.dialogueState = 5;
-                    openDialogue();
+                    this.openDialogue();
                 }
+
                 break;
+
             case 1:
                 if (!this.dialogue)
                 {
                     this.dialogue = true;
                     this.dialogueState = 6;
-                    openDialogue();
+                    this.openDialogue();
                 }
+
                 break;
+
             case 2:
                 switch (this.dialogueState)
                 {
                     case 5:
                         Minecraft.getMinecraft().theWorld.getPlayerEntityByName(this.dialogueInput.getText());
-                        break;
+
                     case 6:
+                    default:
+                        this.dialogue = false;
+                        this.dialogueState = 4;
+                        this.initGui();
+                        return;
                 }
 
-                this.dialogue = false;
-                this.dialogueState = 4;
-                initGui();
-                break;
             case 3:
                 this.dialogue = false;
                 this.dialogueState = 4;
-                initGui();
+                this.initGui();
         }
     }
 
@@ -172,145 +209,163 @@ public class GuiParty extends GuiScreen
         {
             case 5:
                 return "Invite";
+
             case 6:
                 return "Remove";
+
+            default:
+                return "";
         }
-        return "";
     }
 
     private void openDialogue()
     {
         this.partyNameField.setFocused(false);
-        this.dialogueInput = new GuiTextField(this.fontRenderer, this.xParty - 88 + this.fontRenderer.getStringWidth(getDialogueOption()), this.yParty - 7, 193 - this.fontRenderer.getStringWidth(getDialogueOption()) - 10, 16);
+        this.dialogueInput = new GuiTextField(this.fontRenderer, this.xParty - 88 + this.fontRenderer.getStringWidth(this.getDialogueOption()), this.yParty - 7, 193 - this.fontRenderer.getStringWidth(this.getDialogueOption()) - 10, 16);
         this.dialogueInput.setFocused(true);
         this.dialogueInput.setCanLoseFocus(false);
         this.buttonList.add(new GuiButton(2, this.xParty - 1, this.yParty + 14, 50, 20, "Confirm"));
         this.buttonList.add(new GuiButton(3, this.xParty + 52, this.yParty + 14, 45, 20, "Cancel"));
     }
 
+    /**
+     * Returns true if this GUI should pause the game when it is displayed in single-player
+     */
     public boolean doesGuiPauseGame()
     {
         return false;
     }
 
-    public void drawScreen(int x, int y, float partialTick)
+    /**
+     * Draws the screen and all the components in it.
+     */
+    public void drawScreen(int var1, int var2, float var3)
     {
-        drawDefaultBackground();
+        this.drawDefaultBackground();
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-        GL11.glBindTexture(3553, this.backgroundTexture);
-        int dmsy = Mouse.getDWheel();
-        this.sbar.sliderValue -= dmsy / 1000.0F;
-        if (this.sbar.sliderValue > 1.0F) this.sbar.sliderValue = 1.0F;
-        if (this.sbar.sliderValue < 0.0F) this.sbar.sliderValue = 0.0F;
-        int centerX = this.xParty - 70;
-        int centerY = this.yParty - 84;
+        GL11.glBindTexture(GL11.GL_TEXTURE_2D, this.backgroundTexture);
+        int var4 = Mouse.getDWheel();
+        this.sbar.sliderValue -= (float)var4 / 1000.0F;
 
-        ScaledResolution sr = new ScaledResolution(this.mc.gameSettings, this.mc.displayWidth, this.mc.displayHeight);
-        drawTexturedModalRect(centerX, centerY, 0, 0, 141, this.hParty);
-        int totalHeight = 0;
-        int slotW = 100;
-        int slotH = 20;
-        int gutter = 2;
-        GL11.glEnable(3089);
-        GL11.glScissor((centerX + 14) * sr.getScaleFactor(), (centerY + 35) * sr.getScaleFactor(), slotW * sr.getScaleFactor(), 103 * sr.getScaleFactor());
+        if (this.sbar.sliderValue > 1.0F)
+        {
+            this.sbar.sliderValue = 1.0F;
+        }
+
+        if (this.sbar.sliderValue < 0.0F)
+        {
+            this.sbar.sliderValue = 0.0F;
+        }
+
+        int var5 = this.xParty - 70;
+        int var6 = this.yParty - 84;
+        ScaledResolution var7 = new ScaledResolution(this.mc.gameSettings, this.mc.displayWidth, this.mc.displayHeight);
+        this.drawTexturedModalRect(var5, var6, 0, 0, 141, this.hParty);
+        boolean var8 = false;
+        byte var9 = 100;
+        byte var10 = 20;
+        byte var11 = 2;
+        GL11.glEnable(GL11.GL_SCISSOR_TEST);
+        GL11.glScissor((var5 + 14) * var7.getScaleFactor(), (var6 + 35) * var7.getScaleFactor(), var9 * var7.getScaleFactor(), 103 * var7.getScaleFactor());
         GL11.glPushMatrix();
-        totalHeight = (this.pm.pList_offline.size() + this.pm.pList_online.size()) * (slotH + gutter);
-        float sVal = -this.sbar.sliderValue * (totalHeight - 105);
+        int var15 = (this.pm.pList_offline.size() + this.pm.pList_online.size()) * (var10 + var11);
+        float var12 = -this.sbar.sliderValue * (float)(var15 - 105);
 
-        if (totalHeight > 103)
+        if (var15 > 103)
         {
-            GL11.glTranslatef(0.0F, sVal, 0.0F);
+            GL11.glTranslatef(0.0F, var12, 0.0F);
         }
-        totalHeight = 0;
-        for (int i = 0; i < this.pm.pList_online.size(); i++)
+
+        var15 = 0;
+        int var13;
+        EntityPlayer var14;
+
+        for (var13 = 0; var13 < this.pm.pList_online.size(); ++var13)
         {
-            EntityPlayer p = (EntityPlayer) this.pm.pList_online.get(i);
-            drawPlayerSlot(p, centerX + 15, centerY + totalHeight + 30, slotW, slotH, true);
-            totalHeight += slotH + gutter;
+            var14 = (EntityPlayer)this.pm.pList_online.get(var13);
+            this.drawPlayerSlot(var14, var5 + 15, var6 + var15 + 30, var9, var10, true);
+            var15 += var10 + var11;
         }
-        for (int i = 0; i < this.pm.pList_offline.size(); i++)
+
+        for (var13 = 0; var13 < this.pm.pList_offline.size(); ++var13)
         {
-            EntityPlayer p = (EntityPlayer) this.pm.pList_offline.get(i);
-            drawPlayerSlot(p, centerX + 15, centerY + totalHeight + 30, slotW, slotH, false);
-            totalHeight += slotH + gutter;
+            var14 = (EntityPlayer)this.pm.pList_offline.get(var13);
+            this.drawPlayerSlot(var14, var5 + 15, var6 + var15 + 30, var9, var10, false);
+            var15 += var10 + var11;
         }
+
         GL11.glPopMatrix();
-        GL11.glDisable(3089);
-
+        GL11.glDisable(GL11.GL_SCISSOR_TEST);
         this.partyNameField.drawTextBox();
 
-        if (totalHeight > 103)
+        if (var15 > 103)
         {
-            this.sbar.drawButton(this.mc, x, y);
+            this.sbar.drawButton(this.mc, var1, var2);
         }
 
         if (this.dialogue)
         {
-            drawGradientRect(0, 0, this.width, this.height, -1728053248, -1728053248);
+            this.drawGradientRect(0, 0, this.width, this.height, -1728053248, -1728053248);
             GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-            GL11.glBindTexture(3553, this.dialogueTexture);
-            drawTexturedModalRect(centerX - 30, centerY + 71, 0, 0, 201, this.hParty - 201);
+            GL11.glBindTexture(GL11.GL_TEXTURE_2D, this.dialogueTexture);
+            this.drawTexturedModalRect(var5 - 30, var6 + 71, 0, 0, 201, this.hParty - 201);
             this.dialogueInput.drawTextBox();
-            this.fontRenderer.drawStringWithShadow(getDialogueOption() + ":", centerX - 24, centerY + 80, 16777215);
+            this.fontRenderer.drawStringWithShadow(this.getDialogueOption() + ":", var5 - 24, var6 + 80, 16777215);
         }
 
-        super.drawScreen(x, y, partialTick);
+        super.drawScreen(var1, var2, var3);
     }
 
+    /**
+     * Called from the main game loop to update the screen.
+     */
     public void updateScreen()
     {
         super.updateScreen();
+
         if (this.partyNameField != null)
         {
             this.partyNameField.updateCursorCounter();
         }
+
         if (this.dialogue)
         {
             this.dialogueInput.updateCursorCounter();
         }
-        ScaledResolution scaledresolution = new ScaledResolution(this.mc.gameSettings, this.mc.displayWidth, this.mc.displayHeight);
-        int width = scaledresolution.getScaledWidth();
-        int height = scaledresolution.getScaledHeight();
-        this.xParty = (width / 2);
-        this.yParty = (height / 2);
+
+        ScaledResolution var1 = new ScaledResolution(this.mc.gameSettings, this.mc.displayWidth, this.mc.displayHeight);
+        int var2 = var1.getScaledWidth();
+        int var3 = var1.getScaledHeight();
+        this.xParty = var2 / 2;
+        this.yParty = var3 / 2;
     }
 
-    public void drawPlayerSlot(EntityPlayer p, int x, int y, int width, int height, boolean online)
+    public void drawPlayerSlot(EntityPlayer var1, int var2, int var3, int var4, int var5, boolean var6)
     {
-        drawGradientRect(x, y, x + width, y + height, -11184811, -10066330);
-
-        int icon = this.mc.renderEngine.getTextureForDownloadableImage(p.skinUrl, "/mob/char.png");
-
+        this.drawGradientRect(var2, var3, var2 + var4, var3 + var5, -11184811, -10066330);
+        int var7 = this.mc.renderEngine.getTextureForDownloadableImage(var1.skinUrl, "/mob/char.png");
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-        GL11.glBindTexture(3553, icon);
-        GL11.glEnable(3553);
-
-        float u = 0.125F;
-        float v = 0.25F;
-        float u1 = 0.25F;
-        float v1 = 0.5F;
-        GL11.glBegin(7);
-        GL11.glTexCoord2f(u, v);
-        GL11.glVertex2f(x + 2, y + 2);
-        GL11.glTexCoord2f(u, v1);
-        GL11.glVertex2f(x + 2, y + 18);
-        GL11.glTexCoord2f(u1, v1);
-        GL11.glVertex2f(x + 18, y + 18);
-        GL11.glTexCoord2f(u1, v);
-        GL11.glVertex2f(x + 18, y + 2);
+        GL11.glBindTexture(GL11.GL_TEXTURE_2D, var7);
+        GL11.glEnable(GL11.GL_TEXTURE_2D);
+        float var8 = 0.125F;
+        float var9 = 0.25F;
+        float var10 = 0.25F;
+        float var11 = 0.5F;
+        GL11.glBegin(GL11.GL_QUADS);
+        GL11.glTexCoord2f(var8, var9);
+        GL11.glVertex2f((float)(var2 + 2), (float)(var3 + 2));
+        GL11.glTexCoord2f(var8, var11);
+        GL11.glVertex2f((float)(var2 + 2), (float)(var3 + 18));
+        GL11.glTexCoord2f(var10, var11);
+        GL11.glVertex2f((float)(var2 + 18), (float)(var3 + 18));
+        GL11.glTexCoord2f(var10, var9);
+        GL11.glVertex2f((float)(var2 + 18), (float)(var3 + 2));
         GL11.glEnd();
-
         this.mc.renderEngine.resetBoundTexture();
-
-        this.fontRenderer.drawStringWithShadow(p.username, x + height, y + 2, 15066597);
+        this.fontRenderer.drawStringWithShadow(var1.username, var2 + var5, var3 + 2, 15066597);
         GL11.glPushMatrix();
         GL11.glScalef(0.75F, 0.75F, 1.0F);
-        this.fontRenderer.drawString(online ? "Online" : "Offline", (int) ((x + height) / 0.75F), (int) ((y + 12.0F) / 0.75F), online ? 7859831 : 15628151);
+        this.fontRenderer.drawString(var6 ? "Online" : "Offline", (int)(((float)var2 + (float)var5) / 0.75F), (int)(((float)var3 + 12.0F) / 0.75F), var6 ? 7859831 : 15628151);
         GL11.glPopMatrix();
     }
 }
-
-/* Location:           D:\Dev\Mc\forge_orl\mcp\jars\bin\aether.jar
- * Qualified Name:     net.aetherteam.aether.client.gui.social.GuiParty
- * JD-Core Version:    0.6.2
- */

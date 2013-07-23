@@ -7,13 +7,11 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.DamageSource;
 import net.minecraft.world.World;
 
-public class EntityBattleSentry extends EntityAetherMob
+public class EntityBattleSentry extends EntityDungeonMob
 {
     public String dir = "/net/aetherteam/aether/client/sprites";
 
-    /**
-     * Reference to the World object.
-     */
+    /** Reference to the World object. */
     private World worldObj;
     private int timeTilHide;
     public float field_100021_a;
@@ -49,7 +47,7 @@ public class EntityBattleSentry extends EntityAetherMob
         this.field_100020_b = 1.0F;
         this.jcount = this.rand.nextInt(20) + 10;
         this.func_100019_e(this.size);
-        this.rotationYaw = (float) this.rand.nextInt(4) * ((float) Math.PI / 2F);
+        this.rotationYaw = (float)this.rand.nextInt(4) * ((float)Math.PI / 2F);
         this.setPosition(var2, var4, var6);
         this.worldObj = var1;
         this.timeTilHide = 0;
@@ -110,7 +108,8 @@ public class EntityBattleSentry extends EntityAetherMob
         if (this.onGround && !var1)
         {
             this.worldObj.playSoundAtEntity(this, "mob.slime.small", this.getSoundVolume(), ((this.rand.nextFloat() - this.rand.nextFloat()) * 0.2F + 1.0F) / 0.8F);
-        } else if (!this.onGround && var1)
+        }
+        else if (!this.onGround && var1)
         {
             this.motionX *= 3.0D;
             this.motionZ *= 3.0D;
@@ -125,7 +124,8 @@ public class EntityBattleSentry extends EntityAetherMob
         {
             this.setHasBeenAttacked(true);
             --this.timeTilHide;
-        } else
+        }
+        else
         {
             this.setHasBeenAttacked(false);
         }
@@ -139,9 +139,9 @@ public class EntityBattleSentry extends EntityAetherMob
     {
         super.onLivingUpdate();
 
-        if (this.entityToAttack instanceof EntityPlayer && (EntityPlayer) this.entityToAttack != null)
+        if (this.entityToAttack instanceof EntityPlayer && (EntityPlayer)this.entityToAttack != null)
         {
-            this.setInView(!this.isInFieldOfVision((EntityPlayer) this.entityToAttack, this));
+            this.setInView(!this.isInFieldOfVision((EntityPlayer)this.entityToAttack, this));
         }
     }
 
@@ -221,7 +221,8 @@ public class EntityBattleSentry extends EntityAetherMob
             {
                 this.moveStrafing = this.moveForward = 0.0F;
             }
-        } else
+        }
+        else
         {
             this.jcount = this.rand.nextInt(20) + 10;
             this.isJumping = true;
@@ -306,8 +307,8 @@ public class EntityBattleSentry extends EntityAetherMob
     public void entityInit()
     {
         super.entityInit();
-        this.dataWatcher.addObject(16, Byte.valueOf((byte) 0));
-        this.dataWatcher.addObject(17, Byte.valueOf((byte) 0));
+        this.dataWatcher.addObject(16, Byte.valueOf((byte)0));
+        this.dataWatcher.addObject(17, Byte.valueOf((byte)0));
     }
 
     public boolean isInView()
@@ -319,10 +320,11 @@ public class EntityBattleSentry extends EntityAetherMob
     {
         if (var1)
         {
-            this.dataWatcher.updateObject(16, Byte.valueOf((byte) 1));
-        } else
+            this.dataWatcher.updateObject(16, Byte.valueOf((byte)1));
+        }
+        else
         {
-            this.dataWatcher.updateObject(16, Byte.valueOf((byte) 0));
+            this.dataWatcher.updateObject(16, Byte.valueOf((byte)0));
         }
     }
 
@@ -335,10 +337,11 @@ public class EntityBattleSentry extends EntityAetherMob
     {
         if (var1)
         {
-            this.dataWatcher.updateObject(17, Byte.valueOf((byte) 1));
-        } else
+            this.dataWatcher.updateObject(17, Byte.valueOf((byte)1));
+        }
+        else
         {
-            this.dataWatcher.updateObject(17, Byte.valueOf((byte) 0));
+            this.dataWatcher.updateObject(17, Byte.valueOf((byte)0));
         }
     }
 

@@ -17,6 +17,7 @@ import net.aetherteam.aether.entities.mounts.EntityAerbunny;
 import net.aetherteam.aether.entities.mounts.EntityMoa;
 import net.aetherteam.aether.entities.mounts.EntityPhyg;
 import net.aetherteam.aether.entities.mounts.EntitySwet;
+import net.aetherteam.aether.entities.npc.EntityBasicNPC;
 import net.aetherteam.aether.oldcode.EntityMiniCloud;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.entity.EnumCreatureType;
@@ -30,7 +31,7 @@ public class AetherEntities
 
     public static void addSpawn(String var0, int var1, int var2, EnumCreatureType var3)
     {
-        EntityRegistry.addSpawn(var0, makeWeight(var0, var1), makeGroupSize(var0, var2), makeGroupSize(var0, var2), var3, new BiomeGenBase[]{Aether.biome});
+        EntityRegistry.addSpawn(var0, makeWeight(var0, var1), makeGroupSize(var0, var2), makeGroupSize(var0, var2), var3, new BiomeGenBase[] {Aether.biome});
     }
 
     public static void addMappings()
@@ -60,6 +61,7 @@ public class AetherEntities
         EntityRegistry.registerGlobalEntityID(EntityTempest.class, "Tempest", ModLoader.getUniqueEntityId(), 124435179, 2006638);
         EntityRegistry.registerGlobalEntityID(EntityNewZephyr.class, "Zephyr", ModLoader.getUniqueEntityId(), 124435179, 2006638);
         EntityRegistry.registerGlobalEntityID(EntityZephyroo.class, "Zephyroo", ModLoader.getUniqueEntityId(), 124435179, 2006638);
+        EntityRegistry.registerGlobalEntityID(EntityBasicNPC.class, "Angel", ModLoader.getUniqueEntityId(), 134351879, 10395294);
         EntityRegistry.registerModEntity(EntitySlider.class, "Slider", 1, Aether.getInstance(), 80, 1, true);
         EntityRegistry.registerModEntity(EntityFloatingBlock.class, "FloatingBlock", 2, Aether.getInstance(), 80, 1, true);
         EntityRegistry.registerModEntity(EntityPoisonNeedle.class, "PoisonNeedle", 3, Aether.getInstance(), 80, 1, true);
@@ -126,6 +128,7 @@ public class AetherEntities
         LanguageRegistry.instance().addStringLocalization("entity.Zephyroo.name", "en_US", "Zephyroo");
         LanguageRegistry.instance().addStringLocalization("entity.Tempest.name", "en_US", "Tempest");
         LanguageRegistry.instance().addStringLocalization("entity.Sprite.name", "en_US", "Sprite");
+        LanguageRegistry.instance().addStringLocalization("entity.Angel.name", "en_US", "Angel");
         addSpawn("Aerwhale", 8, 5, EnumCreatureType.creature);
         addSpawn("Tempest", 10, 1, EnumCreatureType.monster);
         addSpawn("Zephyr", 10, 1, EnumCreatureType.monster);
@@ -169,7 +172,8 @@ public class AetherEntities
         if (var5)
         {
             EntityRegistry.registerModEntity(var0, var1, EntityRegistry.findGlobalUniqueEntityId(), mod, var2, var3, var4);
-        } else
+        }
+        else
         {
             ++entityId;
             EntityRegistry.registerModEntity(var0, var1, entityId, mod, var2, var3, var4);

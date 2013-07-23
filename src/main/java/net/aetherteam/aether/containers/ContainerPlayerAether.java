@@ -1,7 +1,6 @@
 package net.aetherteam.aether.containers;
 
 import java.util.Iterator;
-
 import net.aetherteam.aether.AetherCommonPlayerHandler;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
@@ -26,7 +25,7 @@ public class ContainerPlayerAether extends ContainerPlayer
 
             if (var7 instanceof Slot)
             {
-                Slot var8 = (Slot) var7;
+                Slot var8 = (Slot)var7;
 
                 switch (var8.slotNumber)
                 {
@@ -52,12 +51,12 @@ public class ContainerPlayerAether extends ContainerPlayer
             }
         }
 
-        for (int var11 = 1; var11 < 3; ++var11)
+        for (int var10 = 1; var10 < 3; ++var10)
         {
-            for (int var10 = 0; var10 < 4; ++var10)
+            for (int var11 = 0; var11 < 4; ++var11)
             {
-                int var12 = 4 * (var11 - 1) + var10;
-                this.addSlotToContainer(new SlotMoreArmor(this, var2, var12, 62 + var11 * 18, 8 + var10 * 18, var12 + 4));
+                int var12 = 4 * (var10 - 1) + var11;
+                this.addSlotToContainer(new SlotMoreArmor(this, var2, var12, 62 + var10 * 18, 8 + var11 * 18, var12 + 4));
             }
         }
 
@@ -70,7 +69,7 @@ public class ContainerPlayerAether extends ContainerPlayer
      */
     public ItemStack transferStackInSlot(EntityPlayer var1, int var2)
     {
-        Slot var3 = (Slot) this.inventorySlots.get(var2);
+        Slot var3 = (Slot)this.inventorySlots.get(var2);
 
         if (var3 != null && var3.getHasStack())
         {

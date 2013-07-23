@@ -16,7 +16,7 @@ public class EntityHomeShot extends EntityFlying
     public int life;
     public int lifeSpan;
     private static final double topSpeed = 0.125D;
-    private static final float sponge = (180F / (float) Math.PI);
+    private static final float sponge = (180F / (float)Math.PI);
 
     public EntityHomeShot(World var1)
     {
@@ -68,7 +68,7 @@ public class EntityHomeShot extends EntityFlying
 
         if (this.firstRun && this.target == null)
         {
-            this.target = (EntityLiving) this.findPlayerToAttack();
+            this.target = (EntityLiving)this.findPlayerToAttack();
             this.firstRun = false;
         }
 
@@ -77,13 +77,15 @@ public class EntityHomeShot extends EntityFlying
             if (this.life <= 0)
             {
                 this.isDead = true;
-            } else
+            }
+            else
             {
                 this.updateAnims();
                 this.faceIt();
                 this.moveIt(this.target, 0.02D);
             }
-        } else
+        }
+        else
         {
             this.isDead = true;
         }
@@ -91,7 +93,7 @@ public class EntityHomeShot extends EntityFlying
 
     public void moveIt(Entity var1, double var2)
     {
-        double var4 = (double) (this.rotationYaw / (180F / (float) Math.PI));
+        double var4 = (double)(this.rotationYaw / (180F / (float)Math.PI));
         this.motionX -= Math.sin(var4) * var2;
         this.motionZ += Math.cos(var4) * var2;
         double var6 = var1.posY - 0.75D;
@@ -99,10 +101,12 @@ public class EntityHomeShot extends EntityFlying
         if (var6 < this.boundingBox.minY - 0.5D)
         {
             this.motionY -= var2 / 2.0D;
-        } else if (var6 > this.boundingBox.minY + 0.5D)
+        }
+        else if (var6 > this.boundingBox.minY + 0.5D)
         {
             this.motionY += var2 / 2.0D;
-        } else
+        }
+        else
         {
             this.motionY += (var6 - this.boundingBox.minY) * (var2 / 2.0D);
         }
@@ -123,11 +127,11 @@ public class EntityHomeShot extends EntityFlying
     {
         for (int var1 = 0; var1 < 3; ++var1)
         {
-            this.sinage[var1] += 0.3F + (float) var1 * 0.13F;
+            this.sinage[var1] += 0.3F + (float)var1 * 0.13F;
 
-            if (this.sinage[var1] > ((float) Math.PI * 2F))
+            if (this.sinage[var1] > ((float)Math.PI * 2F))
             {
-                this.sinage[var1] -= ((float) Math.PI * 2F);
+                this.sinage[var1] -= ((float)Math.PI * 2F);
             }
         }
     }
@@ -138,7 +142,7 @@ public class EntityHomeShot extends EntityFlying
     public void writeEntityToNBT(NBTTagCompound var1)
     {
         super.writeEntityToNBT(var1);
-        var1.setShort("LifeLeft", (short) this.life);
+        var1.setShort("LifeLeft", (short)this.life);
     }
 
     /**
@@ -194,9 +198,10 @@ public class EntityHomeShot extends EntityFlying
     {
         if (var1 != null)
         {
-            this.moveIt(var1, -0.15D - (double) var2 / 8.0D);
+            this.moveIt(var1, -0.15D - (double)var2 / 8.0D);
             return true;
-        } else
+        }
+        else
         {
             return false;
         }

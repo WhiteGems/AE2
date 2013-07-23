@@ -9,39 +9,31 @@ public class DonatorChoice
     public DonatorTexture textureFile;
     public static ArrayList choices = new ArrayList();
 
-    public DonatorChoice(String name, EnumChoiceType type, DonatorTexture texture)
+    public DonatorChoice(String var1, EnumChoiceType var2, DonatorTexture var3)
     {
-        this.name = name;
-        this.type = type;
-
-        texture.localURL = (type.localTexturePath + texture.localURL);
-        texture.onlineURL = (type.onlineTexturePath + texture.onlineURL);
-
-        this.textureFile = texture;
-
+        this.name = var1;
+        this.type = var2;
+        var3.localURL = var2.localTexturePath + var3.localURL;
+        var3.onlineURL = var2.onlineTexturePath + var3.onlineURL;
+        this.textureFile = var3;
         choices.add(this);
     }
 
-    public static DonatorChoice getChoiceFromString(String name)
+    public static DonatorChoice getChoiceFromString(String var0)
     {
-        for (int i = 0; i < choices.size(); i++)
+        for (int var1 = 0; var1 < choices.size(); ++var1)
         {
-            if (((DonatorChoice) choices.get(i)).name.equalsIgnoreCase(name))
+            if (((DonatorChoice)choices.get(var1)).name.equalsIgnoreCase(var0))
             {
-                return (DonatorChoice) choices.get(i);
+                return (DonatorChoice)choices.get(var1);
             }
         }
 
         return null;
     }
 
-    public boolean isType(EnumChoiceType type)
+    public boolean isType(EnumChoiceType var1)
     {
-        return this.type == type;
+        return this.type == var1;
     }
 }
-
-/* Location:           D:\Dev\Mc\forge_orl\mcp\jars\bin\aether.jar
- * Qualified Name:     net.aetherteam.aether.donator.DonatorChoice
- * JD-Core Version:    0.6.2
- */

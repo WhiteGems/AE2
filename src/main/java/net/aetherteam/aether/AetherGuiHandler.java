@@ -3,10 +3,8 @@ package net.aetherteam.aether;
 import cpw.mods.fml.common.network.IGuiHandler;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
-
 import java.util.ArrayList;
 import java.util.List;
-
 import net.aetherteam.aether.client.gui.GuiFreezer;
 import net.aetherteam.aether.client.gui.GuiIncubator;
 import net.aetherteam.aether.client.gui.GuiLore;
@@ -23,7 +21,7 @@ import net.aetherteam.aether.tile_entities.TileEntityFreezer;
 import net.aetherteam.aether.tile_entities.TileEntityIncubator;
 import net.aetherteam.aether.tile_entities.TileEntityTreasureChest;
 import net.minecraft.client.Minecraft;
-import net.minecraft.entity.Entity;
+import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.ContainerChest;
 import net.minecraft.tileentity.TileEntity;
@@ -43,96 +41,36 @@ public class AetherGuiHandler implements IGuiHandler
     public static final int entranceID = guiContainers.size() + 7;
     public static final int loadingScreenID = guiContainers.size() + 8;
 
-    public Object getServerGuiElement(int id, EntityPlayer player, World world, int x, int y, int z)
+    public Object getServerGuiElement(int var1, EntityPlayer var2, World var3, int var4, int var5, int var6)
     {
-        TileEntity tile = world.getBlockTileEntity(x, y, z);
-
-        if (id == treasureChestID)
-        {
-            return new ContainerChest(player.inventory, (TileEntityTreasureChest) tile);
-        }
-        if (id == incubatorID)
-        {
-            return new ContainerIncubator(player.inventory, (TileEntityIncubator) tile);
-        }
-        if (id == freezerID)
-        {
-            return new ContainerFreezer(player.inventory, (TileEntityFreezer) tile);
-        }
-        if (id == loreID)
-        {
-            return new ContainerLore(player.inventory, true, player);
-        }
-        if (id == craftingID)
-        {
-            return new ContainerSkyrootWorkbench(player.inventory, player.worldObj, x, y, z);
-        }
-
-        return null;
+        TileEntity var7 = var3.getBlockTileEntity(var4, var5, var6);
+        return var1 == treasureChestID ? new ContainerChest(var2.inventory, (TileEntityTreasureChest)var7) : (var1 == incubatorID ? new ContainerIncubator(var2.inventory, (TileEntityIncubator)var7) : (var1 == freezerID ? new ContainerFreezer(var2.inventory, (TileEntityFreezer)var7) : (var1 == loreID ? new ContainerLore(var2.inventory, true, var2) : (var1 == craftingID ? new ContainerSkyrootWorkbench(var2.inventory, var2.worldObj, var4, var5, var6) : null))));
     }
 
     @SideOnly(Side.CLIENT)
-    public Object getClientGuiElement(int id, EntityPlayer player, World world, int x, int y, int z)
+    public Object getClientGuiElement(int var1, EntityPlayer var2, World var3, int var4, int var5, int var6)
     {
-        TileEntity tile = world.getBlockTileEntity(x, y, z);
-
-        if (!player.worldObj.isRemote)
-        {
-            return null;
-        }
-
-        if (id == treasureChestID)
-        {
-            return new GuiTreasureChest(player.inventory, (TileEntityTreasureChest) tile, ((TileEntityTreasureChest) tile).getKind());
-        }
-        if (id == incubatorID)
-        {
-            return new GuiIncubator(player.inventory, (TileEntityIncubator) tile);
-        }
-        if (id == freezerID)
-        {
-            return new GuiFreezer(player.inventory, (TileEntityFreezer) tile);
-        }
-        if (id == loreID)
-        {
-            return new GuiLore(player.inventory, player, 0);
-        }
-        if (id == craftingID)
-        {
-            return new GuiSkyrootCrafting(player.inventory, player.worldObj, x, y, z);
-        }
-        if (id == entranceID)
-        {
-            return new GuiDungeonEntrance(player, null, (TileEntityEntranceController) tile);
-        }
-        if (id == loadingScreenID)
-        {
-            return new GuiDungeonScreen(Minecraft.getMinecraft());
-        }
-
-        return null;
+        TileEntity var7 = var3.getBlockTileEntity(var4, var5, var6);
+        return !var2.worldObj.isRemote ? null : (var1 == treasureChestID ? new GuiTreasureChest(var2.inventory, (TileEntityTreasureChest)var7, ((TileEntityTreasureChest)var7).getKind()) : (var1 == incubatorID ? new GuiIncubator(var2.inventory, (TileEntityIncubator)var7) : (var1 == freezerID ? new GuiFreezer(var2.inventory, (TileEntityFreezer)var7) : (var1 == loreID ? new GuiLore(var2.inventory, var2, 0) : (var1 == craftingID ? new GuiSkyrootCrafting(var2.inventory, var2.worldObj, var4, var5, var6) : (var1 == entranceID ? new GuiDungeonEntrance(var2, (GuiScreen)null, (TileEntityEntranceController)var7) : (var1 == loadingScreenID ? new GuiDungeonScreen(Minecraft.getMinecraft()) : null)))))));
     }
 
-    public static void registerGui(Class guiContainer, Class container)
+    public static void registerGui(Class var0, Class var1)
     {
-        guiContainers.add(guiContainer);
-        containers.add(container);
+        guiContainers.add(var0);
+        containers.add(var1);
         tile_entities.add(TileEntity.class);
     }
 
-    public static int getID(Class guiContainer, Class tile)
+    public static int getID(Class var0, Class var1)
     {
-        if (guiContainers.contains(guiContainer))
+        if (guiContainers.contains(var0))
         {
-            tile_entities.add(guiContainers.indexOf(guiContainer), tile);
-            return guiContainers.indexOf(guiContainer);
+            tile_entities.add(guiContainers.indexOf(var0), var1);
+            return guiContainers.indexOf(var0);
         }
-
-        return 0;
+        else
+        {
+            return 0;
+        }
     }
 }
-
-/* Location:           D:\Dev\Mc\forge_orl\mcp\jars\bin\aether.jar
- * Qualified Name:     net.aetherteam.aether.AetherGuiHandler
- * JD-Core Version:    0.6.2
- */

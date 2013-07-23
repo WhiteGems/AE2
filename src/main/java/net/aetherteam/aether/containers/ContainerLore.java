@@ -3,7 +3,6 @@ package net.aetherteam.aether.containers;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.ContainerPlayer;
@@ -28,7 +27,7 @@ public class ContainerLore extends ContainerPlayer
 
             if (var5 instanceof Slot)
             {
-                Slot var6 = (Slot) var5;
+                Slot var6 = (Slot)var5;
                 this.slotsToRemove.add(var6);
             }
         }
@@ -40,15 +39,15 @@ public class ContainerLore extends ContainerPlayer
         {
             for (int var8 = 0; var8 < 9; ++var8)
             {
-                ((Slot) this.inventorySlots.get(var8 + (var7 + 1) * 9)).xDisplayPosition = 48 + var8 * 18;
-                ((Slot) this.inventorySlots.get(var8 + (var7 + 1) * 9)).yDisplayPosition = 113 + var7 * 18;
+                ((Slot)this.inventorySlots.get(var8 + (var7 + 1) * 9)).xDisplayPosition = 48 + var8 * 18;
+                ((Slot)this.inventorySlots.get(var8 + (var7 + 1) * 9)).yDisplayPosition = 113 + var7 * 18;
             }
         }
 
         for (var7 = 0; var7 < 9; ++var7)
         {
-            ((Slot) this.inventorySlots.get(var7)).xDisplayPosition = 48 + var7 * 18;
-            ((Slot) this.inventorySlots.get(var7)).yDisplayPosition = 171;
+            ((Slot)this.inventorySlots.get(var7)).xDisplayPosition = 48 + var7 * 18;
+            ((Slot)this.inventorySlots.get(var7)).yDisplayPosition = 171;
         }
 
         this.loreSlot = new InventoryBasic("Lore Item", true, 1);
@@ -80,7 +79,7 @@ public class ContainerLore extends ContainerPlayer
     public ItemStack getStackInSlot(int var1)
     {
         ItemStack var2 = null;
-        Slot var3 = (Slot) this.inventorySlots.get(var1);
+        Slot var3 = (Slot)this.inventorySlots.get(var1);
 
         if (var3 != null && var3.getHasStack())
         {
@@ -90,21 +89,25 @@ public class ContainerLore extends ContainerPlayer
             if (var1 == 0)
             {
                 this.mergeItemStack(var4, 10, 46, true);
-            } else if (var1 >= 10 && var1 < 37)
+            }
+            else if (var1 >= 10 && var1 < 37)
             {
                 this.mergeItemStack(var4, 37, 46, false);
-            } else if (var1 >= 37 && var1 < 46)
+            }
+            else if (var1 >= 37 && var1 < 46)
             {
                 this.mergeItemStack(var4, 10, 37, false);
-            } else
+            }
+            else
             {
                 this.mergeItemStack(var4, 10, 46, false);
             }
 
             if (var4.stackSize == 0)
             {
-                var3.putStack((ItemStack) null);
-            } else
+                var3.putStack((ItemStack)null);
+            }
+            else
             {
                 var3.onSlotChanged();
             }

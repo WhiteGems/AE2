@@ -1,7 +1,6 @@
 package net.aetherteam.aether.items;
 
 import java.util.ArrayList;
-
 import net.aetherteam.aether.blocks.AetherBlocks;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
@@ -39,18 +38,20 @@ public class ItemAetherBucket extends ItemBucket
         if (this.contents == 0)
         {
             return super.onItemRightClick(var1, var2, var3);
-        } else
+        }
+        else
         {
             float var4 = 1.0F;
-            double var5 = var3.prevPosX + (var3.posX - var3.prevPosX) * (double) var4;
-            double var7 = var3.prevPosY + (var3.posY - var3.prevPosY) * (double) var4 + 1.62D - (double) var3.yOffset;
-            double var9 = var3.prevPosZ + (var3.posZ - var3.prevPosZ) * (double) var4;
+            double var5 = var3.prevPosX + (var3.posX - var3.prevPosX) * (double)var4;
+            double var7 = var3.prevPosY + (var3.posY - var3.prevPosY) * (double)var4 + 1.62D - (double)var3.yOffset;
+            double var9 = var3.prevPosZ + (var3.posZ - var3.prevPosZ) * (double)var4;
             MovingObjectPosition var11 = this.getMovingObjectPositionFromPlayer(var2, var3, false);
 
             if (var11 == null)
             {
                 return var1;
-            } else
+            }
+            else
             {
                 int var12 = var11.blockX;
                 int var13 = var11.blockY;
@@ -89,10 +90,12 @@ public class ItemAetherBucket extends ItemBucket
                 if (!var3.canCurrentToolHarvestBlock(var12, var13, var14))
                 {
                     return var1;
-                } else if (!var2.isAirBlock(var12, var13, var14) && var2.getBlockMaterial(var12, var13, var14).isSolid())
+                }
+                else if (!var2.isAirBlock(var12, var13, var14) && var2.getBlockMaterial(var12, var13, var14).isSolid())
                 {
                     return var1;
-                } else
+                }
+                else
                 {
                     if (var2.provider.isHellWorld && this.contents == Block.waterMoving.blockID)
                     {
@@ -100,15 +103,18 @@ public class ItemAetherBucket extends ItemBucket
 
                         for (int var15 = 0; var15 < 8; ++var15)
                         {
-                            var2.spawnParticle("largesmoke", (double) var12 + Math.random(), (double) var13 + Math.random(), (double) var14 + Math.random(), 0.0D, 0.0D, 0.0D);
+                            var2.spawnParticle("largesmoke", (double)var12 + Math.random(), (double)var13 + Math.random(), (double)var14 + Math.random(), 0.0D, 0.0D, 0.0D);
                         }
-                    } else if (!var2.isRemote && var2.provider.terrainType.getWorldTypeID() == 2 && this.contents == Block.lavaMoving.blockID)
+                    }
+                    else if (!var2.isRemote && var2.provider.terrainType.getWorldTypeID() == 2 && this.contents == Block.lavaMoving.blockID)
                     {
                         var2.setBlock(var12, var13, var14, AetherBlocks.Aerogel.blockID, 0, 4);
-                    } else if (!var2.isRemote && var2.getBlockId(var11.blockX, var11.blockY, var11.blockZ) == Block.glowStone.blockID && AetherBlocks.AetherPortal.tryToCreatePortal(var2, var12, var13, var14))
+                    }
+                    else if (!var2.isRemote && var2.getBlockId(var11.blockX, var11.blockY, var11.blockZ) == Block.glowStone.blockID && AetherBlocks.AetherPortal.tryToCreatePortal(var2, var12, var13, var14))
                     {
                         var2.setBlock(var12, var13, var14, AetherBlocks.AetherPortal.blockID, 0, 4);
-                    } else
+                    }
+                    else
                     {
                         var2.setBlock(var12, var13, var14, this.contents, 0, 4);
                     }

@@ -18,7 +18,7 @@ public class RenderZephyroo extends RenderLiving
 
         if (var1 instanceof EntityZephyroo)
         {
-            EntityZephyroo var10 = (EntityZephyroo) var1;
+            EntityZephyroo var10 = (EntityZephyroo)var1;
 
             if (var10.isLovingClash())
             {

@@ -10,74 +10,49 @@ import net.aetherteam.aether.party.members.PartyMember;
 
 public class DungeonRequestAction extends NotificationAction
 {
-    public boolean executeAccept(Notification notification)
+    public boolean executeAccept(Notification var1)
     {
-        PartyMember requester = PartyController.instance().getMember(notification.getSenderName());
-        Party party = PartyController.instance().getParty(requester);
-        PartyMember member = PartyController.instance().getMember(notification.getReceiverName());
+        PartyMember var2 = PartyController.instance().getMember(var1.getSenderName());
+        Party var3 = PartyController.instance().getParty(var2);
+        PartyMember var4 = PartyController.instance().getMember(var1.getReceiverName());
+        Dungeon var5 = DungeonHandler.instance().getDungeon(var3);
+        boolean var6 = false;
 
-        Dungeon dungeon = DungeonHandler.instance().getDungeon(party);
-
-        boolean dungeonQueued = false;
-
-        if (party.hasMember(member))
+        if (var3.hasMember(var4) && var2 != null && var2.canRecruit())
         {
-            if (requester != null)
-            {
-                if (requester.canRecruit())
-                {
-                    DungeonHandler.instance().queueMember(dungeon, member, true);
-                    dungeonQueued = true;
-                }
-            }
+            DungeonHandler.instance().queueMember(var5, var4, true);
+            var6 = true;
         }
 
-        NotificationHandler.instance().removeNotification(notification);
-        NotificationHandler.instance().removeSentNotification(notification, true);
-
-        return dungeonQueued;
+        NotificationHandler.instance().removeNotification(var1);
+        NotificationHandler.instance().removeSentNotification(var1, true);
+        return var6;
     }
 
-    public boolean executeDecline(Notification notification)
+    public boolean executeDecline(Notification var1)
     {
-        PartyMember requester = PartyController.instance().getMember(notification.getSenderName());
-        Party party = PartyController.instance().getParty(requester);
-        PartyMember member = PartyController.instance().getMember(notification.getReceiverName());
+        PartyMember var2 = PartyController.instance().getMember(var1.getSenderName());
+        Party var3 = PartyController.instance().getParty(var2);
+        PartyMember var4 = PartyController.instance().getMember(var1.getReceiverName());
+        Dungeon var5 = DungeonHandler.instance().getDungeon(var3);
 
-        Dungeon dungeon = DungeonHandler.instance().getDungeon(party);
-
-        if (dungeon != null)
+        if (var5 != null && var3.hasMember(var4) && var2 != null && var2.canRecruit())
         {
-            if (party.hasMember(member))
-            {
-                if (requester != null)
-                {
-                    if (requester.canRecruit())
-                    {
-                        DungeonHandler.instance().disbandQueue(dungeon, party, dungeon.getControllerX(), dungeon.getControllerY(), dungeon.getControllerZ(), member, true);
-                    }
-                }
-            }
+            DungeonHandler.instance().disbandQueue(var5, var3, var5.getControllerX(), var5.getControllerY(), var5.getControllerZ(), var4, true);
         }
 
-        NotificationHandler.instance().removeNotification(notification);
-        NotificationHandler.instance().removeSentNotification(notification, true);
-
+        NotificationHandler.instance().removeNotification(var1);
+        NotificationHandler.instance().removeSentNotification(var1, true);
         return true;
     }
 
-    public String acceptMessage(Notification notification)
+    public String acceptMessage(Notification var1)
     {
         return "You have been queued into the Dungeon raid!";
     }
 
-    public String failedMessage(Notification notification)
+    public String failedMessage(Notification var1)
     {
         return "Sorry, the dungeon raid request no longer exists :(";
     }
 }
-
-/* Location:           D:\Dev\Mc\forge_orl\mcp\jars\bin\aether.jar
- * Qualified Name:     net.aetherteam.aether.notifications.actions.DungeonRequestAction
- * JD-Core Version:    0.6.2
- */

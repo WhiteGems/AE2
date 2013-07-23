@@ -4,19 +4,20 @@ import java.io.Serializable;
 
 public enum MemberType implements Serializable
 {
-    LEADER(true, true, true, true), MODERATOR(true, true, false, false), MEMBER(false, false, false, false);
-
+    LEADER(true, true, true, true),
+    MODERATOR(true, true, false, false),
+    MEMBER(false, false, false, false);
     private boolean canKick;
     private boolean canBan;
     private boolean canRecruit;
     private boolean canPromote;
 
-    private MemberType(boolean canKick, boolean canBan, boolean canRecruit, boolean canPromote)
+    private MemberType(boolean var3, boolean var4, boolean var5, boolean var6)
     {
-        this.canKick = canKick;
-        this.canBan = canBan;
-        this.canRecruit = canRecruit;
-        this.canPromote = canPromote;
+        this.canKick = var3;
+        this.canBan = var4;
+        this.canRecruit = var5;
+        this.canPromote = var6;
     }
 
     public boolean canKick()
@@ -39,21 +40,21 @@ public enum MemberType implements Serializable
         return this.canPromote;
     }
 
-    public static MemberType getTypeFromString(String name)
+    public static MemberType getTypeFromString(String var0)
     {
-        for (MemberType type : values())
+        MemberType[] var1 = values();
+        int var2 = var1.length;
+
+        for (int var3 = 0; var3 < var2; ++var3)
         {
-            if (type.name().equalsIgnoreCase(name))
+            MemberType var4 = var1[var3];
+
+            if (var4.name().equalsIgnoreCase(var0))
             {
-                return type;
+                return var4;
             }
         }
 
         return null;
     }
 }
-
-/* Location:           D:\Dev\Mc\forge_orl\mcp\jars\bin\aether.jar
- * Qualified Name:     net.aetherteam.aether.party.members.MemberType
- * JD-Core Version:    0.6.2
- */

@@ -1,12 +1,10 @@
 package net.aetherteam.aether.client.gui;
 
 import java.util.Random;
-
 import net.aetherteam.aether.notifications.client.ClientNotificationHandler;
 import net.aetherteam.aether.overlays.AetherOverlays;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
-import net.minecraft.client.renderer.RenderEngine;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent.ElementType;
 import net.minecraftforge.event.EventPriority;
@@ -17,34 +15,30 @@ public class GuiAetherIngame extends Gui
     private Minecraft mc;
     private Random rand = new Random();
 
-    public GuiAetherIngame(Minecraft mc)
+    public GuiAetherIngame(Minecraft var1)
     {
-        this.mc = mc;
+        this.mc = var1;
     }
 
-    @ForgeSubscribe(priority = EventPriority.NORMAL)
-    public void onRenderGui(RenderGameOverlayEvent event)
+    @ForgeSubscribe(
+        priority = EventPriority.NORMAL
+    )
+    public void onRenderGui(RenderGameOverlayEvent var1)
     {
-        if ((event.isCancelable()) || (event.type != RenderGameOverlayEvent.ElementType.TEXT))
+        if (!var1.isCancelable() && var1.type == RenderGameOverlayEvent.ElementType.TEXT)
         {
-            return;
+            ClientNotificationHandler.updateNotifications();
+            AetherOverlays.renderDungeonQueue(this.mc);
+            AetherOverlays.renderDungeonTimer(this.mc);
+            AetherOverlays.renderMountHealth(this.mc);
+            AetherOverlays.renderBossHP(this.mc);
+            AetherOverlays.renderCooldown(this.mc);
+            AetherOverlays.renderHearts(this.mc, this.rand);
+            AetherOverlays.renderJumps(this.mc);
+            AetherOverlays.renderIronBubbles(this.mc, this.rand);
+            AetherOverlays.renderCoinbar(this.mc);
+            AetherOverlays.renderPartyHUD(this.mc);
+            this.mc.renderEngine.resetBoundTexture();
         }
-        ClientNotificationHandler.updateNotifications();
-        AetherOverlays.renderDungeonQueue(this.mc);
-        AetherOverlays.renderDungeonTimer(this.mc);
-        AetherOverlays.renderMountHealth(this.mc);
-        AetherOverlays.renderBossHP(this.mc);
-        AetherOverlays.renderCooldown(this.mc);
-        AetherOverlays.renderHearts(this.mc, this.rand);
-        AetherOverlays.renderJumps(this.mc);
-        AetherOverlays.renderIronBubbles(this.mc, this.rand);
-        AetherOverlays.renderCoinbar(this.mc);
-        AetherOverlays.renderPartyHUD(this.mc);
-        this.mc.renderEngine.resetBoundTexture();
     }
 }
-
-/* Location:           D:\Dev\Mc\forge_orl\mcp\jars\bin\aether.jar
- * Qualified Name:     net.aetherteam.aether.client.gui.GuiAetherIngame
- * JD-Core Version:    0.6.2
- */

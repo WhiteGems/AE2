@@ -2,7 +2,6 @@ package net.aetherteam.aether.entities;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import net.aetherteam.aether.blocks.AetherBlocks;
 import net.aetherteam.aether.entities.mounts.EntityAerbunny;
 import net.aetherteam.aether.entities.mounts.EntityMoa;
@@ -68,16 +67,16 @@ public class EntityNotchWave extends Entity implements IProjectile
     {
         this(var1);
         this.thrower = var2;
-        this.setLocationAndAngles(var2.posX, var2.posY + (double) var2.getEyeHeight(), var2.posZ, var2.rotationYaw, var2.rotationPitch);
-        this.posX -= (double) (MathHelper.cos(this.rotationYaw / 180.0F * (float) Math.PI) * 0.16F);
+        this.setLocationAndAngles(var2.posX, var2.posY + (double)var2.getEyeHeight(), var2.posZ, var2.rotationYaw, var2.rotationPitch);
+        this.posX -= (double)(MathHelper.cos(this.rotationYaw / 180.0F * (float)Math.PI) * 0.16F);
         this.posY -= 0.10000000149011612D;
-        this.posZ -= (double) (MathHelper.sin(this.rotationYaw / 180.0F * (float) Math.PI) * 0.16F);
+        this.posZ -= (double)(MathHelper.sin(this.rotationYaw / 180.0F * (float)Math.PI) * 0.16F);
         this.setPositionAndRotation(this.posX, this.posY, this.posZ, this.rotationYaw, this.rotationPitch);
         this.yOffset = 0.0F;
         float var3 = 0.4F;
-        this.motionX = (double) (-MathHelper.sin(this.rotationYaw / 180.0F * (float) Math.PI) * MathHelper.cos(this.rotationPitch / 180.0F * (float) Math.PI) * var3);
-        this.motionZ = (double) (MathHelper.cos(this.rotationYaw / 180.0F * (float) Math.PI) * MathHelper.cos(this.rotationPitch / 180.0F * (float) Math.PI) * var3);
-        this.motionY = (double) (-MathHelper.sin(this.rotationPitch / 180.0F * (float) Math.PI) * var3);
+        this.motionX = (double)(-MathHelper.sin(this.rotationYaw / 180.0F * (float)Math.PI) * MathHelper.cos(this.rotationPitch / 180.0F * (float)Math.PI) * var3);
+        this.motionZ = (double)(MathHelper.cos(this.rotationYaw / 180.0F * (float)Math.PI) * MathHelper.cos(this.rotationPitch / 180.0F * (float)Math.PI) * var3);
+        this.motionY = (double)(-MathHelper.sin(this.rotationPitch / 180.0F * (float)Math.PI) * var3);
         this.setSnowballHeading(this.motionX, this.motionY, this.motionZ, 1.5F, 1.0F);
         this.setThrowableHeading(this.motionX, this.motionY, this.motionZ, 1.5F, 1.0F);
     }
@@ -92,21 +91,21 @@ public class EntityNotchWave extends Entity implements IProjectile
     public void setSnowballHeading(double var1, double var3, double var5, float var7, float var8)
     {
         float var9 = MathHelper.sqrt_double(var1 * var1 + var3 * var3 + var5 * var5);
-        var1 /= (double) var9;
-        var3 /= (double) var9;
-        var5 /= (double) var9;
-        var1 += this.rand.nextGaussian() * 0.007499999832361937D * (double) var8;
-        var3 += this.rand.nextGaussian() * 0.007499999832361937D * (double) var8;
-        var5 += this.rand.nextGaussian() * 0.007499999832361937D * (double) var8;
-        var1 *= (double) var7;
-        var3 *= (double) var7;
-        var5 *= (double) var7;
+        var1 /= (double)var9;
+        var3 /= (double)var9;
+        var5 /= (double)var9;
+        var1 += this.rand.nextGaussian() * 0.007499999832361937D * (double)var8;
+        var3 += this.rand.nextGaussian() * 0.007499999832361937D * (double)var8;
+        var5 += this.rand.nextGaussian() * 0.007499999832361937D * (double)var8;
+        var1 *= (double)var7;
+        var3 *= (double)var7;
+        var5 *= (double)var7;
         this.motionX = var1;
         this.motionY = var3;
         this.motionZ = var5;
         float var10 = MathHelper.sqrt_double(var1 * var1 + var5 * var5);
-        this.prevRotationYaw = this.rotationYaw = (float) (Math.atan2(var1, var5) * 180.0D / Math.PI);
-        this.prevRotationPitch = this.rotationPitch = (float) (Math.atan2(var3, (double) var10) * 180.0D / Math.PI);
+        this.prevRotationYaw = this.rotationYaw = (float)(Math.atan2(var1, var5) * 180.0D / Math.PI);
+        this.prevRotationPitch = this.rotationPitch = (float)(Math.atan2(var3, (double)var10) * 180.0D / Math.PI);
         this.ticksInGroundSnowball = 0;
     }
 
@@ -122,8 +121,8 @@ public class EntityNotchWave extends Entity implements IProjectile
         if (this.prevRotationPitch == 0.0F && this.prevRotationYaw == 0.0F)
         {
             float var7 = MathHelper.sqrt_double(var1 * var1 + var5 * var5);
-            this.prevRotationYaw = this.rotationYaw = (float) (Math.atan2(var1, var5) * 180.0D / Math.PI);
-            this.prevRotationPitch = this.rotationPitch = (float) (Math.atan2(var3, (double) var7) * 180.0D / Math.PI);
+            this.prevRotationYaw = this.rotationYaw = (float)(Math.atan2(var1, var5) * 180.0D / Math.PI);
+            this.prevRotationPitch = this.rotationPitch = (float)(Math.atan2(var3, (double)var7) * 180.0D / Math.PI);
         }
     }
 
@@ -150,7 +149,8 @@ public class EntityNotchWave extends Entity implements IProjectile
         if (this.inGroundSnowball)
         {
             this.setDead();
-        } else
+        }
+        else
         {
             ++this.ticksInAirSnowball;
         }
@@ -176,18 +176,18 @@ public class EntityNotchWave extends Entity implements IProjectile
 
             for (var8 = 0; var8 < var5.size(); ++var8)
             {
-                Entity var9 = (Entity) var5.get(var8);
+                Entity var9 = (Entity)var5.get(var8);
 
                 if (var9.canBeCollidedWith() && (var9 != this.thrower || this.ticksInAirSnowball >= 5))
                 {
                     float var10 = 0.3F;
 
-                    if ((!(var9 instanceof EntityPhyg) || ((EntityPhyg) var9).getSaddled()) && (!(var9 instanceof EntityMoa) || ((EntityMoa) var9).getSaddled()) && (!(var9 instanceof EntityAerbunny) || !(((EntityAerbunny) var9).riddenByEntity instanceof EntityPlayer)) && var9 != this.thrower)
+                    if ((!(var9 instanceof EntityPhyg) || ((EntityPhyg)var9).getSaddled()) && (!(var9 instanceof EntityMoa) || ((EntityMoa)var9).getSaddled()) && (!(var9 instanceof EntityAerbunny) || !(((EntityAerbunny)var9).riddenByEntity instanceof EntityPlayer)) && var9 != this.thrower)
                     {
                         var9.attackEntityFrom(DamageSource.causeMobDamage(this.thrower), 5);
                     }
 
-                    AxisAlignedBB var11 = var9.boundingBox.expand((double) var10, (double) var10, (double) var10);
+                    AxisAlignedBB var11 = var9.boundingBox.expand((double)var10, (double)var10, (double)var10);
                     MovingObjectPosition var12 = var11.calculateIntercept(var1, var2);
 
                     if (var12 != null)
@@ -203,24 +203,24 @@ public class EntityNotchWave extends Entity implements IProjectile
                 }
             }
 
-            for (var8 = (int) (this.posX - 3.0D); (double) var8 <= this.posX + 3.0D; ++var8)
+            for (var8 = (int)(this.posX - 3.0D); (double)var8 <= this.posX + 3.0D; ++var8)
             {
-                for (int var24 = (int) (this.posY - 3.0D); (double) var24 <= this.posY + 3.0D; ++var24)
+                for (int var21 = (int)(this.posY - 3.0D); (double)var21 <= this.posY + 3.0D; ++var21)
                 {
-                    for (int var17 = (int) (this.posZ - 3.0D); (double) var17 <= this.posZ + 3.0D; ++var17)
+                    for (int var24 = (int)(this.posZ - 3.0D); (double)var24 <= this.posZ + 3.0D; ++var24)
                     {
-                        if (Block.blocksList[this.worldObj.getBlockId(var8, var24, var17)] instanceof BlockFlower && this.thrower != null && this.thrower instanceof EntityPlayer)
+                        if (Block.blocksList[this.worldObj.getBlockId(var8, var21, var24)] instanceof BlockFlower && this.thrower != null && this.thrower instanceof EntityPlayer)
                         {
-                            int var16 = this.worldObj.getBlockId(var8, var24, var17);
-                            int var15 = this.worldObj.getBlockMetadata(var8, var24, var17);
+                            int var23 = this.worldObj.getBlockId(var8, var21, var24);
+                            int var25 = this.worldObj.getBlockMetadata(var8, var21, var24);
 
-                            if (!this.harvestBlockBans.contains(Integer.valueOf(this.worldObj.getBlockId(var8, var24, var17))))
+                            if (!this.harvestBlockBans.contains(Integer.valueOf(this.worldObj.getBlockId(var8, var21, var24))))
                             {
-                                Block.blocksList[this.worldObj.getBlockId(var8, var24, var17)].harvestBlock(this.thrower.worldObj, (EntityPlayer) this.thrower, var8, var24, var17, this.worldObj.getBlockMetadata(var8, var24, var17));
+                                Block.blocksList[this.worldObj.getBlockId(var8, var21, var24)].harvestBlock(this.thrower.worldObj, (EntityPlayer)this.thrower, var8, var21, var24, this.worldObj.getBlockMetadata(var8, var21, var24));
 
-                                if (this.worldObj.getBlockId(var8, var24, var17) == var16 && this.worldObj.getBlockMetadata(var8, var24, var17) == var15)
+                                if (this.worldObj.getBlockId(var8, var21, var24) == var23 && this.worldObj.getBlockMetadata(var8, var21, var24) == var25)
                                 {
-                                    Block.blocksList[this.worldObj.getBlockId(var8, var24, var17)].removeBlockByPlayer(this.thrower.worldObj, (EntityPlayer) this.thrower, var8, var24, var17);
+                                    Block.blocksList[this.worldObj.getBlockId(var8, var21, var24)].removeBlockByPlayer(this.thrower.worldObj, (EntityPlayer)this.thrower, var8, var21, var24);
                                 }
                             }
                         }
@@ -238,26 +238,26 @@ public class EntityNotchWave extends Entity implements IProjectile
 
         if (var3 != null)
         {
-            int var18;
+            int var15;
 
-            for (var18 = (int) (this.posX - 3.0D); (double) var18 <= this.posX + 3.0D; ++var18)
+            for (var15 = (int)(this.posX - 3.0D); (double)var15 <= this.posX + 3.0D; ++var15)
             {
-                for (int var21 = (int) (this.posY - 3.0D); (double) var21 <= this.posY + 3.0D; ++var21)
+                for (int var16 = (int)(this.posY - 3.0D); (double)var16 <= this.posY + 3.0D; ++var16)
                 {
-                    for (int var19 = (int) (this.posZ - 3.0D); (double) var19 <= this.posZ + 3.0D; ++var19)
+                    for (int var19 = (int)(this.posZ - 3.0D); (double)var19 <= this.posZ + 3.0D; ++var19)
                     {
-                        if (Block.blocksList[this.worldObj.getBlockId(var18, var21, var19)] instanceof BlockFlower && this.thrower != null && this.thrower instanceof EntityPlayer)
+                        if (Block.blocksList[this.worldObj.getBlockId(var15, var16, var19)] instanceof BlockFlower && this.thrower != null && this.thrower instanceof EntityPlayer)
                         {
-                            var7 = this.worldObj.getBlockId(var18, var21, var19);
-                            var8 = this.worldObj.getBlockMetadata(var18, var21, var19);
+                            var7 = this.worldObj.getBlockId(var15, var16, var19);
+                            var8 = this.worldObj.getBlockMetadata(var15, var16, var19);
 
-                            if (!this.harvestBlockBans.contains(Integer.valueOf(this.worldObj.getBlockId(var18, var21, var19))))
+                            if (!this.harvestBlockBans.contains(Integer.valueOf(this.worldObj.getBlockId(var15, var16, var19))))
                             {
-                                Block.blocksList[this.worldObj.getBlockId(var18, var21, var19)].harvestBlock(this.thrower.worldObj, (EntityPlayer) this.thrower, var18, var21, var19, this.worldObj.getBlockMetadata(var18, var21, var19));
+                                Block.blocksList[this.worldObj.getBlockId(var15, var16, var19)].harvestBlock(this.thrower.worldObj, (EntityPlayer)this.thrower, var15, var16, var19, this.worldObj.getBlockMetadata(var15, var16, var19));
 
-                                if (this.worldObj.getBlockId(var18, var21, var19) == var7 && this.worldObj.getBlockMetadata(var18, var21, var19) == var8)
+                                if (this.worldObj.getBlockId(var15, var16, var19) == var7 && this.worldObj.getBlockMetadata(var15, var16, var19) == var8)
                                 {
-                                    Block.blocksList[this.worldObj.getBlockId(var18, var21, var19)].removeBlockByPlayer(this.thrower.worldObj, (EntityPlayer) this.thrower, var18, var21, var19);
+                                    Block.blocksList[this.worldObj.getBlockId(var15, var16, var19)].removeBlockByPlayer(this.thrower.worldObj, (EntityPlayer)this.thrower, var15, var16, var19);
                                 }
                             }
                         }
@@ -265,7 +265,7 @@ public class EntityNotchWave extends Entity implements IProjectile
                 }
             }
 
-            if ((var3.entityHit == null || (!(var3.entityHit instanceof EntityPhyg) || ((EntityPhyg) var3.entityHit).getSaddled()) && (!(var3.entityHit instanceof EntityMoa) || ((EntityMoa) var3.entityHit).getSaddled()) && (!(var3.entityHit instanceof EntityAerbunny) || !(((EntityAerbunny) var3.entityHit).riddenByEntity instanceof EntityPlayer))) && var3.entityHit != null && var3.entityHit != this.thrower)
+            if ((var3.entityHit == null || (!(var3.entityHit instanceof EntityPhyg) || ((EntityPhyg)var3.entityHit).getSaddled()) && (!(var3.entityHit instanceof EntityMoa) || ((EntityMoa)var3.entityHit).getSaddled()) && (!(var3.entityHit instanceof EntityAerbunny) || !(((EntityAerbunny)var3.entityHit).riddenByEntity instanceof EntityPlayer))) && var3.entityHit != null && var3.entityHit != this.thrower)
             {
                 if (!var3.entityHit.attackEntityFrom(DamageSource.causeMobDamage(this.thrower), 0))
                 {
@@ -275,7 +275,7 @@ public class EntityNotchWave extends Entity implements IProjectile
                 var3.entityHit.addVelocity(this.motionX, 0.6D, this.motionZ);
             }
 
-            for (var18 = 0; var18 < 8; ++var18)
+            for (var15 = 0; var15 < 8; ++var15)
             {
                 this.worldObj.spawnParticle("explode", this.posX, this.posY, this.posZ, 0.0D, 0.0D, 0.0D);
                 this.worldObj.spawnParticle("explode", this.posX, this.posY, this.posZ, 0.0D, 0.0D, 0.0D);
@@ -290,10 +290,10 @@ public class EntityNotchWave extends Entity implements IProjectile
         this.posX += this.motionX;
         this.posY += this.motionY;
         this.posZ += this.motionZ;
-        float var22 = MathHelper.sqrt_double(this.motionX * this.motionX + this.motionZ * this.motionZ);
-        this.rotationYaw = (float) (Math.atan2(this.motionX, this.motionZ) * 180.0D / Math.PI);
+        float var17 = MathHelper.sqrt_double(this.motionX * this.motionX + this.motionZ * this.motionZ);
+        this.rotationYaw = (float)(Math.atan2(this.motionX, this.motionZ) * 180.0D / Math.PI);
 
-        for (this.rotationPitch = (float) (Math.atan2(this.motionY, (double) var22) * 180.0D / Math.PI); this.rotationPitch - this.prevRotationPitch < -180.0F; this.prevRotationPitch -= 360.0F)
+        for (this.rotationPitch = (float)(Math.atan2(this.motionY, (double)var17) * 180.0D / Math.PI); this.rotationPitch - this.prevRotationPitch < -180.0F; this.prevRotationPitch -= 360.0F)
         {
             ;
         }
@@ -315,23 +315,23 @@ public class EntityNotchWave extends Entity implements IProjectile
 
         this.rotationPitch = this.prevRotationPitch + (this.rotationPitch - this.prevRotationPitch) * 0.2F;
         this.rotationYaw = this.prevRotationYaw + (this.rotationYaw - this.prevRotationYaw) * 0.2F;
-        float var23 = 0.99F;
+        float var18 = 0.99F;
         float var20 = 0.03F;
 
         if (this.isInWater())
         {
             for (var7 = 0; var7 < 4; ++var7)
             {
-                float var25 = 0.25F;
-                this.worldObj.spawnParticle("bubble", this.posX - this.motionX * (double) var25, this.posY - this.motionY * (double) var25, this.posZ - this.motionZ * (double) var25, this.motionX, this.motionY, this.motionZ);
+                float var22 = 0.25F;
+                this.worldObj.spawnParticle("bubble", this.posX - this.motionX * (double)var22, this.posY - this.motionY * (double)var22, this.posZ - this.motionZ * (double)var22, this.motionX, this.motionY, this.motionZ);
             }
 
-            var23 = 0.8F;
+            var18 = 0.8F;
         }
 
-        this.motionX *= (double) var23;
-        this.motionY *= (double) var23;
-        this.motionZ *= (double) var23;
+        this.motionX *= (double)var18;
+        this.motionY *= (double)var18;
+        this.motionZ *= (double)var18;
         this.setPositionAndRotation(this.posX, this.posY, this.posZ, this.rotationYaw, this.rotationPitch);
     }
 
@@ -340,12 +340,12 @@ public class EntityNotchWave extends Entity implements IProjectile
      */
     public void writeEntityToNBT(NBTTagCompound var1)
     {
-        var1.setShort("xTile", (short) this.xTileSnowball);
-        var1.setShort("yTile", (short) this.yTileSnowball);
-        var1.setShort("zTile", (short) this.zTileSnowball);
-        var1.setByte("inTile", (byte) this.inTileSnowball);
-        var1.setByte("shake", (byte) this.shakeSnowball);
-        var1.setByte("inGround", (byte) (this.inGroundSnowball ? 1 : 0));
+        var1.setShort("xTile", (short)this.xTileSnowball);
+        var1.setShort("yTile", (short)this.yTileSnowball);
+        var1.setShort("zTile", (short)this.zTileSnowball);
+        var1.setByte("inTile", (byte)this.inTileSnowball);
+        var1.setByte("shake", (byte)this.shakeSnowball);
+        var1.setByte("inGround", (byte)(this.inGroundSnowball ? 1 : 0));
     }
 
     /**
@@ -382,6 +382,5 @@ public class EntityNotchWave extends Entity implements IProjectile
     /**
      * Similar to setArrowHeading, it's point the throwable entity to a x, y, z direction.
      */
-    public void setThrowableHeading(double var1, double var3, double var5, float var7, float var8)
-    {}
+    public void setThrowableHeading(double var1, double var3, double var5, float var7, float var8) {}
 }

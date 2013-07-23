@@ -2,9 +2,7 @@ package net.aetherteam.aether.blocks;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
-
 import java.util.Random;
-
 import net.aetherteam.aether.items.AetherItems;
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.texture.IconRegister;
@@ -64,7 +62,8 @@ public class BlockOrangeTree extends BlockAetherFlower implements IAetherBlock
                     {
                         var1.setBlock(var2, var3, var4, this.blockID, 5, 2);
                         var1.setBlock(var2, var3 + 1, var4, this.blockID, 6, 2);
-                    } else
+                    }
+                    else
                     {
                         var1.setBlock(var2, var3, var4, this.blockID, 3, 2);
                         var1.setBlock(var2, var3 + 1, var4, this.blockID, 4, 2);
@@ -181,12 +180,14 @@ public class BlockOrangeTree extends BlockAetherFlower implements IAetherBlock
             {
                 var7 = 0;
                 var8 = 2;
-            } else
+            }
+            else
             {
                 var7 = 3;
                 var8 = 6;
             }
-        } else
+        }
+        else
         {
             var7 = 1;
             var8 = 3;
@@ -201,7 +202,8 @@ public class BlockOrangeTree extends BlockAetherFlower implements IAetherBlock
         {
             var10 = new ItemStack(AetherItems.Orange.itemID, var9, 0);
             this.dropBlockAsItem_do(var1, var3, var4, var5, var10);
-        } else if (var6 < 5)
+        }
+        else if (var6 < 5)
         {
             var10 = new ItemStack(this, 1, 0);
             this.dropBlockAsItem_do(var1, var3, var4, var5, var10);
@@ -274,16 +276,18 @@ public class BlockOrangeTree extends BlockAetherFlower implements IAetherBlock
             {
                 ItemStack var6 = new ItemStack(AetherBlocks.BlockOrangeTree.blockID, 1, 0);
                 this.dropBlockAsItem_do(var1, var2, var3, var4, var6);
-            } else
+            }
+            else
             {
-                byte var10;
                 byte var7;
+                byte var10;
 
                 if (var1.getBlockId(var2, var3 - 1, var4) == AetherBlocks.AetherGrass.blockID && var1.getBlockMetadata(var2, var3 - 1, var4) == 1)
                 {
                     var10 = 1;
                     var7 = 3;
-                } else
+                }
+                else
                 {
                     var10 = 0;
                     var7 = 2;

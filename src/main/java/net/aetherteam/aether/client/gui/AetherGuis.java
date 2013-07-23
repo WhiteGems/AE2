@@ -16,8 +16,3 @@ public class AetherGuis
         AetherGuiHandler.registerGui(GuiSkyrootCrafting.class, ContainerSkyrootWorkbench.class);
     }
 }
-
-/* Location:           D:\Dev\Mc\forge_orl\mcp\jars\bin\aether.jar
- * Qualified Name:     net.aetherteam.aether.client.gui.AetherGuis
- * JD-Core Version:    0.6.2
- */

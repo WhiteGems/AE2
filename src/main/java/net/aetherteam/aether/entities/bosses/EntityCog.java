@@ -27,7 +27,7 @@ public class EntityCog extends EntityFlying
     public int life;
     public int lifeSpan;
     private static final double topSpeed = 0.125D;
-    private static final float sponge = (180F / (float) Math.PI);
+    private static final float sponge = (180F / (float)Math.PI);
 
     public EntityCog(World var1)
     {
@@ -42,7 +42,7 @@ public class EntityCog extends EntityFlying
     public void entityInit()
     {
         super.entityInit();
-        this.dataWatcher.addObject(16, Byte.valueOf((byte) 0));
+        this.dataWatcher.addObject(16, Byte.valueOf((byte)0));
     }
 
     public boolean isLarge()
@@ -54,10 +54,11 @@ public class EntityCog extends EntityFlying
     {
         if (var1)
         {
-            this.dataWatcher.updateObject(16, Byte.valueOf((byte) 1));
-        } else
+            this.dataWatcher.updateObject(16, Byte.valueOf((byte)1));
+        }
+        else
         {
-            this.dataWatcher.updateObject(16, Byte.valueOf((byte) 0));
+            this.dataWatcher.updateObject(16, Byte.valueOf((byte)0));
         }
     }
 
@@ -75,9 +76,9 @@ public class EntityCog extends EntityFlying
         this.setSize(0.9F, 0.9F);
         this.setPositionAndRotation(var2, var4, var6, this.rotationYaw, this.rotationPitch);
         this.isImmuneToFire = true;
-        this.smotionX = (0.2D + (double) this.rand.nextFloat() * 0.15D) * (this.rand.nextInt(2) == 0 ? 1.0D : -1.0D);
-        this.smotionY = (0.2D + (double) this.rand.nextFloat() * 0.15D) * (this.rand.nextInt(2) == 0 ? 1.0D : -1.0D);
-        this.smotionZ = (0.2D + (double) this.rand.nextFloat() * 0.15D) * (this.rand.nextInt(2) == 0 ? 1.0D : -1.0D);
+        this.smotionX = (0.2D + (double)this.rand.nextFloat() * 0.15D) * (this.rand.nextInt(2) == 0 ? 1.0D : -1.0D);
+        this.smotionY = (0.2D + (double)this.rand.nextFloat() * 0.15D) * (this.rand.nextInt(2) == 0 ? 1.0D : -1.0D);
+        this.smotionZ = (0.2D + (double)this.rand.nextFloat() * 0.15D) * (this.rand.nextInt(2) == 0 ? 1.0D : -1.0D);
         this.setLarge(var8);
         this.parent = var9;
     }
@@ -107,9 +108,9 @@ public class EntityCog extends EntityFlying
 
         for (int var1 = 0; var1 < 40; ++var1)
         {
-            double var2 = (double) ((this.rand.nextFloat() - 0.5F) * 0.5F);
-            double var4 = (double) ((this.rand.nextFloat() - 0.5F) * 0.5F);
-            double var6 = (double) ((this.rand.nextFloat() - 0.5F) * 0.5F);
+            double var2 = (double)((this.rand.nextFloat() - 0.5F) * 0.5F);
+            double var4 = (double)((this.rand.nextFloat() - 0.5F) * 0.5F);
+            double var6 = (double)((this.rand.nextFloat() - 0.5F) * 0.5F);
             this.worldObj.spawnParticle("reddust", this.posX, this.posY, this.posZ, var2, var4, var6);
         }
     }
@@ -129,7 +130,8 @@ public class EntityCog extends EntityFlying
             if (this.smotionX > 0.0D && this.worldObj.getBlockId(var1 + 1, var2, var3) != 0)
             {
                 this.motionX = this.smotionX = -this.smotionX;
-            } else if (this.smotionX < 0.0D && this.worldObj.getBlockId(var1 - 1, var2, var3) != 0)
+            }
+            else if (this.smotionX < 0.0D && this.worldObj.getBlockId(var1 - 1, var2, var3) != 0)
             {
                 this.motionX = this.smotionX = -this.smotionX;
             }
@@ -137,7 +139,8 @@ public class EntityCog extends EntityFlying
             if (this.smotionY > 0.0D && this.worldObj.getBlockId(var1, var2 + 1, var3) != 0)
             {
                 this.motionY = this.smotionY = -this.smotionY;
-            } else if (this.smotionY < 0.0D && this.worldObj.getBlockId(var1, var2 - 1, var3) != 0)
+            }
+            else if (this.smotionY < 0.0D && this.worldObj.getBlockId(var1, var2 - 1, var3) != 0)
             {
                 this.motionY = this.smotionY = -this.smotionY;
             }
@@ -145,7 +148,8 @@ public class EntityCog extends EntityFlying
             if (this.smotionZ > 0.0D && this.worldObj.getBlockId(var1, var2, var3 + 1) != 0)
             {
                 this.motionZ = this.smotionZ = -this.smotionZ;
-            } else if (this.smotionZ < 0.0D && this.worldObj.getBlockId(var1, var2, var3 - 1) != 0)
+            }
+            else if (this.smotionZ < 0.0D && this.worldObj.getBlockId(var1, var2, var3 - 1) != 0)
             {
                 this.motionZ = this.smotionZ = -this.smotionZ;
             }
@@ -160,8 +164,8 @@ public class EntityCog extends EntityFlying
     public void writeEntityToNBT(NBTTagCompound var1)
     {
         super.writeEntityToNBT(var1);
-        var1.setShort("LifeLeft", (short) this.life);
-        var1.setTag("motion", this.newDoubleNBTList(new double[]{this.smotionX, this.smotionY, this.smotionZ}));
+        var1.setShort("LifeLeft", (short)this.life);
+        var1.setTag("motion", this.newDoubleNBTList(new double[] {this.smotionX, this.smotionY, this.smotionZ}));
         var1.setBoolean("Large", this.isLarge());
     }
 
@@ -173,9 +177,9 @@ public class EntityCog extends EntityFlying
         super.readEntityFromNBT(var1);
         this.life = var1.getShort("LifeLeft");
         NBTTagList var2 = var1.getTagList("motion");
-        this.smotionX = (double) ((float) ((NBTTagDouble) var2.tagAt(0)).data);
-        this.smotionY = (double) ((float) ((NBTTagDouble) var2.tagAt(1)).data);
-        this.smotionZ = (double) ((float) ((NBTTagDouble) var2.tagAt(2)).data);
+        this.smotionX = (double)((float)((NBTTagDouble)var2.tagAt(0)).data);
+        this.smotionY = (double)((float)((NBTTagDouble)var2.tagAt(1)).data);
+        this.smotionZ = (double)((float)((NBTTagDouble)var2.tagAt(2)).data);
         this.setLarge(var1.getBoolean("Large"));
     }
 
@@ -214,7 +218,8 @@ public class EntityCog extends EntityFlying
             }
 
             return true;
-        } else
+        }
+        else
         {
             return false;
         }
@@ -223,20 +228,20 @@ public class EntityCog extends EntityFlying
     public void setThrowableHeading(double var1, double var3, double var5, float var7, float var8)
     {
         float var9 = MathHelper.sqrt_double(var1 * var1 + var3 * var3 + var5 * var5);
-        var1 /= (double) var9;
-        var3 /= (double) var9;
-        var5 /= (double) var9;
-        var1 += this.rand.nextGaussian() * 0.007499999832361937D * (double) var8;
-        var3 += this.rand.nextGaussian() * 0.007499999832361937D * (double) var8;
-        var5 += this.rand.nextGaussian() * 0.007499999832361937D * (double) var8;
-        var1 *= (double) var7;
-        var3 *= (double) var7;
-        var5 *= (double) var7;
+        var1 /= (double)var9;
+        var3 /= (double)var9;
+        var5 /= (double)var9;
+        var1 += this.rand.nextGaussian() * 0.007499999832361937D * (double)var8;
+        var3 += this.rand.nextGaussian() * 0.007499999832361937D * (double)var8;
+        var5 += this.rand.nextGaussian() * 0.007499999832361937D * (double)var8;
+        var1 *= (double)var7;
+        var3 *= (double)var7;
+        var5 *= (double)var7;
         this.motionX = var1;
         this.motionY = var3;
         this.motionZ = var5;
         float var10 = MathHelper.sqrt_double(var1 * var1 + var5 * var5);
-        this.prevRotationYaw = this.rotationYaw = (float) (Math.atan2(var1, var5) * 180.0D / Math.PI);
-        this.prevRotationPitch = this.rotationPitch = (float) (Math.atan2(var3, (double) var10) * 180.0D / Math.PI);
+        this.prevRotationYaw = this.rotationYaw = (float)(Math.atan2(var1, var5) * 180.0D / Math.PI);
+        this.prevRotationPitch = this.rotationPitch = (float)(Math.atan2(var3, (double)var10) * 180.0D / Math.PI);
     }
 }

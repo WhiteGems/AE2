@@ -2,11 +2,9 @@ package net.aetherteam.aether.blocks;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Random;
-
 import net.aetherteam.aether.dungeons.Dungeon;
 import net.aetherteam.aether.dungeons.DungeonHandler;
 import net.aetherteam.aether.party.Party;
@@ -25,7 +23,7 @@ public class BlockBronzeDoor extends BlockAether implements IAetherBlock
 {
     private Random rand = new Random();
     private HashMap icons = new HashMap();
-    public static final String[] names = new String[]{"Bronze Door", "Bronze Door Lock"};
+    public static final String[] names = new String[] {"Bronze Door", "Bronze Door Lock"};
 
     protected BlockBronzeDoor(int var1)
     {
@@ -44,12 +42,13 @@ public class BlockBronzeDoor extends BlockAether implements IAetherBlock
      */
     public void onBlockAdded(World var1, int var2, int var3, int var4)
     {
-        Dungeon var5 = DungeonHandler.instance().getInstanceAt(MathHelper.floor_double((double) var2), MathHelper.floor_double((double) var3), MathHelper.floor_double((double) var4));
+        Dungeon var5 = DungeonHandler.instance().getInstanceAt(MathHelper.floor_double((double)var2), MathHelper.floor_double((double)var3), MathHelper.floor_double((double)var4));
 
         if (var5 != null)
         {
             super.onBlockAdded(var1, var2, var3, var4);
-        } else
+        }
+        else
         {
             var1.setBlock(var2, var3, var4, 0);
         }
@@ -70,7 +69,7 @@ public class BlockBronzeDoor extends BlockAether implements IAetherBlock
     {
         ItemStack var3 = new ItemStack(AetherBlocks.BronzeDoor, 1, var2);
         String var4 = var3.getItem().getItemDisplayName(var3);
-        return (Icon) this.icons.get(var4);
+        return (Icon)this.icons.get(var4);
     }
 
     @SideOnly(Side.CLIENT)
@@ -100,7 +99,7 @@ public class BlockBronzeDoor extends BlockAether implements IAetherBlock
                 {
                     if (var1.getBlockId(var10, var11, var12) == AetherBlocks.BronzeDoorController.blockID)
                     {
-                        TileEntityBronzeDoorController var13 = (TileEntityBronzeDoorController) var1.getBlockTileEntity(var10, var11, var12);
+                        TileEntityBronzeDoorController var13 = (TileEntityBronzeDoorController)var1.getBlockTileEntity(var10, var11, var12);
 
                         if (var13 != null)
                         {
@@ -117,6 +116,7 @@ public class BlockBronzeDoor extends BlockAether implements IAetherBlock
                                 {
                                     if (var16 <= 0)
                                     {
+                                        System.out.println(var16);
                                         var13.chatItUp(var5, "This door seems to require " + (5 - var13.getKeyAmount()) + (5 - var16 < 5 ? " more " : " ") + (5 - var16 > 1 ? "keys" : "key") + ". Perhaps they are elsewhere in the dungeon?");
                                         return true;
                                     }

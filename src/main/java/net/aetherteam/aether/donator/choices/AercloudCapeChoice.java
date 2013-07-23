@@ -11,8 +11,3 @@ public class AercloudCapeChoice extends DonatorChoice
         super("Aercloud Cape", EnumChoiceType.CAPE, new DonatorTexture("cape_Aercloud.png", "Aercloud.png", 256, 128));
     }
 }
-
-/* Location:           D:\Dev\Mc\forge_orl\mcp\jars\bin\aether.jar
- * Qualified Name:     net.aetherteam.aether.donator.choices.AercloudCapeChoice
- * JD-Core Version:    0.6.2
- */

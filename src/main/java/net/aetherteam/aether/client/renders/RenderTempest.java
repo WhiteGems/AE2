@@ -24,24 +24,25 @@ public class RenderTempest extends RenderLiving
      */
     protected void preRenderCallback(EntityLiving var1, float var2)
     {
-        EntityTempest var3 = (EntityTempest) var1;
-        float var4 = (float) Math.sin((double) var3.sinage);
+        EntityTempest var3 = (EntityTempest)var1;
+        float var4 = (float)Math.sin((double)var3.sinage);
         float var5;
 
         if (var3.hurtTime > 0)
         {
             var4 *= 0.45F;
             var4 -= 0.125F;
-            var5 = 1.75F + (float) Math.sin((double) (var3.sinage + 2.0F)) * 1.5F;
-        } else
+            var5 = 1.75F + (float)Math.sin((double)(var3.sinage + 2.0F)) * 1.5F;
+        }
+        else
         {
             var4 *= 0.25F;
-            var5 = 1.75F + (float) Math.sin((double) (var3.sinage + 2.0F)) * 1.5F;
+            var5 = 1.75F + (float)Math.sin((double)(var3.sinage + 2.0F)) * 1.5F;
         }
 
         this.tempestModel.sinage = var4;
         this.tempestModel.sinage2 = var5;
-        this.shadowSize = 0.25F;
+        this.shadowSize = 0.75F;
         GL11.glScalef(1.5F, 1.5F, 1.5F);
     }
 
@@ -50,7 +51,8 @@ public class RenderTempest extends RenderLiving
         if (var2 != 0)
         {
             return -1;
-        } else
+        }
+        else
         {
             this.loadTexture("/net/aetherteam/aether/client/sprites/mobs/tempest/glow.png");
             float var4 = 1.0F;
@@ -60,7 +62,7 @@ public class RenderTempest extends RenderLiving
             char var5 = 61680;
             int var6 = var5 % 65536;
             int var7 = var5 / 65536;
-            OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, (float) var6 / 1.0F, (float) var7 / 1.0F);
+            OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, (float)var6 / 1.0F, (float)var7 / 1.0F);
             GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
             GL11.glColor4f(1.0F, 1.0F, 1.0F, var4);
             return 1;
@@ -72,6 +74,6 @@ public class RenderTempest extends RenderLiving
      */
     protected int shouldRenderPass(EntityLiving var1, int var2, float var3)
     {
-        return this.setMarkingBrightness((EntityTempest) var1, var2, var3);
+        return this.setMarkingBrightness((EntityTempest)var1, var2, var3);
     }
 }

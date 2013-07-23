@@ -1,7 +1,6 @@
 package net.aetherteam.aether.blocks;
 
 import java.util.List;
-
 import net.aetherteam.aether.items.AetherItems;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
@@ -49,12 +48,14 @@ public class BlockAetherDirt extends BlockAether implements IAetherBlock
                     var2.addStat(StatList.mineBlockStatArray[this.blockID], 1);
                     var7 = new ItemStack(AetherBlocks.AetherDirt.blockID, 2, 1);
                     this.dropBlockAsItem_do(var1, var3, var4, var5, var7);
-                } else
+                }
+                else
                 {
                     var7 = new ItemStack(AetherBlocks.AetherDirt.blockID, 1, 1);
                     this.dropBlockAsItem_do(var1, var3, var4, var5, var7);
                 }
-            } else
+            }
+            else
             {
                 var7 = new ItemStack(AetherBlocks.AetherDirt.blockID, 1, var6);
                 this.dropBlockAsItem_do(var1, var3, var4, var5, var7);
@@ -81,7 +82,8 @@ public class BlockAetherDirt extends BlockAether implements IAetherBlock
         if (var10 == null)
         {
             return false;
-        } else
+        }
+        else
         {
             if (var10.itemID == AetherItems.SwettyBall.itemID)
             {
@@ -100,12 +102,14 @@ public class BlockAetherDirt extends BlockAether implements IAetherBlock
                                     var1.setBlock(var12, var3 + 1, var13, AetherBlocks.AetherGrass.blockID);
                                     ++var11;
                                 }
-                            } else if (var1.getBlockId(var12, var3 + 1, var13) == 0 && !var1.isRemote)
+                            }
+                            else if (var1.getBlockId(var12, var3 + 1, var13) == 0 && !var1.isRemote)
                             {
                                 var1.setBlock(var12, var3, var13, AetherBlocks.AetherGrass.blockID);
                                 ++var11;
                             }
-                        } else if (var1.getBlockId(var12, var3, var13) == 0 && var1.getBlockId(var12, var3 - 1, var13) == this.blockID && !var1.isRemote)
+                        }
+                        else if (var1.getBlockId(var12, var3, var13) == 0 && var1.getBlockId(var12, var3 - 1, var13) == this.blockID && !var1.isRemote)
                         {
                             var1.setBlock(var12, var3 - 1, var13, AetherBlocks.AetherGrass.blockID);
                             ++var11;

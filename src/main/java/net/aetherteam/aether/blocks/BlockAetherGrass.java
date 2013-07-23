@@ -3,10 +3,8 @@ package net.aetherteam.aether.blocks;
 import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
-
 import java.util.List;
 import java.util.Random;
-
 import net.aetherteam.aether.entities.EntityGoldenFX;
 import net.aetherteam.aether.items.AetherItems;
 import net.minecraft.block.Block;
@@ -64,7 +62,8 @@ public class BlockAetherGrass extends BlockAether implements IAetherBlock
                 var2.addStat(StatList.mineBlockStatArray[this.blockID], 1);
                 var7 = new ItemStack(AetherBlocks.AetherDirt.blockID, 2, 1);
                 this.dropBlockAsItem_do(var1, var3, var4, var5, var7);
-            } else
+            }
+            else
             {
                 var7 = new ItemStack(AetherBlocks.AetherDirt.blockID, 1, 1);
                 this.dropBlockAsItem_do(var1, var3, var4, var5, var7);
@@ -80,19 +79,22 @@ public class BlockAetherGrass extends BlockAether implements IAetherBlock
         if (var5 == null)
         {
             return false;
-        } else
+        }
+        else
         {
             ItemStack var10 = var5.getCurrentEquippedItem();
 
             if (var10 == null)
             {
                 return false;
-            } else if (var10.itemID == AetherItems.AmbrosiumShard.itemID && var1.getBlockMetadata(var2, var3, var4) == 0 && !var1.isRemote)
+            }
+            else if (var10.itemID == AetherItems.AmbrosiumShard.itemID && var1.getBlockMetadata(var2, var3, var4) == 0 && !var1.isRemote)
             {
                 var1.setBlockMetadataWithNotify(var2, var3, var4, 1, 2);
                 --var10.stackSize;
                 return true;
-            } else
+            }
+            else
             {
                 return false;
             }
@@ -141,7 +143,7 @@ public class BlockAetherGrass extends BlockAether implements IAetherBlock
         {
             for (int var6 = 0; var6 < 6; ++var6)
             {
-                EntityGoldenFX var7 = new EntityGoldenFX(var1, (double) ((float) var2 + var5.nextFloat()), (double) ((float) var3 + 1.1F), (double) ((float) var4 + var5.nextFloat()), 0.0D, 0.0D, 0.0D, true);
+                EntityGoldenFX var7 = new EntityGoldenFX(var1, (double)((float)var2 + var5.nextFloat()), (double)((float)var3 + 1.1F), (double)((float)var4 + var5.nextFloat()), 0.0D, 0.0D, 0.0D, true);
                 FMLClientHandler.instance().getClient().effectRenderer.addEffect(var7);
             }
         }
@@ -162,7 +164,8 @@ public class BlockAetherGrass extends BlockAether implements IAetherBlock
                 }
 
                 var1.setBlock(var2, var3, var4, AetherBlocks.AetherDirt.blockID);
-            } else if (var1.getBlockLightValue(var2, var3 + 1, var4) >= 9)
+            }
+            else if (var1.getBlockLightValue(var2, var3 + 1, var4) >= 9)
             {
                 int var6 = var2 + var5.nextInt(3) - 1;
                 int var7 = var3 + var5.nextInt(5) - 3;

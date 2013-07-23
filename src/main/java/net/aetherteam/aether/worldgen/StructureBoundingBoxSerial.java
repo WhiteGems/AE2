@@ -1,7 +1,6 @@
 package net.aetherteam.aether.worldgen;
 
 import java.io.Serializable;
-
 import net.minecraft.world.gen.structure.StructureBoundingBox;
 
 public class StructureBoundingBoxSerial implements Serializable

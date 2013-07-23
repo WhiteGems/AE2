@@ -3,12 +3,8 @@ package net.aetherteam.aether;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-
 import net.aetherteam.aether.donator.Donator;
-import net.aetherteam.aether.donator.DonatorChoice;
-import net.aetherteam.aether.donator.DonatorTexture;
 import net.aetherteam.aether.donator.EnumChoiceType;
-import net.aetherteam.aether.donator.SyncDonatorList;
 import net.aetherteam.aether.donator.choices.MoaChoice;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.potion.Potion;
@@ -25,74 +21,77 @@ public class AetherMoaColour
     public static List colours = new ArrayList();
     private static Random random = new Random();
 
-    public AetherMoaColour(int i, int j, int k, int l, String s)
+    public AetherMoaColour(int var1, int var2, int var3, int var4, String var5)
     {
-        this.ID = i;
-        this.colour = j;
-        this.jumps = k;
-        this.chance = l;
-        totalChance += l;
-        this.name = s;
+        this.ID = var1;
+        this.colour = var2;
+        this.jumps = var3;
+        this.chance = var4;
+        totalChance += var4;
+        this.name = var5;
         colours.add(this);
         names.add(this.name);
     }
 
-    public String getTexture(boolean saddled)
+    public String getTexture(boolean var1)
     {
-        return "/net/aetherteam/aether/client/sprites/moa/" + (saddled ? "saddle_" : "moa_") + this.name + ".png";
+        return "/net/aetherteam/aether/client/sprites/moa/" + (var1 ? "saddle_" : "moa_") + this.name + ".png";
     }
 
-    public String getTexture(boolean saddled, EntityPlayer player)
+    public String getTexture(boolean var1, EntityPlayer var2)
     {
-        if ((Aether.syncDonatorList.isDonator(player.username)) && (saddled))
+        if (Aether.syncDonatorList.isDonator(var2.username) && var1)
         {
             Aether.getInstance();
-            Donator donator = Aether.syncDonatorList.getDonator(player.username);
-            boolean hasChoice = donator.containsChoiceType(EnumChoiceType.MOA);
-            DonatorChoice choice = null;
+            Donator var3 = Aether.syncDonatorList.getDonator(var2.username);
+            boolean var4 = var3.containsChoiceType(EnumChoiceType.MOA);
+            MoaChoice var5 = null;
 
-            if (hasChoice)
+            if (var4)
             {
-                choice = (MoaChoice) donator.getChoiceFromType(EnumChoiceType.MOA);
-
-                return choice.textureFile.localURL;
+                var5 = (MoaChoice)var3.getChoiceFromType(EnumChoiceType.MOA);
+                return var5.textureFile.localURL;
             }
         }
 
-        return "/net/aetherteam/aether/client/sprites/moa/" + ((saddled) && (!player.isPotionActive(Potion.invisibility)) ? "saddle_" : "moa_") + this.name + ".png";
+        return "/net/aetherteam/aether/client/sprites/moa/" + (var1 && !var2.isPotionActive(Potion.invisibility) ? "saddle_" : "moa_") + this.name + ".png";
     }
 
     public static AetherMoaColour pickRandomMoa()
     {
-        int i = random.nextInt(totalChance);
-        for (int j = 0; j < colours.size(); j++)
+        int var0 = random.nextInt(totalChance);
+
+        for (int var1 = 0; var1 < colours.size(); ++var1)
         {
-            if (i < ((AetherMoaColour) colours.get(j)).chance)
+            if (var0 < ((AetherMoaColour)colours.get(var1)).chance)
             {
-                return (AetherMoaColour) colours.get(j);
+                return (AetherMoaColour)colours.get(var1);
             }
-            i -= ((AetherMoaColour) colours.get(j)).chance;
+
+            var0 -= ((AetherMoaColour)colours.get(var1)).chance;
         }
-        return (AetherMoaColour) colours.get(0);
+
+        return (AetherMoaColour)colours.get(0);
     }
 
-    public static AetherMoaColour getColour(int ID)
+    public static AetherMoaColour getColour(int var0)
     {
-        for (int i = 0; i < colours.size(); i++)
+        for (int var1 = 0; var1 < colours.size(); ++var1)
         {
-            if (((AetherMoaColour) colours.get(i)).ID == ID)
+            if (((AetherMoaColour)colours.get(var1)).ID == var0)
             {
-                return (AetherMoaColour) colours.get(i);
+                return (AetherMoaColour)colours.get(var1);
             }
         }
-        return (AetherMoaColour) colours.get(0);
+
+        return (AetherMoaColour)colours.get(0);
     }
 
     public static String[] getNames()
     {
-        String[] namesArray = new String[names.size()];
-        namesArray = (String[]) names.toArray(namesArray);
-        return namesArray;
+        String[] var0 = new String[names.size()];
+        var0 = (String[])names.toArray(var0);
+        return var0;
     }
 
     static
@@ -102,8 +101,3 @@ public class AetherMoaColour
         new AetherMoaColour(2, 2236962, 8, 5, "Black");
     }
 }
-
-/* Location:           D:\Dev\Mc\forge_orl\mcp\jars\bin\aether.jar
- * Qualified Name:     net.aetherteam.aether.AetherMoaColour
- * JD-Core Version:    0.6.2
- */

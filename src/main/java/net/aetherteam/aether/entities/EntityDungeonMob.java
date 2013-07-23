@@ -1,7 +1,8 @@
 package net.aetherteam.aether.entities;
 
+import cpw.mods.fml.common.FMLCommonHandler;
+import cpw.mods.fml.relauncher.Side;
 import java.util.Random;
-
 import net.aetherteam.aether.blocks.AetherBlocks;
 import net.aetherteam.aether.dungeons.Dungeon;
 import net.aetherteam.aether.dungeons.DungeonHandler;
@@ -38,6 +39,17 @@ public class EntityDungeonMob extends EntityCreature implements IMob
     public void onLivingUpdate()
     {
         float var1 = this.getBrightness(1.0F);
+        Side var2 = FMLCommonHandler.instance().getEffectiveSide();
+
+        if (var2.isServer())
+        {
+            Dungeon var3 = DungeonHandler.instance().getInstanceAt(MathHelper.floor_double(this.posX), MathHelper.floor_double(this.posY), MathHelper.floor_double(this.posZ));
+
+            if (var3 != null && !var3.isActive())
+            {
+                this.setDead();
+            }
+        }
 
         if (var1 > 0.5F)
         {
@@ -76,13 +88,15 @@ public class EntityDungeonMob extends EntityCreature implements IMob
         {
             Party var8 = var3.getQueuedParty();
             int var5 = var3.getQueuedMembers().size() + 1;
-            float var6 = (float) (var5 - 1) * 0.075F;
-            int var7 = MathHelper.clamp_int((int) ((float) var2 - (float) var2 * var6), 1, var2);
+            float var6 = (float)(var5 - 1) * 0.075F;
+            int var7 = MathHelper.clamp_int((int)((float)var2 - (float)var2 * var6), 1, var2);
             return super.attackEntityFrom(var1, var7);
-        } else if (!super.attackEntityFrom(var1, var2))
+        }
+        else if (!super.attackEntityFrom(var1, var2))
         {
             return false;
-        } else
+        }
+        else
         {
             Entity var4 = var1.getEntity();
 
@@ -152,7 +166,8 @@ public class EntityDungeonMob extends EntityCreature implements IMob
         if (this.worldObj.getSavedLightValue(EnumSkyBlock.Sky, var1, var2, var3) > this.rand.nextInt(32))
         {
             return false;
-        } else
+        }
+        else
         {
             int var4 = this.worldObj.getBlockLightValue(var1, var2, var3);
 

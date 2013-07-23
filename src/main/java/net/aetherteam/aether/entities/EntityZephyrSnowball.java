@@ -1,9 +1,7 @@
 package net.aetherteam.aether.entities;
 
 import cpw.mods.fml.common.registry.IThrowableEntity;
-
 import java.util.List;
-
 import net.aetherteam.aether.items.AetherItems;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
@@ -51,7 +49,7 @@ public class EntityZephyrSnowball extends Entity implements IThrowableEntity
         var3 += this.rand.nextGaussian() * 0.4D;
         var5 += this.rand.nextGaussian() * 0.4D;
         var7 += this.rand.nextGaussian() * 0.4D;
-        double var9 = (double) MathHelper.sqrt_double(var3 * var3 + var5 * var5 + var7 * var7);
+        double var9 = (double)MathHelper.sqrt_double(var3 * var3 + var5 * var5 + var7 * var7);
         this.accelerationX = var3 / var9 * 0.08000000000000002D;
         this.accelerationY = var5 / var9 * 0.08000000000000002D;
         this.accelerationZ = var7 / var9 * 0.08000000000000002D;
@@ -90,20 +88,21 @@ public class EntityZephyrSnowball extends Entity implements IThrowableEntity
             }
 
             this.inGround = false;
-            this.motionX *= (double) (this.rand.nextFloat() * 0.2F);
-            this.motionY *= (double) (this.rand.nextFloat() * 0.2F);
-            this.motionZ *= (double) (this.rand.nextFloat() * 0.2F);
+            this.motionX *= (double)(this.rand.nextFloat() * 0.2F);
+            this.motionY *= (double)(this.rand.nextFloat() * 0.2F);
+            this.motionZ *= (double)(this.rand.nextFloat() * 0.2F);
             this.ticksAlive = 0;
             this.ticksInAir = 0;
-        } else
+        }
+        else
         {
             ++this.ticksInAir;
         }
 
-        Vec3 var17 = Vec3.createVectorHelper(this.posX, this.posY, this.posZ);
+        Vec3 var15 = Vec3.createVectorHelper(this.posX, this.posY, this.posZ);
         Vec3 var2 = Vec3.createVectorHelper(this.posX + this.motionX, this.posY + this.motionY, this.posZ + this.motionZ);
-        MovingObjectPosition var3 = this.worldObj.rayTraceBlocks(var17, var2);
-        var17 = Vec3.createVectorHelper(this.posX, this.posY, this.posZ);
+        MovingObjectPosition var3 = this.worldObj.rayTraceBlocks(var15, var2);
+        var15 = Vec3.createVectorHelper(this.posX, this.posY, this.posZ);
         var2 = Vec3.createVectorHelper(this.posX + this.motionX, this.posY + this.motionY, this.posZ + this.motionZ);
 
         if (var3 != null)
@@ -117,17 +116,17 @@ public class EntityZephyrSnowball extends Entity implements IThrowableEntity
 
         for (int var8 = 0; var8 < var5.size(); ++var8)
         {
-            Entity var9 = (Entity) var5.get(var8);
+            Entity var9 = (Entity)var5.get(var8);
 
             if (var9.canBeCollidedWith() && (var9 != this.shootingEntity || this.ticksInAir >= 25))
             {
                 float var10 = 0.3F;
-                AxisAlignedBB var11 = var9.boundingBox.expand((double) var10, (double) var10, (double) var10);
-                MovingObjectPosition var12 = var11.calculateIntercept(var17, var2);
+                AxisAlignedBB var11 = var9.boundingBox.expand((double)var10, (double)var10, (double)var10);
+                MovingObjectPosition var12 = var11.calculateIntercept(var15, var2);
 
                 if (var12 != null)
                 {
-                    double var13 = var17.distanceTo(var12.hitVec);
+                    double var13 = var15.distanceTo(var12.hitVec);
 
                     if (var13 < var6 || var6 == 0.0D)
                     {
@@ -147,13 +146,15 @@ public class EntityZephyrSnowball extends Entity implements IThrowableEntity
         {
             if (var3.entityHit != null && var3.entityHit != this.shootingEntity)
             {
-                if (var3.entityHit instanceof EntityPlayer && ((EntityPlayer) var3.entityHit).inventory.armorInventory[0] != null && ((EntityPlayer) var3.entityHit).inventory.armorInventory[0].itemID == AetherItems.SentryBoots.itemID)
+                if (var3.entityHit instanceof EntityPlayer && ((EntityPlayer)var3.entityHit).inventory.armorInventory[0] != null && ((EntityPlayer)var3.entityHit).inventory.armorInventory[0].itemID == AetherItems.SentryBoots.itemID)
                 {
                     this.setDead();
-                } else if (var3.entityHit instanceof EntityPlayer && ((EntityPlayer) var3.entityHit).capabilities.isCreativeMode)
+                }
+                else if (var3.entityHit instanceof EntityPlayer && ((EntityPlayer)var3.entityHit).capabilities.isCreativeMode)
                 {
                     this.setDead();
-                } else if (var3.entityHit != null && !(var3.entityHit instanceof EntityNewZephyr) && !(var3.entityHit instanceof EntityTempest))
+                }
+                else if (var3.entityHit != null && !(var3.entityHit instanceof EntityNewZephyr) && !(var3.entityHit instanceof EntityTempest))
                 {
                     var3.entityHit.motionX += this.motionX;
                     var3.entityHit.motionY += 0.5D;
@@ -171,9 +172,9 @@ public class EntityZephyrSnowball extends Entity implements IThrowableEntity
         this.posY += this.motionY;
         this.posZ += this.motionZ;
         float var16 = MathHelper.sqrt_double(this.motionX * this.motionX + this.motionZ * this.motionZ);
-        this.rotationYaw = (float) (Math.atan2(this.motionX, this.motionZ) * 180.0D / Math.PI);
+        this.rotationYaw = (float)(Math.atan2(this.motionX, this.motionZ) * 180.0D / Math.PI);
 
-        for (this.rotationPitch = (float) (Math.atan2(this.motionY, (double) var16) * 180.0D / Math.PI); this.rotationPitch - this.prevRotationPitch < -180.0F; this.prevRotationPitch -= 360.0F)
+        for (this.rotationPitch = (float)(Math.atan2(this.motionY, (double)var16) * 180.0D / Math.PI); this.rotationPitch - this.prevRotationPitch < -180.0F; this.prevRotationPitch -= 360.0F)
         {
             ;
         }
@@ -195,25 +196,25 @@ public class EntityZephyrSnowball extends Entity implements IThrowableEntity
 
         this.rotationPitch = this.prevRotationPitch + (this.rotationPitch - this.prevRotationPitch) * 0.2F;
         this.rotationYaw = this.prevRotationYaw + (this.rotationYaw - this.prevRotationYaw) * 0.2F;
-        float var15 = 0.95F;
+        float var17 = 0.95F;
 
         if (this.handleWaterMovement())
         {
-            for (int var18 = 0; var18 < 4; ++var18)
+            for (int var19 = 0; var19 < 4; ++var19)
             {
-                float var19 = 0.25F;
-                this.worldObj.spawnParticle("bubble", this.posX - this.motionX * (double) var19, this.posY - this.motionY * (double) var19, this.posZ - this.motionZ * (double) var19, this.motionX, this.motionY, this.motionZ);
+                float var18 = 0.25F;
+                this.worldObj.spawnParticle("bubble", this.posX - this.motionX * (double)var18, this.posY - this.motionY * (double)var18, this.posZ - this.motionZ * (double)var18, this.motionX, this.motionY, this.motionZ);
             }
 
-            var15 = 0.8F;
+            var17 = 0.8F;
         }
 
         this.motionX += this.accelerationX;
         this.motionY += this.accelerationY;
         this.motionZ += this.accelerationZ;
-        this.motionX *= (double) var15;
-        this.motionY *= (double) var15;
-        this.motionZ *= (double) var15;
+        this.motionX *= (double)var17;
+        this.motionY *= (double)var17;
+        this.motionZ *= (double)var17;
         this.worldObj.spawnParticle("smoke", this.posX, this.posY + 0.5D, this.posZ, 0.0D, 0.0D, 0.0D);
         this.setPositionAndRotation(this.posX, this.posY, this.posZ, this.rotationYaw, this.rotationPitch);
     }
@@ -223,12 +224,12 @@ public class EntityZephyrSnowball extends Entity implements IThrowableEntity
      */
     public void writeEntityToNBT(NBTTagCompound var1)
     {
-        var1.setShort("xTile", (short) this.xTile);
-        var1.setShort("yTile", (short) this.yTile);
-        var1.setShort("zTile", (short) this.zTile);
-        var1.setByte("inTile", (byte) this.inTile);
-        var1.setByte("shake", (byte) this.field_9406_a);
-        var1.setByte("inGround", (byte) (this.inGround ? 1 : 0));
+        var1.setShort("xTile", (short)this.xTile);
+        var1.setShort("yTile", (short)this.yTile);
+        var1.setShort("zTile", (short)this.zTile);
+        var1.setByte("inTile", (byte)this.inTile);
+        var1.setByte("shake", (byte)this.field_9406_a);
+        var1.setByte("inGround", (byte)(this.inGround ? 1 : 0));
     }
 
     /**
@@ -259,7 +260,8 @@ public class EntityZephyrSnowball extends Entity implements IThrowableEntity
         if (var1.getEntity() == null)
         {
             return false;
-        } else
+        }
+        else
         {
             Vec3 var3 = var1.getEntity().getLookVec();
 
@@ -278,8 +280,8 @@ public class EntityZephyrSnowball extends Entity implements IThrowableEntity
                     double var7 = this.rand.nextGaussian() * 0.02D;
                     double var9 = this.rand.nextGaussian() * 0.02D;
                     double var11 = 5.0D;
-                    this.shootingEntity.worldObj.spawnParticle("flame", this.shootingEntity.posX + (double) (this.rand.nextFloat() * this.shootingEntity.width * 2.0F) - (double) this.shootingEntity.width - var5 * var11, this.shootingEntity.posY + (double) (this.rand.nextFloat() * (this.shootingEntity.height - 0.6F)) - var7 * var11, this.shootingEntity.posZ + (double) (this.rand.nextFloat() * this.shootingEntity.width * 2.0F) - (double) this.shootingEntity.width - var9 * var11, var5, var7, var9);
-                    this.shootingEntity.worldObj.spawnParticle("largeexplode", this.shootingEntity.posX + (double) (this.rand.nextFloat() * this.shootingEntity.width * 2.0F) - (double) this.shootingEntity.width - var5 * var11, this.shootingEntity.posY + (double) (this.rand.nextFloat() * (this.shootingEntity.height - 0.6F)) - var7 * var11, this.shootingEntity.posZ + (double) (this.rand.nextFloat() * this.shootingEntity.width * 2.0F) - (double) this.shootingEntity.width - var9 * var11, var5, var7, var9);
+                    this.shootingEntity.worldObj.spawnParticle("flame", this.shootingEntity.posX + (double)(this.rand.nextFloat() * this.shootingEntity.width * 2.0F) - (double)this.shootingEntity.width - var5 * var11, this.shootingEntity.posY + (double)(this.rand.nextFloat() * (this.shootingEntity.height - 0.6F)) - var7 * var11, this.shootingEntity.posZ + (double)(this.rand.nextFloat() * this.shootingEntity.width * 2.0F) - (double)this.shootingEntity.width - var9 * var11, var5, var7, var9);
+                    this.shootingEntity.worldObj.spawnParticle("largeexplode", this.shootingEntity.posX + (double)(this.rand.nextFloat() * this.shootingEntity.width * 2.0F) - (double)this.shootingEntity.width - var5 * var11, this.shootingEntity.posY + (double)(this.rand.nextFloat() * (this.shootingEntity.height - 0.6F)) - var7 * var11, this.shootingEntity.posZ + (double)(this.rand.nextFloat() * this.shootingEntity.width * 2.0F) - (double)this.shootingEntity.width - var9 * var11, var5, var7, var9);
                 }
             }
 

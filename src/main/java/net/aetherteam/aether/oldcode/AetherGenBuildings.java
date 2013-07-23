@@ -1,7 +1,6 @@
 package net.aetherteam.aether.oldcode;
 
 import java.util.Random;
-
 import net.minecraft.world.World;
 import net.minecraft.world.gen.feature.WorldGenerator;
 
@@ -47,7 +46,8 @@ public class AetherGenBuildings extends WorldGenerator
                 if (var2.nextInt(this.chance) == 0)
                 {
                     var1.setBlock(var7, var4, var5, this.blockID2, this.meta2, 2);
-                } else
+                }
+                else
                 {
                     var1.setBlock(var7, var4, var5, this.blockID1, this.meta1, 2);
                 }
@@ -64,7 +64,8 @@ public class AetherGenBuildings extends WorldGenerator
                 if (var2.nextInt(this.chance) == 0)
                 {
                     var1.setBlock(var3, var7, var5, this.blockID2, this.meta2, 2);
-                } else
+                }
+                else
                 {
                     var1.setBlock(var3, var7, var5, this.blockID1, this.meta1, 2);
                 }
@@ -81,7 +82,8 @@ public class AetherGenBuildings extends WorldGenerator
                 if (var2.nextInt(this.chance) == 0)
                 {
                     var1.setBlock(var3, var4, var7, this.blockID2, this.meta2, 2);
-                } else
+                }
+                else
                 {
                     var1.setBlock(var3, var4, var7, this.blockID1, this.meta1, 2);
                 }
@@ -100,7 +102,8 @@ public class AetherGenBuildings extends WorldGenerator
                     if (var2.nextInt(this.chance) == 0)
                     {
                         var1.setBlock(var3, var8, var9, this.blockID2, this.meta2, 2);
-                    } else
+                    }
+                    else
                     {
                         var1.setBlock(var3, var8, var9, this.blockID1, this.meta1, 2);
                     }
@@ -120,7 +123,8 @@ public class AetherGenBuildings extends WorldGenerator
                     if (var2.nextInt(this.chance) == 0)
                     {
                         var1.setBlock(var8, var4, var9, this.blockID2, this.meta2, 2);
-                    } else
+                    }
+                    else
                     {
                         var1.setBlock(var8, var4, var9, this.blockID1, this.meta1, 2);
                     }
@@ -140,7 +144,8 @@ public class AetherGenBuildings extends WorldGenerator
                     if (var2.nextInt(this.chance) == 0)
                     {
                         var1.setBlock(var8, var9, var5, this.blockID2, this.meta2, 2);
-                    } else
+                    }
+                    else
                     {
                         var1.setBlock(var8, var9, var5, this.blockID1, this.meta1, 2);
                     }
@@ -204,7 +209,8 @@ public class AetherGenBuildings extends WorldGenerator
                         if (var2.nextInt(this.chance) == 0)
                         {
                             var1.setBlock(var9, var10, var11, this.blockID2, this.meta2, 2);
-                        } else
+                        }
+                        else
                         {
                             var1.setBlock(var9, var10, var11, this.blockID1, this.meta1, 2);
                         }

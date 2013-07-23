@@ -2,16 +2,15 @@ package net.aetherteam.aether.worldgen;
 
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.relauncher.Side;
-
 import java.util.List;
 import java.util.Random;
-
 import net.aetherteam.aether.AetherLoot;
 import net.aetherteam.aether.blocks.AetherBlocks;
 import net.aetherteam.aether.dungeons.Dungeon;
 import net.aetherteam.aether.dungeons.DungeonHandler;
 import net.aetherteam.aether.tile_entities.TileEntitySkyrootChest;
 import net.minecraft.block.Block;
+import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntityMobSpawner;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.structure.StructureBoundingBox;
@@ -35,8 +34,8 @@ public class ComponentDungeonBronzeLight extends ComponentDungeonBronzeRoom
      */
     public boolean addComponentParts(World var1, Random var2, StructureBoundingBox var3)
     {
-        int var5;
         int var4;
+        int var5;
         int var6;
 
         for (var4 = this.boundingBox.minY; var4 <= this.boundingBox.maxY; ++var4)
@@ -102,21 +101,28 @@ public class ComponentDungeonBronzeLight extends ComponentDungeonBronzeRoom
             if (var3.isVecInside(var17, var18, var19) && var1.getBlockId(var17, var18, var19) != AetherBlocks.SkyrootChest.blockID && var2.nextInt(3) == 0)
             {
                 TileEntitySkyrootChest var20 = null;
-                var1.setBlock(var17, var18, var19, AetherBlocks.SkyrootChest.blockID, var16, 2);
-                var1.setBlockMetadataWithNotify(var17, var18, var19, var16, 2);
+                var1.setBlock(var17, var18, var19, AetherBlocks.SkyrootChest.blockID, var16, ChunkProviderAether.placementFlagType);
+                var1.setBlockMetadataWithNotify(var17, var18, var19, var16, ChunkProviderAether.placementFlagType);
                 Dungeon var21 = DungeonHandler.instance().getInstanceAt(var17, var18, var19);
                 var21.registerSafeBlock(var17, var18, var19, AetherBlocks.SkyrootChest.blockID, var16);
-                var20 = (TileEntitySkyrootChest) var1.getBlockTileEntity(var17, var18, var19);
+                Side var22 = FMLCommonHandler.instance().getEffectiveSide();
 
-                if (var20 != null)
+                if (var22.isServer() && !var1.isRemote)
                 {
-                    Side var22 = FMLCommonHandler.instance().getEffectiveSide();
+                    var20 = (TileEntitySkyrootChest)var1.getBlockTileEntity(var17, var18, var19);
 
-                    if (var22.isServer() && !var1.isRemote)
+                    if (var20 != null)
                     {
                         for (int var23 = 0; var23 < 3 + var2.nextInt(3); ++var23)
                         {
-                            var20.setInventorySlotContents(var2.nextInt(var20.getSizeInventory()), AetherLoot.NORMAL.getRandomItem(var2));
+                            ItemStack var24 = AetherLoot.NORMAL.getRandomItem(var2);
+
+                            if (var24.stackSize <= 0)
+                            {
+                                var24.stackSize = 1;
+                            }
+
+                            var20.setInventorySlotContents(var2.nextInt(var20.getSizeInventory()), var24);
                         }
                     }
                 }
@@ -124,14 +130,14 @@ public class ComponentDungeonBronzeLight extends ComponentDungeonBronzeRoom
         }
 
         this.placeBlockAtCurrentPosition(var1, Block.mobSpawner.blockID, 0, var10, var11 + 1, var12, var3);
-        TileEntityMobSpawner var26 = (TileEntityMobSpawner) var1.getBlockTileEntity(var10, var11 + 1, var12);
+        TileEntityMobSpawner var25 = (TileEntityMobSpawner)var1.getBlockTileEntity(var10, var11 + 1, var12);
 
-        if (var26 != null)
+        if (var25 != null)
         {
-            String var25 = var2.nextInt(3) == 1 ? "SentryGolemRanged" : "SentryMelee";
-            var26.func_98049_a().setMobID(var25);
-            Dungeon var24 = DungeonHandler.instance().getInstanceAt(var10, var11 + 1, var12);
-            var24.registerMobSpawner(var10, var11 + 1, var12, var25);
+            String var26 = var2.nextInt(3) == 1 ? "SentryGolemRanged" : "SentryMelee";
+            var25.func_98049_a().setMobID(var26);
+            Dungeon var27 = DungeonHandler.instance().getInstanceAt(var10, var11 + 1, var12);
+            var27.registerMobSpawner(var10, var11 + 1, var12, var26);
         }
 
         this.cutHolesForEntrances(var1, var2, var3);
@@ -167,7 +173,8 @@ public class ComponentDungeonBronzeLight extends ComponentDungeonBronzeRoom
                         if (var12 != var4 && var12 != var7 && var13 != var3 && var13 != var6 && var14 != var5 && var14 != var8)
                         {
                             this.placeBlockAtCurrentPositionWithNotify(var1, var10, 0, var13, var12, var14, var2);
-                        } else
+                        }
+                        else
                         {
                             this.placeBlockAtCurrentPositionWithNotify(var1, var9, 0, var13, var12, var14, var2);
                         }
@@ -211,7 +218,7 @@ public class ComponentDungeonBronzeLight extends ComponentDungeonBronzeRoom
 
         if (var7.isVecInside(var8, var9, var10))
         {
-            var1.setBlock(var8, var9, var10, var2, var3, 2);
+            var1.setBlock(var8, var9, var10, var2, var3, ChunkProviderAether.placementFlagType);
         }
     }
 

@@ -3,6 +3,7 @@ package net.aetherteam.aether.client.renders;
 import cpw.mods.fml.client.registry.RenderingRegistry;
 import net.aetherteam.aether.client.models.ModelAechorPlant;
 import net.aetherteam.aether.client.models.ModelAerbunny;
+import net.aetherteam.aether.client.models.ModelAngel;
 import net.aetherteam.aether.client.models.ModelCarrionSprout;
 import net.aetherteam.aether.client.models.ModelCockatrice;
 import net.aetherteam.aether.client.models.ModelHostEye;
@@ -65,6 +66,7 @@ import net.aetherteam.aether.entities.mounts.EntityAerbunny;
 import net.aetherteam.aether.entities.mounts.EntityMoa;
 import net.aetherteam.aether.entities.mounts.EntityPhyg;
 import net.aetherteam.aether.entities.mounts.EntitySwet;
+import net.aetherteam.aether.entities.npc.EntityBasicNPC;
 import net.aetherteam.aether.oldcode.EntityMiniCloud;
 import net.minecraft.client.model.ModelSlime;
 import net.minecraft.client.renderer.entity.RenderLightningBolt;
@@ -117,5 +119,6 @@ public class AetherEntityRenderers
         RenderingRegistry.registerEntityRenderingHandler(EntityFakeItem.class, new RenderFakeItem());
         RenderingRegistry.registerEntityRenderingHandler(EntityRewardItem.class, new RenderRewardItem());
         RenderingRegistry.registerEntityRenderingHandler(EntityColdLightningBolt.class, new RenderColdLightning());
+        RenderingRegistry.registerEntityRenderingHandler(EntityBasicNPC.class, new RenderNPC(new ModelAngel(), 1.0F));
     }
 }

@@ -2,7 +2,6 @@ package net.aetherteam.aether.worldgen;
 
 import java.util.List;
 import java.util.Random;
-
 import net.aetherteam.aether.blocks.AetherBlocks;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.structure.StructureBoundingBox;
@@ -106,7 +105,8 @@ public class ComponentDungeonStair extends ComponentDungeonBronzeRoom
         if (var1.nextInt(8) != 0)
         {
             var9 = new StructureBoundingBox(var2, var3, var4, var2, var3 + var8, var4);
-        } else
+        }
+        else
         {
             var9 = new StructureBoundingBox(var2, var3 - var8 + 4, var4, var2, var3 + 4, var4);
         }

@@ -27,7 +27,8 @@ public class RenderSheepuff extends RenderLiving
             if (var1.getPuffed())
             {
                 this.setRenderPassModel(this.puffed);
-            } else
+            }
+            else
             {
                 this.setRenderPassModel(this.wool);
             }
@@ -37,7 +38,8 @@ public class RenderSheepuff extends RenderLiving
             int var5 = var1.getFleeceColor();
             GL11.glColor3f(var4 * EntitySheep.fleeceColorTable[var5][0], var4 * EntitySheep.fleeceColorTable[var5][1], var4 * EntitySheep.fleeceColorTable[var5][2]);
             return 1;
-        } else
+        }
+        else
         {
             return -1;
         }
@@ -48,6 +50,6 @@ public class RenderSheepuff extends RenderLiving
      */
     protected int shouldRenderPass(EntityLiving var1, int var2, float var3)
     {
-        return this.setWoolColorAndRender((EntitySheepuff) var1, var2, var3);
+        return this.setWoolColorAndRender((EntitySheepuff)var1, var2, var3);
     }
 }

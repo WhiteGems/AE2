@@ -1,7 +1,6 @@
 package net.aetherteam.aether.worldgen;
 
 import java.util.Random;
-
 import net.aetherteam.aether.blocks.AetherBlocks;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
@@ -47,9 +46,9 @@ public class AetherGenLakes extends WorldGenerator
                 {
                     for (int var23 = 1; var23 < 7; ++var23)
                     {
-                        double var24 = ((double) var21 - var15) / (var9 / 2.0D);
-                        double var26 = ((double) var23 - var17) / (var11 / 2.0D);
-                        double var28 = ((double) var22 - var19) / (var13 / 2.0D);
+                        double var24 = ((double)var21 - var15) / (var9 / 2.0D);
+                        double var26 = ((double)var23 - var17) / (var11 / 2.0D);
+                        double var28 = ((double)var22 - var19) / (var13 / 2.0D);
                         double var30 = var24 * var24 + var26 * var26 + var28 * var28;
 
                         if (var30 < 1.0D)

@@ -1,7 +1,6 @@
 package net.aetherteam.aether.notifications.client;
 
 import java.util.ArrayList;
-
 import net.aetherteam.aether.notifications.NotificationHandler;
 import net.aetherteam.aether.notifications.NotificationType;
 import net.aetherteam.aether.party.Party;
@@ -10,8 +9,6 @@ import net.aetherteam.aether.party.members.PartyMember;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.Gui;
-import net.minecraft.client.renderer.RenderEngine;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.StringUtils;
 import org.lwjgl.opengl.GL11;
 
@@ -37,106 +34,92 @@ public class GuiPlayerRequestSlot extends Gui
     public String username;
     public String skinURL;
 
-    public GuiPlayerRequestSlot(String username, String skinURL, int id, int x, int y, int width, int height)
+    public GuiPlayerRequestSlot(String var1, String var2, int var3, int var4, int var5, int var6, int var7)
     {
-        this.skinURL = skinURL;
-        this.username = username;
+        this.skinURL = var2;
+        this.username = var1;
         this.selected = false;
-        this.width = width;
-        this.height = height;
+        this.width = var6;
+        this.height = var7;
         this.enabled = true;
         this.drawButton = true;
-        this.id = id;
-        this.xPosition = x;
-        this.yPosition = y;
+        this.id = var3;
+        this.xPosition = var4;
+        this.yPosition = var5;
     }
 
-    public void drawPlayerSlot(int x, int y, int width, int height)
+    public void drawPlayerSlot(int var1, int var2, int var3, int var4)
     {
-        this.xPosition = x;
-        this.yPosition = y;
+        this.xPosition = var1;
+        this.yPosition = var2;
+        this.drawGradientRect(this.xPosition, this.yPosition, this.xPosition + var3, this.yPosition + var4, this.selected ? -10439830 : -13421773, this.selected ? -11563178 : -11184811);
+        Minecraft var5 = Minecraft.getMinecraft();
+        FontRenderer var6 = var5.fontRenderer;
+        ArrayList var7 = PartyController.instance().getParties();
+        ArrayList var8 = new ArrayList();
+        int var9;
 
-        drawGradientRect(this.xPosition, this.yPosition, this.xPosition + width, this.yPosition + height, this.selected ? -10439830 : -13421773, this.selected ? -11563178 : -11184811);
-
-        Minecraft mc = Minecraft.getMinecraft();
-        FontRenderer fontRenderer = mc.fontRenderer;
-
-        ArrayList partyList = PartyController.instance().getParties();
-        ArrayList playerStringList = new ArrayList();
-
-        for (int i = 0; i < partyList.size(); i++)
+        for (var9 = 0; var9 < var7.size(); ++var9)
         {
-            PartyMember member = PartyController.instance().getMember(this.username);
+            PartyMember var10 = PartyController.instance().getMember(this.username);
 
-            if (((Party) partyList.get(i)).hasMember(member))
+            if (((Party)var7.get(var9)).hasMember(var10))
             {
-                playerStringList.add(this.username);
+                var8.add(this.username);
             }
         }
 
-        int icon = mc.renderEngine.getTextureForDownloadableImage("http://skins.minecraft.net/MinecraftSkins/" + StringUtils.stripControlCodes(this.username) + ".png", "/mob/char.png");
-
+        var9 = var5.renderEngine.getTextureForDownloadableImage("http://skins.minecraft.net/MinecraftSkins/" + StringUtils.stripControlCodes(this.username) + ".png", "/mob/char.png");
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-        GL11.glBindTexture(3553, icon);
-        GL11.glEnable(3553);
-
-        float u = 0.125F;
-        float v = 0.25F;
-        float u1 = 0.25F;
-        float v1 = 0.5F;
-        GL11.glBegin(7);
-        GL11.glTexCoord2f(u, v);
-        GL11.glVertex2f(x + 2, y + 2);
-        GL11.glTexCoord2f(u, v1);
-        GL11.glVertex2f(x + 2, y + 18);
-        GL11.glTexCoord2f(u1, v1);
-        GL11.glVertex2f(x + 18, y + 18);
-        GL11.glTexCoord2f(u1, v);
-        GL11.glVertex2f(x + 18, y + 2);
+        GL11.glBindTexture(GL11.GL_TEXTURE_2D, var9);
+        GL11.glEnable(GL11.GL_TEXTURE_2D);
+        float var19 = 0.125F;
+        float var11 = 0.25F;
+        float var12 = 0.25F;
+        float var13 = 0.5F;
+        GL11.glBegin(GL11.GL_QUADS);
+        GL11.glTexCoord2f(var19, var11);
+        GL11.glVertex2f((float)(var1 + 2), (float)(var2 + 2));
+        GL11.glTexCoord2f(var19, var13);
+        GL11.glVertex2f((float)(var1 + 2), (float)(var2 + 18));
+        GL11.glTexCoord2f(var12, var13);
+        GL11.glVertex2f((float)(var1 + 18), (float)(var2 + 18));
+        GL11.glTexCoord2f(var12, var11);
+        GL11.glVertex2f((float)(var1 + 18), (float)(var2 + 2));
         GL11.glEnd();
-
-        mc.renderEngine.resetBoundTexture();
-
-        fontRenderer.drawStringWithShadow(this.username, x + height, y + 2, 15066597);
-
+        var5.renderEngine.resetBoundTexture();
+        var6.drawStringWithShadow(this.username, var1 + var4, var2 + 2, 15066597);
         GL11.glPushMatrix();
         GL11.glScalef(0.75F, 0.75F, 1.0F);
+        boolean var14 = PartyController.instance().inParty(this.username);
+        String var15 = "";
+        boolean var16 = false;
+        Party var17 = PartyController.instance().getParty(this.username);
+        boolean var18 = NotificationHandler.instance().hasSentToBefore(this.username, NotificationType.PARTY_REQUEST, var5.thePlayer.username);
+        int var20;
 
-        boolean inParty = PartyController.instance().inParty(this.username);
-
-        String subText = "";
-        int textColour = 0;
-
-        Party party = PartyController.instance().getParty(this.username);
-
-        boolean pending = NotificationHandler.instance().hasSentToBefore(this.username, NotificationType.PARTY_REQUEST, mc.thePlayer.username);
-
-        if (inParty)
+        if (var14)
         {
-            subText = "ALREADY IN PARTY";
-            textColour = 16711680;
-        } else if (pending)
+            var15 = "ALREADY IN PARTY";
+            var20 = 16711680;
+        }
+        else if (var18)
         {
-            subText = "REQUEST PENDING";
-            textColour = 16756516;
-        } else
+            var15 = "REQUEST PENDING";
+            var20 = 16756516;
+        }
+        else
         {
-            subText = "AVAILABLE";
-            textColour = 6750054;
+            var15 = "AVAILABLE";
+            var20 = 6750054;
         }
 
-        fontRenderer.drawString(subText, (int) ((x + height) / 0.75F), (int) ((y + 12.0F) / 0.75F), textColour);
-
+        var6.drawString(var15, (int)(((float)var1 + (float)var4) / 0.75F), (int)(((float)var2 + 12.0F) / 0.75F), var20);
         GL11.glPopMatrix();
     }
 
-    public boolean mousePressed(Minecraft par1Minecraft, int par2, int par3)
+    public boolean mousePressed(Minecraft var1, int var2, int var3)
     {
-        return (this.enabled) && (this.drawButton) && (par2 >= this.xPosition) && (par3 >= this.yPosition) && (par2 < this.xPosition + this.width) && (par3 < this.yPosition + this.height);
+        return this.enabled && this.drawButton && var2 >= this.xPosition && var3 >= this.yPosition && var2 < this.xPosition + this.width && var3 < this.yPosition + this.height;
     }
 }
-
-/* Location:           D:\Dev\Mc\forge_orl\mcp\jars\bin\aether.jar
- * Qualified Name:     net.aetherteam.aether.notifications.client.GuiPlayerRequestSlot
- * JD-Core Version:    0.6.2
- */

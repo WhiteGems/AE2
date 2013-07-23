@@ -2,7 +2,6 @@ package net.aetherteam.aether.items;
 
 import java.util.ArrayList;
 import java.util.Iterator;
-
 import net.aetherteam.aether.entities.EntityAetherLightning;
 import net.aetherteam.aether.enums.AetherEnumElement;
 import net.minecraft.block.Block;
@@ -64,9 +63,10 @@ public class ItemElementalSword extends ItemSword
         if (this.element == AetherEnumElement.Fire)
         {
             var2.setFire(30);
-        } else if (this.element == AetherEnumElement.Lightning && !var2.worldObj.isRemote)
+        }
+        else if (this.element == AetherEnumElement.Lightning && !var2.worldObj.isRemote)
         {
-            var2.worldObj.addWeatherEffect(new EntityAetherLightning(var2.worldObj, (double) ((int) var2.posX), (double) ((int) var2.posY), (double) ((int) var2.posZ), (EntityPlayer) var3));
+            var2.worldObj.addWeatherEffect(new EntityAetherLightning(var2.worldObj, (double)((int)var2.posX), (double)((int)var2.posY), (double)((int)var2.posZ), (EntityPlayer)var3));
         }
 
         var1.damageItem(1, var3);
@@ -80,12 +80,12 @@ public class ItemElementalSword extends ItemSword
     {
         if (this.element == AetherEnumElement.Holy && var1 instanceof EntityLiving)
         {
-            EntityLiving var2 = (EntityLiving) var1;
+            EntityLiving var2 = (EntityLiving)var1;
             Iterator var3 = undead.iterator();
 
             while (var3.hasNext())
             {
-                Class var4 = (Class) var3.next();
+                Class var4 = (Class)var3.next();
 
                 if (var2.getClass().isAssignableFrom(var4))
                 {

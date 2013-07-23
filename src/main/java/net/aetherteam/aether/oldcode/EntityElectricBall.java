@@ -1,10 +1,8 @@
 package net.aetherteam.aether.oldcode;
 
 import cpw.mods.fml.common.registry.IThrowableEntity;
-
 import java.util.List;
 import java.util.Random;
-
 import net.aetherteam.aether.entities.EntityNewZephyr;
 import net.aetherteam.aether.entities.EntityTempest;
 import net.aetherteam.aether.items.AetherItems;
@@ -24,7 +22,7 @@ public class EntityElectricBall extends EntityLiving implements IThrowableEntity
 {
     public float[] sinage = new float[3];
     private static final double topSpeed = 0.125D;
-    private static final float sponge = (180F / (float) Math.PI);
+    private static final float sponge = (180F / (float)Math.PI);
     public Random random = new Random();
     private int xTile;
     private int yTile;
@@ -62,11 +60,11 @@ public class EntityElectricBall extends EntityLiving implements IThrowableEntity
     {
         for (int var1 = 0; var1 < 3; ++var1)
         {
-            this.sinage[var1] += 0.3F + (float) var1 * 0.13F;
+            this.sinage[var1] += 0.3F + (float)var1 * 0.13F;
 
-            if (this.sinage[var1] > ((float) Math.PI * 2F))
+            if (this.sinage[var1] > ((float)Math.PI * 2F))
             {
-                this.sinage[var1] -= ((float) Math.PI * 2F);
+                this.sinage[var1] -= ((float)Math.PI * 2F);
             }
         }
     }
@@ -90,7 +88,7 @@ public class EntityElectricBall extends EntityLiving implements IThrowableEntity
         var3 += this.rand.nextGaussian() * 0.4D;
         var5 += this.rand.nextGaussian() * 0.4D;
         var7 += this.rand.nextGaussian() * 0.4D;
-        double var9 = (double) MathHelper.sqrt_double(var3 * var3 + var5 * var5 + var7 * var7);
+        double var9 = (double)MathHelper.sqrt_double(var3 * var3 + var5 * var5 + var7 * var7);
         this.accelerationX = var3 / var9 * 0.15000000000000002D;
         this.accelerationY = var5 / var9 * 0.1D;
         this.accelerationZ = var7 / var9 * 0.15000000000000002D;
@@ -100,8 +98,7 @@ public class EntityElectricBall extends EntityLiving implements IThrowableEntity
      * Called frequently so the entity can update its state every tick as required. For example, zombies and skeletons
      * use this to react to sunlight and start to burn.
      */
-    public void onLivingUpdate()
-    {}
+    public void onLivingUpdate() {}
 
     /**
      * Gets called every tick from main Entity class
@@ -137,12 +134,13 @@ public class EntityElectricBall extends EntityLiving implements IThrowableEntity
             }
 
             this.inGround = false;
-            this.motionX *= (double) (this.rand.nextFloat() * 0.2F);
-            this.motionY *= (double) (this.rand.nextFloat() * 0.2F);
-            this.motionZ *= (double) (this.rand.nextFloat() * 0.2F);
+            this.motionX *= (double)(this.rand.nextFloat() * 0.2F);
+            this.motionY *= (double)(this.rand.nextFloat() * 0.2F);
+            this.motionZ *= (double)(this.rand.nextFloat() * 0.2F);
             this.ticksAlive = 0;
             this.ticksInAir = 0;
-        } else
+        }
+        else
         {
             ++this.ticksInAir;
         }
@@ -165,12 +163,12 @@ public class EntityElectricBall extends EntityLiving implements IThrowableEntity
 
         for (var8 = 0; var8 < var5.size(); ++var8)
         {
-            Entity var9 = (Entity) var5.get(var8);
+            Entity var9 = (Entity)var5.get(var8);
 
             if (var9.canBeCollidedWith() && (var9 != this.shootingEntity || this.ticksInAir >= 25))
             {
                 float var10 = 0.3F;
-                AxisAlignedBB var11 = var9.boundingBox.expand((double) var10, (double) var10, (double) var10);
+                AxisAlignedBB var11 = var9.boundingBox.expand((double)var10, (double)var10, (double)var10);
                 MovingObjectPosition var12 = var11.calculateIntercept(var15, var2);
 
                 if (var12 != null)
@@ -207,29 +205,32 @@ public class EntityElectricBall extends EntityLiving implements IThrowableEntity
                         ;
                     }
 
-                    if (var3.entityHit instanceof EntityPlayer && ((EntityPlayer) var3.entityHit).inventory.armorInventory[0] != null && ((EntityPlayer) var3.entityHit).inventory.armorInventory[0].itemID == AetherItems.SentryBoots.itemID)
+                    if (var3.entityHit instanceof EntityPlayer && ((EntityPlayer)var3.entityHit).inventory.armorInventory[0] != null && ((EntityPlayer)var3.entityHit).inventory.armorInventory[0].itemID == AetherItems.SentryBoots.itemID)
                     {
                         this.setDead();
-                    } else if (var3.entityHit instanceof EntityPlayer && ((EntityPlayer) var3.entityHit).capabilities.isCreativeMode)
+                    }
+                    else if (var3.entityHit instanceof EntityPlayer && ((EntityPlayer)var3.entityHit).capabilities.isCreativeMode)
                     {
                         this.setDead();
-                    } else if (var3.entityHit != null && !(var3.entityHit instanceof EntityNewZephyr) && !(var3.entityHit instanceof EntityTempest))
+                    }
+                    else if (var3.entityHit != null && !(var3.entityHit instanceof EntityNewZephyr) && !(var3.entityHit instanceof EntityTempest))
                     {
                         var8 = MathHelper.floor_double(var3.entityHit.boundingBox.minX);
                         var17 = MathHelper.floor_double(var3.entityHit.boundingBox.minY);
                         var20 = MathHelper.floor_double(var3.entityHit.boundingBox.minZ);
-                        var19 = new EntityLightningBolt(this.worldObj, (double) var8, (double) var17, (double) var20);
-                        var19.setLocationAndAngles((double) var8, (double) var17, (double) var20, this.rotationYaw, 0.0F);
+                        var19 = new EntityLightningBolt(this.worldObj, (double)var8, (double)var17, (double)var20);
+                        var19.setLocationAndAngles((double)var8, (double)var17, (double)var20, this.rotationYaw, 0.0F);
                         this.worldObj.spawnEntityInWorld(var19);
                     }
                 }
-            } else
+            }
+            else
             {
                 var8 = MathHelper.floor_double(this.posX);
                 var17 = MathHelper.floor_double(this.posY);
                 var20 = MathHelper.floor_double(this.posZ);
                 var19 = new EntityLightningBolt(this.worldObj, this.posX, this.posY, this.posZ);
-                var19.setLocationAndAngles((double) var8, (double) var17, (double) var20, this.rotationYaw, 0.0F);
+                var19.setLocationAndAngles((double)var8, (double)var17, (double)var20, this.rotationYaw, 0.0F);
                 this.worldObj.spawnEntityInWorld(var19);
             }
 
@@ -243,9 +244,9 @@ public class EntityElectricBall extends EntityLiving implements IThrowableEntity
         this.posY += this.motionY;
         this.posZ += this.motionZ;
         float var16 = MathHelper.sqrt_double(this.motionX * this.motionX + this.motionZ * this.motionZ);
-        this.rotationYaw = (float) (Math.atan2(this.motionX, this.motionZ) * 180.0D / Math.PI);
+        this.rotationYaw = (float)(Math.atan2(this.motionX, this.motionZ) * 180.0D / Math.PI);
 
-        for (this.rotationPitch = (float) (Math.atan2(this.motionY, (double) var16) * 180.0D / Math.PI); this.rotationPitch - this.prevRotationPitch < -180.0F; this.prevRotationPitch -= 360.0F)
+        for (this.rotationPitch = (float)(Math.atan2(this.motionY, (double)var16) * 180.0D / Math.PI); this.rotationPitch - this.prevRotationPitch < -180.0F; this.prevRotationPitch -= 360.0F)
         {
             ;
         }
@@ -274,7 +275,7 @@ public class EntityElectricBall extends EntityLiving implements IThrowableEntity
             for (var20 = 0; var20 < 4; ++var20)
             {
                 float var21 = 0.25F;
-                this.worldObj.spawnParticle("bubble", this.posX - this.motionX * (double) var21, this.posY - this.motionY * (double) var21, this.posZ - this.motionZ * (double) var21, this.motionX, this.motionY, this.motionZ);
+                this.worldObj.spawnParticle("bubble", this.posX - this.motionX * (double)var21, this.posY - this.motionY * (double)var21, this.posZ - this.motionZ * (double)var21, this.motionX, this.motionY, this.motionZ);
             }
 
             var18 = 0.8F;
@@ -283,9 +284,9 @@ public class EntityElectricBall extends EntityLiving implements IThrowableEntity
         this.motionX += this.accelerationX;
         this.motionY += this.accelerationY;
         this.motionZ += this.accelerationZ;
-        this.motionX *= (double) var18;
-        this.motionY *= (double) var18;
-        this.motionZ *= (double) var18;
+        this.motionX *= (double)var18;
+        this.motionY *= (double)var18;
+        this.motionZ *= (double)var18;
         this.worldObj.spawnParticle("smoke", this.posX, this.posY + 0.5D, this.posZ, 0.0D, 0.0D, 0.0D);
         this.setPositionAndRotation(this.posX, this.posY, this.posZ, this.rotationYaw, this.rotationPitch);
     }
@@ -295,12 +296,12 @@ public class EntityElectricBall extends EntityLiving implements IThrowableEntity
      */
     public void writeEntityToNBT(NBTTagCompound var1)
     {
-        var1.setShort("xTile", (short) this.xTile);
-        var1.setShort("yTile", (short) this.yTile);
-        var1.setShort("zTile", (short) this.zTile);
-        var1.setByte("inTile", (byte) this.inTile);
-        var1.setByte("shake", (byte) this.field_9406_a);
-        var1.setByte("inGround", (byte) (this.inGround ? 1 : 0));
+        var1.setShort("xTile", (short)this.xTile);
+        var1.setShort("yTile", (short)this.yTile);
+        var1.setShort("zTile", (short)this.zTile);
+        var1.setByte("inTile", (byte)this.inTile);
+        var1.setByte("shake", (byte)this.field_9406_a);
+        var1.setByte("inGround", (byte)(this.inGround ? 1 : 0));
     }
 
     /**

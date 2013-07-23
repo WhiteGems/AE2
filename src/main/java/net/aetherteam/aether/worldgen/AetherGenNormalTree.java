@@ -1,7 +1,6 @@
 package net.aetherteam.aether.worldgen;
 
 import java.util.Random;
-
 import net.aetherteam.aether.blocks.AetherBlocks;
 import net.minecraft.block.Block;
 import net.minecraft.world.World;
@@ -28,8 +27,8 @@ public class AetherGenNormalTree extends WorldGenerator
         if (var4 >= 1 && var4 + var6 + 1 <= 128)
         {
             int var8;
-            int var11;
             int var10;
+            int var11;
             int var12;
 
             for (var8 = var4; var8 <= var4 + 1 + var6; ++var8)
@@ -58,7 +57,8 @@ public class AetherGenNormalTree extends WorldGenerator
                             {
                                 var7 = false;
                             }
-                        } else
+                        }
+                        else
                         {
                             var7 = false;
                         }
@@ -69,7 +69,8 @@ public class AetherGenNormalTree extends WorldGenerator
             if (!var7)
             {
                 return false;
-            } else
+            }
+            else
             {
                 var8 = var1.getBlockId(var3, var4 - 1, var5);
 
@@ -110,12 +111,14 @@ public class AetherGenNormalTree extends WorldGenerator
                     }
 
                     return true;
-                } else
+                }
+                else
                 {
                     return false;
                 }
             }
-        } else
+        }
+        else
         {
             return false;
         }

@@ -3,13 +3,10 @@ package net.aetherteam.aether.packets;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.network.Player;
 import cpw.mods.fml.relauncher.Side;
-
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.DataInputStream;
 import java.io.InputStreamReader;
-import java.io.PrintStream;
-
 import net.aetherteam.aether.party.Party;
 import net.aetherteam.aether.party.PartyController;
 import net.aetherteam.aether.party.members.PartyMember;
@@ -18,64 +15,64 @@ import net.minecraft.network.packet.Packet250CustomPayload;
 
 public class PacketPartyNameChange extends AetherPacket
 {
-    public PacketPartyNameChange(int packetID)
+    public PacketPartyNameChange(int var1)
     {
-        super(packetID);
+        super(var1);
     }
 
-    public void onPacketReceived(Packet250CustomPayload packet, Player player)
+    public void onPacketReceived(Packet250CustomPayload var1, Player var2)
     {
-        DataInputStream dat = new DataInputStream(new ByteArrayInputStream(packet.data));
-        BufferedReader buf = new BufferedReader(new InputStreamReader(dat));
+        DataInputStream var3 = new DataInputStream(new ByteArrayInputStream(var1.data));
+        new BufferedReader(new InputStreamReader(var3));
+
         try
         {
-            byte packetType = dat.readByte();
+            byte var5 = var3.readByte();
+            String var6 = var3.readUTF();
+            String var7 = var3.readUTF();
+            Side var8 = FMLCommonHandler.instance().getEffectiveSide();
+            Party var9;
 
-            String partyName = dat.readUTF();
-            String newPartyName = dat.readUTF();
-
-            Side side = FMLCommonHandler.instance().getEffectiveSide();
-
-            if (side.isClient())
+            if (var8.isClient())
             {
-                Party party = PartyController.instance().getParty(partyName);
+                var9 = PartyController.instance().getParty(var6);
 
-                if ((party != null) && (!newPartyName.isEmpty()) && (PartyController.instance().getParty(newPartyName) == null))
+                if (var9 != null && !var7.isEmpty() && PartyController.instance().getParty(var7) == null)
                 {
-                    PartyController.instance().changePartyName(party, newPartyName, false);
-
-                    System.out.println("'" + partyName + "'s name changed to '" + newPartyName + "'");
-                } else
+                    PartyController.instance().changePartyName(var9, var7, false);
+                    System.out.println("\'" + var6 + "\'s name changed to \'" + var7 + "\'");
+                }
+                else
                 {
                     System.out.println("Either the party was null or the name was empty. Party name change unsuccessful!");
                 }
-            } else
-            {
-                Party party = PartyController.instance().getParty(partyName);
-                PartyMember potentialLeader = PartyController.instance().getMember((EntityPlayer) player);
-
-                if ((party != null) && (!newPartyName.isEmpty()) && (PartyController.instance().getParty(newPartyName) == null))
-                {
-                    if (party.isLeader(potentialLeader))
-                    {
-                        PartyController.instance().changePartyName(party, newPartyName, false);
-
-                        sendPacketToAllExcept(AetherPacketHandler.sendPartyNameChange(partyName, newPartyName), player);
-                    } else
-                    {
-                        System.out.println("A player (" + potentialLeader.username + ") tried to change the name of a party (" + party.getName() + ") but didn't have permission.");
-                    }
-                } else
-                    System.out.println("Something went wrong! The player " + potentialLeader.username + " tried to change the name of a null party!");
             }
-        } catch (Exception ex)
+            else
+            {
+                var9 = PartyController.instance().getParty(var6);
+                PartyMember var10 = PartyController.instance().getMember((EntityPlayer)var2);
+
+                if (var9 != null && !var7.isEmpty() && PartyController.instance().getParty(var7) == null)
+                {
+                    if (var9.isLeader(var10))
+                    {
+                        PartyController.instance().changePartyName(var9, var7, false);
+                        this.sendPacketToAllExcept(AetherPacketHandler.sendPartyNameChange(var6, var7), var2);
+                    }
+                    else
+                    {
+                        System.out.println("A player (" + var10.username + ") tried to change the name of a party (" + var9.getName() + ") but didn\'t have permission.");
+                    }
+                }
+                else
+                {
+                    System.out.println("Something went wrong! The player " + var10.username + " tried to change the name of a null party!");
+                }
+            }
+        }
+        catch (Exception var11)
         {
-            ex.printStackTrace();
+            var11.printStackTrace();
         }
     }
 }
-
-/* Location:           D:\Dev\Mc\forge_orl\mcp\jars\bin\aether.jar
- * Qualified Name:     net.aetherteam.aether.packets.PacketPartyNameChange
- * JD-Core Version:    0.6.2
- */

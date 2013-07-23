@@ -2,7 +2,6 @@ package net.aetherteam.aether.worldgen;
 
 import java.util.List;
 import java.util.Random;
-
 import net.aetherteam.aether.Aether;
 import net.aetherteam.aether.blocks.AetherBlocks;
 import net.minecraft.block.Block;
@@ -48,7 +47,7 @@ public class ChunkProviderAether implements IChunkProvider
     public byte fillerAetherBlock;
     public static BronzeDungeon bronzeDungeon = new BronzeDungeon();
     public static int gumCount;
-    public static int placementFlagType = 3;
+    public static int placementFlagType = 2;
 
     public ChunkProviderAether(World var1, long var2)
     {
@@ -137,7 +136,7 @@ public class ChunkProviderAether implements IChunkProvider
                                     var50 = AetherBlocks.Holystone.blockID;
                                 }
 
-                                var3[var41] = (byte) var50;
+                                var3[var41] = (byte)var50;
                                 var41 += var42;
                                 var45 += var47;
                             }
@@ -167,27 +166,27 @@ public class ChunkProviderAether implements IChunkProvider
         {
             for (int var7 = 0; var7 < 16; ++var7)
             {
-                int var8 = (int) (this.field_28077_t[var6 + var7 * 16] / 3.0D + 3.0D + this.random.nextDouble() * 0.25D);
+                int var8 = (int)(this.field_28077_t[var6 + var7 * 16] / 3.0D + 3.0D + this.random.nextDouble() * 0.25D);
                 int var9 = -1;
-                this.topAetherBlock = (byte) AetherBlocks.AetherGrass.blockID;
-                this.fillerAetherBlock = (byte) AetherBlocks.AetherDirt.blockID;
+                this.topAetherBlock = (byte)AetherBlocks.AetherGrass.blockID;
+                this.fillerAetherBlock = (byte)AetherBlocks.AetherDirt.blockID;
                 byte var10 = this.topAetherBlock;
                 byte var11 = this.fillerAetherBlock;
-                byte var12 = (byte) AetherBlocks.Holystone.blockID;
+                byte var12 = (byte)AetherBlocks.Holystone.blockID;
 
                 if (var10 < 0)
                 {
-                    var10 = (byte) (var10 + 0);
+                    var10 = (byte)(var10 + 0);
                 }
 
                 if (var11 < 0)
                 {
-                    var11 = (byte) (var11 + 0);
+                    var11 = (byte)(var11 + 0);
                 }
 
                 if (var12 < 0)
                 {
-                    var12 = (byte) (var12 + 0);
+                    var12 = (byte)(var12 + 0);
                 }
 
                 for (int var13 = 127; var13 >= 0; --var13)
@@ -198,7 +197,8 @@ public class ChunkProviderAether implements IChunkProvider
                     if (var15 == 0)
                     {
                         var9 = -1;
-                    } else if (var15 == var12)
+                    }
+                    else if (var15 == var12)
                     {
                         if (var9 == -1)
                         {
@@ -213,11 +213,13 @@ public class ChunkProviderAether implements IChunkProvider
                             if (var13 >= 0)
                             {
                                 var3[var14] = var10;
-                            } else
+                            }
+                            else
                             {
                                 var3[var14] = var11;
                             }
-                        } else if (var9 > 0)
+                        }
+                        else if (var9 > 0)
                         {
                             --var9;
                             var3[var14] = var11;
@@ -289,14 +291,14 @@ public class ChunkProviderAether implements IChunkProvider
                 }
 
                 var21 += 0.5D;
-                var23 = var23 * (double) var6 / 16.0D;
+                var23 = var23 * (double)var6 / 16.0D;
                 ++var13;
-                double var25 = (double) var6 / 2.0D;
+                double var25 = (double)var6 / 2.0D;
 
                 for (int var27 = 0; var27 < var6; ++var27)
                 {
                     double var28 = 0.0D;
-                    double var30 = ((double) var27 - var25) * 8.0D / var21;
+                    double var30 = ((double)var27 - var25) * 8.0D / var21;
 
                     if (var30 < 0.0D)
                     {
@@ -310,10 +312,12 @@ public class ChunkProviderAether implements IChunkProvider
                     if (var36 < 0.0D)
                     {
                         var28 = var32;
-                    } else if (var36 > 1.0D)
+                    }
+                    else if (var36 > 1.0D)
                     {
                         var28 = var34;
-                    } else
+                    }
+                    else
                     {
                         var28 = var32 + (var34 - var32) * var36;
                     }
@@ -324,7 +328,7 @@ public class ChunkProviderAether implements IChunkProvider
 
                     if (var27 > var6 - var38)
                     {
-                        var39 = (double) ((float) (var27 - (var6 - var38)) / ((float) var38 - 1.0F));
+                        var39 = (double)((float)(var27 - (var6 - var38)) / ((float)var38 - 1.0F));
                         var28 = var28 * (1.0D - var39) + -30.0D * var39;
                     }
 
@@ -332,7 +336,7 @@ public class ChunkProviderAether implements IChunkProvider
 
                     if (var27 < var38)
                     {
-                        var39 = (double) ((float) (var38 - var27) / ((float) var38 - 1.0F));
+                        var39 = (double)((float)(var38 - var27) / ((float)var38 - 1.0F));
                         var28 = var28 * (1.0D - var39) + -30.0D * var39;
                     }
 
@@ -346,11 +350,6 @@ public class ChunkProviderAether implements IChunkProvider
     }
 
     public void recreateStructures(int var1, int var2) {}
-
-    @Override
-    public void func_104112_b()
-    {
-    }
 
     public int getLoadedChunkCount()
     {
@@ -390,9 +389,9 @@ public class ChunkProviderAether implements IChunkProvider
     {
         int var4 = var2 * 16;
         int var5 = var3 * 16;
-        int var8;
-        int var7;
         int var6;
+        int var7;
+        int var8;
 
         if (this.random.nextInt(50) == 0)
         {
@@ -466,33 +465,19 @@ public class ChunkProviderAether implements IChunkProvider
             (new AetherGenClouds(AetherBlocks.Aercloud.blockID, 0, 64, true, bronzeDungeon)).generate(this.worldObj, this.random, var6, var7, var8);
         }
 
-        double var23 = 0.03125D;
-        this.field_28077_t = this.noiseGenerator5.generateNoiseOctaves(this.field_28077_t, var2, var3, 0, 16, 16, 1, var23 * 2.0D, var23 * 2.0D, var23 * 2.0D);
+        double var19 = 0.03125D;
+        this.field_28077_t = this.noiseGenerator5.generateNoiseOctaves(this.field_28077_t, var2, var3, 0, 16, 16, 1, var19, var19, var19);
         bronzeDungeon.generateStructuresInChunk(this.worldObj, this.random, var2, var3, this.field_28077_t);
-        BiomeGenBase var22 = Aether.biome;
+        BiomeGenBase var20 = Aether.biome;
         BlockSand.fallInstantly = true;
         this.random.setSeed(this.worldObj.getSeed());
         long var9 = this.random.nextLong() / 2L * 2L + 1L;
         long var11 = this.random.nextLong() / 2L * 2L + 1L;
-        this.random.setSeed((long) var2 * var9 + (long) var3 * var11 ^ this.worldObj.getSeed());
-        var23 = 0.125D;
+        this.random.setSeed((long)var2 * var9 + (long)var3 * var11 ^ this.worldObj.getSeed());
+        var19 = 0.125D;
         int var13;
-        int var15;
         int var14;
-
-        if (this.random.nextInt(32) == 0)
-        {
-            var13 = var4 + this.random.nextInt(16);
-            var14 = this.random.nextInt(64) + 32;
-            var15 = var5 + this.random.nextInt(16);
-            (new GenerateFloatingTree()).generate(this.worldObj, this.random, var13, var14, var15);
-        }
-
-        if (gumCount < 800)
-        {
-            ++gumCount;
-        }
-
+        int var15;
         int var16;
 
         for (var13 = 0; var13 < 20; ++var13)
@@ -580,57 +565,57 @@ public class ChunkProviderAether implements IChunkProvider
             }
         }
 
-        var23 = 0.5D;
-        byte var20 = 3;
-        byte var21 = 4;
+        var19 = 0.5D;
+        byte var22 = 4;
+        byte var21 = 3;
         int var17;
         WorldGenerator var18;
-
-        for (var15 = 0; var15 < var20; ++var15)
-        {
-            var16 = var4 + this.random.nextInt(16) + 8;
-            var17 = var5 + this.random.nextInt(16) + 8;
-            var18 = var22.getRandomWorldGenForTrees(this.random);
-            var18.setScale(1.0D, 1.0D, 1.0D);
-            var18.generate(this.worldObj, this.random, var16, this.worldObj.getHeightValue(var16, var17), var17);
-        }
 
         for (var15 = 0; var15 < var21; ++var15)
         {
             var16 = var4 + this.random.nextInt(16) + 8;
             var17 = var5 + this.random.nextInt(16) + 8;
-            var18 = var22.getRandomWorldGenForGrass(this.random);
+            var18 = var20.getRandomWorldGenForTrees(this.random);
             var18.setScale(1.0D, 1.0D, 1.0D);
             var18.generate(this.worldObj, this.random, var16, this.worldObj.getHeightValue(var16, var17), var17);
         }
 
-        int var19;
+        for (var15 = 0; var15 < var22; ++var15)
+        {
+            var16 = var4 + this.random.nextInt(16) + 8;
+            var17 = var5 + this.random.nextInt(16) + 8;
+            var18 = var20.getRandomWorldGenForGrass(this.random);
+            var18.setScale(1.0D, 1.0D, 1.0D);
+            var18.generate(this.worldObj, this.random, var16, this.worldObj.getHeightValue(var16, var17), var17);
+        }
+
+        int var23;
 
         for (var15 = 0; var15 < 2; ++var15)
         {
             var16 = var4 + this.random.nextInt(16) + 8;
             var17 = this.random.nextInt(128);
-            var19 = var5 + this.random.nextInt(16) + 8;
-            (new AetherGenFlowers(AetherBlocks.BerryBush.blockID, 32)).generate(this.worldObj, this.random, var16, var17, var19);
+            var23 = var5 + this.random.nextInt(16) + 8;
+            (new AetherGenFlowers(AetherBlocks.BerryBush.blockID, 32)).generate(this.worldObj, this.random, var16, var17, var23);
         }
 
         for (var15 = 0; var15 < 2; ++var15)
         {
             var16 = var4 + this.random.nextInt(16) + 8;
             var17 = this.random.nextInt(128);
-            var19 = var5 + this.random.nextInt(16) + 8;
-            (new AetherGenOrangeFruit(16)).generate(this.worldObj, this.random, var16, var17, var19);
+            var23 = var5 + this.random.nextInt(16) + 8;
+            (new AetherGenOrangeFruit(16)).generate(this.worldObj, this.random, var16, var17, var23);
         }
 
         for (var15 = 0; var15 < 50; ++var15)
         {
             var16 = var4 + this.random.nextInt(16) + 8;
             var17 = this.random.nextInt(this.random.nextInt(120) + 8);
-            var19 = var5 + this.random.nextInt(16) + 8;
-            (new AetherGenLiquids(Block.waterMoving.blockID)).generate(this.worldObj, this.random, var16, var17, var19);
+            var23 = var5 + this.random.nextInt(16) + 8;
+            (new AetherGenLiquids(Block.waterMoving.blockID)).generate(this.worldObj, this.random, var16, var17, var23);
         }
 
-        SpawnerAnimals.performWorldGenSpawning(this.worldObj, var22, var4 + 8, var5 + 8, 16, 16, this.random);
+        SpawnerAnimals.performWorldGenSpawning(this.worldObj, var20, var4 + 8, var5 + 8, 16, 16, this.random);
         BlockSand.fallInstantly = false;
     }
 
@@ -645,13 +630,13 @@ public class ChunkProviderAether implements IChunkProvider
      */
     public Chunk provideChunk(int var1, int var2)
     {
-        this.random.setSeed((long) var1 * 341873128712L + (long) var2 * 132897987541L);
+        this.random.setSeed((long)var1 * 341873128712L + (long)var2 * 132897987541L);
         byte[] var3 = new byte[32768];
         this.func_28071_a(var1, var2, var3);
         this.func_28072_a(var1, var2, var3);
         this.mapGenCaves.generate(this, this.worldObj, var1, var2, var3);
         bronzeDungeon.generate(this, this.worldObj, var1, var2, var3);
-        AetherChunk var4 = new AetherChunk(this.worldObj, var3, var1, var2);
+        Chunk var4 = new Chunk(this.worldObj, var3, var1, var2);
         var4.generateSkylightMap();
         return var4;
     }
@@ -672,4 +657,6 @@ public class ChunkProviderAether implements IChunkProvider
     {
         return false;
     }
+
+    public void func_104112_b() {}
 }

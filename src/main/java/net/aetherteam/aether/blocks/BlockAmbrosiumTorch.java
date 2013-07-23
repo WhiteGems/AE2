@@ -2,9 +2,7 @@ package net.aetherteam.aether.blocks;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
-
 import java.util.Random;
-
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.util.AxisAlignedBB;
@@ -62,7 +60,8 @@ public class BlockAmbrosiumTorch extends BlockAether implements IAetherBlock
         if (var1.doesBlockHaveSolidTopSurface(var2, var3, var4))
         {
             return true;
-        } else
+        }
+        else
         {
             int var5 = var1.getBlockId(var2, var3, var4);
             return Block.blocksList[var5] != null && Block.blocksList[var5].canPlaceTorchOnTop(var1, var2, var3, var4);
@@ -135,16 +134,20 @@ public class BlockAmbrosiumTorch extends BlockAether implements IAetherBlock
             if (var1.isBlockSolidOnSide(var2 - 1, var3, var4, ForgeDirection.EAST, true))
             {
                 var1.setBlockMetadataWithNotify(var2, var3, var4, 1, 2);
-            } else if (var1.isBlockSolidOnSide(var2 + 1, var3, var4, ForgeDirection.WEST, true))
+            }
+            else if (var1.isBlockSolidOnSide(var2 + 1, var3, var4, ForgeDirection.WEST, true))
             {
                 var1.setBlockMetadataWithNotify(var2, var3, var4, 2, 2);
-            } else if (var1.isBlockSolidOnSide(var2, var3, var4 - 1, ForgeDirection.SOUTH, true))
+            }
+            else if (var1.isBlockSolidOnSide(var2, var3, var4 - 1, ForgeDirection.SOUTH, true))
             {
                 var1.setBlockMetadataWithNotify(var2, var3, var4, 3, 2);
-            } else if (var1.isBlockSolidOnSide(var2, var3, var4 + 1, ForgeDirection.NORTH, true))
+            }
+            else if (var1.isBlockSolidOnSide(var2, var3, var4 + 1, ForgeDirection.NORTH, true))
             {
                 var1.setBlockMetadataWithNotify(var2, var3, var4, 4, 2);
-            } else if (this.canPlaceTorchOn(var1, var2, var3 - 1, var4))
+            }
+            else if (this.canPlaceTorchOn(var1, var2, var3 - 1, var4))
             {
                 var1.setBlockMetadataWithNotify(var2, var3, var4, 5, 2);
             }
@@ -199,11 +202,13 @@ public class BlockAmbrosiumTorch extends BlockAether implements IAetherBlock
                 this.dropBlockAsItem(var1, var2, var3, var4, var1.getBlockMetadata(var2, var3, var4), 0);
                 var1.setBlockToAir(var2, var3, var4);
                 return true;
-            } else
+            }
+            else
             {
                 return false;
             }
-        } else
+        }
+        else
         {
             return true;
         }
@@ -220,7 +225,8 @@ public class BlockAmbrosiumTorch extends BlockAether implements IAetherBlock
             }
 
             return false;
-        } else
+        }
+        else
         {
             return true;
         }
@@ -238,16 +244,20 @@ public class BlockAmbrosiumTorch extends BlockAether implements IAetherBlock
         if (var7 == 1)
         {
             this.setBlockBounds(0.0F, 0.2F, 0.5F - var8, var8 * 2.0F, 0.8F, 0.5F + var8);
-        } else if (var7 == 2)
+        }
+        else if (var7 == 2)
         {
             this.setBlockBounds(1.0F - var8 * 2.0F, 0.2F, 0.5F - var8, 1.0F, 0.8F, 0.5F + var8);
-        } else if (var7 == 3)
+        }
+        else if (var7 == 3)
         {
             this.setBlockBounds(0.5F - var8, 0.2F, 0.0F, 0.5F + var8, 0.8F, var8 * 2.0F);
-        } else if (var7 == 4)
+        }
+        else if (var7 == 4)
         {
             this.setBlockBounds(0.5F - var8, 0.2F, 1.0F - var8 * 2.0F, 0.5F + var8, 0.8F, 1.0F);
-        } else
+        }
+        else
         {
             var8 = 0.1F;
             this.setBlockBounds(0.5F - var8, 0.0F, 0.5F - var8, 0.5F + var8, 0.6F, 0.5F + var8);
@@ -264,9 +274,9 @@ public class BlockAmbrosiumTorch extends BlockAether implements IAetherBlock
     public void randomDisplayTick(World var1, int var2, int var3, int var4, Random var5)
     {
         int var6 = var1.getBlockMetadata(var2, var3, var4);
-        double var7 = (double) ((float) var2 + 0.5F);
-        double var9 = (double) ((float) var3 + 0.7F);
-        double var11 = (double) ((float) var4 + 0.5F);
+        double var7 = (double)((float)var2 + 0.5F);
+        double var9 = (double)((float)var3 + 0.7F);
+        double var11 = (double)((float)var4 + 0.5F);
         double var13 = 0.2199999988079071D;
         double var15 = 0.27000001072883606D;
 
@@ -274,19 +284,23 @@ public class BlockAmbrosiumTorch extends BlockAether implements IAetherBlock
         {
             var1.spawnParticle("smoke", var7 - var15, var9 + var13, var11, 0.0D, 0.0D, 0.0D);
             var1.spawnParticle("flame", var7 - var15, var9 + var13, var11, 0.0D, 0.0D, 0.0D);
-        } else if (var6 == 2)
+        }
+        else if (var6 == 2)
         {
             var1.spawnParticle("smoke", var7 + var15, var9 + var13, var11, 0.0D, 0.0D, 0.0D);
             var1.spawnParticle("flame", var7 + var15, var9 + var13, var11, 0.0D, 0.0D, 0.0D);
-        } else if (var6 == 3)
+        }
+        else if (var6 == 3)
         {
             var1.spawnParticle("smoke", var7, var9 + var13, var11 - var15, 0.0D, 0.0D, 0.0D);
             var1.spawnParticle("flame", var7, var9 + var13, var11 - var15, 0.0D, 0.0D, 0.0D);
-        } else if (var6 == 4)
+        }
+        else if (var6 == 4)
         {
             var1.spawnParticle("smoke", var7, var9 + var13, var11 + var15, 0.0D, 0.0D, 0.0D);
             var1.spawnParticle("flame", var7, var9 + var13, var11 + var15, 0.0D, 0.0D, 0.0D);
-        } else
+        }
+        else
         {
             var1.spawnParticle("smoke", var7, var9, var11, 0.0D, 0.0D, 0.0D);
             var1.spawnParticle("flame", var7, var9, var11, 0.0D, 0.0D, 0.0D);

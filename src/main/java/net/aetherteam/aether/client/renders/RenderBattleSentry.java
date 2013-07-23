@@ -30,7 +30,8 @@ public class RenderBattleSentry extends RenderLiving
         if (var2 != 0)
         {
             return -1;
-        } else
+        }
+        else
         {
             this.loadTexture("/net/aetherteam/aether/client/sprites/mobs/sentryMelee/eye.png");
             float var4 = 1.0F;
@@ -40,7 +41,7 @@ public class RenderBattleSentry extends RenderLiving
             char var5 = 61680;
             int var6 = var5 % 65536;
             int var7 = var5 / 65536;
-            OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, (float) var6 / 1.0F, (float) var7 / 1.0F);
+            OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, (float)var6 / 1.0F, (float)var7 / 1.0F);
             GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
             GL11.glColor4f(1.0F, 1.0F, 1.0F, var4);
 
@@ -58,7 +59,7 @@ public class RenderBattleSentry extends RenderLiving
      */
     protected int shouldRenderPass(EntityLiving var1, int var2, float var3)
     {
-        return this.a((EntityBattleSentry) var1, var2, var3);
+        return this.a((EntityBattleSentry)var1, var2, var3);
     }
 
     /**
@@ -66,12 +67,12 @@ public class RenderBattleSentry extends RenderLiving
      */
     protected void renderModel(EntityLiving var1, float var2, float var3, float var4, float var5, float var6, float var7)
     {
-        if (!((EntityBattleSentry) var1).isInView() || ((EntityBattleSentry) var1).getHasBeenAttacked())
+        if (!((EntityBattleSentry)var1).isInView() || ((EntityBattleSentry)var1).getHasBeenAttacked())
         {
             super.renderModel(var1, var2, var3, var4, var5, var6, var7);
         }
 
-        if (((EntityBattleSentry) var1).isInView() && !((EntityBattleSentry) var1).getHasBeenAttacked())
+        if (((EntityBattleSentry)var1).isInView() && !((EntityBattleSentry)var1).getHasBeenAttacked())
         {
             GL11.glPushMatrix();
             GL11.glTranslatef(0.0F, 0.5F, 0.0F);

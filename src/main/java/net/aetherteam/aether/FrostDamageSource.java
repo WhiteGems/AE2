@@ -10,9 +10,12 @@ public class FrostDamageSource extends DamageSource
         super("Frost bite");
     }
 
-    public String getDeathMessage(EntityLiving par1EntityLiving)
+    /**
+     * Returns the message to be displayed on player death.
+     */
+    public String getDeathMessage(EntityLiving var1)
     {
-        return par1EntityLiving.getEntityName() + " was frost bitten";
+        return var1.getEntityName() + " was frost bitten";
     }
 
     public boolean isUnblockable()
@@ -20,13 +23,11 @@ public class FrostDamageSource extends DamageSource
         return true;
     }
 
+    /**
+     * Returns true if the damage is fire based.
+     */
     public boolean isFireDamage()
     {
         return true;
     }
 }
-
-/* Location:           D:\Dev\Mc\forge_orl\mcp\jars\bin\aether.jar
- * Qualified Name:     net.aetherteam.aether.FrostDamageSource
- * JD-Core Version:    0.6.2
- */

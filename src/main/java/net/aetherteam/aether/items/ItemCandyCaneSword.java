@@ -1,7 +1,6 @@
 package net.aetherteam.aether.items;
 
 import java.util.Random;
-
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.EnumToolMaterial;

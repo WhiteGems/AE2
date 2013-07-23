@@ -2,7 +2,7 @@ package net.aetherteam.aether.items;
 
 import net.minecraft.item.ItemStack;
 
-public class ItemMoreArmor extends ItemAether implements net.aetherteam.aether.interfaces.AEItem
+public class ItemMoreArmor extends ItemAether
 {
     public int itemColour;
     public final int armorLevel;
@@ -11,8 +11,8 @@ public class ItemMoreArmor extends ItemAether implements net.aetherteam.aether.i
     public final int renderIndex;
     public String texture;
     public boolean colouriseRender;
-    private static final int[] damageReduceAmountArray = new int[]{3, 8, 6, 3, 0, 1, 0, 0, 0, 0, 2, 0};
-    private static final int[] maxDamageArray = new int[]{11, 16, 15, 13, 10, 10, 8, 10, 10, 10, 10, 10};
+    private static final int[] damageReduceAmountArray = new int[] {3, 8, 6, 3, 0, 1, 0, 0, 0, 0, 2, 0};
+    private static final int[] maxDamageArray = new int[] {11, 16, 15, 13, 10, 10, 8, 10, 10, 10, 10, 10};
 
     protected ItemMoreArmor(int var1, int var2, int var3, int var4, int var5)
     {

@@ -2,9 +2,7 @@ package net.aetherteam.aether.client.renders;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
-
 import java.util.Random;
-
 import net.aetherteam.aether.entities.EntityColdLightningBolt;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.entity.Render;
@@ -33,8 +31,8 @@ public class RenderColdLightning extends Render
         {
             var11[var18] = var13;
             var12[var18] = var15;
-            var13 += (double) (var17.nextInt(11) - 5);
-            var15 += (double) (var17.nextInt(11) - 5);
+            var13 += (double)(var17.nextInt(11) - 5);
+            var15 += (double)(var17.nextInt(11) - 5);
         }
 
         for (var18 = 0; var18 < 4; ++var18)
@@ -66,29 +64,30 @@ public class RenderColdLightning extends Render
 
                     if (var20 == 0)
                     {
-                        var23 += (double) (var19.nextInt(11) - 5);
-                        var25 += (double) (var19.nextInt(11) - 5);
-                    } else
+                        var23 += (double)(var19.nextInt(11) - 5);
+                        var25 += (double)(var19.nextInt(11) - 5);
+                    }
+                    else
                     {
-                        var23 += (double) (var19.nextInt(31) - 15);
-                        var25 += (double) (var19.nextInt(31) - 15);
+                        var23 += (double)(var19.nextInt(31) - 15);
+                        var25 += (double)(var19.nextInt(31) - 15);
                     }
 
                     var10.startDrawing(5);
                     float var32 = 0.5F;
                     var10.setColorRGBA_F(0.9F * var32, 0.9F * var32, 1.0F * var32, 7.3F);
-                    double var33 = 0.1D + (double) var18 * 0.2D;
+                    double var33 = 0.1D + (double)var18 * 0.2D;
 
                     if (var20 == 0)
                     {
-                        var33 *= (double) var27 * 0.1D + 1.0D;
+                        var33 *= (double)var27 * 0.1D + 1.0D;
                     }
 
-                    double var35 = 0.1D + (double) var18 * 0.2D;
+                    double var35 = 0.1D + (double)var18 * 0.2D;
 
                     if (var20 == 0)
                     {
-                        var35 *= (double) (var27 - 1) * 0.1D + 1.0D;
+                        var35 *= (double)(var27 - 1) * 0.1D + 1.0D;
                     }
 
                     for (int var37 = 0; var37 < 5; ++var37)
@@ -119,8 +118,8 @@ public class RenderColdLightning extends Render
                             var44 += var35 * 2.0D;
                         }
 
-                        var10.addVertex(var42 + var23, var4 + (double) (var27 * 16), var44 + var25);
-                        var10.addVertex(var38 + var28, var4 + (double) ((var27 + 1) * 16), var40 + var30);
+                        var10.addVertex(var42 + var23, var4 + (double)(var27 * 16), var44 + var25);
+                        var10.addVertex(var38 + var28, var4 + (double)((var27 + 1) * 16), var40 + var30);
                     }
 
                     var10.draw();
@@ -142,6 +141,6 @@ public class RenderColdLightning extends Render
      */
     public void doRender(Entity var1, double var2, double var4, double var6, float var8, float var9)
     {
-        this.doRenderLightningBolt((EntityColdLightningBolt) var1, var2, var4, var6, var8, var9);
+        this.doRenderLightningBolt((EntityColdLightningBolt)var1, var2, var4, var6, var8, var9);
     }
 }

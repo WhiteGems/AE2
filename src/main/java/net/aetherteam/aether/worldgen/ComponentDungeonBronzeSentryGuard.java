@@ -2,7 +2,6 @@ package net.aetherteam.aether.worldgen;
 
 import java.util.List;
 import java.util.Random;
-
 import net.aetherteam.aether.blocks.AetherBlocks;
 import net.aetherteam.aether.dungeons.Dungeon;
 import net.aetherteam.aether.dungeons.DungeonHandler;
@@ -33,8 +32,8 @@ public class ComponentDungeonBronzeSentryGuard extends ComponentDungeonBronzeRoo
      */
     public boolean addComponentParts(World var1, Random var2, StructureBoundingBox var3)
     {
-        int var6;
         int var5;
+        int var6;
 
         for (int var4 = this.boundingBox.minY; var4 <= this.boundingBox.maxY; ++var4)
         {
@@ -58,8 +57,8 @@ public class ComponentDungeonBronzeSentryGuard extends ComponentDungeonBronzeRoo
         this.fillWithBlocksWithNotify(var1, var3, this.boundingBox.minX + 1, var6, this.boundingBox.minZ + 1, this.boundingBox.minX + 1 + var17, this.boundingBox.maxY - 1, this.boundingBox.maxZ - 1, 0, 0, false);
         this.fillWithBlocksWithNotify(var1, var3, var5, var6 + 2, var7, var8, var9 + 2, var10, AetherBlocks.LockedDungeonStone.blockID, AetherBlocks.LockedDungeonStone.blockID, false);
         this.fillWithBlocksWithNotify(var1, var3, this.boundingBox.minX + 4, var6, this.boundingBox.minZ + 4, this.boundingBox.maxX - 4, var6 + 1, this.boundingBox.maxZ - 4, AetherBlocks.LockedDungeonStone.blockID, AetherBlocks.LockedDungeonStone.blockID, false);
-        int var18;
         int var13;
+        int var18;
 
         for (int var11 = 1; var11 <= 2; ++var11)
         {
@@ -93,13 +92,13 @@ public class ComponentDungeonBronzeSentryGuard extends ComponentDungeonBronzeRoo
             var18 = this.boundingBox.minX + var17 + (this.boundingBox.maxX - (this.boundingBox.minX + var17)) / 2 + 1;
             var13 = var9 + 4;
             int var14 = this.boundingBox.minZ + (this.boundingBox.maxZ - this.boundingBox.minZ) / 2 + 1;
-            var19.setPosition((double) var18, (double) var13, (double) var14);
+            var19.setPosition((double)var18, (double)var13, (double)var14);
             DungeonHandler var15 = DungeonHandler.instance();
-            Dungeon var16 = var15.getInstanceAt(MathHelper.floor_double((double) var18), MathHelper.floor_double((double) var13), MathHelper.floor_double((double) var14));
+            Dungeon var16 = var15.getInstanceAt(MathHelper.floor_double((double)var18), MathHelper.floor_double((double)var13), MathHelper.floor_double((double)var14));
 
             if (var16 != null)
             {
-                var16.registerEntity((float) var18, (float) var13, (float) var14, var19);
+                var16.registerEntity((float)var18, (float)var13, (float)var14, var19);
             }
 
             if (!var1.isRemote)
@@ -146,7 +145,8 @@ public class ComponentDungeonBronzeSentryGuard extends ComponentDungeonBronzeRoo
                         if (var12 != var4 && var12 != var7 && var13 != var3 && var13 != var6 && var14 != var5 && var14 != var8)
                         {
                             this.placeBlockAtCurrentPositionWithNotify(var1, var10, 0, var13, var12, var14, var2);
-                        } else
+                        }
+                        else
                         {
                             this.placeBlockAtCurrentPositionWithNotify(var1, var9, 0, var13, var12, var14, var2);
                         }

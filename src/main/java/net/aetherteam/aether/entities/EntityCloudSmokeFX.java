@@ -23,14 +23,14 @@ public class EntityCloudSmokeFX extends EntityFX
         this.particleScale *= 0.75F;
         this.particleScale *= var14;
         this.smokeParticleScale = this.particleScale;
-        this.particleMaxAge = (int) (8.0D / (Math.random() * 0.8D + 0.2D));
-        this.particleMaxAge = (int) ((float) this.particleMaxAge * var14);
+        this.particleMaxAge = (int)(8.0D / (Math.random() * 0.8D + 0.2D));
+        this.particleMaxAge = (int)((float)this.particleMaxAge * var14);
         this.noClip = true;
     }
 
     public void renderParticle(Tessellator var1, float var2, float var3, float var4, float var5, float var6, float var7)
     {
-        float var8 = ((float) this.particleAge + var2) / (float) this.particleMaxAge * 32.0F;
+        float var8 = ((float)this.particleAge + var2) / (float)this.particleMaxAge * 32.0F;
 
         if (var8 < 0.0F)
         {

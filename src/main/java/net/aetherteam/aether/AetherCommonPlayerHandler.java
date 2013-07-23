@@ -4,9 +4,8 @@ import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.network.PacketDispatcher;
 import cpw.mods.fml.common.network.Player;
 import cpw.mods.fml.relauncher.Side;
-
+import cpw.mods.fml.relauncher.SideOnly;
 import java.util.Random;
-
 import net.aetherteam.aether.client.PlayerBaseAetherClient;
 import net.aetherteam.aether.entities.mounts_old.RidingHandler;
 import net.aetherteam.aether.interfaces.IAetherBoss;
@@ -19,22 +18,19 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.potion.Potion;
-import net.minecraft.potion.PotionEffect;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 
 public class AetherCommonPlayerHandler
 {
-    public int timeUntilPortal = 0;
-    public boolean inPortal = false;
+    public int timeUntilPortal;
+    public boolean inPortal;
     public float timeInPortal;
     public float prevTimeInPortal;
     public EntityPlayer player;
     protected int teleportDirection;
-    public Random rand = new Random();
+    public Random rand;
     public World worldObj;
     public int jrem;
     public static MinecraftServer mcServer = FMLCommonHandler.instance().getMinecraftServerInstance();
@@ -43,50 +39,56 @@ public class AetherCommonPlayerHandler
     public boolean verifiedOutOfPortal;
     private int verifiedOutOfPortalTime;
     private boolean beenInPortal;
-    private double dungeonPosX = 0.0D;
-    private double dungeonPosY = 0.0D;
-    private double dungeonPosZ = 0.0D;
-    private int frostBiteTimer;
-    private int frostBiteTime;
+    private double dungeonPosX;
+    private double dungeonPosY;
+    private double dungeonPosZ;
+    private boolean isParachuting;
 
-    public AetherCommonPlayerHandler(EntityPlayer Player)
+    public AetherCommonPlayerHandler(EntityPlayer var1)
     {
-        this.player = Player;
+        this.timeUntilPortal = 0;
+        this.inPortal = false;
+        this.rand = new Random();
+        this.dungeonPosX = 0.0D;
+        this.dungeonPosY = 0.0D;
+        this.dungeonPosZ = 0.0D;
+        this.player = var1;
         this.worldObj = this.player.worldObj;
     }
 
-    public AetherCommonPlayerHandler(PlayerBaseAetherClient playerBaseAetherClient)
+    @SideOnly(Side.CLIENT)
+    public AetherCommonPlayerHandler(PlayerBaseAetherClient var1)
     {
-        this(playerBaseAetherClient.getPlayer());
+        this(var1.getPlayer());
     }
 
-    public AetherCommonPlayerHandler(PlayerBaseAetherServer playerBaseAether)
+    public AetherCommonPlayerHandler(PlayerBaseAetherServer var1)
     {
-        this(playerBaseAether.getPlayer());
+        this(var1.getPlayer());
     }
 
     public void afterOnUpdate()
     {
         this.timeUntilPortal = this.player.timeUntilPortal;
-        beforeOnLivingUpdate();
+        this.beforeOnLivingUpdate();
 
-        if ((!this.worldObj.isRemote) && ((this.worldObj instanceof WorldServer)))
+        if (!this.worldObj.isRemote && this.worldObj instanceof WorldServer)
         {
-            MinecraftServer minecraftserver = ((WorldServer) this.worldObj).getMinecraftServer();
-            int i = this.player.getMaxInPortalTime();
+            MinecraftServer var3 = ((WorldServer)this.worldObj).getMinecraftServer();
+            int var2 = this.player.getMaxInPortalTime();
 
             if (this.inPortal)
             {
-                if ((this.player.ridingEntity == null) && (this.timeInPortal++ >= i))
+                if (this.player.ridingEntity == null && this.timeInPortal++ >= (float)var2)
                 {
-                    this.timeInPortal = i;
+                    this.timeInPortal = (float)var2;
                     this.player.timeUntilPortal = this.player.getPortalCooldown();
-
-                    Aether.teleportPlayerToAether((EntityPlayerMP) this.player, false);
+                    Aether.teleportPlayerToAether((EntityPlayerMP)this.player, false);
                 }
 
                 this.inPortal = false;
-            } else
+            }
+            else
             {
                 if (this.timeInPortal > 0.0F)
                 {
@@ -101,30 +103,19 @@ public class AetherCommonPlayerHandler
 
             if (this.timeUntilPortal > 0)
             {
-                this.timeUntilPortal -= 1;
+                --this.timeUntilPortal;
             }
         }
 
-        if ((this.currentBoss != null) && ((this.currentBoss.getBossEntity() instanceof EntityLiving)))
+        if (this.currentBoss != null && this.currentBoss.getBossEntity() instanceof EntityLiving)
         {
-            EntityLiving bossMob = (EntityLiving) this.currentBoss;
+            EntityLiving var4 = (EntityLiving)this.currentBoss;
 
-            if ((bossMob.isDead) || (this.currentBoss.getBossHP() <= 0))
+            if (var4.isDead || this.currentBoss.getBossHP() <= 0)
             {
-                setCurrentBoss(null);
+                this.setCurrentBoss((IAetherBoss)null);
             }
         }
-        if (this.frostBiteTimer > 0)
-        {
-            if (this.rand.nextInt(8) == 1)
-            {
-                this.player.attackEntityFrom(new FrostDamageSource(), this.rand.nextInt(4));
-                this.frostBiteTime += 1;
-            }
-            this.player.addPotionEffect(new PotionEffect(Potion.moveSlowdown.id, 3, 2));
-            this.frostBiteTimer -= 1;
-        }
-        if (this.player.isDead) this.frostBiteTimer = 0;
     }
 
     public void playPortalSFX()
@@ -152,62 +143,55 @@ public class AetherCommonPlayerHandler
 
     public boolean jump()
     {
-        if (this.riddenBy != null)
-        {
-            return this.riddenBy.jump(this, this.player);
-        }
-
-        return true;
+        return this.riddenBy != null ? this.riddenBy.jump(this, this.player) : true;
     }
 
-    public void rideEntity(Entity animal, RidingHandler ridingHandler)
+    public void rideEntity(Entity var1, RidingHandler var2)
     {
-        this.riddenBy = ridingHandler;
+        this.riddenBy = var2;
 
-        if (animal == null)
+        if (var1 == null)
         {
             this.riddenBy = null;
         }
-        Side side = FMLCommonHandler.instance().getEffectiveSide();
-        EntityClientPlayerMP playerr;
-        if (side.isServer())
+
+        Side var3 = FMLCommonHandler.instance().getEffectiveSide();
+
+        if (var3.isServer())
         {
-            EntityPlayerMP playerrs = (EntityPlayerMP) this.player;
-            PacketDispatcher.sendPacketToPlayer(AetherPacketHandler.sendRidingPacket(animal), (Player) playerrs);
-        } else if (side.isClient())
+            EntityPlayerMP var4 = (EntityPlayerMP)this.player;
+            PacketDispatcher.sendPacketToPlayer(AetherPacketHandler.sendRidingPacket(var1), (Player)var4);
+        }
+        else if (var3.isClient())
         {
-            playerr = (EntityClientPlayerMP) this.player;
+            EntityClientPlayerMP var5 = (EntityClientPlayerMP)this.player;
         }
     }
 
-    public void setCurrentBoss(IAetherBoss boss)
+    public void setCurrentBoss(IAetherBoss var1)
     {
-        this.currentBoss = boss;
+        this.currentBoss = var1;
+        PartyMember var2 = PartyController.instance().getMember(this.player.username);
+        Party var3 = PartyController.instance().getParty(var2);
 
-        PartyMember member = PartyController.instance().getMember(this.player.username);
-        Party party = PartyController.instance().getParty(member);
-
-        if (party != null) ;
+        if (var3 != null)
+        {
+            ;
+        }
     }
 
-    public int getFrostBiteTime()
+    public boolean getParachuting()
     {
-        return this.frostBiteTime;
+        return this.isParachuting;
+    }
+
+    public void setParachuting(boolean var1)
+    {
+        this.isParachuting = var1;
     }
 
     public IAetherBoss getCurrentBoss()
     {
         return this.currentBoss;
     }
-
-    public void setInIce()
-    {
-        int time = 100 + this.rand.nextInt(20 * MathHelper.clamp_int(this.rand.nextInt(13), 5, 13));
-        this.frostBiteTimer = time;
-    }
 }
-
-/* Location:           D:\Dev\Mc\forge_orl\mcp\jars\bin\aether.jar
- * Qualified Name:     net.aetherteam.aether.AetherCommonPlayerHandler
- * JD-Core Version:    0.6.2
- */

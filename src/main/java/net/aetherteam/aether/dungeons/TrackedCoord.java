@@ -8,11 +8,11 @@ public class TrackedCoord implements Serializable
     private int y;
     private int z;
 
-    public TrackedCoord(int x, int y, int z)
+    public TrackedCoord(int var1, int var2, int var3)
     {
-        this.x = x;
-        this.y = y;
-        this.z = z;
+        this.x = var1;
+        this.y = var2;
+        this.z = var3;
     }
 
     public int getX()
@@ -30,8 +30,3 @@ public class TrackedCoord implements Serializable
         return this.z;
     }
 }
-
-/* Location:           D:\Dev\Mc\forge_orl\mcp\jars\bin\aether.jar
- * Qualified Name:     net.aetherteam.aether.dungeons.TrackedCoord
- * JD-Core Version:    0.6.2
- */

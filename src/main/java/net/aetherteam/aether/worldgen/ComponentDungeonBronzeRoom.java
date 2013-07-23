@@ -5,7 +5,6 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
-
 import net.aetherteam.aether.blocks.AetherBlocks;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
@@ -156,16 +155,16 @@ public class ComponentDungeonBronzeRoom extends StructureComponent implements Se
 
         while (var4.hasNext())
         {
-            StructureBoundingBox var5 = (StructureBoundingBox) var4.next();
+            StructureBoundingBox var5 = (StructureBoundingBox)var4.next();
             Iterator var6 = this.roomsLinkedToTheRoom.iterator();
 
             while (var6.hasNext())
             {
-                Iterator var7 = ((ComponentDungeonBronzeRoom) var6.next()).entrances.iterator();
+                Iterator var7 = ((ComponentDungeonBronzeRoom)var6.next()).entrances.iterator();
 
                 while (var7.hasNext())
                 {
-                    StructureBoundingBox var8 = this.findIntercetingCube(var5, (StructureBoundingBox) var7.next());
+                    StructureBoundingBox var8 = this.findIntercetingCube(var5, (StructureBoundingBox)var7.next());
 
                     if (var8 != null)
                     {

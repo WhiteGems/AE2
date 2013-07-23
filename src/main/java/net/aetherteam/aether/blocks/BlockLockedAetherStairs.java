@@ -30,7 +30,7 @@ public class BlockLockedAetherStairs extends BlockAetherStairs
      */
     public void onBlockAdded(World var1, int var2, int var3, int var4)
     {
-        if (this.isLocked() && DungeonHandler.instance().getInstanceAt(MathHelper.floor_double((double) var2), MathHelper.floor_double((double) var3), MathHelper.floor_double((double) var4)) == null)
+        if (this.isLocked() && DungeonHandler.instance().getInstanceAt(MathHelper.floor_double((double)var2), MathHelper.floor_double((double)var3), MathHelper.floor_double((double)var4)) == null)
         {
             var1.setBlockToAir(var2, var3, var4);
         }

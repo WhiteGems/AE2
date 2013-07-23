@@ -1,7 +1,6 @@
 package net.aetherteam.aether.blocks;
 
 import java.util.Random;
-
 import net.aetherteam.aether.items.AetherItems;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;

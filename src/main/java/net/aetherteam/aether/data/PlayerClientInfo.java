@@ -10,13 +10,13 @@ public class PlayerClientInfo
     private int armourValue;
     private int aetherCoins;
 
-    public PlayerClientInfo(int halfHearts, int maxHealth, int hunger, int armourValue, int aetherCoins)
+    public PlayerClientInfo(int var1, int var2, int var3, int var4, int var5)
     {
-        this.maxHealth = maxHealth;
-        this.halfHearts = MathHelper.clamp_int(halfHearts, 0, this.maxHealth);
-        this.hunger = hunger;
-        this.armourValue = armourValue;
-        this.aetherCoins = aetherCoins;
+        this.maxHealth = var2;
+        this.halfHearts = MathHelper.clamp_int(var1, 0, this.maxHealth);
+        this.hunger = var3;
+        this.armourValue = var4;
+        this.aetherCoins = var5;
     }
 
     public int getHalfHearts()
@@ -44,8 +44,3 @@ public class PlayerClientInfo
         return this.aetherCoins;
     }
 }
-
-/* Location:           D:\Dev\Mc\forge_orl\mcp\jars\bin\aether.jar
- * Qualified Name:     net.aetherteam.aether.data.PlayerClientInfo
- * JD-Core Version:    0.6.2
- */

@@ -1,23 +1,27 @@
 package net.aetherteam.mainmenu_api;
 
-import java.io.PrintStream;
-
 public class MenuPage
 {
     private MenuSlot[] menuSlots = new MenuSlot[3];
     private int slotIndex = 0;
 
-    public void addMenuSlot(MenuSlot slot)
+    public void addMenuSlot(MenuSlot var1)
     {
-        this.menuSlots[this.slotIndex] = slot;
+        this.menuSlots[this.slotIndex] = var1;
 
-        if (this.slotIndex < getPageAmount()) this.slotIndex += 1;
-        else System.out.println("Menu Page filled up!");
+        if (this.slotIndex < this.getPageAmount())
+        {
+            ++this.slotIndex;
+        }
+        else
+        {
+            System.out.println("Menu Page filled up!");
+        }
     }
 
-    public MenuSlot getMenuSlot(int index)
+    public MenuSlot getMenuSlot(int var1)
     {
-        return this.menuSlots[index];
+        return this.menuSlots[var1];
     }
 
     public int getPageAmount()
@@ -25,8 +29,3 @@ public class MenuPage
         return this.menuSlots.length;
     }
 }
-
-/* Location:           D:\Dev\Mc\forge_orl\mcp\jars\bin\aether.jar
- * Qualified Name:     net.aetherteam.mainmenu_api.MenuPage
- * JD-Core Version:    0.6.2
- */

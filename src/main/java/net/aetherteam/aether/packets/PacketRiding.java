@@ -1,54 +1,53 @@
 package net.aetherteam.aether.packets;
 
 import cpw.mods.fml.common.network.Player;
-
 import java.io.ByteArrayInputStream;
 import java.io.DataInputStream;
 import java.io.IOException;
-
 import net.aetherteam.aether.Aether;
-import net.aetherteam.aether.AetherCommonPlayerHandler;
 import net.aetherteam.aether.entities.mounts_old.Ridable;
 import net.aetherteam.aether.entities.mounts_old.RidingHandler;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.multiplayer.WorldClient;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.network.packet.Packet250CustomPayload;
 
 public class PacketRiding extends AetherPacket
 {
-    public PacketRiding(int packetID)
+    public PacketRiding(int var1)
     {
-        super(packetID);
+        super(var1);
     }
 
-    public void onPacketReceived(Packet250CustomPayload packet, Player player)
+    public void onPacketReceived(Packet250CustomPayload var1, Player var2)
     {
-        DataInputStream dat = new DataInputStream(new ByteArrayInputStream(packet.data));
+        DataInputStream var3 = new DataInputStream(new ByteArrayInputStream(var1.data));
+        int var4 = -1;
 
-        int id = -1;
         try
         {
-            byte packetType = dat.readByte();
-            id = dat.readInt();
-        } catch (IOException e)
+            byte var5 = var3.readByte();
+            var4 = var3.readInt();
+        }
+        catch (IOException var6)
         {
-            e.printStackTrace();
+            var6.printStackTrace();
         }
 
-        Ridable entity = null;
+        Ridable var7 = null;
 
-        if (id != -1)
+        if (var4 != -1)
         {
-            entity = (Ridable) Minecraft.getMinecraft().theWorld.getEntityByID(id);
+            var7 = (Ridable)Minecraft.getMinecraft().theWorld.getEntityByID(var4);
         }
 
-        if (entity != null) entity.getRidingHandler().setRider((EntityPlayer) player);
-        else Aether.getPlayerBase((EntityPlayer) player).rideEntity(null, null);
+        if (var7 != null)
+        {
+            var7.getRidingHandler().setRider((EntityPlayer)var2);
+        }
+        else
+        {
+            Aether.getPlayerBase((EntityPlayer)var2).rideEntity((Entity)null, (RidingHandler)null);
+        }
     }
 }
-
-/* Location:           D:\Dev\Mc\forge_orl\mcp\jars\bin\aether.jar
- * Qualified Name:     net.aetherteam.aether.packets.PacketRiding
- * JD-Core Version:    0.6.2
- */

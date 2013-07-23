@@ -2,7 +2,6 @@ package net.aetherteam.aether.items;
 
 import java.util.Iterator;
 import java.util.List;
-
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.player.EntityPlayer;
@@ -72,7 +71,7 @@ public class ItemValkyrieLance extends ItemSword
         {
             if (var3 instanceof EntityPlayer)
             {
-                EntityPlayer var6 = (EntityPlayer) var3;
+                EntityPlayer var6 = (EntityPlayer)var3;
 
                 if (var6.swingProgressInt == -1)
                 {
@@ -90,11 +89,11 @@ public class ItemValkyrieLance extends ItemSword
 
                         if (var16 != var6)
                         {
-                            Entity var17 = (Entity) var16;
+                            Entity var17 = (Entity)var16;
 
                             if (var17.canBeCollidedWith())
                             {
-                                Vec3 var18 = Vec3.createVectorHelper(var17.posX - var6.posX, var17.boundingBox.minY + (double) (var17.height / 2.0F) - var6.posY - (double) var6.getEyeHeight(), var17.posZ - var6.posZ);
+                                Vec3 var18 = Vec3.createVectorHelper(var17.posX - var6.posX, var17.boundingBox.minY + (double)(var17.height / 2.0F) - var6.posY - (double)var6.getEyeHeight(), var17.posZ - var6.posZ);
                                 double var19 = var18.lengthVector();
 
                                 if (var19 <= var8)
@@ -121,7 +120,7 @@ public class ItemValkyrieLance extends ItemSword
 
                     if (var12 instanceof EntityLiving)
                     {
-                        var1.damageItem(1, (EntityLiving) var12);
+                        var1.damageItem(1, (EntityLiving)var12);
                     }
                 }
             }

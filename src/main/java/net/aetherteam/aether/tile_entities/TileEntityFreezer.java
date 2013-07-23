@@ -2,10 +2,8 @@ package net.aetherteam.aether.tile_entities;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
-
 import java.util.ArrayList;
 import java.util.List;
-
 import net.aetherteam.aether.AetherFrozen;
 import net.aetherteam.aether.blocks.AetherBlocks;
 import net.aetherteam.aether.items.AetherItems;
@@ -62,7 +60,8 @@ public class TileEntityFreezer extends TileEntity implements IInventory, ISidedI
                 var3 = this.frozenItemStacks[var1];
                 this.frozenItemStacks[var1] = null;
                 return var3;
-            } else
+            }
+            else
             {
                 var3 = this.frozenItemStacks[var1].splitStack(var2);
 
@@ -73,7 +72,8 @@ public class TileEntityFreezer extends TileEntity implements IInventory, ISidedI
 
                 return var3;
             }
-        } else
+        }
+        else
         {
             return null;
         }
@@ -90,7 +90,8 @@ public class TileEntityFreezer extends TileEntity implements IInventory, ISidedI
             ItemStack var2 = this.frozenItemStacks[var1];
             this.frozenItemStacks[var1] = null;
             return var2;
-        } else
+        }
+        else
         {
             return null;
         }
@@ -132,7 +133,7 @@ public class TileEntityFreezer extends TileEntity implements IInventory, ISidedI
 
         for (int var3 = 0; var3 < var2.tagCount(); ++var3)
         {
-            NBTTagCompound var4 = (NBTTagCompound) var2.tagAt(var3);
+            NBTTagCompound var4 = (NBTTagCompound)var2.tagAt(var3);
             byte var5 = var4.getByte("Slot");
 
             if (var5 >= 0 && var5 < this.frozenItemStacks.length)
@@ -151,8 +152,8 @@ public class TileEntityFreezer extends TileEntity implements IInventory, ISidedI
     public void writeToNBT(NBTTagCompound var1)
     {
         super.writeToNBT(var1);
-        var1.setShort("BurnTime", (short) this.frozenProgress);
-        var1.setShort("CookTime", (short) this.frozenTimeForItem);
+        var1.setShort("BurnTime", (short)this.frozenProgress);
+        var1.setShort("CookTime", (short)this.frozenTimeForItem);
         NBTTagList var2 = new NBTTagList();
 
         for (int var3 = 0; var3 < this.frozenItemStacks.length; ++var3)
@@ -160,7 +161,7 @@ public class TileEntityFreezer extends TileEntity implements IInventory, ISidedI
             if (this.frozenItemStacks[var3] != null)
             {
                 NBTTagCompound var4 = new NBTTagCompound();
-                var4.setByte("Slot", (byte) var3);
+                var4.setByte("Slot", (byte)var3);
                 this.frozenItemStacks[var3].writeToNBT(var4);
                 var2.appendTag(var4);
             }
@@ -224,7 +225,8 @@ public class TileEntityFreezer extends TileEntity implements IInventory, ISidedI
                 if (this.frozenItemStacks[2] == null)
                 {
                     this.setInventorySlotContents(2, new ItemStack(this.currentFrozen.frozenTo.getItem(), 1, this.currentFrozen.frozenTo.getItemDamage()));
-                } else
+                }
+                else
                 {
                     this.setInventorySlotContents(2, new ItemStack(this.currentFrozen.frozenTo.getItem(), this.getStackInSlot(2).stackSize + 1, this.currentFrozen.frozenTo.getItemDamage()));
                 }
@@ -234,11 +236,13 @@ public class TileEntityFreezer extends TileEntity implements IInventory, ISidedI
                     if (this.getStackInSlot(0).itemID == AetherItems.SkyrootBucket.itemID)
                     {
                         this.setInventorySlotContents(0, new ItemStack(AetherItems.SkyrootBucket));
-                    } else
+                    }
+                    else
                     {
                         this.decrStackSize(0, 1);
                     }
-                } else
+                }
+                else
                 {
                     this.setInventorySlotContents(0, new ItemStack(Item.bucketEmpty));
                 }
@@ -265,15 +269,16 @@ public class TileEntityFreezer extends TileEntity implements IInventory, ISidedI
 
             for (int var2 = 0; var2 < frozen.size(); ++var2)
             {
-                if (var1 != null && frozen.get(var2) != null && var1.itemID == ((AetherFrozen) frozen.get(var2)).frozenFrom.itemID && var1.getItemDamage() == ((AetherFrozen) frozen.get(var2)).frozenFrom.getItemDamage())
+                if (var1 != null && frozen.get(var2) != null && var1.itemID == ((AetherFrozen)frozen.get(var2)).frozenFrom.itemID && var1.getItemDamage() == ((AetherFrozen)frozen.get(var2)).frozenFrom.getItemDamage())
                 {
                     if (this.frozenItemStacks[2] == null)
                     {
-                        this.currentFrozen = (AetherFrozen) frozen.get(var2);
+                        this.currentFrozen = (AetherFrozen)frozen.get(var2);
                         this.frozenTimeForItem = this.currentFrozen.frozenPowerNeeded;
-                    } else if (this.frozenItemStacks[2].itemID == ((AetherFrozen) frozen.get(var2)).frozenTo.itemID && ((AetherFrozen) frozen.get(var2)).frozenTo.getItem().getItemStackLimit() > this.frozenItemStacks[2].stackSize)
+                    }
+                    else if (this.frozenItemStacks[2].itemID == ((AetherFrozen)frozen.get(var2)).frozenTo.itemID && ((AetherFrozen)frozen.get(var2)).frozenTo.getItem().getItemStackLimit() > this.frozenItemStacks[2].stackSize)
                     {
-                        this.currentFrozen = (AetherFrozen) frozen.get(var2);
+                        this.currentFrozen = (AetherFrozen)frozen.get(var2);
                         this.frozenTimeForItem = this.currentFrozen.frozenPowerNeeded;
                     }
                 }
@@ -286,7 +291,7 @@ public class TileEntityFreezer extends TileEntity implements IInventory, ISidedI
      */
     public boolean isUseableByPlayer(EntityPlayer var1)
     {
-        return this.worldObj.getBlockTileEntity(this.xCoord, this.yCoord, this.zCoord) != this ? false : var1.getDistanceSq((double) this.xCoord + 0.5D, (double) this.yCoord + 0.5D, (double) this.zCoord + 0.5D) <= 64.0D;
+        return this.worldObj.getBlockTileEntity(this.xCoord, this.yCoord, this.zCoord) != this ? false : var1.getDistanceSq((double)this.xCoord + 0.5D, (double)this.yCoord + 0.5D, (double)this.zCoord + 0.5D) <= 64.0D;
     }
 
     public static void addFreezable(ItemStack var0, ItemStack var1, int var2)

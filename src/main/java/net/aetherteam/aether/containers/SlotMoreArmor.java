@@ -33,7 +33,7 @@ public class SlotMoreArmor extends Slot
      */
     public boolean isItemValid(ItemStack var1)
     {
-        return var1.getItem() instanceof IAetherAccessory ? ((ItemAccessory) var1.getItem()).isTypeValid(this.armorType) : false;
+        return var1.getItem() instanceof IAetherAccessory ? ((ItemAccessory)var1.getItem()).isTypeValid(this.armorType) : false;
     }
 
     public void setBackgroundIconIndex(int var1)

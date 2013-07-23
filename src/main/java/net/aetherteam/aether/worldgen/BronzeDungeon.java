@@ -8,7 +8,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
-
 import net.aetherteam.aether.dungeons.Dungeon;
 import net.minecraft.world.ChunkCoordIntPair;
 import net.minecraft.world.World;
@@ -57,7 +56,7 @@ public class BronzeDungeon extends MapGenBase implements Serializable
         {
             while (var9.hasNext())
             {
-                StructureBronzeDungeonStart var10 = (StructureBronzeDungeonStart) var9.next();
+                StructureBronzeDungeonStart var10 = (StructureBronzeDungeonStart)var9.next();
 
                 if (var10.getBoundingBox().intersectsWith(var6 - 15, var7 - 15, var6 + 31, var7 + 31))
                 {
@@ -65,7 +64,8 @@ public class BronzeDungeon extends MapGenBase implements Serializable
                     var8 = true;
                 }
             }
-        } catch (ConcurrentModificationException var11)
+        }
+        catch (ConcurrentModificationException var11)
         {
             var11.printStackTrace();
             ++this.tried;
@@ -86,7 +86,7 @@ public class BronzeDungeon extends MapGenBase implements Serializable
 
         while (var4.hasNext())
         {
-            StructureBronzeDungeonStart var5 = (StructureBronzeDungeonStart) var4.next();
+            StructureBronzeDungeonStart var5 = (StructureBronzeDungeonStart)var4.next();
 
             if (var5.getBoundingBox().intersectsWith(var1, var3, var1, var3))
             {
@@ -94,7 +94,7 @@ public class BronzeDungeon extends MapGenBase implements Serializable
 
                 while (var6.hasNext())
                 {
-                    StructureComponent var7 = (StructureComponent) var6.next();
+                    StructureComponent var7 = (StructureComponent)var6.next();
 
                     if (var7.getBoundingBox().isVecInside(var1, var2, var3))
                     {
@@ -118,7 +118,7 @@ public class BronzeDungeon extends MapGenBase implements Serializable
 
         while (var4.hasNext())
         {
-            StructureBronzeDungeonStart var5 = (StructureBronzeDungeonStart) var4.next();
+            StructureBronzeDungeonStart var5 = (StructureBronzeDungeonStart)var4.next();
 
             if (var5.getBoundingBox().intersectsWith(var1, var3, var1, var3))
             {
@@ -126,7 +126,7 @@ public class BronzeDungeon extends MapGenBase implements Serializable
 
                 while (var6.hasNext())
                 {
-                    StructureComponent var7 = (StructureComponent) var6.next();
+                    StructureComponent var7 = (StructureComponent)var6.next();
 
                     if (this.intersectsWith(var7.getBoundingBox(), var1, var2, var3))
                     {

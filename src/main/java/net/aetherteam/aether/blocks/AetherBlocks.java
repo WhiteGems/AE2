@@ -2,26 +2,24 @@ package net.aetherteam.aether.blocks;
 
 import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.common.registry.LanguageRegistry;
-
 import java.lang.reflect.Field;
-
 import net.aetherteam.aether.Aether;
 import net.aetherteam.aether.items.ItemBlockAercloud;
 import net.aetherteam.aether.items.ItemBlockAetherGrass;
 import net.aetherteam.aether.items.ItemBlockAetherLog;
 import net.aetherteam.aether.items.ItemBlockBronzeDoor;
 import net.aetherteam.aether.items.ItemBlockChristmasLeaves;
-import net.aetherteam.aether.items.ItemBlockCrystalLeaves;
 import net.aetherteam.aether.items.ItemBlockDungeon;
 import net.aetherteam.aether.items.ItemBlockDungeonHolystone;
 import net.aetherteam.aether.items.ItemBlockEntrance;
 import net.aetherteam.aether.items.ItemBlockHolystone;
+import net.aetherteam.aether.items.ItemBlockPurpleCrystalLeaves;
 import net.aetherteam.aether.items.ItemBlockQuicksoil;
 import net.aetherteam.aether.items.ItemBlockTrap;
+import net.aetherteam.aether.worldgen.AetherGenFruitTree;
 import net.aetherteam.aether.worldgen.AetherGenLargeTree;
 import net.aetherteam.aether.worldgen.AetherGenMassiveTree;
 import net.aetherteam.aether.worldgen.AetherGenNormalTree;
-import net.aetherteam.aether.worldgen.AetherGenPurpleTree;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.item.ItemStack;
@@ -29,327 +27,398 @@ import net.minecraftforge.common.MinecraftForge;
 
 public class AetherBlocks
 {
-    @AEBlock(
-            name = "Aether Portal")
+    @net.aetherteam.aether.interfaces.AEBlock(
+        name = "Aether Portal"
+    )
     public static BlockAetherPortal AetherPortal;
     public static int AetherPortalID = 165;
-    @AEBlock(
-            name = "Aether Dirt")
+    @net.aetherteam.aether.interfaces.AEBlock(
+        name = "Aether Dirt"
+    )
     public static Block AetherDirt;
     public static int AetherDirtID = 166;
-    @AEBlock(
-            names = {"Aether Grass", "\u00a7bEnchanted Aether Grass"},
-            itemBlock = ItemBlockAetherGrass.class)
+    @net.aetherteam.aether.interfaces.AEBlock(
+        names = {"Aether Grass", "\u00a7bEnchanted Aether Grass"},
+        itemBlock = ItemBlockAetherGrass.class
+    )
     public static Block AetherGrass;
     public static int AetherGrassID = 167;
-    @AEBlock(
-            name = "Quicksoil",
-            itemBlock = ItemBlockQuicksoil.class)
+    @net.aetherteam.aether.interfaces.AEBlock(
+        name = "Quicksoil",
+        itemBlock = ItemBlockQuicksoil.class
+    )
     public static Block Quicksoil;
     public static int QuicksoilID = 168;
-    @AEBlock(
-            names = {"Holystone", "Mossy Holystone"},
-            itemBlock = ItemBlockHolystone.class)
+    @net.aetherteam.aether.interfaces.AEBlock(
+        names = {"Holystone", "Mossy Holystone"},
+        itemBlock = ItemBlockHolystone.class
+    )
     public static Block Holystone;
     public static int HolystoneID = 169;
-    @AEBlock(
-            name = "Icestone")
+    @net.aetherteam.aether.interfaces.AEBlock(
+        name = "Icestone"
+    )
     public static Block Icestone;
     public static int IcestoneID = 170;
-    @AEBlock(
-            names = {"Cold Aercloud", "Blue Aercloud", "Golden Aercloud", "Green Aercloud", "Storm Aercloud", "Purple Aercloud"},
-            itemBlock = ItemBlockAercloud.class)
+    @net.aetherteam.aether.interfaces.AEBlock(
+        names = {"Cold Aercloud", "Blue Aercloud", "Golden Aercloud", "Green Aercloud", "Storm Aercloud", "Purple Aercloud"},
+        itemBlock = ItemBlockAercloud.class
+    )
     public static Block Aercloud;
     public static int AercloudID = 171;
-    @AEBlock(
-            name = "Aerogel")
+    @net.aetherteam.aether.interfaces.AEBlock(
+        name = "Aerogel"
+    )
     public static Block Aerogel;
     public static int AerogelID = 172;
-    @AEBlock(
-            name = "Altar")
+    @net.aetherteam.aether.interfaces.AEBlock(
+        name = "Altar"
+    )
     public static Block Altar;
     public static int AltarID = 173;
-    @AEBlock(
-            name = "Incubator")
+    @net.aetherteam.aether.interfaces.AEBlock(
+        name = "Incubator"
+    )
     public static Block Incubator;
     public static int IncubatorID = 174;
-    @AEBlock(
-            names = {"Skyroot Log", "Golden Oak Log"},
-            itemBlock = ItemBlockAetherLog.class)
+    @net.aetherteam.aether.interfaces.AEBlock(
+        names = {"Skyroot Log", "Golden Oak Log"},
+        itemBlock = ItemBlockAetherLog.class
+    )
     public static Block AetherLog;
     public static int AetherLogID = 175;
-    @AEBlock(
-            name = "Skyroot Plank")
+    @net.aetherteam.aether.interfaces.AEBlock(
+        name = "Skyroot Plank"
+    )
     public static Block SkyrootPlank;
     public static int SkyrootPlankID = 176;
-    @AEBlock(
-            name = "Green Skyroot Leaves")
+    @net.aetherteam.aether.interfaces.AEBlock(
+        name = "Green Skyroot Leaves"
+    )
     public static Block GreenSkyrootLeaves;
     public static int GreenSkyrootLeavesID = 177;
-    @AEBlock(
-            name = "Golden Oak Leaves")
+    @net.aetherteam.aether.interfaces.AEBlock(
+        name = "Golden Oak Leaves"
+    )
     public static Block GoldenOakLeaves;
     public static int GoldenOakLeavesID = 178;
-    @AEBlock(
-            name = "Green Skyroot Sapling")
+    @net.aetherteam.aether.interfaces.AEBlock(
+        name = "Green Skyroot Sapling"
+    )
     public static Block GreenSkyrootSapling;
     public static int GreenSkyrootSaplingID = 179;
-    @AEBlock(
-            name = "Golden Oak Sapling")
+    @net.aetherteam.aether.interfaces.AEBlock(
+        name = "Golden Oak Sapling"
+    )
     public static Block GoldenOakSapling;
     public static int GoldenOakSaplingID = 180;
-    @AEBlock(
-            name = "Ambrosium Ore")
+    @net.aetherteam.aether.interfaces.AEBlock(
+        name = "Ambrosium Ore"
+    )
     public static Block AmbrosiumOre;
     public static int AmbrosiumOreID = 181;
-    @AEBlock(
-            name = "Ambrosium Torch")
+    @net.aetherteam.aether.interfaces.AEBlock(
+        name = "Ambrosium Torch"
+    )
     public static Block AmbrosiumTorch;
     public static int AmbrosiumTorchID = 182;
-    @AEBlock(
-            name = "Zanite Ore")
+    @net.aetherteam.aether.interfaces.AEBlock(
+        name = "Zanite Ore"
+    )
     public static Block ZaniteOre;
     public static int ZaniteOreID = 183;
-    @AEBlock(
-            name = "Gravitite Ore")
+    @net.aetherteam.aether.interfaces.AEBlock(
+        name = "Gravitite Ore"
+    )
     public static Block GravititeOre;
     public static int GravititeOreID = 184;
-    @AEBlock(
-            name = "Enchanted Gravitite")
+    @net.aetherteam.aether.interfaces.AEBlock(
+        name = "Enchanted Gravitite"
+    )
     public static Block EnchantedGravitite;
     public static int EnchantedGravititeID = 185;
-    @AEBlock(
-            names = {"Carved Trap", "Angelic Trap", "Hellfire Trap"},
-            itemBlock = ItemBlockTrap.class)
+    @net.aetherteam.aether.interfaces.AEBlock(
+        names = {"Carved Trap", "Angelic Trap", "Hellfire Trap"},
+        itemBlock = ItemBlockTrap.class
+    )
     public static Block Trap;
     public static int TrapID = 186;
-    @AEBlock(
-            name = "Chest Mimic")
+    @net.aetherteam.aether.interfaces.AEBlock(
+        name = "Chest Mimic"
+    )
     public static Block SkyrootChestMimic;
     public static int SkyrootChestMimicID = 187;
-    @AEBlock(
-            name = "Treasure Chest")
+    @net.aetherteam.aether.interfaces.AEBlock(
+        name = "Treasure Chest"
+    )
     public static Block TreasureChest;
     public static int TreasureChestID = 188;
-    @AEBlock(
-            names = {"Carved Stone", "Angelic Stone", "Hellfire Stone"},
-            itemBlock = ItemBlockDungeon.class)
+    @net.aetherteam.aether.interfaces.AEBlock(
+        names = {"Carved Stone", "Angelic Stone", "Hellfire Stone"},
+        itemBlock = ItemBlockDungeon.class
+    )
     public static Block DungeonStone;
     public static int DungeonStoneID = 189;
-    @AEBlock(
-            names = {"Sentry Stone", "Light Angelic Stone", "Light Hellfire Stone"},
-            itemBlock = ItemBlockDungeon.class)
+    @net.aetherteam.aether.interfaces.AEBlock(
+        names = {"Sentry Stone", "Light Angelic Stone", "Light Hellfire Stone"},
+        itemBlock = ItemBlockDungeon.class
+    )
     public static Block LightDungeonStone;
     public static int LightDungeonStoneID = 190;
-    @AEBlock(
-            names = {"Locked Carved Stone", "Locked Angelic Stone", "Locked Hellfire Stone"},
-            itemBlock = ItemBlockDungeon.class)
+    @net.aetherteam.aether.interfaces.AEBlock(
+        names = {"Locked Carved Stone", "Locked Angelic Stone", "Locked Hellfire Stone"},
+        itemBlock = ItemBlockDungeon.class
+    )
     public static Block LockedDungeonStone;
     public static int LockedDungeonStoneID = 191;
-    @AEBlock(
-            names = {"Locked Sentry Stone", "Locked Light Angelic Stone", "Locked Light Hellfire Stone"},
-            itemBlock = ItemBlockDungeon.class)
+    @net.aetherteam.aether.interfaces.AEBlock(
+        names = {"Locked Sentry Stone", "Locked Light Angelic Stone", "Locked Light Hellfire Stone"},
+        itemBlock = ItemBlockDungeon.class
+    )
     public static Block LockedLightDungeonStone;
     public static int LockedLightDungeonStoneID = 192;
-    @AEBlock(
-            names = {"Pillar", "Pillar Top", "Pillar Bottom"},
-            itemBlock = ItemBlockDungeon.class)
+    @net.aetherteam.aether.interfaces.AEBlock(
+        names = {"Pillar", "Pillar Top", "Pillar Bottom"},
+        itemBlock = ItemBlockDungeon.class
+    )
     public static Block Pillar;
     public static int PillarID = 193;
-    @AEBlock(
-            name = "Zanite Block")
+    @net.aetherteam.aether.interfaces.AEBlock(
+        name = "Zanite Block"
+    )
     public static Block ZaniteBlock;
     public static int ZaniteBlockID = 194;
-    @AEBlock(
-            name = "Quicksoil Glass")
+    @net.aetherteam.aether.interfaces.AEBlock(
+        name = "Quicksoil Glass"
+    )
     public static Block QuicksoilGlass;
     public static int QuicksoilGlassID = 195;
-    @AEBlock(
-            name = "Freezer")
+    @net.aetherteam.aether.interfaces.AEBlock(
+        name = "Freezer"
+    )
     public static Block Freezer;
     public static int FreezerID = 196;
-    @AEBlock(
-            name = "White Flower")
+    @net.aetherteam.aether.interfaces.AEBlock(
+        name = "White Flower"
+    )
     public static Block WhiteFlower;
     public static int WhiteFlowerID = 197;
-    @AEBlock(
-            name = "Purple Flower")
+    @net.aetherteam.aether.interfaces.AEBlock(
+        name = "Purple Flower"
+    )
     public static Block PurpleFlower;
     public static int PurpleFlowerID = 198;
-    @AEBlock(
-            names = {"Christmas Leaves", "Decorative Leaves"},
-            itemBlock = ItemBlockChristmasLeaves.class)
+    @net.aetherteam.aether.interfaces.AEBlock(
+        names = {"Christmas Leaves", "Decorative Leaves"},
+        itemBlock = ItemBlockChristmasLeaves.class
+    )
     public static Block ChristmasLeaves;
     public static int ChristmasLeavesID = 199;
-    @AEBlock(
-            name = "Present")
+    @net.aetherteam.aether.interfaces.AEBlock(
+        name = "Present"
+    )
     public static Block Present;
     public static int PresentID = 200;
-    @AEBlock(
-            name = "Berry Bush")
+    @net.aetherteam.aether.interfaces.AEBlock(
+        name = "Berry Bush"
+    )
     public static Block BerryBush;
     public static int BerryBushID = 201;
-    @AEBlock(
-            name = "Berry Bush Stem")
+    @net.aetherteam.aether.interfaces.AEBlock(
+        name = "Berry Bush Stem"
+    )
     public static Block BerryBushStem;
     public static int BerryBushStemID = 202;
-    @AEBlock(
-            names = {"Crystal Leaves", "Crystal Fruit Leaves"},
-            itemBlock = ItemBlockCrystalLeaves.class)
-    public static Block CrystalLeaves;
-    public static int CrystalLeavesID = 203;
-    @AEBlock(
-            name = "Mossy Holystone Stairs")
+    @net.aetherteam.aether.interfaces.AEBlock(
+        name = "Mossy Holystone Stairs"
+    )
     public static Block MossyHolystoneStairs;
     public static int MossyHolystoneStairsID = 204;
-    @AEBlock(
-            name = "Icestone Stairs")
+    @net.aetherteam.aether.interfaces.AEBlock(
+        name = "Icestone Stairs"
+    )
     public static Block IcestoneStairs;
     public static int IcestoneStairsID = 205;
-    @AEBlock(
-            name = "Skyroot Stairs")
+    @net.aetherteam.aether.interfaces.AEBlock(
+        name = "Skyroot Stairs"
+    )
     public static Block SkyrootStairs;
     public static int SkyrootStairsID = 206;
-    @AEBlock(
-            name = "Carved Stairs")
+    @net.aetherteam.aether.interfaces.AEBlock(
+        name = "Carved Stairs"
+    )
     public static Block CarvedStairs;
     public static int CarvedStairsID = 207;
-    @AEBlock(
-            name = "Angelic Stairs")
+    @net.aetherteam.aether.interfaces.AEBlock(
+        name = "Angelic Stairs"
+    )
     public static Block AngelicStairs;
     public static int AngelicStairsID = 208;
-    @AEBlock(
-            name = "Hellfire Stairs")
+    @net.aetherteam.aether.interfaces.AEBlock(
+        name = "Hellfire Stairs"
+    )
     public static Block HellfireStairs;
     public static int HellfireStairsID = 209;
-    @AEBlock(
-            name = "Holystone Fence")
+    @net.aetherteam.aether.interfaces.AEBlock(
+        name = "Holystone Fence"
+    )
     public static Block HolystoneWall;
     public static int HolystoneWallID = 210;
-    @AEBlock(
-            name = "Mossy Holystone Wall")
+    @net.aetherteam.aether.interfaces.AEBlock(
+        name = "Mossy Holystone Wall"
+    )
     public static Block MossyHolystoneWall;
     public static int MossyHolystoneWallID = 211;
-    @AEBlock(
-            name = "Icestone Wall")
+    @net.aetherteam.aether.interfaces.AEBlock(
+        name = "Icestone Wall"
+    )
     public static Block IcestoneWall;
     public static int IcestoneWallID = 212;
-    @AEBlock(
-            name = "Skyroot Fence")
+    @net.aetherteam.aether.interfaces.AEBlock(
+        name = "Skyroot Fence"
+    )
     public static Block SkyrootFence;
     public static int SkyrootFenceID = 213;
-    @AEBlock(
-            name = "Carved Wall")
+    @net.aetherteam.aether.interfaces.AEBlock(
+        name = "Carved Wall"
+    )
     public static Block CarvedWall;
     public static int CarvedWallID = 214;
-    @AEBlock(
-            name = "Angelic Wall")
+    @net.aetherteam.aether.interfaces.AEBlock(
+        name = "Angelic Wall"
+    )
     public static Block AngelicWall;
     public static int AngelicWallID = 215;
-    @AEBlock(
-            name = "Hellfire Wall")
+    @net.aetherteam.aether.interfaces.AEBlock(
+        name = "Hellfire Wall"
+    )
     public static Block HellfireWall;
     public static int HellfireWallID = 216;
-    @AEBlock(
-            name = "Holystone Brick")
+    @net.aetherteam.aether.interfaces.AEBlock(
+        name = "Holystone Brick"
+    )
     public static Block HolystoneBrick;
     public static int HolystoneBrickID = 217;
-    @AEBlock(
-            name = "Blue Skyroot Leaves")
+    @net.aetherteam.aether.interfaces.AEBlock(
+        name = "Blue Skyroot Leaves"
+    )
     public static Block BlueSkyrootLeaves;
     public static int BlueSkyrootLeavesID = 218;
-    @AEBlock(
-            name = "Skyroot Log Wall")
+    @net.aetherteam.aether.interfaces.AEBlock(
+        name = "Skyroot Log Wall"
+    )
     public static Block SkyrootLogWall;
     public static int SkyrootLogWallID = 219;
-    @AEBlock(
-            name = "Tall Aether Grass")
+    @net.aetherteam.aether.interfaces.AEBlock(
+        name = "Tall Aether Grass"
+    )
     public static Block TallAetherGrass;
     public static int TallAetherGrassID = 220;
-    @AEBlock(
-            name = "Dark Blue Skyroot Leaves")
+    @net.aetherteam.aether.interfaces.AEBlock(
+        name = "Dark Blue Skyroot Leaves"
+    )
     public static Block DarkBlueSkyrootLeaves;
     public static int DarkBlueSkyrootLeavesID = 221;
-    @AEBlock(
-            name = "Blue Skyroot Sapling")
+    @net.aetherteam.aether.interfaces.AEBlock(
+        name = "Blue Skyroot Sapling"
+    )
     public static Block BlueSkyrootSapling;
     public static int BlueSkyrootSaplingID = 222;
-    @AEBlock(
-            name = "Skyroot Chest")
+    @net.aetherteam.aether.interfaces.AEBlock(
+        name = "Skyroot Chest"
+    )
     public static Block SkyrootChest;
     public static int SkyrootChestID = 223;
-    @AEBlock(
-            name = "Bronze Door Controller")
+    @net.aetherteam.aether.interfaces.AEBlock(
+        name = "Bronze Door Controller"
+    )
     public static Block BronzeDoorController;
     public static int BronzeDoorControllerID = 224;
-    @AEBlock(
-            name = "Purple Skyroot Leaves")
-    public static Block PurpleSkyrootLeaves;
-    public static int PurpleSkyrootLeavesID = 225;
-    @AEBlock(
-            name = "Purple Skyroot Sapling")
-    public static Block PurpleSkyrootSapling;
-    public static int PurpleSkyrootSaplingID = 226;
-    @AEBlock(
-            name = "Orange Fruit Tree Sapling")
+    @net.aetherteam.aether.interfaces.AEBlock(
+        names = {"Purple Crystal Leaves", "Purple Fruit Leaves"},
+        itemBlock = ItemBlockPurpleCrystalLeaves.class
+    )
+    public static Block PurpleCrystalLeaves;
+    public static int PurpleCrystalLeavesID = 225;
+    @net.aetherteam.aether.interfaces.AEBlock(
+        name = "Purple Skyroot Sapling"
+    )
+    public static Block PurpleCrystalSapling;
+    public static int PurpleCrystalSaplingID = 226;
+    @net.aetherteam.aether.interfaces.AEBlock(
+        name = "Orange Fruit Tree Sapling"
+    )
     public static Block BlockOrangeTree;
     public static int OrangeFruitTreeID = 227;
-    @AEBlock(
-            names = {"Bronze Door", "Bronze Door Lock"},
-            itemBlock = ItemBlockBronzeDoor.class)
+    @net.aetherteam.aether.interfaces.AEBlock(
+        names = {"Bronze Door", "Bronze Door Lock"},
+        itemBlock = ItemBlockBronzeDoor.class
+    )
     public static Block BronzeDoor;
     public static int BronzeDoorID = 228;
-    @AEBlock(
-            name = "Continuum Ore")
+    @net.aetherteam.aether.interfaces.AEBlock(
+        name = "Continuum Ore"
+    )
     public static Block ContinuumOre;
     public static int ContinuumOreID = 229;
-    @AEBlock(
-            name = "Dark Blue Skyroot Sapling")
+    @net.aetherteam.aether.interfaces.AEBlock(
+        name = "Dark Blue Skyroot Sapling"
+    )
     public static Block DarkBlueSkyrootSapling;
     public static int DarkBlueSkyrootSaplingID = 230;
-    @AEBlock(
-            name = "Skyroot Crafting Table")
+    @net.aetherteam.aether.interfaces.AEBlock(
+        name = "Skyroot Crafting Table"
+    )
     public static Block SkyrootCraftingTable;
     public static int SkyrootCraftingTableID = 231;
-    @AEBlock(
-            names = {"Dungeon Entrance", "Dungeon Entrance Lock"},
-            itemBlock = ItemBlockEntrance.class)
+    @net.aetherteam.aether.interfaces.AEBlock(
+        names = {"Dungeon Entrance", "Dungeon Entrance Lock"},
+        itemBlock = ItemBlockEntrance.class
+    )
     public static Block DungeonEntrance;
     public static int DungeonEntranceID = 232;
-    @AEBlock(
-            name = "Dungeon Entrance Controller")
+    @net.aetherteam.aether.interfaces.AEBlock(
+        name = "Dungeon Entrance Controller"
+    )
     public static Block DungeonEntranceController;
     public static int DungeonEntranceControllerID = 233;
-    @AEBlock(
-            names = {"Dungeon Holystone", "Dungeon Mossy Holystone"},
-            itemBlock = ItemBlockDungeonHolystone.class)
+    @net.aetherteam.aether.interfaces.AEBlock(
+        names = {"Dungeon Holystone", "Dungeon Mossy Holystone"},
+        itemBlock = ItemBlockDungeonHolystone.class
+    )
     public static Block DungeonHolystone;
     public static int DungeonHolystoneID = 234;
-    @AEBlock(
-            name = "Locked Carved Stone Stairs")
+    @net.aetherteam.aether.interfaces.AEBlock(
+        name = "Locked Carved Stone Stairs"
+    )
     public static Block CarvedDungeonStairs;
     public static int CarvedDungeonStairsID = 235;
-    @AEBlock(
-            name = "Locked Carved Stone Wall")
+    @net.aetherteam.aether.interfaces.AEBlock(
+        name = "Locked Carved Stone Wall"
+    )
     public static Block CarvedDungeonWall;
     public static int CarvedDungeonWallID = 236;
-    @AEBlock(
-            name = "Holystone Stairs")
+    @net.aetherteam.aether.interfaces.AEBlock(
+        name = "Holystone Stairs"
+    )
     public static Block HolystoneStairs;
     public static int HolystoneStairsID = 237;
-    @AEBlock(
-            name = "Cold Fire")
+    @net.aetherteam.aether.interfaces.AEBlock(
+        name = "Cold Fire"
+    )
     public static BlockColdFire ColdFire;
     public static int ColdFireID = 238;
     public static int altarRenderId;
     public static int treasureChestRenderId;
     public static int skyrootChestRenderId;
     public static int entranceRenderId;
+    public static int berryBushRenderId;
+    public static int tallAetherGrassRenderId;
     public static String terrainCat = "Aether Terrain";
 
     public static void init()
     {
-        AetherPortal = (BlockAetherPortal) (new BlockAetherPortal(makeTerrainID(terrainCat, "AetherPortal", AetherPortalID))).setUnlocalizedName("Aether:Aether Portal").setLightValue(0.75F).setCreativeTab(Aether.blocks);
+        AetherPortal = (BlockAetherPortal)(new BlockAetherPortal(makeTerrainID(terrainCat, "AetherPortal", AetherPortalID))).setUnlocalizedName("Aether:Aether Portal").setLightValue(0.75F).setCreativeTab(Aether.blocks);
         AetherDirt = (new BlockAetherDirt(makeTerrainID(terrainCat, "Aether Dirt", AetherDirtID))).setIconName("Aether Dirt").setCreativeTab(Aether.blocks);
         AetherGrass = (new BlockAetherGrass(makeTerrainID(terrainCat, "Aether Grass", AetherGrassID))).setIconName("Aether Grass").setCreativeTab(Aether.blocks);
         Quicksoil = (new BlockQuicksoil(makeTerrainID(terrainCat, "Quicksoil", QuicksoilID))).setIconName("Quicksoil").setCreativeTab(Aether.blocks);
@@ -373,10 +442,10 @@ public class AetherBlocks
         Trap = (new BlockTrap(makeID("Trap", TrapID))).setIconName("Trap");
         SkyrootChestMimic = (new BlockChestMimic(makeID("Chest Mimic", SkyrootChestMimicID))).setIconName("Chest Mimic").setCreativeTab(Aether.blocks);
         TreasureChest = (new BlockTreasureChest(makeID("Treasure Chest", TreasureChestID), 29)).setIconName("Treasure Chest").setCreativeTab(Aether.blocks);
-        DungeonStone = (new BlockDungeon(makeID("Dungeon Stone", DungeonStoneID), 0.5F, 0.0F)).setIconName("Dungeon Stone").setCreativeTab(Aether.blocks);
-        LightDungeonStone = (new BlockDungeon(makeID("Light Dungeon Stone", LightDungeonStoneID), 0.5F, 0.75F)).setIconName("Light Dungeon Stone").setCreativeTab(Aether.blocks);
-        LockedDungeonStone = (new BlockDungeon(makeID("Locked Dungeon Stone", LockedDungeonStoneID), -1.0F, 0.0F, 1000000.0F)).setIconName("Locked Dungeon Stone").setCreativeTab(Aether.blocks);
-        LockedLightDungeonStone = (new BlockDungeon(makeID("Locked Light Dungeon Stone", LockedLightDungeonStoneID), -1.0F, 0.5F, 1000000.0F)).setIconName("Locked Light Dungeon Stone").setCreativeTab(Aether.blocks);
+        DungeonStone = (new BlockDungeon(makeID("Dungeon Stone", DungeonStoneID), 0.5F, 0.0F)).setDungeonBlock(true).setIconName("Dungeon Stone").setCreativeTab(Aether.blocks);
+        LightDungeonStone = (new BlockDungeon(makeID("Light Dungeon Stone", LightDungeonStoneID), 0.5F, 0.75F)).setDungeonBlock(true).setIconName("Light Dungeon Stone").setCreativeTab(Aether.blocks);
+        LockedDungeonStone = (new BlockDungeon(makeID("Locked Dungeon Stone", LockedDungeonStoneID), -1.0F, 0.0F, 1000000.0F)).setDungeonBlock(true).setIconName("Locked Dungeon Stone").setCreativeTab(Aether.blocks);
+        LockedLightDungeonStone = (new BlockDungeon(makeID("Locked Light Dungeon Stone", LockedLightDungeonStoneID), -1.0F, 0.5F, 1000000.0F)).setDungeonBlock(true).setIconName("Locked Light Dungeon Stone").setCreativeTab(Aether.blocks);
         Pillar = (new BlockPillar(makeID("Pillar", PillarID))).setIconName("Pillar").setCreativeTab(Aether.blocks);
         ZaniteBlock = (new BlockZanite(makeID("Zanite Block", ZaniteBlockID))).setIconName("Zanite Block").setCreativeTab(Aether.blocks);
         QuicksoilGlass = (new BlockQuicksoilGlass(makeID("Quicksoil Glass", QuicksoilGlassID))).setIconName("Quicksoil Glass").setCreativeTab(Aether.blocks);
@@ -387,7 +456,6 @@ public class AetherBlocks
         Present = (new BlockPresent(makeID("Present", PresentID))).setIconName("Present").setCreativeTab(Aether.blocks);
         BerryBush = (new BlockBerryBush(makeID("Berry Bush", BerryBushID))).setIconName("Berry Bush").setCreativeTab(Aether.blocks);
         BerryBushStem = (new BlockBerryBushStem(makeID("Berry Bush Stem", BerryBushStemID))).setIconName("Berry Bush Stem").setCreativeTab(Aether.blocks);
-        CrystalLeaves = (new BlockCrystalLeaves(makeID("Crystal Leaves", CrystalLeavesID))).setIconName("Crystal Leaves").setCreativeTab(Aether.blocks);
         HolystoneStairs = (new BlockAetherStairs(makeID("Holystone Stairs", HolystoneStairsID), Holystone, 0)).setIconName("Holystone Stairs").setCreativeTab(Aether.blocks);
         MossyHolystoneStairs = (new BlockAetherStairs(makeID("Mossy Holystone Stairs", MossyHolystoneStairsID), Holystone, 2)).setIconName("Mossy Holystone Stairs").setCreativeTab(Aether.blocks);
         IcestoneStairs = (new BlockAetherStairs(makeID("Icestone Stairs", IcestoneStairsID), Icestone, 0)).setIconName("Icestone Stairs").setCreativeTab(Aether.blocks);
@@ -410,8 +478,8 @@ public class AetherBlocks
         BlueSkyrootLeaves = (new BlockAetherLeaves(BlueSkyrootLeavesID, BlueSkyrootSaplingID)).setIconName("Blue Skyroot Leaves").setCreativeTab(Aether.blocks);
         SkyrootChest = (new BlockSkyrootChest(makeID("Skyroot Chest", SkyrootChestID), 0)).setIconName("Skyroot Chest").setCreativeTab(Aether.blocks).setHardness(2.5F).setStepSound(Block.soundWoodFootstep);
         BronzeDoorController = (new BlockBronzeDoorController(makeID("Bronze Door Lock", BronzeDoorControllerID))).setIconName("Bronze Door Lock");
-        PurpleSkyrootSapling = (new BlockAetherSapling(PurpleSkyrootSaplingID, new AetherGenPurpleTree(PurpleSkyrootLeavesID, 5, true))).setIconName("Purple Skyroot Sapling").setCreativeTab(Aether.blocks);
-        PurpleSkyrootLeaves = (new BlockAetherLeaves(PurpleSkyrootLeavesID, PurpleSkyrootSaplingID)).setIconName("Purple Skyroot Leaves").setCreativeTab(Aether.blocks);
+        PurpleCrystalSapling = (new BlockAetherSapling(PurpleCrystalSaplingID, new AetherGenFruitTree(PurpleCrystalLeavesID, 1, 50, 5, true))).setIconName("Purple Crystal Sapling").setCreativeTab(Aether.blocks);
+        PurpleCrystalLeaves = (new BlockPurpleCrystalLeaves(PurpleCrystalLeavesID)).setIconName("Purple Crystal Leaves").setCreativeTab(Aether.blocks);
         BlockOrangeTree = (new BlockOrangeTree(makeID("BlockOrangeTree", OrangeFruitTreeID))).setIconName("BlockOrangeTree").setCreativeTab(Aether.blocks);
         BronzeDoor = (new BlockBronzeDoor(makeID("Bronze Door", BronzeDoorID))).setIconName("Bronze Door").setCreativeTab(Aether.blocks);
         ContinuumOre = (new BlockContinuumOre(makeID("Continuum Ore", ContinuumOreID))).setIconName("Continuum Ore").setCreativeTab(Aether.blocks);
@@ -419,10 +487,10 @@ public class AetherBlocks
         SkyrootCraftingTable = (new BlockSkyrootWorkbench(makeID("Skyroot Workbench", SkyrootCraftingTableID))).setHardness(2.5F).setStepSound(Block.soundWoodFootstep).setUnlocalizedName("Skyroot Workbench").setCreativeTab(Aether.blocks);
         DungeonEntrance = (new BlockEntranceDoor(makeID("Dungeon Entrance", DungeonEntranceID))).setIconName("Dungeon Entrance");
         DungeonEntranceController = (new BlockEntranceController(makeID("Dungeon Entrance Controller", DungeonEntranceControllerID))).setIconName("Dungeon Entrance Controller");
-        DungeonHolystone = (new BlockDungeonHolystone(makeID("Dungeon Holystone", DungeonHolystoneID))).setIconName("Dungeon Holystone");
+        DungeonHolystone = (new BlockDungeonHolystone(makeID("Dungeon Holystone", DungeonHolystoneID))).setDungeonBlock(true).setIconName("Dungeon Holystone");
         CarvedDungeonWall = (new BlockLockedAetherWall(makeID("Locked Carved Stone Wall", CarvedDungeonWallID), DungeonStone, 0)).setIconName("Locked Carved Stone Wall").setBlockUnbreakable();
         CarvedDungeonStairs = (new BlockLockedAetherStairs(makeID("Locked Carved Stone Stairs", CarvedDungeonStairsID), DungeonStone, 0)).setIconName("Locked Carved Stone Stairs").setBlockUnbreakable();
-        ColdFire = (BlockColdFire) (new BlockColdFire(makeID("Cold Fire", ColdFireID))).setIconName("Cold Fire").setBlockUnbreakable();
+        ColdFire = (BlockColdFire)(new BlockColdFire(makeID("Cold Fire", ColdFireID))).setIconName("Cold Fire").setBlockUnbreakable();
         Block.blocksList[Block.bed.blockID] = null;
         Block.blocksList[Block.bed.blockID] = (new BlockAetherBed(26)).setHardness(0.2F).setUnlocalizedName("bed");
         registerBlocks();
@@ -472,7 +540,7 @@ public class AetherBlocks
         for (int var2 = 0; var2 < var1; ++var2)
         {
             Field var3 = var0[var2];
-            AEBlock var4 = (AEBlock) var3.getAnnotation(AEBlock.class);
+            net.aetherteam.aether.interfaces.AEBlock var4 = (net.aetherteam.aether.interfaces.AEBlock)var3.getAnnotation(net.aetherteam.aether.interfaces.AEBlock.class);
 
             if (var4 != null && Block.class.isAssignableFrom(var3.getType()))
             {
@@ -480,8 +548,9 @@ public class AetherBlocks
 
                 try
                 {
-                    var5 = (Block) var3.get((Object) null);
-                } catch (IllegalAccessException var8)
+                    var5 = (Block)var3.get((Object)null);
+                }
+                catch (IllegalAccessException var8)
                 {
                     var8.printStackTrace();
                     continue;
@@ -496,7 +565,8 @@ public class AetherBlocks
                     {
                         LanguageRegistry.addName(new ItemStack(var5, 1, var7), var6[var7]);
                     }
-                } else
+                }
+                else
                 {
                     LanguageRegistry.addName(var5, var4.name());
                 }

@@ -1,7 +1,6 @@
 package net.aetherteam.aether.entities;
 
 import java.util.List;
-
 import net.aetherteam.aether.Aether;
 import net.aetherteam.aether.blocks.AetherBlocks;
 import net.aetherteam.aether.interfaces.IAetherMob;
@@ -82,7 +81,7 @@ public class EntityCockatrice extends EntityAetherMob implements IAetherMob
 
             if (var2 < var1.size())
             {
-                Entity var3 = (Entity) var1.get(var2);
+                Entity var3 = (Entity)var1.get(var2);
                 var3.mountEntity(this);
             }
 
@@ -102,7 +101,7 @@ public class EntityCockatrice extends EntityAetherMob implements IAetherMob
     {
         if (var1 instanceof EntityLiving)
         {
-            this.target = (EntityLiving) var1;
+            this.target = (EntityLiving)var1;
 
             if (var2 < 10.0F)
             {
@@ -111,7 +110,7 @@ public class EntityCockatrice extends EntityAetherMob implements IAetherMob
 
                 if (this.target != null)
                 {
-                    if (this.target.isDead || (double) this.target.getDistanceToEntity(this) > 12.0D)
+                    if (this.target.isDead || (double)this.target.getDistanceToEntity(this) > 12.0D)
                     {
                         this.target = null;
                         this.attackTime = 0;
@@ -129,7 +128,7 @@ public class EntityCockatrice extends EntityAetherMob implements IAetherMob
                     }
                 }
 
-                this.rotationYaw = (float) (Math.atan2(var5, var3) * 180.0D / Math.PI) - 90.0F;
+                this.rotationYaw = (float)(Math.atan2(var5, var3) * 180.0D / Math.PI) - 90.0F;
                 this.hasAttacked = true;
             }
         }
@@ -165,7 +164,7 @@ public class EntityCockatrice extends EntityAetherMob implements IAetherMob
         super.onLivingUpdate();
         this.field_756_e = this.field_752_b;
         this.field_757_d = this.destPos;
-        this.destPos = (float) ((double) this.destPos + (double) (this.onGround ? -1 : 4) * 0.05D);
+        this.destPos = (float)((double)this.destPos + (double)(this.onGround ? -1 : 4) * 0.05D);
 
         if (this.destPos < 0.01F)
         {
@@ -189,14 +188,15 @@ public class EntityCockatrice extends EntityAetherMob implements IAetherMob
             this.field_755_h = 1.0F;
         }
 
-        this.field_755_h = (float) ((double) this.field_755_h * 0.9D);
+        this.field_755_h = (float)((double)this.field_755_h * 0.9D);
 
         if (!this.onGround && this.motionY < 0.0D)
         {
             if (this.riddenByEntity == null)
             {
                 this.motionY *= 0.6D;
-            } else
+            }
+            else
             {
                 this.motionY *= 0.6375D;
             }
@@ -213,8 +213,7 @@ public class EntityCockatrice extends EntityAetherMob implements IAetherMob
     /**
      * Called when the mob is falling. Calculates and applies fall damage.
      */
-    protected void fall(float var1)
-    {}
+    protected void fall(float var1) {}
 
     /**
      * Called when the entity is attacked.
@@ -226,7 +225,8 @@ public class EntityCockatrice extends EntityAetherMob implements IAetherMob
         if (var3 != null && this.riddenByEntity != null && var3 == this.riddenByEntity)
         {
             return false;
-        } else
+        }
+        else
         {
             boolean var4 = super.attackEntityFrom(var1, var2);
 
@@ -245,8 +245,8 @@ public class EntityCockatrice extends EntityAetherMob implements IAetherMob
     public void writeEntityToNBT(NBTTagCompound var1)
     {
         super.writeEntityToNBT(var1);
-        var1.setShort("Jumps", (short) this.jumps);
-        var1.setShort("Remaining", (short) this.jrem);
+        var1.setShort("Jumps", (short)this.jumps);
+        var1.setShort("Remaining", (short)this.jrem);
 
         if (this.riddenByEntity != null)
         {

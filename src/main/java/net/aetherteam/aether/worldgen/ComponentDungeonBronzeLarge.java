@@ -2,7 +2,6 @@ package net.aetherteam.aether.worldgen;
 
 import java.util.List;
 import java.util.Random;
-
 import net.aetherteam.aether.blocks.AetherBlocks;
 import net.aetherteam.aether.entities.bosses.EntitySentryGuardian;
 import net.minecraft.world.World;
@@ -29,8 +28,8 @@ public class ComponentDungeonBronzeLarge extends ComponentDungeonBronzeRoom
      */
     public boolean addComponentParts(World var1, Random var2, StructureBoundingBox var3)
     {
-        int var6;
         int var5;
+        int var6;
 
         for (int var4 = this.boundingBox.minY; var4 <= this.boundingBox.maxY; ++var4)
         {
@@ -60,38 +59,38 @@ public class ComponentDungeonBronzeLarge extends ComponentDungeonBronzeRoom
             boolean var12 = false;
             int var13 = this.boundingBox.minY + var11;
             int var14;
-            int var17;
+            int var16;
 
-            for (var17 = var11; var17 <= this.boundingBox.maxX - this.boundingBox.minX - var11; ++var17)
+            for (var16 = var11; var16 <= this.boundingBox.maxX - this.boundingBox.minX - var11; ++var16)
             {
-                this.placeBlockAtCurrentPositionWithNotify(var1, AetherBlocks.CarvedDungeonStairs.blockID, 3, this.boundingBox.minX + var17, var13, this.boundingBox.maxZ - var11, var3);
-                this.placeBlockAtCurrentPositionWithNotify(var1, AetherBlocks.CarvedDungeonStairs.blockID, 2, this.boundingBox.minX + var17, var13, this.boundingBox.minZ + var11, var3);
+                this.placeBlockAtCurrentPositionWithNotify(var1, AetherBlocks.CarvedDungeonStairs.blockID, 3, this.boundingBox.minX + var16, var13, this.boundingBox.maxZ - var11, var3);
+                this.placeBlockAtCurrentPositionWithNotify(var1, AetherBlocks.CarvedDungeonStairs.blockID, 2, this.boundingBox.minX + var16, var13, this.boundingBox.minZ + var11, var3);
 
                 for (var14 = 1; var14 < 6; ++var14)
                 {
-                    this.placeBlockAtCurrentPositionWithNotify(var1, 0, 0, this.boundingBox.minX + var17, var13 + var14, this.boundingBox.minZ + var11, var3);
-                    this.placeBlockAtCurrentPositionWithNotify(var1, 0, 0, this.boundingBox.minX + var17, var13 + var14, this.boundingBox.maxZ - var11, var3);
+                    this.placeBlockAtCurrentPositionWithNotify(var1, 0, 0, this.boundingBox.minX + var16, var13 + var14, this.boundingBox.minZ + var11, var3);
+                    this.placeBlockAtCurrentPositionWithNotify(var1, 0, 0, this.boundingBox.minX + var16, var13 + var14, this.boundingBox.maxZ - var11, var3);
                 }
             }
 
-            for (var17 = var11; var17 <= this.boundingBox.maxZ - this.boundingBox.minZ - var11; ++var17)
+            for (var16 = var11; var16 <= this.boundingBox.maxZ - this.boundingBox.minZ - var11; ++var16)
             {
-                this.placeBlockAtCurrentPositionWithNotify(var1, AetherBlocks.CarvedDungeonStairs.blockID, 0, this.boundingBox.minX + var11, var13, this.boundingBox.minZ + var17, var3);
-                this.placeBlockAtCurrentPositionWithNotify(var1, AetherBlocks.CarvedDungeonStairs.blockID, 1, this.boundingBox.maxX - var11, var13, this.boundingBox.minZ + var17, var3);
+                this.placeBlockAtCurrentPositionWithNotify(var1, AetherBlocks.CarvedDungeonStairs.blockID, 0, this.boundingBox.minX + var11, var13, this.boundingBox.minZ + var16, var3);
+                this.placeBlockAtCurrentPositionWithNotify(var1, AetherBlocks.CarvedDungeonStairs.blockID, 1, this.boundingBox.maxX - var11, var13, this.boundingBox.minZ + var16, var3);
 
                 for (var14 = 1; var14 < 6; ++var14)
                 {
-                    this.placeBlockAtCurrentPositionWithNotify(var1, 0, 0, this.boundingBox.minX + var11, var13 + var14, this.boundingBox.minZ + var17, var3);
-                    this.placeBlockAtCurrentPositionWithNotify(var1, 0, 0, this.boundingBox.maxX - var11, var13 + var14, this.boundingBox.minZ + var17, var3);
+                    this.placeBlockAtCurrentPositionWithNotify(var1, 0, 0, this.boundingBox.minX + var11, var13 + var14, this.boundingBox.minZ + var16, var3);
+                    this.placeBlockAtCurrentPositionWithNotify(var1, 0, 0, this.boundingBox.maxX - var11, var13 + var14, this.boundingBox.minZ + var16, var3);
                 }
             }
         }
 
         if (var3.isVecInside(this.boundingBox.minX + var15 + (this.boundingBox.maxX - (this.boundingBox.minX + var15)) / 2 + 1, var9 + 2, this.boundingBox.minZ + (this.boundingBox.maxZ - this.boundingBox.minZ) / 2 + 1))
         {
-            EntitySentryGuardian var16 = new EntitySentryGuardian(var1);
-            var16.setPosition((double) (this.boundingBox.minX + var15 + (this.boundingBox.maxX - (this.boundingBox.minX + var15)) / 2 + 1), (double) (var9 + 2), (double) (this.boundingBox.minZ + (this.boundingBox.maxZ - this.boundingBox.minZ) / 2 + 1));
-            var1.spawnEntityInWorld(var16);
+            EntitySentryGuardian var17 = new EntitySentryGuardian(var1);
+            var17.setPosition((double)(this.boundingBox.minX + var15 + (this.boundingBox.maxX - (this.boundingBox.minX + var15)) / 2 + 1), (double)(var9 + 2), (double)(this.boundingBox.minZ + (this.boundingBox.maxZ - this.boundingBox.minZ) / 2 + 1));
+            var1.spawnEntityInWorld(var17);
         }
 
         this.cutHolesForEntrances(var1, var2, var3);
@@ -127,7 +126,8 @@ public class ComponentDungeonBronzeLarge extends ComponentDungeonBronzeRoom
                         if (var12 != var4 && var12 != var7 && var13 != var3 && var13 != var6 && var14 != var5 && var14 != var8)
                         {
                             this.placeBlockAtCurrentPositionWithNotify(var1, var10, 0, var13, var12, var14, var2);
-                        } else
+                        }
+                        else
                         {
                             this.placeBlockAtCurrentPositionWithNotify(var1, var9, 0, var13, var12, var14, var2);
                         }
@@ -171,7 +171,7 @@ public class ComponentDungeonBronzeLarge extends ComponentDungeonBronzeRoom
 
         if (var7.isVecInside(var8, var9, var10))
         {
-            var1.setBlock(var8, var9, var10, var2, var3, 2);
+            var1.setBlock(var8, var9, var10, var2, var3, ChunkProviderAether.placementFlagType);
         }
     }
 

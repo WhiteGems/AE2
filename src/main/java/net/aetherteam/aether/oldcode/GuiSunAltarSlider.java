@@ -29,7 +29,7 @@ public class GuiSunAltarSlider extends GuiButton
 
     public void setTime()
     {
-        long var1 = (long) (24000.0F * this.sliderValue);
+        long var1 = (long)(24000.0F * this.sliderValue);
         long var3 = this.worldObj.getWorldInfo().getWorldTime();
         long var5 = var3 % 24000L;
         long var7 = var1 > var5 ? var1 - var5 : var1 + 24000L - var5;
@@ -45,7 +45,7 @@ public class GuiSunAltarSlider extends GuiButton
         {
             if (this.dragging)
             {
-                this.sliderValue = (float) (var2 - (this.xPosition + 4)) / (float) (this.width - 8);
+                this.sliderValue = (float)(var2 - (this.xPosition + 4)) / (float)(this.width - 8);
 
                 if (this.sliderValue < 0.0F)
                 {
@@ -61,8 +61,8 @@ public class GuiSunAltarSlider extends GuiButton
             }
 
             GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-            this.drawTexturedModalRect(this.xPosition + (int) (this.sliderValue * (float) (this.width - 8)), this.yPosition, 0, 66, 4, 20);
-            this.drawTexturedModalRect(this.xPosition + (int) (this.sliderValue * (float) (this.width - 8)) + 4, this.yPosition, 196, 66, 4, 20);
+            this.drawTexturedModalRect(this.xPosition + (int)(this.sliderValue * (float)(this.width - 8)), this.yPosition, 0, 66, 4, 20);
+            this.drawTexturedModalRect(this.xPosition + (int)(this.sliderValue * (float)(this.width - 8)) + 4, this.yPosition, 196, 66, 4, 20);
         }
     }
 
@@ -71,7 +71,7 @@ public class GuiSunAltarSlider extends GuiButton
      */
     public void drawButton(Minecraft var1, int var2, int var3)
     {
-        this.sliderValue = (float) (this.worldObj.getWorldInfo().getWorldTime() % 24000L) / 24000.0F;
+        this.sliderValue = (float)(this.worldObj.getWorldInfo().getWorldTime() % 24000L) / 24000.0F;
         super.drawButton(var1, var2, var3);
     }
 
@@ -83,7 +83,7 @@ public class GuiSunAltarSlider extends GuiButton
     {
         if (super.mousePressed(var1, var2, var3))
         {
-            this.sliderValue = (float) (var2 - (this.xPosition + 4)) / (float) (this.width - 8);
+            this.sliderValue = (float)(var2 - (this.xPosition + 4)) / (float)(this.width - 8);
 
             if (this.sliderValue < 0.0F)
             {
@@ -98,7 +98,8 @@ public class GuiSunAltarSlider extends GuiButton
             this.setTime();
             this.dragging = true;
             return true;
-        } else
+        }
+        else
         {
             return false;
         }

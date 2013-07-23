@@ -1,7 +1,6 @@
 package net.aetherteam.aether.blocks;
 
 import java.util.ArrayList;
-
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockFence;
 import net.minecraft.block.material.Material;

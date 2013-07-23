@@ -19,14 +19,18 @@ public class ItemPoisonCure extends ItemFood
         return this;
     }
 
-    public void onFoodEaten(ItemStack var1, World var2, EntityPlayer var3)
+    public ItemStack onEaten(ItemStack var1, World var2, EntityPlayer var3)
     {
+        --var1.stackSize;
+
         if (!var2.isRemote)
         {
             var3.curePotionEffects(new ItemStack(Item.bucketMilk));
         }
 
-        --var1.stackSize;
+        var3.getFoodStats().addStats(this);
         var2.playSoundAtEntity(var3, "random.burp", 0.5F, var2.rand.nextFloat() * 0.1F + 0.9F);
+        this.onFoodEaten(var1, var2, var3);
+        return var1;
     }
 }

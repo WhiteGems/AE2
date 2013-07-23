@@ -12,7 +12,7 @@ public class RenderElectricBall extends RenderLiving
     public RenderElectricBall(ModelBase var1, float var2)
     {
         super(var1, var2);
-        this.shotty = (ModelBall) var1;
+        this.shotty = (ModelBall)var1;
     }
 
     /**
@@ -21,7 +21,7 @@ public class RenderElectricBall extends RenderLiving
      */
     public void preRenderCallback(EntityLiving var1, float var2)
     {
-        EntityElectricBall var3 = (EntityElectricBall) var1;
+        EntityElectricBall var3 = (EntityElectricBall)var1;
 
         for (int var4 = 0; var4 < 3; ++var4)
         {

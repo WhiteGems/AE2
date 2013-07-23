@@ -24,14 +24,15 @@ public class TileEntitySkyrootChestRenderer extends TileEntitySpecialRenderer
         if (!var1.func_70309_m())
         {
             var9 = 0;
-        } else
+        }
+        else
         {
             Block var10 = var1.getBlockType();
             var9 = var1.getBlockMetadata();
 
             if (var10 != null && var9 == 0)
             {
-                ((BlockSkyrootChest) var10).unifyAdjacentChests(var1.getWorldObj(), var1.xCoord, var1.yCoord, var1.zCoord);
+                ((BlockSkyrootChest)var10).unifyAdjacentChests(var1.getWorldObj(), var1.xCoord, var1.yCoord, var1.zCoord);
                 var9 = var1.getBlockMetadata();
             }
 
@@ -46,7 +47,8 @@ public class TileEntitySkyrootChestRenderer extends TileEntitySpecialRenderer
             {
                 var14 = this.chestModel;
                 this.bindTextureByName("/net/aetherteam/aether/client/sprites/tile_entities/skyrootChest.png");
-            } else
+            }
+            else
             {
                 var14 = this.largeChestModel;
                 this.bindTextureByName("/net/aetherteam/aether/client/sprites/tile_entities/skyrootLargeChest.png");
@@ -54,7 +56,7 @@ public class TileEntitySkyrootChestRenderer extends TileEntitySpecialRenderer
 
             GL11.glPushMatrix();
             GL11.glEnable(GL12.GL_RESCALE_NORMAL);
-            GL11.glTranslatef((float) var2, (float) var4 + 1.0F, (float) var6 + 1.0F);
+            GL11.glTranslatef((float)var2, (float)var4 + 1.0F, (float)var6 + 1.0F);
             GL11.glScalef(1.0F, -1.0F, -1.0F);
             GL11.glTranslatef(0.5F, 0.5F, 0.5F);
             short var11 = 0;
@@ -89,7 +91,7 @@ public class TileEntitySkyrootChestRenderer extends TileEntitySpecialRenderer
                 GL11.glTranslatef(0.0F, 0.0F, -1.0F);
             }
 
-            GL11.glRotatef((float) var11, 0.0F, 1.0F, 0.0F);
+            GL11.glRotatef((float)var11, 0.0F, 1.0F, 0.0F);
             GL11.glTranslatef(-0.5F, -0.5F, -0.5F);
             float var12 = var1.prevLidAngle + (var1.lidAngle - var1.prevLidAngle) * var8;
             float var13;
@@ -116,7 +118,7 @@ public class TileEntitySkyrootChestRenderer extends TileEntitySpecialRenderer
 
             var12 = 1.0F - var12;
             var12 = 1.0F - var12 * var12 * var12;
-            var14.chestLid.rotateAngleX = -(var12 * (float) Math.PI / 2.0F);
+            var14.chestLid.rotateAngleX = -(var12 * (float)Math.PI / 2.0F);
             var14.renderAll();
             GL11.glPopMatrix();
         }
@@ -124,6 +126,6 @@ public class TileEntitySkyrootChestRenderer extends TileEntitySpecialRenderer
 
     public void renderTileEntityAt(TileEntity var1, double var2, double var4, double var6, float var8)
     {
-        this.renderTileEntityChestAt((TileEntitySkyrootChest) var1, var2, var4, var6, var8);
+        this.renderTileEntityChestAt((TileEntitySkyrootChest)var1, var2, var4, var6, var8);
     }
 }

@@ -45,13 +45,16 @@ public class BlockIcestone extends BlockAether implements IAetherBlock
                     if (var1.getBlockId(var9, var10, var11) == 8)
                     {
                         var1.setBlock(var9, var10, var11, 79);
-                    } else if (var1.getBlockId(var9, var10, var11) == 9)
+                    }
+                    else if (var1.getBlockId(var9, var10, var11) == 9)
                     {
                         var1.setBlock(var9, var10, var11, 79);
-                    } else if (var1.getBlockId(var9, var10, var11) == 10)
+                    }
+                    else if (var1.getBlockId(var9, var10, var11) == 10)
                     {
                         var1.setBlock(var9, var10, var11, 49);
-                    } else if (var1.getBlockId(var9, var10, var11) == 11)
+                    }
+                    else if (var1.getBlockId(var9, var10, var11) == 11)
                     {
                         var1.setBlock(var9, var10, var11, 49);
                     }

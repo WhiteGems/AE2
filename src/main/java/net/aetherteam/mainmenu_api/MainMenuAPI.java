@@ -11,17 +11,23 @@ import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.network.NetworkMod;
 
-import java.io.PrintStream;
-
-@Mod(modid = "MainMenuAPI", name = "Main Menu API", version = "1.0.0")
-@NetworkMod(clientSideRequired = true, serverSideRequired = true)
+@Mod(
+    modid = "MainMenuAPI",
+    name = "Main Menu API",
+    version = "1.0.0"
+)
+@NetworkMod(
+    clientSideRequired = true,
+    serverSideRequired = true
+)
 public class MainMenuAPI
 {
-
     @Mod.Instance("MainMenuAPI")
     private static MainMenuAPI instance;
-
-    @SidedProxy(clientSide = "net.aetherteam.mainmenu_api.client.MenuClientProxy", serverSide = "net.aetherteam.mainmenu_api.MenuCommonProxy")
+    @SidedProxy(
+        clientSide = "net.aetherteam.mainmenu_api.client.MenuClientProxy",
+        serverSide = "net.aetherteam.mainmenu_api.MenuCommonProxy"
+    )
     public static MenuCommonProxy proxy;
 
     public static MainMenuAPI getInstance()
@@ -30,46 +36,39 @@ public class MainMenuAPI
     }
 
     @Mod.Init
-    public void load(FMLInitializationEvent event)
+    public void load(FMLInitializationEvent var1)
     {
         proxy.registerTickHandler();
     }
 
     @Mod.PostInit
-    public void postInit(FMLPostInitializationEvent event)
-    {
-    }
+    public void postInit(FMLPostInitializationEvent var1) {}
 
     @Mod.PreInit
-    public void preInit(FMLPreInitializationEvent event)
+    public void preInit(FMLPreInitializationEvent var1)
     {
         proxy.registerSounds();
     }
 
-    public static void registerMenu(String menuName, Class menu)
+    public static void registerMenu(String var0, Class var1)
     {
-        if (menuName == null)
+        if (var0 == null)
         {
             throw new NullPointerException("A Menu Base string is null!");
         }
-
-        if (menu == null)
+        else if (var1 == null)
         {
-            throw new NullPointerException("The Menu Base '" + menuName + "' has a null MenuBase class!");
+            throw new NullPointerException("The Menu Base \'" + var0 + "\' has a null MenuBase class!");
         }
-
-        if (MenuBaseSorter.isMenuRegistered(menuName))
+        else
         {
-            System.out.println("Menu Base '" + menu + "' with name '" + menuName + "' is already registered!");
+            if (MenuBaseSorter.isMenuRegistered(var0))
+            {
+                System.out.println("Menu Base \'" + var1 + "\' with name \'" + var0 + "\' is already registered!");
+            }
+
+            System.out.println("Menu Base \'" + var1 + "\' with name \'" + var0 + "\' has been registered.");
+            MenuBaseSorter.addMenuToSorter(var0, var1);
         }
-
-        System.out.println("Menu Base '" + menu + "' with name '" + menuName + "' has been registered.");
-
-        MenuBaseSorter.addMenuToSorter(menuName, menu);
     }
 }
-
-/* Location:           D:\Dev\Mc\forge_orl\mcp\jars\bin\aether.jar
- * Qualified Name:     net.aetherteam.mainmenu_api.MainMenuAPI
- * JD-Core Version:    0.6.2
- */

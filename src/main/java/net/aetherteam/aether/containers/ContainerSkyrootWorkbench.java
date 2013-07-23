@@ -24,6 +24,6 @@ public class ContainerSkyrootWorkbench extends ContainerWorkbench
 
     public boolean canInteractWith(EntityPlayer var1)
     {
-        return this.worldObj.getBlockId(this.posX, this.posY, this.posZ) != AetherBlocks.SkyrootCraftingTable.blockID ? false : var1.getDistanceSq((double) this.posX + 0.5D, (double) this.posY + 0.5D, (double) this.posZ + 0.5D) <= 64.0D;
+        return this.worldObj.getBlockId(this.posX, this.posY, this.posZ) != AetherBlocks.SkyrootCraftingTable.blockID ? false : var1.getDistanceSq((double)this.posX + 0.5D, (double)this.posY + 0.5D, (double)this.posZ + 0.5D) <= 64.0D;
     }
 }

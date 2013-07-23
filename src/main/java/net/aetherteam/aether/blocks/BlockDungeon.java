@@ -2,10 +2,8 @@ package net.aetherteam.aether.blocks;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
-
 import java.util.HashMap;
 import java.util.List;
-
 import net.aetherteam.aether.dungeons.DungeonHandler;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
@@ -21,7 +19,7 @@ import net.minecraft.world.World;
 public class BlockDungeon extends BlockAether implements IAetherBlock
 {
     private HashMap icons;
-    public static final String[] names = new String[]{"Carved Stone", "Angelic Stone", "Hellfire Stone", "Sentry Stone", "Light Angelic Stone", "Light Hellfire Stone"};
+    public static final String[] names = new String[] {"Carved Stone", "Angelic Stone", "Hellfire Stone", "Sentry Stone", "Light Angelic Stone", "Light Hellfire Stone"};
 
     public static int getBlockFromDye(int var0)
     {
@@ -74,7 +72,7 @@ public class BlockDungeon extends BlockAether implements IAetherBlock
     {
         ItemStack var3 = new ItemStack(this.isLit() ? AetherBlocks.LightDungeonStone : AetherBlocks.DungeonStone, 1, var2);
         String var4 = var3.getItem().getItemDisplayName(var3);
-        return (Icon) this.icons.get(var4);
+        return (Icon)this.icons.get(var4);
     }
 
     public boolean removeBlockByPlayer(World var1, EntityPlayer var2, int var3, int var4, int var5)
@@ -87,7 +85,7 @@ public class BlockDungeon extends BlockAether implements IAetherBlock
      */
     public void onBlockAdded(World var1, int var2, int var3, int var4)
     {
-        if (this.isLocked() && DungeonHandler.instance().getInstanceAt(MathHelper.floor_double((double) var2), MathHelper.floor_double((double) var3), MathHelper.floor_double((double) var4)) == null)
+        if (this.isLocked() && DungeonHandler.instance().getInstanceAt(MathHelper.floor_double((double)var2), MathHelper.floor_double((double)var3), MathHelper.floor_double((double)var4)) == null)
         {
             var1.setBlockToAir(var2, var3, var4);
         }

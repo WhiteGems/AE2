@@ -24,7 +24,8 @@ public class RenderFlyingCow extends RenderLiving
             this.loadTexture("/net/aetherteam/aether/client/sprites/mobs/flyingcow/wings.png");
             ModelFlyingCow2.flyingcow = var1;
             return 1;
-        } else
+        }
+        else
         {
             return -1;
         }
@@ -35,7 +36,7 @@ public class RenderFlyingCow extends RenderLiving
      */
     protected int shouldRenderPass(EntityLiving var1, int var2, float var3)
     {
-        return this.setWoolColorAndRender((EntityFlyingCow) var1, var2, var3);
+        return this.setWoolColorAndRender((EntityFlyingCow)var1, var2, var3);
     }
 
     private float interpolateRotation(float var1, float var2, float var3)

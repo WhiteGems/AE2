@@ -1,65 +1,62 @@
 package net.aetherteam.aether.packets;
 
 import cpw.mods.fml.common.network.Player;
-
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.DataInputStream;
 import java.io.InputStreamReader;
 import java.util.HashMap;
-
 import net.aetherteam.aether.Aether;
-import net.aetherteam.aether.CommonProxy;
-import net.aetherteam.aether.client.PlayerBaseAetherClient;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.network.packet.Packet250CustomPayload;
 
 public class PacketCoinChange extends AetherPacket
 {
-    public PacketCoinChange(int packetID)
+    public PacketCoinChange(int var1)
     {
-        super(packetID);
+        super(var1);
     }
 
-    public void onPacketReceived(Packet250CustomPayload packet, Player player)
+    @SideOnly(Side.CLIENT)
+    public void onPacketReceived(Packet250CustomPayload var1, Player var2)
     {
-        DataInputStream dat = new DataInputStream(new ByteArrayInputStream(packet.data));
-        BufferedReader buf = new BufferedReader(new InputStreamReader(dat));
+        DataInputStream var3 = new DataInputStream(new ByteArrayInputStream(var1.data));
+        new BufferedReader(new InputStreamReader(var3));
+
         try
         {
-            byte packetType = dat.readByte();
-            boolean clearFirst = dat.readBoolean();
-            boolean adding = dat.readBoolean();
-            short length = dat.readShort();
-            int coinAmount = dat.readInt();
+            byte var5 = var3.readByte();
+            boolean var6 = var3.readBoolean();
+            boolean var7 = var3.readBoolean();
+            short var8 = var3.readShort();
+            int var9 = var3.readInt();
+            HashMap var10 = Aether.proxy.getClientCoins();
 
-            HashMap playerCoins = Aether.proxy.getClientCoins();
-
-            if (clearFirst)
+            if (var6)
             {
-                playerCoins.clear();
+                var10.clear();
             }
 
-            for (int i = 0; i < length; i++)
+            for (int var11 = 0; var11 < var8; ++var11)
             {
-                String username = dat.readUTF();
-                if (adding)
+                String var12 = var3.readUTF();
+
+                if (var7)
                 {
-                    playerCoins.put(username, Integer.valueOf(coinAmount));
-                    Aether.getClientPlayer((EntityPlayerSP) player).updateCoinAmount();
-                } else
+                    var10.put(var12, Integer.valueOf(var9));
+                    Aether.getClientPlayer((EntityPlayerSP)var2).updateCoinAmount();
+                }
+                else
                 {
-                    playerCoins.remove(username);
+                    var10.remove(var12);
                 }
             }
-        } catch (Exception ex)
+        }
+        catch (Exception var13)
         {
-            ex.printStackTrace();
+            var13.printStackTrace();
         }
     }
 }
-
-/* Location:           D:\Dev\Mc\forge_orl\mcp\jars\bin\aether.jar
- * Qualified Name:     net.aetherteam.aether.packets.PacketCoinChange
- * JD-Core Version:    0.6.2
- */

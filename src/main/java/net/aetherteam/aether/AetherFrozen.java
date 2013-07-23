@@ -8,15 +8,10 @@ public class AetherFrozen
     public ItemStack frozenTo;
     public int frozenPowerNeeded;
 
-    public AetherFrozen(ItemStack from, ItemStack to, int i)
+    public AetherFrozen(ItemStack var1, ItemStack var2, int var3)
     {
-        this.frozenFrom = from;
-        this.frozenTo = to;
-        this.frozenPowerNeeded = i;
+        this.frozenFrom = var1;
+        this.frozenTo = var2;
+        this.frozenPowerNeeded = var3;
     }
 }
-
-/* Location:           D:\Dev\Mc\forge_orl\mcp\jars\bin\aether.jar
- * Qualified Name:     net.aetherteam.aether.AetherFrozen
- * JD-Core Version:    0.6.2
- */

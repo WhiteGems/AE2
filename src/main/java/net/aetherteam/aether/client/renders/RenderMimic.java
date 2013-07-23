@@ -18,9 +18,9 @@ public class RenderMimic extends RenderLiving
     protected int a(EntityMimic var1, int var2, float var3)
     {
         this.loadTexture("/net/aetherteam/aether/client/sprites/mobs/mimic/mimic1.png");
-        ((ModelMimic) this.mainModel).render1(0.0F, 0.0F, -0.1F, 0.0F, 0.0F, 0.0625F, var1);
+        ((ModelMimic)this.mainModel).render1(0.0F, 0.0F, -0.1F, 0.0F, 0.0F, 0.0625F, var1);
         this.loadTexture("/net/aetherteam/aether/client/sprites/mobs/mimic/mimic2.png");
-        ((ModelMimic) this.mainModel).render2(0.0F, 0.0F, -0.1F, 0.0F, 0.0F, 0.0625F, var1);
+        ((ModelMimic)this.mainModel).render2(0.0F, 0.0F, -0.1F, 0.0F, 0.0F, 0.0625F, var1);
         GL11.glEnable(GL11.GL_BLEND);
         GL11.glDisable(GL11.GL_ALPHA_TEST);
         GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
@@ -33,6 +33,6 @@ public class RenderMimic extends RenderLiving
      */
     protected int shouldRenderPass(EntityLiving var1, int var2, float var3)
     {
-        return this.a((EntityMimic) var1, var2, var3);
+        return this.a((EntityMimic)var1, var2, var3);
     }
 }

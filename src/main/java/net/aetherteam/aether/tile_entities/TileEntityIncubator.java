@@ -57,7 +57,8 @@ public class TileEntityIncubator extends TileEntity implements IInventory, ISide
                 var3 = this.IncubatorItemStacks[var1];
                 this.IncubatorItemStacks[var1] = null;
                 return var3;
-            } else
+            }
+            else
             {
                 var3 = this.IncubatorItemStacks[var1].splitStack(var2);
 
@@ -68,7 +69,8 @@ public class TileEntityIncubator extends TileEntity implements IInventory, ISide
 
                 return var3;
             }
-        } else
+        }
+        else
         {
             return null;
         }
@@ -85,7 +87,8 @@ public class TileEntityIncubator extends TileEntity implements IInventory, ISide
             ItemStack var2 = this.IncubatorItemStacks[var1];
             this.IncubatorItemStacks[var1] = null;
             return var2;
-        } else
+        }
+        else
         {
             return null;
         }
@@ -123,7 +126,7 @@ public class TileEntityIncubator extends TileEntity implements IInventory, ISide
 
         for (int var3 = 0; var3 < var2.tagCount(); ++var3)
         {
-            NBTTagCompound var4 = (NBTTagCompound) var2.tagAt(var3);
+            NBTTagCompound var4 = (NBTTagCompound)var2.tagAt(var3);
             byte var5 = var4.getByte("Slot");
 
             if (var5 >= 0 && var5 < this.IncubatorItemStacks.length)
@@ -145,7 +148,7 @@ public class TileEntityIncubator extends TileEntity implements IInventory, ISide
     public void writeToNBT(NBTTagCompound var1)
     {
         super.writeToNBT(var1);
-        var1.setShort("BurnTime", (short) this.progress);
+        var1.setShort("BurnTime", (short)this.progress);
         NBTTagList var2 = new NBTTagList();
 
         for (int var3 = 0; var3 < this.IncubatorItemStacks.length; ++var3)
@@ -153,7 +156,7 @@ public class TileEntityIncubator extends TileEntity implements IInventory, ISide
             if (this.IncubatorItemStacks[var3] != null)
             {
                 NBTTagCompound var4 = new NBTTagCompound();
-                var4.setByte("Slot", (byte) var3);
+                var4.setByte("Slot", (byte)var3);
                 this.IncubatorItemStacks[var3].writeToNBT(var4);
                 var2.appendTag(var4);
             }
@@ -214,7 +217,7 @@ public class TileEntityIncubator extends TileEntity implements IInventory, ISide
             if (this.IncubatorItemStacks[1] != null && !this.worldObj.isRemote)
             {
                 EntityMoa var1 = new EntityMoa(this.worldObj, true, false, false, AetherMoaColour.getColour(this.IncubatorItemStacks[1].getItemDamage()), this.playerUsing);
-                var1.setPosition((double) this.xCoord + 0.5D, (double) this.yCoord + 1.5D, (double) this.zCoord + 0.5D);
+                var1.setPosition((double)this.xCoord + 0.5D, (double)this.yCoord + 1.5D, (double)this.zCoord + 0.5D);
                 this.worldObj.spawnEntityInWorld(var1);
             }
 
@@ -243,7 +246,7 @@ public class TileEntityIncubator extends TileEntity implements IInventory, ISide
     public boolean isUseableByPlayer(EntityPlayer var1)
     {
         this.playerUsing = var1;
-        return this.worldObj.getBlockTileEntity(this.xCoord, this.yCoord, this.zCoord) != this ? false : var1.getDistanceSq((double) this.xCoord + 0.5D, (double) this.yCoord + 0.5D, (double) this.zCoord + 0.5D) <= 64.0D;
+        return this.worldObj.getBlockTileEntity(this.xCoord, this.yCoord, this.zCoord) != this ? false : var1.getDistanceSq((double)this.xCoord + 0.5D, (double)this.yCoord + 0.5D, (double)this.zCoord + 0.5D) <= 64.0D;
     }
 
     public int getStartInventorySide(ForgeDirection var1)

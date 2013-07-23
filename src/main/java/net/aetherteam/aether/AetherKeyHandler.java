@@ -1,15 +1,13 @@
 package net.aetherteam.aether;
 
-import cpw.mods.fml.client.registry.KeyBindingRegistry;
 import cpw.mods.fml.client.registry.KeyBindingRegistry.KeyHandler;
 import cpw.mods.fml.common.TickType;
-
 import java.util.EnumSet;
-
 import net.aetherteam.aether.client.gui.GuiInventoryAether;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.entity.EntityClientPlayerMP;
+import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.settings.KeyBinding;
-import net.minecraft.entity.player.EntityPlayer;
 
 public class AetherKeyHandler extends KeyBindingRegistry.KeyHandler
 {
@@ -17,7 +15,7 @@ public class AetherKeyHandler extends KeyBindingRegistry.KeyHandler
 
     public AetherKeyHandler()
     {
-        super(new KeyBinding[]{aetherKeyBinding}, new boolean[]{false});
+        super(new KeyBinding[] {aetherKeyBinding}, new boolean[] {false});
     }
 
     public String getLabel()
@@ -25,33 +23,30 @@ public class AetherKeyHandler extends KeyBindingRegistry.KeyHandler
         return "Aether Inventory";
     }
 
-    public void keyDown(EnumSet types, KeyBinding kb, boolean tickEnd, boolean isRepeat)
+    public void keyDown(EnumSet var1, KeyBinding var2, boolean var3, boolean var4)
     {
-        EntityPlayer player = Minecraft.getMinecraft().thePlayer;
+        EntityClientPlayerMP var5 = Minecraft.getMinecraft().thePlayer;
 
-        if ((kb.equals(aetherKeyBinding)) && (isRepeat))
+        if (var2.equals(aetherKeyBinding) && var4)
         {
             if (Minecraft.getMinecraft().currentScreen != null)
             {
-                Minecraft.getMinecraft().displayGuiScreen(null);
-                return;
+                Minecraft.getMinecraft().displayGuiScreen((GuiScreen)null);
             }
-
-            Minecraft.getMinecraft().displayGuiScreen(new GuiInventoryAether(player));
-            return;
+            else
+            {
+                Minecraft.getMinecraft().displayGuiScreen(new GuiInventoryAether(var5));
+            }
         }
     }
 
-    public void keyUp(EnumSet types, KeyBinding kb, boolean tickEnd)
+    public void keyUp(EnumSet var1, KeyBinding var2, boolean var3)
     {
-        EntityPlayer player = Minecraft.getMinecraft().thePlayer;
+        EntityClientPlayerMP var4 = Minecraft.getMinecraft().thePlayer;
 
-        if (kb.equals(aetherKeyBinding))
+        if (var2.equals(aetherKeyBinding) && Minecraft.getMinecraft().currentScreen != null && Minecraft.getMinecraft().currentScreen instanceof GuiInventoryAether)
         {
-            if (Minecraft.getMinecraft().currentScreen != null)
-            {
-                if (!(Minecraft.getMinecraft().currentScreen instanceof GuiInventoryAether)) ;
-            }
+            ;
         }
     }
 
@@ -60,8 +55,3 @@ public class AetherKeyHandler extends KeyBindingRegistry.KeyHandler
         return EnumSet.of(TickType.CLIENT);
     }
 }
-
-/* Location:           D:\Dev\Mc\forge_orl\mcp\jars\bin\aether.jar
- * Qualified Name:     net.aetherteam.aether.AetherKeyHandler
- * JD-Core Version:    0.6.2
- */

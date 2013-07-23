@@ -1,7 +1,6 @@
 package net.aetherteam.aether.blocks;
 
 import java.util.Random;
-
 import net.aetherteam.aether.entities.EntityMimic;
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.texture.IconRegister;
@@ -28,7 +27,7 @@ public class BlockChestMimic extends BlockSkyrootChest implements IAetherBlock
         {
             var1.setBlock(var2, var3, var4, 0);
             EntityMimic var10 = new EntityMimic(var1);
-            var10.setPosition((double) var2 + 0.5D, (double) var3 + 1.5D, (double) var4 + 0.5D);
+            var10.setPosition((double)var2 + 0.5D, (double)var3 + 1.5D, (double)var4 + 0.5D);
             var1.spawnEntityInWorld(var10);
         }
 
@@ -96,7 +95,7 @@ public class BlockChestMimic extends BlockSkyrootChest implements IAetherBlock
         {
             var1.setBlock(var2, var3, var4, 0);
             EntityMimic var6 = new EntityMimic(var1);
-            var6.setPosition((double) var2 + 0.5D, (double) var3 + 1.5D, (double) var4 + 0.5D);
+            var6.setPosition((double)var2 + 0.5D, (double)var3 + 1.5D, (double)var4 + 0.5D);
             var1.spawnEntityInWorld(var6);
         }
     }

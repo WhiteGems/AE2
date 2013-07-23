@@ -54,10 +54,11 @@ public class EntityFlyingMiniBoss extends EntityFlying implements IAetherBoss
         {
             Party var4 = var3.getQueuedParty();
             int var5 = var3.getQueuedMembers().size() + 1;
-            float var6 = (float) (var5 - 1) * 0.075F;
-            int var7 = MathHelper.clamp_int((int) ((float) var2 - (float) var2 * var6), 1, var2);
+            float var6 = (float)(var5 - 1) * 0.075F;
+            int var7 = MathHelper.clamp_int((int)((float)var2 - (float)var2 * var6), 1, var2);
             return super.attackEntityFrom(var1, var7);
-        } else
+        }
+        else
         {
             return super.attackEntityFrom(var1, var2);
         }

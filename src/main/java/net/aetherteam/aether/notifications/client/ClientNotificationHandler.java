@@ -6,12 +6,10 @@ import net.aetherteam.aether.client.gui.social.dialogue.GuiDialogueBox;
 import net.aetherteam.aether.notifications.Notification;
 import net.aetherteam.aether.notifications.NotificationType;
 import net.minecraft.client.Minecraft;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.server.integrated.IntegratedServer;
+import net.minecraft.client.gui.GuiScreen;
 
 public class ClientNotificationHandler
 {
-
     @SideOnly(Side.CLIENT)
     private static GuiNotification notificationGui = new GuiNotification(Minecraft.getMinecraft());
 
@@ -22,15 +20,15 @@ public class ClientNotificationHandler
     }
 
     @SideOnly(Side.CLIENT)
-    public static void queueReceivedNotification(Notification notification)
+    public static void queueReceivedNotification(Notification var0)
     {
-        notificationGui.queueReceivedNotification(notification);
+        notificationGui.queueReceivedNotification(var0);
     }
 
     @SideOnly(Side.CLIENT)
-    public static void createGeneric(String header, String lower, String toPlayer)
+    public static void createGeneric(String var0, String var1, String var2)
     {
-        queueReceivedNotification(new Notification(NotificationType.GENERIC, header, lower, toPlayer));
+        queueReceivedNotification(new Notification(NotificationType.GENERIC, var0, var1, var2));
     }
 
     @SideOnly(Side.CLIENT)
@@ -40,25 +38,20 @@ public class ClientNotificationHandler
     }
 
     @SideOnly(Side.CLIENT)
-    public static void openDialogueBox(String trueText, String falseText, boolean flag)
+    public static void openDialogueBox(String var0, String var1, boolean var2)
     {
-        Minecraft.getMinecraft().displayGuiScreen(new GuiDialogueBox(null, trueText, falseText, flag));
+        Minecraft.getMinecraft().displayGuiScreen(new GuiDialogueBox((GuiScreen)null, var0, var1, var2));
     }
 
     @SideOnly(Side.CLIENT)
-    public static void openDialogueBox(String text)
+    public static void openDialogueBox(String var0)
     {
-        Minecraft.getMinecraft().displayGuiScreen(new GuiDialogueBox(null, text, "", true));
+        Minecraft.getMinecraft().displayGuiScreen(new GuiDialogueBox((GuiScreen)null, var0, "", true));
     }
 
     @SideOnly(Side.CLIENT)
     public static boolean isOpenToLAN()
     {
-        return (Minecraft.getMinecraft().getIntegratedServer() != null) && (Minecraft.getMinecraft().getIntegratedServer().getPublic());
+        return Minecraft.getMinecraft().getIntegratedServer() != null && Minecraft.getMinecraft().getIntegratedServer().getPublic();
     }
 }
-
-/* Location:           D:\Dev\Mc\forge_orl\mcp\jars\bin\aether.jar
- * Qualified Name:     net.aetherteam.aether.notifications.client.ClientNotificationHandler
- * JD-Core Version:    0.6.2
- */

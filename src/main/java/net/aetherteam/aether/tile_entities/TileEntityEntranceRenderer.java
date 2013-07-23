@@ -24,19 +24,19 @@ public class TileEntityEntranceRenderer extends TileEntitySpecialRenderer
 
     public void renderTileEntityAt(TileEntity var1, double var2, double var4, double var6, float var8)
     {
-        this.renderTileEntityEntranceAt((TileEntityEntranceController) var1, var2, var4, var6, var8);
+        this.renderTileEntityEntranceAt((TileEntityEntranceController)var1, var2, var4, var6, var8);
     }
 
     public void renderTileEntityEntranceAt(TileEntityEntranceController var1, double var2, double var4, double var6, float var8)
     {
         Dungeon var9 = var1.getDungeon();
 
-        if (var9 != null && !var9.hasMember(PartyController.instance().getMember((EntityPlayer) Minecraft.getMinecraft().thePlayer)))
+        if (var9 != null && !var9.hasMember(PartyController.instance().getMember((EntityPlayer)Minecraft.getMinecraft().thePlayer)))
         {
             PartyMember var10 = PartyController.instance().getMember(Minecraft.getMinecraft().thePlayer.username.toLowerCase());
             Party var11 = PartyController.instance().getParty(var10);
-            String var12 = (var11 == null || !var9.hasAnyConqueredDungeon(var11.getMembers())) && !var9.hasConqueredDungeon((EntityPlayer) Minecraft.getMinecraft().thePlayer) ? (!var9.isActive() && !var9.hasQueuedParty() ? "Available" : "Occupied") : "Conquered";
-            int var13 = (var11 == null || !var9.hasAnyConqueredDungeon(var11.getMembers())) && !var9.hasConqueredDungeon((EntityPlayer) Minecraft.getMinecraft().thePlayer) ? (!var9.isActive() && !var9.hasQueuedParty() ? 6750054 : 16756516) : 10688793;
+            String var12 = (var11 == null || !var9.hasAnyConqueredDungeon(var11.getMembers())) && !var9.hasConqueredDungeon((EntityPlayer)Minecraft.getMinecraft().thePlayer) ? (!var9.isActive() && !var9.hasQueuedParty() ? "Available" : "Occupied") : "Conquered";
+            int var13 = (var11 == null || !var9.hasAnyConqueredDungeon(var11.getMembers())) && !var9.hasConqueredDungeon((EntityPlayer)Minecraft.getMinecraft().thePlayer) ? (!var9.isActive() && !var9.hasQueuedParty() ? 6750054 : 16756516) : 10688793;
             GL11.glPushMatrix();
             this.renderLabel(var1, var12, var2, var4 + 5.0D, var6, 24, 2.0F, var13);
             GL11.glPopMatrix();
@@ -48,13 +48,13 @@ public class TileEntityEntranceRenderer extends TileEntitySpecialRenderer
         RenderManager var12 = RenderManager.instance;
         double var13 = var1.getDistanceFrom(var12.livingPlayer.posX, var12.livingPlayer.posY, var12.livingPlayer.posZ);
 
-        if (var13 <= (double) (var9 * var9))
+        if (var13 <= (double)(var9 * var9))
         {
             FontRenderer var15 = var12.getFontRenderer();
             float var16 = 1.6F;
             float var17 = 0.016666668F * var16;
             GL11.glPushMatrix();
-            GL11.glTranslatef((float) var3 + 0.0F, (float) var5 + 0.5F, (float) var7);
+            GL11.glTranslatef((float)var3 + 0.0F, (float)var5 + 0.5F, (float)var7);
             GL11.glScalef(var10, var10, var10);
             GL11.glNormal3f(1.0F, 1.0F, 1.0F);
             GL11.glRotatef(-var12.playerViewY, 0.0F, 1.0F, 0.0F);
@@ -77,10 +77,10 @@ public class TileEntityEntranceRenderer extends TileEntitySpecialRenderer
             var18.startDrawingQuads();
             int var20 = var15.getStringWidth(var2) / 2;
             var18.setColorRGBA_F(0.0F, 0.0F, 0.0F, 0.25F);
-            var18.addVertex((double) (-var20 - 1), (double) (-1 + var19), 0.0D);
-            var18.addVertex((double) (-var20 - 1), (double) (8 + var19), 0.0D);
-            var18.addVertex((double) (var20 + 1), (double) (8 + var19), 0.0D);
-            var18.addVertex((double) (var20 + 1), (double) (-1 + var19), 0.0D);
+            var18.addVertex((double)(-var20 - 1), (double)(-1 + var19), 0.0D);
+            var18.addVertex((double)(-var20 - 1), (double)(8 + var19), 0.0D);
+            var18.addVertex((double)(var20 + 1), (double)(8 + var19), 0.0D);
+            var18.addVertex((double)(var20 + 1), (double)(-1 + var19), 0.0D);
             var18.draw();
             GL11.glEnable(GL11.GL_TEXTURE_2D);
             var15.drawString(var2, -var15.getStringWidth(var2) / 2, var19, var11);

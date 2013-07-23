@@ -1,10 +1,8 @@
 package net.aetherteam.aether.tile_entities;
 
 import cpw.mods.fml.common.FMLCommonHandler;
-
 import java.util.Iterator;
 import java.util.Random;
-
 import net.aetherteam.aether.AetherLoot;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
@@ -100,7 +98,7 @@ public class TileEntityTreasureChest extends TileEntityChest
         while (var3.hasNext())
         {
             Object var4 = var3.next();
-            EntityPlayerMP var5 = (EntityPlayerMP) var4;
+            EntityPlayerMP var5 = (EntityPlayerMP)var4;
 
             if (var5.worldObj == this.worldObj)
             {

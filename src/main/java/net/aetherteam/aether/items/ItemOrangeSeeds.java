@@ -27,7 +27,8 @@ public class ItemOrangeSeeds extends ItemAether
         if (var11 == Block.snow.blockID && (var3.getBlockMetadata(var4, var5, var6) & 7) < 1)
         {
             var7 = 1;
-        } else if (var11 != Block.vine.blockID && var11 != Block.tallGrass.blockID && var11 != Block.deadBush.blockID)
+        }
+        else if (var11 != Block.vine.blockID && var11 != Block.tallGrass.blockID && var11 != Block.deadBush.blockID)
         {
             if (var7 == 0)
             {
@@ -63,12 +64,14 @@ public class ItemOrangeSeeds extends ItemAether
         if (!var2.canPlayerEdit(var4, var5, var6, var7, var1))
         {
             return false;
-        } else if (var1.stackSize == 0)
+        }
+        else if (var1.stackSize == 0)
         {
             return false;
-        } else
+        }
+        else
         {
-            if (var3.canPlaceEntityOnSide(spawnID, var4, var5, var6, false, var7, (Entity) null, var1))
+            if (var3.canPlaceEntityOnSide(spawnID, var4, var5, var6, false, var7, (Entity)null, var1))
             {
                 Block var12 = Block.blocksList[spawnID];
                 int var13 = var12.onBlockPlaced(var3, var4, var5, var6, var7, var8, var9, var10, 0);
@@ -81,7 +84,7 @@ public class ItemOrangeSeeds extends ItemAether
                         Block.blocksList[spawnID].onPostBlockPlaced(var3, var4, var5, var6, var13);
                     }
 
-                    var3.playSoundEffect((double) ((float) var4 + 0.5F), (double) ((float) var5 + 0.5F), (double) ((float) var6 + 0.5F), var12.stepSound.getPlaceSound(), (var12.stepSound.getVolume() + 1.0F) / 2.0F, var12.stepSound.getPitch() * 0.8F);
+                    var3.playSoundEffect((double)((float)var4 + 0.5F), (double)((float)var5 + 0.5F), (double)((float)var6 + 0.5F), var12.stepSound.getPlaceSound(), (var12.stepSound.getVolume() + 1.0F) / 2.0F, var12.stepSound.getPitch() * 0.8F);
                     --var1.stackSize;
                 }
             }

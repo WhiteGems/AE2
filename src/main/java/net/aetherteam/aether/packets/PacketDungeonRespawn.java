@@ -3,12 +3,10 @@ package net.aetherteam.aether.packets;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.network.Player;
 import cpw.mods.fml.relauncher.Side;
-
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.DataInputStream;
 import java.io.InputStreamReader;
-
 import net.aetherteam.aether.dungeons.Dungeon;
 import net.aetherteam.aether.dungeons.DungeonHandler;
 import net.aetherteam.aether.notifications.client.ClientNotificationHandler;
@@ -18,42 +16,37 @@ import net.minecraft.network.packet.Packet250CustomPayload;
 
 public class PacketDungeonRespawn extends AetherPacket
 {
-    public PacketDungeonRespawn(int packetID)
+    public PacketDungeonRespawn(int var1)
     {
-        super(packetID);
+        super(var1);
     }
 
-    public void onPacketReceived(Packet250CustomPayload packet, Player player)
+    public void onPacketReceived(Packet250CustomPayload var1, Player var2)
     {
-        DataInputStream dat = new DataInputStream(new ByteArrayInputStream(packet.data));
-        BufferedReader buf = new BufferedReader(new InputStreamReader(dat));
+        DataInputStream var3 = new DataInputStream(new ByteArrayInputStream(var1.data));
+        new BufferedReader(new InputStreamReader(var3));
+
         try
         {
-            byte packetType = dat.readByte();
+            byte var5 = var3.readByte();
+            int var6 = var3.readInt();
+            String var7 = var3.readUTF();
+            Side var8 = FMLCommonHandler.instance().getEffectiveSide();
 
-            int dungeonID = dat.readInt();
-            String partyName = dat.readUTF();
-
-            Side side = FMLCommonHandler.instance().getEffectiveSide();
-
-            if (side.isClient())
+            if (var8.isClient())
             {
-                Party party = PartyController.instance().getParty(partyName);
-                Dungeon dungeon = DungeonHandler.instance().getDungeon(dungeonID);
+                Party var9 = PartyController.instance().getParty(var7);
+                Dungeon var10 = DungeonHandler.instance().getDungeon(var6);
 
-                if ((party != null) && (dungeon != null))
+                if (var9 != null && var10 != null)
                 {
                     ClientNotificationHandler.openDialogueBox("You have respawned!");
                 }
             }
-        } catch (Exception ex)
+        }
+        catch (Exception var11)
         {
-            ex.printStackTrace();
+            var11.printStackTrace();
         }
     }
 }
-
-/* Location:           D:\Dev\Mc\forge_orl\mcp\jars\bin\aether.jar
- * Qualified Name:     net.aetherteam.aether.packets.PacketDungeonRespawn
- * JD-Core Version:    0.6.2
- */

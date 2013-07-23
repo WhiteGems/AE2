@@ -2,15 +2,10 @@ package net.aetherteam.aether.blocks;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
-
-import java.util.List;
 import java.util.Random;
-
-import net.aetherteam.aether.Aether;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockFire;
 import net.minecraft.client.renderer.texture.IconRegister;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.Icon;
 import net.minecraft.world.IBlockAccess;
@@ -55,12 +50,11 @@ public class BlockColdFire extends BlockFire
     }
 
     /**
-     * Returns a bounding box from the pool of bounding boxes (this means this box can change after the pool has been
-     * cleared to be reused)
+     * Returns the bounding box of the wired rectangular prism to render.
      */
-    public AxisAlignedBB getCollisionBoundingBoxFromPool(World var1, int var2, int var3, int var4)
+    public AxisAlignedBB getSelectedBoundingBoxFromPool(World var1, int var2, int var3, int var4)
     {
-        return null;
+        return AxisAlignedBB.getAABBPool().getAABB((double)var2 + this.minX, (double)var3 + this.minY, (double)var4 + this.minZ, (double)var2 + this.maxX, (double)var3 + this.maxY, (double)var4 + this.maxZ);
     }
 
     /**
@@ -122,7 +116,8 @@ public class BlockColdFire extends BlockFire
             if (!var7 && var1.isRaining() && (var1.canLightningStrikeAt(var2, var3, var4) || var1.canLightningStrikeAt(var2 - 1, var3, var4) || var1.canLightningStrikeAt(var2 + 1, var3, var4) || var1.canLightningStrikeAt(var2, var3, var4 - 1) || var1.canLightningStrikeAt(var2, var3, var4 + 1)))
             {
                 var1.setBlockToAir(var2, var3, var4);
-            } else
+            }
+            else
             {
                 int var8 = var1.getBlockMetadata(var2, var3, var4);
 
@@ -139,10 +134,12 @@ public class BlockColdFire extends BlockFire
                     {
                         var1.setBlockToAir(var2, var3, var4);
                     }
-                } else if (!var7 && !this.canBlockCatchFire(var1, var2, var3 - 1, var4, ForgeDirection.UP) && var8 == 15 && var5.nextInt(4) == 0)
+                }
+                else if (!var7 && !this.canBlockCatchFire(var1, var2, var3 - 1, var4, ForgeDirection.UP) && var8 == 15 && var5.nextInt(4) == 0)
                 {
                     var1.setBlockToAir(var2, var3, var4);
-                } else
+                }
+                else
                 {
                     boolean var9 = var1.isBlockHighHumidity(var2, var3, var4);
                     byte var10 = 0;
@@ -241,7 +238,8 @@ public class BlockColdFire extends BlockFire
                 }
 
                 var1.setBlock(var2, var3, var4, this.blockID, var12, 3);
-            } else
+            }
+            else
             {
                 var1.setBlockToAir(var2, var3, var4);
             }
@@ -265,7 +263,8 @@ public class BlockColdFire extends BlockFire
         if (!var1.isAirBlock(var2, var3, var4))
         {
             return 0;
-        } else
+        }
+        else
         {
             int var6 = this.getChanceToEncourageFire(var1, var2 + 1, var3, var4, var5, ForgeDirection.WEST);
             var6 = this.getChanceToEncourageFire(var1, var2 - 1, var3, var4, var6, ForgeDirection.EAST);
@@ -337,7 +336,8 @@ public class BlockColdFire extends BlockFire
             if (!var1.doesBlockHaveSolidTopSurface(var2, var3 - 1, var4) && !this.canNeighborBurn(var1, var2, var3, var4))
             {
                 var1.setBlockToAir(var2, var3, var4);
-            } else
+            }
+            else
             {
                 var1.scheduleBlockUpdate(var2, var3, var4, this.blockID, this.tickRate(var1) + var1.rand.nextInt(10));
             }
@@ -351,26 +351,13 @@ public class BlockColdFire extends BlockFire
      */
     public void randomDisplayTick(World var1, int var2, int var3, int var4, Random var5)
     {
-        List var6 = var1.getEntitiesWithinAABB(EntityPlayer.class, AxisAlignedBB.getBoundingBox((double) var2, (double) var3, (double) var4, (double) (var2 + 1), (double) (var3 + 2), (double) (var4 + 1)));
-        int var7;
-
-        if (var6.size() > 0)
-        {
-            for (var7 = 0; var7 < var6.size(); ++var7)
-            {
-                if (Aether.getPlayerBase((EntityPlayer) var6.get(var7)) != null)
-                {
-                    Aether.getPlayerBase((EntityPlayer) var6.get(var7)).setInIce();
-                }
-            }
-        }
-
         if (var5.nextInt(24) == 0)
         {
-            var1.playSound((double) ((float) var2 + 0.5F), (double) ((float) var3 + 0.5F), (double) ((float) var4 + 0.5F), "fire.fire", 1.0F + var5.nextFloat(), var5.nextFloat() * 0.7F + 0.3F, false);
+            var1.playSound((double)((float)var2 + 0.5F), (double)((float)var3 + 0.5F), (double)((float)var4 + 0.5F), "fire.fire", 1.0F + var5.nextFloat(), var5.nextFloat() * 0.7F + 0.3F, false);
         }
 
-        float var10;
+        int var6;
+        float var7;
         float var8;
         float var9;
 
@@ -378,66 +365,67 @@ public class BlockColdFire extends BlockFire
         {
             if (AetherBlocks.ColdFire.canBlockCatchFire(var1, var2 - 1, var3, var4, ForgeDirection.EAST))
             {
-                for (var7 = 0; var7 < 2; ++var7)
+                for (var6 = 0; var6 < 2; ++var6)
                 {
-                    var8 = (float) var2 + var5.nextFloat() * 0.1F;
-                    var9 = (float) var3 + var5.nextFloat();
-                    var10 = (float) var4 + var5.nextFloat();
-                    var1.spawnParticle("largesmoke", (double) var8, (double) var9, (double) var10, 0.0D, 0.0D, 0.0D);
+                    var7 = (float)var2 + var5.nextFloat() * 0.1F;
+                    var8 = (float)var3 + var5.nextFloat();
+                    var9 = (float)var4 + var5.nextFloat();
+                    var1.spawnParticle("largesmoke", (double)var7, (double)var8, (double)var9, 0.0D, 0.0D, 0.0D);
                 }
             }
 
             if (AetherBlocks.ColdFire.canBlockCatchFire(var1, var2 + 1, var3, var4, ForgeDirection.WEST))
             {
-                for (var7 = 0; var7 < 2; ++var7)
+                for (var6 = 0; var6 < 2; ++var6)
                 {
-                    var8 = (float) (var2 + 1) - var5.nextFloat() * 0.1F;
-                    var9 = (float) var3 + var5.nextFloat();
-                    var10 = (float) var4 + var5.nextFloat();
-                    var1.spawnParticle("largesmoke", (double) var8, (double) var9, (double) var10, 0.0D, 0.0D, 0.0D);
+                    var7 = (float)(var2 + 1) - var5.nextFloat() * 0.1F;
+                    var8 = (float)var3 + var5.nextFloat();
+                    var9 = (float)var4 + var5.nextFloat();
+                    var1.spawnParticle("largesmoke", (double)var7, (double)var8, (double)var9, 0.0D, 0.0D, 0.0D);
                 }
             }
 
             if (AetherBlocks.ColdFire.canBlockCatchFire(var1, var2, var3, var4 - 1, ForgeDirection.SOUTH))
             {
-                for (var7 = 0; var7 < 2; ++var7)
+                for (var6 = 0; var6 < 2; ++var6)
                 {
-                    var8 = (float) var2 + var5.nextFloat();
-                    var9 = (float) var3 + var5.nextFloat();
-                    var10 = (float) var4 + var5.nextFloat() * 0.1F;
-                    var1.spawnParticle("largesmoke", (double) var8, (double) var9, (double) var10, 0.0D, 0.0D, 0.0D);
+                    var7 = (float)var2 + var5.nextFloat();
+                    var8 = (float)var3 + var5.nextFloat();
+                    var9 = (float)var4 + var5.nextFloat() * 0.1F;
+                    var1.spawnParticle("largesmoke", (double)var7, (double)var8, (double)var9, 0.0D, 0.0D, 0.0D);
                 }
             }
 
             if (AetherBlocks.ColdFire.canBlockCatchFire(var1, var2, var3, var4 + 1, ForgeDirection.NORTH))
             {
-                for (var7 = 0; var7 < 2; ++var7)
+                for (var6 = 0; var6 < 2; ++var6)
                 {
-                    var8 = (float) var2 + var5.nextFloat();
-                    var9 = (float) var3 + var5.nextFloat();
-                    var10 = (float) (var4 + 1) - var5.nextFloat() * 0.1F;
-                    var1.spawnParticle("largesmoke", (double) var8, (double) var9, (double) var10, 0.0D, 0.0D, 0.0D);
+                    var7 = (float)var2 + var5.nextFloat();
+                    var8 = (float)var3 + var5.nextFloat();
+                    var9 = (float)(var4 + 1) - var5.nextFloat() * 0.1F;
+                    var1.spawnParticle("largesmoke", (double)var7, (double)var8, (double)var9, 0.0D, 0.0D, 0.0D);
                 }
             }
 
             if (AetherBlocks.ColdFire.canBlockCatchFire(var1, var2, var3 + 1, var4, ForgeDirection.DOWN))
             {
-                for (var7 = 0; var7 < 2; ++var7)
+                for (var6 = 0; var6 < 2; ++var6)
                 {
-                    var8 = (float) var2 + var5.nextFloat();
-                    var9 = (float) (var3 + 1) - var5.nextFloat() * 0.1F;
-                    var10 = (float) var4 + var5.nextFloat();
-                    var1.spawnParticle("largesmoke", (double) var8, (double) var9, (double) var10, 0.0D, 0.0D, 0.0D);
+                    var7 = (float)var2 + var5.nextFloat();
+                    var8 = (float)(var3 + 1) - var5.nextFloat() * 0.1F;
+                    var9 = (float)var4 + var5.nextFloat();
+                    var1.spawnParticle("largesmoke", (double)var7, (double)var8, (double)var9, 0.0D, 0.0D, 0.0D);
                 }
             }
-        } else
+        }
+        else
         {
-            for (var7 = 0; var7 < 3; ++var7)
+            for (var6 = 0; var6 < 3; ++var6)
             {
-                var8 = (float) var2 + var5.nextFloat();
-                var9 = (float) var3 + var5.nextFloat() * 0.5F + 0.5F;
-                var10 = (float) var4 + var5.nextFloat();
-                var1.spawnParticle("largesmoke", (double) var8, (double) var9, (double) var10, 0.0D, 0.0D, 0.0D);
+                var7 = (float)var2 + var5.nextFloat();
+                var8 = (float)var3 + var5.nextFloat() * 0.5F + 0.5F;
+                var9 = (float)var4 + var5.nextFloat();
+                var1.spawnParticle("largesmoke", (double)var7, (double)var8, (double)var9, 0.0D, 0.0D, 0.0D);
             }
         }
     }
@@ -450,7 +438,7 @@ public class BlockColdFire extends BlockFire
      */
     public void registerIcons(IconRegister var1)
     {
-        this.iconArray = new Icon[]{var1.registerIcon("Aether:coldfire_0"), var1.registerIcon("Aether:coldfire_1")};
+        this.iconArray = new Icon[] {var1.registerIcon("Aether:coldfire_0"), var1.registerIcon("Aether:coldfire_1")};
     }
 
     @SideOnly(Side.CLIENT)

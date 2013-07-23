@@ -23,7 +23,7 @@ public class EntityFiroBall extends EntityFlying
     public boolean smacked;
     public boolean fromCloud;
     private static final double topSpeed = 0.125D;
-    private static final float sponge = (180F / (float) Math.PI);
+    private static final float sponge = (180F / (float)Math.PI);
 
     public EntityFiroBall(World var1)
     {
@@ -62,9 +62,9 @@ public class EntityFiroBall extends EntityFlying
             this.sinage[var9] = this.rand.nextFloat() * 6.0F;
         }
 
-        this.smotionX = (0.2D + (double) this.rand.nextFloat() * 0.15D) * (this.rand.nextInt(2) == 0 ? 1.0D : -1.0D);
-        this.smotionY = (0.2D + (double) this.rand.nextFloat() * 0.15D) * (this.rand.nextInt(2) == 0 ? 1.0D : -1.0D);
-        this.smotionZ = (0.2D + (double) this.rand.nextFloat() * 0.15D) * (this.rand.nextInt(2) == 0 ? 1.0D : -1.0D);
+        this.smotionX = (0.2D + (double)this.rand.nextFloat() * 0.15D) * (this.rand.nextInt(2) == 0 ? 1.0D : -1.0D);
+        this.smotionY = (0.2D + (double)this.rand.nextFloat() * 0.15D) * (this.rand.nextInt(2) == 0 ? 1.0D : -1.0D);
+        this.smotionZ = (0.2D + (double)this.rand.nextFloat() * 0.15D) * (this.rand.nextInt(2) == 0 ? 1.0D : -1.0D);
 
         if (var8)
         {
@@ -92,9 +92,9 @@ public class EntityFiroBall extends EntityFlying
             this.sinage[var10] = this.rand.nextFloat() * 6.0F;
         }
 
-        this.smotionX = (0.2D + (double) this.rand.nextFloat() * 0.15D) * (this.rand.nextInt(2) == 0 ? 1.0D : -1.0D);
-        this.smotionY = (0.2D + (double) this.rand.nextFloat() * 0.15D) * (this.rand.nextInt(2) == 0 ? 1.0D : -1.0D);
-        this.smotionZ = (0.2D + (double) this.rand.nextFloat() * 0.15D) * (this.rand.nextInt(2) == 0 ? 1.0D : -1.0D);
+        this.smotionX = (0.2D + (double)this.rand.nextFloat() * 0.15D) * (this.rand.nextInt(2) == 0 ? 1.0D : -1.0D);
+        this.smotionY = (0.2D + (double)this.rand.nextFloat() * 0.15D) * (this.rand.nextInt(2) == 0 ? 1.0D : -1.0D);
+        this.smotionZ = (0.2D + (double)this.rand.nextFloat() * 0.15D) * (this.rand.nextInt(2) == 0 ? 1.0D : -1.0D);
 
         if (var8)
         {
@@ -128,16 +128,17 @@ public class EntityFiroBall extends EntityFlying
         if (this.frosty)
         {
             this.worldObj.playSoundAtEntity(this, "random.glass", 2.0F, (this.rand.nextFloat() - this.rand.nextFloat()) * 0.2F + 1.2F);
-        } else
+        }
+        else
         {
             this.worldObj.playSoundAtEntity(this, "random.fizz", 2.0F, (this.rand.nextFloat() - this.rand.nextFloat()) * 0.2F + 1.2F);
         }
 
         for (int var1 = 0; var1 < 16; ++var1)
         {
-            double var2 = this.posX + (double) (this.rand.nextFloat() - this.rand.nextFloat()) * 0.25D;
-            double var4 = this.posY + (double) (this.rand.nextFloat() - this.rand.nextFloat()) * 0.25D;
-            double var6 = this.posZ + (double) (this.rand.nextFloat() - this.rand.nextFloat()) * 0.25D;
+            double var2 = this.posX + (double)(this.rand.nextFloat() - this.rand.nextFloat()) * 0.25D;
+            double var4 = this.posY + (double)(this.rand.nextFloat() - this.rand.nextFloat()) * 0.25D;
+            double var6 = this.posZ + (double)(this.rand.nextFloat() - this.rand.nextFloat()) * 0.25D;
 
             if (!this.frosty)
             {
@@ -151,16 +152,17 @@ public class EntityFiroBall extends EntityFlying
         if (this.frosty)
         {
             this.worldObj.playSoundAtEntity(this, "random.glass", 2.0F, (this.rand.nextFloat() - this.rand.nextFloat()) * 0.2F + 1.2F);
-        } else
+        }
+        else
         {
             this.worldObj.playSoundAtEntity(this, "random.explode", 2.0F, (this.rand.nextFloat() - this.rand.nextFloat()) * 0.2F + 1.2F);
         }
 
         for (int var1 = 0; var1 < 40; ++var1)
         {
-            double var2 = (double) ((this.rand.nextFloat() - 0.5F) * 0.5F);
-            double var4 = (double) ((this.rand.nextFloat() - 0.5F) * 0.5F);
-            double var6 = (double) ((this.rand.nextFloat() - 0.5F) * 0.5F);
+            double var2 = (double)((this.rand.nextFloat() - 0.5F) * 0.5F);
+            double var4 = (double)((this.rand.nextFloat() - 0.5F) * 0.5F);
+            double var6 = (double)((this.rand.nextFloat() - 0.5F) * 0.5F);
 
             if (this.frosty)
             {
@@ -168,7 +170,8 @@ public class EntityFiroBall extends EntityFlying
                 var4 *= 0.5D;
                 var6 *= 0.5D;
                 this.worldObj.spawnParticle("snowshovel", this.posX, this.posY, this.posZ, var2, var4 + 0.125D, var6);
-            } else
+            }
+            else
             {
                 this.worldObj.spawnParticle("flame", this.posX, this.posY, this.posZ, var2, var4, var6);
             }
@@ -181,11 +184,11 @@ public class EntityFiroBall extends EntityFlying
         {
             for (int var1 = 0; var1 < 3; ++var1)
             {
-                this.sinage[var1] += 0.3F + (float) var1 * 0.13F;
+                this.sinage[var1] += 0.3F + (float)var1 * 0.13F;
 
-                if (this.sinage[var1] > ((float) Math.PI * 2F))
+                if (this.sinage[var1] > ((float)Math.PI * 2F))
                 {
-                    this.sinage[var1] -= ((float) Math.PI * 2F);
+                    this.sinage[var1] -= ((float)Math.PI * 2F);
                 }
             }
         }
@@ -204,7 +207,8 @@ public class EntityFiroBall extends EntityFlying
                 this.splode();
                 this.fizzle();
                 this.isDead = true;
-            } else
+            }
+            else
             {
                 int var1 = MathHelper.floor_double(this.posX);
                 int var2 = MathHelper.floor_double(this.boundingBox.minY);
@@ -213,7 +217,8 @@ public class EntityFiroBall extends EntityFlying
                 if (this.smotionX > 0.0D && this.worldObj.getBlockId(var1 + 1, var2, var3) != 0)
                 {
                     this.motionX = this.smotionX = -this.smotionX;
-                } else if (this.smotionX < 0.0D && this.worldObj.getBlockId(var1 - 1, var2, var3) != 0)
+                }
+                else if (this.smotionX < 0.0D && this.worldObj.getBlockId(var1 - 1, var2, var3) != 0)
                 {
                     this.motionX = this.smotionX = -this.smotionX;
                 }
@@ -221,7 +226,8 @@ public class EntityFiroBall extends EntityFlying
                 if (this.smotionY > 0.0D && this.worldObj.getBlockId(var1, var2 + 1, var3) != 0)
                 {
                     this.motionY = this.smotionY = -this.smotionY;
-                } else if (this.smotionY < 0.0D && this.worldObj.getBlockId(var1, var2 - 1, var3) != 0)
+                }
+                else if (this.smotionY < 0.0D && this.worldObj.getBlockId(var1, var2 - 1, var3) != 0)
                 {
                     this.motionY = this.smotionY = -this.smotionY;
                 }
@@ -229,7 +235,8 @@ public class EntityFiroBall extends EntityFlying
                 if (this.smotionZ > 0.0D && this.worldObj.getBlockId(var1, var2, var3 + 1) != 0)
                 {
                     this.motionZ = this.smotionZ = -this.smotionZ;
-                } else if (this.smotionZ < 0.0D && this.worldObj.getBlockId(var1, var2, var3 - 1) != 0)
+                }
+                else if (this.smotionZ < 0.0D && this.worldObj.getBlockId(var1, var2, var3 - 1) != 0)
                 {
                     this.motionZ = this.smotionZ = -this.smotionZ;
                 }
@@ -245,8 +252,8 @@ public class EntityFiroBall extends EntityFlying
     public void writeEntityToNBT(NBTTagCompound var1)
     {
         super.writeEntityToNBT(var1);
-        var1.setShort("LifeLeft", (short) this.life);
-        var1.setTag("SeriousKingVampire", this.newDoubleNBTList(new double[]{this.smotionX, this.smotionY, this.smotionZ}));
+        var1.setShort("LifeLeft", (short)this.life);
+        var1.setTag("SeriousKingVampire", this.newDoubleNBTList(new double[] {this.smotionX, this.smotionY, this.smotionZ}));
         var1.setBoolean("Frosty", this.frosty);
         var1.setBoolean("FromCloud", this.fromCloud);
         var1.setBoolean("Smacked", this.smacked);
@@ -269,9 +276,9 @@ public class EntityFiroBall extends EntityFlying
 
         this.smacked = var1.getBoolean("Smacked");
         NBTTagList var2 = var1.getTagList("SeriousKingVampire");
-        this.smotionX = (double) ((float) ((NBTTagDouble) var2.tagAt(0)).data);
-        this.smotionY = (double) ((float) ((NBTTagDouble) var2.tagAt(1)).data);
-        this.smotionZ = (double) ((float) ((NBTTagDouble) var2.tagAt(2)).data);
+        this.smotionX = (double)((float)((NBTTagDouble)var2.tagAt(0)).data);
+        this.smotionY = (double)((float)((NBTTagDouble)var2.tagAt(1)).data);
+        this.smotionZ = (double)((float)((NBTTagDouble)var2.tagAt(2)).data);
     }
 
     /**
@@ -287,7 +294,8 @@ public class EntityFiroBall extends EntityFlying
             if (this.frosty && (!(var1 instanceof EntityFireMonster) || this.smacked && !this.fromCloud) && !(var1 instanceof EntityFireMinion))
             {
                 var2 = var1.attackEntityFrom(DamageSource.causeMobDamage(this), 5);
-            } else if (!this.frosty && !(var1 instanceof EntityFireMonster) && !(var1 instanceof EntityFireMinion))
+            }
+            else if (!this.frosty && !(var1 instanceof EntityFireMonster) && !(var1 instanceof EntityFireMinion))
             {
                 var2 = var1.attackEntityFrom(DamageSource.causeMobDamage(this), 5);
 
@@ -324,7 +332,8 @@ public class EntityFiroBall extends EntityFlying
 
             this.smacked = true;
             return true;
-        } else
+        }
+        else
         {
             return false;
         }

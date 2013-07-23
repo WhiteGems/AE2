@@ -1,7 +1,6 @@
 package net.aetherteam.aether.blocks;
 
 import java.util.List;
-
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockWall;
 import net.minecraft.creativetab.CreativeTabs;

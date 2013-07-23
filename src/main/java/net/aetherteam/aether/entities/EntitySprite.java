@@ -22,7 +22,7 @@ public class EntitySprite extends EntityMob
     public void entityInit()
     {
         super.entityInit();
-        this.dataWatcher.addObject(16, Byte.valueOf((byte) 0));
+        this.dataWatcher.addObject(16, Byte.valueOf((byte)0));
     }
 
     public boolean isSitting()
@@ -48,38 +48,39 @@ public class EntitySprite extends EntityMob
             this.motionZ = 0.0D;
             this.jumpMovementFactor = 0.0F;
             this.renderYawOffset = this.rotationPitch = this.rotationYaw = 0.0F;
-        } else if (this.Holding != null)
+        }
+        else if (this.Holding != null)
         {
             this.motionY = 0.0D;
             this.motionX = 0.0D;
             this.motionZ = 0.0D;
             boolean var1 = true;
 
-            if ((double) this.targetPos.y > this.posY)
+            if ((double)this.targetPos.y > this.posY)
             {
                 this.motionY = 0.5D;
                 var1 = false;
             }
 
-            if ((double) this.targetPos.x < this.posX - 4.0D)
+            if ((double)this.targetPos.x < this.posX - 4.0D)
             {
                 this.motionX = 0.5D;
                 var1 = false;
             }
 
-            if ((double) this.targetPos.x > this.posX + 4.0D)
+            if ((double)this.targetPos.x > this.posX + 4.0D)
             {
                 this.motionX = -0.5D;
                 var1 = false;
             }
 
-            if ((double) this.targetPos.z < this.posZ - 4.0D)
+            if ((double)this.targetPos.z < this.posZ - 4.0D)
             {
                 this.motionZ = 0.5D;
                 var1 = false;
             }
 
-            if ((double) this.targetPos.z < this.posZ + 4.0D)
+            if ((double)this.targetPos.z < this.posZ + 4.0D)
             {
                 this.motionZ = -0.5D;
                 var1 = false;
@@ -92,7 +93,8 @@ public class EntitySprite extends EntityMob
                 this.isAnnoyed = false;
                 this.entityToAttack = null;
                 this.setSitting(true);
-            } else
+            }
+            else
             {
                 this.Holding.mountEntity(this);
             }
@@ -101,12 +103,12 @@ public class EntitySprite extends EntityMob
 
     Pos findLowestPoint(World var1)
     {
-        Pos var2 = new Pos((int) this.posX, (int) this.posY + 10, (int) this.posZ);
+        Pos var2 = new Pos((int)this.posX, (int)this.posY + 10, (int)this.posZ);
         int var3 = 128;
 
-        for (int var4 = (int) this.posX - 8; (double) var4 < this.posX + 8.0D; ++var4)
+        for (int var4 = (int)this.posX - 8; (double)var4 < this.posX + 8.0D; ++var4)
         {
-            for (int var5 = (int) this.posX - 8; (double) var5 < this.posX + 8.0D; ++var5)
+            for (int var5 = (int)this.posX - 8; (double)var5 < this.posX + 8.0D; ++var5)
             {
                 if (var3 > var1.getHeightValue(var4, var5))
                 {
@@ -130,7 +132,7 @@ public class EntitySprite extends EntityMob
      */
     protected void attackEntity(Entity var1, float var2)
     {
-        EntityLiving var3 = (EntityLiving) var1;
+        EntityLiving var3 = (EntityLiving)var1;
 
         if (var2 < 1.0F && this.canEntityBeSeen(var3) && this.Holding == null && this.isAnnoyed)
         {
@@ -152,10 +154,11 @@ public class EntitySprite extends EntityMob
     {
         if (var1)
         {
-            this.dataWatcher.updateObject(16, Byte.valueOf((byte) 0));
-        } else
+            this.dataWatcher.updateObject(16, Byte.valueOf((byte)0));
+        }
+        else
         {
-            this.dataWatcher.updateObject(16, Byte.valueOf((byte) 1));
+            this.dataWatcher.updateObject(16, Byte.valueOf((byte)1));
         }
     }
 

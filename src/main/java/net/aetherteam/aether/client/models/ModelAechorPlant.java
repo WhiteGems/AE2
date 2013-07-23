@@ -34,7 +34,7 @@ public class ModelAechorPlant extends ModelBase
 
     public ModelAechorPlant(float var1, float var2)
     {
-        this.pie = ((float) Math.PI * 2F);
+        this.pie = ((float)Math.PI * 2F);
         this.size = 1.0F;
         this.petal = new ModelRenderer[petals];
         this.leaf = new ModelRenderer[petals];
@@ -49,7 +49,8 @@ public class ModelAechorPlant extends ModelBase
                 this.petal[var3] = new ModelRenderer(this, 29, 3);
                 this.petal[var3].addBox(-4.0F, -1.0F, -12.0F, 8, 1, 9, var1 - 0.25F);
                 this.petal[var3].setRotationPoint(0.0F, 1.0F + var2, 0.0F);
-            } else
+            }
+            else
             {
                 this.petal[var3].addBox(-4.0F, -1.0F, -13.0F, 8, 1, 10, var1 - 0.125F);
                 this.petal[var3].setRotationPoint(0.0F, 1.0F + var2, 0.0F);
@@ -134,7 +135,7 @@ public class ModelAechorPlant extends ModelBase
     public void setRotationAngles(float var1, float var2, float var3, float var4, float var5, float var6)
     {
         this.head.rotateAngleX = 0.0F;
-        this.head.rotateAngleY = var5 / (180F / (float) Math.PI);
+        this.head.rotateAngleY = var5 / (180F / (float)Math.PI);
         float var7 = this.sinage2;
         this.stem.rotateAngleY = this.head.rotateAngleY;
         this.stem.rotationPointY = var7 * 0.5F;
@@ -151,24 +152,24 @@ public class ModelAechorPlant extends ModelBase
             this.petal[var8].rotateAngleX = var8 % 2 == 0 ? -0.25F : -0.4125F;
             this.petal[var8].rotateAngleX += this.sinage;
             this.petal[var8].rotateAngleY = this.head.rotateAngleY;
-            this.petal[var8].rotateAngleY += this.pie / (float) petals * (float) var8;
+            this.petal[var8].rotateAngleY += this.pie / (float)petals * (float)var8;
             this.leaf[var8].rotateAngleX = var8 % 2 == 0 ? 0.1F : 0.2F;
             this.leaf[var8].rotateAngleX += this.sinage * 0.75F;
-            this.leaf[var8].rotateAngleY = this.head.rotateAngleY + this.pie / (float) petals / 2.0F;
-            this.leaf[var8].rotateAngleY += this.pie / (float) petals * (float) var8;
+            this.leaf[var8].rotateAngleY = this.head.rotateAngleY + this.pie / (float)petals / 2.0F;
+            this.leaf[var8].rotateAngleY += this.pie / (float)petals * (float)var8;
             this.petal[var8].rotationPointY = var7;
             this.leaf[var8].rotationPointY = var7;
         }
 
         for (var8 = 0; var8 < stamens; ++var8)
         {
-            this.stamen[var8].rotateAngleX = 0.2F + (float) var8 / 15.0F;
+            this.stamen[var8].rotateAngleX = 0.2F + (float)var8 / 15.0F;
             this.stamen[var8].rotateAngleY = this.head.rotateAngleY + 0.1F;
-            this.stamen[var8].rotateAngleY += this.pie / (float) stamens * (float) var8;
+            this.stamen[var8].rotateAngleY += this.pie / (float)stamens * (float)var8;
             this.stamen[var8].rotateAngleX += this.sinage * 0.4F;
-            this.stamen2[var8].rotateAngleX = 0.2F + (float) var8 / 15.0F;
+            this.stamen2[var8].rotateAngleX = 0.2F + (float)var8 / 15.0F;
             this.stamen2[var8].rotateAngleY = this.head.rotateAngleY + 0.1F;
-            this.stamen2[var8].rotateAngleY += this.pie / (float) stamens * (float) var8;
+            this.stamen2[var8].rotateAngleY += this.pie / (float)stamens * (float)var8;
             this.stamen2[var8].rotateAngleX += this.sinage * 0.4F;
             this.stamen[var8].rotationPointY = var7 + this.sinage * 2.0F;
             this.stamen2[var8].rotationPointY = var7 + this.sinage * 2.0F;

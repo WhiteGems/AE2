@@ -2,14 +2,8 @@ package net.aetherteam.aether.party.members;
 
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.relauncher.Side;
-
 import java.io.Serializable;
-
 import net.aetherteam.aether.Aether;
-import net.aetherteam.aether.CommonProxy;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.RenderEngine;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 
 public class PartyMember implements Serializable
@@ -17,36 +11,38 @@ public class PartyMember implements Serializable
     public String username;
     public int skinIndex;
     public String skinUrl;
-    private MemberType type = MemberType.MEMBER;
+    private MemberType type;
+    Side side;
 
-    Side side = FMLCommonHandler.instance().getEffectiveSide();
-
-    public PartyMember(EntityPlayer player)
+    public PartyMember(EntityPlayer var1)
     {
-        this.username = player.username;
+        this.type = MemberType.MEMBER;
+        this.side = FMLCommonHandler.instance().getEffectiveSide();
+        this.username = var1.username;
 
         if (this.side.isClient())
         {
-            this.skinIndex = Aether.proxy.getClient().renderEngine.getTextureForDownloadableImage(player.skinUrl, "/mob/char.png");
-            this.skinUrl = player.skinUrl;
+            this.skinIndex = Aether.proxy.getClient().renderEngine.getTextureForDownloadableImage(var1.skinUrl, "/mob/char.png");
+            this.skinUrl = var1.skinUrl;
         }
     }
 
-    public PartyMember(String username, String skinUrl)
+    public PartyMember(String var1, String var2)
     {
-        this.username = username;
+        this.type = MemberType.MEMBER;
+        this.side = FMLCommonHandler.instance().getEffectiveSide();
+        this.username = var1;
 
         if (this.side.isClient())
         {
-            this.skinIndex = Aether.proxy.getClient().renderEngine.getTextureForDownloadableImage(skinUrl, "/mob/char.png");
-            this.skinUrl = skinUrl;
+            this.skinIndex = Aether.proxy.getClient().renderEngine.getTextureForDownloadableImage(var2, "/mob/char.png");
+            this.skinUrl = var2;
         }
     }
 
-    public PartyMember promoteTo(MemberType type)
+    public PartyMember promoteTo(MemberType var1)
     {
-        this.type = type;
-
+        this.type = var1;
         return this;
     }
 
@@ -85,8 +81,3 @@ public class PartyMember implements Serializable
         return this.type;
     }
 }
-
-/* Location:           D:\Dev\Mc\forge_orl\mcp\jars\bin\aether.jar
- * Qualified Name:     net.aetherteam.aether.party.members.PartyMember
- * JD-Core Version:    0.6.2
- */

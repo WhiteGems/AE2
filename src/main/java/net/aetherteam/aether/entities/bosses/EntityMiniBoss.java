@@ -35,7 +35,7 @@ public class EntityMiniBoss extends EntityBossMob implements IAetherBoss
         {
             Dungeon var2 = DungeonHandler.instance().getInstanceAt(MathHelper.floor_double(this.posX), MathHelper.floor_double(this.posY), MathHelper.floor_double(this.posZ));
 
-            if (var2 != null && !var2.isActive())
+            if (var2 != null && !var2.isActive() && !(this.boss instanceof EntityLabyrinthEye))
             {
                 this.setDead();
             }

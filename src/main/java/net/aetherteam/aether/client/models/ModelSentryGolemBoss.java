@@ -49,13 +49,13 @@ public class ModelSentryGolemBoss extends ModelBase
         this.leftarm.setRotationPoint(-9.0F, -16.0F, 4.0F);
         this.leftarm.setTextureSize(128, 128);
         this.leftarm.mirror = true;
-        this.setRotation(this.leftarm, -((float) Math.PI * 2F / 9F), ((float) Math.PI / 2F), 0.0F);
+        this.setRotation(this.leftarm, -((float)Math.PI * 2F / 9F), ((float)Math.PI / 2F), 0.0F);
         this.rightarm = new ModelRenderer(this, 0, 0);
         this.rightarm.addBox(0.0F, 0.0F, 0.0F, 8, 15, 8);
         this.rightarm.setRotationPoint(9.0F, -16.0F, -4.0F);
         this.rightarm.setTextureSize(128, 128);
         this.rightarm.mirror = true;
-        this.setRotation(this.rightarm, -((float) Math.PI * 2F / 9F), -((float) Math.PI / 2F), 0.0F);
+        this.setRotation(this.rightarm, -((float)Math.PI * 2F / 9F), -((float)Math.PI / 2F), 0.0F);
         this.leftforearm = new ModelRenderer(this, 0, 62);
         this.leftforearm.addBox(0.0F, 0.0F, 0.0F, 10, 17, 10);
         this.leftforearm.setRotationPoint(-19.0F, -5.0F, -4.5F);
@@ -105,7 +105,7 @@ public class ModelSentryGolemBoss extends ModelBase
      */
     public void setLivingAnimations(EntityLiving var1, float var2, float var3, float var4)
     {
-        EntitySentryGuardian var5 = (EntitySentryGuardian) var1;
+        EntitySentryGuardian var5 = (EntitySentryGuardian)var1;
         int var6 = var5.getAttackTimer();
 
         if (var6 != 0)

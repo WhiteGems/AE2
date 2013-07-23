@@ -21,13 +21,11 @@ public class AetherFoodTab extends CreativeTabs
         return "Aether Food";
     }
 
+    /**
+     * Gets the translated Label.
+     */
     public String getTranslatedTabLabel()
     {
-        return getTabLabel();
+        return this.getTabLabel();
     }
 }
-
-/* Location:           D:\Dev\Mc\forge_orl\mcp\jars\bin\aether.jar
- * Qualified Name:     net.aetherteam.aether.creative_tabs.AetherFoodTab
- * JD-Core Version:    0.6.2
- */

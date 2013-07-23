@@ -1,17 +1,10 @@
 package net.aetherteam.aether.client.gui.social;
 
 import cpw.mods.fml.client.FMLClientHandler;
-
-import java.util.List;
-
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.ScaledResolution;
-import net.minecraft.client.renderer.RenderEngine;
-import net.minecraft.client.settings.GameSettings;
-import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.entity.player.EntityPlayer;
 import org.lwjgl.opengl.GL11;
 
@@ -24,42 +17,50 @@ public class GuiPartyRequest extends GuiScreen
     private int yParty;
     private int wParty;
     private int hParty;
-    Minecraft f;
+
+    /** Reference to the Minecraft object. */
+    Minecraft mc;
     private EntityPlayer player;
     private GuiScreen parent;
 
-    public GuiPartyRequest(EntityPlayer player, GuiScreen parent)
+    public GuiPartyRequest(EntityPlayer var1, GuiScreen var2)
     {
-        this(new PartyData(), player, parent);
+        this(new PartyData(), var1, var2);
     }
 
-    public GuiPartyRequest(PartyData pm, EntityPlayer player, GuiScreen parent)
+    public GuiPartyRequest(PartyData var1, EntityPlayer var2, GuiScreen var3)
     {
-        this.parent = parent;
-        this.player = player;
+        this.parent = var3;
+        this.player = var2;
         this.mc = FMLClientHandler.instance().getClient();
-        this.pm = pm;
+        this.pm = var1;
         this.backgroundTexture = this.mc.renderEngine.getTexture("/net/aetherteam/aether/client/sprites/gui/partyMain.png");
         this.easterTexture = this.mc.renderEngine.getTexture("/net/aetherteam/aether/client/sprites/gui/partyMain.png");
         this.wParty = 256;
         this.hParty = 256;
-        updateScreen();
+        this.updateScreen();
     }
 
-    protected void keyTyped(char charTyped, int keyTyped)
+    /**
+     * Fired when a key is typed. This is the equivalent of KeyListener.keyTyped(KeyEvent e).
+     */
+    protected void keyTyped(char var1, int var2)
     {
-        super.keyTyped(charTyped, keyTyped);
+        super.keyTyped(var1, var2);
 
-        if (keyTyped == Minecraft.getMinecraft().gameSettings.keyBindInventory.keyCode)
+        if (var2 == Minecraft.getMinecraft().gameSettings.keyBindInventory.keyCode)
         {
-            this.mc.displayGuiScreen((GuiScreen) null);
+            this.mc.displayGuiScreen((GuiScreen)null);
             this.mc.setIngameFocus();
         }
     }
 
+    /**
+     * Adds the buttons (and other controls) to the screen in question.
+     */
     public void initGui()
     {
-        updateScreen();
+        this.updateScreen();
         this.buttonList.clear();
         this.buttonList.add(new GuiButton(5, this.xParty - 60, this.yParty - 36 - 28, 120, 20, "Ownership"));
         this.buttonList.add(new GuiButton(4, this.xParty - 60, this.yParty - 14 - 28, 120, 20, "Operator"));
@@ -68,55 +69,59 @@ public class GuiPartyRequest extends GuiScreen
         this.buttonList.add(new GuiButton(0, this.xParty - 60, this.yParty + 81 - 28, 120, 20, "Back"));
     }
 
-    protected void actionPerformed(GuiButton btn)
+    /**
+     * Fired when a control is clicked. This is the equivalent of ActionListener.actionPerformed(ActionEvent e).
+     */
+    protected void actionPerformed(GuiButton var1)
     {
-        switch (btn.id)
+        switch (var1.id)
         {
             case 0:
                 this.mc.displayGuiScreen(this.parent);
                 break;
+
             case 3:
                 this.mc.displayGuiScreen(new GuiPlayerList(this.player, this));
         }
     }
 
+    /**
+     * Returns true if this GUI should pause the game when it is displayed in single-player
+     */
     public boolean doesGuiPauseGame()
     {
         return false;
     }
 
-    public void drawScreen(int x, int y, float partialTick)
+    /**
+     * Draws the screen and all the components in it.
+     */
+    public void drawScreen(int var1, int var2, float var3)
     {
-        drawDefaultBackground();
+        this.drawDefaultBackground();
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-        GL11.glBindTexture(3553, this.backgroundTexture);
-        int centerX = this.xParty - 70;
-        int centerY = this.yParty - 84;
-
-        ScaledResolution sr = new ScaledResolution(this.mc.gameSettings, this.mc.displayWidth, this.mc.displayHeight);
-        drawTexturedModalRect(centerX, centerY, 0, 0, 141, this.hParty);
-        GL11.glBindTexture(3553, this.backgroundTexture);
-
+        GL11.glBindTexture(GL11.GL_TEXTURE_2D, this.backgroundTexture);
+        int var4 = this.xParty - 70;
+        int var5 = this.yParty - 84;
+        new ScaledResolution(this.mc.gameSettings, this.mc.displayWidth, this.mc.displayHeight);
+        this.drawTexturedModalRect(var4, var5, 0, 0, 141, this.hParty);
+        GL11.glBindTexture(GL11.GL_TEXTURE_2D, this.backgroundTexture);
         this.mc.renderEngine.resetBoundTexture();
-
-        String name = "Request Party Position";
-
-        drawString(this.fontRenderer, name, centerX + 69 - this.fontRenderer.getStringWidth(name) / 2, centerY + 5, 16777215);
-        super.drawScreen(x, y, partialTick);
+        String var7 = "Request Party Position";
+        this.drawString(this.fontRenderer, var7, var4 + 69 - this.fontRenderer.getStringWidth(var7) / 2, var5 + 5, 16777215);
+        super.drawScreen(var1, var2, var3);
     }
 
+    /**
+     * Called from the main game loop to update the screen.
+     */
     public void updateScreen()
     {
         super.updateScreen();
-        ScaledResolution scaledresolution = new ScaledResolution(this.mc.gameSettings, this.mc.displayWidth, this.mc.displayHeight);
-        int width = scaledresolution.getScaledWidth();
-        int height = scaledresolution.getScaledHeight();
-        this.xParty = (width / 2);
-        this.yParty = (height / 2);
+        ScaledResolution var1 = new ScaledResolution(this.mc.gameSettings, this.mc.displayWidth, this.mc.displayHeight);
+        int var2 = var1.getScaledWidth();
+        int var3 = var1.getScaledHeight();
+        this.xParty = var2 / 2;
+        this.yParty = var3 / 2;
     }
 }
-
-/* Location:           D:\Dev\Mc\forge_orl\mcp\jars\bin\aether.jar
- * Qualified Name:     net.aetherteam.aether.client.gui.social.GuiPartyRequest
- * JD-Core Version:    0.6.2
- */

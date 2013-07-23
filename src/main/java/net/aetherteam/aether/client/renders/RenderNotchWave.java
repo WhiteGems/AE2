@@ -19,7 +19,7 @@ public class RenderNotchWave extends Render
     public void doRenderNotchWave(EntityNotchWave var1, double var2, double var4, double var6, float var8, float var9)
     {
         GL11.glPushMatrix();
-        GL11.glTranslatef((float) var2, (float) var4, (float) var6);
+        GL11.glTranslatef((float)var2, (float)var4, (float)var6);
         GL11.glEnable(GL12.GL_RESCALE_NORMAL);
         float var10 = this.field_77002_a;
         GL11.glScalef(var10 / 1.0F, var10 / 1.0F, var10 / 1.0F);
@@ -32,10 +32,10 @@ public class RenderNotchWave extends Render
         GL11.glRotatef(-this.renderManager.playerViewX, 1.0F, 0.0F, 0.0F);
         var11.startDrawingQuads();
         var11.setNormal(0.0F, 1.0F, 0.0F);
-        var11.addVertexWithUV((double) (0.0F - var13), (double) (0.0F - var14), 0.0D, 0.0D, 0.0D);
-        var11.addVertexWithUV((double) (var12 - var13), (double) (0.0F - var14), 0.0D, 0.0D, 1.0D);
-        var11.addVertexWithUV((double) (var12 - var13), (double) (1.0F - var14), 0.0D, 1.0D, 1.0D);
-        var11.addVertexWithUV((double) (0.0F - var13), (double) (1.0F - var14), 0.0D, 1.0D, 0.0D);
+        var11.addVertexWithUV((double)(0.0F - var13), (double)(0.0F - var14), 0.0D, 0.0D, 0.0D);
+        var11.addVertexWithUV((double)(var12 - var13), (double)(0.0F - var14), 0.0D, 0.0D, 1.0D);
+        var11.addVertexWithUV((double)(var12 - var13), (double)(1.0F - var14), 0.0D, 1.0D, 1.0D);
+        var11.addVertexWithUV((double)(0.0F - var13), (double)(1.0F - var14), 0.0D, 1.0D, 0.0D);
         var11.draw();
         GL11.glDisable(GL12.GL_RESCALE_NORMAL);
         GL11.glPopMatrix();
@@ -49,6 +49,6 @@ public class RenderNotchWave extends Render
      */
     public void doRender(Entity var1, double var2, double var4, double var6, float var8, float var9)
     {
-        this.doRenderNotchWave((EntityNotchWave) var1, var2, var4, var6, var8, var9);
+        this.doRenderNotchWave((EntityNotchWave)var1, var2, var4, var6, var8, var9);
     }
 }

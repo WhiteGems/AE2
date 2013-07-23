@@ -9,34 +9,34 @@ public class AetherOptions
     private static boolean showNotifications = true;
     private static boolean slideCoinbar = true;
 
-    public static void setMinimalPartyHUD(boolean option)
+    public static void setMinimalPartyHUD(boolean var0)
     {
-        minimalPartyHUD = option;
+        minimalPartyHUD = var0;
     }
 
-    public static void setRenderHead(boolean option)
+    public static void setRenderHead(boolean var0)
     {
-        renderMemberHead = option;
+        renderMemberHead = var0;
     }
 
-    public static void setShowPartyHUD(boolean option)
+    public static void setShowPartyHUD(boolean var0)
     {
-        showPartyHUD = option;
+        showPartyHUD = var0;
     }
 
-    public static void setShowPartyName(boolean option)
+    public static void setShowPartyName(boolean var0)
     {
-        showPartyName = option;
+        showPartyName = var0;
     }
 
-    public static void setShowNotifications(boolean option)
+    public static void setShowNotifications(boolean var0)
     {
-        showNotifications = option;
+        showNotifications = var0;
     }
 
-    public static void setSlideCoinbar(boolean option)
+    public static void setSlideCoinbar(boolean var0)
     {
-        slideCoinbar = option;
+        slideCoinbar = var0;
     }
 
     public static boolean getRenderHead()
@@ -69,8 +69,3 @@ public class AetherOptions
         return slideCoinbar;
     }
 }
-
-/* Location:           D:\Dev\Mc\forge_orl\mcp\jars\bin\aether.jar
- * Qualified Name:     net.aetherteam.aether.data.AetherOptions
- * JD-Core Version:    0.6.2
- */

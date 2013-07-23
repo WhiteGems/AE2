@@ -1,42 +1,35 @@
 package net.aetherteam.aether.packets;
 
 import cpw.mods.fml.common.network.Player;
-
 import java.io.ByteArrayInputStream;
 import java.io.DataInputStream;
 import java.io.IOException;
-
 import net.aetherteam.aether.Aether;
 import net.aetherteam.aether.donator.Donator;
-import net.aetherteam.aether.donator.SyncDonatorList;
 import net.minecraft.network.packet.Packet250CustomPayload;
 
 public class PacketDonatorChange extends AetherPacket
 {
-    public PacketDonatorChange(int packetID)
+    public PacketDonatorChange(int var1)
     {
-        super(packetID);
+        super(var1);
     }
 
-    public void onPacketReceived(Packet250CustomPayload packet, Player player)
+    public void onPacketReceived(Packet250CustomPayload var1, Player var2)
     {
-        DataInputStream dat = new DataInputStream(new ByteArrayInputStream(packet.data));
+        DataInputStream var3 = new DataInputStream(new ByteArrayInputStream(var1.data));
+
         try
         {
-            byte packetType = dat.readByte();
-            String username = dat.readUTF();
-            String RSA = dat.readUTF();
-
+            byte var4 = var3.readByte();
+            String var5 = var3.readUTF();
+            String var6 = var3.readUTF();
             Aether.getInstance();
-            Aether.syncDonatorList.addDonator(username, new Donator(username, RSA));
-        } catch (IOException e)
+            Aether.syncDonatorList.addDonator(var5, new Donator(var5, var6));
+        }
+        catch (IOException var7)
         {
-            e.printStackTrace();
+            var7.printStackTrace();
         }
     }
 }
-
-/* Location:           D:\Dev\Mc\forge_orl\mcp\jars\bin\aether.jar
- * Qualified Name:     net.aetherteam.aether.packets.PacketDonatorChange
- * JD-Core Version:    0.6.2
- */

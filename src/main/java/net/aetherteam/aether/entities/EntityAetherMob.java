@@ -1,7 +1,6 @@
 package net.aetherteam.aether.entities;
 
 import java.util.Random;
-
 import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.world.World;
 

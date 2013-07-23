@@ -4,13 +4,10 @@ import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.network.PacketDispatcher;
 import cpw.mods.fml.common.network.Player;
 import cpw.mods.fml.relauncher.Side;
-
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.DataInputStream;
 import java.io.InputStreamReader;
-import java.io.PrintStream;
-
 import net.aetherteam.aether.dungeons.Dungeon;
 import net.aetherteam.aether.dungeons.DungeonHandler;
 import net.aetherteam.aether.party.Party;
@@ -22,91 +19,89 @@ import net.minecraft.network.packet.Packet250CustomPayload;
 
 public class PacketPartyMemberChange extends AetherPacket
 {
-    public PacketPartyMemberChange(int packetID)
+    public PacketPartyMemberChange(int var1)
     {
-        super(packetID);
+        super(var1);
     }
 
-    public void onPacketReceived(Packet250CustomPayload packet, Player player)
+    public void onPacketReceived(Packet250CustomPayload var1, Player var2)
     {
-        DataInputStream dat = new DataInputStream(new ByteArrayInputStream(packet.data));
-        BufferedReader buf = new BufferedReader(new InputStreamReader(dat));
+        DataInputStream var3 = new DataInputStream(new ByteArrayInputStream(var1.data));
+        new BufferedReader(new InputStreamReader(var3));
+
         try
         {
-            byte packetType = dat.readByte();
-            boolean adding = dat.readBoolean();
+            byte var5 = var3.readByte();
+            boolean var6 = var3.readBoolean();
+            String var7 = var3.readUTF();
+            String var8 = var3.readUTF();
+            String var9 = var3.readUTF();
+            Side var10 = FMLCommonHandler.instance().getEffectiveSide();
+            Party var11;
+            PartyMember var12;
 
-            String partyName = dat.readUTF();
-            String username = dat.readUTF();
-            String skinURL = dat.readUTF();
-
-            Side side = FMLCommonHandler.instance().getEffectiveSide();
-
-            if (side.isClient())
+            if (var10.isClient())
             {
-                Party party = PartyController.instance().getParty(partyName);
+                var11 = PartyController.instance().getParty(var7);
 
-                if (party != null)
+                if (var11 != null)
                 {
-                    if (adding)
+                    if (var6)
                     {
-                        PartyMember newMember = new PartyMember(username, skinURL);
-
-                        PartyController.instance().joinParty(party, newMember, false);
-
-                        System.out.println("Added Player '" + username + "' to the Party: " + partyName + "!");
-                    } else
+                        var12 = new PartyMember(var8, var9);
+                        PartyController.instance().joinParty(var11, var12, false);
+                        System.out.println("Added Player \'" + var8 + "\' to the Party: " + var7 + "!");
+                    }
+                    else
                     {
-                        PartyMember partyMember = PartyController.instance().getMember(username);
-
-                        PartyController.instance().leaveParty(party, partyMember, false);
-
-                        System.out.println("Removed Player '" + username + "' from the Party: " + partyName + "!");
+                        var12 = PartyController.instance().getMember(var8);
+                        PartyController.instance().leaveParty(var11, var12, false);
+                        System.out.println("Removed Player \'" + var8 + "\' from the Party: " + var7 + "!");
                     }
                 }
-            } else
+            }
+            else
             {
-                Party party = PartyController.instance().getParty(partyName);
-                PartyMember potentialLeader = PartyController.instance().getMember((EntityPlayer) player);
-                PartyMember affectedMember = PartyController.instance().getMember(username);
+                var11 = PartyController.instance().getParty(var7);
+                var12 = PartyController.instance().getMember((EntityPlayer)var2);
+                PartyMember var13 = PartyController.instance().getMember(var8);
 
-                if (party != null)
+                if (var11 != null)
                 {
-                    if ((party.isLeader(potentialLeader)) || (party.getType() == PartyType.OPEN) || ((potentialLeader != null) && (potentialLeader.username.toLowerCase().equalsIgnoreCase(affectedMember.username)) && (!adding)) || (party.isRequestedPlayer(username)))
+                    if (!var11.isLeader(var12) && var11.getType() != PartyType.OPEN && (var12 == null || !var12.username.toLowerCase().equalsIgnoreCase(var13.username) || var6) && !var11.isRequestedPlayer(var8))
                     {
-                        if ((adding) && (affectedMember == null))
+                        System.out.println("A player (" + var12.username + ") tried to add/kick a member (" + var13.username + ") but didn\'t have permission or the party was not \'open\'.");
+                    }
+                    else
+                    {
+                        if (var6 && var13 == null)
                         {
-                            PartyController.instance().joinParty(party, new PartyMember(username, ""), false);
-                        } else
+                            PartyController.instance().joinParty(var11, new PartyMember(var8, ""), false);
+                        }
+                        else
                         {
-                            Dungeon dungeon = DungeonHandler.instance().getDungeon(party);
+                            Dungeon var14 = DungeonHandler.instance().getDungeon(var11);
+                            PartyController.instance().leaveParty(var11, var13, false);
 
-                            PartyController.instance().leaveParty(party, affectedMember, false);
-
-                            if ((dungeon != null) && (!dungeon.hasStarted()))
+                            if (var14 != null && !var14.hasStarted())
                             {
-                                DungeonHandler.instance().checkForQueue(dungeon);
-
-                                PacketDispatcher.sendPacketToAllPlayers(AetherPacketHandler.sendDungeonQueueCheck(dungeon));
+                                DungeonHandler.instance().checkForQueue(var14);
+                                PacketDispatcher.sendPacketToAllPlayers(AetherPacketHandler.sendDungeonQueueCheck(var14));
                             }
                         }
 
-                        sendPacketToAllExcept(AetherPacketHandler.sendPartyMemberChange(adding, partyName, username, skinURL), player);
-                    } else
-                    {
-                        System.out.println("A player (" + potentialLeader.username + ") tried to add/kick a member (" + affectedMember.username + ") but didn't have permission or the party was not 'open'.");
+                        this.sendPacketToAllExcept(AetherPacketHandler.sendPartyMemberChange(var6, var7, var8, var9), var2);
                     }
-                } else if (affectedMember != null)
-                    System.out.println("Something went wrong! The player " + affectedMember.username + " tried to join/leave a null party!");
+                }
+                else if (var13 != null)
+                {
+                    System.out.println("Something went wrong! The player " + var13.username + " tried to join/leave a null party!");
+                }
             }
-        } catch (Exception ex)
+        }
+        catch (Exception var15)
         {
-            ex.printStackTrace();
+            var15.printStackTrace();
         }
     }
 }
-
-/* Location:           D:\Dev\Mc\forge_orl\mcp\jars\bin\aether.jar
- * Qualified Name:     net.aetherteam.aether.packets.PacketPartyMemberChange
- * JD-Core Version:    0.6.2
- */

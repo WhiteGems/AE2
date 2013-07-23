@@ -22,7 +22,7 @@ public class RenderFloatingBlock extends Render
     {
         Block var10 = Block.blocksList[var1.getBlockID()];
         GL11.glPushMatrix();
-        GL11.glTranslatef((float) var2, (float) var4, (float) var6);
+        GL11.glTranslatef((float)var2, (float)var4, (float)var6);
         GL11.glDisable(GL11.GL_LIGHTING);
         GL11.glRotatef(-90.0F, 0.0F, 1.0F, 0.0F);
 
@@ -44,6 +44,6 @@ public class RenderFloatingBlock extends Render
      */
     public void doRender(Entity var1, double var2, double var4, double var6, float var8, float var9)
     {
-        this.renderFloatingBlock((EntityFloatingBlock) var1, var2, var4, var6, var8, var9);
+        this.renderFloatingBlock((EntityFloatingBlock)var1, var2, var4, var6, var8, var9);
     }
 }

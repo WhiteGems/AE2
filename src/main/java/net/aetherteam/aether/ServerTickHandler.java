@@ -4,19 +4,14 @@ import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.ITickHandler;
 import cpw.mods.fml.common.TickType;
 import cpw.mods.fml.common.network.PacketDispatcher;
-
 import java.util.EnumSet;
 import java.util.Iterator;
-import java.util.List;
-
 import net.aetherteam.aether.dungeons.Dungeon;
 import net.aetherteam.aether.dungeons.DungeonHandler;
 import net.aetherteam.aether.packets.AetherPacketHandler;
 import net.aetherteam.aether.party.Party;
 import net.aetherteam.aether.party.PartyController;
-import net.aetherteam.aether.party.members.PartyMember;
 import net.aetherteam.aether.tile_entities.TileEntityEntranceController;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.management.ServerConfigurationManager;
@@ -32,43 +27,42 @@ public class ServerTickHandler implements ITickHandler
         return null;
     }
 
-    public void tickEnd(EnumSet type, Object[] tickData)
+    public void tickEnd(EnumSet var1, Object ... var2)
     {
-        if (type.equals(EnumSet.of(TickType.SERVER)))
+        if (var1.equals(EnumSet.of(TickType.SERVER)))
         {
-            for (Dungeon dungeon : DungeonHandler.instance().getInstances())
+            Iterator var3 = DungeonHandler.instance().getInstances().iterator();
+
+            while (var3.hasNext())
             {
-                if ((dungeon.timerStarted()) && (dungeon.timerFinished()))
+                Dungeon var4 = (Dungeon)var3.next();
+
+                if (var4.timerStarted() && var4.timerFinished())
                 {
-                    MinecraftServer server = FMLCommonHandler.instance().getMinecraftServerInstance();
-                    ServerConfigurationManager configManager = server.getConfigurationManager();
+                    MinecraftServer var5 = FMLCommonHandler.instance().getMinecraftServerInstance();
+                    ServerConfigurationManager var6 = var5.getConfigurationManager();
+                    Party var7 = var4.getQueuedParty();
+                    EntityPlayer var8 = null;
 
-                    Party party = dungeon.getQueuedParty();
-
-                    EntityPlayer partyLeader = null;
-
-                    if (party != null)
+                    if (var7 != null)
                     {
-                        for (Iterator i$ = configManager.playerEntityList.iterator(); i$.hasNext(); )
-                        {
-                            Object obj = i$.next();
+                        Iterator var9 = var6.playerEntityList.iterator();
 
-                            if (((obj instanceof EntityPlayer)) && (party.hasMember(PartyController.instance().getMember((EntityPlayer) obj))))
+                        while (var9.hasNext())
+                        {
+                            Object var10 = var9.next();
+
+                            if (var10 instanceof EntityPlayer && var7.hasMember(PartyController.instance().getMember((EntityPlayer)var10)) && ((EntityPlayer)var10).username.equalsIgnoreCase(var7.getLeader().username))
                             {
-                                if (((EntityPlayer) obj).username.equalsIgnoreCase(party.getLeader().username))
-                                {
-                                    partyLeader = (EntityPlayer) obj;
-                                }
+                                var8 = (EntityPlayer)var10;
                             }
                         }
 
-                        if (partyLeader != null)
+                        if (var8 != null)
                         {
-                            TileEntityEntranceController controller = (TileEntityEntranceController) partyLeader.worldObj.getBlockTileEntity(dungeon.getControllerX(), dungeon.getControllerY(), dungeon.getControllerZ());
-
-                            DungeonHandler.instance().finishDungeon(dungeon, party, controller, false);
-
-                            PacketDispatcher.sendPacketToAllPlayers(AetherPacketHandler.sendDungeonFinish(dungeon, controller, party));
+                            TileEntityEntranceController var11 = (TileEntityEntranceController)var8.worldObj.getBlockTileEntity(var4.getControllerX(), var4.getControllerY(), var4.getControllerZ());
+                            DungeonHandler.instance().finishDungeon(var4, var7, var11, false);
+                            PacketDispatcher.sendPacketToAllPlayers(AetherPacketHandler.sendDungeonFinish(var4, var11, var7));
                         }
 
                         return;
@@ -83,12 +77,5 @@ public class ServerTickHandler implements ITickHandler
         return EnumSet.of(TickType.SERVER);
     }
 
-    public void tickStart(EnumSet type, Object[] tickData)
-    {
-    }
+    public void tickStart(EnumSet var1, Object ... var2) {}
 }
-
-/* Location:           D:\Dev\Mc\forge_orl\mcp\jars\bin\aether.jar
- * Qualified Name:     net.aetherteam.aether.ServerTickHandler
- * JD-Core Version:    0.6.2
- */

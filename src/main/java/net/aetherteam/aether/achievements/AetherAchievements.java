@@ -24,8 +24,3 @@ public class AetherAchievements
         LanguageRegistry.instance().addStringLocalization("achievement." + achievement + ".desc", "en_US", desc);
     }
 }
-
-/* Location:           D:\Dev\Mc\forge_orl\mcp\jars\bin\aether.jar
- * Qualified Name:     net.aetherteam.aether.achievements.AetherAchievements
- * JD-Core Version:    0.6.2
- */

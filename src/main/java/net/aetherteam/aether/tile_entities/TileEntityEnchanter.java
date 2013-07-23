@@ -4,12 +4,10 @@ import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
-
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
-
 import net.aetherteam.aether.Aether;
 import net.aetherteam.aether.AetherEnchantment;
 import net.aetherteam.aether.items.AetherItems;
@@ -81,7 +79,8 @@ public class TileEntityEnchanter extends TileEntity implements IInventory, ISide
                 }
 
                 return var3;
-            } else
+            }
+            else
             {
                 var3 = this.enchanterItemStacks[var1].splitStack(var2);
 
@@ -97,7 +96,8 @@ public class TileEntityEnchanter extends TileEntity implements IInventory, ISide
 
                 return var3;
             }
-        } else
+        }
+        else
         {
             return null;
         }
@@ -114,7 +114,8 @@ public class TileEntityEnchanter extends TileEntity implements IInventory, ISide
             ItemStack var2 = this.enchanterItemStacks[var1];
             this.enchanterItemStacks[var1] = null;
             return var2;
-        } else
+        }
+        else
         {
             return null;
         }
@@ -157,7 +158,7 @@ public class TileEntityEnchanter extends TileEntity implements IInventory, ISide
 
         for (int var3 = 0; var3 < var2.tagCount(); ++var3)
         {
-            NBTTagCompound var4 = (NBTTagCompound) var2.tagAt(var3);
+            NBTTagCompound var4 = (NBTTagCompound)var2.tagAt(var3);
             byte var5 = var4.getByte("Slot");
 
             if (var5 >= 0 && var5 < this.enchanterItemStacks.length)
@@ -176,8 +177,8 @@ public class TileEntityEnchanter extends TileEntity implements IInventory, ISide
     public void writeToNBT(NBTTagCompound var1)
     {
         super.writeToNBT(var1);
-        var1.setShort("BurnTime", (short) this.enchantProgress);
-        var1.setShort("CookTime", (short) this.enchantTimeForItem);
+        var1.setShort("BurnTime", (short)this.enchantProgress);
+        var1.setShort("CookTime", (short)this.enchantTimeForItem);
         NBTTagList var2 = new NBTTagList();
 
         for (int var3 = 0; var3 < this.enchanterItemStacks.length; ++var3)
@@ -185,7 +186,7 @@ public class TileEntityEnchanter extends TileEntity implements IInventory, ISide
             if (this.enchanterItemStacks[var3] != null)
             {
                 NBTTagCompound var4 = new NBTTagCompound();
-                var4.setByte("Slot", (byte) var3);
+                var4.setByte("Slot", (byte)var3);
                 this.enchanterItemStacks[var3].writeToNBT(var4);
                 var2.appendTag(var4);
             }
@@ -222,24 +223,28 @@ public class TileEntityEnchanter extends TileEntity implements IInventory, ISide
                     var2 = new ItemStack(var1.itemID, var3, var1.getItemDamage());
                     var1.stackSize -= var3;
                     this.setInventorySlotContents(0, var2);
-                } else
+                }
+                else
                 {
                     var2 = new ItemStack(var1.itemID, var1.stackSize, var1.getItemDamage());
                     var1.stackSize = 0;
                     this.setInventorySlotContents(0, var2);
                 }
-            } else if (var2.itemID == var1.itemID && var2.getItemDamage() == var1.getItemDamage())
+            }
+            else if (var2.itemID == var1.itemID && var2.getItemDamage() == var1.getItemDamage())
             {
                 if (this.canCombineStackWithRemainder(var1, var2, var3))
                 {
                     this.combineStackWithRemainder(var1, var2, var3);
-                } else if (this.stackIsFull(var2, var3))
+                }
+                else if (this.stackIsFull(var2, var3))
                 {
                     if (this.worldObj.isRemote)
                     {
                         FMLClientHandler.instance().getClient().ingameGUI.getChatGUI().printChatMessage("Altar is at full capacity.");
                     }
-                } else
+                }
+                else
                 {
                     var2.stackSize += var1.stackSize;
                     var1.stackSize = 0;
@@ -266,7 +271,8 @@ public class TileEntityEnchanter extends TileEntity implements IInventory, ISide
         {
             int var4 = var2.stackSize + var1.stackSize - var3;
             return var4;
-        } else
+        }
+        else
         {
             return 0;
         }
@@ -305,7 +311,8 @@ public class TileEntityEnchanter extends TileEntity implements IInventory, ISide
                     var2 = new ItemStack(AetherItems.AmbrosiumShard.itemID, 1, 0);
                     this.setInventorySlotContents(1, var2);
                     --var1.stackSize;
-                } else
+                }
+                else
                 {
                     ++var2.stackSize;
                     --var1.stackSize;
@@ -329,17 +336,18 @@ public class TileEntityEnchanter extends TileEntity implements IInventory, ISide
         {
             if (!this.worldObj.isRemote)
             {
-                var1 = new EntityItem(this.worldObj, (double) ((float) this.xCoord + 0.5F), (double) ((float) this.yCoord + 1.0F), (double) ((float) this.zCoord + 0.5F), this.enchanterItemStacks[1]);
+                var1 = new EntityItem(this.worldObj, (double)((float)this.xCoord + 0.5F), (double)((float)this.yCoord + 1.0F), (double)((float)this.zCoord + 0.5F), this.enchanterItemStacks[1]);
                 var1.delayBeforeCanPickup = 10;
                 this.worldObj.spawnEntityInWorld(var1);
             }
 
             this.decrStackSize(1, this.enchanterItemStacks[1].stackSize);
-        } else if (this.enchanterItemStacks[0] != null)
+        }
+        else if (this.enchanterItemStacks[0] != null)
         {
             if (!this.worldObj.isRemote)
             {
-                var1 = new EntityItem(this.worldObj, (double) ((float) this.xCoord + 0.5F), (double) ((float) this.yCoord + 1.0F), (double) ((float) this.zCoord + 0.5F), this.enchanterItemStacks[0]);
+                var1 = new EntityItem(this.worldObj, (double)((float)this.xCoord + 0.5F), (double)((float)this.yCoord + 1.0F), (double)((float)this.zCoord + 0.5F), this.enchanterItemStacks[0]);
                 var1.delayBeforeCanPickup = 10;
                 this.worldObj.spawnEntityInWorld(var1);
             }
@@ -374,27 +382,30 @@ public class TileEntityEnchanter extends TileEntity implements IInventory, ISide
         if (this.enchanterItemStacks[0] != null)
         {
             this.itemFloatingSpeed = 0.03D;
-        } else
+        }
+        else
         {
             this.itemFloatingSpeed = 0.0D;
         }
 
         if (this.enchanterItemStacks[1] != null)
         {
-            float var1 = this.ambRotationSpeed * (float) this.enchanterItemStacks[1].stackSize * 0.5F;
+            float var1 = this.ambRotationSpeed * (float)this.enchanterItemStacks[1].stackSize * 0.5F;
             this.ambRotation += var1;
             double var2;
 
             if (this.enchanterItemStacks[1].stackSize < 4)
             {
-                var2 = 0.2D * (double) this.enchanterItemStacks[1].stackSize * 0.5D;
-            } else
+                var2 = 0.2D * (double)this.enchanterItemStacks[1].stackSize * 0.5D;
+            }
+            else
             {
                 var2 = 0.35D;
             }
 
             this.ambSpinningSpeed = var2;
-        } else
+        }
+        else
         {
             this.ambRotation = 0.0F;
             this.ambSpinningSpeed = 0.0D;
@@ -406,16 +417,17 @@ public class TileEntityEnchanter extends TileEntity implements IInventory, ISide
         {
             var6 = this.getStackInSlot(0);
 
-            for (int var8 = 0; var8 < enchantments.size(); ++var8)
+            for (int var7 = 0; var7 < enchantments.size(); ++var7)
             {
-                if (var6 != null && enchantments.get(var8) != null && var6.itemID == ((AetherEnchantment) enchantments.get(var8)).enchantFrom.itemID && var6.getItemDamage() == ((AetherEnchantment) enchantments.get(var8)).enchantFrom.getItemDamage())
+                if (var6 != null && enchantments.get(var7) != null && var6.itemID == ((AetherEnchantment)enchantments.get(var7)).enchantFrom.itemID && var6.getItemDamage() == ((AetherEnchantment)enchantments.get(var7)).enchantFrom.getItemDamage())
                 {
                     if (this.enchanterItemStacks[2] == null)
                     {
-                        this.currentEnchantment = (AetherEnchantment) enchantments.get(var8);
-                    } else if (this.enchanterItemStacks[2].itemID == ((AetherEnchantment) enchantments.get(var8)).enchantTo.itemID && ((AetherEnchantment) enchantments.get(var8)).enchantTo.getItem().getItemStackLimit() > this.enchanterItemStacks[2].stackSize)
+                        this.currentEnchantment = (AetherEnchantment)enchantments.get(var7);
+                    }
+                    else if (this.enchanterItemStacks[2].itemID == ((AetherEnchantment)enchantments.get(var7)).enchantTo.itemID && ((AetherEnchantment)enchantments.get(var7)).enchantTo.getItem().getItemStackLimit() > this.enchanterItemStacks[2].stackSize)
                     {
-                        this.currentEnchantment = (AetherEnchantment) enchantments.get(var8);
+                        this.currentEnchantment = (AetherEnchantment)enchantments.get(var7);
                     }
                 }
             }
@@ -424,10 +436,10 @@ public class TileEntityEnchanter extends TileEntity implements IInventory, ISide
         if (this.currentEnchantment != null)
         {
             var6 = this.getStackInSlot(0);
-            ItemStack var7 = this.getStackInSlot(1);
+            ItemStack var8 = this.getStackInSlot(1);
             boolean var3 = true;
 
-            if (this.canEnchant() && var7 != null && var7.stackSize >= this.currentEnchantment.enchantAmbrosiumNeeded && var6 != null)
+            if (this.canEnchant() && var8 != null && var8.stackSize >= this.currentEnchantment.enchantAmbrosiumNeeded && var6 != null)
             {
                 Aether.proxy.spawnAltarParticles(this.worldObj, this.xCoord, this.yCoord, this.zCoord, this.rand);
 
@@ -435,7 +447,7 @@ public class TileEntityEnchanter extends TileEntity implements IInventory, ISide
                 {
                     ItemStack var4 = this.currentEnchantment.enchantTo.copy();
                     var4.stackSize = var6.stackSize;
-                    EntityItem var5 = new EntityItem(this.worldObj, (double) ((float) this.xCoord + 0.5F), (double) ((float) this.yCoord + 1.0F), (double) ((float) this.zCoord + 0.5F), var4);
+                    EntityItem var5 = new EntityItem(this.worldObj, (double)((float)this.xCoord + 0.5F), (double)((float)this.yCoord + 1.0F), (double)((float)this.zCoord + 0.5F), var4);
                     var5.delayBeforeCanPickup = 10;
                     this.worldObj.spawnEntityInWorld(var5);
                 }
@@ -452,7 +464,7 @@ public class TileEntityEnchanter extends TileEntity implements IInventory, ISide
      */
     public boolean isUseableByPlayer(EntityPlayer var1)
     {
-        return this.worldObj.getBlockTileEntity(this.xCoord, this.yCoord, this.zCoord) != this ? false : var1.getDistanceSq((double) this.xCoord + 0.5D, (double) this.yCoord + 0.5D, (double) this.zCoord + 0.5D) <= 64.0D;
+        return this.worldObj.getBlockTileEntity(this.xCoord, this.yCoord, this.zCoord) != this ? false : var1.getDistanceSq((double)this.xCoord + 0.5D, (double)this.yCoord + 0.5D, (double)this.zCoord + 0.5D) <= 64.0D;
     }
 
     public static void addEnchantment(ItemStack var0, ItemStack var1, int var2)
@@ -469,7 +481,7 @@ public class TileEntityEnchanter extends TileEntity implements IInventory, ISide
     {
         for (int var2 = 0; var2 < enchantments.size(); ++var2)
         {
-            if (var1 != null && enchantments.get(var2) != null && var1.itemID == ((AetherEnchantment) enchantments.get(var2)).enchantFrom.itemID && var1.getItemDamage() == ((AetherEnchantment) enchantments.get(var2)).enchantFrom.getItemDamage())
+            if (var1 != null && enchantments.get(var2) != null && var1.itemID == ((AetherEnchantment)enchantments.get(var2)).enchantFrom.itemID && var1.getItemDamage() == ((AetherEnchantment)enchantments.get(var2)).enchantFrom.getItemDamage())
             {
                 return true;
             }
@@ -482,7 +494,7 @@ public class TileEntityEnchanter extends TileEntity implements IInventory, ISide
     {
         for (int var2 = 0; var2 < enchantments.size(); ++var2)
         {
-            if (var1 != null && enchantments.get(var2) != null && var1.itemID == ((AetherEnchantment) enchantments.get(var2)).enchantFrom.itemID && var1.getItemDamage() == ((AetherEnchantment) enchantments.get(var2)).enchantFrom.getItemDamage() && ((AetherEnchantment) enchantments.get(var2)).limitStackToOne)
+            if (var1 != null && enchantments.get(var2) != null && var1.itemID == ((AetherEnchantment)enchantments.get(var2)).enchantFrom.itemID && var1.getItemDamage() == ((AetherEnchantment)enchantments.get(var2)).enchantFrom.getItemDamage() && ((AetherEnchantment)enchantments.get(var2)).limitStackToOne)
             {
                 return true;
             }
@@ -528,7 +540,7 @@ public class TileEntityEnchanter extends TileEntity implements IInventory, ISide
         while (var3.hasNext())
         {
             Object var4 = var3.next();
-            EntityPlayerMP var5 = (EntityPlayerMP) var4;
+            EntityPlayerMP var5 = (EntityPlayerMP)var4;
 
             if (var5.worldObj == this.worldObj)
             {

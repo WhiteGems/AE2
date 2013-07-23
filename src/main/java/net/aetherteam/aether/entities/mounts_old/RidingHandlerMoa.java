@@ -1,7 +1,6 @@
 package net.aetherteam.aether.entities.mounts_old;
 
 import java.util.Random;
-
 import net.aetherteam.aether.Aether;
 import net.aetherteam.aether.donator.Donator;
 import net.aetherteam.aether.donator.EnumChoiceType;
@@ -28,7 +27,7 @@ public class RidingHandlerMoa extends RidingHandler
     public RidingHandlerMoa(EntityMoa var1)
     {
         super(var1);
-        this.animal = (EntityLiving) this.mount;
+        this.animal = (EntityLiving)this.mount;
         this.random = new Random();
         this.jumpsRemaining = 0;
         this.rand = new Random();
@@ -53,12 +52,14 @@ public class RidingHandlerMoa extends RidingHandler
                 this.rider.motionY = 0.875D;
                 this.jpress = true;
                 --this.jumpsRemaining;
-            } else if (this.rider.handleWaterMovement() && this.rider.isJumping)
+            }
+            else if (this.rider.handleWaterMovement() && this.rider.isJumping)
             {
                 this.rider.motionY = 0.5D;
                 this.jpress = true;
                 --this.jumpsRemaining;
-            } else if (this.jumpsRemaining > 0 && !this.jpress && this.rider.isJumping)
+            }
+            else if (this.jumpsRemaining > 0 && !this.jpress && this.rider.isJumping)
             {
                 this.rider.motionY = 0.75D;
                 this.jpress = true;
@@ -73,12 +74,12 @@ public class RidingHandlerMoa extends RidingHandler
             if (this.rider.onGround || this.rider.worldObj.getBlockId(MathHelper.floor_double(this.rider.posX), MathHelper.floor_double(this.rider.posY - 1.0D), MathHelper.floor_double(this.rider.posZ)) != 0)
             {
                 this.jpress = false;
-                this.jumpsRemaining = ((EntityMoa) this.animal).getColour().jumps;
+                this.jumpsRemaining = ((EntityMoa)this.animal).getColour().jumps;
             }
 
             if (this.rider instanceof EntityPlayer)
             {
-                String var1 = ((EntityPlayer) this.rider).username;
+                String var1 = ((EntityPlayer)this.rider).username;
 
                 if (Aether.syncDonatorList.isDonator(var1))
                 {
@@ -89,8 +90,8 @@ public class RidingHandlerMoa extends RidingHandler
 
                     if (var3)
                     {
-                        var4 = (MoaChoice) var2.getChoiceFromType(EnumChoiceType.MOA);
-                        ((MoaChoice) var4).spawnParticleEffects(this.random, (EntityPlayer) this.rider);
+                        var4 = (MoaChoice)var2.getChoiceFromType(EnumChoiceType.MOA);
+                        ((MoaChoice)var4).spawnParticleEffects(this.random, (EntityPlayer)this.rider);
                     }
                 }
             }
@@ -110,8 +111,8 @@ public class RidingHandlerMoa extends RidingHandler
     {
         this.rider.stepHeight = 0.5F;
         this.animal.tasks.addTask(0, new EntityAISwimming(this.animal));
-        this.animal.tasks.addTask(1, new EntityAIPanic((EntityCreature) this.animal, 0.38F));
-        this.animal.tasks.addTask(2, new EntityAIWander((EntityCreature) this.animal, 0.3F));
+        this.animal.tasks.addTask(1, new EntityAIPanic((EntityCreature)this.animal, 0.38F));
+        this.animal.tasks.addTask(2, new EntityAIWander((EntityCreature)this.animal, 0.3F));
         this.animal.tasks.addTask(4, new EntityAIWatchClosest(this.animal, EntityPlayer.class, 6.0F));
         this.animal.tasks.addTask(5, new EntityAILookIdle(this.animal));
         super.onUnMount();
@@ -131,7 +132,7 @@ public class RidingHandlerMoa extends RidingHandler
     {
         if (this.rider != null && this.rider instanceof EntityPlayer)
         {
-            String var1 = ((EntityPlayer) this.rider).username;
+            String var1 = ((EntityPlayer)this.rider).username;
 
             if (Aether.syncDonatorList.isDonator(var1))
             {
@@ -148,8 +149,8 @@ public class RidingHandlerMoa extends RidingHandler
                         double var8 = this.random.nextGaussian() * 0.02D;
                         double var10 = this.random.nextGaussian() * 0.02D;
                         double var12 = 5.0D;
-                        this.rider.worldObj.spawnParticle("flame", this.rider.posX + (double) (this.random.nextFloat() * this.rider.width * 2.0F) - (double) this.rider.width - var6 * var12, this.rider.posY + (double) (this.random.nextFloat() * (this.rider.height - 0.6F)) - var8 * var12, this.rider.posZ + (double) (this.random.nextFloat() * this.rider.width * 2.0F) - (double) this.rider.width - var10 * var12, var6, var8, var10);
-                        this.rider.worldObj.spawnParticle("largeexplode", this.rider.posX + (double) (this.random.nextFloat() * this.rider.width * 2.0F) - (double) this.rider.width - var6 * var12, this.rider.posY + (double) (this.random.nextFloat() * (this.rider.height - 0.6F)) - var8 * var12, this.rider.posZ + (double) (this.random.nextFloat() * this.rider.width * 2.0F) - (double) this.rider.width - var10 * var12, var6, var8, var10);
+                        this.rider.worldObj.spawnParticle("flame", this.rider.posX + (double)(this.random.nextFloat() * this.rider.width * 2.0F) - (double)this.rider.width - var6 * var12, this.rider.posY + (double)(this.random.nextFloat() * (this.rider.height - 0.6F)) - var8 * var12, this.rider.posZ + (double)(this.random.nextFloat() * this.rider.width * 2.0F) - (double)this.rider.width - var10 * var12, var6, var8, var10);
+                        this.rider.worldObj.spawnParticle("largeexplode", this.rider.posX + (double)(this.random.nextFloat() * this.rider.width * 2.0F) - (double)this.rider.width - var6 * var12, this.rider.posY + (double)(this.random.nextFloat() * (this.rider.height - 0.6F)) - var8 * var12, this.rider.posZ + (double)(this.random.nextFloat() * this.rider.width * 2.0F) - (double)this.rider.width - var10 * var12, var6, var8, var10);
                     }
                 }
             }

@@ -15,9 +15,7 @@ public class AIEntityControlledByPlayerPhyg extends EntityAIBase
     private final float maxSpeed;
     private float currentSpeed = 0.0F;
 
-    /**
-     * Whether the entity's speed is boosted.
-     */
+    /** Whether the entity's speed is boosted. */
     private boolean speedBoosted = false;
 
     /**
@@ -25,9 +23,7 @@ public class AIEntityControlledByPlayerPhyg extends EntityAIBase
      */
     private int speedBoostTime = 0;
 
-    /**
-     * Maximum time the entity's speed should be boosted for.
-     */
+    /** Maximum time the entity's speed should be boosted for. */
     private int maxSpeedBoostTime = 0;
 
     public AIEntityControlledByPlayerPhyg(EntityLiving var1, float var2)
@@ -93,8 +89,8 @@ public class AIEntityControlledByPlayerPhyg extends EntityAIBase
      */
     public void updateTask()
     {
-        EntityPlayer var1 = (EntityPlayer) this.thisEntity.riddenByEntity;
-        EntityCreature var2 = (EntityCreature) this.thisEntity;
+        EntityPlayer var1 = (EntityPlayer)this.thisEntity.riddenByEntity;
+        EntityCreature var2 = (EntityCreature)this.thisEntity;
         float var3 = MathHelper.wrapAngleTo180_float(var1.rotationYaw - this.thisEntity.rotationYaw) * 0.5F;
 
         if (var3 > 5.0F)
@@ -131,7 +127,7 @@ public class AIEntityControlledByPlayerPhyg extends EntityAIBase
                 this.speedBoosted = false;
             }
 
-            var7 += var7 * 1.15F * MathHelper.sin((float) this.speedBoostTime / (float) this.maxSpeedBoostTime * (float) Math.PI);
+            var7 += var7 * 1.15F * MathHelper.sin((float)this.speedBoostTime / (float)this.maxSpeedBoostTime * (float)Math.PI);
         }
 
         float var8 = 0.91F;
@@ -139,7 +135,7 @@ public class AIEntityControlledByPlayerPhyg extends EntityAIBase
         if (this.thisEntity.onGround)
         {
             var8 = 0.54600006F;
-            int var9 = this.thisEntity.worldObj.getBlockId(MathHelper.floor_float((float) var4), MathHelper.floor_float((float) var5) - 1, MathHelper.floor_float((float) var6));
+            int var9 = this.thisEntity.worldObj.getBlockId(MathHelper.floor_float((float)var4), MathHelper.floor_float((float)var5) - 1, MathHelper.floor_float((float)var6));
 
             if (var9 > 0)
             {
@@ -148,8 +144,8 @@ public class AIEntityControlledByPlayerPhyg extends EntityAIBase
         }
 
         float var22 = 0.16277136F / (var8 * var8 * var8);
-        float var10 = MathHelper.sin(var2.rotationYaw * (float) Math.PI / 180.0F);
-        float var11 = MathHelper.cos(var2.rotationYaw * (float) Math.PI / 180.0F);
+        float var10 = MathHelper.sin(var2.rotationYaw * (float)Math.PI / 180.0F);
+        float var11 = MathHelper.cos(var2.rotationYaw * (float)Math.PI / 180.0F);
         float var12 = var2.getAIMoveSpeed() * var22;
         float var13 = Math.max(var7, 1.0F);
         var13 = var12 / var13;
@@ -170,7 +166,8 @@ public class AIEntityControlledByPlayerPhyg extends EntityAIBase
             }
 
             var16 = 0.0F;
-        } else
+        }
+        else
         {
             var15 = 0.0F;
 
@@ -185,8 +182,8 @@ public class AIEntityControlledByPlayerPhyg extends EntityAIBase
             }
         }
 
-        int var17 = MathHelper.floor_double(this.thisEntity.posX + (double) var15);
-        int var18 = MathHelper.floor_double(this.thisEntity.posZ + (double) var16);
+        int var17 = MathHelper.floor_double(this.thisEntity.posX + (double)var15);
+        int var18 = MathHelper.floor_double(this.thisEntity.posZ + (double)var16);
         PathPoint var19 = new PathPoint(MathHelper.floor_float(this.thisEntity.width + 1.0F), MathHelper.floor_float(this.thisEntity.height + var1.height + 1.0F), MathHelper.floor_float(this.thisEntity.width + 1.0F));
 
         if ((var4 != var17 || var6 != var18) && PathFinder.func_82565_a(this.thisEntity, var17, var5, var18, var19, false, false, true) == 0 && PathFinder.func_82565_a(this.thisEntity, var4, var5 + 1, var6, var19, false, false, true) == 1 && PathFinder.func_82565_a(this.thisEntity, var17, var5 + 1, var18, var19, false, false, true) == 1)
@@ -204,12 +201,14 @@ public class AIEntityControlledByPlayerPhyg extends EntityAIBase
             this.thisEntity.motionY = 1.4D;
             var20 = true;
             var23 = var21 - 1;
-        } else if (this.thisEntity.handleWaterMovement() && var1.isJumping)
+        }
+        else if (this.thisEntity.handleWaterMovement() && var1.isJumping)
         {
             this.thisEntity.motionY = 0.5D;
             var20 = true;
             var23 = var21 - 1;
-        } else if (var21 > 0 && !var20 && var1.isJumping)
+        }
+        else if (var21 > 0 && !var20 && var1.isJumping)
         {
             this.thisEntity.motionY = 1.2D;
             var20 = true;

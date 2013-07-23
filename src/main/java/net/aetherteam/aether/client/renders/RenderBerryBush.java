@@ -1,6 +1,7 @@
 package net.aetherteam.aether.client.renders;
 
 import cpw.mods.fml.client.registry.ISimpleBlockRenderingHandler;
+import net.aetherteam.aether.blocks.AetherBlocks;
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.client.renderer.Tessellator;
@@ -9,8 +10,6 @@ import org.lwjgl.opengl.GL11;
 
 public class RenderBerryBush implements ISimpleBlockRenderingHandler
 {
-    public static int renderID = 100;
-
     public void renderInventoryBlock(Block var1, int var2, int var3, RenderBlocks var4)
     {
         if (var3 == this.getRenderId())
@@ -32,19 +31,19 @@ public class RenderBerryBush implements ISimpleBlockRenderingHandler
             var5.draw();
             var5.startDrawingQuads();
             var5.setNormal(0.0F, 0.0F, -1.0F);
-            var4.renderFaceXPos(var1, 0.0D, 0.0D, 0.0D, var1.getIcon(2, var2));
+            var4.renderFaceZPos(var1, 0.0D, 0.0D, 0.0D, var1.getIcon(2, var2));
             var5.draw();
             var5.startDrawingQuads();
             var5.setNormal(0.0F, 0.0F, 1.0F);
-            var4.renderFaceXNeg(var1, 0.0D, 0.0D, 0.0D, var1.getIcon(3, var2));
+            var4.renderFaceZNeg(var1, 0.0D, 0.0D, 0.0D, var1.getIcon(3, var2));
             var5.draw();
             var5.startDrawingQuads();
             var5.setNormal(-1.0F, 0.0F, 0.0F);
-            var4.renderFaceZNeg(var1, 0.0D, 0.0D, 0.0D, var1.getIcon(4, var2));
+            var4.renderFaceXPos(var1, 0.0D, 0.0D, 0.0D, var1.getIcon(4, var2));
             var5.draw();
             var5.startDrawingQuads();
             var5.setNormal(1.0F, 0.0F, 0.0F);
-            var4.renderFaceZPos(var1, 0.0D, 0.0D, 0.0D, var1.getIcon(5, var2));
+            var4.renderFaceXNeg(var1, 0.0D, 0.0D, 0.0D, var1.getIcon(5, var2));
             var5.draw();
             GL11.glTranslatef(0.5F, 0.5F, 0.5F);
         }
@@ -57,7 +56,8 @@ public class RenderBerryBush implements ISimpleBlockRenderingHandler
             var7.renderCrossedSquares(var5, var2, var3, var4);
             var7.renderStandardBlock(var5, var2, var3, var4);
             return true;
-        } else
+        }
+        else
         {
             return false;
         }
@@ -70,6 +70,6 @@ public class RenderBerryBush implements ISimpleBlockRenderingHandler
 
     public int getRenderId()
     {
-        return renderID;
+        return AetherBlocks.berryBushRenderId;
     }
 }

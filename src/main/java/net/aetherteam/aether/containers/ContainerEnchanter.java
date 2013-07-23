@@ -43,7 +43,7 @@ public class ContainerEnchanter extends Container
     public ItemStack transferStackInSlot(EntityPlayer var1, int var2)
     {
         ItemStack var3 = null;
-        Slot var4 = (Slot) this.inventorySlots.get(var2);
+        Slot var4 = (Slot)this.inventorySlots.get(var2);
 
         if (var4 != null && var4.getHasStack())
         {
@@ -58,24 +58,28 @@ public class ContainerEnchanter extends Container
                 }
 
                 var4.onSlotChange(var5, var3);
-            } else if (var2 != 1 && var2 != 0)
+            }
+            else if (var2 != 1 && var2 != 0)
             {
                 if (var2 >= 3 && var2 < 30)
                 {
                     this.mergeItemStack(var5, 30, 39, false);
-                } else if (var2 >= 30 && var2 < 39 && !this.mergeItemStack(var5, 3, 30, false))
+                }
+                else if (var2 >= 30 && var2 < 39 && !this.mergeItemStack(var5, 3, 30, false))
                 {
                     this.mergeItemStack(var5, 3, 30, false);
                 }
-            } else if (!this.mergeItemStack(var5, 3, 39, false))
+            }
+            else if (!this.mergeItemStack(var5, 3, 39, false))
             {
                 return null;
             }
 
             if (var5.stackSize == 0)
             {
-                var4.putStack((ItemStack) null);
-            } else
+                var4.putStack((ItemStack)null);
+            }
+            else
             {
                 var4.onSlotChanged();
             }

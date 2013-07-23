@@ -1,8 +1,6 @@
 package net.aetherteam.aether.blocks;
 
 import java.util.Random;
-
-import net.aetherteam.aether.Aether;
 import net.aetherteam.aether.items.AetherItems;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
@@ -46,7 +44,7 @@ public class BlockBerryBush extends BlockAetherFlower implements IAetherBlock
      */
     public AxisAlignedBB getCollisionBoundingBoxFromPool(World var1, int var2, int var3, int var4)
     {
-        return AxisAlignedBB.getBoundingBox((double) var2 + this.minX, (double) var3 + this.minY, (double) var4 + this.minZ, (double) var2 + this.maxX, (double) var3 + this.maxY, (double) var4 + this.maxZ);
+        return AxisAlignedBB.getBoundingBox((double)var2 + this.minX, (double)var3 + this.minY, (double)var4 + this.minZ, (double)var2 + this.maxX, (double)var3 + this.maxY, (double)var4 + this.maxZ);
     }
 
     /**
@@ -54,7 +52,7 @@ public class BlockBerryBush extends BlockAetherFlower implements IAetherBlock
      */
     public int getRenderType()
     {
-        return Aether.BerryBushRenderID;
+        return AetherBlocks.berryBushRenderId;
     }
 
     /**
@@ -79,7 +77,8 @@ public class BlockBerryBush extends BlockAetherFlower implements IAetherBlock
         {
             var7 = 1;
             var8 = 3;
-        } else
+        }
+        else
         {
             var7 = 0;
             var8 = 2;

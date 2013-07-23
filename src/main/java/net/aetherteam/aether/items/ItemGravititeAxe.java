@@ -1,7 +1,6 @@
 package net.aetherteam.aether.items;
 
 import java.util.Random;
-
 import net.aetherteam.aether.entities.EntityFloatingBlock;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.EnumToolMaterial;
@@ -36,23 +35,24 @@ public class ItemGravititeAxe extends ItemAxe
         float var4 = var3.rotationPitch;
         float var5 = var3.rotationYaw;
         double var6 = var3.posX;
-        double var8 = var3.posY + 1.62D - (double) var3.yOffset;
+        double var8 = var3.posY + 1.62D - (double)var3.yOffset;
         double var10 = var3.posZ;
         Vec3 var12 = Vec3.createVectorHelper(var6, var8, var10);
-        float var13 = MathHelper.cos(-var5 * 0.01745329F - (float) Math.PI);
-        float var14 = MathHelper.sin(-var5 * 0.01745329F - (float) Math.PI);
+        float var13 = MathHelper.cos(-var5 * 0.01745329F - (float)Math.PI);
+        float var14 = MathHelper.sin(-var5 * 0.01745329F - (float)Math.PI);
         float var15 = -MathHelper.cos(-var4 * 0.01745329F);
         float var16 = MathHelper.sin(-var4 * 0.01745329F);
         float var17 = var14 * var15;
         float var19 = var13 * var15;
         double var20 = 5.0D;
-        Vec3 var22 = var12.addVector((double) var17 * var20, (double) var16 * var20, (double) var19 * var20);
+        Vec3 var22 = var12.addVector((double)var17 * var20, (double)var16 * var20, (double)var19 * var20);
         MovingObjectPosition var23 = var2.rayTraceBlocks_do(var12, var22, false);
 
         if (var23 == null)
         {
             return var1;
-        } else
+        }
+        else
         {
             if (var23.typeOfHit == EnumMovingObjectType.TILE)
             {
@@ -66,7 +66,7 @@ public class ItemGravititeAxe extends ItemAxe
                 {
                     if (var27 == blocksEffectiveAgainst[var29].blockID)
                     {
-                        EntityFloatingBlock var30 = new EntityFloatingBlock(var2, (double) ((float) var24 + 0.5F), (double) ((float) var25 + 0.5F), (double) ((float) var26 + 0.5F), var27, var28);
+                        EntityFloatingBlock var30 = new EntityFloatingBlock(var2, (double)((float)var24 + 0.5F), (double)((float)var25 + 0.5F), (double)((float)var26 + 0.5F), var27, var28);
 
                         if (!var2.isRemote)
                         {

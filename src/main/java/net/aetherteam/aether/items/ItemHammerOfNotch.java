@@ -43,14 +43,16 @@ public class ItemHammerOfNotch extends ItemSword
         if (Aether.getServerPlayer(var3) == null)
         {
             return var1;
-        } else
+        }
+        else
         {
             if (Aether.getServerPlayer(var3).getPlayer().capabilities.isCreativeMode)
             {
                 var2.playSoundAtEntity(var3, "mob.ghast.fireball", 1.0F, 1.0F / (itemRand.nextFloat() * 0.4F + 0.8F));
                 this.notchwave = new EntityNotchWave(var2, var3);
                 var2.spawnEntityInWorld(this.notchwave);
-            } else if (Aether.getServerPlayer(var3).setGeneralCooldown(200, var1.getDisplayName()))
+            }
+            else if (Aether.getServerPlayer(var3).setGeneralCooldown(200, var1.getDisplayName()))
             {
                 if (Aether.proxy.getClientPlayer() != null)
                 {

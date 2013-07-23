@@ -32,19 +32,20 @@ public class EntityGoldenFX extends EntityPortalFX
             this.prevPosX = this.posX;
             this.prevPosY = this.posY;
             this.prevPosZ = this.posZ;
-            float var1 = (float) this.particleAge / (float) this.particleMaxAge;
+            float var1 = (float)this.particleAge / (float)this.particleMaxAge;
             float var2 = var1;
             var1 = -var1 + var1 * var1 * 2.0F;
             var1 = 1.0F - var1;
-            this.posX = this.portalPosX + this.motionX * (double) var1;
-            this.posY = this.portalPosY - 1.5D + this.motionY * (double) var1 + (double) (1.0F + var2);
-            this.posZ = this.portalPosZ + this.motionZ * (double) var1;
+            this.posX = this.portalPosX + this.motionX * (double)var1;
+            this.posY = this.portalPosY - 1.5D + this.motionY * (double)var1 + (double)(1.0F + var2);
+            this.posZ = this.portalPosZ + this.motionZ * (double)var1;
 
             if (this.particleAge++ >= this.particleMaxAge)
             {
                 this.setDead();
             }
-        } else
+        }
+        else
         {
             super.onUpdate();
         }

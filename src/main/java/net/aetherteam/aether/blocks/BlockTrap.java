@@ -2,11 +2,9 @@ package net.aetherteam.aether.blocks;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
-
 import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
-
 import net.aetherteam.aether.entities.EntitySentry;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockBreakable;
@@ -23,7 +21,7 @@ import net.minecraft.world.World;
 public class BlockTrap extends BlockBreakable implements IAetherBlock
 {
     private HashMap icons = new HashMap();
-    public static final String[] names = new String[]{"Carved Stone", "Angelic Stone", "Hellfire Stone"};
+    public static final String[] names = new String[] {"Carved Stone", "Angelic Stone", "Hellfire Stone"};
 
     public BlockTrap(int var1)
     {
@@ -79,10 +77,10 @@ public class BlockTrap extends BlockBreakable implements IAetherBlock
     {
         if (var5 instanceof EntityPlayer)
         {
-            var1.playSoundEffect((double) ((float) var2 + 0.5F), (double) ((float) var3 + 0.5F), (double) ((float) var4 + 0.5F), "aemisc.activateTrap", 1.0F, 1.0F);
-            int var6 = MathHelper.floor_double((double) var2);
-            int var7 = MathHelper.floor_double((double) var3);
-            int var8 = MathHelper.floor_double((double) var4);
+            var1.playSoundEffect((double)((float)var2 + 0.5F), (double)((float)var3 + 0.5F), (double)((float)var4 + 0.5F), "aemisc.activateTrap", 1.0F, 1.0F);
+            int var6 = MathHelper.floor_double((double)var2);
+            int var7 = MathHelper.floor_double((double)var3);
+            int var8 = MathHelper.floor_double((double)var4);
 
             if (!var1.isRemote)
             {
@@ -90,7 +88,7 @@ public class BlockTrap extends BlockBreakable implements IAetherBlock
                 {
                     case 0:
                         EntitySentry var9 = new EntitySentry(var1);
-                        var9.setPosition((double) var6 + 0.5D, (double) var7 + 1.5D, (double) var8 + 0.5D);
+                        var9.setPosition((double)var6 + 0.5D, (double)var7 + 1.5D, (double)var8 + 0.5D);
                         var1.spawnEntityInWorld(var9);
 
                     case 1:
@@ -126,7 +124,7 @@ public class BlockTrap extends BlockBreakable implements IAetherBlock
     {
         ItemStack var3 = new ItemStack(AetherBlocks.DungeonStone, 1, var2);
         String var4 = var3.getItem().getItemDisplayName(var3);
-        return (Icon) this.icons.get(var4);
+        return (Icon)this.icons.get(var4);
     }
 
     @SideOnly(Side.CLIENT)

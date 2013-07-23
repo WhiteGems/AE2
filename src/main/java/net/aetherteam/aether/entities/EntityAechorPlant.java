@@ -1,7 +1,6 @@
 package net.aetherteam.aether.entities;
 
 import java.util.List;
-
 import net.aetherteam.aether.blocks.AetherBlocks;
 import net.aetherteam.aether.items.AetherItems;
 import net.minecraft.entity.Entity;
@@ -35,7 +34,7 @@ public class EntityAechorPlant extends EntityAetherAnimal
         this.sinage = this.rand.nextFloat() * 6.0F;
         this.smokeTime = this.attTime = 0;
         this.seeprey = false;
-        this.setSize(0.75F + (float) this.getSize() * 0.125F, 0.5F + (float) this.getSize() * 0.075F);
+        this.setSize(0.75F + (float)this.getSize() * 0.125F, 0.5F + (float)this.getSize() * 0.075F);
         this.setPosition(this.posX, this.posY, this.posZ);
         this.setPoisonAmount(2);
     }
@@ -66,7 +65,8 @@ public class EntityAechorPlant extends EntityAetherAnimal
         {
             ++this.entityAge;
             this.despawnEntity();
-        } else
+        }
+        else
         {
             super.onLivingUpdate();
 
@@ -84,17 +84,19 @@ public class EntityAechorPlant extends EntityAetherAnimal
         if (this.hurtTime > 0)
         {
             this.sinage += 0.9F;
-        } else if (this.seeprey)
+        }
+        else if (this.seeprey)
         {
             this.sinage += 0.3F;
-        } else
+        }
+        else
         {
             this.sinage += 0.1F;
         }
 
-        if (this.sinage > ((float) Math.PI * 2F))
+        if (this.sinage > ((float)Math.PI * 2F))
         {
-            this.sinage -= ((float) Math.PI * 2F);
+            this.sinage -= ((float)Math.PI * 2F);
         }
 
         int var2;
@@ -105,13 +107,13 @@ public class EntityAechorPlant extends EntityAetherAnimal
 
             for (var2 = 0; var2 < var1.size(); ++var2)
             {
-                Entity var3 = (Entity) var1.get(var2);
+                Entity var3 = (Entity)var1.get(var2);
 
                 if (var3 instanceof EntityLiving && !(var3 instanceof EntityAechorPlant) && !(var3 instanceof EntityCreeper))
                 {
                     if (var3 instanceof EntityPlayer)
                     {
-                        EntityPlayer var4 = (EntityPlayer) var3;
+                        EntityPlayer var4 = (EntityPlayer)var3;
                         boolean var5 = false;
 
                         if (var5)
@@ -120,7 +122,7 @@ public class EntityAechorPlant extends EntityAetherAnimal
                         }
                     }
 
-                    this.target = (EntityLiving) var3;
+                    this.target = (EntityLiving)var3;
                     break;
                 }
             }
@@ -128,26 +130,27 @@ public class EntityAechorPlant extends EntityAetherAnimal
 
         if (this.target != null)
         {
-            if (!this.target.isDead && (double) this.target.getDistanceToEntity(this) <= 12.0D)
+            if (!this.target.isDead && (double)this.target.getDistanceToEntity(this) <= 12.0D)
             {
                 if (this.target instanceof EntityPlayer)
                 {
-                    EntityPlayer var7 = (EntityPlayer) this.target;
-                    boolean var9 = false;
+                    EntityPlayer var6 = (EntityPlayer)this.target;
+                    boolean var8 = false;
 
-                    if (var9)
+                    if (var8)
                     {
                         this.target = null;
                         this.attTime = 0;
                     }
                 }
-            } else
+            }
+            else
             {
                 this.target = null;
                 this.attTime = 0;
             }
 
-            if (this.target != null && this.attTime >= 20 && this.canEntityBeSeen(this.target) && (double) this.target.getDistanceToEntity(this) < 12.0D)
+            if (this.target != null && this.attTime >= 20 && this.canEntityBeSeen(this.target) && (double)this.target.getDistanceToEntity(this) < 12.0D)
             {
                 this.shootTarget();
                 this.attTime = -10;
@@ -164,11 +167,11 @@ public class EntityAechorPlant extends EntityAetherAnimal
         if (this.smokeTime >= (this.seeprey ? 3 : 8))
         {
             this.smokeTime = 0;
-            int var6 = MathHelper.floor_double(this.posX);
+            int var7 = MathHelper.floor_double(this.posX);
             var2 = MathHelper.floor_double(this.boundingBox.minY);
-            int var8 = MathHelper.floor_double(this.posZ);
+            int var9 = MathHelper.floor_double(this.posZ);
 
-            if (this.worldObj.getBlockId(var6, var2 - 1, var8) != AetherBlocks.AetherGrass.blockID && this.grounded)
+            if (this.worldObj.getBlockId(var7, var2 - 1, var9) != AetherBlocks.AetherGrass.blockID && this.grounded)
             {
                 this.isDead = true;
             }
@@ -193,7 +196,7 @@ public class EntityAechorPlant extends EntityAetherAnimal
 
             if (!this.worldObj.isRemote)
             {
-                var9.setArrowHeading(var1, var7, var3, 0.285F + (float) var7 * 0.55F, 1.0F);
+                var9.setArrowHeading(var1, var7, var3, 0.285F + (float)var7 * 0.55F, 1.0F);
                 this.worldObj.spawnEntityInWorld(var9);
             }
         }
@@ -222,11 +225,11 @@ public class EntityAechorPlant extends EntityAetherAnimal
     {
         for (int var7 = 0; var7 < 8; ++var7)
         {
-            double var8 = this.posX + (double) (this.rand.nextFloat() - this.rand.nextFloat()) * 0.5D;
-            double var10 = this.posY + 0.25D + (double) (this.rand.nextFloat() - this.rand.nextFloat()) * 0.5D;
-            double var12 = this.posZ + (double) (this.rand.nextFloat() - this.rand.nextFloat()) * 0.5D;
-            double var14 = (double) (this.rand.nextFloat() - this.rand.nextFloat()) * 0.5D;
-            double var16 = (double) (this.rand.nextFloat() - this.rand.nextFloat()) * 0.5D;
+            double var8 = this.posX + (double)(this.rand.nextFloat() - this.rand.nextFloat()) * 0.5D;
+            double var10 = this.posY + 0.25D + (double)(this.rand.nextFloat() - this.rand.nextFloat()) * 0.5D;
+            double var12 = this.posZ + (double)(this.rand.nextFloat() - this.rand.nextFloat()) * 0.5D;
+            double var14 = (double)(this.rand.nextFloat() - this.rand.nextFloat()) * 0.5D;
+            double var16 = (double)(this.rand.nextFloat() - this.rand.nextFloat()) * 0.5D;
             this.worldObj.spawnParticle("portal", var8, var10, var12, var14, 0.25D, var16);
         }
 
@@ -247,10 +250,11 @@ public class EntityAechorPlant extends EntityAetherAnimal
         if (var3 != null && var3.itemID == AetherItems.SkyrootBucket.itemID && this.getPoisonLeft() > 0)
         {
             this.decrementPoison();
-            var1.inventory.setInventorySlotContents(var1.inventory.currentItem, (ItemStack) null);
+            var1.inventory.setInventorySlotContents(var1.inventory.currentItem, (ItemStack)null);
             var1.inventory.setInventorySlotContents(var1.inventory.currentItem, new ItemStack(AetherItems.SkyrootBucket, 1, 2));
             return true;
-        } else
+        }
+        else
         {
             if (var2)
             {
@@ -262,7 +266,7 @@ public class EntityAechorPlant extends EntityAetherAnimal
                     double var6 = this.rand.nextGaussian() * 0.02D;
                     double var8 = this.rand.nextGaussian() * 0.02D;
                     double var10 = this.rand.nextGaussian() * 0.02D;
-                    this.worldObj.spawnParticle(var4, this.posX + (double) (this.rand.nextFloat() * this.width * 2.0F) - (double) this.width, this.posY + 0.5D + (double) (this.rand.nextFloat() * this.height), this.posZ + (double) (this.rand.nextFloat() * this.width * 2.0F) - (double) this.width, var6, var8, var10);
+                    this.worldObj.spawnParticle(var4, this.posX + (double)(this.rand.nextFloat() * this.width * 2.0F) - (double)this.width, this.posY + 0.5D + (double)(this.rand.nextFloat() * this.height), this.posZ + (double)(this.rand.nextFloat() * this.width * 2.0F) - (double)this.width, var6, var8, var10);
                 }
             }
 
@@ -278,8 +282,8 @@ public class EntityAechorPlant extends EntityAetherAnimal
         super.writeEntityToNBT(var1);
         var1.setBoolean("Grounded", this.grounded);
         var1.setBoolean("NoDespawn", this.noDespawn);
-        var1.setShort("AttTime", (short) this.attTime);
-        var1.setShort("Size", (short) this.getSize());
+        var1.setShort("AttTime", (short)this.attTime);
+        var1.setShort("Size", (short)this.getSize());
         var1.setInteger("Poison", this.getPoisonLeft());
     }
 
@@ -294,7 +298,7 @@ public class EntityAechorPlant extends EntityAetherAnimal
         this.attTime = var1.getShort("AttTime");
         this.setSize(var1.getShort("Size"));
         this.setPoisonAmount(var1.getInteger("Poison"));
-        this.setSize(0.75F + (float) this.getSize() * 0.125F, 0.5F + (float) this.getSize() * 0.075F);
+        this.setSize(0.75F + (float)this.getSize() * 0.125F, 0.5F + (float)this.getSize() * 0.075F);
         this.setPosition(this.posX, this.posY, this.posZ);
     }
 
@@ -302,7 +306,7 @@ public class EntityAechorPlant extends EntityAetherAnimal
     {
         super.entityInit();
         this.dataWatcher.addObject(16, Integer.valueOf(0));
-        this.dataWatcher.addObject(17, Short.valueOf((short) 0));
+        this.dataWatcher.addObject(17, Short.valueOf((short)0));
     }
 
     public int getPoisonLeft()
@@ -327,7 +331,7 @@ public class EntityAechorPlant extends EntityAetherAnimal
 
     public void setSize(int var1)
     {
-        this.dataWatcher.updateObject(17, Short.valueOf((short) var1));
+        this.dataWatcher.updateObject(17, Short.valueOf((short)var1));
     }
 
     /**

@@ -27,40 +27,40 @@ public class ModelAerbunny extends ModelBase
         byte var1 = 16;
         this.a = new ModelRenderer(this, 0, 0);
         this.a.addBox(-2.0F, -1.0F, -4.0F, 4, 4, 6, 0.0F);
-        this.a.setRotationPoint(0.0F, (float) (-1 + var1), -4.0F);
+        this.a.setRotationPoint(0.0F, (float)(-1 + var1), -4.0F);
         this.g = new ModelRenderer(this, 14, 0);
         this.g.addBox(-2.0F, -5.0F, -3.0F, 1, 4, 2, 0.0F);
-        this.g.setRotationPoint(0.0F, (float) (-1 + var1), -4.0F);
+        this.g.setRotationPoint(0.0F, (float)(-1 + var1), -4.0F);
         this.g2 = new ModelRenderer(this, 14, 0);
         this.g2.addBox(1.0F, -5.0F, -3.0F, 1, 4, 2, 0.0F);
-        this.g2.setRotationPoint(0.0F, (float) (-1 + var1), -4.0F);
+        this.g2.setRotationPoint(0.0F, (float)(-1 + var1), -4.0F);
         this.h = new ModelRenderer(this, 20, 0);
         this.h.addBox(-4.0F, 0.0F, -3.0F, 2, 3, 2, 0.0F);
-        this.h.setRotationPoint(0.0F, (float) (-1 + var1), -4.0F);
+        this.h.setRotationPoint(0.0F, (float)(-1 + var1), -4.0F);
         this.h2 = new ModelRenderer(this, 20, 0);
         this.h2.addBox(2.0F, 0.0F, -3.0F, 2, 3, 2, 0.0F);
-        this.h2.setRotationPoint(0.0F, (float) (-1 + var1), -4.0F);
+        this.h2.setRotationPoint(0.0F, (float)(-1 + var1), -4.0F);
         this.b = new ModelRenderer(this, 0, 10);
         this.b.addBox(-3.0F, -4.0F, -3.0F, 6, 8, 6, 0.0F);
-        this.b.setRotationPoint(0.0F, (float) (0 + var1), 0.0F);
+        this.b.setRotationPoint(0.0F, (float)(0 + var1), 0.0F);
         this.b2 = new ModelRenderer(this, 0, 24);
         this.b2.addBox(-2.0F, 4.0F, -2.0F, 4, 3, 4, 0.0F);
-        this.b2.setRotationPoint(0.0F, (float) (0 + var1), 0.0F);
+        this.b2.setRotationPoint(0.0F, (float)(0 + var1), 0.0F);
         this.b3 = new ModelRenderer(this, 29, 0);
         this.b3.addBox(-3.5F, -3.5F, -3.5F, 7, 7, 7, 0.0F);
         this.b3.setRotationPoint(0.0F, 0.0F, 0.0F);
         this.e1 = new ModelRenderer(this, 24, 16);
         this.e1.addBox(-2.0F, 0.0F, -1.0F, 2, 2, 2);
-        this.e1.setRotationPoint(3.0F, (float) (3 + var1), -3.0F);
+        this.e1.setRotationPoint(3.0F, (float)(3 + var1), -3.0F);
         this.e2 = new ModelRenderer(this, 24, 16);
         this.e2.addBox(0.0F, 0.0F, -1.0F, 2, 2, 2);
-        this.e2.setRotationPoint(-3.0F, (float) (3 + var1), -3.0F);
+        this.e2.setRotationPoint(-3.0F, (float)(3 + var1), -3.0F);
         this.ff1 = new ModelRenderer(this, 16, 24);
         this.ff1.addBox(-2.0F, 0.0F, -4.0F, 2, 2, 4);
-        this.ff1.setRotationPoint(3.0F, (float) (3 + var1), 4.0F);
+        this.ff1.setRotationPoint(3.0F, (float)(3 + var1), 4.0F);
         this.ff2 = new ModelRenderer(this, 16, 24);
         this.ff2.addBox(0.0F, 0.0F, -4.0F, 2, 2, 4);
-        this.ff2.setRotationPoint(-3.0F, (float) (3 + var1), 4.0F);
+        this.ff2.setRotationPoint(-3.0F, (float)(3 + var1), 4.0F);
     }
 
     /**
@@ -94,7 +94,8 @@ public class ModelAerbunny extends ModelBase
             GL11.glTranslatef(0.0F, 1.0F, 0.0F);
             GL11.glScalef(var9, var9, var9);
             this.b3.render(var7);
-        } else
+        }
+        else
         {
             this.a.render(var7);
             this.g.render(var7);
@@ -118,8 +119,8 @@ public class ModelAerbunny extends ModelBase
 
     public void setRotationAngles(float var1, float var2, float var3, float var4, float var5, float var6)
     {
-        this.a.rotateAngleX = -(var5 / (180F / (float) Math.PI));
-        this.a.rotateAngleY = var4 / (180F / (float) Math.PI);
+        this.a.rotateAngleX = -(var5 / (180F / (float)Math.PI));
+        this.a.rotateAngleY = var4 / (180F / (float)Math.PI);
         this.g.rotateAngleX = this.a.rotateAngleX;
         this.g.rotateAngleY = this.a.rotateAngleY;
         this.g2.rotateAngleX = this.a.rotateAngleX;
@@ -128,12 +129,12 @@ public class ModelAerbunny extends ModelBase
         this.h.rotateAngleY = this.a.rotateAngleY;
         this.h2.rotateAngleX = this.a.rotateAngleX;
         this.h2.rotateAngleY = this.a.rotateAngleY;
-        this.b.rotateAngleX = ((float) Math.PI / 2F);
-        this.b2.rotateAngleX = ((float) Math.PI / 2F);
-        this.b3.rotateAngleX = ((float) Math.PI / 2F);
+        this.b.rotateAngleX = ((float)Math.PI / 2F);
+        this.b2.rotateAngleX = ((float)Math.PI / 2F);
+        this.b3.rotateAngleX = ((float)Math.PI / 2F);
         this.e1.rotateAngleX = MathHelper.cos(var1 * 0.6662F) * 1.0F * var2;
-        this.ff1.rotateAngleX = MathHelper.cos(var1 * 0.6662F + (float) Math.PI) * 1.2F * var2;
+        this.ff1.rotateAngleX = MathHelper.cos(var1 * 0.6662F + (float)Math.PI) * 1.2F * var2;
         this.e2.rotateAngleX = MathHelper.cos(var1 * 0.6662F) * 1.0F * var2;
-        this.ff2.rotateAngleX = MathHelper.cos(var1 * 0.6662F + (float) Math.PI) * 1.2F * var2;
+        this.ff2.rotateAngleX = MathHelper.cos(var1 * 0.6662F + (float)Math.PI) * 1.2F * var2;
     }
 }

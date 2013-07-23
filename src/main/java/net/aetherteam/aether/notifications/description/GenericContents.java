@@ -4,18 +4,13 @@ import net.aetherteam.aether.notifications.Notification;
 
 public class GenericContents extends NotificationContents
 {
-    public String getTitle(Notification notification)
+    public String getTitle(Notification var1)
     {
         return "Generic Request:";
     }
 
-    public String getDescription(Notification notification)
+    public String getDescription(Notification var1)
     {
         return "This is a generic description!";
     }
 }
-
-/* Location:           D:\Dev\Mc\forge_orl\mcp\jars\bin\aether.jar
- * Qualified Name:     net.aetherteam.aether.notifications.description.GenericContents
- * JD-Core Version:    0.6.2
- */

@@ -1,7 +1,6 @@
 package net.aetherteam.aether.commands;
 
 import java.util.List;
-
 import net.aetherteam.aether.Aether;
 import net.aetherteam.aether.containers.InventoryAether;
 import net.minecraft.command.CommandBase;
@@ -43,10 +42,11 @@ public class CommandClearInventoryAether extends CommandBase
 
         if (var6 == 0 && Aether.getServerPlayer(var3).inv.isEmpty())
         {
-            throw new CommandException("commands.clear.failure", new Object[]{var3.getEntityName()});
-        } else
+            throw new CommandException("commands.clear.failure", new Object[] {var3.getEntityName()});
+        }
+        else
         {
-            notifyAdmins(var1, "commands.clear.success", new Object[]{var3.getEntityName(), Integer.valueOf(var6)});
+            notifyAdmins(var1, "commands.clear.success", new Object[] {var3.getEntityName(), Integer.valueOf(var6)});
         }
     }
 

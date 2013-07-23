@@ -9,7 +9,7 @@ public class ModelBall extends ModelBase
 {
     public ModelRenderer[] head;
     public float[] sinage;
-    private static final float sponge = (180F / (float) Math.PI);
+    private static final float sponge = (180F / (float)Math.PI);
 
     public ModelBall()
     {
@@ -49,15 +49,15 @@ public class ModelBall extends ModelBase
         GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
         GL11.glPushMatrix();
-        GL11.glRotatef(this.sinage[0] * (180F / (float) Math.PI), 1.0F, 0.0F, 0.0F);
+        GL11.glRotatef(this.sinage[0] * (180F / (float)Math.PI), 1.0F, 0.0F, 0.0F);
         this.head[0].render(var7);
         GL11.glPopMatrix();
         GL11.glPushMatrix();
-        GL11.glRotatef(this.sinage[1] * (180F / (float) Math.PI), 0.0F, 1.0F, 0.0F);
+        GL11.glRotatef(this.sinage[1] * (180F / (float)Math.PI), 0.0F, 1.0F, 0.0F);
         this.head[1].render(var7);
         GL11.glPopMatrix();
         GL11.glPushMatrix();
-        GL11.glRotatef(this.sinage[2] * (180F / (float) Math.PI), 0.0F, 0.0F, 1.0F);
+        GL11.glRotatef(this.sinage[2] * (180F / (float)Math.PI), 0.0F, 0.0F, 1.0F);
         this.head[2].render(var7);
         GL11.glPopMatrix();
         GL11.glEnable(GL11.GL_ALPHA_TEST);
@@ -67,8 +67,8 @@ public class ModelBall extends ModelBase
     {
         for (int var7 = 0; var7 < 3; ++var7)
         {
-            this.head[var7].rotateAngleY = var4 / (180F / (float) Math.PI);
-            this.head[var7].rotateAngleX = var5 / (180F / (float) Math.PI);
+            this.head[var7].rotateAngleY = var4 / (180F / (float)Math.PI);
+            this.head[var7].rotateAngleX = var5 / (180F / (float)Math.PI);
         }
     }
 }

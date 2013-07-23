@@ -2,9 +2,7 @@ package net.aetherteam.aether.items;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
-
 import java.util.List;
-
 import net.aetherteam.aether.entities.EntityDartEnchanted;
 import net.aetherteam.aether.entities.EntityDartGolden;
 import net.aetherteam.aether.entities.EntityDartPhoenix;
@@ -21,7 +19,7 @@ import net.minecraft.world.World;
 
 public class ItemDartShooter extends ItemAether
 {
-    public static final String[] names = new String[]{"Golden Dart Shooter", "Poison Dart Shooter", "Enchanted Dart Shooter", "Phoenix Dart Shooter"};
+    public static final String[] names = new String[] {"Golden Dart Shooter", "Poison Dart Shooter", "Enchanted Dart Shooter", "Phoenix Dart Shooter"};
     @SideOnly(Side.CLIENT)
     private Icon[] icons;
 
@@ -139,7 +137,8 @@ public class ItemDartShooter extends ItemAether
         if (!var3.capabilities.isCreativeMode)
         {
             var4 = this.consumeItem(var3, AetherItems.Dart.itemID, var1.getItemDamage());
-        } else
+        }
+        else
         {
             var4 = var1.getItemDamage();
         }
@@ -152,13 +151,16 @@ public class ItemDartShooter extends ItemAether
             if (var4 == 1)
             {
                 var5 = new EntityDartPoison(var2, var3);
-            } else if (var4 == 2)
+            }
+            else if (var4 == 2)
             {
                 var5 = new EntityDartEnchanted(var2, var3);
-            } else if (var4 == 0)
+            }
+            else if (var4 == 0)
             {
                 var5 = new EntityDartGolden(var2, var3);
-            } else if (var4 == 3)
+            }
+            else if (var4 == 3)
             {
                 var5 = new EntityDartPhoenix(var2, var3, new ItemStack(AetherItems.Dart.itemID, 1, var4));
                 var2.playSoundAtEntity(var3, "mob.ghast.fireball", 1.0F, 1.0F / (itemRand.nextFloat() * 0.4F + 0.4F));
@@ -166,16 +168,16 @@ public class ItemDartShooter extends ItemAether
 
             if (!var2.isRemote)
             {
-                var2.spawnEntityInWorld((Entity) var5);
+                var2.spawnEntityInWorld((Entity)var5);
 
                 if (!var3.capabilities.isCreativeMode)
                 {
-                    ((EntityDartGolden) var5).canBePickedUp = 1;
+                    ((EntityDartGolden)var5).canBePickedUp = 1;
                 }
 
                 if (var3.capabilities.isCreativeMode)
                 {
-                    ((EntityDartGolden) var5).canBePickedUp = 2;
+                    ((EntityDartGolden)var5).canBePickedUp = 2;
                 }
             }
         }

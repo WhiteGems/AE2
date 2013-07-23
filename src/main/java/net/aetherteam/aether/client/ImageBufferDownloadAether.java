@@ -2,12 +2,10 @@ package net.aetherteam.aether.client;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
-
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferInt;
 import java.awt.image.ImageObserver;
-
 import net.minecraft.client.renderer.IImageBuffer;
 import net.minecraft.client.renderer.ImageBufferDownload;
 
@@ -30,20 +28,21 @@ public class ImageBufferDownloadAether extends ImageBufferDownload implements II
         if (var1 == null)
         {
             return null;
-        } else
+        }
+        else
         {
             BufferedImage var2 = new BufferedImage(this.imageWidth, this.imageHeight, 2);
             Graphics var3 = var2.getGraphics();
-            var3.drawImage(var1, 0, 0, (ImageObserver) null);
+            var3.drawImage(var1, 0, 0, (ImageObserver)null);
             var3.dispose();
-            this.imageData = ((DataBufferInt) var2.getRaster().getDataBuffer()).getData();
+            this.imageData = ((DataBufferInt)var2.getRaster().getDataBuffer()).getData();
             this.setAreaOpaque(0, 0, this.imageWidth, this.imageWidth / 2);
             this.setAreaTransparent(this.imageWidth, 0, this.imageHeight, this.imageWidth);
             this.setAreaOpaque(0, this.imageWidth / 2, this.imageHeight, this.imageWidth);
             boolean var4 = false;
-            int var7;
-            int var6;
             int var5;
+            int var6;
+            int var7;
 
             for (var5 = 32; var5 < 64; ++var5)
             {

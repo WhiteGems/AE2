@@ -3,13 +3,11 @@ package net.aetherteam.aether.packets;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.network.Player;
 import cpw.mods.fml.relauncher.Side;
-
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.DataInputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
-
 import net.aetherteam.aether.dungeons.Dungeon;
 import net.aetherteam.aether.dungeons.DungeonHandler;
 import net.aetherteam.aether.dungeons.DungeonType;
@@ -18,73 +16,66 @@ import net.minecraft.network.packet.Packet250CustomPayload;
 
 public class PacketDungeonChange extends AetherPacket
 {
-    public PacketDungeonChange(int packetID)
+    public PacketDungeonChange(int var1)
     {
-        super(packetID);
+        super(var1);
     }
 
-    public void onPacketReceived(Packet250CustomPayload packet, Player player)
+    public void onPacketReceived(Packet250CustomPayload var1, Player var2)
     {
-        DataInputStream dat = new DataInputStream(new ByteArrayInputStream(packet.data));
-        BufferedReader buf = new BufferedReader(new InputStreamReader(dat));
+        DataInputStream var3 = new DataInputStream(new ByteArrayInputStream(var1.data));
+        new BufferedReader(new InputStreamReader(var3));
+
         try
         {
-            byte packetType = dat.readByte();
-            boolean adding = dat.readBoolean();
+            byte var5 = var3.readByte();
+            boolean var6 = var3.readBoolean();
+            int var7 = var3.readInt();
+            DungeonType var8 = null;
+            int var9 = -1;
+            int var10 = -1;
+            boolean var11 = false;
+            StructureBoundingBoxSerial var12 = null;
+            ArrayList var13 = null;
+            Side var14 = FMLCommonHandler.instance().getEffectiveSide();
 
-            int dungeonID = dat.readInt();
-
-            DungeonType dungeonType = null;
-            int x = -1;
-            int z = -1;
-            int amountBoxes = 0;
-            StructureBoundingBoxSerial boundingBox = null;
-            ArrayList boundingBoxes = null;
-
-            Side side = FMLCommonHandler.instance().getEffectiveSide();
-
-            if (adding)
+            if (var6)
             {
-                dungeonType = DungeonType.getTypeFromString(dat.readUTF());
-                x = dat.readInt();
-                z = dat.readInt();
+                var8 = DungeonType.getTypeFromString(var3.readUTF());
+                var9 = var3.readInt();
+                var10 = var3.readInt();
+                short var17 = var3.readShort();
+                var12 = new StructureBoundingBoxSerial(var3.readInt(), var3.readInt(), var3.readInt(), var3.readInt(), var3.readInt(), var3.readInt());
+                var13 = new ArrayList();
 
-                amountBoxes = dat.readShort();
-
-                boundingBox = new StructureBoundingBoxSerial(dat.readInt(), dat.readInt(), dat.readInt(), dat.readInt(), dat.readInt(), dat.readInt());
-                boundingBoxes = new ArrayList();
-
-                for (int i = 0; i < amountBoxes; i++)
+                for (int var15 = 0; var15 < var17; ++var15)
                 {
-                    boundingBoxes.add(new StructureBoundingBoxSerial(dat.readInt(), dat.readInt(), dat.readInt(), dat.readInt(), dat.readInt(), dat.readInt()));
+                    var13.add(new StructureBoundingBoxSerial(var3.readInt(), var3.readInt(), var3.readInt(), var3.readInt(), var3.readInt(), var3.readInt()));
                 }
             }
 
-            if (side.isClient())
+            if (var14.isClient())
             {
-                Dungeon dungeon = DungeonHandler.instance().getDungeon(dungeonID);
+                Dungeon var18 = DungeonHandler.instance().getDungeon(var7);
 
-                if (adding)
+                if (var6)
                 {
-                    if (dungeon != null)
+                    if (var18 != null)
                     {
-                        DungeonHandler.instance().removeInstance(dungeon);
+                        DungeonHandler.instance().removeInstance(var18);
                     }
 
-                    DungeonHandler.instance().addInstance(new Dungeon(dungeonType, x, z, boundingBox, boundingBoxes));
-                } else if (dungeon != null)
+                    DungeonHandler.instance().addInstance(new Dungeon(var8, var9, var10, var12, var13));
+                }
+                else if (var18 != null)
                 {
-                    DungeonHandler.instance().removeInstance(dungeon);
+                    DungeonHandler.instance().removeInstance(var18);
                 }
             }
-        } catch (Exception ex)
+        }
+        catch (Exception var16)
         {
-            ex.printStackTrace();
+            var16.printStackTrace();
         }
     }
 }
-
-/* Location:           D:\Dev\Mc\forge_orl\mcp\jars\bin\aether.jar
- * Qualified Name:     net.aetherteam.aether.packets.PacketDungeonChange
- * JD-Core Version:    0.6.2
- */

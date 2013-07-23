@@ -1,5 +1,7 @@
 package net.aetherteam.aether.items;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.aetherteam.aether.PlayerBaseAetherServer;
 import net.aetherteam.aether.client.PlayerBaseAetherClient;
 import net.aetherteam.aether.interfaces.IAetherAccessory;
@@ -23,8 +25,8 @@ public class ItemAccessory extends ItemAether implements IAetherAccessory
     public static Icon miscSlot;
     public static Icon shieldSlot;
     public static Icon gloveSlot;
-    private static final int[] damageReduceAmountArray = new int[]{3, 7, 5, 3, 0, 0, 0, 0, 0, 0, 0, 0};
-    private static final int[] maxDamageArray = new int[]{11, 16, 15, 13, 10, 10, 8, 10, 10, 10, 10, 10};
+    private static final int[] damageReduceAmountArray = new int[] {3, 7, 5, 3, 0, 0, 0, 0, 0, 0, 0, 0};
+    private static final int[] maxDamageArray = new int[] {11, 16, 15, 13, 10, 10, 8, 10, 10, 10, 10, 10};
 
     protected ItemAccessory(int var1, int var2, int var3, int var4, int var5)
     {
@@ -95,12 +97,14 @@ public class ItemAccessory extends ItemAether implements IAetherAccessory
             {
                 var1[0] = this.armorType - 4;
                 var1[1] = this.armorType - 4;
-            } else
+            }
+            else
             {
                 var1[0] = 3;
                 var1[1] = 7;
             }
-        } else
+        }
+        else
         {
             var1[0] = 4;
             var1[1] = 5;
@@ -126,6 +130,7 @@ public class ItemAccessory extends ItemAether implements IAetherAccessory
         this.activatePassive(var1);
     }
 
+    @SideOnly(Side.CLIENT)
     public void activateClientPassive(EntityPlayer var1, PlayerBaseAetherClient var2)
     {
         this.activatePassive(var1);

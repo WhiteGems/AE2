@@ -1,7 +1,6 @@
 package net.aetherteam.aether.blocks;
 
 import java.util.Random;
-
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
@@ -47,7 +46,7 @@ public class BlockBerryBushStem extends BlockAetherFlower implements IAetherBloc
      */
     public AxisAlignedBB getCollisionBoundingBoxFromPool(World var1, int var2, int var3, int var4)
     {
-        return AxisAlignedBB.getBoundingBox((double) var2 + this.minX, (double) var3 + this.minY, (double) var4 + this.minZ, (double) var2 + this.maxX, (double) var3 + this.maxY, (double) var4 + this.maxZ);
+        return AxisAlignedBB.getBoundingBox((double)var2 + this.minX, (double)var3 + this.minY, (double)var4 + this.minZ, (double)var2 + this.maxX, (double)var3 + this.maxY, (double)var4 + this.maxZ);
     }
 
     public boolean blockActivated(World var1, int var2, int var3, int var4, EntityPlayer var5)
@@ -55,23 +54,28 @@ public class BlockBerryBushStem extends BlockAetherFlower implements IAetherBloc
         if (var1.isRemote)
         {
             return false;
-        } else if (var5 == null)
+        }
+        else if (var5 == null)
         {
             return false;
-        } else
+        }
+        else
         {
             ItemStack var6 = var5.getCurrentEquippedItem();
 
             if (var6 == null)
             {
                 return false;
-            } else if (var6.itemID != Item.dyePowder.itemID)
+            }
+            else if (var6.itemID != Item.dyePowder.itemID)
             {
                 return false;
-            } else if (var6.getItemDamage() != 15)
+            }
+            else if (var6.getItemDamage() != 15)
             {
                 return false;
-            } else
+            }
+            else
             {
                 --var6.stackSize;
                 var1.setBlock(var2, var3, var4, 0);

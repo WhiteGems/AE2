@@ -4,11 +4,10 @@ public class TrackedMobSpawnerCoord extends TrackedCoord
 {
     private String mobID;
 
-    public TrackedMobSpawnerCoord(int x, int y, int z, String mobID)
+    public TrackedMobSpawnerCoord(int var1, int var2, int var3, String var4)
     {
-        super(x, y, z);
-
-        this.mobID = mobID;
+        super(var1, var2, var3);
+        this.mobID = var4;
     }
 
     public String getMobID()
@@ -16,8 +15,3 @@ public class TrackedMobSpawnerCoord extends TrackedCoord
         return this.mobID;
     }
 }
-
-/* Location:           D:\Dev\Mc\forge_orl\mcp\jars\bin\aether.jar
- * Qualified Name:     net.aetherteam.aether.dungeons.TrackedMobSpawnerCoord
- * JD-Core Version:    0.6.2
- */

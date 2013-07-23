@@ -4,33 +4,32 @@ public enum EnumChoiceType
 {
     MOA("MOA", "/net/aetherteam/aether/client/sprites/moa/", "http://www.aethermod.net/skins/moa_"),
     CAPE("CAPE", "/net/aetherteam/aether/client/sprites/capes/", "http://www.aethermod.net/skins/cape_");
-
     public String name;
     public String localTexturePath;
     public String onlineTexturePath;
 
-    private EnumChoiceType(String name, String texturePath, String onlinePath)
+    private EnumChoiceType(String var3, String var4, String var5)
     {
-        this.name = name;
-        this.localTexturePath = texturePath;
-        this.onlineTexturePath = onlinePath;
+        this.name = var3;
+        this.localTexturePath = var4;
+        this.onlineTexturePath = var5;
     }
 
-    public static EnumChoiceType getTypeFromString(String name)
+    public static EnumChoiceType getTypeFromString(String var0)
     {
-        for (EnumChoiceType v : values())
+        EnumChoiceType[] var1 = values();
+        int var2 = var1.length;
+
+        for (int var3 = 0; var3 < var2; ++var3)
         {
-            if (v.name().equals(name))
+            EnumChoiceType var4 = var1[var3];
+
+            if (var4.name().equals(var0))
             {
-                return v;
+                return var4;
             }
         }
 
         return null;
     }
 }
-
-/* Location:           D:\Dev\Mc\forge_orl\mcp\jars\bin\aether.jar
- * Qualified Name:     net.aetherteam.aether.donator.EnumChoiceType
- * JD-Core Version:    0.6.2
- */

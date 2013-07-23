@@ -1,7 +1,6 @@
 package net.aetherteam.aether.blocks;
 
 import java.util.Random;
-
 import net.aetherteam.aether.entities.EntityFloatingBlock;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
@@ -51,9 +50,9 @@ public class BlockFloating extends BlockAether implements IAetherBlock
 
     private void tryToFall(World var1, int var2, int var3, int var4)
     {
-        int var8 = MathHelper.floor_double((double) var2);
-        int var9 = MathHelper.floor_double((double) var3);
-        int var10 = MathHelper.floor_double((double) var4);
+        int var8 = MathHelper.floor_double((double)var2);
+        int var9 = MathHelper.floor_double((double)var3);
+        int var10 = MathHelper.floor_double((double)var4);
         int var11 = var1.getBlockId(var2, var3, var4);
         int var12 = var1.getBlockMetadata(var2, var3, var4);
 
@@ -64,13 +63,14 @@ public class BlockFloating extends BlockAether implements IAetherBlock
             if (!fallInstantly && var1.checkChunksExist(var2 - var13, var3 - var13, var4 - var13, var2 + var13, var3 + var13, var4 + var13))
             {
                 var1.setBlockToAir(var2, var3, var4);
-                EntityFloatingBlock var14 = new EntityFloatingBlock(var1, (double) ((float) var8 + 0.5F), (double) ((float) var9 + 0.5F), (double) ((float) var10 + 0.5F), this.blockID, var12);
+                EntityFloatingBlock var14 = new EntityFloatingBlock(var1, (double)((float)var8 + 0.5F), (double)((float)var9 + 0.5F), (double)((float)var10 + 0.5F), this.blockID, var12);
 
                 if (!var1.isRemote)
                 {
                     var1.spawnEntityInWorld(var14);
                 }
-            } else
+            }
+            else
             {
                 var1.setBlockToAir(var2, var3, var4);
 
@@ -90,14 +90,12 @@ public class BlockFloating extends BlockAether implements IAetherBlock
     /**
      * Called when the falling block entity for this block is created
      */
-    protected void onStartFalling(EntityFloatingBlock var1)
-    {}
+    protected void onStartFalling(EntityFloatingBlock var1) {}
 
     /**
      * Called when the falling block entity for this block hits the ground and turns back into a block
      */
-    public void onFinishFalling(World var1, int var2, int var3, int var4, int var5)
-    {}
+    public void onFinishFalling(World var1, int var2, int var3, int var4, int var5) {}
 
     public int tickRate()
     {
@@ -111,10 +109,12 @@ public class BlockFloating extends BlockAether implements IAetherBlock
         if (var4 == 0)
         {
             return true;
-        } else if (var4 == Block.fire.blockID)
+        }
+        else if (var4 == Block.fire.blockID)
         {
             return true;
-        } else
+        }
+        else
         {
             Material var5 = Block.blocksList[var4].blockMaterial;
             return var5 == Material.water ? true : var5 == Material.lava;

@@ -3,9 +3,7 @@ package net.aetherteam.aether.blocks;
 import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
-
 import java.util.Random;
-
 import net.aetherteam.aether.items.AetherItems;
 import net.aetherteam.aether.tile_entities.TileEntityEnchanter;
 import net.minecraft.block.Block;
@@ -50,7 +48,7 @@ public class BlockEnchanter extends BlockContainer implements IAetherBlock
      */
     public boolean onBlockActivated(World var1, int var2, int var3, int var4, EntityPlayer var5, int var6, float var7, float var8, float var9)
     {
-        TileEntityEnchanter var10 = (TileEntityEnchanter) var1.getBlockTileEntity(var2, var3, var4);
+        TileEntityEnchanter var10 = (TileEntityEnchanter)var1.getBlockTileEntity(var2, var3, var4);
 
         if (var10 != null)
         {
@@ -72,21 +70,25 @@ public class BlockEnchanter extends BlockContainer implements IAetherBlock
                 {
                     var10.addAmbrosium(var11);
                     var10.onInventoryChanged();
-                } else if (var10.isEnchantable(var11))
+                }
+                else if (var10.isEnchantable(var11))
                 {
                     if (var10.getEnchanterStacks(0) != null && var10.getEnchanterStacks(0).itemID != var11.itemID)
                     {
                         var10.dropNextStack();
-                    } else
+                    }
+                    else
                     {
                         var10.addEnchantable(var11);
                         var10.onInventoryChanged();
                     }
-                } else
+                }
+                else
                 {
                     var10.dropNextStack();
                 }
-            } else
+            }
+            else
             {
                 var10.dropNextStack();
             }
@@ -108,7 +110,8 @@ public class BlockEnchanter extends BlockContainer implements IAetherBlock
         try
         {
             return new TileEntityEnchanter();
-        } catch (Exception var3)
+        }
+        catch (Exception var3)
         {
             throw new RuntimeException(var3);
         }
@@ -136,7 +139,7 @@ public class BlockEnchanter extends BlockContainer implements IAetherBlock
      */
     public void onBlockPlacedBy(World var1, int var2, int var3, int var4, EntityLiving var5, ItemStack var6)
     {
-        int var7 = MathHelper.floor_double((double) (var5.rotationYaw * 4.0F / 360.0F) + 0.5D) & 3;
+        int var7 = MathHelper.floor_double((double)(var5.rotationYaw * 4.0F / 360.0F) + 0.5D) & 3;
 
         if (var7 == 0)
         {
@@ -164,7 +167,7 @@ public class BlockEnchanter extends BlockContainer implements IAetherBlock
      */
     public void breakBlock(World var1, int var2, int var3, int var4, int var5, int var6)
     {
-        TileEntityEnchanter var7 = (TileEntityEnchanter) var1.getBlockTileEntity(var2, var3, var4);
+        TileEntityEnchanter var7 = (TileEntityEnchanter)var1.getBlockTileEntity(var2, var3, var4);
 
         if (var7 != null)
         {
@@ -188,17 +191,17 @@ public class BlockEnchanter extends BlockContainer implements IAetherBlock
                         }
 
                         var9.stackSize -= var13;
-                        EntityItem var14 = new EntityItem(var1, (double) ((float) var2 + var10), (double) ((float) var3 + var11), (double) ((float) var4 + var12), new ItemStack(var9.itemID, var13, var9.getItemDamage()));
+                        EntityItem var14 = new EntityItem(var1, (double)((float)var2 + var10), (double)((float)var3 + var11), (double)((float)var4 + var12), new ItemStack(var9.itemID, var13, var9.getItemDamage()));
 
                         if (var9.hasTagCompound())
                         {
-                            var14.getEntityItem().setTagCompound((NBTTagCompound) var9.getTagCompound().copy());
+                            var14.getEntityItem().setTagCompound((NBTTagCompound)var9.getTagCompound().copy());
                         }
 
                         float var15 = 0.05F;
-                        var14.motionX = (double) ((float) this.EnchanterRand.nextGaussian() * var15);
-                        var14.motionY = (double) ((float) this.EnchanterRand.nextGaussian() * var15 + 0.2F);
-                        var14.motionZ = (double) ((float) this.EnchanterRand.nextGaussian() * var15);
+                        var14.motionX = (double)((float)this.EnchanterRand.nextGaussian() * var15);
+                        var14.motionY = (double)((float)this.EnchanterRand.nextGaussian() * var15 + 0.2F);
+                        var14.motionZ = (double)((float)this.EnchanterRand.nextGaussian() * var15);
                         var1.spawnEntityInWorld(var14);
                     }
                 }
@@ -215,7 +218,7 @@ public class BlockEnchanter extends BlockContainer implements IAetherBlock
      */
     public void randomDisplayTick(World var1, int var2, int var3, int var4, Random var5)
     {
-        TileEntityEnchanter var6 = (TileEntityEnchanter) var1.getBlockTileEntity(var2, var3, var4);
+        TileEntityEnchanter var6 = (TileEntityEnchanter)var1.getBlockTileEntity(var2, var3, var4);
     }
 
     private void setDefaultDirection(World var1, int var2, int var3, int var4)

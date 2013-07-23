@@ -4,13 +4,11 @@ import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.network.PacketDispatcher;
 import cpw.mods.fml.relauncher.Side;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
-
 import net.aetherteam.aether.Aether;
 import net.aetherteam.aether.AetherCommonPlayerHandler;
 import net.aetherteam.aether.AetherLoot;
@@ -123,12 +121,12 @@ public class EntitySlider extends EntityBossMob implements IAetherBoss
         this.posX = Math.floor(this.posX + 0.5D);
         this.posY = Math.floor(this.posY + 0.5D);
         this.posZ = Math.floor(this.posZ + 0.5D);
-        this.dataWatcher.addObject(16, Byte.valueOf((byte) 0));
-        this.dataWatcher.addObject(17, Byte.valueOf((byte) 0));
+        this.dataWatcher.addObject(16, Byte.valueOf((byte)0));
+        this.dataWatcher.addObject(17, Byte.valueOf((byte)0));
         this.dataWatcher.addObject(18, String.valueOf(AetherNameGen.gen()));
-        this.dataWatcher.addObject(19, Byte.valueOf((byte) 0));
-        this.dataWatcher.addObject(20, Byte.valueOf((byte) 0));
-        this.dataWatcher.addObject(21, Byte.valueOf((byte) 0));
+        this.dataWatcher.addObject(19, Byte.valueOf((byte)0));
+        this.dataWatcher.addObject(20, Byte.valueOf((byte)0));
+        this.dataWatcher.addObject(21, Byte.valueOf((byte)0));
     }
 
     public boolean getAwake()
@@ -142,10 +140,11 @@ public class EntitySlider extends EntityBossMob implements IAetherBoss
         {
             if (var1)
             {
-                this.dataWatcher.updateObject(16, Byte.valueOf((byte) 1));
-            } else
+                this.dataWatcher.updateObject(16, Byte.valueOf((byte)1));
+            }
+            else
             {
-                this.dataWatcher.updateObject(16, Byte.valueOf((byte) 0));
+                this.dataWatcher.updateObject(16, Byte.valueOf((byte)0));
             }
         }
     }
@@ -159,7 +158,7 @@ public class EntitySlider extends EntityBossMob implements IAetherBoss
 
         if (var1.getEntity() instanceof EntityPlayer)
         {
-            EntityPlayer var2 = (EntityPlayer) var1.getEntity();
+            EntityPlayer var2 = (EntityPlayer)var1.getEntity();
             Party var3 = PartyController.instance().getParty(PartyController.instance().getMember(var2));
             Dungeon var4 = DungeonHandler.instance().getInstanceAt(MathHelper.floor_double(this.posX), MathHelper.floor_double(this.posY), MathHelper.floor_double(this.posZ));
 
@@ -189,10 +188,11 @@ public class EntitySlider extends EntityBossMob implements IAetherBoss
         {
             if (var1)
             {
-                this.dataWatcher.updateObject(17, Byte.valueOf((byte) 1));
-            } else
+                this.dataWatcher.updateObject(17, Byte.valueOf((byte)1));
+            }
+            else
             {
-                this.dataWatcher.updateObject(17, Byte.valueOf((byte) 0));
+                this.dataWatcher.updateObject(17, Byte.valueOf((byte)0));
             }
         }
     }
@@ -219,10 +219,11 @@ public class EntitySlider extends EntityBossMob implements IAetherBoss
     {
         if (var1)
         {
-            this.dataWatcher.updateObject(19, Byte.valueOf((byte) 1));
-        } else
+            this.dataWatcher.updateObject(19, Byte.valueOf((byte)1));
+        }
+        else
         {
-            this.dataWatcher.updateObject(19, Byte.valueOf((byte) 0));
+            this.dataWatcher.updateObject(19, Byte.valueOf((byte)0));
         }
     }
 
@@ -235,10 +236,11 @@ public class EntitySlider extends EntityBossMob implements IAetherBoss
     {
         if (var1)
         {
-            this.dataWatcher.updateObject(20, Byte.valueOf((byte) 1));
-        } else
+            this.dataWatcher.updateObject(20, Byte.valueOf((byte)1));
+        }
+        else
         {
-            this.dataWatcher.updateObject(20, Byte.valueOf((byte) 0));
+            this.dataWatcher.updateObject(20, Byte.valueOf((byte)0));
         }
     }
 
@@ -251,11 +253,12 @@ public class EntitySlider extends EntityBossMob implements IAetherBoss
     {
         if (var1)
         {
-            this.dataWatcher.updateObject(21, Byte.valueOf((byte) 1));
+            this.dataWatcher.updateObject(21, Byte.valueOf((byte)1));
             this.playMusicFile("Slider Finish");
-        } else
+        }
+        else
         {
-            this.dataWatcher.updateObject(21, Byte.valueOf((byte) 0));
+            this.dataWatcher.updateObject(21, Byte.valueOf((byte)0));
         }
     }
 
@@ -263,14 +266,12 @@ public class EntitySlider extends EntityBossMob implements IAetherBoss
      * Takes in the distance the entity has fallen this tick and whether its on the ground to update the fall distance
      * and deal fall damage if landing on the ground.  Args: distanceFallenThisTick, onGround
      */
-    protected void updateFallState(double var1, boolean var3)
-    {}
+    protected void updateFallState(double var1, boolean var3) {}
 
     /**
      * Called when the mob is falling. Calculates and applies fall damage.
      */
-    protected void fall(float var1)
-    {}
+    protected void fall(float var1) {}
 
     /**
      * Determines if an entity can be despawned, used on idle far away entities
@@ -311,8 +312,8 @@ public class EntitySlider extends EntityBossMob implements IAetherBoss
     {
         super.writeEntityToNBT(var1);
         var1.setFloat("Speedy", this.speedy);
-        var1.setShort("MoveTimer", (short) this.moveTimer);
-        var1.setShort("Direction", (short) this.direction);
+        var1.setShort("MoveTimer", (short)this.moveTimer);
+        var1.setShort("Direction", (short)this.direction);
         var1.setBoolean("GotMovement", this.gotMovement);
         var1.setBoolean("Awake", this.getAwake());
         var1.setBoolean("Critical", this.getCritical());
@@ -406,9 +407,9 @@ public class EntitySlider extends EntityBossMob implements IAetherBoss
     {
         if (this.isSoundOn())
         {
-            float var10002 = (float) this.posX;
-            float var10003 = (float) this.posY;
-            Aether.proxy.getClient().sndManager.playStreaming(var1, var10002, var10003, (float) this.posZ);
+            float var10002 = (float)this.posX;
+            float var10003 = (float)this.posY;
+            Aether.proxy.getClient().sndManager.playStreaming(var1, var10002, var10003, (float)this.posZ);
         }
     }
 
@@ -427,14 +428,14 @@ public class EntitySlider extends EntityBossMob implements IAetherBoss
 
         if (!this.worldObj.isRemote)
         {
-            this.setPosition((double) ((float) this.dungeonX + 8.0F), (double) ((float) this.dungeonY + 1.0F), (double) ((float) this.dungeonZ + 8.0F));
+            this.setPosition((double)((float)this.dungeonX + 8.0F), (double)((float)this.dungeonY + 1.0F), (double)((float)this.dungeonZ + 8.0F));
         }
 
         List var1 = this.worldObj.getEntitiesWithinAABBExcludingEntity(this, this.boundingBox.expand(35.0D, 15.0D, 35.0D));
 
         for (int var2 = 0; var2 < var1.size(); ++var2)
         {
-            Entity var3 = (Entity) var1.get(var2);
+            Entity var3 = (Entity)var1.get(var2);
 
             if (var3 instanceof EntitySentry)
             {
@@ -468,7 +469,7 @@ public class EntitySlider extends EntityBossMob implements IAetherBoss
 
         if (var2 != null && this.dungeonX == 0 && this.dungeonY == 0 && this.dungeonZ == 0)
         {
-            this.setDungeon((int) this.posX - 8, (int) this.posY - 2, (int) this.posZ - 8);
+            this.setDungeon((int)this.posX - 8, (int)this.posY - 2, (int)this.posZ - 8);
         }
 
         if (var2 != null)
@@ -505,10 +506,12 @@ public class EntitySlider extends EntityBossMob implements IAetherBoss
         if (this.getCritical())
         {
             this.texture = this.dir + "/bosses/slider/sliderAwake_red.png";
-        } else if (this.getAwake())
+        }
+        else if (this.getAwake())
         {
             this.texture = this.dir + "/bosses/slider/sliderAwake.png";
-        } else
+        }
+        else
         {
             this.texture = this.dir + "/bosses/slider/sliderSleep.png";
         }
@@ -521,10 +524,10 @@ public class EntitySlider extends EntityBossMob implements IAetherBoss
 
             while (var3.hasNext())
             {
-                var4 = (PartyMember) var3.next();
+                var4 = (PartyMember)var3.next();
                 EntityPlayer var5 = this.worldObj.getPlayerEntityByName(var4.username);
 
-                if (var5 != null && (int) var5.posX >= this.dungeonX && (int) var5.posX < this.dungeonX + 16 && (int) var5.posZ >= this.dungeonZ + 1 && (int) var5.posZ < this.dungeonZ + 16 && !this.activeMembers.contains(var5.username.toLowerCase()))
+                if (var5 != null && (int)var5.posX >= this.dungeonX && (int)var5.posX < this.dungeonX + 16 && (int)var5.posZ >= this.dungeonZ + 1 && (int)var5.posZ < this.dungeonZ + 16 && !this.activeMembers.contains(var5.username.toLowerCase()))
                 {
                     this.activeMembers.add(var5.username.toLowerCase());
                 }
@@ -534,7 +537,7 @@ public class EntitySlider extends EntityBossMob implements IAetherBoss
 
             while (var3.hasNext())
             {
-                var4 = (PartyMember) var3.next();
+                var4 = (PartyMember)var3.next();
 
                 if (!this.activeMembers.contains(var4.username.toLowerCase()) && !this.deadMembers.contains(var4.username.toLowerCase()))
                 {
@@ -542,19 +545,20 @@ public class EntitySlider extends EntityBossMob implements IAetherBoss
                 }
             }
 
-            boolean var17 = this.deadMembers.size() >= this.queuedMembers.size();
+            boolean var15 = this.deadMembers.size() >= this.queuedMembers.size();
             this.target = this.worldObj.getClosestPlayerToEntity(this, -1.0D);
 
             if (this.target != null && this.target instanceof EntityPlayer)
             {
-                EntityPlayer var16 = (EntityPlayer) this.target;
+                EntityPlayer var16 = (EntityPlayer)this.target;
 
-                if (var17)
+                if (var15)
                 {
                     this.resetSlider();
                     return;
                 }
-            } else if (this.target == null)
+            }
+            else if (this.target == null)
             {
                 this.target = this.worldObj.getClosestPlayerToEntity(this, -1.0D);
             }
@@ -583,78 +587,84 @@ public class EntitySlider extends EntityBossMob implements IAetherBoss
             {
                 this.spawnSentries(8, 4);
                 this.setCritical(true);
-            } else
+            }
+            else
             {
                 this.setCritical(false);
             }
 
             this.fallDistance = 0.0F;
+            double var17;
             double var6;
-            double var15;
             double var8;
 
             if (this.gotMovement)
             {
                 if (this.isCollided)
                 {
-                    var15 = this.posX - 0.5D;
+                    var17 = this.posX - 0.5D;
                     var6 = this.boundingBox.minY + 0.75D;
                     var8 = this.posZ - 0.5D;
                     this.crushed = false;
 
                     if (var6 < 124.0D && var6 > 4.0D)
                     {
-                        double var13;
                         int var10;
                         double var11;
+                        double var13;
 
                         if (this.direction == 0)
                         {
                             for (var10 = 0; var10 < 25; ++var10)
                             {
-                                var11 = (double) (var10 / 5 - 2) * 0.75D;
-                                var13 = (double) (var10 % 5 - 2) * 0.75D;
-                                this.blockCrush((int) (var15 + var11), (int) (var6 + 1.5D), (int) (var8 + var13));
+                                var11 = (double)(var10 / 5 - 2) * 0.75D;
+                                var13 = (double)(var10 % 5 - 2) * 0.75D;
+                                this.blockCrush((int)(var17 + var11), (int)(var6 + 1.5D), (int)(var8 + var13));
                             }
-                        } else if (this.direction == 1)
+                        }
+                        else if (this.direction == 1)
                         {
                             for (var10 = 0; var10 < 25; ++var10)
                             {
-                                var11 = (double) (var10 / 5 - 2) * 0.75D;
-                                var13 = (double) (var10 % 5 - 2) * 0.75D;
-                                this.blockCrush((int) (var15 + var11), (int) (var6 - 1.5D), (int) (var8 + var13));
+                                var11 = (double)(var10 / 5 - 2) * 0.75D;
+                                var13 = (double)(var10 % 5 - 2) * 0.75D;
+                                this.blockCrush((int)(var17 + var11), (int)(var6 - 1.5D), (int)(var8 + var13));
                             }
-                        } else if (this.direction == 2)
+                        }
+                        else if (this.direction == 2)
                         {
                             for (var10 = 0; var10 < 25; ++var10)
                             {
-                                var11 = (double) (var10 / 5 - 2) * 0.75D;
-                                var13 = (double) (var10 % 5 - 2) * 0.75D;
-                                this.blockCrush((int) (var15 + 1.5D), (int) (var6 + var11), (int) (var8 + var13));
+                                var11 = (double)(var10 / 5 - 2) * 0.75D;
+                                var13 = (double)(var10 % 5 - 2) * 0.75D;
+                                this.blockCrush((int)(var17 + 1.5D), (int)(var6 + var11), (int)(var8 + var13));
                             }
-                        } else if (this.direction == 3)
+                        }
+                        else if (this.direction == 3)
                         {
                             for (var10 = 0; var10 < 25; ++var10)
                             {
-                                var11 = (double) (var10 / 5 - 2) * 0.75D;
-                                var13 = (double) (var10 % 5 - 2) * 0.75D;
-                                this.blockCrush((int) (var15 - 1.5D), (int) (var6 + var11), (int) (var8 + var13));
+                                var11 = (double)(var10 / 5 - 2) * 0.75D;
+                                var13 = (double)(var10 % 5 - 2) * 0.75D;
+                                this.blockCrush((int)(var17 - 1.5D), (int)(var6 + var11), (int)(var8 + var13));
                             }
-                        } else if (this.direction == 4)
+                        }
+                        else if (this.direction == 4)
                         {
                             for (var10 = 0; var10 < 25; ++var10)
                             {
-                                var11 = (double) (var10 / 5 - 2) * 0.75D;
-                                var13 = (double) (var10 % 5 - 2) * 0.75D;
-                                this.blockCrush((int) (var15 + var11), (int) (var6 + var13), (int) (var8 + 1.5D));
+                                var11 = (double)(var10 / 5 - 2) * 0.75D;
+                                var13 = (double)(var10 % 5 - 2) * 0.75D;
+                                this.blockCrush((int)(var17 + var11), (int)(var6 + var13), (int)(var8 + 1.5D));
                             }
-                        } else if (this.direction == 5)
+                        }
+                        else if (this.direction == 5)
                         {
                             for (var10 = 0; var10 < 25; ++var10)
                             {
-                                var11 = (double) (var10 / 5 - 2) * 0.75D;
-                                var13 = (double) (var10 % 5 - 2) * 0.75D;
-                                this.blockCrush((int) (var15 + var11), (int) (var6 + var13), (int) (var8 - 1.5D));
+                                var11 = (double)(var10 / 5 - 2) * 0.75D;
+                                var13 = (double)(var10 % 5 - 2) * 0.75D;
+                                this.blockCrush((int)(var17 + var11), (int)(var6 + var13), (int)(var8 - 1.5D));
                             }
                         }
                     }
@@ -666,7 +676,8 @@ public class EntitySlider extends EntityBossMob implements IAetherBoss
                     }
 
                     this.stop();
-                } else
+                }
+                else
                 {
                     if (this.speedy < 2.0F)
                     {
@@ -679,52 +690,57 @@ public class EntitySlider extends EntityBossMob implements IAetherBoss
 
                     if (this.direction == 0)
                     {
-                        this.motionY = (double) this.speedy;
+                        this.motionY = (double)this.speedy;
 
                         if (this.boundingBox.minY > this.target.boundingBox.minY + 0.35D)
                         {
                             this.stop();
                             this.moveTimer = this.getCritical() ? 4 : 8;
                         }
-                    } else if (this.direction == 1)
+                    }
+                    else if (this.direction == 1)
                     {
-                        this.motionY = (double) (-this.speedy);
+                        this.motionY = (double)(-this.speedy);
 
                         if (this.boundingBox.minY < this.target.boundingBox.minY - 0.25D)
                         {
                             this.stop();
                             this.moveTimer = this.getCritical() ? 4 : 8;
                         }
-                    } else if (this.direction == 2)
+                    }
+                    else if (this.direction == 2)
                     {
-                        this.motionX = (double) this.speedy;
+                        this.motionX = (double)this.speedy;
 
                         if (this.posX > this.target.posX + 0.125D)
                         {
                             this.stop();
                             this.moveTimer = this.getCritical() ? 4 : 8;
                         }
-                    } else if (this.direction == 3)
+                    }
+                    else if (this.direction == 3)
                     {
-                        this.motionX = (double) (-this.speedy);
+                        this.motionX = (double)(-this.speedy);
 
                         if (this.posX < this.target.posX - 0.125D)
                         {
                             this.stop();
                             this.moveTimer = this.getCritical() ? 4 : 8;
                         }
-                    } else if (this.direction == 4)
+                    }
+                    else if (this.direction == 4)
                     {
-                        this.motionZ = (double) this.speedy;
+                        this.motionZ = (double)this.speedy;
 
                         if (this.posZ > this.target.posZ + 0.125D)
                         {
                             this.stop();
                             this.moveTimer = this.getCritical() ? 4 : 8;
                         }
-                    } else if (this.direction == 5)
+                    }
+                    else if (this.direction == 5)
                     {
-                        this.motionZ = (double) (-this.speedy);
+                        this.motionZ = (double)(-this.speedy);
 
                         if (this.posZ < this.target.posZ - 0.125D)
                         {
@@ -733,7 +749,8 @@ public class EntitySlider extends EntityBossMob implements IAetherBoss
                         }
                     }
                 }
-            } else
+            }
+            else
             {
                 this.motionY = 0.0D;
 
@@ -749,13 +766,14 @@ public class EntitySlider extends EntityBossMob implements IAetherBoss
                     this.motionX = 0.0D;
                     this.motionY = 0.0D;
                     this.motionZ = 0.0D;
-                } else
+                }
+                else
                 {
-                    var15 = Math.abs(this.posX - this.target.posX);
+                    var17 = Math.abs(this.posX - this.target.posX);
                     var6 = Math.abs(this.boundingBox.minY - this.target.boundingBox.minY);
                     var8 = Math.abs(this.posZ - this.target.posZ);
 
-                    if (var15 > var8)
+                    if (var17 > var8)
                     {
                         this.direction = 2;
 
@@ -763,7 +781,8 @@ public class EntitySlider extends EntityBossMob implements IAetherBoss
                         {
                             this.direction = 3;
                         }
-                    } else
+                    }
+                    else
                     {
                         this.direction = 4;
 
@@ -773,7 +792,7 @@ public class EntitySlider extends EntityBossMob implements IAetherBoss
                         }
                     }
 
-                    if (var6 > var15 && var6 > var8 || var6 > 0.25D && this.rand.nextInt(5) == 0)
+                    if (var6 > var17 && var6 > var8 || var6 > 0.25D && this.rand.nextInt(5) == 0)
                     {
                         this.direction = 0;
 
@@ -844,7 +863,7 @@ public class EntitySlider extends EntityBossMob implements IAetherBoss
 
                 int[] var4 = this.getSpotCoords(var3);
                 EntitySentry var6 = new EntitySentry(this.worldObj);
-                var6.setPosition((double) var4[0] + 0.5D, (double) var4[1] + 1.5D, (double) var4[2] + 0.5D);
+                var6.setPosition((double)var4[0] + 0.5D, (double)var4[1] + 1.5D, (double)var4[2] + 0.5D);
                 this.worldObj.spawnEntityInWorld(var6);
                 ++var3;
             }
@@ -931,7 +950,7 @@ public class EntitySlider extends EntityBossMob implements IAetherBoss
 
                 if (var1 instanceof EntityCreature || var1 instanceof EntityPlayer)
                 {
-                    EntityLiving var2 = (EntityLiving) var1;
+                    EntityLiving var2 = (EntityLiving)var1;
                     var2.motionY += 0.35D;
                     var2.motionX *= 2.0D;
                     var2.motionZ *= 2.0D;
@@ -994,11 +1013,11 @@ public class EntitySlider extends EntityBossMob implements IAetherBoss
 
                 while (var7.hasNext())
                 {
-                    PartyMember var8 = (PartyMember) var7.next();
+                    PartyMember var8 = (PartyMember)var7.next();
 
-                    if (var6 instanceof EntityPlayerMP && ((EntityPlayerMP) var6).username.equalsIgnoreCase(var8.username))
+                    if (var6 instanceof EntityPlayerMP && ((EntityPlayerMP)var6).username.equalsIgnoreCase(var8.username))
                     {
-                        ((EntityPlayerMP) var6).setPositionAndUpdate((double) ((float) ((double) this.dungeonX + 0.5D)), (double) ((float) this.dungeonY), (double) ((float) ((double) this.dungeonZ + 8.0D)));
+                        ((EntityPlayerMP)var6).setPositionAndUpdate((double)((float)((double)this.dungeonX + 0.5D)), (double)((float)this.dungeonY), (double)((float)((double)this.dungeonZ + 8.0D)));
                     }
                 }
             }
@@ -1013,9 +1032,10 @@ public class EntitySlider extends EntityBossMob implements IAetherBoss
         if (var1.getEntity() instanceof EntitySentry)
         {
             return false;
-        } else if (var1.getEntity() != null && var1.getEntity() instanceof EntityPlayer)
+        }
+        else if (var1.getEntity() != null && var1.getEntity() instanceof EntityPlayer)
         {
-            EntityPlayer var3 = (EntityPlayer) var1.getEntity();
+            EntityPlayer var3 = (EntityPlayer)var1.getEntity();
             ItemStack var4 = var3.getCurrentEquippedItem();
 
             if (var4 != null && var4.getItem() != null)
@@ -1024,7 +1044,8 @@ public class EntitySlider extends EntityBossMob implements IAetherBoss
                 {
                     this.chatItUp(var3, "Hmm. It\'s a rock-solid block. A " + var4.getItem().getItemDisplayName(var4) + " wouldn\'t work on this.");
                     return false;
-                } else
+                }
+                else
                 {
                     AetherCommonPlayerHandler var5 = Aether.getPlayerBase(var3);
                     Side var6 = FMLCommonHandler.instance().getEffectiveSide();
@@ -1043,7 +1064,8 @@ public class EntitySlider extends EntityBossMob implements IAetherBoss
                     if (this.health > 0 && !this.isDead)
                     {
                         this.startMusic(true);
-                    } else
+                    }
+                    else
                     {
                         this.finishMusic(true);
                         this.playMusicFile("Slider Finish");
@@ -1057,10 +1079,11 @@ public class EntitySlider extends EntityBossMob implements IAetherBoss
                     {
                         Party var9 = var8.getQueuedParty();
                         var10 = var8.getQueuedMembers().size();
-                        float var11 = (float) (var10 - 1) * 0.045F;
-                        var12 = MathHelper.clamp_int((int) ((float) var2 - (float) var2 * var11), 1, var2);
+                        float var11 = (float)(var10 - 1) * 0.045F;
+                        var12 = MathHelper.clamp_int((int)((float)var2 - (float)var2 * var11), 1, var2);
                         var7 = super.attackEntityFrom(var1, var12);
-                    } else
+                    }
+                    else
                     {
                         var7 = super.attackEntityFrom(var1, Math.max(0, var2));
                     }
@@ -1072,19 +1095,19 @@ public class EntitySlider extends EntityBossMob implements IAetherBoss
                             this.queuedMembers = var8.getQueuedMembers();
                         }
 
-                        for (int var29 = 0; var29 < (this.health <= 0 ? 16 : 48); ++var29)
+                        for (int var16 = 0; var16 < (this.health <= 0 ? 16 : 48); ++var16)
                         {
-                            double var28 = this.posX + (double) (this.rand.nextFloat() - this.rand.nextFloat()) * 1.5D;
-                            double var19 = this.boundingBox.minY + 1.75D + (double) (this.rand.nextFloat() - this.rand.nextFloat()) * 1.5D;
-                            double var14 = this.posZ + (double) (this.rand.nextFloat() - this.rand.nextFloat()) * 1.5D;
+                            double var21 = this.posX + (double)(this.rand.nextFloat() - this.rand.nextFloat()) * 1.5D;
+                            double var22 = this.boundingBox.minY + 1.75D + (double)(this.rand.nextFloat() - this.rand.nextFloat()) * 1.5D;
+                            double var14 = this.posZ + (double)(this.rand.nextFloat() - this.rand.nextFloat()) * 1.5D;
 
                             if (this.health <= 0)
                             {
-                                this.worldObj.spawnParticle("explode", var28, var19, var14, 0.0D, 0.0D, 0.0D);
+                                this.worldObj.spawnParticle("explode", var21, var22, var14, 0.0D, 0.0D, 0.0D);
                             }
                         }
 
-                        ArrayList var24;
+                        ArrayList var27;
 
                         if (this.health <= 0)
                         {
@@ -1092,11 +1115,11 @@ public class EntitySlider extends EntityBossMob implements IAetherBoss
 
                             if (!this.worldObj.isRemote)
                             {
-                                boolean var30 = false;
+                                boolean var17 = false;
 
                                 if (this.random.nextInt(10) == 0)
                                 {
-                                    var30 = true;
+                                    var17 = true;
                                 }
 
                                 for (var10 = 0; var10 < 25 + this.random.nextInt(25); ++var10)
@@ -1111,23 +1134,23 @@ public class EntitySlider extends EntityBossMob implements IAetherBoss
 
                                 if (var8 != null)
                                 {
-                                    var24 = var8.getQueuedMembers();
-                                    Iterator var27 = var24.iterator();
+                                    var27 = var8.getQueuedMembers();
+                                    Iterator var20 = var27.iterator();
 
-                                    while (var27.hasNext())
+                                    while (var20.hasNext())
                                     {
-                                        PartyMember var21 = (PartyMember) var27.next();
+                                        PartyMember var24 = (PartyMember)var20.next();
 
                                         for (int var13 = 0; var13 < 5 + this.random.nextInt(3); ++var13)
                                         {
-                                            this.worldObj.spawnEntityInWorld(new EntityRewardItem(this.worldObj, this.posX, this.posY, this.posZ, AetherLoot.BRONZE.getRandomItem(this.random), var21.username));
+                                            this.worldObj.spawnEntityInWorld(new EntityRewardItem(this.worldObj, this.posX, this.posY, this.posZ, AetherLoot.BRONZE.getRandomItem(this.random), var24.username));
                                         }
 
-                                        this.worldObj.spawnEntityInWorld(new EntityRewardItem(this.worldObj, this.posX, this.posY, this.posZ, new ItemStack(AetherItems.Key, 1, 0), var21.username));
+                                        this.worldObj.spawnEntityInWorld(new EntityRewardItem(this.worldObj, this.posX, this.posY, this.posZ, new ItemStack(AetherItems.Key, 1, 0), var24.username));
 
-                                        if (var30)
+                                        if (var17)
                                         {
-                                            this.worldObj.spawnEntityInWorld(new EntityRewardItem(this.worldObj, this.posX, this.posY, this.posZ, new ItemStack(AetherItems.LabyrinthMusicDisk, 1, 0), var21.username));
+                                            this.worldObj.spawnEntityInWorld(new EntityRewardItem(this.worldObj, this.posX, this.posY, this.posZ, new ItemStack(AetherItems.LabyrinthMusicDisk, 1, 0), var24.username));
                                         }
                                     }
                                 }
@@ -1136,28 +1159,29 @@ public class EntitySlider extends EntityBossMob implements IAetherBoss
                             this.openDoor();
                             this.finishMusic(true);
                             this.worldObj.playSoundEffect(this.posX, this.posY, this.posZ, "aemisc.achieveBronzeNew", 1.0F, 1.0F);
-                        } else if (!this.getAwake())
+                        }
+                        else if (!this.getAwake())
                         {
-                            Side var25 = FMLCommonHandler.instance().getEffectiveSide();
+                            Side var18 = FMLCommonHandler.instance().getEffectiveSide();
 
-                            if (var25.isServer() && !this.worldObj.isRemote && var8 != null)
+                            if (var18.isServer() && !this.worldObj.isRemote && var8 != null)
                             {
-                                var24 = var8.getQueuedMembers();
-                                ArrayList var22 = new ArrayList();
-                                EntityPlayer var18 = (EntityPlayer) var1.getEntity();
-                                Iterator var17 = var24.iterator();
+                                var27 = var8.getQueuedMembers();
+                                ArrayList var25 = new ArrayList();
+                                EntityPlayer var29 = (EntityPlayer)var1.getEntity();
+                                Iterator var28 = var27.iterator();
 
-                                while (var17.hasNext())
+                                while (var28.hasNext())
                                 {
-                                    PartyMember var16 = (PartyMember) var17.next();
+                                    PartyMember var30 = (PartyMember)var28.next();
 
-                                    if (!var16.username.equalsIgnoreCase(var18.username))
+                                    if (!var30.username.equalsIgnoreCase(var29.username))
                                     {
-                                        var22.add(var16);
+                                        var25.add(var30);
                                     }
                                 }
 
-                                this.teleportMembersFromParty(var22);
+                                this.teleportMembersFromParty(var25);
                             }
 
                             this.worldObj.playSoundAtEntity(this, "aeboss.slider.awake", 2.5F, 1.0F / (this.rand.nextFloat() * 0.2F + 0.9F));
@@ -1165,22 +1189,23 @@ public class EntitySlider extends EntityBossMob implements IAetherBoss
                             this.target = var1.getEntity();
                             var10 = this.dungeonX - 1;
 
-                            for (int var23 = this.dungeonY; var23 < this.dungeonY + 8; ++var23)
+                            for (int var26 = this.dungeonY; var26 < this.dungeonY + 8; ++var26)
                             {
                                 for (var12 = this.dungeonZ + 5; var12 < this.dungeonZ + 11; ++var12)
                                 {
-                                    this.worldObj.setBlock(var10, var23, var12, AetherBlocks.LockedDungeonStone.blockID);
+                                    this.worldObj.setBlock(var10, var26, var12, AetherBlocks.LockedDungeonStone.blockID);
                                 }
                             }
-                        } else if (this.gotMovement)
+                        }
+                        else if (this.gotMovement)
                         {
                             this.speedy *= 1.5F;
                         }
 
-                        double var26 = Math.abs(this.posX - var1.getEntity().posX);
-                        double var20 = Math.abs(this.posZ - var1.getEntity().posZ);
+                        double var19 = Math.abs(this.posX - var1.getEntity().posX);
+                        double var23 = Math.abs(this.posZ - var1.getEntity().posZ);
 
-                        if (var26 > var20)
+                        if (var19 > var23)
                         {
                             this.dennis = 1;
                             this.rennis = 0;
@@ -1189,7 +1214,8 @@ public class EntitySlider extends EntityBossMob implements IAetherBoss
                             {
                                 this.dennis = -1;
                             }
-                        } else
+                        }
+                        else
                         {
                             this.rennis = 1;
                             this.dennis = 0;
@@ -1200,17 +1226,19 @@ public class EntitySlider extends EntityBossMob implements IAetherBoss
                             }
                         }
 
-                        this.harvey = 0.7F - (float) this.health / 875.0F;
+                        this.harvey = 0.7F - (float)this.health / 875.0F;
                     }
 
                     return var7;
                 }
-            } else
+            }
+            else
             {
                 this.chatItUp(var3, "Hmm. It\'s a rock-solid block. My fist wouldn\'t work on this.");
                 return false;
             }
-        } else
+        }
+        else
         {
             return false;
         }
@@ -1246,14 +1274,12 @@ public class EntitySlider extends EntityBossMob implements IAetherBoss
     /**
      * Adds to the current velocity of the entity. Args: x, y, z
      */
-    public void addVelocity(double var1, double var3, double var5)
-    {}
+    public void addVelocity(double var1, double var3, double var5) {}
 
     /**
      * knocks back this entity
      */
-    public void knockBack(Entity var1, int var2, double var3, double var5)
-    {}
+    public void knockBack(Entity var1, int var2, double var3, double var5) {}
 
     public void blockCrush(int var1, int var2, int var3)
     {
@@ -1261,7 +1287,7 @@ public class EntitySlider extends EntityBossMob implements IAetherBoss
         {
             int var4 = this.worldObj.getBlockId(var1, var2, var3);
             int var5 = this.worldObj.getBlockMetadata(var1, var2, var3);
-            Collections.addAll(this.blockBans, new Integer[]{Integer.valueOf(AetherBlocks.LockedDungeonStone.blockID), Integer.valueOf(AetherBlocks.LockedLightDungeonStone.blockID), Integer.valueOf(AetherBlocks.TreasureChest.blockID), Integer.valueOf(AetherBlocks.DungeonHolystone.blockID), Integer.valueOf(AetherBlocks.DungeonEntrance.blockID), Integer.valueOf(AetherBlocks.DungeonEntranceController.blockID), Integer.valueOf(AetherBlocks.BronzeDoor.blockID), Integer.valueOf(AetherBlocks.BronzeDoorController.blockID)});
+            Collections.addAll(this.blockBans, new Integer[] {Integer.valueOf(AetherBlocks.LockedDungeonStone.blockID), Integer.valueOf(AetherBlocks.LockedLightDungeonStone.blockID), Integer.valueOf(AetherBlocks.TreasureChest.blockID), Integer.valueOf(AetherBlocks.DungeonHolystone.blockID), Integer.valueOf(AetherBlocks.DungeonEntrance.blockID), Integer.valueOf(AetherBlocks.DungeonEntranceController.blockID), Integer.valueOf(AetherBlocks.BronzeDoor.blockID), Integer.valueOf(AetherBlocks.BronzeDoorController.blockID)});
 
             if (var4 == 0 || this.blockBans.contains(Integer.valueOf(var4)))
             {
@@ -1289,9 +1315,9 @@ public class EntitySlider extends EntityBossMob implements IAetherBoss
     {
         if (this.worldObj.isRemote)
         {
-            double var4 = (double) var1 + 0.5D + (double) (this.rand.nextFloat() - this.rand.nextFloat()) * 0.375D;
-            double var6 = (double) var2 + 0.5D + (double) (this.rand.nextFloat() - this.rand.nextFloat()) * 0.375D;
-            double var8 = (double) var3 + 0.5D + (double) (this.rand.nextFloat() - this.rand.nextFloat()) * 0.375D;
+            double var4 = (double)var1 + 0.5D + (double)(this.rand.nextFloat() - this.rand.nextFloat()) * 0.375D;
+            double var6 = (double)var2 + 0.5D + (double)(this.rand.nextFloat() - this.rand.nextFloat()) * 0.375D;
+            double var8 = (double)var3 + 0.5D + (double)(this.rand.nextFloat() - this.rand.nextFloat()) * 0.375D;
             this.worldObj.spawnParticle("explode", var4, var6, var8, 0.0D, 0.0D, 0.0D);
         }
     }

@@ -3,11 +3,9 @@ package net.aetherteam.aether.dungeons;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.network.PacketDispatcher;
 import cpw.mods.fml.relauncher.Side;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
-
 import net.aetherteam.aether.data.SerialDataHandler;
 import net.aetherteam.aether.dungeons.keys.DungeonKey;
 import net.aetherteam.aether.notifications.Notification;
@@ -67,7 +65,7 @@ public class DungeonHandler
 
         for (Iterator var3 = this.instances.values().iterator(); var3.hasNext(); ++var2)
         {
-            Dungeon var4 = (Dungeon) var3.next();
+            Dungeon var4 = (Dungeon)var3.next();
 
             if (var4 == var1)
             {
@@ -80,7 +78,7 @@ public class DungeonHandler
 
     public Dungeon getDungeon(int var1)
     {
-        return (Dungeon) this.instances.get(Integer.valueOf(var1));
+        return (Dungeon)this.instances.get(Integer.valueOf(var1));
     }
 
     public Dungeon getInstanceAt(int var1, int var2, int var3)
@@ -89,7 +87,7 @@ public class DungeonHandler
 
         while (var4.hasNext())
         {
-            Dungeon var5 = (Dungeon) var4.next();
+            Dungeon var5 = (Dungeon)var4.next();
 
             if (var5.boundingBox.intersectsWith(var1, var3, var1, var3))
             {
@@ -97,7 +95,7 @@ public class DungeonHandler
 
                 while (var6.hasNext())
                 {
-                    StructureBoundingBoxSerial var7 = (StructureBoundingBoxSerial) var6.next();
+                    StructureBoundingBoxSerial var7 = (StructureBoundingBoxSerial)var6.next();
 
                     if (var7.isVecInside(var1, var2, var3))
                     {
@@ -125,7 +123,7 @@ public class DungeonHandler
 
                 while (var8.hasNext())
                 {
-                    PartyMember var9 = (PartyMember) var8.next();
+                    PartyMember var9 = (PartyMember)var8.next();
 
                     if (!var2.isLeader(var9))
                     {
@@ -258,7 +256,7 @@ public class DungeonHandler
 
             while (var2.hasNext())
             {
-                Dungeon var3 = (Dungeon) var2.next();
+                Dungeon var3 = (Dungeon)var2.next();
 
                 if (var3.hasQueuedParty() && var3.getQueuedParty().getName().equalsIgnoreCase(var1.getName()))
                 {
@@ -278,7 +276,7 @@ public class DungeonHandler
 
             while (var2.hasNext())
             {
-                Dungeon var3 = (Dungeon) var2.next();
+                Dungeon var3 = (Dungeon)var2.next();
 
                 if (var3.isQueuedParty(var1))
                 {
@@ -290,7 +288,7 @@ public class DungeonHandler
         return false;
     }
 
-    public ArrayList<Dungeon> getInstances()
+    public ArrayList getInstances()
     {
         ArrayList var1 = new ArrayList();
         Iterator var2 = this.instances.values().iterator();
@@ -301,7 +299,7 @@ public class DungeonHandler
 
             if (var3 instanceof Dungeon)
             {
-                Dungeon var4 = (Dungeon) var3;
+                Dungeon var4 = (Dungeon)var3;
                 var1.add(var4);
             }
         }
@@ -315,7 +313,7 @@ public class DungeonHandler
 
         while (var2.hasNext())
         {
-            Dungeon var3 = (Dungeon) var2.next();
+            Dungeon var3 = (Dungeon)var2.next();
             this.addInstance(var3);
         }
     }

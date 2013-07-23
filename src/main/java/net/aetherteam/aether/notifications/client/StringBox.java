@@ -7,34 +7,28 @@ public class StringBox
     String text = new String();
     int boxCharWidth = 10;
 
-    public StringBox(String text, int boxCharWidth)
+    public StringBox(String var1, int var2)
     {
-        this.text = text;
-        this.boxCharWidth = boxCharWidth;
+        this.text = var1;
+        this.boxCharWidth = var2;
     }
 
     public ArrayList getStringList()
     {
-        ArrayList strings = new ArrayList();
+        ArrayList var1 = new ArrayList();
 
         while (this.text.length() > this.boxCharWidth)
         {
-            String subDescription = this.text.substring(0, this.boxCharWidth);
+            String var2 = this.text.substring(0, this.boxCharWidth);
             this.text = this.text.replace(this.text.substring(0, this.boxCharWidth), "");
-
-            strings.add(subDescription);
+            var1.add(var2);
         }
 
-        if ((this.text.length() > 0) && (this.text.length() <= this.boxCharWidth))
+        if (this.text.length() > 0 && this.text.length() <= this.boxCharWidth)
         {
-            strings.add(this.text);
+            var1.add(this.text);
         }
 
-        return strings;
+        return var1;
     }
 }
-
-/* Location:           D:\Dev\Mc\forge_orl\mcp\jars\bin\aether.jar
- * Qualified Name:     net.aetherteam.aether.notifications.client.StringBox
- * JD-Core Version:    0.6.2
- */

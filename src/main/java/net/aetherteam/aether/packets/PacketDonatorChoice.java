@@ -2,41 +2,38 @@ package net.aetherteam.aether.packets;
 
 import cpw.mods.fml.common.network.PacketDispatcher;
 import cpw.mods.fml.common.network.Player;
-
 import java.io.ByteArrayInputStream;
 import java.io.DataInputStream;
 import java.io.IOException;
-import java.io.PrintStream;
-
 import net.aetherteam.aether.Aether;
-import net.aetherteam.aether.donator.Donator;
 import net.aetherteam.aether.donator.DonatorChoice;
 import net.aetherteam.aether.donator.SyncDonatorList;
 import net.minecraft.network.packet.Packet250CustomPayload;
 
 public class PacketDonatorChoice extends AetherPacket
 {
-    public PacketDonatorChoice(int packetID)
+    public PacketDonatorChoice(int var1)
     {
-        super(packetID);
+        super(var1);
     }
 
-    public void onPacketReceived(Packet250CustomPayload packet, Player player)
+    public void onPacketReceived(Packet250CustomPayload var1, Player var2)
     {
-        DataInputStream dat = new DataInputStream(new ByteArrayInputStream(packet.data));
+        DataInputStream var3 = new DataInputStream(new ByteArrayInputStream(var1.data));
+
         try
         {
-            byte packetType = dat.readByte();
-            String username = dat.readUTF();
-            String choiceName = dat.readUTF();
-            boolean adding = dat.readBoolean();
-            byte proxy = dat.readByte();
+            byte var4 = var3.readByte();
+            String var5 = var3.readUTF();
+            String var6 = var3.readUTF();
+            boolean var7 = var3.readBoolean();
+            byte var8 = var3.readByte();
 
-            if (proxy >= 1)
+            if (var8 >= 1)
             {
-                DonatorChoice choice = DonatorChoice.getChoiceFromString(choiceName);
+                DonatorChoice var9 = DonatorChoice.getChoiceFromString(var6);
 
-                if (choice == null)
+                if (var9 == null)
                 {
                     System.out.println("Choice was null! Packet handling unsuccessful.");
                     return;
@@ -44,29 +41,28 @@ public class PacketDonatorChoice extends AetherPacket
 
                 System.out.println("Choice transferred!");
 
-                if (adding)
+                if (var7)
                 {
                     Aether.getInstance();
-                    Aether.syncDonatorList.getDonator(username).addChoice(choice);
-                } else
-                {
-                    Aether.getInstance();
-                    Aether.syncDonatorList.getDonator(username).removeChoiceType(choice.type);
+                    Aether.syncDonatorList.getDonator(var5).addChoice(var9);
                 }
-            } else
+                else
+                {
+                    Aether.getInstance();
+                    Aether.syncDonatorList.getDonator(var5).removeChoiceType(var9.type);
+                }
+            }
+            else
             {
-                SyncDonatorList donators = Aether.syncDonatorList;
-                PacketDispatcher.sendPacketToAllPlayers(AetherPacketHandler.sendDonatorChoice(username, DonatorChoice.getChoiceFromString(choiceName), adding, (byte) 1));
+                Aether var10000 = Aether.instance;
+                SyncDonatorList var11 = Aether.syncDonatorList;
+                PacketDispatcher.sendPacketToAllPlayers(AetherPacketHandler.sendDonatorChoice(var5, DonatorChoice.getChoiceFromString(var6), var7, (byte)1));
                 System.out.println("Server received packet, dispatching to players!");
             }
-        } catch (IOException e)
+        }
+        catch (IOException var10)
         {
-            e.printStackTrace();
+            var10.printStackTrace();
         }
     }
 }
-
-/* Location:           D:\Dev\Mc\forge_orl\mcp\jars\bin\aether.jar
- * Qualified Name:     net.aetherteam.aether.packets.PacketDonatorChoice
- * JD-Core Version:    0.6.2
- */

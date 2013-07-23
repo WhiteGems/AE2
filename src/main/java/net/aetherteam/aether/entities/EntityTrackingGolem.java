@@ -28,7 +28,8 @@ public class EntityTrackingGolem extends EntityDungeonMob implements IAetherMob
         if (!this.getSeenEnemy())
         {
             this.texture = "/net/aetherteam/aether/client/sprites/mobs/sentrygolem/sentryGolem.png";
-        } else
+        }
+        else
         {
             this.texture = "/net/aetherteam/aether/client/sprites/mobs/sentrygolem/sentryGolem_red.png";
         }
@@ -37,7 +38,7 @@ public class EntityTrackingGolem extends EntityDungeonMob implements IAetherMob
     public void entityInit()
     {
         super.entityInit();
-        this.dataWatcher.addObject(16, Byte.valueOf((byte) 0));
+        this.dataWatcher.addObject(16, Byte.valueOf((byte)0));
     }
 
     public boolean getSeenEnemy()
@@ -50,10 +51,11 @@ public class EntityTrackingGolem extends EntityDungeonMob implements IAetherMob
         if (var1)
         {
             this.worldObj.playSoundAtEntity(this, "aemob.sentryGolem.seenEnemy", 5.0F, this.rand.nextFloat() * 0.4F + 0.8F);
-            this.dataWatcher.updateObject(16, Byte.valueOf((byte) 1));
-        } else
+            this.dataWatcher.updateObject(16, Byte.valueOf((byte)1));
+        }
+        else
         {
-            this.dataWatcher.updateObject(16, Byte.valueOf((byte) 0));
+            this.dataWatcher.updateObject(16, Byte.valueOf((byte)0));
         }
     }
 
@@ -100,12 +102,12 @@ public class EntityTrackingGolem extends EntityDungeonMob implements IAetherMob
         if (this.entityToAttack == null && var1 != null && this.canEntityBeSeen(var1) && !var1.isDead && !var1.capabilities.isCreativeMode)
         {
             this.entityToAttack = var1;
-            var1.faceEntity(this, 3.5F, (float) var1.getVerticalFaceSpeed());
+            var1.faceEntity(this, 3.5F, (float)var1.getVerticalFaceSpeed());
         }
 
         if (this.entityToAttack != null && this.entityToAttack instanceof EntityLiving && this.canEntityBeSeen(this.entityToAttack) && !this.entityToAttack.isDead)
         {
-            ((EntityLiving) this.entityToAttack).faceEntity(this, 3.5F, (float) ((EntityLiving) this.entityToAttack).getVerticalFaceSpeed());
+            ((EntityLiving)this.entityToAttack).faceEntity(this, 3.5F, (float)((EntityLiving)this.entityToAttack).getVerticalFaceSpeed());
             this.faceEntity(this.entityToAttack, 10.0F, 10.0F);
 
             if (!this.getSeenEnemy())
@@ -115,10 +117,11 @@ public class EntityTrackingGolem extends EntityDungeonMob implements IAetherMob
 
             if (!this.worldObj.isRemote)
             {
-                ((EntityLiving) this.entityToAttack).addPotionEffect(new PotionEffect(Potion.moveSlowdown.id, 10, 3));
-                ((EntityLiving) this.entityToAttack).addPotionEffect(new PotionEffect(Potion.confusion.id, 100, 3));
+                ((EntityLiving)this.entityToAttack).addPotionEffect(new PotionEffect(Potion.moveSlowdown.id, 10, 3));
+                ((EntityLiving)this.entityToAttack).addPotionEffect(new PotionEffect(Potion.confusion.id, 100, 3));
             }
-        } else
+        }
+        else
         {
             this.entityToAttack = null;
             this.setSeenEnemy(false);
@@ -127,7 +130,8 @@ public class EntityTrackingGolem extends EntityDungeonMob implements IAetherMob
         if (!this.getSeenEnemy())
         {
             this.texture = "/net/aetherteam/aether/client/sprites/mobs/sentrygolem/sentryGolem.png";
-        } else
+        }
+        else
         {
             this.texture = "/net/aetherteam/aether/client/sprites/mobs/sentrygolem/sentryGolem_red.png";
         }

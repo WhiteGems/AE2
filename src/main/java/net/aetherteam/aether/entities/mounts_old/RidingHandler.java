@@ -59,7 +59,7 @@ public class RidingHandler
     {
         if (this.rider instanceof EntityPlayer)
         {
-            Aether.getPlayerBase((EntityPlayer) this.rider).rideEntity((Entity) null, this);
+            Aether.getPlayerBase((EntityPlayer)this.rider).rideEntity((Entity)null, this);
         }
 
         this.rider = null;

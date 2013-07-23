@@ -29,7 +29,7 @@ public class EntityMimic extends EntityDungeonMob
     public void onUpdate()
     {
         super.onUpdate();
-        this.mouth = (float) (Math.cos((double) ((float) this.ticksExisted / 10.0F * (float) Math.PI)) + 1.0D) * 0.6F;
+        this.mouth = (float)(Math.cos((double)((float)this.ticksExisted / 10.0F * (float)Math.PI)) + 1.0D) * 0.6F;
         this.legs *= 0.9F;
 
         if (this.motionX > 0.001D || this.motionX < -0.001D || this.motionZ > 0.001D || this.motionZ < -0.001D)

@@ -1,7 +1,6 @@
 package net.aetherteam.aether.worldgen;
 
 import java.util.Random;
-
 import net.aetherteam.aether.blocks.AetherBlocks;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.feature.WorldGenerator;
@@ -23,8 +22,8 @@ public class AetherGenMassiveTree extends WorldGenerator
     {
         boolean var6 = true;
         int var7 = var2.nextInt(this.randHeight) + (this.branches ? 8 : 4);
-        int var9;
         int var8;
+        int var9;
         int var10;
 
         for (var8 = var3 - 3; var8 < var3 + 3; ++var8)
@@ -48,7 +47,8 @@ public class AetherGenMassiveTree extends WorldGenerator
             if (var8 != AetherBlocks.AetherGrass.blockID && var8 != AetherBlocks.AetherDirt.blockID)
             {
                 return false;
-            } else
+            }
+            else
             {
                 var1.setBlock(var3, var4 - 1, var5, AetherBlocks.AetherDirt.blockID);
 
@@ -290,7 +290,8 @@ public class AetherGenMassiveTree extends WorldGenerator
 
                 return true;
             }
-        } else
+        }
+        else
         {
             return false;
         }

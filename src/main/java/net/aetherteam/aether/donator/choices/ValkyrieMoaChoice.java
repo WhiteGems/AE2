@@ -1,9 +1,7 @@
 package net.aetherteam.aether.donator.choices;
 
 import java.util.Random;
-
 import net.aetherteam.aether.Aether;
-import net.aetherteam.aether.CommonProxy;
 import net.aetherteam.aether.donator.DonatorTexture;
 import net.aetherteam.aether.donator.EnumChoiceType;
 import net.minecraft.entity.player.EntityPlayer;
@@ -15,13 +13,8 @@ public class ValkyrieMoaChoice extends MoaChoice
         super("Valkyrie Moa", EnumChoiceType.MOA, new DonatorTexture("saddle_Valkyrie.png", "Valkyrie.png", 256, 128));
     }
 
-    public void spawnParticleEffects(Random random, EntityPlayer player)
+    public void spawnParticleEffects(Random var1, EntityPlayer var2)
     {
-        Aether.proxy.spawnDonatorMoaParticles(player, random);
+        Aether.proxy.spawnDonatorMoaParticles(var2, var1);
     }
 }
-
-/* Location:           D:\Dev\Mc\forge_orl\mcp\jars\bin\aether.jar
- * Qualified Name:     net.aetherteam.aether.donator.choices.ValkyrieMoaChoice
- * JD-Core Version:    0.6.2
- */

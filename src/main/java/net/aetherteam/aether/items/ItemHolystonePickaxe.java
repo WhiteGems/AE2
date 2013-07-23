@@ -1,7 +1,6 @@
 package net.aetherteam.aether.items;
 
 import java.util.Random;
-
 import net.aetherteam.aether.blocks.AetherBlocks;
 import net.minecraft.block.Block;
 import net.minecraft.entity.EntityLiving;
@@ -14,7 +13,7 @@ import net.minecraft.world.World;
 public class ItemHolystonePickaxe extends ItemPickaxe
 {
     private static Random random = new Random();
-    public static final Block[] blocksEffectiveAgainst = new Block[]{Block.cobblestone, Block.stoneDoubleSlab, Block.stoneSingleSlab, Block.stone, Block.sandStone, Block.cobblestoneMossy, Block.oreIron, Block.blockIron, Block.oreCoal, Block.blockGold, Block.oreGold, Block.oreDiamond, Block.blockDiamond, Block.ice, Block.netherrack, Block.oreLapis, Block.blockLapis, Block.oreRedstone, Block.oreRedstoneGlowing, Block.rail, Block.railDetector, Block.railPowered, Block.railActivator, AetherBlocks.Holystone, AetherBlocks.HolystoneBrick, AetherBlocks.HolystoneStairs, AetherBlocks.HolystoneWall};
+    public static final Block[] blocksEffectiveAgainst = new Block[] {Block.cobblestone, Block.stoneDoubleSlab, Block.stoneSingleSlab, Block.stone, Block.sandStone, Block.cobblestoneMossy, Block.oreIron, Block.blockIron, Block.oreCoal, Block.blockGold, Block.oreGold, Block.oreDiamond, Block.blockDiamond, Block.ice, Block.netherrack, Block.oreLapis, Block.blockLapis, Block.oreRedstone, Block.oreRedstoneGlowing, Block.rail, Block.railDetector, Block.railPowered, Block.railActivator, AetherBlocks.Holystone, AetherBlocks.HolystoneBrick, AetherBlocks.HolystoneStairs, AetherBlocks.HolystoneWall};
 
     protected ItemHolystonePickaxe(int var1, EnumToolMaterial var2)
     {

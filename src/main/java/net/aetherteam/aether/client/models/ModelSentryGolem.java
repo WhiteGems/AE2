@@ -15,7 +15,7 @@ public class ModelSentryGolem extends ModelBiped
     public boolean isDefault = false;
     public byte armState = 2;
     float armAngle = 0.0F;
-    float[] armsAngles = new float[]{1.0F, 1.0F, 0.5F, 0.5F};
+    float[] armsAngles = new float[] {1.0F, 1.0F, 0.5F, 0.5F};
 
     public ModelSentryGolem()
     {
@@ -134,7 +134,7 @@ public class ModelSentryGolem extends ModelBiped
 
         if (var7 instanceof EntitySentryGolem)
         {
-            EntitySentryGolem var8 = (EntitySentryGolem) var7;
+            EntitySentryGolem var8 = (EntitySentryGolem)var7;
             this.armState = var8.getHandState();
 
             if (var8.progress < this.armsAngles[this.armState])

@@ -21,7 +21,7 @@ public class ModelCarrionSprout extends ModelBase
     private static int petals = 8;
     public float sinage;
     public float sinage2;
-    private float pie = ((float) Math.PI * 2F);
+    private float pie = ((float)Math.PI * 2F);
 
     public ModelCarrionSprout()
     {
@@ -38,7 +38,8 @@ public class ModelCarrionSprout extends ModelBase
                 this.petal[var1] = new ModelRenderer(this, 43, 49);
                 this.petal[var1].addBox(-2.8F, -1.0F, -10.8F, 6, 0, 9);
                 this.petal[var1].setRotationPoint(0.0F, 1.0F, 0.0F);
-            } else
+            }
+            else
             {
                 this.petal[var1].addBox(-2.8F, -1.0F, -11.8F, 6, 0, 9);
                 this.petal[var1].setRotationPoint(0.0F, 1.0F, 0.0F);
@@ -128,7 +129,7 @@ public class ModelCarrionSprout extends ModelBase
             this.petal[var10].rotateAngleX = var10 % 2 == 0 ? -0.25F : -0.4125F;
             this.petal[var10].rotateAngleX += this.sinage;
             this.petal[var10].rotateAngleY = 17.0F;
-            this.petal[var10].rotateAngleY += this.pie / (float) petals * (float) var10;
+            this.petal[var10].rotateAngleY += this.pie / (float)petals * (float)var10;
             this.petal[var10].rotationPointY = var8 + var9;
         }
 

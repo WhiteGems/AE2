@@ -1,5 +1,7 @@
 package net.aetherteam.aether.items;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.aetherteam.aether.PlayerBaseAetherServer;
 import net.aetherteam.aether.client.PlayerBaseAetherClient;
 import net.minecraft.entity.player.EntityPlayer;
@@ -40,18 +42,21 @@ public class ItemAgilityCape extends ItemAccessory
         if (var2.wearingAccessory(this.itemID))
         {
             var1.stepHeight = 1.0F;
-        } else
+        }
+        else
         {
             var1.stepHeight = var2.prevStepHeight;
         }
     }
 
+    @SideOnly(Side.CLIENT)
     public void activateClientPassive(EntityPlayer var1, PlayerBaseAetherClient var2)
     {
         if (var2.wearingAccessory(this.itemID))
         {
             var1.stepHeight = 1.0F;
-        } else
+        }
+        else
         {
             var1.stepHeight = var2.prevStepHeight;
         }

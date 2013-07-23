@@ -71,7 +71,8 @@ public class EntityValkyrie extends EntityDungeonMob implements IAetherBoss
             this.texture = "/aether/mobs/valkyrie2.png";
             this.health = 500;
             this.boss = true;
-        } else
+        }
+        else
         {
             this.texture = "/aether/mobs/valkyrie.png";
             this.health = 50;
@@ -187,12 +188,12 @@ public class EntityValkyrie extends EntityDungeonMob implements IAetherBoss
         var8 *= this.rand.nextInt(2) * 2 - 1;
         var9 *= this.rand.nextInt(2) * 2 - 1;
         var10 *= this.rand.nextInt(2) * 2 - 1;
-        var1 += (double) var8;
-        var3 += (double) var9;
-        var5 += (double) var10;
-        int var11 = (int) Math.floor(var1 - 0.5D);
-        int var12 = (int) Math.floor(var3 - 0.5D);
-        int var13 = (int) Math.floor(var5 - 0.5D);
+        var1 += (double)var8;
+        var3 += (double)var9;
+        var5 += (double)var10;
+        int var11 = (int)Math.floor(var1 - 0.5D);
+        int var12 = (int)Math.floor(var3 - 0.5D);
+        int var13 = (int)Math.floor(var5 - 0.5D);
         boolean var14 = false;
 
         for (int var15 = 0; var15 < 32 && !var14; ++var15)
@@ -213,10 +214,11 @@ public class EntityValkyrie extends EntityDungeonMob implements IAetherBoss
         if (!var14)
         {
             this.teleFail();
-        } else
+        }
+        else
         {
             this.spawnExplosionParticle();
-            this.setPosition((double) var11 + 0.5D, (double) var12 + 0.5D, (double) var13 + 0.5D);
+            this.setPosition((double)var11 + 0.5D, (double)var12 + 0.5D, (double)var13 + 0.5D);
             this.motionX = 0.0D;
             this.motionY = 0.0D;
             this.motionZ = 0.0D;
@@ -225,7 +227,7 @@ public class EntityValkyrie extends EntityDungeonMob implements IAetherBoss
             this.isJumping = false;
             this.rotationPitch = 0.0F;
             this.rotationYaw = 0.0F;
-            this.setPathToEntity((PathEntity) null);
+            this.setPathToEntity((PathEntity)null);
             this.renderYawOffset = this.rand.nextFloat() * 360.0F;
             this.spawnExplosionParticle();
             this.teleTimer = this.rand.nextInt(40);
@@ -277,7 +279,8 @@ public class EntityValkyrie extends EntityDungeonMob implements IAetherBoss
             this.motionY *= 0.5D;
             this.moveForward = 0.0F;
             this.faceEntity(this.mc.thePlayer, 15.0F, 180.0F);
-        } else
+        }
+        else
         {
             super.updateEntityActionState();
             ++this.teleTimer;
@@ -288,23 +291,28 @@ public class EntityValkyrie extends EntityDungeonMob implements IAetherBoss
                 {
                     if (this.boss && this.onGround && this.rand.nextInt(2) == 0 && this.entityToAttack != null && this.entityToAttack instanceof EntityLiving)
                     {
-                        this.makeHomeShot(1, (EntityLiving) this.entityToAttack);
+                        this.makeHomeShot(1, (EntityLiving)this.entityToAttack);
                         this.teleTimer = -100;
-                    } else
+                    }
+                    else
                     {
                         this.teleport(this.entityToAttack.posX, this.entityToAttack.posY, this.entityToAttack.posZ, 7);
                     }
-                } else if (this.onGround && !this.boss)
+                }
+                else if (this.onGround && !this.boss)
                 {
                     this.teleport(this.posX, this.posY, this.posZ, 12 + this.rand.nextInt(12));
-                } else
+                }
+                else
                 {
                     this.teleport(this.safeX, this.safeY, this.safeZ, 6);
                 }
-            } else if (this.teleTimer < 446 && (this.posY <= 0.0D || this.posY <= this.safeY - 16.0D))
+            }
+            else if (this.teleTimer < 446 && (this.posY <= 0.0D || this.posY <= this.safeY - 16.0D))
             {
                 this.teleTimer = 446;
-            } else if (this.teleTimer % 5 == 0 && this.entityToAttack != null && !this.canEntityBeSeen(this.entityToAttack))
+            }
+            else if (this.teleTimer % 5 == 0 && this.entityToAttack != null && !this.canEntityBeSeen(this.entityToAttack))
             {
                 this.teleTimer += 100;
             }
@@ -386,14 +394,15 @@ public class EntityValkyrie extends EntityDungeonMob implements IAetherBoss
         if (!this.onGround)
         {
             this.sinage += 0.75F;
-        } else
+        }
+        else
         {
             this.sinage += 0.15F;
         }
 
-        if (this.sinage > ((float) Math.PI * 2F))
+        if (this.sinage > ((float)Math.PI * 2F))
         {
-            this.sinage -= ((float) Math.PI * 2F);
+            this.sinage -= ((float)Math.PI * 2F);
         }
 
         if (!this.otherDimension())
@@ -414,16 +423,16 @@ public class EntityValkyrie extends EntityDungeonMob implements IAetherBoss
     public void writeEntityToNBT(NBTTagCompound var1)
     {
         super.writeEntityToNBT(var1);
-        var1.setShort("Anger", (short) this.angerLevel);
-        var1.setShort("TeleTimer", (short) this.teleTimer);
-        var1.setShort("TimeLeft", (short) this.timeLeft);
+        var1.setShort("Anger", (short)this.angerLevel);
+        var1.setShort("TeleTimer", (short)this.teleTimer);
+        var1.setShort("TimeLeft", (short)this.timeLeft);
         var1.setBoolean("Boss", this.boss);
         var1.setBoolean("Duel", this.duel);
         var1.setInteger("DungeonX", this.dungeonX);
         var1.setInteger("DungeonY", this.dungeonY);
         var1.setInteger("DungeonZ", this.dungeonZ);
         var1.setInteger("DungeonEntranceZ", this.dungeonEntranceZ);
-        var1.setTag("SafePos", this.newDoubleNBTList(new double[]{this.safeX, this.safeY, this.safeZ}));
+        var1.setTag("SafePos", this.newDoubleNBTList(new double[] {this.safeX, this.safeY, this.safeZ}));
         var1.setString("BossName", this.name);
     }
 
@@ -449,9 +458,9 @@ public class EntityValkyrie extends EntityDungeonMob implements IAetherBoss
         }
 
         NBTTagList var2 = var1.getTagList("SafePos");
-        this.safeX = ((NBTTagDouble) var2.tagAt(0)).data;
-        this.safeY = ((NBTTagDouble) var2.tagAt(1)).data;
-        this.safeZ = ((NBTTagDouble) var2.tagAt(2)).data;
+        this.safeX = ((NBTTagDouble)var2.tagAt(0)).data;
+        this.safeY = ((NBTTagDouble)var2.tagAt(1)).data;
+        this.safeZ = ((NBTTagDouble)var2.tagAt(2)).data;
 
         if (var1.getBoolean("IsCurrentBoss"))
         {
@@ -485,13 +494,15 @@ public class EntityValkyrie extends EntityDungeonMob implements IAetherBoss
                 if (var3 == 2)
                 {
                     this.chatItUp("Sorry, I don\'t fight with weaklings.");
-                } else
+                }
+                else
                 {
                     this.chatItUp("Try defeating some weaker valkyries first.");
                 }
 
                 return false;
-            } else
+            }
+            else
             {
                 if (this.boss)
                 {
@@ -499,11 +510,13 @@ public class EntityValkyrie extends EntityDungeonMob implements IAetherBoss
                     {
                         this.chatTime = 0;
                         this.chatItUp("This will be your final battle!");
-                    } else
+                    }
+                    else
                     {
                         this.teleTimer += 60;
                     }
-                } else if (this.entityToAttack == null)
+                }
+                else if (this.entityToAttack == null)
                 {
                     this.chatTime = 0;
                     var3 = this.rand.nextInt(3);
@@ -511,14 +524,17 @@ public class EntityValkyrie extends EntityDungeonMob implements IAetherBoss
                     if (var3 == 2)
                     {
                         this.chatItUp("I\'m not going easy on you!");
-                    } else if (var3 == 1)
+                    }
+                    else if (var3 == 1)
                     {
                         this.chatItUp("You\'re gonna regret that!");
-                    } else
+                    }
+                    else
                     {
                         this.chatItUp("Now you\'re in for it!");
                     }
-                } else
+                }
+                else
                 {
                     this.teleTimer -= 10;
                 }
@@ -537,13 +553,16 @@ public class EntityValkyrie extends EntityDungeonMob implements IAetherBoss
                         this.unlockDoor();
                         this.unlockTreasure();
                         this.chatItUp("You are truly... a mighty warrior...");
-                    } else if (var4 == 2)
+                    }
+                    else if (var4 == 2)
                     {
                         this.chatItUp("Alright, alright! You win!");
-                    } else if (var4 == 1)
+                    }
+                    else if (var4 == 1)
                     {
                         this.chatItUp("Okay, I give up! Geez!");
-                    } else
+                    }
+                    else
                     {
                         this.chatItUp("Oww! Fine, here\'s your medal...");
                     }
@@ -553,7 +572,8 @@ public class EntityValkyrie extends EntityDungeonMob implements IAetherBoss
 
                 return var5;
             }
-        } else
+        }
+        else
         {
             this.teleport(this.posX, this.posY, this.posZ, 8);
             this.extinguish();
@@ -574,7 +594,7 @@ public class EntityValkyrie extends EntityDungeonMob implements IAetherBoss
 
             if (var1 != null && this.entityToAttack != null && var1 == this.entityToAttack && var1 instanceof EntityLiving)
             {
-                EntityLiving var3 = (EntityLiving) var1;
+                EntityLiving var3 = (EntityLiving)var1;
 
                 if (var3.getHealth() <= 0)
                 {
@@ -587,15 +607,18 @@ public class EntityValkyrie extends EntityDungeonMob implements IAetherBoss
                     {
                         this.chatItUp("As expected of a human.");
                         this.unlockDoor();
-                    } else if (var4 == 2)
+                    }
+                    else if (var4 == 2)
                     {
                         this.chatItUp("You want a medallion? Try being less pathetic.");
-                    } else if (var4 == 1 && var3 instanceof EntityPlayer)
+                    }
+                    else if (var4 == 1 && var3 instanceof EntityPlayer)
                     {
-                        EntityPlayer var5 = (EntityPlayer) var3;
+                        EntityPlayer var5 = (EntityPlayer)var3;
                         String var6 = var5.username;
                         this.chatItUp("Maybe some day, " + var6 + "... maybe some day.");
-                    } else
+                    }
+                    else
                     {
                         this.chatItUp("Humans aren\'t nearly as cute when they\'re dead.");
                     }
@@ -614,7 +637,8 @@ public class EntityValkyrie extends EntityDungeonMob implements IAetherBoss
         {
             this.entityDropItem(new ItemStack(AetherItems.Key, 1, 1), 0.0F);
             this.dropItem(Item.swordGold.itemID, 1);
-        } else
+        }
+        else
         {
             this.dropItem(AetherItems.VictoryMedal.itemID, 1);
         }
@@ -623,8 +647,7 @@ public class EntityValkyrie extends EntityDungeonMob implements IAetherBoss
     /**
      * Called when the mob is falling. Calculates and applies fall damage.
      */
-    public void fall(float var1)
-    {}
+    public void fall(float var1) {}
 
     public boolean otherDimension()
     {

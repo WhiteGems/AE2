@@ -1,7 +1,6 @@
 package net.aetherteam.aether.items;
 
 import java.util.List;
-
 import net.aetherteam.aether.AetherMoaColour;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.ItemStack;

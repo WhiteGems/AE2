@@ -1,29 +1,26 @@
 package net.aetherteam.aether.interfaces;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.aetherteam.aether.PlayerBaseAetherServer;
 import net.aetherteam.aether.client.PlayerBaseAetherClient;
 import net.minecraft.entity.player.EntityPlayer;
 
-public abstract interface IAetherAccessory
+public interface IAetherAccessory
 {
-    public static final int[] damageReduceAmountArray = {3, 8, 6, 3, 0, 1, 0, 0, 0, 0, 2, 0};
+    int[] damageReduceAmountArray = new int[] {3, 8, 6, 3, 0, 1, 0, 0, 0, 0, 2, 0};
+    int[] maxDamageArray = new int[] {11, 16, 15, 13, 10, 10, 8, 10, 10, 10, 10, 10};
 
-    public static final int[] maxDamageArray = {11, 16, 15, 13, 10, 10, 8, 10, 10, 10, 10, 10};
+    boolean isTypeValid(int var1);
 
-    public abstract boolean isTypeValid(int paramInt);
+    boolean damageType();
 
-    public abstract boolean damageType();
+    boolean damageType(int var1);
 
-    public abstract boolean damageType(int paramInt);
+    void activatePassive(EntityPlayer var1);
 
-    public abstract void activatePassive(EntityPlayer paramEntityPlayer);
+    void activateServerPassive(EntityPlayer var1, PlayerBaseAetherServer var2);
 
-    public abstract void activateServerPassive(EntityPlayer paramEntityPlayer, PlayerBaseAetherServer paramPlayerBaseAetherServer);
-
-    public abstract void activateClientPassive(EntityPlayer paramEntityPlayer, PlayerBaseAetherClient paramPlayerBaseAetherClient);
+    @SideOnly(Side.CLIENT)
+    void activateClientPassive(EntityPlayer var1, PlayerBaseAetherClient var2);
 }
-
-/* Location:           D:\Dev\Mc\forge_orl\mcp\jars\bin\aether.jar
- * Qualified Name:     net.aetherteam.aether.interfaces.IAetherAccessory
- * JD-Core Version:    0.6.2
- */

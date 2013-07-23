@@ -3,9 +3,11 @@ package net.aetherteam.aether.entities.bosses;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.network.PacketDispatcher;
 import cpw.mods.fml.relauncher.Side;
+import java.util.List;
 import net.aetherteam.aether.Aether;
 import net.aetherteam.aether.AetherCommonPlayerHandler;
 import net.aetherteam.aether.AetherNameGen;
+import net.aetherteam.aether.blocks.AetherBlocks;
 import net.aetherteam.aether.dungeons.Dungeon;
 import net.aetherteam.aether.dungeons.DungeonHandler;
 import net.aetherteam.aether.dungeons.keys.DungeonKey;
@@ -25,6 +27,7 @@ import net.minecraft.entity.ai.EntityAINearestAttackableTarget;
 import net.minecraft.entity.ai.EntityAIWatchClosest;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
@@ -39,7 +42,22 @@ public class EntityLabyrinthEye extends EntityMiniBoss implements IAetherBoss, I
     private float heightOffset = 0.5F;
     private int chatTime;
     public int timeUntilShoot = 30;
-    private boolean[] stageDone = new boolean[5];
+    private boolean[] stageDone = new boolean[13];
+    public int courseChangeCooldown;
+    public double waypointX;
+    public double waypointY;
+    public double waypointZ;
+    private Entity targetedEntity;
+    public int prevAttackCounter;
+    public int attackCounter;
+    public float sinage;
+    int xpov = 1;
+    int zpov = 1;
+    private double targetX;
+    private double targetY;
+    private double targetZ;
+    private int updateTime;
+    private int stage;
 
     public EntityLabyrinthEye(World var1)
     {
@@ -53,17 +71,19 @@ public class EntityLabyrinthEye extends EntityMiniBoss implements IAetherBoss, I
         this.targetTasks.addTask(1, new EntityAIHurtByTarget(this, false));
         this.bossName = AetherNameGen.gen();
         this.texture = "/net/aetherteam/aether/client/sprites/mobs/cogboss/cogsleep.png";
-        this.stageDone[0] = false;
-        this.stageDone[1] = false;
-        this.stageDone[2] = false;
-        this.stageDone[3] = false;
-        this.stageDone[4] = false;
+        this.setSize(2.0F, 2.0F);
+
+        for (int var2 = 0; var2 < 12; ++var2)
+        {
+            this.stageDone[var2] = false;
+        }
     }
 
     public void entityInit()
     {
         super.entityInit();
-        this.dataWatcher.addObject(16, Byte.valueOf((byte) 0));
+        this.dataWatcher.addObject(16, Byte.valueOf((byte)0));
+        this.dataWatcher.addObject(17, Integer.valueOf(0));
     }
 
     /**
@@ -82,53 +102,134 @@ public class EntityLabyrinthEye extends EntityMiniBoss implements IAetherBoss, I
         return false;
     }
 
+    private boolean isCourseTraversable(double var1, double var3, double var5, double var7)
+    {
+        double var9 = (this.waypointX - this.posX) / var7;
+        double var11 = (this.waypointY - this.posY) / var7;
+        double var13 = (this.waypointZ - this.posZ) / var7;
+        AxisAlignedBB var15 = this.boundingBox.copy();
+
+        for (int var16 = 1; (double)var16 < var7; ++var16)
+        {
+            var15.offset(var9, var11, var13);
+
+            if (this.worldObj.getCollidingBoundingBoxes(this, var15).size() > 0)
+            {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    private void orbitPlayer()
+    {
+        double var1 = this.waypointX - this.posX;
+        double var3 = this.waypointY - this.posY;
+        double var5 = this.waypointZ - this.posZ;
+        double var7 = (double)MathHelper.sqrt_double(var1 * var1 + var3 * var3 + var5 * var5);
+        double var9 = this.targetedEntity.getDistanceSqToEntity(this);
+        double var11 = this.targetedEntity.posX - this.posX;
+        double var13 = this.targetedEntity.boundingBox.minY + (double)(this.targetedEntity.height / 2.0F) - (this.posY + (double)(this.height / 2.0F));
+        double var15 = this.targetedEntity.posZ - this.posZ;
+        this.renderYawOffset = this.rotationYaw = -((float)Math.atan2(var11, var15)) * 180.0F / (float)Math.PI;
+        double var17 = (double)this.rand.nextFloat() * 10.0D;
+        double var19 = (double)MathHelper.sqrt_double(196.0D - var17 * var17);
+        double var21 = (double)this.rand.nextFloat() * var19;
+        double var23 = (double)MathHelper.sqrt_double(var19 * var19 - var21 * var21);
+
+        if (this.rand.nextInt(8) == 0)
+        {
+            this.xpov = this.rand.nextBoolean() ? -1 : 1;
+            this.zpov = this.rand.nextBoolean() ? -1 : 1;
+        }
+
+        this.waypointX = this.targetedEntity.posX + var21 * (double)this.xpov;
+        this.waypointY = this.targetedEntity.posY + var17 + 5.0D;
+        this.waypointZ = this.targetedEntity.posZ + var23 * (double)this.zpov;
+
+        if (this.isCourseTraversable(this.waypointX, this.waypointY, this.waypointZ, var7))
+        {
+            float var25 = 0.5F;
+            this.motionX = var1 / var7 * (double)var25;
+            this.motionY = var3 / var7 * (double)var25;
+            this.motionZ = var5 / var7 * (double)var25;
+        }
+    }
+
     /**
      * Basic mob attack. Default to touch of death in EntityCreature. Overridden by each mob to define their attack.
      */
     protected void attackEntity(Entity var1, float var2)
     {
-        this.target = (EntityLiving) var1;
-
-        if (var2 < 10.0F)
+        if (var1 instanceof EntityLiving)
         {
-            double var3 = var1.posX - this.posX;
-            double var5 = var1.posZ - this.posZ;
+            this.target = (EntityLiving)var1;
 
-            if (this.target != null)
+            if (var2 < 10.0F)
             {
-                if (!this.target.isDead && (double) this.target.getDistanceToEntity(this) <= 12.0D)
+                double var3 = var1.posX - this.posX;
+                double var5 = var1.posZ - this.posZ;
+                int var7;
+
+                if (this.target != null)
                 {
-                    if (this.getAwake() && this.attackTime >= this.timeUntilShoot)
+                    if (!this.target.isDead && (double)this.target.getDistanceToEntity(this) <= 12.0D)
                     {
-                        for (int var7 = 0; var7 < 4; ++var7)
+                        if (this.getAwake() && this.attackTime >= this.timeUntilShoot)
                         {
-                            if (this.isBossStage(var7))
-                            {
-                                this.spawnLargeCog(this.target, var7);
-                            }
+                            this.attackEntityWithRangedAttack(this.target);
                         }
-
-                        this.attackEntityWithRangedAttack(this.target);
                     }
-                } else
-                {
-                    this.target = null;
-                    this.attackTime = 0;
+                    else
+                    {
+                        this.target = null;
+                        this.attackTime = 0;
+                    }
+
+                    if (this.attackTime >= this.timeUntilShoot && this.canEntityBeSeen(this.target))
+                    {
+                        this.attackTime = -10;
+                    }
+
+                    if (this.attackTime < this.timeUntilShoot)
+                    {
+                        this.attackTime += 2;
+                    }
+
+                    for (var7 = 0; var7 < 13; ++var7)
+                    {
+                        if (this.isBossStage(var7) && !this.stageDone[var7])
+                        {
+                            this.setStage(var7);
+                            this.spawnLargeCog(this.target, var7);
+                        }
+                    }
+
+                    if (this.stage == 12)
+                    {
+                        this.setSize(0.5F, 0.5F);
+                    }
                 }
 
-                if (this.attackTime >= this.timeUntilShoot && this.canEntityBeSeen(this.target))
-                {
-                    this.attackTime = -10;
-                }
-
-                if (this.attackTime < this.timeUntilShoot)
-                {
-                    this.attackTime += 2;
-                }
+                this.rotationYaw = (float)(Math.atan2(var5, var3) * 180.0D / Math.PI) - 90.0F;
+                var7 = MathHelper.floor_double(var1.posX);
+                int var8 = MathHelper.floor_double(var1.posY);
+                int var9 = MathHelper.floor_double(var1.posZ);
+                this.worldObj.setBlock(var7, var8, var9, AetherBlocks.ColdFire.blockID);
             }
-
-            this.rotationYaw = (float) (Math.atan2(var5, var3) * 180.0D / Math.PI) - 90.0F;
         }
+    }
+
+    private void setStage(int var1)
+    {
+        this.dataWatcher.updateObject(17, Integer.valueOf(var1));
+        this.stage = var1;
+    }
+
+    public int getStage()
+    {
+        return this.dataWatcher.getWatchableObjectInt(17);
     }
 
     /**
@@ -153,7 +254,7 @@ public class EntityLabyrinthEye extends EntityMiniBoss implements IAetherBoss, I
         if (!this.worldObj.isRemote)
         {
             float var16 = var15 * 0.075F;
-            var8.setThrowableHeading(var9, var11 + (double) (var15 * 0.2F), var13, var16, 0.0F);
+            var8.setThrowableHeading(var9, var11 + (double)(var15 * 0.2F), var13, var16, 0.0F);
             this.worldObj.spawnEntityInWorld(var8);
         }
     }
@@ -179,12 +280,30 @@ public class EntityLabyrinthEye extends EntityMiniBoss implements IAetherBoss, I
             if (!this.worldObj.isRemote)
             {
                 float var17 = var16 * 0.075F;
-                var9.setThrowableHeading(var10, var12 + (double) (var16 * 0.2F), var14, var17, 0.0F);
+                var9.setThrowableHeading(var10, var12 + (double)(var16 * 0.2F), var14, var17, 0.0F);
+                this.worldObj.playSoundAtEntity(this, "aemob.labyrinthsEye.cogloss", 2.0F, 1.0F);
+                this.playSound("random.break", 0.8F, 0.8F + this.worldObj.rand.nextFloat() * 0.4F);
                 this.worldObj.spawnEntityInWorld(var9);
             }
 
             this.stageDone[var2] = true;
         }
+    }
+
+    /**
+     * Returns the sound this mob makes on death.
+     */
+    protected String getDeathSound()
+    {
+        return "aemob.labyrinthsEye.eyedeath";
+    }
+
+    /**
+     * Returns the sound this mob makes while it's alive.
+     */
+    protected String getLivingSound()
+    {
+        return "aemob.labyrinthsEye.move";
     }
 
     /**
@@ -194,7 +313,7 @@ public class EntityLabyrinthEye extends EntityMiniBoss implements IAetherBoss, I
     {
         if (var1.getEntity() instanceof EntityPlayer)
         {
-            EntityPlayer var2 = (EntityPlayer) var1.getEntity();
+            EntityPlayer var2 = (EntityPlayer)var1.getEntity();
             Party var3 = PartyController.instance().getParty(PartyController.instance().getMember(var2));
             Dungeon var4 = DungeonHandler.instance().getInstanceAt(MathHelper.floor_double(this.posX), MathHelper.floor_double(this.posY), MathHelper.floor_double(this.posZ));
 
@@ -214,10 +333,31 @@ public class EntityLabyrinthEye extends EntityMiniBoss implements IAetherBoss, I
      */
     public void onUpdate()
     {
+        this.motionX = this.motionY = this.motionZ = 0.0D;
         super.onUpdate();
+        this.motionX = this.motionY = this.motionZ = 0.0D;
         this.extinguish();
+        AxisAlignedBB var1 = AxisAlignedBB.getBoundingBox(this.posX, this.posY, this.posZ, this.posX, this.posY, this.posZ).expand(1.0D, 1.0D, 1.0D);
+        List var2 = this.worldObj.getEntitiesWithinAABBExcludingEntity(this, var1);
 
-        if (this.chatTime >= 0)
+        if (var2.size() > 0 && this.getAwake())
+        {
+            for (int var3 = 0; var3 < var2.size(); ++var3)
+            {
+                Entity var4 = (Entity)var2.get(var3);
+
+                if (var4 instanceof EntityLiving)
+                {
+                    var4.attackEntityFrom(DamageSource.generic, MathHelper.clamp_int(this.rand.nextInt(6), 4, 6));
+                    var4.motionX *= 1.2432525D;
+                    var4.motionY *= 1.2432525D;
+                    var4.motionZ *= 1.2432525D;
+                    var4.velocityChanged = true;
+                }
+            }
+        }
+
+        if (this.targetedEntity != null && this.chatTime >= 0)
         {
             --this.chatTime;
         }
@@ -227,7 +367,8 @@ public class EntityLabyrinthEye extends EntityMiniBoss implements IAetherBoss, I
         if (this.getAwake())
         {
             this.texture = "/net/aetherteam/aether/client/sprites/mobs/cogboss/cogawake.png";
-        } else
+        }
+        else
         {
             this.texture = "/net/aetherteam/aether/client/sprites/mobs/cogboss/cogsleep.png";
         }
@@ -240,35 +381,6 @@ public class EntityLabyrinthEye extends EntityMiniBoss implements IAetherBoss, I
             {
                 ;
             }
-        } else
-        {
-            this.motionX = this.motionY = this.motionZ = 0.0D;
-        }
-
-        if (!this.worldObj.isRemote)
-        {
-            if (this.rand.nextInt(100) == 1 && this.getEntityToAttack() != null)
-            {
-                ;
-            }
-
-            --this.heightOffsetUpdateTime;
-
-            if (this.heightOffsetUpdateTime <= 0)
-            {
-                this.heightOffsetUpdateTime = 100;
-                this.heightOffset = 0.5F + (float) this.rand.nextGaussian() * 3.0F;
-            }
-
-            if (this.getEntityToAttack() != null && this.getEntityToAttack().posY + (double) this.getEntityToAttack().getEyeHeight() > this.posY + (double) this.getEyeHeight() + (double) this.heightOffset)
-            {
-                this.motionY += (0.700000011920929D - this.motionY) * 0.700000011920929D;
-            }
-        }
-
-        if (!this.onGround && this.motionY < 0.0D)
-        {
-            this.motionY *= 0.8D;
         }
     }
 
@@ -276,20 +388,44 @@ public class EntityLabyrinthEye extends EntityMiniBoss implements IAetherBoss, I
     {
         switch (var1)
         {
-            case 0:
-                return this.getHealth() <= 250 && this.getHealth() >= 200;
-
             case 1:
-                return this.getHealth() < 200 && this.getHealth() >= 150;
+                return this.getHealth() <= 250 && this.getHealth() >= 231;
 
             case 2:
-                return this.getHealth() < 150 && this.getHealth() >= 100;
+                return this.getHealth() < 231 && this.getHealth() >= 212;
 
             case 3:
-                return this.getHealth() < 100 && this.getHealth() >= 50;
+                return this.getHealth() < 212 && this.getHealth() >= 193;
 
             case 4:
-                return this.getHealth() < 50;
+                return this.getHealth() < 193 && this.getHealth() >= 174;
+
+            case 5:
+                return this.getHealth() < 174 && this.getHealth() >= 155;
+
+            case 6:
+                return this.getHealth() < 155 && this.getHealth() >= 136;
+
+            case 7:
+                return this.getHealth() < 136 && this.getHealth() >= 117;
+
+            case 8:
+                return this.getHealth() < 117 && this.getHealth() >= 98;
+
+            case 9:
+                return this.getHealth() < 98 && this.getHealth() >= 79;
+
+            case 10:
+                return this.getHealth() < 79 && this.getHealth() >= 60;
+
+            case 11:
+                return this.getHealth() < 60 && this.getHealth() >= 41;
+
+            case 12:
+                return this.getHealth() < 41 && this.getHealth() >= 22;
+
+            case 13:
+                return this.getHealth() < 3;
 
             default:
                 return false;
@@ -308,18 +444,19 @@ public class EntityLabyrinthEye extends EntityMiniBoss implements IAetherBoss, I
 
         if (var3 != null && var1.isProjectile())
         {
-            if (var4 instanceof EntityPlayer && ((EntityPlayer) var4).getCurrentEquippedItem() != null)
+            if (var4 instanceof EntityPlayer && ((EntityPlayer)var4).getCurrentEquippedItem() != null)
             {
-                this.chatItUp((EntityPlayer) var4, "Better switch to a sword, my " + ((EntityPlayer) var4).getCurrentEquippedItem().getItem().getItemDisplayName(((EntityPlayer) var4).getCurrentEquippedItem()) + " doesn\'t seem to affect it.");
+                this.chatItUp((EntityPlayer)var4, "Better switch to a sword, my " + ((EntityPlayer)var4).getCurrentEquippedItem().getItem().getItemDisplayName(((EntityPlayer)var4).getCurrentEquippedItem()) + " doesn\'t seem to affect it.");
                 this.chatTime = 60;
             }
 
             return false;
-        } else
+        }
+        else
         {
             if (var4 instanceof EntityPlayer)
             {
-                EntityPlayer var5 = (EntityPlayer) var4;
+                EntityPlayer var5 = (EntityPlayer)var4;
                 AetherCommonPlayerHandler var6 = Aether.getPlayerBase(var5);
                 PartyMember var7 = PartyController.instance().getMember(var5);
                 Party var8 = PartyController.instance().getParty(var7);
@@ -358,7 +495,8 @@ public class EntityLabyrinthEye extends EntityMiniBoss implements IAetherBoss, I
         if (!this.getAwake())
         {
             return null;
-        } else
+        }
+        else
         {
             EntityPlayer var1 = this.worldObj.getClosestVulnerablePlayerToEntity(this, 16.0D);
             this.texture = "/net/aetherteam/aether/client/sprites/mobs/cogboss/cogawake.png";
@@ -373,6 +511,7 @@ public class EntityLabyrinthEye extends EntityMiniBoss implements IAetherBoss, I
     {
         super.writeEntityToNBT(var1);
         var1.setBoolean("Awake", this.getAwake());
+        var1.setInteger("Stage", this.stage);
     }
 
     /**
@@ -382,6 +521,7 @@ public class EntityLabyrinthEye extends EntityMiniBoss implements IAetherBoss, I
     {
         super.readEntityFromNBT(var1);
         this.setAwake(var1.getBoolean("Awake"));
+        this.setStage(var1.getInteger("Stage"));
     }
 
     public boolean getAwake()
@@ -394,11 +534,12 @@ public class EntityLabyrinthEye extends EntityMiniBoss implements IAetherBoss, I
         if (var1)
         {
             this.texture = "/net/aetherteam/aether/client/sprites/mobs/cog/cogawake.png";
-            this.dataWatcher.updateObject(16, Byte.valueOf((byte) 1));
-        } else
+            this.dataWatcher.updateObject(16, Byte.valueOf((byte)1));
+        }
+        else
         {
             this.texture = "/net/aetherteam/aether/client/sprites/mobs/cog/cogsleep.png";
-            this.dataWatcher.updateObject(16, Byte.valueOf((byte) 0));
+            this.dataWatcher.updateObject(16, Byte.valueOf((byte)0));
         }
     }
 
@@ -415,6 +556,5 @@ public class EntityLabyrinthEye extends EntityMiniBoss implements IAetherBoss, I
     /**
      * Attack the specified entity using a ranged attack.
      */
-    public void attackEntityWithRangedAttack(EntityLiving var1, float var2)
-    {}
+    public void attackEntityWithRangedAttack(EntityLiving var1, float var2) {}
 }

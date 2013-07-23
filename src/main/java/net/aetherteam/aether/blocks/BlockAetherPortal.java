@@ -2,10 +2,8 @@ package net.aetherteam.aether.blocks;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
-
 import java.util.List;
 import java.util.Random;
-
 import net.aetherteam.aether.Aether;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockPortal;
@@ -65,9 +63,10 @@ public class BlockAetherPortal extends BlockPortal implements IAetherBlock
             {
                 if (var5.timeUntilPortal <= 0 && !var1.isRemote)
                 {
-                    Aether.getServerPlayer((EntityPlayer) var5).setInPortal();
+                    Aether.getServerPlayer((EntityPlayer)var5).Z();
                 }
-            } else if (var5.timeUntilPortal <= 0)
+            }
+            else if (var5.timeUntilPortal <= 0)
             {
                 Aether.teleportEntityToAether(var5);
             }
@@ -99,7 +98,8 @@ public class BlockAetherPortal extends BlockPortal implements IAetherBlock
         if (var1.getBlockId(var2, var8 - 1, var4) != Block.glowStone.blockID)
         {
             var1.setBlock(var2, var3, var4, 0);
-        } else
+        }
+        else
         {
             int var9;
 
@@ -116,11 +116,13 @@ public class BlockAetherPortal extends BlockPortal implements IAetherBlock
                 if (var10 && var11)
                 {
                     var1.setBlock(var2, var3, var4, 0);
-                } else if ((var1.getBlockId(var2 + var6, var3, var4 + var7) != Block.glowStone.blockID || var1.getBlockId(var2 - var6, var3, var4 - var7) != this.blockID) && (var1.getBlockId(var2 - var6, var3, var4 - var7) != Block.glowStone.blockID || var1.getBlockId(var2 + var6, var3, var4 + var7) != this.blockID))
+                }
+                else if ((var1.getBlockId(var2 + var6, var3, var4 + var7) != Block.glowStone.blockID || var1.getBlockId(var2 - var6, var3, var4 - var7) != this.blockID) && (var1.getBlockId(var2 - var6, var3, var4 - var7) != Block.glowStone.blockID || var1.getBlockId(var2 + var6, var3, var4 + var7) != this.blockID))
                 {
                     var1.setBlock(var2, var3, var4, 0);
                 }
-            } else
+            }
+            else
             {
                 var1.setBlock(var2, var3, var4, 0);
             }
@@ -134,7 +136,7 @@ public class BlockAetherPortal extends BlockPortal implements IAetherBlock
     {
         if (var5.nextInt(250) == 0)
         {
-            var1.playSound((double) var2 + 0.5D, (double) var3 + 0.5D, (double) var4 + 0.5D, "aeportal.aeportal", 0.5F, var5.nextFloat() * 0.4F + 0.8F, false);
+            var1.playSound((double)var2 + 0.5D, (double)var3 + 0.5D, (double)var4 + 0.5D, "aeportal.aeportal", 0.5F, var5.nextFloat() * 0.4F + 0.8F, false);
         }
 
         Aether.proxy.spawnPortalParticles(var1, var2, var3, var4, var5, this.blockID);
@@ -161,7 +163,8 @@ public class BlockAetherPortal extends BlockPortal implements IAetherBlock
         if (var5 == var6)
         {
             return false;
-        } else
+        }
+        else
         {
             if (var1.getBlockId(var2 - var5, var3, var4 - var6) == 0)
             {
@@ -188,7 +191,8 @@ public class BlockAetherPortal extends BlockPortal implements IAetherBlock
                             {
                                 return false;
                             }
-                        } else if (var10 != 0 && var10 != Block.waterMoving.blockID)
+                        }
+                        else if (var10 != 0 && var10 != Block.waterMoving.blockID)
                         {
                             return false;
                         }

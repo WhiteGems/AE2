@@ -1,16 +1,10 @@
 package net.aetherteam.aether;
 
-import java.util.Random;
-
 import net.aetherteam.aether.blocks.AetherBlocks;
 import net.aetherteam.aether.containers.InventoryAether;
 import net.aetherteam.aether.entities.EntityAetherCoin;
-import net.minecraft.block.Block;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.world.GameRules;
 import net.minecraft.world.World;
-import net.minecraftforge.event.Event;
 import net.minecraftforge.event.Event.Result;
 import net.minecraftforge.event.ForgeSubscribe;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
@@ -19,88 +13,85 @@ import net.minecraftforge.event.entity.player.BonemealEvent;
 public class AetherEvents
 {
     @ForgeSubscribe
-    public void bonemealEvent(BonemealEvent event)
+    public void bonemealEvent(BonemealEvent var1)
     {
-        World world = event.world;
-        int id = world.getBlockId(event.X, event.Y, event.Z);
-        if (id == AetherBlocks.AetherGrass.blockID)
+        World var2 = var1.world;
+        int var3 = var2.getBlockId(var1.X, var1.Y, var1.Z);
+
+        if (var3 == AetherBlocks.AetherGrass.blockID)
         {
-            if (!event.world.isRemote)
+            if (!var1.world.isRemote)
             {
-                int iSpawned = 0;
+                int var4 = 0;
+                label41:
 
-                label316:
-                for (int var9 = 0; var9 < 64; var9++)
+                for (int var5 = 0; var5 < 64; ++var5)
                 {
-                    int x = event.X;
-                    int y = event.Y + 1;
-                    int z = event.Z;
+                    int var6 = var1.X;
+                    int var7 = var1.Y + 1;
+                    int var8 = var1.Z;
 
-                    for (int var13 = 0; var13 < var9 / 16; var13++)
+                    for (int var9 = 0; var9 < var5 / 16; ++var9)
                     {
-                        x += world.rand.nextInt(3) - 1;
-                        y += (world.rand.nextInt(3) - 1) * world.rand.nextInt(3) / 2;
-                        z += world.rand.nextInt(3) - 1;
-                        if ((world.getBlockId(x, y - 1, z) != id) || (world.isBlockNormalCube(x, y, z)))
+                        var6 += var2.rand.nextInt(3) - 1;
+                        var7 += (var2.rand.nextInt(3) - 1) * var2.rand.nextInt(3) / 2;
+                        var8 += var2.rand.nextInt(3) - 1;
+
+                        if (var2.getBlockId(var6, var7 - 1, var8) != var3 || var2.isBlockNormalCube(var6, var7, var8))
                         {
-                            break label316;
+                            continue label41;
                         }
                     }
-                    if (world.getBlockId(x, y, z) == 0)
+
+                    if (var2.getBlockId(var6, var7, var8) == 0)
                     {
-                        if (world.rand.nextInt(20 + 10 * iSpawned) == 0)
+                        if (var2.rand.nextInt(20 + 10 * var4) == 0)
                         {
-                            world.setBlock(x, y, z, AetherBlocks.WhiteFlower.blockID);
-                            iSpawned++;
-                        } else if (world.rand.nextInt(10 + 2 * iSpawned) <= 2)
+                            var2.setBlock(var6, var7, var8, AetherBlocks.WhiteFlower.blockID);
+                            ++var4;
+                        }
+                        else if (var2.rand.nextInt(10 + 2 * var4) <= 2)
                         {
-                            world.setBlock(x, y, z, AetherBlocks.PurpleFlower.blockID);
-                            iSpawned++;
-                        } else if (world.rand.nextInt(10 + 2 * iSpawned) <= 8)
+                            var2.setBlock(var6, var7, var8, AetherBlocks.PurpleFlower.blockID);
+                            ++var4;
+                        }
+                        else if (var2.rand.nextInt(10 + 2 * var4) <= 8)
                         {
-                            world.setBlock(x, y, z, AetherBlocks.TallAetherGrass.blockID);
-                            iSpawned++;
+                            var2.setBlock(var6, var7, var8, AetherBlocks.TallAetherGrass.blockID);
+                            ++var4;
                         }
                     }
                 }
             }
-            event.setResult(Event.Result.ALLOW);
+
+            var1.setResult(Event.Result.ALLOW);
         }
     }
 
     @ForgeSubscribe
-    public void playerDeathEvent(LivingDeathEvent event)
+    public void playerDeathEvent(LivingDeathEvent var1)
     {
-        if ((event.entityLiving instanceof EntityPlayer))
+        if (var1.entityLiving instanceof EntityPlayer)
         {
-            EntityPlayer player = (EntityPlayer) event.entityLiving;
-            PlayerBaseAetherServer base = Aether.getServerPlayer(player);
+            EntityPlayer var2 = (EntityPlayer)var1.entityLiving;
+            PlayerBaseAetherServer var3 = Aether.getServerPlayer(var2);
 
-            if (!player.worldObj.getGameRules().getGameRuleBooleanValue("keepInventory"))
+            if (!var2.worldObj.getGameRules().getGameRuleBooleanValue("keepInventory"))
             {
-                base.inv.dropAllItems();
+                var3.inv.dropAllItems();
 
-                if (!player.worldObj.isRemote)
+                if (!var2.worldObj.isRemote)
                 {
-                    double x = event.entityLiving.posX;
-                    double y = event.entityLiving.posY;
-                    double z = event.entityLiving.posZ;
-
-                    World world = player.worldObj;
-
-                    player.worldObj.spawnEntityInWorld(new EntityAetherCoin(world, x, y, z, base.getCoins()));
-                    base.inv = new InventoryAether(player);
-
-                    base.setCoinAmount(0);
-
-                    event.setResult(Event.Result.ALLOW);
+                    double var4 = var1.entityLiving.posX;
+                    double var6 = var1.entityLiving.posY;
+                    double var8 = var1.entityLiving.posZ;
+                    World var10 = var2.worldObj;
+                    var2.worldObj.spawnEntityInWorld(new EntityAetherCoin(var10, var4, var6, var8, var3.getCoins()));
+                    var3.inv = new InventoryAether(var2);
+                    var3.setCoinAmount(0);
+                    var1.setResult(Event.Result.ALLOW);
                 }
             }
         }
     }
 }
-
-/* Location:           D:\Dev\Mc\forge_orl\mcp\jars\bin\aether.jar
- * Qualified Name:     net.aetherteam.aether.AetherEvents
- * JD-Core Version:    0.6.2
- */

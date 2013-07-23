@@ -7,9 +7,9 @@ import net.minecraftforge.common.AchievementPage;
 
 public class AetherACPage extends AchievementPage
 {
-    public AetherACPage(Achievement[] pages)
+    public AetherACPage(Achievement ... var1)
     {
-        super("Aether", pages);
+        super("Aether", var1);
     }
 
     public int bgGetSprite(Random random, int i, int j)
@@ -17,8 +17,3 @@ public class AetherACPage extends AchievementPage
         return 0;
     }
 }
-
-/* Location:           D:\Dev\Mc\forge_orl\mcp\jars\bin\aether.jar
- * Qualified Name:     net.aetherteam.aether.achievements.AetherACPage
- * JD-Core Version:    0.6.2
- */

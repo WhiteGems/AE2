@@ -55,8 +55,8 @@ public class ModelMiniCloud extends ModelBase
     {
         for (int var7 = 0; var7 < 5; ++var7)
         {
-            this.head[var7].rotateAngleY = var4 / (180F / (float) Math.PI);
-            this.head[var7].rotateAngleX = var5 / (180F / (float) Math.PI);
+            this.head[var7].rotateAngleY = var4 / (180F / (float)Math.PI);
+            this.head[var7].rotateAngleX = var5 / (180F / (float)Math.PI);
         }
     }
 }

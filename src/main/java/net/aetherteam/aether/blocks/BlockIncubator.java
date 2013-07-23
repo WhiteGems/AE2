@@ -2,7 +2,6 @@ package net.aetherteam.aether.blocks;
 
 import java.util.ArrayList;
 import java.util.Random;
-
 import net.aetherteam.aether.Aether;
 import net.aetherteam.aether.AetherGuiHandler;
 import net.aetherteam.aether.tile_entities.TileEntityIncubator;
@@ -61,7 +60,7 @@ public class BlockIncubator extends BlockContainer implements IAetherBlock
      */
     public boolean onBlockActivated(World var1, int var2, int var3, int var4, EntityPlayer var5, int var6, float var7, float var8, float var9)
     {
-        TileEntityIncubator var10 = (TileEntityIncubator) var1.getBlockTileEntity(var2, var3, var4);
+        TileEntityIncubator var10 = (TileEntityIncubator)var1.getBlockTileEntity(var2, var3, var4);
         int var11 = AetherGuiHandler.incubatorID;
         var5.openGui(Aether.instance, var11, var1, var2, var3, var4);
         return true;
@@ -80,7 +79,8 @@ public class BlockIncubator extends BlockContainer implements IAetherBlock
         try
         {
             return new TileEntityIncubator();
-        } catch (Exception var3)
+        }
+        catch (Exception var3)
         {
             throw new RuntimeException(var3);
         }
@@ -113,7 +113,7 @@ public class BlockIncubator extends BlockContainer implements IAetherBlock
      */
     public void onBlockPlacedBy(World var1, int var2, int var3, int var4, EntityLiving var5, ItemStack var6)
     {
-        int var7 = MathHelper.floor_double((double) (var5.rotationYaw * 4.0F / 360.0F) + 0.5D) & 3;
+        int var7 = MathHelper.floor_double((double)(var5.rotationYaw * 4.0F / 360.0F) + 0.5D) & 3;
 
         if (var7 == 0)
         {
@@ -141,7 +141,7 @@ public class BlockIncubator extends BlockContainer implements IAetherBlock
      */
     public void breakBlock(World var1, int var2, int var3, int var4, int var5, int var6)
     {
-        TileEntityIncubator var7 = (TileEntityIncubator) var1.getBlockTileEntity(var2, var3, var4);
+        TileEntityIncubator var7 = (TileEntityIncubator)var1.getBlockTileEntity(var2, var3, var4);
 
         if (var7 != null)
         {
@@ -165,15 +165,15 @@ public class BlockIncubator extends BlockContainer implements IAetherBlock
                         }
 
                         var9.stackSize -= var14;
-                        var12 = new EntityItem(var1, (double) ((float) var2 + var10), (double) ((float) var3 + var11), (double) ((float) var4 + var13), new ItemStack(var9.itemID, var14, var9.getItemDamage()));
+                        var12 = new EntityItem(var1, (double)((float)var2 + var10), (double)((float)var3 + var11), (double)((float)var4 + var13), new ItemStack(var9.itemID, var14, var9.getItemDamage()));
                         float var15 = 0.05F;
-                        var12.motionX = (double) ((float) this.IncubatorRand.nextGaussian() * var15);
-                        var12.motionY = (double) ((float) this.IncubatorRand.nextGaussian() * var15 + 0.2F);
-                        var12.motionZ = (double) ((float) this.IncubatorRand.nextGaussian() * var15);
+                        var12.motionX = (double)((float)this.IncubatorRand.nextGaussian() * var15);
+                        var12.motionY = (double)((float)this.IncubatorRand.nextGaussian() * var15 + 0.2F);
+                        var12.motionZ = (double)((float)this.IncubatorRand.nextGaussian() * var15);
 
                         if (var9.hasTagCompound())
                         {
-                            var12.getEntityItem().setTagCompound((NBTTagCompound) var9.getTagCompound().copy());
+                            var12.getEntityItem().setTagCompound((NBTTagCompound)var9.getTagCompound().copy());
                         }
                     }
                 }

@@ -4,13 +4,14 @@ import java.io.Serializable;
 
 public enum PartyType implements Serializable
 {
-    OPEN(6750054), CLOSED(16711680), PRIVATE(0);
-
+    OPEN(6750054),
+    CLOSED(16711680),
+    PRIVATE(0);
     public int displayColor;
 
-    private PartyType(int displayColor)
+    private PartyType(int var3)
     {
-        this.displayColor = displayColor;
+        this.displayColor = var3;
     }
 
     public int getDisplayColor()
@@ -18,21 +19,21 @@ public enum PartyType implements Serializable
         return this.displayColor;
     }
 
-    public static PartyType getTypeFromString(String name)
+    public static PartyType getTypeFromString(String var0)
     {
-        for (PartyType type : values())
+        PartyType[] var1 = values();
+        int var2 = var1.length;
+
+        for (int var3 = 0; var3 < var2; ++var3)
         {
-            if (type.name().equalsIgnoreCase(name))
+            PartyType var4 = var1[var3];
+
+            if (var4.name().equalsIgnoreCase(var0))
             {
-                return type;
+                return var4;
             }
         }
 
         return null;
     }
 }
-
-/* Location:           D:\Dev\Mc\forge_orl\mcp\jars\bin\aether.jar
- * Qualified Name:     net.aetherteam.aether.party.PartyType
- * JD-Core Version:    0.6.2
- */

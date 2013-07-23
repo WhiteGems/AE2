@@ -1,6 +1,6 @@
 package net.aetherteam.aether.items;
 
-import net.aetherteam.aether.entities.EntityCloudParachute;
+import net.aetherteam.aether.Aether;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -25,14 +25,20 @@ public class ItemCloudParachute extends ItemAether
      */
     public ItemStack onItemRightClick(ItemStack var1, World var2, EntityPlayer var3)
     {
-        EntityCloudParachute var4 = new EntityCloudParachute(var2, var3, this.itemID == AetherItems.GoldenCloudParachute.itemID);
-
-        if (!var2.isRemote)
+        if (Aether.getServerPlayer(var3) == null)
         {
-            var2.spawnEntityInWorld(var4);
+            return var1;
         }
+        else
+        {
+            Aether.getServerPlayer(var3).setParachuting(true, this.getParachuteType());
+            --var1.stackSize;
+            return var1;
+        }
+    }
 
-        var1.damageItem(1, var3);
-        return var1;
+    private int getParachuteType()
+    {
+        return this.itemID == AetherItems.CloudParachute.itemID ? 0 : (this.itemID == AetherItems.GoldenCloudParachute.itemID ? 1 : (this.itemID == AetherItems.PurpleCloudParachute.itemID ? 2 : (this.itemID == AetherItems.GreenCloudParachute.itemID ? 3 : (this.itemID == AetherItems.BlueCloudParachute.itemID ? 4 : 0))));
     }
 }

@@ -27,7 +27,8 @@ public class Camera extends EntityLiving
         if (var2 == null)
         {
             this.setDead();
-        } else
+        }
+        else
         {
             this.entityAttachedTo = var2;
 
@@ -51,7 +52,8 @@ public class Camera extends EntityLiving
         {
             this.mountEntity(this.entityAttachedTo);
             this.setRotation(this.entityAttachedTo.rotationYaw, this.entityAttachedTo.rotationPitch);
-        } else
+        }
+        else
         {
             CameraManager.turnOffCamera(this.worldObj);
             this.setDead();

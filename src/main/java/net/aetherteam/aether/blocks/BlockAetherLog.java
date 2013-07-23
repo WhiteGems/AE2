@@ -2,13 +2,13 @@ package net.aetherteam.aether.blocks;
 
 import java.util.List;
 import java.util.Random;
-
 import net.aetherteam.aether.items.AetherItems;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.stats.StatList;
 import net.minecraft.util.Icon;
@@ -73,16 +73,18 @@ public class BlockAetherLog extends BlockAether implements IAetherBlock
                     var2.addStat(StatList.mineBlockStatArray[this.blockID], 1);
                     var7 = new ItemStack(AetherBlocks.AetherLog.blockID, 2, 1);
                     this.dropBlockAsItem_do(var1, var3, var4, var5, var7);
-                } else
+                }
+                else
                 {
                     var7 = new ItemStack(AetherBlocks.AetherLog.blockID, 1, 1);
                     this.dropBlockAsItem_do(var1, var3, var4, var5, var7);
                 }
-            } else if (var6 > 1)
+            }
+            else if (var6 > 1)
             {
                 var7 = var2.inventory.getCurrentItem();
 
-                if (var7 == null || var7.itemID != AetherItems.ZaniteAxe.itemID && var7.itemID != AetherItems.GravititeAxe.itemID && var6 >= 2)
+                if (var7 == null || var7.itemID != AetherItems.ZaniteAxe.itemID && var7.itemID != AetherItems.GravititeAxe.itemID && var7.itemID != Item.axeDiamond.itemID && var7.itemID != Item.axeIron.itemID && var6 >= 2)
                 {
                     return;
                 }
@@ -91,7 +93,8 @@ public class BlockAetherLog extends BlockAether implements IAetherBlock
                 this.dropBlockAsItem_do(var1, var3, var4, var5, var8);
                 ItemStack var9 = new ItemStack(AetherItems.GoldenAmber.itemID, 1 + rand.nextInt(3), 0);
                 this.dropBlockAsItem_do(var1, var3, var4, var5, var9);
-            } else
+            }
+            else
             {
                 var7 = new ItemStack(AetherBlocks.AetherLog.blockID, 1, var6);
                 this.dropBlockAsItem_do(var1, var3, var4, var5, var7);

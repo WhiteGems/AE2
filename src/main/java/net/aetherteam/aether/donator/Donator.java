@@ -8,10 +8,10 @@ public class Donator
     String RSA;
     public HashMap choices = new HashMap();
 
-    public Donator(String username, String RSA)
+    public Donator(String var1, String var2)
     {
-        this.username = username;
-        this.RSA = RSA;
+        this.username = var1;
+        this.RSA = var2;
     }
 
     public String getRSA()
@@ -19,46 +19,31 @@ public class Donator
         return this.RSA;
     }
 
-    public void addChoice(DonatorChoice choice)
+    public void addChoice(DonatorChoice var1)
     {
-        if (this.choices.get(choice.type) != null)
+        if (this.choices.get(var1.type) != null)
         {
-            this.choices.remove(choice.type);
+            this.choices.remove(var1.type);
         }
 
-        this.choices.put(choice.type, choice);
+        this.choices.put(var1.type, var1);
     }
 
-    public void removeChoiceType(EnumChoiceType type)
+    public void removeChoiceType(EnumChoiceType var1)
     {
-        if (this.choices.get(type) != null)
+        if (this.choices.get(var1) != null)
         {
-            this.choices.remove(type);
+            this.choices.remove(var1);
         }
     }
 
-    public boolean containsChoiceType(EnumChoiceType type)
+    public boolean containsChoiceType(EnumChoiceType var1)
     {
-        if (this.choices.get(type) != null)
-        {
-            return true;
-        }
-
-        return false;
+        return this.choices.get(var1) != null;
     }
 
-    public DonatorChoice getChoiceFromType(EnumChoiceType type)
+    public DonatorChoice getChoiceFromType(EnumChoiceType var1)
     {
-        if (this.choices.get(type) != null)
-        {
-            return (DonatorChoice) this.choices.get(type);
-        }
-
-        return null;
+        return this.choices.get(var1) != null ? (DonatorChoice)this.choices.get(var1) : null;
     }
 }
-
-/* Location:           D:\Dev\Mc\forge_orl\mcp\jars\bin\aether.jar
- * Qualified Name:     net.aetherteam.aether.donator.Donator
- * JD-Core Version:    0.6.2
- */

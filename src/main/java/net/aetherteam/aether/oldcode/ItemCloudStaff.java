@@ -1,7 +1,6 @@
 package net.aetherteam.aether.oldcode;
 
 import java.util.List;
-
 import net.aetherteam.aether.items.ItemAether;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
@@ -29,7 +28,7 @@ public class ItemCloudStaff extends ItemAether
 
         for (int var4 = 0; var4 < var3.size(); ++var4)
         {
-            Entity var5 = (Entity) var3.get(var4);
+            Entity var5 = (Entity)var3.get(var4);
 
             if (var5 instanceof EntityMiniCloud)
             {

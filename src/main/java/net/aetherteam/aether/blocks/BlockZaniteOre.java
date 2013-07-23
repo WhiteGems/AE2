@@ -1,7 +1,6 @@
 package net.aetherteam.aether.blocks;
 
 import java.util.Random;
-
 import net.aetherteam.aether.items.AetherItems;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
@@ -40,7 +39,8 @@ public class BlockZaniteOre extends BlockAether implements IAetherBlock
         if (EnchantmentHelper.getSilkTouchModifier(var2))
         {
             var7 = this.createStackedBlock(var6);
-        } else
+        }
+        else
         {
             var7 = new ItemStack(AetherItems.ZaniteGemstone.itemID, MathHelper.clamp_int((new Random()).nextInt(var8 * 2), 1, var8 * 2 + 1), 0);
         }

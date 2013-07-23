@@ -2,9 +2,7 @@ package net.aetherteam.aether.blocks;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
-
 import java.util.Random;
-
 import net.aetherteam.aether.dungeons.Dungeon;
 import net.aetherteam.aether.dungeons.DungeonHandler;
 import net.aetherteam.aether.tile_entities.TileEntityEntranceController;
@@ -98,7 +96,8 @@ public class BlockEntranceController extends BlockContainer implements IAetherBl
         try
         {
             return new TileEntityEntranceController();
-        } catch (Exception var3)
+        }
+        catch (Exception var3)
         {
             throw new RuntimeException(var3);
         }
@@ -109,12 +108,13 @@ public class BlockEntranceController extends BlockContainer implements IAetherBl
      */
     public void onBlockAdded(World var1, int var2, int var3, int var4)
     {
-        Dungeon var5 = DungeonHandler.instance().getInstanceAt(MathHelper.floor_double((double) var2), MathHelper.floor_double((double) var3), MathHelper.floor_double((double) var4));
+        Dungeon var5 = DungeonHandler.instance().getInstanceAt(MathHelper.floor_double((double)var2), MathHelper.floor_double((double)var3), MathHelper.floor_double((double)var4));
 
         if (var5 != null)
         {
             super.onBlockAdded(var1, var2, var3, var4);
-        } else
+        }
+        else
         {
             var1.setBlock(var2, var3, var4, 0);
         }

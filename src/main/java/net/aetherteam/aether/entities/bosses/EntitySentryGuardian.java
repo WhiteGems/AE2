@@ -35,6 +35,7 @@ public class EntitySentryGuardian extends EntityMiniBoss implements IAetherBoss
     private float heightOffset = 0.5F;
     public int chatTime;
     private int attackTimer;
+    private int cappedAmount;
 
     public EntitySentryGuardian(World var1)
     {
@@ -50,7 +51,8 @@ public class EntitySentryGuardian extends EntityMiniBoss implements IAetherBoss
         if (!this.getHasBeenAttacked())
         {
             this.texture = "/net/aetherteam/aether/client/sprites/mobs/sentrygolemboss/sentryGolemBoss.png";
-        } else
+        }
+        else
         {
             this.texture = "/net/aetherteam/aether/client/sprites/mobs/sentrygolemboss/sentryGolemBoss_red.png";
         }
@@ -61,13 +63,14 @@ public class EntitySentryGuardian extends EntityMiniBoss implements IAetherBoss
         super(var1);
         this.bossName = AetherNameGen.gen();
         this.setSize(2.25F, 2.5F);
-        this.setPosition((double) var2 + 0.5D, (double) var3, (double) var4 + 0.5D);
+        this.setPosition((double)var2 + 0.5D, (double)var3, (double)var4 + 0.5D);
         this.health = 250;
 
         if (!this.getHasBeenAttacked())
         {
             this.texture = "/net/aetherteam/aether/client/sprites/mobs/sentrygolemboss/sentryGolemBoss.png";
-        } else
+        }
+        else
         {
             this.texture = "/net/aetherteam/aether/client/sprites/mobs/sentrygolemboss/sentryGolemBoss_red.png";
         }
@@ -76,7 +79,7 @@ public class EntitySentryGuardian extends EntityMiniBoss implements IAetherBoss
     public void entityInit()
     {
         super.entityInit();
-        this.dataWatcher.addObject(16, Byte.valueOf((byte) 0));
+        this.dataWatcher.addObject(16, Byte.valueOf((byte)0));
     }
 
     public boolean getHasBeenAttacked()
@@ -89,11 +92,12 @@ public class EntitySentryGuardian extends EntityMiniBoss implements IAetherBoss
         if (var1)
         {
             this.texture = "/net/aetherteam/aether/client/sprites/mobs/sentrygolemboss/sentryGolemBoss_red.png";
-            this.dataWatcher.updateObject(16, Byte.valueOf((byte) 1));
-        } else
+            this.dataWatcher.updateObject(16, Byte.valueOf((byte)1));
+        }
+        else
         {
             this.texture = "/net/aetherteam/aether/client/sprites/mobs/sentrygolemboss/sentryGolemBoss.png";
-            this.dataWatcher.updateObject(16, Byte.valueOf((byte) 0));
+            this.dataWatcher.updateObject(16, Byte.valueOf((byte)0));
         }
     }
 
@@ -106,7 +110,8 @@ public class EntitySentryGuardian extends EntityMiniBoss implements IAetherBoss
         if (!this.getHasBeenAttacked())
         {
             return null;
-        } else
+        }
+        else
         {
             EntityPlayer var1 = this.worldObj.getClosestVulnerablePlayerToEntity(this, 16.0D);
             this.texture = "/net/aetherteam/aether/client/sprites/mobs/sentrygolemboss/sentryGolemBoss_red.png";
@@ -116,13 +121,15 @@ public class EntitySentryGuardian extends EntityMiniBoss implements IAetherBoss
 
     public void spawnSentry()
     {
-        if (!this.worldObj.isRemote)
+        if (!this.worldObj.isRemote && this.cappedAmount < 5)
         {
             EntitySentry var1 = new EntitySentry(this.worldObj, this.posX, this.posY, this.posZ);
             this.worldObj.spawnEntityInWorld(var1);
             var1.motionY = 1.0D;
             var1.fallDistance = -100.0F;
             var1.setAttackTarget(this.getAttackTarget());
+            ++this.cappedAmount;
+            var1.setParent(this);
             this.worldObj.playSoundAtEntity(this, "aemob.sentryGuardian.spawn", 2.0F, 1.0F);
         }
     }
@@ -137,7 +144,7 @@ public class EntitySentryGuardian extends EntityMiniBoss implements IAetherBoss
 
         if (var1.getEntity() instanceof EntityPlayer)
         {
-            EntityPlayer var2 = (EntityPlayer) var1.getEntity();
+            EntityPlayer var2 = (EntityPlayer)var1.getEntity();
             Party var3 = PartyController.instance().getParty(PartyController.instance().getMember(var2));
             Dungeon var4 = DungeonHandler.instance().getInstanceAt(MathHelper.floor_double(this.posX), MathHelper.floor_double(this.posY), MathHelper.floor_double(this.posZ));
 
@@ -171,9 +178,9 @@ public class EntitySentryGuardian extends EntityMiniBoss implements IAetherBoss
 
         if (this.health > 0)
         {
-            double var1 = (double) (this.rand.nextFloat() - 0.5F);
-            double var3 = (double) this.rand.nextFloat();
-            double var5 = (double) (this.rand.nextFloat() - 0.5F);
+            double var1 = (double)(this.rand.nextFloat() - 0.5F);
+            double var3 = (double)this.rand.nextFloat();
+            double var5 = (double)(this.rand.nextFloat() - 0.5F);
             double var7 = this.posX + var1 * var3;
             double var9 = this.boundingBox.minY + var3 - 0.30000001192092896D;
             double var11 = this.posZ + var5 * var3;
@@ -181,7 +188,8 @@ public class EntitySentryGuardian extends EntityMiniBoss implements IAetherBoss
             if (!this.getHasBeenAttacked())
             {
                 this.worldObj.spawnParticle("reddust", var7, var9, var11, -0.30000001192092896D, 0.800000011920929D, 0.8999999761581421D);
-            } else
+            }
+            else
             {
                 this.worldObj.spawnParticle("reddust", var7, var9, var11, 0.0D, 0.0D, 0.0D);
             }
@@ -196,7 +204,7 @@ public class EntitySentryGuardian extends EntityMiniBoss implements IAetherBoss
     public boolean attackEntityAsMob(Entity var1)
     {
         this.attackTimer = 10;
-        this.worldObj.setEntityState(this, (byte) 4);
+        this.worldObj.setEntityState(this, (byte)4);
         boolean var2 = var1.attackEntityFrom(DamageSource.causeMobDamage(this), 7 + this.rand.nextInt(15));
 
         if (var2)
@@ -204,6 +212,7 @@ public class EntitySentryGuardian extends EntityMiniBoss implements IAetherBoss
             var1.motionY += 0.4000000059604645D;
             var1.motionZ += 0.4000000059604645D;
             var1.motionX += 0.4000000059604645D;
+            var1.velocityChanged = true;
         }
 
         this.worldObj.playSoundAtEntity(this, "mob.irongolem.throw", 1.0F, 1.0F);
@@ -239,18 +248,19 @@ public class EntitySentryGuardian extends EntityMiniBoss implements IAetherBoss
 
         if (var3 != null && var1.isProjectile())
         {
-            if (var4 instanceof EntityPlayer && ((EntityPlayer) var4).getCurrentEquippedItem() != null)
+            if (var4 instanceof EntityPlayer && ((EntityPlayer)var4).getCurrentEquippedItem() != null)
             {
-                this.chatItUp((EntityPlayer) var4, "Better switch to a sword, my " + ((EntityPlayer) var4).getCurrentEquippedItem().getItem().getItemDisplayName(((EntityPlayer) var4).getCurrentEquippedItem()) + " doesn\'t seem to affect it.");
+                this.chatItUp((EntityPlayer)var4, "Better switch to a sword, my " + ((EntityPlayer)var4).getCurrentEquippedItem().getItem().getItemDisplayName(((EntityPlayer)var4).getCurrentEquippedItem()) + " doesn\'t seem to affect it.");
                 this.chatTime = 60;
             }
 
             return false;
-        } else
+        }
+        else
         {
             if (var4 instanceof EntityPlayer)
             {
-                EntityPlayer var5 = (EntityPlayer) var4;
+                EntityPlayer var5 = (EntityPlayer)var4;
                 AetherCommonPlayerHandler var6 = Aether.getPlayerBase(var5);
                 PartyMember var7 = PartyController.instance().getMember(var5);
                 Party var8 = PartyController.instance().getParty(var7);
@@ -304,10 +314,10 @@ public class EntitySentryGuardian extends EntityMiniBoss implements IAetherBoss
             if (this.heightOffsetUpdateTime <= 0)
             {
                 this.heightOffsetUpdateTime = 100;
-                this.heightOffset = 0.5F + (float) this.rand.nextGaussian() * 3.0F;
+                this.heightOffset = 0.5F + (float)this.rand.nextGaussian() * 3.0F;
             }
 
-            if (this.getEntityToAttack() != null && this.getEntityToAttack().posY + (double) this.getEntityToAttack().getEyeHeight() > this.posY + (double) this.getEyeHeight() + (double) this.heightOffset)
+            if (this.getEntityToAttack() != null && this.getEntityToAttack().posY + (double)this.getEntityToAttack().getEyeHeight() > this.posY + (double)this.getEyeHeight() + (double)this.heightOffset)
             {
                 this.motionY += (0.700000011920929D - this.motionY) * 0.700000011920929D;
             }
@@ -366,8 +376,7 @@ public class EntitySentryGuardian extends EntityMiniBoss implements IAetherBoss
     /**
      * Called when the mob is falling. Calculates and applies fall damage.
      */
-    protected void fall(float var1)
-    {}
+    protected void fall(float var1) {}
 
     public int getMaxHealth()
     {
@@ -402,5 +411,10 @@ public class EntitySentryGuardian extends EntityMiniBoss implements IAetherBoss
     public EnumBossType getBossType()
     {
         return EnumBossType.MINI;
+    }
+
+    public void failedYou()
+    {
+        --this.cappedAmount;
     }
 }

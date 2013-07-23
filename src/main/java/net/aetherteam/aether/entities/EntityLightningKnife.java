@@ -1,7 +1,6 @@
 package net.aetherteam.aether.entities;
 
 import java.util.List;
-
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.effect.EntityLightningBolt;
@@ -52,16 +51,16 @@ public class EntityLightningKnife extends Entity
         super(var1);
         this.thrower = var2;
         this.setSize(0.25F, 0.25F);
-        this.setLocationAndAngles(var2.posX, var2.posY + (double) var2.getEyeHeight(), var2.posZ, var2.rotationYaw, var2.rotationPitch);
-        this.posX -= (double) (MathHelper.cos(this.rotationYaw / 180.0F * (float) Math.PI) * 0.16F);
+        this.setLocationAndAngles(var2.posX, var2.posY + (double)var2.getEyeHeight(), var2.posZ, var2.rotationYaw, var2.rotationPitch);
+        this.posX -= (double)(MathHelper.cos(this.rotationYaw / 180.0F * (float)Math.PI) * 0.16F);
         this.posY -= 0.10000000149011612D;
-        this.posZ -= (double) (MathHelper.sin(this.rotationYaw / 180.0F * (float) Math.PI) * 0.16F);
+        this.posZ -= (double)(MathHelper.sin(this.rotationYaw / 180.0F * (float)Math.PI) * 0.16F);
         this.setPositionAndRotation(this.posX, this.posY, this.posZ, this.rotationYaw, this.rotationPitch);
         this.yOffset = 0.0F;
         float var3 = 0.4F;
-        this.motionX = (double) (-MathHelper.sin(this.rotationYaw / 180.0F * (float) Math.PI) * MathHelper.cos(this.rotationPitch / 180.0F * (float) Math.PI) * var3);
-        this.motionZ = (double) (MathHelper.cos(this.rotationYaw / 180.0F * (float) Math.PI) * MathHelper.cos(this.rotationPitch / 180.0F * (float) Math.PI) * var3);
-        this.motionY = (double) (-MathHelper.sin(this.rotationPitch / 180.0F * (float) Math.PI) * var3);
+        this.motionX = (double)(-MathHelper.sin(this.rotationYaw / 180.0F * (float)Math.PI) * MathHelper.cos(this.rotationPitch / 180.0F * (float)Math.PI) * var3);
+        this.motionZ = (double)(MathHelper.cos(this.rotationYaw / 180.0F * (float)Math.PI) * MathHelper.cos(this.rotationPitch / 180.0F * (float)Math.PI) * var3);
+        this.motionY = (double)(-MathHelper.sin(this.rotationPitch / 180.0F * (float)Math.PI) * var3);
         this.setSnowballHeading(this.motionX, this.motionY, this.motionZ, 1.5F, 1.0F);
     }
 
@@ -77,21 +76,21 @@ public class EntityLightningKnife extends Entity
     public void setSnowballHeading(double var1, double var3, double var5, float var7, float var8)
     {
         float var9 = MathHelper.sqrt_double(var1 * var1 + var3 * var3 + var5 * var5);
-        var1 /= (double) var9;
-        var3 /= (double) var9;
-        var5 /= (double) var9;
-        var1 += this.rand.nextGaussian() * 0.007499999832361937D * (double) var8;
-        var3 += this.rand.nextGaussian() * 0.007499999832361937D * (double) var8;
-        var5 += this.rand.nextGaussian() * 0.007499999832361937D * (double) var8;
-        var1 *= (double) var7;
-        var3 *= (double) var7;
-        var5 *= (double) var7;
+        var1 /= (double)var9;
+        var3 /= (double)var9;
+        var5 /= (double)var9;
+        var1 += this.rand.nextGaussian() * 0.007499999832361937D * (double)var8;
+        var3 += this.rand.nextGaussian() * 0.007499999832361937D * (double)var8;
+        var5 += this.rand.nextGaussian() * 0.007499999832361937D * (double)var8;
+        var1 *= (double)var7;
+        var3 *= (double)var7;
+        var5 *= (double)var7;
         this.motionX = var1;
         this.motionY = var3;
         this.motionZ = var5;
         float var10 = MathHelper.sqrt_double(var1 * var1 + var5 * var5);
-        this.prevRotationYaw = this.rotationYaw = (float) (Math.atan2(var1, var5) * 180.0D / Math.PI);
-        this.prevRotationPitch = this.rotationPitch = (float) (Math.atan2(var3, (double) var10) * 180.0D / Math.PI);
+        this.prevRotationYaw = this.rotationYaw = (float)(Math.atan2(var1, var5) * 180.0D / Math.PI);
+        this.prevRotationPitch = this.rotationPitch = (float)(Math.atan2(var3, (double)var10) * 180.0D / Math.PI);
         this.ticksInGroundSnowball = 0;
     }
 
@@ -107,8 +106,8 @@ public class EntityLightningKnife extends Entity
         if (this.prevRotationPitch == 0.0F && this.prevRotationYaw == 0.0F)
         {
             float var7 = MathHelper.sqrt_double(var1 * var1 + var5 * var5);
-            this.prevRotationYaw = this.rotationYaw = (float) (Math.atan2(var1, var5) * 180.0D / Math.PI);
-            this.prevRotationPitch = this.rotationPitch = (float) (Math.atan2(var3, (double) var7) * 180.0D / Math.PI);
+            this.prevRotationYaw = this.rotationYaw = (float)(Math.atan2(var1, var5) * 180.0D / Math.PI);
+            this.prevRotationPitch = this.rotationPitch = (float)(Math.atan2(var3, (double)var7) * 180.0D / Math.PI);
         }
     }
 
@@ -144,12 +143,13 @@ public class EntityLightningKnife extends Entity
             }
 
             this.inGroundSnowball = false;
-            this.motionX *= (double) (this.rand.nextFloat() * 0.2F);
-            this.motionY *= (double) (this.rand.nextFloat() * 0.2F);
-            this.motionZ *= (double) (this.rand.nextFloat() * 0.2F);
+            this.motionX *= (double)(this.rand.nextFloat() * 0.2F);
+            this.motionY *= (double)(this.rand.nextFloat() * 0.2F);
+            this.motionZ *= (double)(this.rand.nextFloat() * 0.2F);
             this.ticksInGroundSnowball = 0;
             this.ticksInAirSnowball = 0;
-        } else
+        }
+        else
         {
             ++this.ticksInAirSnowball;
         }
@@ -173,12 +173,12 @@ public class EntityLightningKnife extends Entity
 
             for (int var8 = 0; var8 < var5.size(); ++var8)
             {
-                Entity var9 = (Entity) var5.get(var8);
+                Entity var9 = (Entity)var5.get(var8);
 
                 if (var9.canBeCollidedWith() && (var9 != this.thrower || this.ticksInAirSnowball >= 5))
                 {
                     float var10 = 0.3F;
-                    AxisAlignedBB var11 = var9.boundingBox.expand((double) var10, (double) var10, (double) var10);
+                    AxisAlignedBB var11 = var9.boundingBox.expand((double)var10, (double)var10, (double)var10);
                     MovingObjectPosition var12 = var11.calculateIntercept(var15, var2);
 
                     if (var12 != null)
@@ -202,10 +202,10 @@ public class EntityLightningKnife extends Entity
 
         if (var3 != null)
         {
-            int var18;
-            int var16;
-            int var21;
             EntityLightningBolt var7;
+            int var17;
+            int var16;
+            int var20;
 
             if (var3.entityHit != null)
             {
@@ -215,18 +215,19 @@ public class EntityLightningKnife extends Entity
                 }
 
                 var16 = MathHelper.floor_double(var3.entityHit.boundingBox.minX);
-                var21 = MathHelper.floor_double(var3.entityHit.boundingBox.minY);
-                var18 = MathHelper.floor_double(var3.entityHit.boundingBox.minZ);
-                var7 = new EntityLightningBolt(this.worldObj, (double) var16, (double) var21, (double) var18);
-                var7.setLocationAndAngles((double) var16, (double) var21, (double) var18, this.rotationYaw, 0.0F);
+                var17 = MathHelper.floor_double(var3.entityHit.boundingBox.minY);
+                var20 = MathHelper.floor_double(var3.entityHit.boundingBox.minZ);
+                var7 = new EntityLightningBolt(this.worldObj, (double)var16, (double)var17, (double)var20);
+                var7.setLocationAndAngles((double)var16, (double)var17, (double)var20, this.rotationYaw, 0.0F);
                 this.worldObj.spawnEntityInWorld(var7);
-            } else
+            }
+            else
             {
                 var16 = MathHelper.floor_double(this.posX);
-                var21 = MathHelper.floor_double(this.posY);
-                var18 = MathHelper.floor_double(this.posZ);
+                var17 = MathHelper.floor_double(this.posY);
+                var20 = MathHelper.floor_double(this.posZ);
                 var7 = new EntityLightningBolt(this.worldObj, this.posX, this.posY, this.posZ);
-                var7.setLocationAndAngles((double) var16, (double) var21, (double) var18, this.rotationYaw, 0.0F);
+                var7.setLocationAndAngles((double)var16, (double)var17, (double)var20, this.rotationYaw, 0.0F);
                 this.worldObj.spawnEntityInWorld(var7);
             }
 
@@ -241,10 +242,10 @@ public class EntityLightningKnife extends Entity
         this.posX += this.motionX;
         this.posY += this.motionY;
         this.posZ += this.motionZ;
-        float var19 = MathHelper.sqrt_double(this.motionX * this.motionX + this.motionZ * this.motionZ);
-        this.rotationYaw = (float) (Math.atan2(this.motionX, this.motionZ) * 180.0D / Math.PI);
+        float var18 = MathHelper.sqrt_double(this.motionX * this.motionX + this.motionZ * this.motionZ);
+        this.rotationYaw = (float)(Math.atan2(this.motionX, this.motionZ) * 180.0D / Math.PI);
 
-        for (this.rotationPitch = (float) (Math.atan2(this.motionY, (double) var19) * 180.0D / Math.PI); this.rotationPitch - this.prevRotationPitch < -180.0F; this.prevRotationPitch -= 360.0F)
+        for (this.rotationPitch = (float)(Math.atan2(this.motionY, (double)var18) * 180.0D / Math.PI); this.rotationPitch - this.prevRotationPitch < -180.0F; this.prevRotationPitch -= 360.0F)
         {
             ;
         }
@@ -266,24 +267,24 @@ public class EntityLightningKnife extends Entity
 
         this.rotationPitch = this.prevRotationPitch + (this.rotationPitch - this.prevRotationPitch) * 0.2F;
         this.rotationYaw = this.prevRotationYaw + (this.rotationYaw - this.prevRotationYaw) * 0.2F;
-        float var20 = 0.99F;
-        float var17 = 0.03F;
+        float var19 = 0.99F;
+        float var21 = 0.03F;
 
         if (this.isInWater())
         {
-            for (int var23 = 0; var23 < 4; ++var23)
+            for (int var22 = 0; var22 < 4; ++var22)
             {
-                float var22 = 0.25F;
-                this.worldObj.spawnParticle("bubble", this.posX - this.motionX * (double) var22, this.posY - this.motionY * (double) var22, this.posZ - this.motionZ * (double) var22, this.motionX, this.motionY, this.motionZ);
+                float var23 = 0.25F;
+                this.worldObj.spawnParticle("bubble", this.posX - this.motionX * (double)var23, this.posY - this.motionY * (double)var23, this.posZ - this.motionZ * (double)var23, this.motionX, this.motionY, this.motionZ);
             }
 
-            var20 = 0.8F;
+            var19 = 0.8F;
         }
 
-        this.motionX *= (double) var20;
-        this.motionY *= (double) var20;
-        this.motionZ *= (double) var20;
-        this.motionY -= (double) var17;
+        this.motionX *= (double)var19;
+        this.motionY *= (double)var19;
+        this.motionZ *= (double)var19;
+        this.motionY -= (double)var21;
         this.setPositionAndRotation(this.posX, this.posY, this.posZ, this.rotationYaw, this.rotationPitch);
     }
 
@@ -292,12 +293,12 @@ public class EntityLightningKnife extends Entity
      */
     public void writeEntityToNBT(NBTTagCompound var1)
     {
-        var1.setShort("xTile", (short) this.xTileSnowball);
-        var1.setShort("yTile", (short) this.yTileSnowball);
-        var1.setShort("zTile", (short) this.zTileSnowball);
-        var1.setByte("inTile", (byte) this.inTileSnowball);
-        var1.setByte("shake", (byte) this.shakeSnowball);
-        var1.setByte("inGround", (byte) (this.inGroundSnowball ? 1 : 0));
+        var1.setShort("xTile", (short)this.xTileSnowball);
+        var1.setShort("yTile", (short)this.yTileSnowball);
+        var1.setShort("zTile", (short)this.zTileSnowball);
+        var1.setByte("inTile", (byte)this.inTileSnowball);
+        var1.setByte("shake", (byte)this.shakeSnowball);
+        var1.setByte("inGround", (byte)(this.inGroundSnowball ? 1 : 0));
     }
 
     /**

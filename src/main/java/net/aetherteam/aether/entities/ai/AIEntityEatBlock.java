@@ -31,7 +31,8 @@ public class AIEntityEatBlock extends EntityAIBase
         if (this.theEntity.getRNG().nextInt(this.theEntity.isChild() ? 50 : 1000) != 0)
         {
             return false;
-        } else
+        }
+        else
         {
             int var1 = MathHelper.floor_double(this.theEntity.posX);
             int var2 = MathHelper.floor_double(this.theEntity.posY);
@@ -46,7 +47,7 @@ public class AIEntityEatBlock extends EntityAIBase
     public void startExecuting()
     {
         this.eatGrassTick = 40;
-        this.theWorld.setEntityState(this.theEntity, (byte) 10);
+        this.theWorld.setEntityState(this.theEntity, (byte)10);
         this.theEntity.getNavigator().clearPathEntity();
     }
 
@@ -89,7 +90,8 @@ public class AIEntityEatBlock extends EntityAIBase
                 this.theWorld.playAuxSFX(2001, var1, var2, var3, Block.tallGrass.blockID + 4096);
                 this.theWorld.setBlock(var1, var2, var3, 0);
                 this.theEntity.eatGrassBonus();
-            } else if (this.theWorld.getBlockId(var1, var2 - 1, var3) == this.blocktoEat.blockID)
+            }
+            else if (this.theWorld.getBlockId(var1, var2 - 1, var3) == this.blocktoEat.blockID)
             {
                 this.theWorld.playAuxSFX(2001, var1, var2 - 1, var3, this.blocktoEat.blockID);
                 this.theWorld.setBlock(var1, var2 - 1, var3, this.blocktoReplace.blockID);

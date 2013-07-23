@@ -2,9 +2,9 @@ package net.aetherteam.aether.items;
 
 import java.util.ArrayList;
 import java.util.Random;
-
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 
@@ -29,7 +29,8 @@ public class ItemContinuum extends ItemAether
         do
         {
             var4 = 256 + random.nextInt(31744);
-        } while (Item.itemsList[var4] == null || banList.contains(Integer.valueOf(var4)));
+        }
+        while (Item.itemsList[var4] == null || Item.itemsList[var4] != null && (new ItemStack(var4, 1, 0)).getItem() instanceof ItemBlock || banList.contains(Integer.valueOf(var4)));
 
         var1.itemID = var4;
         return var1;

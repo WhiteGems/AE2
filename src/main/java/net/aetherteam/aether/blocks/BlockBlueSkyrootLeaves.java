@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.Random;
-
 import net.aetherteam.aether.util.Loc;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
@@ -40,7 +39,7 @@ public class BlockBlueSkyrootLeaves extends BlockAether implements IAetherBlock
 
         while (!var6.isEmpty())
         {
-            Loc var9 = (Loc) var6.poll();
+            Loc var9 = (Loc)var6.poll();
 
             if (!var7.contains(var9))
             {

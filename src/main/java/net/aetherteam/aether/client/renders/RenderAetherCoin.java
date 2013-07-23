@@ -14,7 +14,7 @@ public class RenderAetherCoin extends Render
     {
         GL11.glPushMatrix();
         float var10 = var1.getCoinValue() > 1 ? 1.5F : 0.5F;
-        GL11.glTranslatef((float) var2, (float) var4 + var10, (float) var6);
+        GL11.glTranslatef((float)var2, (float)var4 + var10, (float)var6);
         float var11 = var1.getCoinValue() > 1 ? 0.8F : 0.25F;
         GL11.glScalef(var11, var11, var11);
         GL11.glRotatef(-180.0F, 1.0F, 0.0F, 0.0F);
@@ -32,6 +32,6 @@ public class RenderAetherCoin extends Render
      */
     public void doRender(Entity var1, double var2, double var4, double var6, float var8, float var9)
     {
-        this.Render((EntityAetherCoin) var1, var2, var4, var6, var8, var9);
+        this.Render((EntityAetherCoin)var1, var2, var4, var6, var8, var9);
     }
 }

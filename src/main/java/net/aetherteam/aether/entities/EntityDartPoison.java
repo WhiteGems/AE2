@@ -38,13 +38,17 @@ public class EntityDartPoison extends EntityDartGolden
     public boolean onHitTarget(Entity var1)
     {
         super.onHitTarget(var1);
-        EntityLiving var2 = (EntityLiving) var1;
 
-        if (!this.worldObj.isRemote)
+        if (var1 instanceof EntityLiving)
         {
-            var2.addPotionEffect(new PotionEffect(Potion.poison.id, 200, 0));
-            var2.addPotionEffect(new PotionEffect(Potion.confusion.id, 200, 3));
-            this.setDead();
+            EntityLiving var2 = (EntityLiving)var1;
+
+            if (!this.worldObj.isRemote)
+            {
+                var2.addPotionEffect(new PotionEffect(Potion.poison.id, 200, 0));
+                var2.addPotionEffect(new PotionEffect(Potion.confusion.id, 200, 3));
+                this.setDead();
+            }
         }
 
         return true;

@@ -26,7 +26,7 @@ public class ModelTempestBall extends ModelBase
         this.Shape21.setRotationPoint(9.0F, 2.0F, 7.0F);
         this.Shape21.setTextureSize(64, 32);
         this.Shape21.mirror = true;
-        this.setRotation(this.Shape21, 0.0F, -(float) Math.PI, -0.1745329F);
+        this.setRotation(this.Shape21, 0.0F, -(float)Math.PI, -0.1745329F);
         this.Shape23 = new ModelRenderer(this, 32, 0);
         this.Shape23.addBox(0.0F, 0.0F, 0.0F, 8, 8, 8);
         this.Shape23.setRotationPoint(0.0F, 0.0F, 0.0F);

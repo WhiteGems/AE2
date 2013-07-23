@@ -2,7 +2,6 @@ package net.aetherteam.aether.worldgen;
 
 import java.util.List;
 import java.util.Random;
-
 import net.aetherteam.aether.blocks.AetherBlocks;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.structure.StructureBoundingBox;
@@ -20,7 +19,8 @@ public class ComponentDungeonCorridor extends ComponentDungeonBronzeRoom
         if (this.coordBaseMode != 2 && this.coordBaseMode != 0)
         {
             this.sectionCount = this.boundingBox.getXSize() / 5;
-        } else
+        }
+        else
         {
             this.sectionCount = this.boundingBox.getZSize() / 5;
         }

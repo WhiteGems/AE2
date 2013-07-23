@@ -1,5 +1,7 @@
 package net.aetherteam.aether.items;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.aetherteam.aether.PlayerBaseAetherServer;
 import net.aetherteam.aether.client.PlayerBaseAetherClient;
 import net.minecraft.entity.player.EntityPlayer;
@@ -43,6 +45,7 @@ public class ItemRegenerationStone extends ItemAccessory
         }
     }
 
+    @SideOnly(Side.CLIENT)
     public void activateClientPassive(EntityPlayer var1, PlayerBaseAetherClient var2)
     {
         if (var1.ticksExisted % 200 == 0 && var1.getHealth() < var2.maxHealth)
