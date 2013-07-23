@@ -14,9 +14,9 @@ import org.lwjgl.opengl.GL11;
 
 public class GuiPlayerRequestSlot extends Gui
 {
-    protected static final String AVAILABLE_TEXT = "AVAILABLE";
-    protected static final String INPARTY_TEXT = "ALREADY IN PARTY";
-    protected static final String PENDING_TEXT = "REQUEST PENDING";
+    protected static final String AVAILABLE_TEXT = "可用";
+    protected static final String INPARTY_TEXT = "已加入公会";
+    protected static final String PENDING_TEXT = "请求审理中";
     private static final int AVAILABLE_COLOUR = 6750054;
     private static final int INPARTY_COLOUR = 16711680;
     private static final int PENDING_COLOUR = 16756516;
@@ -92,29 +92,27 @@ public class GuiPlayerRequestSlot extends Gui
         GL11.glPushMatrix();
         GL11.glScalef(0.75F, 0.75F, 1.0F);
         boolean var14 = PartyController.instance().inParty(this.username);
-        String var15 = "";
+        String subText = "";
         boolean var16 = false;
         Party var17 = PartyController.instance().getParty(this.username);
-        boolean var18 = NotificationHandler.instance().hasSentToBefore(this.username, NotificationType.PARTY_REQUEST, var5.thePlayer.username);
-        int var20;
+        boolean pending = NotificationHandler.instance().hasSentToBefore(this.username, NotificationType.PARTY_REQUEST, var5.thePlayer.username);
+        int textColour;
 
         if (var14)
         {
-            var15 = "ALREADY IN PARTY";
-            var20 = 16711680;
-        }
-        else if (var18)
+            subText = "已加入公会";
+            textColour = 16711680;
+        } else if (pending)
         {
-            var15 = "REQUEST PENDING";
-            var20 = 16756516;
-        }
-        else
+            subText = "请求审理中";
+            textColour = 16756516;
+        } else
         {
-            var15 = "AVAILABLE";
-            var20 = 6750054;
+            subText = "可用";
+            textColour = 6750054;
         }
 
-        var6.drawString(var15, (int)(((float)var1 + (float)var4) / 0.75F), (int)(((float)var2 + 12.0F) / 0.75F), var20);
+        var6.drawString(subText, (int)(((float)var1 + (float)var4) / 0.75F), (int)(((float)var2 + 12.0F) / 0.75F), textColour);
         GL11.glPopMatrix();
     }
 

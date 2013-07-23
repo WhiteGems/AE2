@@ -45,7 +45,7 @@ public class GuiSunAltar extends GuiScreen
         int var6 = (this.width - var4) / 2;
         int var7 = (this.height - var5) / 2;
         this.drawTexturedModalRect(var6, var7, 0, 0, var4, var5);
-        this.fontRenderer.drawString("Sun Altar", (this.width - this.fontRenderer.getStringWidth("Sun Altar")) / 2, var7 + 20, 4210752);
+        this.fontRenderer.drawString("太阳祭坛", (this.width - this.fontRenderer.getStringWidth("太阳祭坛")) / 2, var7 + 20, 4210752);
     }
 
     /**

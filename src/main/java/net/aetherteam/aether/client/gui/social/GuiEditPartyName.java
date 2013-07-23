@@ -16,7 +16,7 @@ import org.lwjgl.opengl.GL11;
 public class GuiEditPartyName extends GuiScreen
 {
     private GuiTextField dialogueInput;
-    private String name;
+    private String name = "以太世界公会";
     private int dialogueTexture;
     private int xParty;
     private int yParty;
@@ -33,11 +33,10 @@ public class GuiEditPartyName extends GuiScreen
         this(new PartyData(), var1, var2);
     }
 
-    public GuiEditPartyName(PartyData var1, EntityPlayer var2, GuiScreen var3)
+    public GuiEditPartyName(PartyData var1, EntityPlayer player, GuiScreen parent)
     {
-        this.name = "Aether Party";
-        this.parent = var3;
-        this.player = var2;
+        this.parent = parent;
+        this.player = player;
         this.mc = FMLClientHandler.instance().getClient();
         this.dialogueTexture = this.mc.renderEngine.getTexture("/net/aetherteam/aether/client/sprites/gui/dialogue.png");
         this.wParty = 256;
@@ -57,8 +56,8 @@ public class GuiEditPartyName extends GuiScreen
         this.dialogueInput.setFocused(true);
         this.dialogueInput.setMaxStringLength(22);
         this.dialogueInput.setCanLoseFocus(false);
-        this.buttonList.add(new GuiButton(0, this.xParty - 1, this.yParty + 14, 50, 20, "Confirm"));
-        this.buttonList.add(new GuiButton(1, this.xParty + 52, this.yParty + 14, 45, 20, "Cancel"));
+        this.buttonList.add(new GuiButton(0, this.xParty - 1, this.yParty + 14, 50, 20, "确认"));
+        this.buttonList.add(new GuiButton(1, this.xParty + 52, this.yParty + 14, 45, 20, "取消"));
     }
 
     /**
@@ -101,9 +100,9 @@ public class GuiEditPartyName extends GuiScreen
 
                 if (var3 && var2 != null)
                 {
-                    String var4 = var2.getName();
-                    boolean var5 = PartyController.instance().changePartyName(var2, this.dialogueInput.getText(), true);
-                    this.mc.displayGuiScreen(new GuiDialogueBox(this.parent, "Party name was changed to \'" + this.dialogueInput.getText() + "\'!", "That party name is already taken. Sorry :(", var5));
+                    String partyName = var2.getName();
+                    boolean nameChanged = PartyController.instance().changePartyName(var2, this.dialogueInput.getText(), true);
+                    this.mc.displayGuiScreen(new GuiDialogueBox(this.parent, "公会重命名为 " + this.dialogueInput.getText() + " !", "抱歉, 该名称已占用 :(", nameChanged));
                 }
 
                 break;
@@ -124,19 +123,19 @@ public class GuiEditPartyName extends GuiScreen
     /**
      * Draws the screen and all the components in it.
      */
-    public void drawScreen(int var1, int var2, float var3)
+    public void drawScreen(int x, int y, float partialTick)
     {
         this.drawDefaultBackground();
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-        int var4 = this.xParty - 70;
-        int var5 = this.yParty - 84;
+        int centerX = this.xParty - 70;
+        int centerY = this.yParty - 84;
         ScaledResolution var6 = new ScaledResolution(this.mc.gameSettings, this.mc.displayWidth, this.mc.displayHeight);
         boolean var7 = false;
         byte var8 = 100;
         boolean var9 = true;
         boolean var10 = true;
         GL11.glEnable(GL11.GL_SCISSOR_TEST);
-        GL11.glScissor((var4 + 14) * var6.getScaleFactor(), (var5 + 35) * var6.getScaleFactor(), var8 * var6.getScaleFactor(), 103 * var6.getScaleFactor());
+        GL11.glScissor((centerX + 14) * var6.getScaleFactor(), (centerY + 35) * var6.getScaleFactor(), var8 * var6.getScaleFactor(), 103 * var6.getScaleFactor());
         GL11.glPushMatrix();
         var7 = false;
         GL11.glPopMatrix();
@@ -144,10 +143,10 @@ public class GuiEditPartyName extends GuiScreen
         this.drawGradientRect(0, 0, this.width, this.height, -1728053248, -1728053248);
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
         GL11.glBindTexture(GL11.GL_TEXTURE_2D, this.dialogueTexture);
-        this.drawTexturedModalRect(var4 - 30, var5 + 71, 0, 0, 201, this.hParty - 201);
+        this.drawTexturedModalRect(centerX - 30, centerY + 71, 0, 0, 201, this.hParty - 201);
         this.dialogueInput.drawTextBox();
-        this.fontRenderer.drawString("Change Party Name", (int)(((float)var4 + (float)this.height) / 0.75F), (int)(((float)var5 + 12.0F) / 0.75F), -10066330);
-        super.drawScreen(var1, var2, var3);
+        this.fontRenderer.drawString("重命名公会", (int) ((centerX + this.height) / 0.75F), (int) ((centerY + 12.0F) / 0.75F), -10066330);
+        super.drawScreen(x, y, partialTick);
     }
 
     /**

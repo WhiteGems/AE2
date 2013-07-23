@@ -11,18 +11,18 @@ public class Party implements Serializable
 {
     private String name;
     private PartyMember leader;
-    private ArrayList members = new ArrayList();
-    private ArrayList requestedMembers = new ArrayList();
+    private ArrayList<PartyMember> members = new ArrayList<PartyMember>();
+    private ArrayList<String> requestedMembers = new ArrayList<String>();
     private int memberSizeLimit = 20;
     private PartyType TYPE;
 
-    public Party(String var1, PartyMember var2)
+    public Party(String name, PartyMember leader)
     {
         this.TYPE = PartyType.OPEN;
-        this.name = var1;
-        this.leader = var2;
+        this.name = name;
+        this.leader = leader;
         this.leader.promoteTo(MemberType.LEADER);
-        this.join(var2);
+        this.join(leader);
     }
 
     public String getName()
@@ -50,9 +50,9 @@ public class Party implements Serializable
         return this.TYPE;
     }
 
-    public Party setType(PartyType var1)
+    public Party setType(PartyType type)
     {
-        this.TYPE = var1;
+        this.TYPE = type;
         return this;
     }
 
@@ -71,27 +71,25 @@ public class Party implements Serializable
         return this.leader != null;
     }
 
-    public boolean isLeader(PartyMember var1)
+    public boolean isLeader(PartyMember member)
     {
-        return var1 != null && this.leader == var1;
+        return member != null && this.leader == member;
     }
 
-    public boolean hasMember(PartyMember var1)
+    public boolean hasMember(PartyMember member)
     {
-        return var1 != null && this.hasMember(var1.username);
+        return member != null && this.hasMember(member.username);
     }
 
-    public boolean hasMember(String var1)
+    public boolean hasMember(String memberName)
     {
-        if (this.members != null && var1 != null)
+        if (this.members != null && memberName != null)
         {
-            Iterator var2 = this.members.iterator();
-
-            while (var2.hasNext())
+            for (Object member : this.members)
             {
-                PartyMember var3 = (PartyMember)var2.next();
+                PartyMember var3 = (PartyMember)member;
 
-                if (var3.username.equalsIgnoreCase(var1))
+                if (var3.username.equalsIgnoreCase(memberName))
                 {
                     return true;
                 }
@@ -101,16 +99,16 @@ public class Party implements Serializable
         return false;
     }
 
-    public void promoteMember(PartyMember var1, MemberType var2)
+    public void promoteMember(PartyMember member, MemberType type)
     {
-        if (this.hasMember(var1))
+        if (this.hasMember(member))
         {
-            var1.promoteTo(var2);
+            member.promoteTo(type);
 
-            if (var2 == MemberType.LEADER && this.hasLeader())
+            if (type == MemberType.LEADER && this.hasLeader())
             {
                 this.leader.promoteTo(MemberType.MEMBER);
-                this.leader = var1;
+                this.leader = member;
             }
         }
     }
@@ -135,45 +133,45 @@ public class Party implements Serializable
         return this.requestedMembers.contains(var1.toLowerCase());
     }
 
-    public void join(PartyMember var1)
+    public void join(PartyMember member)
     {
-        if (var1 != null && this.members.size() < this.memberSizeLimit && !this.hasMember(var1))
+        if (member != null && this.members.size() < this.memberSizeLimit && !this.hasMember(member))
         {
-            if (PartyController.instance().inParty(var1.username))
+            if (PartyController.instance().inParty(member.username))
             {
-                PartyController.instance().getParty(PartyController.instance().getMember(var1.username));
+                PartyController.instance().getParty(PartyController.instance().getMember(member.username));
             }
 
-            if (this.isRequestedPlayer(var1.username))
+            if (this.isRequestedPlayer(member.username))
             {
-                this.removeRequestedPlayer(var1.username);
+                this.removeRequestedPlayer(member.username);
             }
 
-            this.members.add(var1);
+            this.members.add(member);
         }
     }
 
-    public void leave(PartyMember var1)
+    public void leave(PartyMember member)
     {
-        if (this.hasMember(var1))
+        if (this.hasMember(member))
         {
-            if (var1.isLeader() && this.members.size() > 1)
+            if (member.isLeader() && this.members.size() > 1)
             {
-                Random var2 = new Random();
-                PartyMember var3;
+                Random rand = new Random();
+                PartyMember newLeader;
 
-                for (var3 = null; var3 == null || var3 == var1; var3 = (PartyMember)this.members.get(var2.nextInt(this.members.size())))
+                for (newLeader = null; newLeader == null || newLeader == member; newLeader = (PartyMember)this.members.get(rand.nextInt(this.members.size())))
                 {
                     ;
                 }
 
-                if (var3 != null)
+                if (newLeader != null)
                 {
-                    PartyController.instance().promoteMember(PartyController.instance().getMember(var3.username), MemberType.LEADER, true);
+                    PartyController.instance().promoteMember(PartyController.instance().getMember(newLeader.username), MemberType.LEADER, true);
                 }
             }
 
-            this.members.remove(var1);
+            this.members.remove(member);
 
             if (this.members.size() <= 0)
             {

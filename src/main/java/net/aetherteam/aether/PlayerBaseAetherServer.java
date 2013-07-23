@@ -305,7 +305,7 @@ public class PlayerBaseAetherServer extends PlayerCoreServer
 
         if (this.prevCreative != this.player.ce.isCreativeMode)
         {
-            System.out.println("hey");
+            // System.out.println("hey"); // hey yo, do not spam my console
 
             if (!this.player.ce.isCreativeMode)
             {

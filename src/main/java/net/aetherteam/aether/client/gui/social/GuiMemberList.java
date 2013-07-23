@@ -17,8 +17,8 @@ import org.lwjgl.opengl.GL11;
 
 public class GuiMemberList extends GuiScreen
 {
-    protected static final String ONLINE_TEXT = "ONLINE";
-    protected static final String OFFLINE_TEXT = "OFFLINE";
+    protected static final String ONLINE_TEXT = "在线";
+    protected static final String OFFLINE_TEXT = "离线";
     private static final int ONLINE_TEXT_COLOR = 6750054;
     private static final int OFFLINE_TEXT_COLOR = 16711680;
     private GuiYSlider sbar;
@@ -63,7 +63,7 @@ public class GuiMemberList extends GuiScreen
 
         this.sbar = new GuiYSlider(-1, this.xParty + 46, this.yParty - 54, 10, 103);
         this.sbar.sliderValue = this.sbarVal;
-        this.buttonList.add(new GuiButton(0, this.xParty - 58, this.yParty + 85 - 28, 120, 20, "Back"));
+        this.buttonList.add(new GuiButton(0, this.xParty - 58, this.yParty + 85 - 28, 120, 20, "返回"));
     }
 
     /**
@@ -128,7 +128,7 @@ public class GuiMemberList extends GuiScreen
     /**
      * Draws the screen and all the components in it.
      */
-    public void drawScreen(int var1, int var2, float var3)
+    public void drawScreen(int x, int y, float partialTick)
     {
         if (PartyController.instance().getParty(this.player) == null)
         {
@@ -158,16 +158,16 @@ public class GuiMemberList extends GuiScreen
             this.sbar.sliderValue = 0.0F;
         }
 
-        int var6 = this.xParty - 70;
-        int var7 = this.yParty - 84;
+        int centerX = this.xParty - 70;
+        int centerY = this.yParty - 84;
         ScaledResolution var8 = new ScaledResolution(this.mc.gameSettings, this.mc.displayWidth, this.mc.displayHeight);
-        this.drawTexturedModalRect(var6, var7, 0, 0, 141, this.hParty);
+        this.drawTexturedModalRect(centerX, centerY, 0, 0, 141, this.hParty);
         boolean var9 = false;
         byte var10 = 100;
         byte var11 = 20;
         byte var12 = 2;
         GL11.glEnable(GL11.GL_SCISSOR_TEST);
-        GL11.glScissor((var6 + 14) * var8.getScaleFactor(), (var7 + 35) * var8.getScaleFactor(), var10 * var8.getScaleFactor(), 103 * var8.getScaleFactor());
+        GL11.glScissor((centerX + 14) * var8.getScaleFactor(), (centerY + 35) * var8.getScaleFactor(), var10 * var8.getScaleFactor(), 103 * var8.getScaleFactor());
         GL11.glPushMatrix();
         int var16 = var4.size() * (var11 + var12);
         float var13 = -this.sbar.sliderValue * (float)(var16 - 105);
@@ -182,7 +182,7 @@ public class GuiMemberList extends GuiScreen
         for (int var14 = 0; var14 < var4.size(); ++var14)
         {
             String var15 = ((PartyMember)var4.get(var14)).username;
-            this.drawPlayerSlot(var15, var6 + 15, var7 + var16 + 30, var10, var11, true);
+            this.drawPlayerSlot(var15, centerX + 15, centerY + var16 + 30, var10, var11, true);
             var16 += var11 + var12;
         }
 
@@ -191,11 +191,10 @@ public class GuiMemberList extends GuiScreen
 
         if (var16 > 103)
         {
-            this.sbar.drawButton(this.mc, var1, var2);
+            this.sbar.drawButton(this.mc, x, y);
         }
-
-        this.drawString(this.fontRenderer, "Player List", var6 + 40, var7 + 10, 16777215);
-        super.drawScreen(var1, var2, var3);
+        drawString(this.fontRenderer, "玩家列表", centerX + 40, centerY + 10, 16777215);
+        super.drawScreen(x, y, partialTick);
     }
 
     /**
@@ -253,11 +252,11 @@ public class GuiMemberList extends GuiScreen
 
         if (var8.contains(var1))
         {
-            this.fontRenderer.drawString("ONLINE", (int)(((float)var2 + (float)var5) / 0.75F), (int)(((float)var3 + 12.0F) / 0.75F), 6750054);
+            this.fontRenderer.drawString("在线", (int)(((float)var2 + (float)var5) / 0.75F), (int)(((float)var3 + 12.0F) / 0.75F), 6750054);
         }
         else
         {
-            this.fontRenderer.drawString("OFFLINE", (int)(((float)var2 + (float)var5) / 0.75F), (int)(((float)var3 + 12.0F) / 0.75F), 16711680);
+            this.fontRenderer.drawString("离线", (int)(((float)var2 + (float)var5) / 0.75F), (int)(((float)var3 + 12.0F) / 0.75F), 16711680);
         }
 
         GL11.glPopMatrix();

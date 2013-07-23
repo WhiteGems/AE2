@@ -4,14 +4,15 @@ import java.io.Serializable;
 
 public enum PartyType implements Serializable
 {
-    OPEN(6750054),
-    CLOSED(16711680),
-    PRIVATE(0);
-    public int displayColor;
+    OPEN(6750054, "公开"), CLOSE(16711680, "关闭"), PRIVATE(0, "私有");
 
-    private PartyType(int var3)
+    public int displayColor;
+    public transient String realname;
+
+    private PartyType(int displayColor, String name)
     {
-        this.displayColor = var3;
+        this.displayColor = displayColor;
+        this.realname = name;
     }
 
     public int getDisplayColor()
@@ -19,18 +20,26 @@ public enum PartyType implements Serializable
         return this.displayColor;
     }
 
-    public static PartyType getTypeFromString(String var0)
+    public static PartyType getTypeFromName(String name)
     {
-        PartyType[] var1 = values();
-        int var2 = var1.length;
-
-        for (int var3 = 0; var3 < var2; ++var3)
+        for (PartyType type : values())
         {
-            PartyType var4 = var1[var3];
-
-            if (var4.name().equalsIgnoreCase(var0))
+            if (type.realname.equalsIgnoreCase(name))
             {
-                return var4;
+                return type;
+            }
+        }
+
+        return null;
+    }
+
+    public static PartyType getTypeFromString(String name)
+    {
+        for (PartyType type : values())
+        {
+            if (type.name().equalsIgnoreCase(name))
+            {
+                return type;
             }
         }
 

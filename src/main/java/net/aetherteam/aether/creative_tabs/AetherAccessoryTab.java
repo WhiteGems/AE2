@@ -18,7 +18,7 @@ public class AetherAccessoryTab extends CreativeTabs
 
     public String getTabLabel()
     {
-        return "Aether Accessories";
+        return "以太II|配件";
     }
 
     /**

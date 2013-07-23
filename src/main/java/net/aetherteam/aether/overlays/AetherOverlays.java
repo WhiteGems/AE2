@@ -94,7 +94,7 @@ public class AetherOverlays
             int var5 = var3.getScaledHeight();
             EntityPlayer var6 = var1.getPlayer();
             var0.renderEngine.resetBoundTexture();
-            var0.fontRenderer.drawStringWithShadow(Aether.proxy.getClientCooldownName().get(var6.username) + " Cooldown", var4 / 2 - var0.fontRenderer.getStringWidth(Aether.proxy.getClientCooldownName().get(var6.username) + " Cooldown") / 2, 32 + (var2.getCurrentBoss() != null ? 20 : 0), -1);
+            var0.fontRenderer.drawStringWithShadow(Aether.proxy.getClientCooldownName().get(var6.username) + " 冷却", var4 / 2 - var0.fontRenderer.getStringWidth(Aether.proxy.getClientCooldownName().get(var6.username) + " 冷却") / 2, 32 + (var2.getCurrentBoss() != null ? 20 : 0), -1);
             GL11.glEnable(GL11.GL_BLEND);
             GL11.glDisable(GL11.GL_DEPTH_TEST);
             GL11.glDepthMask(false);
@@ -125,7 +125,7 @@ public class AetherOverlays
             int var6 = var5.getScaledWidth();
             int var7 = var5.getScaledHeight();
             var0.renderEngine.resetBoundTexture();
-            String var8 = "Dungeon Queue: " + var3.getAmountQueued() + "/" + var2.getMembers().size();
+            String var8 = "已准备成员: " + var3.getAmountQueued() + "/" + var2.getMembers().size();
             var0.fontRenderer.drawStringWithShadow(var8, var6 / 2 - var0.fontRenderer.getStringWidth(var8) / 2, 16 + (var4.ridingEntity instanceof Mount ? 16 : 0), -1);
         }
     }
@@ -149,7 +149,7 @@ public class AetherOverlays
                 int var8 = (var3.getTimerLength() - var3.getTimerSeconds()) / 60;
                 int var9 = var3.getTimerLength() - var3.getTimerSeconds() - var8 * 60;
                 String var10 = String.valueOf(var8 + ":" + String.format("%02d", new Object[] {Integer.valueOf(var9)}));
-                String var11 = "Dungeon Ends In: " + var10;
+                String var11 = "地牢即将关闭,倒计时: " + var10;
                 var0.fontRenderer.drawStringWithShadow(var11, var6 / 2 - var0.fontRenderer.getStringWidth(var11) / 2, 16 + (var4.ridingEntity instanceof Mount ? 16 : 0), -1);
             }
         }
@@ -356,7 +356,7 @@ public class AetherOverlays
 
                 if (var6 && var19 > 1)
                 {
-                    var0.fontRenderer.drawStringWithShadow("\u00a7n" + (var26 ? "Dungeon Group" : "Party") + ":\u00a7r " + var24.getName(), 2, 59, 15066597);
+                    var0.fontRenderer.drawStringWithShadow("\u00a7n" + (var26 ? "地牢小队" : "公会") + ":\u00a7r " + var24.getName(), 2, 59, 15066597);
                 }
 
                 GL11.glPopMatrix();
@@ -597,7 +597,7 @@ public class AetherOverlays
                     drawTexturedModalRect((float)(var6 / 2 - 49), 10.0F, 1.0F, 57.0F, 96.0F, 58.0F);
                 }
 
-                var10 = "\u00a7o" + (var20 ? "Final" : "Mini") + " Boss";
+                var10 = "\u00a7o" + (var20 ? "最终" : "迷你") + "Boss";
                 var12 = var20 ? 45 : 24;
                 var13 = var20 ? -10 : 11;
                 var14 = var20;

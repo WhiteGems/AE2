@@ -23,8 +23,8 @@ import org.lwjgl.opengl.GL11;
 
 public class GuiRequestPlayer extends GuiScreen
 {
-    protected static final String ONLINE_TEXT = "ONLINE";
-    protected static final String OFFLINE_TEXT = "OFFLINE";
+    protected static final String ONLINE_TEXT = "在线";
+    protected static final String OFFLINE_TEXT = "离线";
     private static final int ONLINE_TEXT_COLOR = 6750054;
     private static final int OFFLINE_TEXT_COLOR = 16711680;
     private GuiYSlider sbar;
@@ -75,8 +75,9 @@ public class GuiRequestPlayer extends GuiScreen
 
         this.sbar = new GuiYSlider(-1, this.xMember + 46, this.yMember - 54, 10, 103);
         this.sbar.sliderValue = this.sbarVal;
-        this.buttonList.add(new GuiButton(0, this.xMember - 58, this.yMember + 85 - 28, 120, 20, "Back"));
-        this.buttonList.add(new GuiButton(0, this.xMember - 58, this.yMember + 85 - 28, 120, 20, "Back"));
+
+        this.buttonList.add(new GuiButton(0, this.xMember - 58, this.yMember + 85 - 28, 120, 20, "返回"));
+        this.buttonList.add(new GuiButton(0, this.xMember - 58, this.yMember + 85 - 28, 120, 20, "返回"));
     }
 
     /**
@@ -232,16 +233,16 @@ public class GuiRequestPlayer extends GuiScreen
             this.sbar.sliderValue = 0.0F;
         }
 
-        int var6 = this.xMember - 70;
-        int var7 = this.yMember - 84;
+        int centerX = this.xMember - 70;
+        int centerY = this.yMember - 84;
         ScaledResolution var8 = new ScaledResolution(this.mc.gameSettings, this.mc.displayWidth, this.mc.displayHeight);
-        this.drawTexturedModalRect(var6, var7, 0, 0, 141, this.hMember);
+        this.drawTexturedModalRect(centerX, centerY, 0, 0, 141, this.hMember);
         this.totalHeight = 0;
         byte var9 = 100;
         byte var10 = 20;
         byte var11 = 2;
         GL11.glEnable(GL11.GL_SCISSOR_TEST);
-        GL11.glScissor((var6 + 14) * var8.getScaleFactor(), (var7 + 35) * var8.getScaleFactor(), var9 * var8.getScaleFactor(), 103 * var8.getScaleFactor());
+        GL11.glScissor((centerX + 14) * var8.getScaleFactor(), (centerY + 35) * var8.getScaleFactor(), var9 * var8.getScaleFactor(), 103 * var8.getScaleFactor());
         GL11.glPushMatrix();
         this.totalHeight = var4.size() * (var10 + var11);
         float var12 = -this.sbar.sliderValue * (float)(this.totalHeight - 105);
@@ -261,7 +262,7 @@ public class GuiRequestPlayer extends GuiScreen
                 GuiPlayerInfo var14 = (GuiPlayerInfo)var4.get(var13);
                 String var15 = var14.name;
                 String var16 = "http://skins.minecraft.net/MinecraftSkins/" + StringUtils.stripControlCodes(var15) + ".png";
-                this.playerSlots.add(new GuiPlayerRequestSlot(var15, var16, this.playerSlots.size(), var6 + 15, var7 + this.totalHeight + 30, var9, var10));
+                this.playerSlots.add(new GuiPlayerRequestSlot(var15, var16, this.playerSlots.size(), centerX + 15, centerY + this.totalHeight + 30, var9, var10));
                 this.totalHeight += var10 + var11;
             }
 
@@ -270,7 +271,7 @@ public class GuiRequestPlayer extends GuiScreen
 
         for (var13 = 0; var13 < this.playerSlots.size(); ++var13)
         {
-            ((GuiPlayerRequestSlot)this.playerSlots.get(var13)).drawPlayerSlot(var6 + 15, var7 + this.totalHeight + 30, var9, var10);
+            ((GuiPlayerRequestSlot)this.playerSlots.get(var13)).drawPlayerSlot(centerX + 15, centerY + this.totalHeight + 30, var9, var10);
             this.totalHeight += var10 + var11;
         }
 
@@ -282,17 +283,20 @@ public class GuiRequestPlayer extends GuiScreen
             this.sbar.drawButton(this.mc, var1, var2);
         }
 
-        this.drawString(this.fontRenderer, "Player List", var6 + 40, var7 + 10, 16777215);
-        String var17 = "Request";
-        this.kickButton = new GuiButton(1, this.xMember + 3, this.yMember + 85 - 28, 58, 20, var17);
-        boolean var18 = false;
+        drawString(this.fontRenderer, "玩家列表", centerX + 40, centerY + 10, 16777215);
+
+        String kickName = "请求";
+
+        this.kickButton = new GuiButton(1, this.xMember + 3, this.yMember + 85 - 28, 58, 20, kickName);
+
+        boolean pending = false;
 
         if (this.selectedPlayerSlot != null)
         {
-            var18 = NotificationHandler.instance().hasSentToBefore(this.selectedPlayerSlot.username, NotificationType.PARTY_REQUEST, this.player.username);
+            pending = NotificationHandler.instance().hasSentToBefore(this.selectedPlayerSlot.username, NotificationType.PARTY_REQUEST, this.player.username);
         }
 
-        if (this.selectedPlayerSlot != null && this.slotIsSelected && (!PartyController.instance().inParty(this.selectedPlayerSlot.username) || this.playerSlots.size() == 1) && !var18)
+        if (this.selectedPlayerSlot != null && this.slotIsSelected && (!PartyController.instance().inParty(this.selectedPlayerSlot.username) || this.playerSlots.size() == 1) && !pending)
         {
             this.kickButton.enabled = true;
         }
@@ -301,7 +305,7 @@ public class GuiRequestPlayer extends GuiScreen
             this.kickButton.enabled = false;
         }
 
-        this.buttonList.add(new GuiButton(0, this.xMember - 60, this.yMember + 85 - 28, 58, 20, "Back"));
+        this.buttonList.add(new GuiButton(0, this.xMember - 60, this.yMember + 85 - 28, 58, 20, "返回"));
         this.buttonList.add(this.kickButton);
         super.drawScreen(var1, var2, var3);
     }

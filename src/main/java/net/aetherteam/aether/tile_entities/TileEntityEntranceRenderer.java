@@ -15,9 +15,9 @@ import org.lwjgl.opengl.GL11;
 
 public class TileEntityEntranceRenderer extends TileEntitySpecialRenderer
 {
-    protected static final String AVAILABLE = "Available";
-    protected static final String OCCUPIED = "Occupied";
-    protected static final String CONQUERED = "Conquered";
+    protected static final String AVAILABLE = "未攻略";
+    protected static final String OCCUPIED = "攻略中";
+    protected static final String CONQUERED = "已攻略";
     private static final int AVAILABLE_COLOUR = 6750054;
     private static final int OCCUPIED_COLOUR = 16756516;
     private static final int CONQUERED_COLOUR = 10688793;
@@ -35,8 +35,8 @@ public class TileEntityEntranceRenderer extends TileEntitySpecialRenderer
         {
             PartyMember var10 = PartyController.instance().getMember(Minecraft.getMinecraft().thePlayer.username.toLowerCase());
             Party var11 = PartyController.instance().getParty(var10);
-            String var12 = (var11 == null || !var9.hasAnyConqueredDungeon(var11.getMembers())) && !var9.hasConqueredDungeon((EntityPlayer)Minecraft.getMinecraft().thePlayer) ? (!var9.isActive() && !var9.hasQueuedParty() ? "Available" : "Occupied") : "Conquered";
-            int var13 = (var11 == null || !var9.hasAnyConqueredDungeon(var11.getMembers())) && !var9.hasConqueredDungeon((EntityPlayer)Minecraft.getMinecraft().thePlayer) ? (!var9.isActive() && !var9.hasQueuedParty() ? 6750054 : 16756516) : 10688793;
+            String var12 = (var11 == null || !var9.hasAnyConqueredDungeon(var11.getMembers())) && !var9.hasConqueredDungeon((EntityPlayer) Minecraft.getMinecraft().thePlayer) ? (!var9.isActive() && !var9.hasQueuedParty() ? "未攻略" : "攻略中") : "已攻略";
+            int var13 = (var11 == null || !var9.hasAnyConqueredDungeon(var11.getMembers())) && !var9.hasConqueredDungeon((EntityPlayer) Minecraft.getMinecraft().thePlayer) ? (!var9.isActive() && !var9.hasQueuedParty() ? 6750054 : 16756516) : 10688793;
             GL11.glPushMatrix();
             this.renderLabel(var1, var12, var2, var4 + 5.0D, var6, 24, 2.0F, var13);
             GL11.glPopMatrix();

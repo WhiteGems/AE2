@@ -75,17 +75,20 @@ public class GuiManagePartyMember extends GuiScreen
     {
         this.updateScreen();
         this.buttonList.clear();
-        this.transferButton = new GuiButton(5, this.xParty - 60, this.yParty - 36 - 28, 120, 20, "Transfer Ownership");
-        this.moderatorButton = new GuiButton(4, this.xParty - 60, this.yParty - 14 - 28, 120, 20, "Make Moderator");
-        this.kickButton = new GuiButton(5, this.xParty - 60, this.yParty + 8 - 28, 120, 20, "Kick");
-        this.banButton = new GuiButton(6, this.xParty - 60, this.yParty + 30 - 28, 120, 20, "Ban");
+
+        this.transferButton = new GuiButton(5, this.xParty - 60, this.yParty - 36 - 28, 120, 20, "移交队长");
+        this.moderatorButton = new GuiButton(4, this.xParty - 60, this.yParty - 14 - 28, 120, 20, "添加管理");
+        this.kickButton = new GuiButton(5, this.xParty - 60, this.yParty + 8 - 28, 120, 20, "踢出");
+        this.banButton = new GuiButton(6, this.xParty - 60, this.yParty + 30 - 28, 120, 20, "封禁");
+
         this.transferButton.enabled = false;
         this.moderatorButton.enabled = false;
         this.buttonList.add(this.transferButton);
         this.buttonList.add(this.moderatorButton);
         this.buttonList.add(this.kickButton);
         this.buttonList.add(this.banButton);
-        this.buttonList.add(new GuiButton(0, this.xParty - 60, this.yParty + 81 - 28, 120, 20, "Back"));
+
+        this.buttonList.add(new GuiButton(0, this.xParty - 60, this.yParty + 81 - 28, 120, 20, "返回"));
     }
 
     /**
@@ -123,19 +126,22 @@ public class GuiManagePartyMember extends GuiScreen
     /**
      * Draws the screen and all the components in it.
      */
-    public void drawScreen(int var1, int var2, float var3)
+    public void drawScreen(int x, int y, float partialTick)
     {
         this.drawDefaultBackground();
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-        GL11.glBindTexture(GL11.GL_TEXTURE_2D, this.backgroundTexture);
-        int var4 = this.xParty - 70;
-        int var5 = this.yParty - 84;
-        new ScaledResolution(this.mc.gameSettings, this.mc.displayWidth, this.mc.displayHeight);
-        this.drawTexturedModalRect(var4, var5, 0, 0, 141, this.hParty);
-        GL11.glBindTexture(GL11.GL_TEXTURE_2D, this.backgroundTexture);
-        String var7 = "Manage Permissions";
-        this.drawString(this.fontRenderer, var7, var4 + 69 - this.fontRenderer.getStringWidth(var7) / 2, var5 + 5, 16777215);
-        super.drawScreen(var1, var2, var3);
+        GL11.glBindTexture(3553, this.backgroundTexture);
+        int centerX = this.xParty - 70;
+        int centerY = this.yParty - 84;
+
+        ScaledResolution sr = new ScaledResolution(this.mc.gameSettings, this.mc.displayWidth, this.mc.displayHeight);
+        drawTexturedModalRect(centerX, centerY, 0, 0, 141, this.hParty);
+        GL11.glBindTexture(3553, this.backgroundTexture);
+
+        String name = "管理权限";
+
+        drawString(this.fontRenderer, name, centerX + 69 - this.fontRenderer.getStringWidth(name) / 2, centerY + 5, 16777215);
+        super.drawScreen(x, y, partialTick);
     }
 
     /**

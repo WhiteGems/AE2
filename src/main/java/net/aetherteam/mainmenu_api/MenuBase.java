@@ -95,7 +95,7 @@ public class MenuBase extends GuiScreen
 
         this.jukeButtonList.clear();
         this.jukeButton = new GuiButtonItemStack(this.fontRenderer, var4, 0, this.getJukeboxButtonX(), this.getJukeboxButtonY(), new ItemStack(Block.jukebox));
-        this.menuButton = new GuiMenuButton(0, this.getListButtonX(), this.getListButtonY(), 58, 20, "Menu List");
+        this.menuButton = new GuiMenuButton(0, this.getListButtonX(), this.getListButtonY(), 58, 20, "菜单列表");
         this.menuButton.drawButton(this.mc, var1, var2);
 
         if (this.useJukebox())
@@ -112,22 +112,21 @@ public class MenuBase extends GuiScreen
             GL11.glEnable(GL11.GL_BLEND);
             GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
             GL11.glBindTexture(GL11.GL_TEXTURE_2D, this.jukeboxTexture);
-            int var8 = var6 - var6 / 2 - 75;
-            int var9 = var7 - var7 / 2 - 37;
+            int centerX = var6 - var6 / 2 - 75;
+            int centerY = var7 - var7 / 2 - 37;
             new ScaledResolution(var4.gameSettings, var4.displayWidth, var4.displayHeight);
-            this.drawTexturedModalRect(var8, var9, 0, 0, 151, this.jukeHeight);
+            this.drawTexturedModalRect(centerX, centerY, 0, 0, 151, this.jukeHeight);
             var4.renderEngine.resetBoundTexture();
-            this.fontRenderer.drawStringWithShadow(this.jukebox.getCurrentSongName(), var8 + 76 - this.fontRenderer.getStringWidth(this.jukebox.getCurrentSongName()) / 2, var9 + 14, 16777215);
+            this.fontRenderer.drawStringWithShadow(this.jukebox.getCurrentSongName(), centerX + 76 - this.fontRenderer.getStringWidth(this.jukebox.getCurrentSongName()) / 2, centerY + 14, 16777215);
 
             if (!this.jukebox.isMusicPlaying() && !MenuBaseConfig.muteMusic)
             {
-                this.fontRenderer.drawStringWithShadow("Loading Song...", var8 + 76 - this.fontRenderer.getStringWidth("Loading Song...") / 2, var9 - 11, 16777215);
+                this.fontRenderer.drawStringWithShadow("载入音乐中...", centerX + 76 - this.fontRenderer.getStringWidth("载入音乐中...") / 2, centerY - 11, 16777215);
             }
-
-            this.jukeButtonList.add(new GuiButton(0, var8 + 12, var9 + 42, 58, 20, "Music: " + (MenuBaseConfig.muteMusic ? "Off" : "On")));
-            this.jukeButtonList.add(new GuiButton(1, var8 + 83, var9 + 42, 58, 20, "Loop: " + (MenuBaseConfig.loopMusic ? "On" : "Off")));
-            this.jukeButtonList.add(new GuiButton(2, var8 + 125, var9 + 8, 20, 20, ">"));
-            this.jukeButtonList.add(new GuiButton(3, var8 + 7, var9 + 8, 20, 20, "<"));
+            this.jukeButtonList.add(new GuiButton(0, centerX + 12, centerY + 42, 58, 20, "音乐: " + (MenuBaseConfig.muteMusic ? "关" : "开")));
+            this.jukeButtonList.add(new GuiButton(1, centerX + 83, centerY + 42, 58, 20, "循环: " + (MenuBaseConfig.loopMusic ? "开" : "关")));
+            this.jukeButtonList.add(new GuiButton(2, centerX + 125, centerY + 8, 20, 20, ">"));
+            this.jukeButtonList.add(new GuiButton(3, centerX + 7, centerY + 8, 20, 20, "<"));
 
             for (int var11 = 0; var11 < this.jukeButtonList.size(); ++var11)
             {

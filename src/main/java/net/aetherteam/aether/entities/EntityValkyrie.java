@@ -493,11 +493,10 @@ public class EntityValkyrie extends EntityDungeonMob implements IAetherBoss
 
                 if (var3 == 2)
                 {
-                    this.chatItUp("Sorry, I don\'t fight with weaklings.");
-                }
-                else
+                    this.chatItUp("抱歉, 强者从不欺凌弱小");
+                } else
                 {
-                    this.chatItUp("Try defeating some weaker valkyries first.");
+                    this.chatItUp("尝试先打败一些喽啰证明自己的实力");
                 }
 
                 return false;
@@ -509,9 +508,8 @@ public class EntityValkyrie extends EntityDungeonMob implements IAetherBoss
                     if (this.entityToAttack == null)
                     {
                         this.chatTime = 0;
-                        this.chatItUp("This will be your final battle!");
-                    }
-                    else
+                        this.chatItUp("这将是你最后一战!");
+                    } else
                     {
                         this.teleTimer += 60;
                     }
@@ -523,15 +521,13 @@ public class EntityValkyrie extends EntityDungeonMob implements IAetherBoss
 
                     if (var3 == 2)
                     {
-                        this.chatItUp("I\'m not going easy on you!");
-                    }
-                    else if (var3 == 1)
+                        this.chatItUp("我不会饶了你的!");
+                    } else if (var3 == 1)
                     {
-                        this.chatItUp("You\'re gonna regret that!");
-                    }
-                    else
+                        this.chatItUp("你会感到后悔的!");
+                    } else
                     {
-                        this.chatItUp("Now you\'re in for it!");
+                        this.chatItUp("现在, 你要为此付出代价!");
                     }
                 }
                 else
@@ -552,19 +548,16 @@ public class EntityValkyrie extends EntityDungeonMob implements IAetherBoss
                         this.isDead = false;
                         this.unlockDoor();
                         this.unlockTreasure();
-                        this.chatItUp("You are truly... a mighty warrior...");
-                    }
-                    else if (var4 == 2)
+                        this.chatItUp("你是一个... 真正强大的战士...");
+                    } else if (var4 == 2)
                     {
-                        this.chatItUp("Alright, alright! You win!");
-                    }
-                    else if (var4 == 1)
+                        this.chatItUp("好吧, 好吧! 你赢了!");
+                    } else if (var4 == 1)
                     {
-                        this.chatItUp("Okay, I give up! Geez!");
-                    }
-                    else
+                        this.chatItUp("好吧, 我放弃了! 天啊!");
+                    } else
                     {
-                        this.chatItUp("Oww! Fine, here\'s your medal...");
+                        this.chatItUp("喔喔! 够了, 给你勋章...");
                     }
 
                     this.spawnExplosionParticle();
@@ -605,22 +598,20 @@ public class EntityValkyrie extends EntityDungeonMob implements IAetherBoss
 
                     if (this.boss)
                     {
-                        this.chatItUp("As expected of a human.");
+                        this.chatItUp("正如大家所期许之人");
                         this.unlockDoor();
                     }
                     else if (var4 == 2)
                     {
-                        this.chatItUp("You want a medallion? Try being less pathetic.");
-                    }
-                    else if (var4 == 1 && var3 instanceof EntityPlayer)
+                        this.chatItUp("你想要勋章? 别抱着这么可悲的想法了");
+                    } else if (var4 == 1 && var3 instanceof EntityPlayer)
                     {
                         EntityPlayer var5 = (EntityPlayer)var3;
                         String var6 = var5.username;
-                        this.chatItUp("Maybe some day, " + var6 + "... maybe some day.");
-                    }
-                    else
+                        this.chatItUp("也许有一天, " + var6 + "... 也许会有那么一天");
+                    } else
                     {
-                        this.chatItUp("Humans aren\'t nearly as cute when they\'re dead.");
+                        this.chatItUp("将死之际, 人类这可爱的小苹果也要腐烂了啊");
                     }
                 }
             }
@@ -720,7 +711,7 @@ public class EntityValkyrie extends EntityDungeonMob implements IAetherBoss
 
     public String getBossTitle()
     {
-        return this.name + ", the Valkyrie Queen";
+        return "瓦尔基里女王:" + this.name;
     }
 
     public int getBossStage()

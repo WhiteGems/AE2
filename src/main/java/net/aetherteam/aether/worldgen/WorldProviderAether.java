@@ -75,7 +75,7 @@ public class WorldProviderAether extends WorldProviderSurface
 
     public String getDepartMessage()
     {
-        return "Descending from the Aether";
+        return "离开以太世界";
     }
 
     /**
@@ -136,7 +136,7 @@ public class WorldProviderAether extends WorldProviderSurface
 
     public String getWelcomeMessage()
     {
-        return "Ascending into the Aether";
+        return "进入以太世界";
     }
 
     /**

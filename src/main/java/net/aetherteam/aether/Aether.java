@@ -132,6 +132,7 @@ public class Aether
     public static CommonProxy proxy;
     public static ArrayList developers = new ArrayList();
     public static ArrayList helper = new ArrayList();
+    public static ArrayList translator = new ArrayList();
 
     public static Configuration getConfig()
     {

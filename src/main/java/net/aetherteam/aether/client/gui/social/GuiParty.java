@@ -13,12 +13,12 @@ import org.lwjgl.opengl.GL11;
 
 public class GuiParty extends GuiScreen
 {
-    private static final String ONLINE_TEXT = "Online";
-    private static final String OFFLINE_TEXT = "Offline";
-    private static final String BUTTON_INVITE_TEXT = "Invite";
-    private static final String BUTTON_REMOVE_TEXT = "Remove";
-    private static final String BUTTON_CONFIRM_TEXT = "Confirm";
-    private static final String BUTTON_CANCEL_TEXT = "Cancel";
+    private static final String ONLINE_TEXT = "在线";
+    private static final String OFFLINE_TEXT = "离线";
+    private static final String BUTTON_INVITE_TEXT = "邀请";
+    private static final String BUTTON_REMOVE_TEXT = "移除";
+    private static final String BUTTON_CONFIRM_TEXT = "确认";
+    private static final String BUTTON_CANCEL_TEXT = "取消";
     private static final int ONLINE_FONT_COLOR = 7859831;
     private static final int OFFLINE_FONT_COLOR = 15628151;
     private static final int BUTTON_INVITE = 0;
@@ -34,8 +34,8 @@ public class GuiParty extends GuiScreen
     private GuiTextField partyNameField;
     private GuiTextField dialogueInput;
     private GuiYSlider sbar;
-    private float sbarVal;
-    private String name;
+    private float sbarVal = 0.0F;
+    private String name = "以太公会";
     private int backgroundTexture;
     private int dialogueTexture;
     private int xParty;
@@ -56,7 +56,6 @@ public class GuiParty extends GuiScreen
         this.dialogueState = 4;
         this.dialogue = false;
         this.sbarVal = 0.0F;
-        this.name = "Aether Party";
         this.mc = FMLClientHandler.instance().getClient();
         this.pm = var1;
         this.backgroundTexture = this.mc.renderEngine.getTexture("/net/aetherteam/aether/client/sprites/gui/party.png");
@@ -87,8 +86,8 @@ public class GuiParty extends GuiScreen
 
         this.sbar = new GuiYSlider(-1, this.xParty + 46, this.yParty - 54, 10, 103);
         this.sbar.sliderValue = this.sbarVal;
-        this.buttonList.add(new GuiButton(0, this.xParty - 58, this.yParty + 85 - 28, 52, 20, "Invite"));
-        this.buttonList.add(new GuiButton(1, this.xParty - 1, this.yParty + 85 - 28, 60, 20, "Remove"));
+        this.buttonList.add(new GuiButton(0, this.xParty - 58, this.yParty + 85 - 28, 52, 20, "邀请"));
+        this.buttonList.add(new GuiButton(1, this.xParty - 1, this.yParty + 85 - 28, 60, 20, "移除"));
         this.partyNameField = new GuiTextField(this.fontRenderer, this.xParty - 55, this.yParty - 73, 107, 16);
         this.partyNameField.setFocused(true);
         this.partyNameField.setMaxStringLength(16);
@@ -208,13 +207,9 @@ public class GuiParty extends GuiScreen
         switch (this.dialogueState)
         {
             case 5:
-                return "Invite";
-
+                return "邀请";
             case 6:
-                return "Remove";
-
-            default:
-                return "";
+                return "移除";
         }
     }
 
@@ -224,8 +219,8 @@ public class GuiParty extends GuiScreen
         this.dialogueInput = new GuiTextField(this.fontRenderer, this.xParty - 88 + this.fontRenderer.getStringWidth(this.getDialogueOption()), this.yParty - 7, 193 - this.fontRenderer.getStringWidth(this.getDialogueOption()) - 10, 16);
         this.dialogueInput.setFocused(true);
         this.dialogueInput.setCanLoseFocus(false);
-        this.buttonList.add(new GuiButton(2, this.xParty - 1, this.yParty + 14, 50, 20, "Confirm"));
-        this.buttonList.add(new GuiButton(3, this.xParty + 52, this.yParty + 14, 45, 20, "Cancel"));
+        this.buttonList.add(new GuiButton(2, this.xParty - 1, this.yParty + 14, 50, 20, "确认"));
+        this.buttonList.add(new GuiButton(3, this.xParty + 52, this.yParty + 14, 45, 20, "取消"));
     }
 
     /**
@@ -340,9 +335,9 @@ public class GuiParty extends GuiScreen
         this.yParty = var3 / 2;
     }
 
-    public void drawPlayerSlot(EntityPlayer var1, int var2, int var3, int var4, int var5, boolean var6)
+    public void drawPlayerSlot(EntityPlayer var1, int x, int y, int var4, int height, boolean online)
     {
-        this.drawGradientRect(var2, var3, var2 + var4, var3 + var5, -11184811, -10066330);
+        this.drawGradientRect(x, y, x + var4, y + height, -11184811, -10066330);
         int var7 = this.mc.renderEngine.getTextureForDownloadableImage(var1.skinUrl, "/mob/char.png");
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
         GL11.glBindTexture(GL11.GL_TEXTURE_2D, var7);
@@ -353,19 +348,19 @@ public class GuiParty extends GuiScreen
         float var11 = 0.5F;
         GL11.glBegin(GL11.GL_QUADS);
         GL11.glTexCoord2f(var8, var9);
-        GL11.glVertex2f((float)(var2 + 2), (float)(var3 + 2));
+        GL11.glVertex2f((float)(x + 2), (float)(y + 2));
         GL11.glTexCoord2f(var8, var11);
-        GL11.glVertex2f((float)(var2 + 2), (float)(var3 + 18));
+        GL11.glVertex2f((float)(x + 2), (float)(y + 18));
         GL11.glTexCoord2f(var10, var11);
-        GL11.glVertex2f((float)(var2 + 18), (float)(var3 + 18));
+        GL11.glVertex2f((float)(x + 18), (float)(y + 18));
         GL11.glTexCoord2f(var10, var9);
-        GL11.glVertex2f((float)(var2 + 18), (float)(var3 + 2));
+        GL11.glVertex2f((float)(x + 18), (float)(y + 2));
         GL11.glEnd();
         this.mc.renderEngine.resetBoundTexture();
-        this.fontRenderer.drawStringWithShadow(var1.username, var2 + var5, var3 + 2, 15066597);
+        this.fontRenderer.drawStringWithShadow(var1.username, x + height, y + 2, 15066597);
         GL11.glPushMatrix();
         GL11.glScalef(0.75F, 0.75F, 1.0F);
-        this.fontRenderer.drawString(var6 ? "Online" : "Offline", (int)(((float)var2 + (float)var5) / 0.75F), (int)(((float)var3 + 12.0F) / 0.75F), var6 ? 7859831 : 15628151);
+        this.fontRenderer.drawString(online ? "在线" : "离线", (int) ((x + height) / 0.75F), (int) ((y + 12.0F) / 0.75F), online ? 7859831 : 15628151);
         GL11.glPopMatrix();
     }
 }

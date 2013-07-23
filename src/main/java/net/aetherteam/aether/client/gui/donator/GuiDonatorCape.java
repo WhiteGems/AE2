@@ -128,44 +128,51 @@ public class GuiDonatorCape extends GuiScreen
         this.buttonList.clear();
         this.drawDefaultBackground();
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-        GL11.glBindTexture(GL11.GL_TEXTURE_2D, this.backgroundTexture);
-        int var4 = this.xParty - 97;
-        int var5 = this.yParty - 56;
-        ScaledResolution var6 = new ScaledResolution(this.mc.gameSettings, this.mc.displayWidth, this.mc.displayHeight);
-        this.drawTexturedModalRect(var4, var5, 0, 0, 194, this.hParty);
-        this.buttonList.add(new GuiButton(0, this.xParty + 10, this.yParty + 27, 80, 20, "Back"));
-        GuiButton var7 = null;
-        Object var8 = null;
-        boolean var9 = this.donator.containsChoiceType(EnumChoiceType.CAPE);
+        GL11.glBindTexture(3553, this.backgroundTexture);
+        int centerX = this.xParty - 97;
+        int centerY = this.yParty - 56;
+
+        ScaledResolution sr = new ScaledResolution(this.mc.gameSettings, this.mc.displayWidth, this.mc.displayHeight);
+        drawTexturedModalRect(centerX, centerY, 0, 0, 194, this.hParty);
+
+        this.buttonList.add(new GuiButton(0, this.xParty + 10, this.yParty + 27, 80, 20, "返回"));
+
+        GuiButton typeButton = null;
+        GuiButton overrideButton = null;
+
+        boolean hasChoice = this.donator.containsChoiceType(EnumChoiceType.CAPE);
 
         if (this.donator != null)
         {
-            DonatorChoice var10 = null;
+            DonatorChoice choice = null;
 
-            if (var9)
+            if (hasChoice)
             {
                 this.backgroundTexture = this.mc.renderEngine.getTexture("/net/aetherteam/aether/client/sprites/gui/choiceMenu.png");
-                var10 = this.donator.getChoiceFromType(EnumChoiceType.CAPE);
+                choice = this.donator.getChoiceFromType(EnumChoiceType.CAPE);
             }
             else
             {
                 this.backgroundTexture = this.mc.renderEngine.getTexture("/net/aetherteam/aether/client/sprites/gui/choiceMenu2.png");
             }
 
-            var7 = new GuiButton(1, this.xParty + 10, this.yParty - 35, 80, 20, var10 != null ? var10.name : "Off");
+            typeButton = new GuiButton(1, this.xParty + 10, this.yParty - 35, 80, 20, choice != null ? choice.name : "关闭");
         }
 
         if (this.donator == null)
         {
-            var7.enabled = false;
+            typeButton.enabled = false;
         }
 
-        this.buttonList.add(var7);
+        this.buttonList.add(typeButton);
         super.drawScreen(var1, var2, var3);
         this.mc.renderEngine.resetBoundTexture();
-        String var11 = "Donator Cape";
-        this.drawString(this.fontRenderer, var11, var6.getScaledWidth() / 2 - this.fontRenderer.getStringWidth(var11) / 2 + 49, var5 + 10, 15658734);
-        this.drawPlayerOnGui(this.mc, this.xParty - 40, this.yParty + 35, 30, 1.0F, 1.0F, this.donator != null && this.donator.containsChoiceType(EnumChoiceType.CAPE));
+
+        String header = "捐赠者披风";
+
+        drawString(this.fontRenderer, header, sr.getScaledWidth() / 2 - this.fontRenderer.getStringWidth(header) / 2 + 49, centerY + 10, 15658734);
+
+        drawPlayerOnGui(this.mc, this.xParty - 40, this.yParty + 35, 30, 1.0F, 1.0F, (this.donator != null) && (this.donator.containsChoiceType(EnumChoiceType.CAPE)));
     }
 
     public void drawPlayerOnGui(Minecraft var1, int var2, int var3, int var4, float var5, float var6, boolean var7)

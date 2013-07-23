@@ -31,16 +31,16 @@ public class GuiAetherIIButton extends GuiButton
         this.color2 = 0;
     }
 
-    public GuiAetherIIButton(int var1, int var2, int var3, int var4, int var5)
+    public GuiAetherIIButton(int i, int j, int k, int color, int var5)
     {
-        super(var1, var2, var3, "Official Aether Servers");
+        super(i, j, k, "以太官方服务器");
         this.scrollHeight = this.scrollMax;
         this.scrollMin = 115;
         this.scrollCrop = 20;
         this.scrollCropMax = 90;
         this.retracting = false;
-        this.color = var4;
-        this.color2 = var4;
+        this.color = color;
+        this.color2 = color;
     }
 
     public GuiAetherIIButton(int var1, int var2, int var3, int var4, int var5, String var6)

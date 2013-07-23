@@ -26,7 +26,7 @@ public class GuiTreasureChest extends GuiContainer
         switch (var3)
         {
             case 1:
-                this.name = "Bronze Treasure Chest";
+                this.name = "青铜宝箱";
 
             case 2:
             case 4:
@@ -34,11 +34,11 @@ public class GuiTreasureChest extends GuiContainer
                 break;
 
             case 3:
-                this.name = "Silver Treasure Chest";
+                this.name = "白银宝箱";
                 break;
 
             case 5:
-                this.name = "Gold Treasure Chest";
+                this.name = "黄金宝箱";
         }
     }
 

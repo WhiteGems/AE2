@@ -65,7 +65,8 @@ public class GuiMenu extends GuiScreen
     {
         this.updateScreen();
         this.buttonList.clear();
-        this.buttonList.add(new GuiButton(0, this.xParty - 60, this.yParty + 81 - 28, 120, 20, "Back"));
+
+        this.buttonList.add(new GuiButton(0, this.xParty - 60, this.yParty + 81 - 28, 120, 20, "返回"));
     }
 
     /**
@@ -124,15 +125,17 @@ public class GuiMenu extends GuiScreen
 
         if (var7.size() > 1 || var7.size() == 0)
         {
-            this.buttonList.add(new GuiButton(5, this.xParty - 60, this.yParty - 36 - 28, 120, 20, "Party"));
-            this.buttonList.add(new GuiButton(1, this.xParty - 60, this.yParty - 14 - 28, 120, 20, "Notifications"));
-            this.buttonList.add(new GuiButton(3, this.xParty - 60, this.yParty + 8 - 28, 120, 20, "Player List"));
-            this.buttonList.add(new GuiButton(2, this.xParty - 60, this.yParty + 30 - 28, 120, 20, "Options"));
-            this.buttonList.add(new GuiButton(4, this.xParty - 60, this.yParty + 52 - 28, 120, 20, "Friend List"));
-            ((GuiButton)this.buttonList.get(4)).enabled = false;
+            this.buttonList.add(new GuiButton(5, this.xParty - 60, this.yParty - 36 - 28, 120, 20, "公会"));
+            this.buttonList.add(new GuiButton(1, this.xParty - 60, this.yParty - 14 - 28, 120, 20, "消息"));
+            this.buttonList.add(new GuiButton(3, this.xParty - 60, this.yParty + 8 - 28, 120, 20, "玩家列表"));
+            this.buttonList.add(new GuiButton(2, this.xParty - 60, this.yParty + 30 - 28, 120, 20, "选项"));
+            this.buttonList.add(new GuiButton(4, this.xParty - 60, this.yParty + 52 - 28, 120, 20, "好友列表"));
+
+            ((GuiButton) this.buttonList.get(4)).enabled = false;
         }
 
-        this.buttonList.add(new GuiButton(0, this.xParty - 60, this.yParty + 81 - 28, 120, 20, "Back"));
+        this.buttonList.add(new GuiButton(0, this.xParty - 60, this.yParty + 81 - 28, 120, 20, "返回"));
+
         this.mc.renderEngine.resetBoundTexture();
 
         if (var7.size() <= 1 && var7.size() != 0)
@@ -140,14 +143,12 @@ public class GuiMenu extends GuiScreen
             GL11.glBindTexture(GL11.GL_TEXTURE_2D, this.backgroundTexture);
             this.drawTexturedModalRect(var4 + 13, var5 + 40, 141, 131, 115, 125);
             this.mc.renderEngine.resetBoundTexture();
-            this.drawString(this.fontRenderer, "\u00a7lForever Alone :(", var4 + 20, var5 + 100, 16750199);
-            this.drawString(this.fontRenderer, "\u00a7l(Single Player)", var4 + 25, var5 + 112, 16750199);
-            this.buttonList.add(new GuiButton(2, this.xParty - 60, this.yParty - 40 - 35, 120, 20, "Options"));
-        }
-        else
+            drawString(this.fontRenderer, "注定孤独一生 :(", centerX + 26, centerY + 10, 15658734);
+            drawString(this.fontRenderer, "(单人游戏)", centerX + 31, centerY + 22, 15658734);
+        } else
         {
             this.mc.renderEngine.resetBoundTexture();
-            this.drawString(this.fontRenderer, "Social Menu", var4 + 40, var5 + 5, 16777215);
+            drawString(this.fontRenderer, "社区菜单", centerX + 70 - this.fontRenderer.getStringWidth("社区菜单") / 2, centerY + 5, 16777215);
         }
 
         super.drawScreen(var1, var2, var3);

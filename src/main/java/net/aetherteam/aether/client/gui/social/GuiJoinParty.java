@@ -220,16 +220,16 @@ public class GuiJoinParty extends GuiScreen
             this.sbar.sliderValue = 0.0F;
         }
 
-        int var18 = this.xParty - 70;
-        int var8 = this.yParty - 84;
+        int centerX = this.xParty - 70;
+        int centerY = this.yParty - 84;
         ScaledResolution var9 = new ScaledResolution(this.mc.gameSettings, this.mc.displayWidth, this.mc.displayHeight);
-        this.drawTexturedModalRect(var18, var8, 0, 0, 141, this.hParty);
+        this.drawTexturedModalRect(centerX, centerY, 0, 0, 141, this.hParty);
         this.totalHeight = 0;
         byte var10 = 100;
         byte var11 = 20;
         byte var12 = 2;
         GL11.glEnable(GL11.GL_SCISSOR_TEST);
-        GL11.glScissor((var18 + 14) * var9.getScaleFactor(), (var8 + 35) * var9.getScaleFactor(), var10 * var9.getScaleFactor(), 103 * var9.getScaleFactor());
+        GL11.glScissor((centerX + 14) * var9.getScaleFactor(), (centerY + 35) * var9.getScaleFactor(), var10 * var9.getScaleFactor(), 103 * var9.getScaleFactor());
         GL11.glPushMatrix();
         this.totalHeight = var5.size() * (var11 + var12);
         float var13 = -this.sbar.sliderValue * (float)(this.totalHeight - 105);
@@ -247,7 +247,7 @@ public class GuiJoinParty extends GuiScreen
             {
                 if (((Party)var5.get(var14)).getType() != PartyType.PRIVATE)
                 {
-                    this.partySlots.add(new GuiPartySlot((Party)var5.get(var14), this.partySlots.size(), var18 + 15, var8 + this.totalHeight + 30, var10, var11));
+                    this.partySlots.add(new GuiPartySlot((Party)var5.get(var14), this.partySlots.size(), centerX + 15, centerY + this.totalHeight + 30, var10, var11));
                     this.totalHeight += var11 + var12;
                 }
             }
@@ -262,7 +262,7 @@ public class GuiJoinParty extends GuiScreen
             if (((GuiPartySlot)this.partySlots.get(var15)).party.getType() != PartyType.PRIVATE)
             {
                 var19 = false;
-                ((GuiPartySlot)this.partySlots.get(var15)).drawPartySlot(var18 + 15, var8 + this.totalHeight + 30, var10, var11);
+                ((GuiPartySlot)this.partySlots.get(var15)).drawPartySlot(centerX + 15, centerY + this.totalHeight + 30, var10, var11);
                 this.totalHeight += var11 + var12;
             }
         }
@@ -276,7 +276,7 @@ public class GuiJoinParty extends GuiScreen
         }
 
         this.mc.renderEngine.resetBoundTexture();
-        this.drawString(this.fontRenderer, "Party List", var18 + 70 - this.fontRenderer.getStringWidth("Party List") / 2, var8 + 10, 16777215);
+        drawString(this.fontRenderer, "公会列表", centerX + 70 - this.fontRenderer.getStringWidth("公会列表") / 2, centerY + 10, 16777215);
 
         if (var5.size() == 0 || var19)
         {
@@ -289,11 +289,13 @@ public class GuiJoinParty extends GuiScreen
             this.drawTexturedModalRect(0, 0, 0, 0, 201, this.hParty - 201);
             GL11.glPopMatrix();
             this.mc.renderEngine.resetBoundTexture();
-            String var16 = "There are no parties to display at this time.";
-            this.drawString(this.fontRenderer, var16, var18 + 70 - this.fontRenderer.getStringWidth(var16) / 2, var8 + 75, 16777215);
+
+            String warningLabel = "当前无人建立公会";
+
+            drawString(this.fontRenderer, warningLabel, centerX + 70 - this.fontRenderer.getStringWidth(warningLabel) / 2, centerY + 75, 16777215);
         }
 
-        this.joinButton = new GuiButton(1, this.xParty + 3, this.yParty + 85 - 28, 58, 20, "Join");
+        this.joinButton = new GuiButton(1, this.xParty + 3, this.yParty + 85 - 28, 58, 20, "加入");
 
         if (this.selectedPartySlot != null && this.slotIsSelected)
         {
@@ -304,7 +306,7 @@ public class GuiJoinParty extends GuiScreen
             this.joinButton.enabled = false;
         }
 
-        this.buttonList.add(new GuiButton(0, this.xParty - 60, this.yParty + 85 - 28, 58, 20, "Back"));
+        this.buttonList.add(new GuiButton(0, this.xParty - 60, this.yParty + 85 - 28, 58, 20, "返回"));
         this.buttonList.add(this.joinButton);
         super.drawScreen(var1, var2, var3);
     }

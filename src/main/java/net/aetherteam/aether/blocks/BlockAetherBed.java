@@ -51,7 +51,7 @@ public class BlockAetherBed extends BlockBed implements IAetherBlock
 
             if (!var1.provider.canRespawnHere())
             {
-                var5.addChatMessage("Cannot sleep in this dimension.");
+                var5.addChatMessage("在这个世界睡不着");
                 return true;
             }
             else

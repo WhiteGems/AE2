@@ -55,7 +55,7 @@ public class GuiPartyList extends GuiScreen
 
         this.sbar = new GuiYSlider(-1, this.xParty + 46, this.yParty - 54, 10, 103);
         this.sbar.sliderValue = this.sbarVal;
-        this.buttonList.add(new GuiButton(0, this.xParty - 58, this.yParty + 85 - 28, 120, 20, "Back"));
+        this.buttonList.add(new GuiButton(0, this.xParty - 58, this.yParty + 85 - 28, 120, 20, "返回"));
     }
 
     /**
@@ -139,16 +139,16 @@ public class GuiPartyList extends GuiScreen
             this.sbar.sliderValue = 0.0F;
         }
 
-        int var6 = this.xParty - 70;
-        int var7 = this.yParty - 84;
+        int centerX = this.xParty - 70;
+        int centerY = this.yParty - 84;
         ScaledResolution var8 = new ScaledResolution(this.mc.gameSettings, this.mc.displayWidth, this.mc.displayHeight);
-        this.drawTexturedModalRect(var6, var7, 0, 0, 141, this.hParty);
+        this.drawTexturedModalRect(centerX, centerY, 0, 0, 141, this.hParty);
         boolean var9 = false;
         byte var10 = 100;
         byte var11 = 20;
         byte var12 = 2;
         GL11.glEnable(GL11.GL_SCISSOR_TEST);
-        GL11.glScissor((var6 + 14) * var8.getScaleFactor(), (var7 + 35) * var8.getScaleFactor(), var10 * var8.getScaleFactor(), 103 * var8.getScaleFactor());
+        GL11.glScissor((centerX + 14) * var8.getScaleFactor(), (centerY + 35) * var8.getScaleFactor(), var10 * var8.getScaleFactor(), 103 * var8.getScaleFactor());
         GL11.glPushMatrix();
         int var17 = var4.size() * (var11 + var12);
         float var13 = -this.sbar.sliderValue * (float)(var17 - 105);
@@ -166,7 +166,7 @@ public class GuiPartyList extends GuiScreen
             if (((Party)var4.get(var15)).getType() != PartyType.PRIVATE)
             {
                 var14 = false;
-                this.drawPartySlot((Party)var4.get(var15), var6 + 15, var7 + var17 + 30, var10, var11, true);
+                this.drawPartySlot((Party)var4.get(var15), centerX + 15, centerY + var17 + 30, var10, var11, true);
                 var17 += var11 + var12;
             }
         }
@@ -180,7 +180,7 @@ public class GuiPartyList extends GuiScreen
         }
 
         this.mc.renderEngine.resetBoundTexture();
-        this.drawString(this.fontRenderer, "Party List", var6 + 70 - this.fontRenderer.getStringWidth("Party List") / 2, var7 + 10, 16777215);
+        drawString(this.fontRenderer, "公会列表", centerX + 70 - this.fontRenderer.getStringWidth("公会列表") / 2, centerY + 10, 16777215);
 
         if (var4.size() == 0 || var14)
         {
@@ -193,8 +193,10 @@ public class GuiPartyList extends GuiScreen
             this.drawTexturedModalRect(0, 0, 0, 0, 201, this.hParty - 201);
             GL11.glPopMatrix();
             this.mc.renderEngine.resetBoundTexture();
-            String var16 = "There are no parties to display at this time.";
-            this.drawString(this.fontRenderer, var16, var6 + 70 - this.fontRenderer.getStringWidth(var16) / 2, var7 + 75, 16777215);
+
+            String warningLabel = "当前无人创建公会";
+
+            drawString(this.fontRenderer, warningLabel, centerX + 70 - this.fontRenderer.getStringWidth(warningLabel) / 2, centerY + 75, 16777215);
         }
 
         super.drawScreen(var1, var2, var3);
@@ -213,15 +215,15 @@ public class GuiPartyList extends GuiScreen
         this.yParty = var3 / 2;
     }
 
-    public void drawPartySlot(Party var1, int var2, int var3, int var4, int var5, boolean var6)
+    public void drawPartySlot(Party party, int x, int y, int var4, int height, boolean var6)
     {
-        this.drawGradientRect(var2, var3, var2 + var4, var3 + var5, -11184811, -10066330);
+        this.drawGradientRect(x, y, x + var4, y + height, -11184811, -10066330);
         this.mc.renderEngine.resetBoundTexture();
-        this.fontRenderer.drawStringWithShadow(var1.getName(), var2 + var5 - 19, var3 + 2, 15066597);
+        this.fontRenderer.drawStringWithShadow(party.getName(), x + height - 19, y + 2, 15066597);
         GL11.glPushMatrix();
         GL11.glScalef(0.75F, 0.75F, 1.0F);
-        this.fontRenderer.drawString(var1.getLeader().username, (int)(((float)var2 + (float)var5) / 0.75F - 22.0F + (float)(var1.getType().name().length() * 6)), (int)(((float)var3 + 12.0F) / 0.75F), 26367);
-        this.fontRenderer.drawString(var1.getType().name(), (int)(((float)var2 + (float)var5) / 0.75F) - 25, (int)(((float)var3 + 12.0F) / 0.75F), var1.getType().getDisplayColor());
+        this.fontRenderer.drawString(party.getLeader().username, (int) ((x + this.height) / 0.75F - 18.0F + party.getType().realname.length() * 6), (int) ((y + 12.0F) / 0.75F), 26367);
+        this.fontRenderer.drawString(party.getType().realname, (int) ((x + this.height) / 0.75F) - 25, (int) ((y + 12.0F) / 0.75F), party.getType().getDisplayColor());
         GL11.glPopMatrix();
     }
 }

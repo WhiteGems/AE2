@@ -87,7 +87,7 @@ public class PacketDungeonQueueChange extends AetherPacket
                         if (!var22.equals(var26) && PartyController.instance().getParty((EntityPlayer)var26).hasMember(PartyController.instance().getMember(var22)) && var22.worldObj.provider.dimensionId != 3)
                         {
                             PacketDispatcher.sendPacketToPlayer(AetherPacketHandler.sendDungeonQueueChange(false, var28, var9, var10, var11, var13), var2);
-                            var26.addChatMessage("\u00a7o All of your party members aren\'t in the Aether!");
+                            var26.addChatMessage("\u00a7o你的公会目前没有成员在以太世界频道!");
                             return;
                         }
                     }
