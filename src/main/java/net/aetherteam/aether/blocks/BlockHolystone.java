@@ -61,7 +61,7 @@ public class BlockHolystone extends BlockAether implements IAetherBlock
      * is the only chance you get to register icons.
      */
     @Override
-	@SideOnly(Side.CLIENT)
+    @SideOnly(Side.CLIENT)
     public void registerIcons(IconRegister ir)
     {
     	holystone = ir.registerIcon("Aether:Holystone");
