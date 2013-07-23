@@ -26,6 +26,8 @@ public class GuiOptionsCoinbar extends GuiScreen
     private int yParty;
     private int wParty;
     private int hParty;
+    
+    /** Reference to the Minecraft object. */
     Minecraft mc;
     private EntityPlayer player;
     private GuiScreen parent;
@@ -39,12 +41,12 @@ public class GuiOptionsCoinbar extends GuiScreen
         this.easterTexture = this.mc.renderEngine.getTexture("/net/aetherteam/aether/client/sprites/gui/partyMain.png");
         this.wParty = 256;
         this.hParty = 256;
-        updateScreen();
+        this.updateScreen();
     }
 
     public void initGui()
     {
-        updateScreen();
+        this.updateScreen();
         this.buttonList.clear();
 
         this.buttonList.add(new GuiButton(0, this.xParty - 60, this.yParty + 81 - 28, 120, 20, "返回"));
@@ -63,19 +65,12 @@ public class GuiOptionsCoinbar extends GuiScreen
 
     protected void actionPerformed(GuiButton button)
     {
-        List playerList = this.mc.thePlayer.sendQueue.playerInfoList;
-
-        boolean online = playerList.size() > 1;
-
         switch (button.id)
         {
             case 0:
-                if (online)
-                {
-                    this.mc.displayGuiScreen(this.parent);
-                } else this.mc.displayGuiScreen(null);
-
+                this.mc.displayGuiScreen(this.parent);
                 break;
+                
             case 1:
                 AetherOptions.setSlideCoinbar(!AetherOptions.getSlideCoinbar());
         }
@@ -98,36 +93,15 @@ public class GuiOptionsCoinbar extends GuiScreen
 
         ScaledResolution sr = new ScaledResolution(this.mc.gameSettings, this.mc.displayWidth, this.mc.displayHeight);
         drawTexturedModalRect(centerX, centerY, 0, 0, 141, this.hParty);
-
-        List playerList = this.mc.thePlayer.sendQueue.playerInfoList;
-
-        boolean online = playerList.size() > 1;
-
-        if (online)
-        {
-            String slideCoinbarString = AetherOptions.getSlideCoinbar() ? "是" : "否";
-
-            GuiButton showNotification = new GuiButton(1, this.xParty - 60, this.yParty - 36 - 28, 120, 20, "滑动以太币界面: " + slideCoinbarString);
-
-            this.buttonList.add(showNotification);
-
-            this.mc.renderEngine.resetBoundTexture();
-
-            String title = "以太币界面";
-
-            drawString(this.fontRenderer, title, centerX + 70 - this.fontRenderer.getStringWidth(title) / 2, centerY + 5, 16777215);
-        } else
-        {
-            GL11.glBindTexture(3553, this.backgroundTexture);
-            drawTexturedModalRect(centerX + 13, centerY + 40, 141, 131, 115, 125);
-
-            this.mc.renderEngine.resetBoundTexture();
-            drawString(this.fontRenderer, "注定孤独一生 :(", centerX + 26, centerY + 10, 15658734);
-            drawString(this.fontRenderer, "(单人游戏)", centerX + 31, centerY + 22, 15658734);
-        }
-
-        this.buttonList.add(new GuiButton(0, this.xParty - 60, this.yParty + 81 - 28, 120, 20, online ? "返回" : "退出"));
-
+        String slideCoinbarString = AetherOptions.getSlideCoinbar() ? "是" : "否";
+        GuiButton showNotification = new GuiButton(1, this.xParty - 60, this.yParty - 36 - 28, 120, 20, "滑动以太币界面: " + slideCoinbarString);
+        this.buttonList.add(showNotification);
+        
+        this.mc.renderEngine.resetBoundTexture();
+        
+        String title = "以太币界面";
+        drawString(this.fontRenderer, title, centerX + 70 - this.fontRenderer.getStringWidth(title) / 2, centerY + 5, 16777215);
+        this.buttonList.add(new GuiButton(0, this.xParty - 60, this.yParty + 81 - 28, 120, 20, "返回");
         super.drawScreen(x, y, partialTick);
     }
 
