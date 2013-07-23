@@ -63,7 +63,7 @@ public class BlockAetherPortal extends BlockPortal implements IAetherBlock
             {
                 if (var5.timeUntilPortal <= 0 && !var1.isRemote)
                 {
-                    Aether.getServerPlayer((EntityPlayer)var5).Z();
+                    Aether.getServerPlayer((EntityPlayer)var5).setInPortal();
                 }
             }
             else if (var5.timeUntilPortal <= 0)

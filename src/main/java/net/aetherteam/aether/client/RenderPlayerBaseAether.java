@@ -36,9 +36,12 @@ public class RenderPlayerBaseAether extends PlayerCoreRender
         super(var1, var2);
     }
 
-    public void a(EntityPlayer var1, float var2)
+    /**
+     * Method for adding special render rules
+     */
+    public void renderSpecials(EntityPlayer var1, float var2)
     {
-        super.a(var1, var2);
+        super.renderSpecials(var1, var2);
         this.renderCape(var1, var2);
         GL11.glPushMatrix();
         GL11.glDisable(GL11.GL_LIGHTING);
@@ -53,9 +56,9 @@ public class RenderPlayerBaseAether extends PlayerCoreRender
         GL11.glPopMatrix();
     }
 
-    public void a(EntityPlayer var1, double var2, double var4, double var6, float var8, float var9)
+    public void renderPlayer(EntityPlayer var1, double var2, double var4, double var6, float var8, float var9)
     {
-        super.a(var1, var2, var4, var6, -90.0F, var9);
+        super.renderPlayer(var1, var2, var4, var6, -90.0F, var9);
         this.renderMisc(var1, var2, var4, var6, var8, var9);
     }
 
@@ -71,9 +74,9 @@ public class RenderPlayerBaseAether extends PlayerCoreRender
         OpenGlHelper.setActiveTexture(OpenGlHelper.defaultTexUnit);
     }
 
-    public void b(EntityPlayer var1)
+    public void renderFirstPersonArm(EntityPlayer var1)
     {
-        super.b(var1);
+        super.renderFirstPersonArm(var1);
 
         if (this.renderPlayer.getRenderManager().renderEngine != null)
         {
@@ -91,7 +94,7 @@ public class RenderPlayerBaseAether extends PlayerCoreRender
             GL11.glDisable(GL11.GL_BLEND);
             GL11.glDepthMask(true);
             GL11.glTranslatef(0.0F, -0.7F, -0.4F);
-            this.renderPlayer.a("/net/aetherteam/aether/client/sprites/mobs/parachute_" + String.valueOf(Aether.proxy.getClientParachuteType().get(var1.username)) + ".png");
+            this.renderPlayer.loadTexture("/net/aetherteam/aether/client/sprites/mobs/parachute_" + String.valueOf(Aether.proxy.getClientParachuteType().get(var1.username)) + ".png");
             this.modelParachute.Cloud1.render(var2);
             this.modelParachute.Cloud2.render(var2);
             this.modelParachute.Cloud3.render(var2);
@@ -120,7 +123,7 @@ public class RenderPlayerBaseAether extends PlayerCoreRender
             GL11.glEnable(GL11.GL_BLEND);
             GL11.glBlendFunc(GL11.GL_ONE, GL11.GL_ONE);
             GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-            this.renderPlayer.a("http://skins.minecraft.net/MinecraftSkins/" + var1.username + ".png", "/mob/char.png");
+            this.renderPlayer.loadDownloadableImageTexture("http://skins.minecraft.net/MinecraftSkins/" + var1.username + ".png", "/mob/char.png");
             this.modelMisc.onGround = 0.0F;
             this.modelMisc.setRotationAngles(0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0625F, var1);
             GL11.glTranslatef(-0.01F, 0.05F, 0.01F);
@@ -151,7 +154,7 @@ public class RenderPlayerBaseAether extends PlayerCoreRender
                 this.modelMisc.setRotationAngles(0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0625F, var1);
                 this.modelMisc.bipedRightArm.render(0.0625F);
                 ItemAccessory var3 = (ItemAccessory)((ItemAccessory)var2.slots[6].getItem());
-                this.renderPlayer.a(var3.texture);
+                this.renderPlayer.loadTexture(var3.texture);
                 int var4 = var3.getColorFromItemStack(new ItemStack(var3, 1, 0), 1);
                 float var5 = (float)(var4 >> 16 & 255) / 255.0F;
                 float var6 = (float)(var4 >> 8 & 255) / 255.0F;
@@ -182,11 +185,11 @@ public class RenderPlayerBaseAether extends PlayerCoreRender
                 {
                     DonatorTexture var5 = Aether.syncDonatorList.getDonator(var1.username).getChoiceFromType(EnumChoiceType.CAPE).textureFile;
                     String var6 = var5.localURL;
-                    this.renderPlayer.a(var6);
+                    this.renderPlayer.loadTexture(var6);
                 }
                 else
                 {
-                    this.renderPlayer.a(((ItemAccessory)((ItemAccessory)var4.getItem())).texture);
+                    this.renderPlayer.loadTexture(((ItemAccessory)((ItemAccessory)var4.getItem())).texture);
                 }
 
                 GL11.glPushMatrix();
@@ -264,9 +267,9 @@ public class RenderPlayerBaseAether extends PlayerCoreRender
         {
             GL11.glPushMatrix();
             GL11.glEnable(GL11.GL_CULL_FACE);
-            this.modelMisc.onGround = this.renderPlayer.d(var1, var9);
+            this.modelMisc.onGround = this.renderPlayer.renderSwingProgress(var1, var9);
             this.modelMisc.isRiding = var1.isRiding();
-            this.modelWings.onGround = this.renderPlayer.d(var1, var9);
+            this.modelWings.onGround = this.renderPlayer.renderSwingProgress(var1, var9);
             this.modelWings.isRiding = var1.isRiding();
 
             try
@@ -274,13 +277,13 @@ public class RenderPlayerBaseAether extends PlayerCoreRender
                 float var11 = var1.prevRenderYawOffset + (var1.renderYawOffset - var1.prevRenderYawOffset) * var9;
                 float var12 = var1.prevRotationYaw + (var1.rotationYaw - var1.prevRotationYaw) * var9;
                 float var13 = var1.prevRotationPitch + (var1.rotationPitch - var1.prevRotationPitch) * var9;
-                this.a(var1, var2, var4, var6);
-                float var14 = this.b(var1, var9);
-                this.a(var1, var14, var11, var9);
+                this.renderLivingAt(var1, var2, var4, var6);
+                float var14 = this.handleRotationFloat(var1, var9);
+                this.rotateCorpse(var1, var14, var11, var9);
                 float var15 = 0.0625F;
                 GL11.glEnable(GL12.GL_RESCALE_NORMAL);
                 GL11.glScalef(-1.0F, -1.0F, 1.0F);
-                this.a(var1, var9);
+                this.preRenderCallback(var1, var9);
                 GL11.glTranslatef(0.0F, -24.0F * var15 - 0.0078125F, 0.0F);
                 float var16 = var1.prevLimbYaw + (var1.limbYaw - var1.prevLimbYaw) * var9;
                 float var17 = var1.limbSwing - var1.limbYaw * (1.0F - var9);
@@ -303,7 +306,7 @@ public class RenderPlayerBaseAether extends PlayerCoreRender
                 if (var10.slots[0] != null)
                 {
                     var18 = (ItemAccessory)((ItemAccessory)var10.slots[0].getItem());
-                    this.renderPlayer.a(var18.texture);
+                    this.renderPlayer.loadTexture(var18.texture);
                     var19 = var18.getColorFromItemStack(new ItemStack(var18, 1, 0), 1);
                     var20 = (float)(var19 >> 16 & 255) / 255.0F;
                     var21 = (float)(var19 >> 8 & 255) / 255.0F;
@@ -320,7 +323,7 @@ public class RenderPlayerBaseAether extends PlayerCoreRender
                 if (var10.slots[6] != null)
                 {
                     var18 = (ItemAccessory)((ItemAccessory)var10.slots[6].getItem());
-                    this.renderPlayer.a(var18.texture);
+                    this.renderPlayer.loadTexture(var18.texture);
                     var19 = var18.getColorFromItemStack(new ItemStack(var18, 1, 0), 1);
                     var20 = (float)(var19 >> 16 & 255) / 255.0F;
                     var21 = (float)(var19 >> 8 & 255) / 255.0F;
@@ -339,7 +342,7 @@ public class RenderPlayerBaseAether extends PlayerCoreRender
                 {
                     this.modelWings.sinage = Aether.getClientPlayer(var1).getSinage();
                     this.modelWings.gonRound = var1.onGround;
-                    this.renderPlayer.a("/net/aetherteam/aether/client/sprites/mobs/valkyrie/valkyrie.png");
+                    this.renderPlayer.loadTexture("/net/aetherteam/aether/client/sprites/mobs/valkyrie/valkyrie.png");
                     this.modelWings.wingLeft.render(var15);
                     this.modelWings.wingRight.render(var15);
                 }
@@ -356,7 +359,7 @@ public class RenderPlayerBaseAether extends PlayerCoreRender
                     float var24 = 1.0F;
                     GL11.glEnable(GL11.GL_BLEND);
                     GL11.glBlendFunc(GL11.GL_ONE, GL11.GL_ONE);
-                    this.renderPlayer.a("http://skins.minecraft.net/MinecraftSkins/" + var1.username + ".png", "/mob/char.png");
+                    this.renderPlayer.loadDownloadableImageTexture("http://skins.minecraft.net/MinecraftSkins/" + var1.username + ".png", "/mob/char.png");
                     this.modelMisc.bipedBody.render(var15);
                     GL11.glTranslatef(0.0F, 0.05F, 0.0F);
                     this.modelMisc.bipedRightLeg.render(var15);

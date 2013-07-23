@@ -69,9 +69,9 @@ public class PlayerBaseAetherClient extends PlayerCoreClient
     private boolean prevCreative;
     private int coinAmount = 0;
     public static boolean keepInventory = false;
-    public Random ab = new Random();
+    public Random rand = new Random();
     public float zLevel = -90.0F;
-    private Minecraft c = Minecraft.getMinecraft();
+    private Minecraft mc = Minecraft.getMinecraft();
     private int parachuteType;
     public List extendedReachItems;
     private boolean isParachuting;
@@ -82,8 +82,8 @@ public class PlayerBaseAetherClient extends PlayerCoreClient
         this.extendedReachItems = Arrays.asList(new Item[] {AetherItems.ValkyrieShovel, AetherItems.ValkyriePickaxe, AetherItems.ValkyrieAxe});
         this.maxHealth = 20;
         this.inv = new InventoryAether(this.player);
-        this.player.bL = (Container)(!this.player.ce.isCreativeMode ? new ContainerPlayerAether(this.player.bK, this.inv, this.player.q.isRemote, this.player, this.playerHandler) : new ContainerPlayer(this.player.bK, true, this.player));
-        this.player.bM = this.player.bL;
+        this.player.inventoryContainer = (Container)(!this.player.capabilities.isCreativeMode ? new ContainerPlayerAether(this.player.inventory, this.inv, this.player.worldObj.isRemote, this.player, this.playerHandler) : new ContainerPlayer(this.player.inventory, true, this.player));
+        this.player.openContainer = this.player.inventoryContainer;
     }
 
     public EntityPlayer getPlayer()
@@ -108,66 +108,82 @@ public class PlayerBaseAetherClient extends PlayerCoreClient
 
     public void updateGeneralCooldown()
     {
-        if (this.generalcooldown == 0 && Aether.proxy.getClientCooldown().get(this.player.bS) != null && Aether.proxy.getClientMaxCooldown().get(this.player.bS) != null)
+        if (this.generalcooldown == 0 && Aether.proxy.getClientCooldown().get(this.player.username) != null && Aether.proxy.getClientMaxCooldown().get(this.player.username) != null)
         {
-            this.generalcooldown = ((Integer)Aether.proxy.getClientCooldown().get(this.player.bS)).intValue();
-            this.generalcooldownmax = ((Integer)Aether.proxy.getClientMaxCooldown().get(this.player.bS)).intValue();
+            this.generalcooldown = ((Integer)Aether.proxy.getClientCooldown().get(this.player.username)).intValue();
+            this.generalcooldownmax = ((Integer)Aether.proxy.getClientMaxCooldown().get(this.player.username)).intValue();
         }
     }
 
     public void updateCoinAmount()
     {
-        if (Aether.proxy.getClientCoins().get(this.player.bS) != null)
+        if (Aether.proxy.getClientCoins().get(this.player.username) != null)
         {
-            this.coinAmount = ((Integer)Aether.proxy.getClientCoins().get(this.player.bS)).intValue();
+            this.coinAmount = ((Integer)Aether.proxy.getClientCoins().get(this.player.username)).intValue();
             AetherOverlays.queueCoinbarSlide();
         }
     }
 
     public void updateParachute()
     {
-        if (Aether.proxy.getClientParachuting().get(this.player.bS) != null && Aether.proxy.getClientParachuteType().get(this.player.bS) != null)
+        if (Aether.proxy.getClientParachuting().get(this.player.username) != null && Aether.proxy.getClientParachuteType().get(this.player.username) != null)
         {
-            this.isParachuting = ((Boolean)Aether.proxy.getClientParachuting().get(this.player.bS)).booleanValue();
-            this.parachuteType = ((Integer)Aether.proxy.getClientParachuteType().get(this.player.bS)).intValue();
+            this.isParachuting = ((Boolean)Aether.proxy.getClientParachuting().get(this.player.username)).booleanValue();
+            this.parachuteType = ((Integer)Aether.proxy.getClientParachuteType().get(this.player.username)).intValue();
         }
     }
 
-    public boolean g_()
+    /**
+     * returns true if this entity is by a ladder, false otherwise
+     */
+    public boolean isOnLadder()
     {
-        return this.wearingAccessory(AetherItems.SwettyPendant.itemID) && this.isBesideClimbableBlock() ? true : super.g_();
+        return this.wearingAccessory(AetherItems.SwettyPendant.itemID) && this.isBesideClimbableBlock() ? true : super.isOnLadder();
     }
 
-    public void a(EntityLightningBolt var1)
+    /**
+     * Called when a lightning bolt hits the entity.
+     */
+    public void onStruckByLightning(EntityLightningBolt var1)
     {
         if (!(var1 instanceof EntityAetherLightning) || ((EntityAetherLightning)var1).playerUsing != this.player)
         {
-            super.a(var1);
+            super.onStruckByLightning(var1);
         }
     }
 
-    public void a(Entity var1, int var2, double var3, double var5)
+    /**
+     * knocks back this entity
+     */
+    public void knockBack(Entity var1, int var2, double var3, double var5)
     {
         if (!this.wearingObsidianArmour())
         {
-            super.a(var1, var2, var3, var5);
+            super.knockBack(var1, var2, var3, var5);
         }
     }
 
     public boolean isBesideClimbableBlock()
     {
-        return this.player.G;
+        return this.player.isCollidedHorizontally;
     }
 
-    public void bl()
+    /**
+     * Causes this entity to do an upwards motion (jumping).
+     */
+    public void jump()
     {
         if (this.playerHandler.jump())
         {
-            super.bl();
+            super.jump();
         }
     }
 
-    public void c()
+    /**
+     * Called frequently so the entity can update its state every tick as required. For example, zombies and skeletons
+     * use this to react to sunlight and start to burn.
+     */
+    public void onLivingUpdate()
     {
         this.playerHandler.beforeOnLivingUpdate();
 
@@ -175,69 +191,72 @@ public class PlayerBaseAetherClient extends PlayerCoreClient
         {
             if (this.playerHandler.riddenBy.animateSitting())
             {
-                this.player.a(2, true);
+                this.player.setFlag(2, true);
                 this.player.shouldRiderSit();
             }
 
             if (this.playerHandler.riddenBy.sprinting())
             {
-                this.player.a(3, true);
+                this.player.setFlag(3, true);
             }
         }
 
-        super.c();
+        super.onLivingUpdate();
     }
 
-    public void l_()
+    /**
+     * Called to update the entity's position/logic.
+     */
+    public void onUpdate()
     {
         if (this.isAboveBlock(AetherBlocks.Aercloud.blockID))
         {
-            this.player.T = 0.0F;
+            this.player.fallDistance = 0.0F;
         }
 
-        super.l_();
+        super.onUpdate();
         this.processAbilities();
 
-        if (Aether.proxy.getClientCoins().get(this.player.bS) != null && this.coinAmount != ((Integer)Aether.proxy.getClientCoins().get(this.player.bS)).intValue())
+        if (Aether.proxy.getClientCoins().get(this.player.username) != null && this.coinAmount != ((Integer)Aether.proxy.getClientCoins().get(this.player.username)).intValue())
         {
             this.updateCoinAmount();
         }
 
-        if (Aether.proxy.getClientParachuting().get(this.player.bS) != null && this.isParachuting != ((Boolean)Aether.proxy.getClientParachuting().get(this.player.bS)).booleanValue() || Aether.proxy.getClientParachuteType().get(this.player.bS) != null && this.parachuteType != ((Integer)Aether.proxy.getClientParachuteType().get(this.player.bS)).intValue())
+        if (Aether.proxy.getClientParachuting().get(this.player.username) != null && this.isParachuting != ((Boolean)Aether.proxy.getClientParachuting().get(this.player.username)).booleanValue() || Aether.proxy.getClientParachuteType().get(this.player.username) != null && this.parachuteType != ((Integer)Aether.proxy.getClientParachuteType().get(this.player.username)).intValue())
         {
             this.updateParachute();
         }
 
-        if (this.prevCreative != this.player.ce.isCreativeMode)
+        if (this.prevCreative != this.player.capabilities.isCreativeMode)
         {
-            if (!this.player.ce.isCreativeMode)
+            if (!this.player.capabilities.isCreativeMode)
             {
                 ;
             }
 
-            this.prevCreative = this.player.ce.isCreativeMode;
+            this.prevCreative = this.player.capabilities.isCreativeMode;
         }
 
-        if (Aether.proxy.getClientExtraHearts().get(this.player.bS) != null)
+        if (Aether.proxy.getClientExtraHearts().get(this.player.username) != null)
         {
-            this.maxHealth = ((Integer)Aether.proxy.getClientExtraHearts().get(this.player.bS)).intValue();
+            this.maxHealth = ((Integer)Aether.proxy.getClientExtraHearts().get(this.player.username)).intValue();
         }
 
-        PotionEffect var1 = this.player.b(Potion.regeneration);
+        PotionEffect var1 = this.player.getActivePotionEffect(Potion.regeneration);
 
-        if (var1 != null && var1.getDuration() > 0 && Potion.potionTypes[var1.getPotionID()].isReady(var1.getDuration(), var1.getAmplifier()) && this.player.aX() >= 20 && this.player.aX() < this.maxHealth)
+        if (var1 != null && var1.getDuration() > 0 && Potion.potionTypes[var1.getPotionID()].isReady(var1.getDuration(), var1.getAmplifier()) && this.player.getHealth() >= 20 && this.player.getHealth() < this.maxHealth)
         {
-            this.player.j(1);
+            this.player.heal(1);
         }
 
-        if (this.player.cn().getFoodLevel() >= 18 && this.player.aX() >= 20 && this.player.aX() < this.maxHealth)
+        if (this.player.getFoodStats().getFoodLevel() >= 18 && this.player.getHealth() >= 20 && this.player.getHealth() < this.maxHealth)
         {
             ++this.foodTimer;
 
             if (this.foodTimer >= 80)
             {
                 this.foodTimer = 0;
-                this.player.j(1);
+                this.player.heal(1);
             }
         }
         else
@@ -250,24 +269,24 @@ public class PlayerBaseAetherClient extends PlayerCoreClient
             --this.generalcooldown;
         }
 
-        if (this.player.q.difficultySetting == 0 && this.player.aX() >= 20 && this.player.aX() < this.maxHealth && this.player.ac % 20 == 0)
+        if (this.player.worldObj.difficultySetting == 0 && this.player.getHealth() >= 20 && this.player.getHealth() < this.maxHealth && this.player.ticksExisted % 20 == 0)
         {
-            this.player.j(1);
+            this.player.heal(1);
         }
 
         if (this.playerHandler.getCurrentBoss() != null)
         {
             Entity var2 = this.playerHandler.getCurrentBoss().getBossEntity();
 
-            if (Math.sqrt(Math.pow(var2.posX - this.player.u, 2.0D) + Math.pow(var2.posY - this.player.v, 2.0D) + Math.pow(var2.posZ - this.player.w, 2.0D)) > 50.0D)
+            if (Math.sqrt(Math.pow(var2.posX - this.player.posX, 2.0D) + Math.pow(var2.posY - this.player.posY, 2.0D) + Math.pow(var2.posZ - this.player.posZ, 2.0D)) > 50.0D)
             {
                 this.playerHandler.setCurrentBoss((IAetherBoss)null);
             }
         }
 
-        if (Aether.proxy.getClientExtraHearts().get(this.player.bS) != null)
+        if (Aether.proxy.getClientExtraHearts().get(this.player.username) != null)
         {
-            this.maxHealth = ((Integer)Aether.proxy.getClientExtraHearts().get(this.player.bS)).intValue();
+            this.maxHealth = ((Integer)Aether.proxy.getClientExtraHearts().get(this.player.username)).intValue();
         }
 
         ++this.updateCounter;
@@ -276,15 +295,15 @@ public class PlayerBaseAetherClient extends PlayerCoreClient
 
     public boolean isAboveBlock(int var1)
     {
-        MathHelper.floor_double(this.player.u);
-        int var2 = MathHelper.floor_double(this.player.E.minY);
-        MathHelper.floor_double(this.player.w);
-        return this.player.q.getBlockId(MathHelper.floor_double(this.player.E.minX), var2 - 1, MathHelper.floor_double(this.player.E.minZ)) == var1 || this.player.q.getBlockId(MathHelper.floor_double(this.player.E.maxX), var2 - 1, MathHelper.floor_double(this.player.E.minZ)) == var1 || this.player.q.getBlockId(MathHelper.floor_double(this.player.E.maxX), var2 - 1, MathHelper.floor_double(this.player.E.maxZ)) == var1 || this.player.q.getBlockId(MathHelper.floor_double(this.player.E.minX), var2 - 1, MathHelper.floor_double(this.player.E.maxZ)) == var1;
+        MathHelper.floor_double(this.player.posX);
+        int var2 = MathHelper.floor_double(this.player.boundingBox.minY);
+        MathHelper.floor_double(this.player.posZ);
+        return this.player.worldObj.getBlockId(MathHelper.floor_double(this.player.boundingBox.minX), var2 - 1, MathHelper.floor_double(this.player.boundingBox.minZ)) == var1 || this.player.worldObj.getBlockId(MathHelper.floor_double(this.player.boundingBox.maxX), var2 - 1, MathHelper.floor_double(this.player.boundingBox.minZ)) == var1 || this.player.worldObj.getBlockId(MathHelper.floor_double(this.player.boundingBox.maxX), var2 - 1, MathHelper.floor_double(this.player.boundingBox.maxZ)) == var1 || this.player.worldObj.getBlockId(MathHelper.floor_double(this.player.boundingBox.minX), var2 - 1, MathHelper.floor_double(this.player.boundingBox.maxZ)) == var1;
     }
 
     public void processAbilities()
     {
-        if (!this.player.F)
+        if (!this.player.onGround)
         {
             this.sinage += 0.75F;
         }
@@ -300,15 +319,15 @@ public class PlayerBaseAetherClient extends PlayerCoreClient
 
         if (this.wearingAccessory(AetherItems.SwettyPendant.itemID) && this.isBesideClimbableBlock())
         {
-            if (!this.player.F && this.player.y < 0.0D && !this.player.G() && !this.player.ag())
+            if (!this.player.onGround && this.player.motionY < 0.0D && !this.player.isInWater() && !this.player.isSneaking())
             {
-                this.player.y *= 0.6D;
+                this.player.motionY *= 0.6D;
             }
 
-            this.player.T = -1.0F;
+            this.player.fallDistance = -1.0F;
         }
 
-        if (this.player.ac % 400 == 0)
+        if (this.player.ticksExisted % 400 == 0)
         {
             if (this.inv.slots[0] != null && this.inv.slots[0].itemID == AetherItems.ZanitePendant.itemID)
             {
@@ -343,35 +362,35 @@ public class PlayerBaseAetherClient extends PlayerCoreClient
 
         if (this.wearingPhoenixArmour())
         {
-            this.player.A();
-            this.player.d(new PotionEffect(Potion.fireResistance.id, 10, 4));
+            this.player.extinguish();
+            this.player.addPotionEffect(new PotionEffect(Potion.fireResistance.id, 10, 4));
 
-            if (this.player.q.isRemote)
+            if (this.player.worldObj.isRemote)
             {
-                FMLClientHandler.instance().getClient().theWorld.spawnParticle("flame", this.player.u + this.playerHandler.rand.nextGaussian() / 5.0D, this.player.v - 0.5D + this.playerHandler.rand.nextGaussian() / 5.0D, this.player.w + this.playerHandler.rand.nextGaussian() / 3.0D, 0.0D, 0.0D, 0.0D);
+                FMLClientHandler.instance().getClient().theWorld.spawnParticle("flame", this.player.posX + this.playerHandler.rand.nextGaussian() / 5.0D, this.player.posY - 0.5D + this.playerHandler.rand.nextGaussian() / 5.0D, this.player.posZ + this.playerHandler.rand.nextGaussian() / 3.0D, 0.0D, 0.0D, 0.0D);
             }
         }
 
         if (this.wearingGravititeArmour())
         {
-            if (this.player.bG && !this.jumpBoosted && this.player.ag())
+            if (this.player.isJumping && !this.jumpBoosted && this.player.isSneaking())
             {
-                this.player.y = 1.0D;
+                this.player.motionY = 1.0D;
                 this.jumpBoosted = true;
             }
 
-            this.player.T = -1.0F;
+            this.player.fallDistance = -1.0F;
         }
 
         if (this.wearingObsidianArmour())
         {
-            this.player.d(new PotionEffect(Potion.resistance.id, 10, 3));
-            this.player.d(new PotionEffect(Potion.moveSlowdown.id, 10, 1));
+            this.player.addPotionEffect(new PotionEffect(Potion.resistance.id, 10, 3));
+            this.player.addPotionEffect(new PotionEffect(Potion.moveSlowdown.id, 10, 1));
         }
 
         if (this.wearingValkyrieArmour())
         {
-            if (this.player.bG)
+            if (this.player.isJumping)
             {
                 if (this.flightMod >= this.maxFlightMod)
                 {
@@ -383,7 +402,7 @@ public class PlayerBaseAetherClient extends PlayerCoreClient
                     if (this.flightCount < this.maxFlightCount)
                     {
                         this.flightMod += 0.25D;
-                        this.player.y = 0.025D * this.flightMod;
+                        this.player.motionY = 0.025D * this.flightMod;
                         ++this.flightCount;
                     }
                 }
@@ -397,16 +416,16 @@ public class PlayerBaseAetherClient extends PlayerCoreClient
                 this.flightMod = 1.0D;
             }
 
-            this.player.T = -1.0F;
+            this.player.fallDistance = -1.0F;
         }
 
-        if (this.player.F)
+        if (this.player.onGround)
         {
             this.flightCount = 0;
             this.flightMod = 1.0D;
         }
 
-        if (!this.player.bG && this.player.F)
+        if (!this.player.isJumping && this.player.onGround)
         {
             this.jumpBoosted = false;
         }
@@ -421,14 +440,18 @@ public class PlayerBaseAetherClient extends PlayerCoreClient
 
         if (!this.wearingAccessory(AetherItems.AgilityCape.itemID))
         {
-            this.player.Y = this.prevStepHeight;
+            this.player.stepHeight = this.prevStepHeight;
         }
     }
 
-    public float bE()
+    /**
+     * This method returns a value to be applied directly to entity speed, this factor is less than 1 when a slowdown
+     * potion effect is applied, more than 1 when a haste potion effect is applied and 2 for fleeing entities.
+     */
+    public float getSpeedModifier()
     {
         float var1 = this.playerHandler.getSpeedModifier();
-        return var1 == -1.0F ? super.bE() : var1;
+        return var1 == -1.0F ? super.getSpeedModifier() : var1;
     }
 
     public AetherCommonPlayerHandler getPlayerHandler()
@@ -436,37 +459,46 @@ public class PlayerBaseAetherClient extends PlayerCoreClient
         return this.playerHandler;
     }
 
-    public void j(int var1)
+    /**
+     * Heal living entity (param: amount of half-hearts)
+     */
+    public void heal(int var1)
     {
-        if (this.player.aX() > 0)
+        if (this.player.getHealth() > 0)
         {
-            this.player.b(this.player.aX() + var1);
+            this.player.setEntityHealth(this.player.getHealth() + var1);
 
-            if (this.player.aX() > this.maxHealth)
+            if (this.player.getHealth() > this.maxHealth)
             {
-                this.player.b(this.maxHealth);
+                this.player.setEntityHealth(this.maxHealth);
             }
         }
     }
 
-    public void b(NBTTagCompound var1)
+    /**
+     * (abstract) Protected helper method to write subclass entity data to NBT.
+     */
+    public void writeEntityToNBT(NBTTagCompound var1)
     {
         var1.setInteger("MaxHealth", this.maxHealth);
         var1.setTag("AetherInventory", this.inv.writeToNBT(new NBTTagList()));
         var1.setBoolean("HasDefeatedSunSpirit", this.hasDefeatedSunSpirit);
-        var1.setBoolean("inAether", this.player.ar == 3);
+        var1.setBoolean("inAether", this.player.dimension == 3);
         var1.setInteger("GeneralCooldown", this.generalcooldown);
         var1.setInteger("GeneralCooldownMax", this.generalcooldownmax);
         var1.setString("CooldownName", this.cooldownName);
         var1.setInteger("Coins", this.coinAmount);
-        super.b(var1);
+        super.writeEntityToNBT(var1);
     }
 
-    public void a(NBTTagCompound var1)
+    /**
+     * (abstract) Protected helper method to read subclass entity data from NBT.
+     */
+    public void readEntityFromNBT(NBTTagCompound var1)
     {
-        if (this.player.q.isRemote)
+        if (this.player.worldObj.isRemote)
         {
-            File var2 = new File(((SaveHandler)this.player.q.getSaveHandler()).getWorldDirectoryName(), "aether.dat");
+            File var2 = new File(((SaveHandler)this.player.worldObj.getSaveHandler()).getWorldDirectoryName(), "aether.dat");
 
             if (var2.exists())
             {
@@ -484,9 +516,9 @@ public class PlayerBaseAetherClient extends PlayerCoreClient
 
                     NBTTagList var4 = var3.getTagList("Inventory");
 
-                    if (this.player.ar == 3)
+                    if (this.player.dimension == 3)
                     {
-                        this.player.ar = 3;
+                        this.player.dimension = 3;
                     }
 
                     this.inv.readFromNBT(var4);
@@ -512,7 +544,7 @@ public class PlayerBaseAetherClient extends PlayerCoreClient
 
                 if (var1.getBoolean("inAether"))
                 {
-                    this.player.ar = 3;
+                    this.player.dimension = 3;
                 }
 
                 this.generalcooldown = var1.getInteger("GeneralCooldown");
@@ -523,7 +555,7 @@ public class PlayerBaseAetherClient extends PlayerCoreClient
             }
         }
 
-        super.a(var1);
+        super.readEntityFromNBT(var1);
     }
 
     public void onDefeatSunSpirit()
@@ -541,9 +573,12 @@ public class PlayerBaseAetherClient extends PlayerCoreClient
         return this.hasDefeatedSunSpirit;
     }
 
-    public float a(Block var1, boolean var2)
+    /**
+     * Returns how strong the player is against the specified block at this moment
+     */
+    public float getCurrentPlayerStrVsBlock(Block var1, boolean var2)
     {
-        ItemStack var3 = this.player.bK.getCurrentItem();
+        ItemStack var3 = this.player.inventory.getCurrentItem();
         float var4 = var3 == null ? 1.0F : var3.getItem().getStrVsBlock(var3, var1, 0);
 
         if (this.inv.slots[0] != null && this.inv.slots[0].itemID == AetherItems.ZanitePendant.itemID)
@@ -563,14 +598,14 @@ public class PlayerBaseAetherClient extends PlayerCoreClient
 
         if (!this.wearingNeptuneArmour())
         {
-            return var4 == -1.0F ? super.a(var1, var2) : var4;
+            return var4 == -1.0F ? super.getCurrentPlayerStrVsBlock(var1, var2) : var4;
         }
         else
         {
             if (var4 > 1.0F)
             {
                 int var5 = EnchantmentHelper.getEfficiencyModifier(this.player);
-                ItemStack var6 = this.player.bK.getCurrentItem();
+                ItemStack var6 = this.player.inventory.getCurrentItem();
 
                 if (var5 > 0 && var6 != null)
                 {
@@ -588,14 +623,14 @@ public class PlayerBaseAetherClient extends PlayerCoreClient
                 }
             }
 
-            if (this.player.a(Potion.digSpeed))
+            if (this.player.isPotionActive(Potion.digSpeed))
             {
-                var4 *= 1.0F + (float)(this.player.b(Potion.digSpeed).getAmplifier() + 1) * 0.2F;
+                var4 *= 1.0F + (float)(this.player.getActivePotionEffect(Potion.digSpeed).getAmplifier() + 1) * 0.2F;
             }
 
-            if (this.player.a(Potion.digSlowdown))
+            if (this.player.isPotionActive(Potion.digSlowdown))
             {
-                var4 *= 1.0F - (float)(this.player.b(Potion.digSlowdown).getAmplifier() + 1) * 0.2F;
+                var4 *= 1.0F - (float)(this.player.getActivePotionEffect(Potion.digSlowdown).getAmplifier() + 1) * 0.2F;
             }
 
             var4 = ForgeEventFactory.getBreakSpeed(this.player, var1, 0, var4);
@@ -603,21 +638,28 @@ public class PlayerBaseAetherClient extends PlayerCoreClient
         }
     }
 
-    public boolean G()
+    /**
+     * Checks if this entity is inside water (if inWater field is true as a result of handleWaterMovement() returning
+     * true)
+     */
+    public boolean isInWater()
     {
-        return this.wearingNeptuneArmour() ? false : super.G();
+        return this.wearingNeptuneArmour() ? false : super.isInWater();
     }
 
-    public MovingObjectPosition a(double var1, float var3)
+    /**
+     * Performs a ray trace for the distance specified and using the partial tick time. Args: distance, partialTickTime
+     */
+    public MovingObjectPosition rayTrace(double var1, float var3)
     {
-        ItemStack var4 = this.player.cd();
+        ItemStack var4 = this.player.getCurrentEquippedItem();
 
         if (var4 != null && var4.getItem() != null && this.extendedReachItems.contains(var4.getItem()))
         {
             var1 = 10.0D;
         }
 
-        return this.player.a(var1, var3);
+        return this.player.rayTrace(var1, var3);
     }
 
     public int getAccessoryCount(int var1)
@@ -686,7 +728,7 @@ public class PlayerBaseAetherClient extends PlayerCoreClient
     {
         for (int var2 = 0; var2 < 4; ++var2)
         {
-            if (this.player.bK.armorInventory[var2] != null && this.player.bK.armorInventory[var2].itemID == var1)
+            if (this.player.inventory.armorInventory[var2] != null && this.player.inventory.armorInventory[var2].itemID == var1)
             {
                 return true;
             }
@@ -727,6 +769,6 @@ public class PlayerBaseAetherClient extends PlayerCoreClient
 
     public void updateNotificationOverlay(Party var1, byte var2)
     {
-        this.c.displayGuiScreen(new GuiScreenNotificationOverlay(var1, var2));
+        this.mc.displayGuiScreen(new GuiScreenNotificationOverlay(var1, var2));
     }
 }
