@@ -12,6 +12,7 @@ import net.minecraft.client.Minecraft;
 public class MenuBaseConfig
 {
     private static Minecraft mc = Minecraft.getMinecraft();
+
     private static final Properties menuProps = new Properties();
     public static String selectedMenuName;
     public static boolean loopMusic;
@@ -27,24 +28,19 @@ public class MenuBaseConfig
     public static double playerPosY;
     public static double playerPosZ;
     public static int ticks;
-    private static File config;
+    private static File config = new File(Minecraft.getMinecraftDir(), "MenuAPI.properties");
 
     public static void loadConfig()
     {
-        PrintStream var10000 = System.out;
         Minecraft.getMinecraft();
-        var10000.println(Minecraft.getMinecraftDir());
+        System.out.println(Minecraft.getMinecraftDir());
 
         if (config.exists())
-        {
             try
             {
-                FileInputStream var3 = new FileInputStream;
-                StringBuilder var10002 = new StringBuilder();
                 Minecraft.getMinecraft();
-                var3.<init>(var10002.append(Minecraft.getMinecraftDir()).append("/MenuAPI.properties").toString());
-                FileInputStream var0 = var3;
-                menuProps.load(var0);
+                FileInputStream in = new FileInputStream(Minecraft.getMinecraftDir() + "/MenuAPI.properties");
+                menuProps.load(in);
 
                 if (menuProps.size() <= 0)
                 {
@@ -64,15 +60,14 @@ public class MenuBaseConfig
                     hasStartedMusic = menuProps.getProperty("hasStartedMusic") != null ? menuProps.getProperty("hasStartedMusic").equals("true") : false;
                 }
             }
-            catch (FileNotFoundException var1)
+            catch (FileNotFoundException e)
             {
-                var1.printStackTrace();
+                e.printStackTrace();
             }
-            catch (IOException var2)
+            catch (IOException e)
             {
-                var2.printStackTrace();
+                e.printStackTrace();
             }
-        }
         else
         {
             resetConfig();
@@ -92,83 +87,66 @@ public class MenuBaseConfig
             menuProps.setProperty("musicSet", "false");
             menuProps.setProperty("hasPlayedMusic", "false");
             menuProps.setProperty("hasStartedMusic", "false");
-            Properties var10000 = menuProps;
-            FileOutputStream var10001 = new FileOutputStream;
-            StringBuilder var10003 = new StringBuilder();
             Minecraft.getMinecraft();
-            var10001.<init>(var10003.append(Minecraft.getMinecraftDir()).append("/MenuAPI.properties").toString());
-            var10000.store(var10001, (String)null);
-            FileInputStream var3 = new FileInputStream;
-            StringBuilder var10002 = new StringBuilder();
+            menuProps.store(new FileOutputStream(Minecraft.getMinecraftDir() + "/MenuAPI.properties"), null);
             Minecraft.getMinecraft();
-            var3.<init>(var10002.append(Minecraft.getMinecraftDir()).append("/MenuAPI.properties").toString());
-            FileInputStream var0 = var3;
-            menuProps.load(var0);
+            FileInputStream in = new FileInputStream(Minecraft.getMinecraftDir() + "/MenuAPI.properties");
+            menuProps.load(in);
         }
-        catch (FileNotFoundException var1)
+        catch (FileNotFoundException e)
         {
-            var1.printStackTrace();
+            e.printStackTrace();
         }
-        catch (IOException var2)
+        catch (IOException e)
         {
-            var2.printStackTrace();
+            e.printStackTrace();
         }
     }
 
     public static void wipeConfig()
     {
         if (config.exists())
-        {
             try
             {
                 menuProps.setProperty("selectedMenu", "");
-                Properties var10000 = menuProps;
-                FileOutputStream var10001 = new FileOutputStream;
-                StringBuilder var10003 = new StringBuilder();
                 Minecraft.getMinecraft();
-                var10001.<init>(var10003.append(Minecraft.getMinecraftDir()).append("/MenuAPI.properties").toString());
-                var10000.store(var10001, (String)null);
-                FileInputStream var0 = new FileInputStream("MenuAPI.properties");
-                menuProps.load(var0);
+                menuProps.store(new FileOutputStream(Minecraft.getMinecraftDir() + "/MenuAPI.properties"), null);
+                FileInputStream in = new FileInputStream("MenuAPI.properties");
+                menuProps.load(in);
             }
-            catch (FileNotFoundException var1)
+            catch (FileNotFoundException e)
             {
-                var1.printStackTrace();
+                e.printStackTrace();
             }
-            catch (IOException var2)
+            catch (IOException e)
             {
-                var2.printStackTrace();
+                e.printStackTrace();
             }
-        }
     }
 
-    public static void setProperty(String var0, String var1)
+    public static void setProperty(String name, String value)
     {
         try
         {
-            menuProps.setProperty(var0, var1);
-            Properties var10000 = menuProps;
-            FileOutputStream var10001 = new FileOutputStream;
-            StringBuilder var10003 = new StringBuilder();
+            menuProps.setProperty(name, value);
             Minecraft.getMinecraft();
-            var10001.<init>(var10003.append(Minecraft.getMinecraftDir()).append("/MenuAPI.properties").toString());
-            var10000.store(var10001, (String)null);
-            FileInputStream var2 = new FileInputStream("MenuAPI.properties");
-            menuProps.load(var2);
+            menuProps.store(new FileOutputStream(Minecraft.getMinecraftDir() + "/MenuAPI.properties"), null);
+            FileInputStream in = new FileInputStream("MenuAPI.properties");
+            menuProps.load(in);
         }
-        catch (FileNotFoundException var3)
+        catch (FileNotFoundException e)
         {
-            var3.printStackTrace();
+            e.printStackTrace();
         }
-        catch (IOException var4)
+        catch (IOException e)
         {
-            var4.printStackTrace();
+            e.printStackTrace();
         }
     }
 
     static
     {
         Minecraft.getMinecraft();
-        config = new File(Minecraft.getMinecraftDir(), "MenuAPI.properties");
     }
 }
+

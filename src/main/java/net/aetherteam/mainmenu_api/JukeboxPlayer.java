@@ -26,15 +26,12 @@ public class JukeboxPlayer
 
     public void process()
     {
-        File var10000 = new File;
-        StringBuilder var10002 = new StringBuilder();
         Minecraft.getMinecraft();
-        var10000.<init>(var10002.append(Minecraft.getMinecraftDir()).append("/resources/streaming/").toString());
-        File var1 = var10000;
+        File streaming = new File(Minecraft.getMinecraftDir() + "/resources/streaming/");
 
-        if (var1.exists())
+        if (streaming.exists())
         {
-            this.jukeboxMusic = this.listMusic(var1, false);
+            this.jukeboxMusic = listMusic(streaming, false);
         }
     }
 

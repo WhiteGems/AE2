@@ -13,26 +13,23 @@ import net.minecraftforge.event.ForgeSubscribe;
 public class MenuSoundLoader
 {
     @ForgeSubscribe
-    public void onSound(SoundLoadEvent var1)
+    public void onSound(SoundLoadEvent event)
     {
-        JukeboxPlayer var2 = new JukeboxPlayer();
-        File var10000 = new File;
-        StringBuilder var10002 = new StringBuilder();
+        JukeboxPlayer jukebox = new JukeboxPlayer();
         Minecraft.getMinecraft();
-        var10000.<init>(var10002.append(Minecraft.getMinecraftDir()).append("/resources/streaming/").toString());
-        File var3 = var10000;
-        List var4 = null;
+        File streaming = new File(Minecraft.getMinecraftDir() + "/resources/streaming/");
+        List music = null;
 
-        if (var3.exists())
+        if (streaming.exists())
         {
-            var4 = var2.listMusic(var3, true);
+            music = jukebox.listMusic(streaming, true);
         }
 
-        if (var4 != null)
+        if (music != null)
         {
-            for (int var5 = 0; var5 < var4.size(); ++var5)
+            for (int musicIndex = 0; musicIndex < music.size(); musicIndex++)
             {
-                this.registerStreaming(var1.manager, "streaming/" + (String)var4.get(var5), "/resources/streaming/" + (String)var4.get(var5));
+                registerStreaming(event.manager, "streaming/" + music.get(musicIndex), "/resources/streaming/" + music.get(musicIndex));
             }
         }
     }
@@ -56,18 +53,18 @@ public class MenuSoundLoader
         }
     }
 
-    private void registerStreaming(SoundManager var1, String var2, String var3)
+    private void registerStreaming(SoundManager manager, String var2, String path)
     {
-        File var4 = new File(ModLoader.getMinecraftInstance().mcDataDir, "resources/" + var2);
+        File soundFile = new File(ModLoader.getMinecraftInstance().mcDataDir, "resources/" + var2);
 
-        if (var4.canRead() && var4.isFile())
+        if (soundFile.canRead() && soundFile.isFile())
         {
-            ModLoader.getMinecraftInstance().installResource(var2, var4);
+            ModLoader.getMinecraftInstance().installResource(var2, soundFile);
             System.out.println("MainMenuAPI - Registering Music: " + var2.replace("streaming/", ""));
         }
         else
         {
-            System.err.println("Could not load file: " + var4);
+            System.err.println("Could not load file: " + soundFile);
         }
     }
 }

@@ -1,13 +1,14 @@
 package net.aetherteam.aether;
 
-import cpw.mods.fml.client.registry.KeyBindingRegistry.KeyHandler;
+import cpw.mods.fml.client.registry.KeyBindingRegistry;
 import cpw.mods.fml.common.TickType;
-import java.util.EnumSet;
 import net.aetherteam.aether.client.gui.GuiInventoryAether;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityClientPlayerMP;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.settings.KeyBinding;
+
+import java.util.EnumSet;
 
 public class AetherKeyHandler extends KeyBindingRegistry.KeyHandler
 {
@@ -31,7 +32,7 @@ public class AetherKeyHandler extends KeyBindingRegistry.KeyHandler
         {
             if (Minecraft.getMinecraft().currentScreen != null)
             {
-                Minecraft.getMinecraft().displayGuiScreen((GuiScreen)null);
+                Minecraft.getMinecraft().displayGuiScreen(null);
             }
             else
             {

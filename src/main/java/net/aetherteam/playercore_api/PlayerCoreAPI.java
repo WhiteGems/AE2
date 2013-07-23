@@ -4,10 +4,9 @@ import com.google.common.eventbus.EventBus;
 import cpw.mods.fml.common.DummyModContainer;
 import cpw.mods.fml.common.LoadController;
 import cpw.mods.fml.common.ModMetadata;
+
 import java.util.ArrayList;
 import java.util.Arrays;
-import net.aetherteam.playercore_api.PlayerCoreAPI$1;
-import net.aetherteam.playercore_api.PlayerCoreAPI$PlayerCoreType;
 
 public class PlayerCoreAPI extends DummyModContainer
 {
@@ -31,19 +30,19 @@ public class PlayerCoreAPI extends DummyModContainer
         var1.logoFile = "";
     }
 
-    public static void register(PlayerCoreAPI$PlayerCoreType var0, Class var1)
+    public static void register(PlayerCoreType var0, Class var1)
     {
-        switch (PlayerCoreAPI$1.$SwitchMap$net$aetherteam$playercore_api$PlayerCoreAPI$PlayerCoreType[var0.ordinal()])
+        switch (var0)
         {
-            case 1:
+            case CLIENT:
                 playerCoreClientList.add(var1);
                 break;
 
-            case 2:
+            case RENDER:
                 playerCoreRenderList.add(var1);
                 break;
 
-            case 3:
+            case SERVER:
                 playerCoreServerList.add(var1);
         }
     }
@@ -52,4 +51,13 @@ public class PlayerCoreAPI extends DummyModContainer
     {
         return true;
     }
+
+
+    public enum PlayerCoreType
+    {
+        CLIENT,
+        SERVER,
+        RENDER;
+    }
+
 }

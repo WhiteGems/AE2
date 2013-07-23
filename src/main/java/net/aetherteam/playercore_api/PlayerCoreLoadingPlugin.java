@@ -1,10 +1,9 @@
 package net.aetherteam.playercore_api;
 
 import cpw.mods.fml.relauncher.IFMLLoadingPlugin;
-import cpw.mods.fml.relauncher.IFMLLoadingPlugin$TransformerExclusions;
 import java.util.Map;
 
-@IFMLLoadingPlugin$TransformerExclusions( {"net.aetherteam.playercore_api, net.aetherteam.playercore_api.asm"})
+@IFMLLoadingPlugin.TransformerExclusions( {"net.aetherteam.playercore_api, net.aetherteam.playercore_api.asm"})
 public class PlayerCoreLoadingPlugin implements IFMLLoadingPlugin
 {
     public String[] getLibraryRequestClass()
