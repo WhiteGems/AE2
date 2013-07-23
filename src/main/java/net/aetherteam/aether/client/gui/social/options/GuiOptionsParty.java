@@ -26,6 +26,7 @@ public class GuiOptionsParty extends GuiScreen
     private int yParty;
     private int wParty;
     private int hParty;
+    
     Minecraft mc;
     private EntityPlayer player;
     private GuiScreen parent;
@@ -63,18 +64,10 @@ public class GuiOptionsParty extends GuiScreen
 
     protected void actionPerformed(GuiButton button)
     {
-        List playerList = this.mc.thePlayer.sendQueue.playerInfoList;
-
-        boolean online = playerList.size() > 1;
-
         switch (button.id)
         {
             case 0:
-                if (online)
-                {
-                    this.mc.displayGuiScreen(this.parent);
-                } else this.mc.displayGuiScreen(null);
-
+                this.mc.displayGuiScreen(this.parent);
                 break;
             case 1:
                 AetherOptions.setShowPartyHUD(!AetherOptions.getShowPartyHUD());
@@ -108,54 +101,37 @@ public class GuiOptionsParty extends GuiScreen
         ScaledResolution sr = new ScaledResolution(this.mc.gameSettings, this.mc.displayWidth, this.mc.displayHeight);
         drawTexturedModalRect(centerX, centerY, 0, 0, 141, this.hParty);
 
-        List playerList = this.mc.thePlayer.sendQueue.playerInfoList;
+        String renderHeadString = AetherOptions.getRenderHead() ? "是" : "否";
+        String showHUDString = AetherOptions.getShowPartyHUD() ? "是" : "否";
+        String showNameString = AetherOptions.getShowPartyName() ? "开" : "关";
 
-        boolean online = playerList.size() > 1;
+        GuiButton minimalHUD = new GuiButton(2, this.xParty - 60, this.yParty - 14 - 28, 120, 20, "HUD风格: " + (AetherOptions.getMinimalPartyHUD() ? "简约" : "华丽"));
+        GuiButton renderHead = new GuiButton(3, this.xParty - 60, this.yParty + 8 - 28, 120, 20, "头像渲染: " + renderHeadString);
+        GuiButton showName = new GuiButton(4, this.xParty - 60, this.yParty + 30 - 28, 120, 20, "公会名称: " + showNameString);
 
-        if (online)
+        this.buttonList.add(new GuiButton(1, this.xParty - 60, this.yParty - 36 - 28, 120, 20, "显示HUD: " + showHUDString));
+        this.buttonList.add(minimalHUD);
+        this.buttonList.add(renderHead);
+        this.buttonList.add(showName);
+
+        if (AetherOptions.getShowPartyHUD())
         {
-            String renderHeadString = AetherOptions.getRenderHead() ? "是" : "否";
-            String showHUDString = AetherOptions.getShowPartyHUD() ? "是" : "否";
-
-            String showNameString = AetherOptions.getShowPartyName() ? "开" : "关";
-
-            GuiButton minimalHUD = new GuiButton(2, this.xParty - 60, this.yParty - 14 - 28, 120, 20, "HUD风格: " + (AetherOptions.getMinimalPartyHUD() ? "简约" : "华丽"));
-            GuiButton renderHead = new GuiButton(3, this.xParty - 60, this.yParty + 8 - 28, 120, 20, "头像渲染: " + renderHeadString);
-            GuiButton showName = new GuiButton(4, this.xParty - 60, this.yParty + 30 - 28, 120, 20, "公会名称: " + showNameString);
-
-            this.buttonList.add(new GuiButton(1, this.xParty - 60, this.yParty - 36 - 28, 120, 20, "显示HUD: " + showHUDString));
-            this.buttonList.add(minimalHUD);
-            this.buttonList.add(renderHead);
-            this.buttonList.add(showName);
-
-            if (AetherOptions.getShowPartyHUD())
-            {
-                minimalHUD.enabled = true;
-                renderHead.enabled = true;
-                showName.enabled = true;
-            } else
-            {
-                minimalHUD.enabled = false;
-                renderHead.enabled = false;
-                showName.enabled = false;
-            }
-
-            this.mc.renderEngine.resetBoundTexture();
-
-            String title = "公会HUD";
-
-            drawString(this.fontRenderer, title, centerX + 70 - this.fontRenderer.getStringWidth(title) / 2, centerY + 5, 16777215);
+            minimalHUD.enabled = true;
+            renderHead.enabled = true;
+            showName.enabled = true;
         } else
         {
-            GL11.glBindTexture(3553, this.backgroundTexture);
-            drawTexturedModalRect(centerX + 13, centerY + 40, 141, 131, 115, 125);
-
-            this.mc.renderEngine.resetBoundTexture();
-            drawString(this.fontRenderer, "注定孤独一生 :(", centerX + 26, centerY + 10, 15658734);
-            drawString(this.fontRenderer, "(单人游戏)", centerX + 31, centerY + 22, 15658734);
+            minimalHUD.enabled = false;
+            renderHead.enabled = false;
+            showName.enabled = false;
         }
 
-        this.buttonList.add(new GuiButton(0, this.xParty - 60, this.yParty + 81 - 28, 120, 20, online ? "返回" : "退出"));
+        this.mc.renderEngine.resetBoundTexture();
+
+        String title = "公会HUD";
+
+        drawString(this.fontRenderer, title, centerX + 70 - this.fontRenderer.getStringWidth(title) / 2, centerY + 5, 16777215);
+        this.buttonList.add(new GuiButton(0, this.xParty - 60, this.yParty + 81 - 28, 120, 20, "返回");
 
         super.drawScreen(x, y, partialTick);
     }
