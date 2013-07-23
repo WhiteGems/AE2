@@ -2,6 +2,9 @@ package net.aetherteam.aether.blocks;
 
 import java.util.HashMap;
 import java.util.List;
+
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.aetherteam.aether.items.AetherItems;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
@@ -15,7 +18,8 @@ import net.minecraft.world.World;
 
 public class BlockHolystone extends BlockAether implements IAetherBlock
 {
-    private HashMap icons = new HashMap();
+    private Icon holystone;
+    private Icon holymossystone;
     public static final String[] names = new String[] {"Holystone", "Mossy Holystone"};
 
     protected BlockHolystone(int var1)
@@ -37,23 +41,31 @@ public class BlockHolystone extends BlockAether implements IAetherBlock
     /**
      * From the specified side and block metadata retrieves the blocks texture. Args: side, metadata
      */
-    public Icon getIcon(int var1, int var2)
+    @Override
+    @SideOnly(Side.CLIENT)
+    public Icon getIcon(int side, int meta)
     {
-        ItemStack var3 = new ItemStack(AetherBlocks.Holystone, 1, var2);
-        String var4 = var3.getItem().getItemDisplayName(var3);
-        return (Icon)this.icons.get(var4);
+        switch(meta)
+    	{
+    	case 1:
+    		return this.holystone;
+    	case 3:
+    		return this.holystone;
+    	}
+    	
+        return this.holystone;
     }
 
     /**
      * When this method is called, your block should register all the icons it needs with the given IconRegister. This
      * is the only chance you get to register icons.
      */
-    public void registerIcons(IconRegister var1)
+    @Override
+	@SideOnly(Side.CLIENT)
+    public void registerIcons(IconRegister ir)
     {
-        for (int var2 = 0; var2 < names.length; ++var2)
-        {
-            this.icons.put(names[var2], var1.registerIcon("Aether:" + names[var2]));
-        }
+    	holystone = ir.registerIcon("Aether:Holystone");
+    	holymossystone = ir.registerIcon("Aether:Mossy Holystone");
     }
 
     /**
