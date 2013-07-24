@@ -120,8 +120,8 @@ public class GuiOptions extends GuiScreen
 
         String title = "选项";
         
-        this.drawString(this.fontRenderer, var9, var4 + 70 - this.fontRenderer.getStringWidth(title) / 2, var5 + 5, 16777215);
-        this.buttonList.add(new GuiButton(0, this.xParty - 60, this.yParty + 81 - 28, 120, 20, "后退"));
+        this.drawString(this.fontRenderer, title, centerX + 70 - this.fontRenderer.getStringWidth(title) / 2, centerY + 5, 16777215);
+        this.buttonList.add(new GuiButton(0, this.xParty - 60, this.yParty + 81 - 28, 120, 20, "返回"));
         super.drawScreen(x, y, partialTick);
         
     }
