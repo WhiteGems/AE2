@@ -483,19 +483,19 @@ public class AetherItems
     )
     public static Item MoaMusicDisk;
     @net.aetherteam.aether.interfaces.AEItem(
-        name = "Aerwhale Music Disk"
+        name = "以太鲸音乐唱片"
     )
     public static Item AerwhaleMusicDisk;
     @net.aetherteam.aether.interfaces.AEItem(
-        name = "Crystal EXP Bottle"
+        name = "水晶经验瓶"
     )
     public static Item CrystalBottle;
     @net.aetherteam.aether.interfaces.AEItem(
-        name = "Piggie Bank"
+        name = "小猪存钱罐"
     )
     public static Item PiggieBank;
     @net.aetherteam.aether.interfaces.AEItem(
-        name = "Wyndberry"
+        name = "蓝莓"
     )
     public static Item Wyndberry;
     public static HashMap spritesPath = new HashMap();
