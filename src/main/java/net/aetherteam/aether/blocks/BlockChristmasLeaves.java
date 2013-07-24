@@ -47,10 +47,10 @@ public class BlockChristmasLeaves extends BlockLeaves implements IAetherBlock
     public void registerIcons(IconRegister ir)
     {
         leafIcon = ir.registerIcon("Aether:Christmas Leaves");
-        decoratedLeafIcon = ir.registerIcon("Aether:Decorated Leaves");
+        decoratedLeafIcon = ir.registerIcon("Aether:Decorative Leaves");
 
         leafIcon_O = ir.registerIcon("Aether:Christmas Leaves_Opaque");
-        decoratedLeafIcon_O = ir.registerIcon("Aether:Decorated Leaves_Opaque");
+        decoratedLeafIcon_O = ir.registerIcon("Aether:Decorative Leaves_Opaque");
         super.registerIcons(ir);
     }
 
@@ -82,25 +82,25 @@ public class BlockChristmasLeaves extends BlockLeaves implements IAetherBlock
     /**
      * returns a list of blocks with the same ID, but different meta (eg: wood returns 4 blocks)
      */
-    public void getSubBlocks(int var1, CreativeTabs var2, List var3)
+    public void getSubBlocks(int ID, CreativeTabs var2, List var3)
     {
-        var3.add(new ItemStack(var1, 1, 0));
-        var3.add(new ItemStack(var1, 1, 1));
+        var3.add(new ItemStack(ID, 1, 0));
+        var3.add(new ItemStack(ID, 1, 1));
     }
-
-    @SideOnly(Side.CLIENT)
 
     /**
      * From the specified side and block metadata retrieves the blocks texture. Args: side, metadata
      */
+    @SideOnly(Side.CLIENT)
     public Icon getIcon(int side, int meta)
     {
         this.setGraphicsLevel(Minecraft.getMinecraft().gameSettings.fancyGraphics);
-	if(meta == 0)
+	switch(meta)
 	{
-		return this.graphicsLevel ? leafIcon : leafIcon_O;
+	    case 0: return this.graphicsLevel ? leafIcon : leafIcon_O;
+	    case 1: return this.graphicsLevel ? decoratedLeafIcon : decoratedLeafIcon_O;
 	}
-        return this.graphicsLevel ? decoratedLeafIcon : decoratedLeafIcon_O;
+        return this.graphicsLevel ? leafIcon : leafIcon_O;
     }
 
     /**
