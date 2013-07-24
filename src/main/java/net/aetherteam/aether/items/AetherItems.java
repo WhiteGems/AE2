@@ -167,23 +167,23 @@ public class AetherItems
     )
     public static Item HammerOfNotch;
     @AEItem(
-            name = "浮云"
+            name = "降落伞"
     )
     public static Item CloudParachute;
     @AEItem(
-            name = "金色浮云"
+            name = "金色降落伞"
     )
     public static Item GoldenCloudParachute;
     @AEItem(
-            name = "紫色浮云"
+            name = "紫色降落伞"
     )
     public static Item PurpleCloudParachute;
     @AEItem(
-            name = "绿色浮云"
+            name = "绿色降落伞"
     )
     public static Item GreenCloudParachute;
     @AEItem(
-            name = "蓝色浮云"
+            name = "蓝色浮空伞"
     )
     public static Item BlueCloudParachute;
     @AEItem(
