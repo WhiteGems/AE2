@@ -21,6 +21,9 @@ import net.minecraft.world.World;
 
 public class BlockChristmasLeaves extends BlockLeaves implements IAetherBlock
 {
+    private Icon leafIcon,leafIcon_O;
+	private Icon decoratedLeafIcon,decoratedLeafIcon_O;
+
     private HashMap icons = new HashMap();
     public static final String[] names = new String[] {"Christmas Leaves", "Decorative Leaves"};
 
@@ -44,13 +47,14 @@ public class BlockChristmasLeaves extends BlockLeaves implements IAetherBlock
      * When this method is called, your block should register all the icons it needs with the given IconRegister. This
      * is the only chance you get to register icons.
      */
-    public void registerIcons(IconRegister var1)
+    public void registerIcons(IconRegister ir)
     {
-        for (int var2 = 0; var2 < names.length; ++var2)
-        {
-            this.icons.put(names[var2], var1.registerIcon("Aether:" + names[var2]));
-            this.icons.put(names[var2] + "_Opaque", var1.registerIcon("Aether:" + names[var2] + "_Opaque"));
-        }
+		leafIcon = ir.registerIcon("Aether:Christmas Leaves");
+        decoratedLeafIcon = ir.registerIcon("Aether:Decorated Leaves");
+		
+		leafIcon_O = ir.registerIcon("Aether:Christmas Leaves_Opaque");
+        decoratedLeafIcon_O = ir.registerIcon("Aether:Decorated Leaves_Opaque");
+		super.registerIcons(ir);
     }
 
     /**
@@ -92,12 +96,14 @@ public class BlockChristmasLeaves extends BlockLeaves implements IAetherBlock
     /**
      * From the specified side and block metadata retrieves the blocks texture. Args: side, metadata
      */
-    public Icon getIcon(int var1, int var2)
+    public Icon getIcon(int side, int meta)
     {
         this.setGraphicsLevel(Minecraft.getMinecraft().gameSettings.fancyGraphics);
-        ItemStack var3 = new ItemStack(AetherBlocks.ChristmasLeaves, 1, var2);
-        String var4 = var3.getItem().getItemDisplayName(var3);
-        return (Icon)this.icons.get(this.graphicsLevel ? var4 : var4 + "_Opaque");
+		if(meta == 0)
+		{
+			return (Icon)this.icons.get(this.graphicsLevel ? "Christmas Leaves" : "Christmas Leaves_Opaque");
+		}
+        return (Icon)this.icons.get(this.graphicsLevel ? "Decorated Leaves" : "Decorated Leaves_Opaque");
     }
 
     /**
