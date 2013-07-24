@@ -93,7 +93,8 @@ public class GuiOptionsNotification extends GuiScreen
         drawTexturedModalRect(centerX, centerY, 0, 0, 141, this.hParty);
         
         String showNotificationString = AetherOptions.getShowNotifications() ? "是" : "否";
-        GuiButton showNotification = new GuiButton(1, this.xParty - 60, this.yParty - 36 - 28, 120, 20, "显示收到的信息: " + showNotificationString);            this.buttonList.add(showNotification);
+        GuiButton showNotification = new GuiButton(1, this.xParty - 60, this.yParty - 36 - 28, 120, 20, "显示收到的信息: " + showNotificationString); 
+        this.buttonList.add(showNotification);
         this.mc.renderEngine.resetBoundTexture();
         String title = "消息";
         drawString(this.fontRenderer, title, centerX + 70 - this.fontRenderer.getStringWidth(title) / 2, centerY + 5, 16777215);
