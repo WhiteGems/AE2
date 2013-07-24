@@ -22,10 +22,7 @@ import net.minecraft.world.World;
 public class BlockChristmasLeaves extends BlockLeaves implements IAetherBlock
 {
     private Icon leafIcon,leafIcon_O;
-	private Icon decoratedLeafIcon,decoratedLeafIcon_O;
-
-    private HashMap icons = new HashMap();
-    public static final String[] names = new String[] {"Christmas Leaves", "Decorative Leaves"};
+    private Icon decoratedLeafIcon,decoratedLeafIcon_O;
 
     public BlockChristmasLeaves(int var1)
     {
@@ -49,12 +46,12 @@ public class BlockChristmasLeaves extends BlockLeaves implements IAetherBlock
      */
     public void registerIcons(IconRegister ir)
     {
-		leafIcon = ir.registerIcon("Aether:Christmas Leaves");
+	leafIcon = ir.registerIcon("Aether:Christmas Leaves");
         decoratedLeafIcon = ir.registerIcon("Aether:Decorated Leaves");
 		
-		leafIcon_O = ir.registerIcon("Aether:Christmas Leaves_Opaque");
+	leafIcon_O = ir.registerIcon("Aether:Christmas Leaves_Opaque");
         decoratedLeafIcon_O = ir.registerIcon("Aether:Decorated Leaves_Opaque");
-		super.registerIcons(ir);
+	super.registerIcons(ir);
     }
 
     /**
@@ -99,10 +96,10 @@ public class BlockChristmasLeaves extends BlockLeaves implements IAetherBlock
     public Icon getIcon(int side, int meta)
     {
         this.setGraphicsLevel(Minecraft.getMinecraft().gameSettings.fancyGraphics);
-		if(meta == 0)
-		{
-			return (Icon)this.icons.get(this.graphicsLevel ? "Christmas Leaves" : "Christmas Leaves_Opaque");
-		}
+	if(meta == 0)
+	{
+		return (Icon)this.icons.get(this.graphicsLevel ? "Christmas Leaves" : "Christmas Leaves_Opaque");
+	}
         return (Icon)this.icons.get(this.graphicsLevel ? "Decorated Leaves" : "Decorated Leaves_Opaque");
     }
 
