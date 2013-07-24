@@ -47,11 +47,11 @@ public class GuiInventoryAether extends InventoryEffectRenderer
         this.drawPlayerOnGui(this.mc, var4 + 34, var5 + 75, 30, (float)(var4 + 51) - this.xSize_lo, (float)(var5 + 75 - 50) - this.ySize_lo);
         StringTranslate var6 = StringTranslate.getInstance();
         this.buttonList.clear();
-        GuiButton var7 = new GuiButton(2, this.guiLeft + 7, this.guiTop + 162, 72, 20, var6.translateKey("Book of Lore"));
+        GuiButton var7 = new GuiButton(2, this.guiLeft + 7, this.guiTop + 162, 72, 20, var6.translateKey("以太Ⅱ物品百科"));
         var7.enabled = false;
         this.buttonList.add(var7);
-        this.buttonList.add(new GuiButton(3, this.guiLeft + 84, this.guiTop + 162, 34, 20, var6.translateKey("Social")));
-        this.buttonList.add(new GuiButton(4, this.guiLeft + 123, this.guiTop + 162, 46, 20, var6.translateKey("Donator")));
+        this.buttonList.add(new GuiButton(3, this.guiLeft + 84, this.guiTop + 162, 34, 20, var6.translateKey("社区")));
+        this.buttonList.add(new GuiButton(4, this.guiLeft + 123, this.guiTop + 162, 46, 20, var6.translateKey("捐赠特区")));
     }
 
     /**
