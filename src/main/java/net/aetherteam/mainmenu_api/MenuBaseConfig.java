@@ -111,7 +111,7 @@ public class MenuBaseConfig
                 menuProps.setProperty("selectedMenu", "");
                 Minecraft.getMinecraft();
                 menuProps.store(new FileOutputStream(Minecraft.getMinecraftDir() + "/MenuAPI.properties"), null);
-                FileInputStream in = new FileInputStream("MenuAPI.properties");
+                FileInputStream in = new FileInputStream(Minecraft.getMinecraftDir() + "/MenuAPI.properties");
                 menuProps.load(in);
             }
             catch (FileNotFoundException e)
@@ -131,7 +131,7 @@ public class MenuBaseConfig
             menuProps.setProperty(name, value);
             Minecraft.getMinecraft();
             menuProps.store(new FileOutputStream(Minecraft.getMinecraftDir() + "/MenuAPI.properties"), null);
-            FileInputStream in = new FileInputStream("MenuAPI.properties");
+            FileInputStream in = new FileInputStream(Minecraft.getMinecraftDir() + "/MenuAPI.properties");
             menuProps.load(in);
         }
         catch (FileNotFoundException e)
