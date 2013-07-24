@@ -46,12 +46,12 @@ public class BlockChristmasLeaves extends BlockLeaves implements IAetherBlock
      */
     public void registerIcons(IconRegister ir)
     {
-	leafIcon = ir.registerIcon("Aether:Christmas Leaves");
+        leafIcon = ir.registerIcon("Aether:Christmas Leaves");
         decoratedLeafIcon = ir.registerIcon("Aether:Decorated Leaves");
-		
-	leafIcon_O = ir.registerIcon("Aether:Christmas Leaves_Opaque");
+
+        leafIcon_O = ir.registerIcon("Aether:Christmas Leaves_Opaque");
         decoratedLeafIcon_O = ir.registerIcon("Aether:Decorated Leaves_Opaque");
-	super.registerIcons(ir);
+        super.registerIcons(ir);
     }
 
     /**
@@ -98,9 +98,9 @@ public class BlockChristmasLeaves extends BlockLeaves implements IAetherBlock
         this.setGraphicsLevel(Minecraft.getMinecraft().gameSettings.fancyGraphics);
 	if(meta == 0)
 	{
-		return (Icon)this.icons.get(this.graphicsLevel ? "Christmas Leaves" : "Christmas Leaves_Opaque");
+		return this.graphicsLevel ? leafIcon : leafIcon_O;
 	}
-        return (Icon)this.icons.get(this.graphicsLevel ? "Decorated Leaves" : "Decorated Leaves_Opaque");
+        return this.graphicsLevel ? decoratedLeafIcon : decoratedLeafIcon_O;
     }
 
     /**

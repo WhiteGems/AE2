@@ -98,7 +98,7 @@ public class GuiOptionsNotification extends GuiScreen
         this.mc.renderEngine.resetBoundTexture();
         String title = "消息";
         drawString(this.fontRenderer, title, centerX + 70 - this.fontRenderer.getStringWidth(title) / 2, centerY + 5, 16777215);
-        this.buttonList.add(new GuiButton(0, this.xParty - 60, this.yParty + 81 - 28, 120, 20, "返回");
+        this.buttonList.add(new GuiButton(0, this.xParty - 60, this.yParty + 81 - 28, 120, 20, "返回"));
 
         super.drawScreen(x, y, partialTick);
     }
