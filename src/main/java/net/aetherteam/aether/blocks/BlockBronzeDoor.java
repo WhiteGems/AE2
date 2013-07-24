@@ -22,8 +22,7 @@ import net.minecraft.world.World;
 public class BlockBronzeDoor extends BlockAether implements IAetherBlock
 {
     private Random rand = new Random();
-    private HashMap icons = new HashMap();
-    public static final String[] names = new String[] {"Bronze Door", "Bronze Door Lock"};
+    private Icon door,lock;
 
     protected BlockBronzeDoor(int var1)
     {
@@ -67,9 +66,14 @@ public class BlockBronzeDoor extends BlockAether implements IAetherBlock
      */
     public Icon getIcon(int side, int meta)
     {
-        ItemStack var3 = new ItemStack(AetherBlocks.BronzeDoor, 1, meta);
-        String var4 = var3.getItem().getItemDisplayName(var3);
-        return (Icon)this.icons.get(var4);
+
+        switch(meta)
+        {
+    	case 0:return this.door;
+    	case 1:return this.lock;
+    	}
+    	
+    	return this.door;
     }
 
     @SideOnly(Side.CLIENT)
@@ -80,10 +84,8 @@ public class BlockBronzeDoor extends BlockAether implements IAetherBlock
      */
     public void registerIcons(IconRegister ir)
     {
-        for (String name : names)
-        {
-            this.icons.put(name, ir.registerIcon("Aether:" + name));
-        }
+    	door = ir.registerIcon("Aether:Bronze Door");
+    	lock = ir.registerIcon("Aether:Bronze Door Lock");  
     }
 
     /**
@@ -96,7 +98,7 @@ public class BlockBronzeDoor extends BlockAether implements IAetherBlock
                 for (int z = posz - 3; z <= posz + 3; ++z)
                     if (var1.getBlockId(x, y, z) == AetherBlocks.BronzeDoorController.blockID)
                     {
-                        TileEntityBronzeDoorController var13 = (TileEntityBronzeDoorController)var1.getBlockTileEntity(x, y, z);
+                        TileEntityBronzeDoorController var13 = (TileEntityBronzeDoorController) var1.getBlockTileEntity(x, y, z);
 
                         if (var13 != null)
                         {
@@ -119,6 +121,7 @@ public class BlockBronzeDoor extends BlockAether implements IAetherBlock
 
                                     if (var16 <= 0)
                                     {
+                                        var16 = 0;
                                         var13.chatItUp(var5, "这个门似乎需要 5 把钥匙, 在地牢的深处能找到这些钥匙?");
                                         return true;
                                     }
