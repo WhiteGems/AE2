@@ -19,49 +19,49 @@ public class RenderNPC extends RenderBiped
         if (var1 instanceof EntityBasicNPC)
         {
             EntityBasicNPC var10 = (EntityBasicNPC)var1;
-            String var11 = "Neutral";
+            String var11 = "日常";
 
             if (var10.isAngry())
             {
-                var11 = "Angry";
+                var11 = "愤怒";
             }
             else if (var10.isScared())
             {
-                var11 = "Scared";
+                var11 = "恐惧";
             }
             else if (var10.isBored())
             {
-                var11 = "Bored";
+                var11 = "厌烦";
             }
             else if (var10.isCurious())
             {
-                var11 = "Curious";
+                var11 = "好奇";
             }
             else if (var10.isHappy())
             {
-                var11 = "Happy";
+                var11 = "开心";
             }
             else if (var10.isHungry())
             {
-                var11 = "Hungry";
+                var11 = "着急";
             }
             else if (var10.isInhibited())
             {
-                var11 = "Inhibited";
+                var11 = "羞怯";
             }
             else if (var10.isPuzzled())
             {
-                var11 = "Puzzled";
+                var11 = "迷惑";
             }
             else if (var10.isViolent())
             {
-                var11 = "Violent";
+                var11 = "暴躁";
             }
 
             String var12 = String.valueOf((int)(var10.getPleasure() * 100.0F) + "%");
             String var13 = String.valueOf((int)(var10.getArousal() * 100.0F) + "%");
             String var14 = String.valueOf((int)(var10.getDominance() * 100.0F) + "%");
-            String var15 = "P: " + var12 + " A: " + var13 + " D: " + var14;
+            String var15 = "愉悦度: " + var12 + "兴奋度: " + var13 + "控制度: " + var14;
             this.func_96449_a(var1, var2, var4, var6, var11, var9, 1.0D);
             this.func_96449_a(var1, var2, var4 + 0.30000001192092896D, var6, var15, var9, 1.0D);
         }
