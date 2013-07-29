@@ -39,7 +39,7 @@ public class GuiCreateDungeonParty extends GuiScreen
     private GuiButton finishButton;
     private GuiButton backButton;
     private GuiTextField partyNameField;
-    private String partyName;
+    private String partyName = "";
     private EntityPlayer player;
     private GuiScreen parent;
     private TileEntityEntranceController controller;
