@@ -171,6 +171,7 @@ public class AetherEntities
         LanguageRegistry.instance().addStringLocalization("entity.Zephyroo.name", "zh_CN", "以太袋鼠");
         LanguageRegistry.instance().addStringLocalization("entity.Tempest.name", "zh_CN", "风暴怪");
         LanguageRegistry.instance().addStringLocalization("entity.Sprite.name", "zh_CN", "烈焰太阳神");
+        LanguageRegistry.instance().addStringLocalization("entity.Angel.name", "zh_CN", "折翼天使");
 
         addSpawn("Aerwhale", 8, 5, EnumCreatureType.creature);
         addSpawn("Tempest", 10, 1, EnumCreatureType.monster);
