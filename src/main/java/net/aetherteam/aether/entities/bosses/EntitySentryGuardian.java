@@ -231,7 +231,7 @@ public class EntitySentryGuardian extends EntityMiniBoss implements IAetherBoss
         {
             if (attacker instanceof EntityPlayer && ((EntityPlayer)attacker).getCurrentEquippedItem() != null)
             {
-                this.chatItUp((EntityPlayer)attacker, "Better switch to a sword, my " + ((EntityPlayer)attacker).getCurrentEquippedItem().getItem().getItemDisplayName(((EntityPlayer)attacker).getCurrentEquippedItem()) + " doesn\'t seem to affect it.");
+                this.chatItUp((EntityPlayer)attacker, "也许该换成剑攻击, 我的" + ((EntityPlayer)attacker).getCurrentEquippedItem().getItem().getItemDisplayName(((EntityPlayer)attacker).getCurrentEquippedItem()) + "对付不了这玩意儿!");
                 this.chatTime = 60;
             }
 
@@ -372,7 +372,7 @@ public class EntitySentryGuardian extends EntityMiniBoss implements IAetherBoss
 
     public String getBossTitle()
     {
-        return this.bossName + ", the Sentry Guardian";
+        return "守卫者:" + this.bossName;
     }
 
     public Entity getBossEntity()

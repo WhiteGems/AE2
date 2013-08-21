@@ -54,7 +54,9 @@ public class MenuBaseLoader extends GuiScreen
         Keyboard.enableRepeatEvents(true);
         this.updateScreen();
         this.buttonList.clear();
-        this.launchMenu = new GuiButton(0, this.x2 - 35, this.y2 + 85 - 28, 72, 20, "Launch Menu");
+
+        this.launchMenu = new GuiButton(0, this.x2 - 35, this.y2 + 85 - 28, 72, 20, "启动菜单");
+
         this.launchMenu.enabled = false;
         this.buttonList.add(this.launchMenu);
         this.rightPage = new GuiButton(1, this.x2 + 44, this.y2 + 57, 20, 20, ">");

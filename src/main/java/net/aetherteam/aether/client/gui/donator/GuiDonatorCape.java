@@ -135,7 +135,7 @@ public class GuiDonatorCape extends GuiScreen
         int centerY = this.yParty - 56;
         ScaledResolution sr = new ScaledResolution(this.mc.gameSettings, this.mc.displayWidth, this.mc.displayHeight);
         this.drawTexturedModalRect(centerX, centerY, 0, 0, 194, this.hParty);
-        this.buttonList.add(new GuiButton(0, this.xParty + 10, this.yParty + 27, 80, 20, "Back"));
+        this.buttonList.add(new GuiButton(0, this.xParty + 10, this.yParty + 27, 80, 20, "返回"));
         GuiButton typeButton = null;
         Object overrideButton = null;
         boolean hasChoice = this.donator.containsChoiceType(EnumChoiceType.CAPE);
@@ -154,7 +154,7 @@ public class GuiDonatorCape extends GuiScreen
                 this.backgroundTexture = TEXTURE_CHOICE_MENU_2;
             }
 
-            typeButton = new GuiButton(1, this.xParty + 10, this.yParty - 35, 80, 20, header != null ? header.name : "Off");
+            typeButton = new GuiButton(1, this.xParty + 10, this.yParty - 35, 80, 20, header != null ? header.name : "关闭");
         }
 
         if (this.donator == null)
@@ -164,7 +164,7 @@ public class GuiDonatorCape extends GuiScreen
 
         this.buttonList.add(typeButton);
         super.drawScreen(x, y, partialTick);
-        String header1 = "Donator Cape";
+        String header1 = "捐赠者披风";
         this.drawString(this.fontRenderer, header1, sr.getScaledWidth() / 2 - this.fontRenderer.getStringWidth(header1) / 2 + 49, centerY + 10, 15658734);
         this.drawPlayerOnGui(this.mc, this.xParty - 40, this.yParty + 35, 30, 1.0F, 1.0F, this.donator != null && this.donator.containsChoiceType(EnumChoiceType.CAPE));
     }

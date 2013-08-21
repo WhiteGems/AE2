@@ -15,9 +15,9 @@ import org.lwjgl.opengl.GL11;
 
 public class TileEntityEntranceRenderer extends TileEntitySpecialRenderer
 {
-    protected static final String AVAILABLE = "Available";
-    protected static final String OCCUPIED = "Occupied";
-    protected static final String CONQUERED = "Conquered";
+    protected static final String AVAILABLE = "未攻略";
+    protected static final String OCCUPIED = "攻略中";
+    protected static final String CONQUERED = "已攻略";
     private static final int AVAILABLE_COLOUR = 6750054;
     private static final int OCCUPIED_COLOUR = 16756516;
     private static final int CONQUERED_COLOUR = 10688793;
@@ -35,7 +35,7 @@ public class TileEntityEntranceRenderer extends TileEntitySpecialRenderer
         {
             PartyMember member = PartyController.instance().getMember(Minecraft.getMinecraft().thePlayer.username.toLowerCase());
             Party party = PartyController.instance().getParty(member);
-            String label = (party == null || !dungeon.hasAnyConqueredDungeon(party.getMembers())) && !dungeon.hasConqueredDungeon((EntityPlayer)Minecraft.getMinecraft().thePlayer) ? (!dungeon.isActive() && !dungeon.hasQueuedParty() ? "Available" : "Occupied") : "Conquered";
+            String label = (party == null || !dungeon.hasAnyConqueredDungeon(party.getMembers())) && !dungeon.hasConqueredDungeon((EntityPlayer)Minecraft.getMinecraft().thePlayer) ? (!dungeon.isActive() && !dungeon.hasQueuedParty() ? "未攻略" : "攻略中") : "已攻略";
             int label_colour = (party == null || !dungeon.hasAnyConqueredDungeon(party.getMembers())) && !dungeon.hasConqueredDungeon((EntityPlayer)Minecraft.getMinecraft().thePlayer) ? (!dungeon.isActive() && !dungeon.hasQueuedParty() ? 6750054 : 16756516) : 10688793;
             GL11.glPushMatrix();
             this.renderLabel(entrance, label, d, d1 + 5.0D, d2, 24, 2.0F, label_colour);

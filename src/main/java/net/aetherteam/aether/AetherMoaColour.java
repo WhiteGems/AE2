@@ -17,12 +17,13 @@ public class AetherMoaColour
     public int jumps;
     public int chance;
     public String name;
+    public String texturename;
     public static List<String> names = new ArrayList();
     private static int totalChance;
     public static List<AetherMoaColour> colours = new ArrayList();
     private static Random random = new Random();
 
-    public AetherMoaColour(int i, int j, int k, int l, String s)
+    public AetherMoaColour(int i, int j, int k, int l, String s, String texture)
     {
         this.ID = i;
         this.colour = j;
@@ -30,13 +31,14 @@ public class AetherMoaColour
         this.chance = l;
         totalChance += l;
         this.name = s;
+        this.texturename = texture;
         colours.add(this);
         names.add(this.name);
     }
 
     public ResourceLocation getTexture(boolean saddled)
     {
-        return new ResourceLocation("aether", "textures/moa/" + (saddled ? "saddle_" : "moa_") + this.name + ".png");
+        return new ResourceLocation("aether", "textures/moa/" + (saddled ? "saddle_" : "moa_") + this.texturename + ".png");
     }
 
     public ResourceLocation getTexture(boolean saddled, EntityPlayer player)
@@ -55,50 +57,50 @@ public class AetherMoaColour
             }
         }
 
-        return new ResourceLocation("aether", "textures/moa/" + (saddled && !player.isPotionActive(Potion.invisibility) ? "saddle_" : "moa_") + this.name + ".png");
+        return new ResourceLocation("aether", "textures/moa/" + (saddled && !player.isPotionActive(Potion.invisibility) ? "saddle_" : "moa_") + this.texturename + ".png");
     }
 
     public static AetherMoaColour pickRandomMoa()
     {
         int i = random.nextInt(totalChance);
 
-        for (int j = 0; j < colours.size(); ++j)
+        for (AetherMoaColour colour1 : colours)
         {
-            if (i < ((AetherMoaColour)colours.get(j)).chance)
+            if (i < colour1.chance)
             {
-                return (AetherMoaColour)colours.get(j);
+                return colour1;
             }
 
-            i -= ((AetherMoaColour)colours.get(j)).chance;
+            i -= colour1.chance;
         }
 
-        return (AetherMoaColour)colours.get(0);
+        return colours.get(0);
     }
 
     public static AetherMoaColour getColour(int ID)
     {
-        for (int i = 0; i < colours.size(); ++i)
+        for (AetherMoaColour colour1 : colours)
         {
-            if (((AetherMoaColour)colours.get(i)).ID == ID)
+            if (colour1.ID == ID)
             {
-                return (AetherMoaColour)colours.get(i);
+                return colour1;
             }
         }
 
-        return (AetherMoaColour)colours.get(0);
+        return colours.get(0);
     }
 
     public static String[] getNames()
     {
         String[] namesArray = new String[names.size()];
-        namesArray = (String[])names.toArray(namesArray);
+        namesArray = names.toArray(namesArray);
         return namesArray;
     }
 
     static
     {
-        new AetherMoaColour(0, 7829503, 3, 100, "Blue");
-        new AetherMoaColour(1, 16777215, 4, 20, "White");
-        new AetherMoaColour(2, 2236962, 8, 5, "Black");
+        new AetherMoaColour(0, 7829503, 3, 100, "蓝色", "Blue");
+        new AetherMoaColour(1, 16777215, 4, 20, "白色", "White");
+        new AetherMoaColour(2, 2236962, 8, 5, "黑色", "Black");
     }
 }

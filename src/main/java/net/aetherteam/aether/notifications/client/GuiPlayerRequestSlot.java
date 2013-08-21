@@ -15,9 +15,9 @@ import org.lwjgl.opengl.GL11;
 
 public class GuiPlayerRequestSlot extends Gui
 {
-    protected static final String AVAILABLE_TEXT = "AVAILABLE";
-    protected static final String INPARTY_TEXT = "ALREADY IN PARTY";
-    protected static final String PENDING_TEXT = "REQUEST PENDING";
+    protected static final String AVAILABLE_TEXT = "可用";
+    protected static final String INPARTY_TEXT = "已加入公会";
+    protected static final String PENDING_TEXT = "请求审理中";
     private static final int AVAILABLE_COLOUR = 6750054;
     private static final int INPARTY_COLOUR = 16711680;
     private static final int PENDING_COLOUR = 16756516;
@@ -88,27 +88,26 @@ public class GuiPlayerRequestSlot extends Gui
         GL11.glScalef(0.75F, 0.75F, 1.0F);
         boolean inParty = PartyController.instance().inParty(partyMember.username);
         String subText = "";
-        boolean textColour = false;
         boolean pending = NotificationHandler.instance().hasSentToBefore(partyMember.username, NotificationType.PARTY_REQUEST, mc.thePlayer.username);
-        int var19;
+        int textColour;
 
         if (inParty)
         {
-            subText = "ALREADY IN PARTY";
-            var19 = 16711680;
+            subText = "已加入公会";
+            textColour = 16711680;
         }
         else if (pending)
         {
-            subText = "REQUEST PENDING";
-            var19 = 16756516;
+            subText = "请求审理中";
+            textColour = 16756516;
         }
         else
         {
-            subText = "AVAILABLE";
-            var19 = 6750054;
+            subText = "可用";
+            textColour = 6750054;
         }
 
-        fontRenderer.drawString(subText, (int)(((float)x + (float)height) / 0.75F), (int)(((float)y + 12.0F) / 0.75F), var19);
+        fontRenderer.drawString(subText, (int)(((float)x + (float)height) / 0.75F), (int)(((float)y + 12.0F) / 0.75F), textColour);
         GL11.glPopMatrix();
     }
 

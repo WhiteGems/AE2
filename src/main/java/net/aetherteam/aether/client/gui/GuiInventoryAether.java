@@ -48,11 +48,11 @@ public class GuiInventoryAether extends InventoryEffectRenderer
         this.drawTexturedModalRect(var5, var6, 0, 0, this.xSize, this.ySize + 21);
         renderEntity(var5 + 34, var6 + 75, 30, (float)(var5 + 51) - this.xSize_lo, (float)(var6 + 75 - 50) - this.ySize_lo, this.mc.thePlayer);
         this.buttonList.clear();
-        GuiButton bookOfLore = new GuiButton(2, this.guiLeft + 7, this.guiTop + 162, 72, 20, I18n.func_135053_a("Book of Lore"));
+        GuiButton bookOfLore = new GuiButton(2, this.guiLeft + 7, this.guiTop + 162, 72, 20, I18n.func_135053_a("以太Ⅱ物品百科"));
         bookOfLore.enabled = false;
         this.buttonList.add(bookOfLore);
-        this.buttonList.add(new GuiButton(3, this.guiLeft + 84, this.guiTop + 162, 34, 20, I18n.func_135053_a("Social")));
-        this.buttonList.add(new GuiButton(4, this.guiLeft + 123, this.guiTop + 162, 46, 20, I18n.func_135053_a("Donator")));
+        this.buttonList.add(new GuiButton(3, this.guiLeft + 84, this.guiTop + 162, 34, 20, I18n.func_135053_a("社区")));
+        this.buttonList.add(new GuiButton(4, this.guiLeft + 123, this.guiTop + 162, 46, 20, I18n.func_135053_a("捐赠特区")));
     }
 
     /**

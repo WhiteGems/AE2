@@ -274,7 +274,7 @@ public class GuiJoinParty extends GuiScreen
             this.sbar.drawButton(this.mc, x, y);
         }
 
-        this.drawString(this.fontRenderer, "Party List", var18 + 70 - this.fontRenderer.getStringWidth("Party List") / 2, centerY + 10, 16777215);
+        this.drawString(this.fontRenderer, "公会列表", var18 + 70 - this.fontRenderer.getStringWidth("公会列表") / 2, centerY + 10, 16777215);
 
         if (partyList.size() == 0 || var19)
         {
@@ -286,11 +286,11 @@ public class GuiJoinParty extends GuiScreen
             GL11.glScalef(var20, var20, var20);
             this.drawTexturedModalRect(0, 0, 0, 0, 201, this.hParty - 201);
             GL11.glPopMatrix();
-            String warningLabel = "There are no parties to display at this time.";
+            String warningLabel = "当前无人建立公会.";
             this.drawString(this.fontRenderer, warningLabel, var18 + 70 - this.fontRenderer.getStringWidth(warningLabel) / 2, centerY + 75, 16777215);
         }
 
-        this.joinButton = new GuiButton(1, this.xParty + 3, this.yParty + 85 - 28, 58, 20, "Join");
+        this.joinButton = new GuiButton(1, this.xParty + 3, this.yParty + 85 - 28, 58, 20, "加入");
 
         if (this.selectedPartySlot != null && this.slotIsSelected)
         {
@@ -301,7 +301,7 @@ public class GuiJoinParty extends GuiScreen
             this.joinButton.enabled = false;
         }
 
-        this.buttonList.add(new GuiButton(0, this.xParty - 60, this.yParty + 85 - 28, 58, 20, "Back"));
+        this.buttonList.add(new GuiButton(0, this.xParty - 60, this.yParty + 85 - 28, 58, 20, "返回"));
         this.buttonList.add(this.joinButton);
         super.drawScreen(x, y, partialTick);
     }

@@ -23,49 +23,49 @@ public class RenderNPC extends RenderBiped
         if (living instanceof EntityBasicNPC)
         {
             EntityBasicNPC npc = (EntityBasicNPC)living;
-            String mood = "Neutral";
+            String mood = "日常";
 
             if (npc.isAngry())
             {
-                mood = "Angry";
+                mood = "愤怒";
             }
             else if (npc.isScared())
             {
-                mood = "Scared";
+                mood = "恐惧";
             }
             else if (npc.isBored())
             {
-                mood = "Bored";
+                mood = "厌烦";
             }
             else if (npc.isCurious())
             {
-                mood = "Curious";
+                mood = "好奇";
             }
             else if (npc.isHappy())
             {
-                mood = "Happy";
+                mood = "开心";
             }
             else if (npc.isHungry())
             {
-                mood = "Hungry";
+                mood = "着急";
             }
             else if (npc.isInhibited())
             {
-                mood = "Inhibited";
+                mood = "羞怯";
             }
             else if (npc.isPuzzled())
             {
-                mood = "Puzzled";
+                mood = "迷惑";
             }
             else if (npc.isViolent())
             {
-                mood = "Violent";
+                mood = "暴躁";
             }
 
             String p = String.valueOf((int)(npc.getPleasure() * 100.0F) + "%");
             String a = String.valueOf((int)(npc.getArousal() * 100.0F) + "%");
             String d = String.valueOf((int)(npc.getDominance() * 100.0F) + "%");
-            String PAD = "P: " + p + " A: " + a + " D: " + d;
+            String PAD = "愉悦度: " + p + " 兴奋度: " + a + " 控制度: " + d;
             this.func_96449_a(living, par2, par4, par6, mood, par9, 1.0D);
             this.func_96449_a(living, par2, par4 + 0.30000001192092896D, par6, PAD, par9, 1.0D);
         }

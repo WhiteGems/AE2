@@ -60,7 +60,7 @@ public class BlockAltar extends BlockContainer implements IAetherBlock
             {
                 if (world.isRemote)
                 {
-                    FMLClientHandler.instance().getClient().ingameGUI.getChatGUI().printChatMessage("Altar is being blocked by something above!");
+                    FMLClientHandler.instance().getClient().ingameGUI.getChatGUI().printChatMessage("祭坛上方不能被遮蔽!");
                 }
 
                 return true;

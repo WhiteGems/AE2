@@ -45,8 +45,8 @@ public class PartyView extends GuiScreen
     public void initGui()
     {
         this.buttonList.clear();
-        this.buttonList.add(new GuiButton(0, this.xParty - 58, this.yParty + 85 - 28, 52, 20, "Invite"));
-        this.buttonList.add(new GuiButton(0, this.xParty - 1, this.yParty + 85 - 28, 60, 20, "Remove"));
+        this.buttonList.add(new GuiButton(0, this.xParty - 58, this.yParty + 85 - 28, 52, 20, "邀请"));
+        this.buttonList.add(new GuiButton(0, this.xParty - 1, this.yParty + 85 - 28, 60, 20, "移除"));
         super.initGui();
     }
 
@@ -97,7 +97,7 @@ public class PartyView extends GuiScreen
             totalHeight += slotH + gutter;
         }
 
-        this.fontRenderer.drawStringWithShadow("Kingbdogz\' party", centerX + 16, centerY + 11, 16777215);
+        this.fontRenderer.drawStringWithShadow("Kingbdogz的公会", centerX + 16, centerY + 11, 16777215);
         super.drawScreen(x, y, partialTick);
     }
 
@@ -137,7 +137,7 @@ public class PartyView extends GuiScreen
         this.fontRenderer.drawStringWithShadow(p.username, x + height, y + 2, 15066597);
         GL11.glPushMatrix();
         GL11.glScalef(0.75F, 0.75F, 1.0F);
-        this.fontRenderer.drawString("Online", (int)(((float)x + (float)height) / 0.75F), (int)(((float)y + 12.0F) / 0.75F), 7859831);
+        this.fontRenderer.drawString("在线", (int)(((float)x + (float)height) / 0.75F), (int)(((float)y + 12.0F) / 0.75F), 7859831);
         GL11.glPopMatrix();
     }
 }

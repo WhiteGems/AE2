@@ -26,7 +26,7 @@ public class RenderZephyroo extends RenderLiving
 
             if (roo.isLovingClash())
             {
-                this.func_96449_a(par1EntityLiving, par2, par4, par6, "pls lov me clashy <3", par9, 1.0D);
+                this.func_96449_a(par1EntityLiving, par2, par4, par6, "请疼爱我, 喔:-O 亲~", par9, 1.0D);
             }
         }
     }

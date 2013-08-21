@@ -18,8 +18,8 @@ import org.lwjgl.opengl.GL11;
 public class GuiManageMembers extends GuiScreen
 {
     private static final ResourceLocation TEXTURE_PARTY = new ResourceLocation("aether", "textures/gui/party.png");
-    protected static final String ONLINE_TEXT = "ONLINE";
-    protected static final String OFFLINE_TEXT = "OFFLINE";
+    protected static final String ONLINE_TEXT = "在线";
+    protected static final String OFFLINE_TEXT = "离线";
     private static final int ONLINE_TEXT_COLOR = 6750054;
     private static final int OFFLINE_TEXT_COLOR = 16711680;
     private GuiYSlider sbar;
@@ -80,8 +80,9 @@ public class GuiManageMembers extends GuiScreen
 
         this.sbar = new GuiYSlider(-1, this.xMember + 46, this.yMember - 54, 10, 103);
         this.sbar.sliderValue = this.sbarVal;
-        this.buttonList.add(new GuiButton(0, this.xMember - 58, this.yMember + 85 - 28, 120, 20, "Back"));
-        this.buttonList.add(new GuiButton(0, this.xMember - 58, this.yMember + 85 - 28, 120, 20, "Back"));
+
+        this.buttonList.add(new GuiButton(0, this.xMember - 58, this.yMember + 85 - 28, 120, 20, "返回"));
+        this.buttonList.add(new GuiButton(0, this.xMember - 58, this.yMember + 85 - 28, 120, 20, "返回"));
     }
 
     /**
@@ -262,17 +263,13 @@ public class GuiManageMembers extends GuiScreen
             this.sbar.drawButton(this.mc, x, y);
         }
 
-        this.drawString(this.fontRenderer, "Player List", centerX + 40, centerY + 10, 16777215);
+        this.drawString(this.fontRenderer, "玩家列表", centerX + 40, centerY + 10, 16777215);
         String var15;
 
         if (this.selectedPlayerSlot != null && !this.selectedPlayerSlot.partyMember.isLeader())
         {
-            var15 = "Manage";
-        }
-        else
-        {
-            var15 = "Disband";
-        }
+            var15 = "管理";
+        } else var15 = "解散";
 
         this.kickButton = new GuiButton(1, this.xMember + 3, this.yMember + 85 - 28, 58, 20, var15);
 
@@ -285,7 +282,7 @@ public class GuiManageMembers extends GuiScreen
             this.kickButton.enabled = false;
         }
 
-        this.buttonList.add(new GuiButton(0, this.xMember - 60, this.yMember + 85 - 28, 58, 20, "Back"));
+        this.buttonList.add(new GuiButton(0, this.xMember - 60, this.yMember + 85 - 28, 58, 20, "返回"));
         this.buttonList.add(this.kickButton);
         super.drawScreen(x, y, partialTick);
     }

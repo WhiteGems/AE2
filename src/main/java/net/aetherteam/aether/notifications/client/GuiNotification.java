@@ -39,7 +39,11 @@ public class GuiNotification extends Gui
         if (AetherOptions.getShowNotifications())
         {
             this.headerText = notification.getHeaderText();
-            this.senderName = notification.getType() == NotificationType.GENERIC ? notification.getSenderName() : (notification.getSenderName().isEmpty() ? "To " + notification.getReceiverName() : "From " + notification.getSenderName());
+            this.senderName = notification.getType() == NotificationType.GENERIC ?
+                    notification.getSenderName() :
+                    (notification.getSenderName().isEmpty() ?
+                            "去往 " + notification.getReceiverName() :
+                            "来自 " + notification.getSenderName());
             this.notificationTime = Minecraft.getSystemTime();
             this.theNotification = notification;
             this.haveNotification = false;
@@ -49,7 +53,11 @@ public class GuiNotification extends Gui
     public void queueAchievementInformation(Notification notification)
     {
         this.headerText = notification.getHeaderText();
-        this.senderName = notification.getType() == NotificationType.GENERIC ? notification.getSenderName() : (notification.getSenderName().isEmpty() ? "To " + notification.getReceiverName() : "From " + notification.getSenderName());
+        this.senderName = notification.getType() == NotificationType.GENERIC ?
+                notification.getSenderName() :
+                (notification.getSenderName().isEmpty() ?
+                        "去往 " + notification.getReceiverName() :
+                        "来自 " + notification.getSenderName());
         this.notificationTime = Minecraft.getSystemTime() - 2500L;
         this.theNotification = notification;
         this.haveNotification = true;

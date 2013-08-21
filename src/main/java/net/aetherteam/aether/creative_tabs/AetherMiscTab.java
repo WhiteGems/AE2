@@ -18,7 +18,7 @@ public class AetherMiscTab extends CreativeTabs
 
     public String getTabLabel()
     {
-        return "Aether Miscellaneous";
+        return "以太II|杂项";
     }
 
     /**

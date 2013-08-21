@@ -12,8 +12,8 @@ import org.lwjgl.opengl.GL11;
 
 public class GuiPlayerSlot extends Gui
 {
-    protected static final String ONLINE_TEXT = "ONLINE";
-    protected static final String OFFLINE_TEXT = "OFFLINE";
+    protected static final String ONLINE_TEXT = "在线";
+    protected static final String OFFLINE_TEXT = "离线";
     private static final int ONLINE_TEXT_COLOR = 6750054;
     private static final int OFFLINE_TEXT_COLOR = 16711680;
     protected int width;
@@ -83,11 +83,11 @@ public class GuiPlayerSlot extends Gui
 
         if (playerStringList.contains(this.partyMember.username))
         {
-            fontRenderer.drawString("ONLINE", (int)(((float)x + (float)height) / 0.75F), (int)(((float)y + 12.0F) / 0.75F), 6750054);
+            fontRenderer.drawString("在线", (int)(((float)x + (float)height) / 0.75F), (int)(((float)y + 12.0F) / 0.75F), 6750054);
         }
         else
         {
-            fontRenderer.drawString("OFFLINE", (int)(((float)x + (float)height) / 0.75F), (int)(((float)y + 12.0F) / 0.75F), 16711680);
+            fontRenderer.drawString("离线", (int)(((float)x + (float)height) / 0.75F), (int)(((float)y + 12.0F) / 0.75F), 16711680);
         }
 
         GL11.glPopMatrix();

@@ -73,9 +73,11 @@ public class GuiViewNotification extends GuiScreen
     {
         this.updateScreen();
         this.buttonList.clear();
-        this.acceptButton = new GuiButton(0, this.xParty - 30, this.yParty + 34, 60, 20, "Accept");
-        this.denyButton = new GuiButton(1, this.xParty - 100, this.yParty + 34, 60, 20, "Decline");
-        this.backButton = new GuiButton(2, this.xParty + 40, this.yParty + 34, 60, 20, "Back");
+
+        this.acceptButton = new GuiButton(0, this.xParty - 30, this.yParty + 34, 60, 20, "接受");
+        this.denyButton = new GuiButton(1, this.xParty - 100, this.yParty + 34, 60, 20, "拒绝");
+        this.backButton = new GuiButton(2, this.xParty + 40, this.yParty + 34, 60, 20, "返回");
+
         this.buttonList.add(this.acceptButton);
         this.buttonList.add(this.denyButton);
         this.buttonList.add(this.backButton);
@@ -127,7 +129,7 @@ public class GuiViewNotification extends GuiScreen
         new ScaledResolution(this.mc.gameSettings, this.mc.displayWidth, this.mc.displayHeight);
         this.drawTexturedModalRect(centerX, centerY, 0, 0, 256, this.hParty);
         this.mc.renderEngine.func_110577_a(TEXTURE_NOTIFICATION_VIEW);
-        String name = "Viewing Notification";
+        String name = "查看通知";
         this.drawString(this.fontRenderer, name, this.width / 2 - this.fontRenderer.getStringWidth(name) / 2, centerY + 7, 16777215);
         String title = this.notification.getTypeContents().getTitle(this.notification);
         this.drawString(this.fontRenderer, title, this.width / 2 - this.fontRenderer.getStringWidth(title) / 2, centerY + 27, 16777215);

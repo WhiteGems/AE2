@@ -1,6 +1,8 @@
 package net.aetherteam.aether.dungeons.keys;
 
-public class DungeonKey
+import java.io.Serializable;
+
+public class DungeonKey implements Serializable
 {
     EnumKeyType type;
 

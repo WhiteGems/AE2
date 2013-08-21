@@ -35,12 +35,12 @@ public class GuiCreateDungeonParty extends GuiScreen
     /** Reference to the Minecraft object. */
     Minecraft mc;
     private ArrayList<String> partyType;
-    private int typeIndex;
+    private int typeIndex = 0;
     private GuiButton typeButton;
     private GuiButton finishButton;
     private GuiButton backButton;
     private GuiTextField partyNameField;
-    private String partyName;
+    private String partyName = "";
     private EntityPlayer player;
     private GuiScreen parent;
     private TileEntityEntranceController controller;
@@ -54,12 +54,10 @@ public class GuiCreateDungeonParty extends GuiScreen
     public GuiCreateDungeonParty(PartyData pm, EntityPlayer player, GuiScreen parent)
     {
         this.partyType = new ArrayList();
-        this.typeIndex = 0;
-        this.partyName = "";
         this.parent = parent;
-        this.partyType.add("Open");
-        this.partyType.add("Closed");
-        this.partyType.add("Private");
+        this.partyType.add("公开");
+        this.partyType.add("关闭");
+        this.partyType.add("私有");
         this.player = player;
         this.mc = FMLClientHandler.instance().getClient();
         this.pm = pm;
@@ -75,9 +73,11 @@ public class GuiCreateDungeonParty extends GuiScreen
     {
         this.updateScreen();
         this.buttonList.clear();
-        this.typeButton = new GuiButton(1, this.partyX - 60, this.partyY - 16 - 28, 120, 20, "Type: " + (String)this.partyType.get(this.typeIndex));
-        this.finishButton = new GuiButton(2, this.partyX - 60, this.partyY + 6 - 28, 120, 20, "Start Dungeon");
-        this.backButton = new GuiButton(0, this.partyX - 60, this.partyY + 81 - 28, 120, 20, "Back");
+
+        this.typeButton = new GuiButton(1, this.partyX - 60, this.partyY - 16 - 28, 120, 20, "类型: " + (String) this.partyType.get(this.typeIndex));
+        this.finishButton = new GuiButton(2, this.partyX - 60, this.partyY + 6 - 28, 120, 20, "开始冒险!");
+        this.backButton = new GuiButton(0, this.partyX - 60, this.partyY + 81 - 28, 120, 20, "返回");
+
         this.buttonList.add(this.typeButton);
         this.buttonList.add(this.finishButton);
         this.buttonList.add(this.backButton);
@@ -102,7 +102,6 @@ public class GuiCreateDungeonParty extends GuiScreen
             case 1:
                 ++this.typeIndex;
                 break;
-
             case 2:
                 Party party = (new Party(this.partyName, new PartyMember(this.player))).setType(PartyType.getTypeFromString((String)this.partyType.get(this.typeIndex)));
                 boolean created = PartyController.instance().addParty(party, true);
@@ -111,7 +110,7 @@ public class GuiCreateDungeonParty extends GuiScreen
 
                 if (!created)
                 {
-                    this.mc.displayGuiScreen(new GuiDialogueBox(this, "Your party was successfully created!", "Your party name is already taken. Try again.", created));
+                    this.mc.displayGuiScreen(new GuiDialogueBox(this, "你已成功建立公会!", "抱歉, 你的公会名称已经被占用 :(", created));
                 }
                 else if (this.controller != null && this.controller.getDungeon() != null && !this.controller.getDungeon().hasQueuedParty())
                 {
@@ -143,9 +142,8 @@ public class GuiCreateDungeonParty extends GuiScreen
         {
             this.typeIndex = 0;
         }
-
-        this.typeButton = new GuiButton(1, this.partyX - 60, this.partyY - 16 - 28, 120, 20, "Type: " + (String)this.partyType.get(this.typeIndex));
-        this.finishButton = new GuiButton(2, this.partyX - 60, this.partyY + 6 - 28, 120, 20, "Start Dungeon");
+        this.typeButton = new GuiButton(1, this.partyX - 60, this.partyY - 16 - 28, 120, 20, "类型: " + (String) this.partyType.get(this.typeIndex));
+        this.finishButton = new GuiButton(2, this.partyX - 60, this.partyY + 6 - 28, 120, 20, "开始冒险!");
 
         if (this.partyName.isEmpty())
         {
@@ -163,7 +161,7 @@ public class GuiCreateDungeonParty extends GuiScreen
         new ScaledResolution(this.mc.gameSettings, this.mc.displayWidth, this.mc.displayHeight);
         this.drawTexturedModalRect(centerX, centerY, 0, 0, 141, this.partyH);
         this.mc.renderEngine.func_110577_a(TEXTURE_CREATE_PARTY);
-        String headerName = "Dungeon Raid Name";
+        String headerName = "行动代号";
         this.drawString(this.fontRenderer, headerName, centerX + 68 - this.fontRenderer.getStringWidth(headerName) / 2, centerY + 5, 16777215);
         this.partyNameField.drawTextBox();
         super.drawScreen(x, y, partialTick);
@@ -181,7 +179,7 @@ public class GuiCreateDungeonParty extends GuiScreen
         }
         else if (keyTyped == Minecraft.getMinecraft().gameSettings.keyBindInventory.keyCode)
         {
-            this.mc.displayGuiScreen((GuiScreen)null);
+            this.mc.displayGuiScreen(null);
             this.mc.setIngameFocus();
         }
 

@@ -177,7 +177,7 @@ public class DungeonHandler
 
             if (side.isClient())
             {
-                ClientNotificationHandler.createGeneric("Dungeon Queue Failed!", "By " + disbandMember.username, "");
+                ClientNotificationHandler.createGeneric("进入地牢攻略战失败!", "By " + disbandMember.username, "");
 
                 if (sendPackets)
                 {
@@ -199,7 +199,7 @@ public class DungeonHandler
 
             if (side.isClient() && PartyController.instance().getParty(PartyController.instance().getMember(ClientNotificationHandler.clientUsername())).getName().equalsIgnoreCase(PartyController.instance().getParty(member).getName()))
             {
-                ClientNotificationHandler.createGeneric("Member Left Dungeon!", member.username, "");
+                ClientNotificationHandler.createGeneric("成员离开地牢!", member.username, "");
             }
 
             if (sendPackets && side.isClient())

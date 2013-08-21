@@ -1,7 +1,9 @@
 package net.aetherteam.aether.client.gui.social.options;
 
 import cpw.mods.fml.client.FMLClientHandler;
+
 import java.util.List;
+
 import net.aetherteam.aether.data.AetherOptions;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
@@ -18,8 +20,7 @@ public class GuiOptionsParty extends GuiScreen
     private int yParty;
     private int wParty;
     private int hParty;
-
-    /** Reference to the Minecraft object. */
+    
     Minecraft mc;
     private EntityPlayer player;
     private GuiScreen parent;
@@ -31,17 +32,15 @@ public class GuiOptionsParty extends GuiScreen
         this.mc = FMLClientHandler.instance().getClient();
         this.wParty = 256;
         this.hParty = 256;
-        this.updateScreen();
+        updateScreen();
     }
 
-    /**
-     * Adds the buttons (and other controls) to the screen in question.
-     */
     public void initGui()
     {
-        this.updateScreen();
+        updateScreen();
         this.buttonList.clear();
-        this.buttonList.add(new GuiButton(0, this.xParty - 60, this.yParty + 81 - 28, 120, 20, "Back"));
+
+        this.buttonList.add(new GuiButton(0, this.xParty - 60, this.yParty + 81 - 28, 120, 20, "返回"));
     }
 
     /**
@@ -53,7 +52,7 @@ public class GuiOptionsParty extends GuiScreen
 
         if (keyTyped == Minecraft.getMinecraft().gameSettings.keyBindInventory.keyCode)
         {
-            this.mc.displayGuiScreen((GuiScreen)null);
+            this.mc.displayGuiScreen((GuiScreen) null);
             this.mc.setIngameFocus();
         }
     }
@@ -71,27 +70,20 @@ public class GuiOptionsParty extends GuiScreen
             case 0:
                 this.mc.displayGuiScreen(this.parent);
                 break;
-
             case 1:
                 AetherOptions.setShowPartyHUD(!AetherOptions.getShowPartyHUD());
                 break;
-
             case 2:
                 AetherOptions.setMinimalPartyHUD(!AetherOptions.getMinimalPartyHUD());
                 break;
-
             case 3:
                 AetherOptions.setRenderHead(!AetherOptions.getRenderHead());
                 break;
-
             case 4:
                 AetherOptions.setShowPartyName(!AetherOptions.getShowPartyName());
         }
     }
 
-    /**
-     * Returns true if this GUI should pause the game when it is displayed in single-player
-     */
     public boolean doesGuiPauseGame()
     {
         return false;
@@ -103,7 +95,8 @@ public class GuiOptionsParty extends GuiScreen
     public void drawScreen(int x, int y, float partialTick)
     {
         this.buttonList.clear();
-        this.drawDefaultBackground();
+
+        drawDefaultBackground();
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
         this.mc.renderEngine.func_110577_a(TEXTURE_PARTYMAIN);
         int centerX = this.xParty - 70;
@@ -112,13 +105,13 @@ public class GuiOptionsParty extends GuiScreen
         this.drawTexturedModalRect(centerX, centerY, 0, 0, 141, this.hParty);
         List playerList = this.mc.thePlayer.sendQueue.playerInfoList;
         boolean online = playerList.size() > 1;
-        String renderHeadString = AetherOptions.getRenderHead() ? "True" : "False";
-        String showHUDString = AetherOptions.getShowPartyHUD() ? "True" : "False";
-        String showNameString = AetherOptions.getShowPartyName() ? "On" : "Off";
-        GuiButton minimalHUD = new GuiButton(2, this.xParty - 60, this.yParty - 14 - 28, 120, 20, "HUD Style: " + (AetherOptions.getMinimalPartyHUD() ? "Minimal" : "Heavy"));
-        GuiButton renderHead = new GuiButton(3, this.xParty - 60, this.yParty + 8 - 28, 120, 20, "Render Head: " + renderHeadString);
-        GuiButton showName = new GuiButton(4, this.xParty - 60, this.yParty + 30 - 28, 120, 20, "Party Name: " + showNameString);
-        this.buttonList.add(new GuiButton(1, this.xParty - 60, this.yParty - 36 - 28, 120, 20, "Show HUD: " + showHUDString));
+        String renderHeadString = AetherOptions.getRenderHead() ? "是" : "否";
+        String showHUDString = AetherOptions.getShowPartyHUD() ? "是" : "否";
+        String showNameString = AetherOptions.getShowPartyName() ? "开" : "关";
+        GuiButton minimalHUD = new GuiButton(2, this.xParty - 60, this.yParty - 14 - 28, 120, 20, "HUD风格: " + (AetherOptions.getMinimalPartyHUD() ? "简约" : "华丽"));
+        GuiButton renderHead = new GuiButton(3, this.xParty - 60, this.yParty + 8 - 28, 120, 20, "头像渲染: " + renderHeadString);
+        GuiButton showName = new GuiButton(4, this.xParty - 60, this.yParty + 30 - 28, 120, 20, "公会名称: " + showNameString);
+        this.buttonList.add(new GuiButton(1, this.xParty - 60, this.yParty - 36 - 28, 120, 20, "显示HUD: " + showHUDString));
         this.buttonList.add(minimalHUD);
         this.buttonList.add(renderHead);
         this.buttonList.add(showName);
@@ -136,15 +129,12 @@ public class GuiOptionsParty extends GuiScreen
             showName.enabled = false;
         }
 
-        String title = "Party HUD";
+        String title = "公会HUD";
         this.drawString(this.fontRenderer, title, centerX + 70 - this.fontRenderer.getStringWidth(title) / 2, centerY + 5, 16777215);
-        this.buttonList.add(new GuiButton(0, this.xParty - 60, this.yParty + 81 - 28, 120, 20, "Back"));
+        this.buttonList.add(new GuiButton(0, this.xParty - 60, this.yParty + 81 - 28, 120, 20, "返回"));
         super.drawScreen(x, y, partialTick);
     }
 
-    /**
-     * Called from the main game loop to update the screen.
-     */
     public void updateScreen()
     {
         super.updateScreen();

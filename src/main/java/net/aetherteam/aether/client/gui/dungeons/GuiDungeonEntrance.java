@@ -163,7 +163,7 @@ public class GuiDungeonEntrance extends GuiScreen
         this.partyNameField.setFocused(false);
         this.partyNameField.setMaxStringLength(5000);
         this.partyNameField.drawTextBox();
-        this.drawString(this.fontRenderer, "\u00a7f\u00a7n\u00a7lWARNING!", centerX + 46, centerY + 10, 15658734);
+        this.drawString(this.fontRenderer, "\u00a7f\u00a7n\u00a7l警告!", centerX + 46, centerY + 10, 15658734);
 
         if (this.controller != null && this.controller.hasDungeon())
         {
@@ -181,82 +181,78 @@ public class GuiDungeonEntrance extends GuiScreen
                 if (this.controller.getDungeon().hasQueuedParty() && (!this.controller.getDungeon().isQueuedParty(party) || this.controller.getDungeon().isQueuedParty(party) && !this.controller.getDungeon().hasMember(PartyController.instance().getMember(this.player))))
                 {
                     this.description = new String[6];
-                    this.description[0] = "Sorry, but at this time";
-                    this.description[1] = "the dungeon is occupied";
+                    this.description[0] = "抱歉, 此时此刻, 地牢";
+                    this.description[1] = "已经被人闯入, 攻略者来自";
 
                     if (this.controller.getDungeon().isQueuedParty(party) && !this.controller.getDungeon().hasMember(PartyController.instance().getMember(this.player)))
                     {
-                        this.description[2] = "by your party.";
-                    }
-                    else
-                    {
-                        this.description[2] = "by another party.";
-                    }
+                        this.description[2] = "你的公会";
+                    } else this.description[2] = "其他公会";
 
                     this.description[3] = "";
-                    this.description[4] = "Please come back at";
-                    this.description[5] = "a later time.";
+                    this.description[4] = "请稍等一会";
+                    this.description[5] = "儿再来试试";
                 }
                 else if (this.controller.getDungeon().isQueuedParty(party) && this.controller.getDungeon().hasMember(PartyController.instance().getMember(this.player)))
                 {
                     if (this.controller.getDungeon().isActive())
                     {
                         this.description = new String[8];
-                        this.description[0] = "Would you like to";
-                        this.description[1] = "leave this dungeon?";
-                        this.description[2] = "";
-                        this.description[3] = 3 - this.controller.getDungeon().getMemberLeaves(PartyController.instance().getMember(this.player)) + "/3 Quits Left";
+                        this.description[0] = "你真的想要离开";
+                        this.description[1] = "这个地牢?";
+                        this.description[2] = "你还有";
+                        this.description[3] = 3 - this.controller.getDungeon().getMemberLeaves(PartyController.instance().getMember(this.player)) + "/3 次离开机会";
                         this.description[4] = "";
-                        this.description[5] = "Each dungeon can only";
-                        this.description[6] = "be left 3 times before";
-                        this.description[7] = "it becomes unusable.";
+                        this.description[5] = "在彻底重置之前";
+                        this.description[6] = "每个地牢仅仅允许";
+                        this.description[7] = "离开三次";
                     }
                     else
                     {
                         this.description = new String[7];
-                        this.description[0] = "Your party has been";
-                        this.description[1] = "queued into this";
-                        this.description[2] = "dungeon.";
+                        this.description[0] = "你的公会正排队";
+                        this.description[1] = "进入地牢中";
+                        this.description[2] = "";
                         this.description[3] = "";
-                        this.description[4] = "Please wait for others";
-                        this.description[5] = "to accept the dungeon";
-                        this.description[6] = "queue.";
+                        this.description[4] = "请等待你的其他队友";
+                        this.description[5] = "接受组队探险的";
+                        this.description[6] = "邀请";
                     }
                 }
                 else if (this.controller.getDungeon().hasAnyConqueredDungeon(var18))
                 {
                     this.description = new String[8];
-                    this.description[0] = "Sorry, but this";
-                    this.description[1] = "dungeon has already";
-                    this.description[2] = "been conquered by";
-                    this.description[3] = "someone in your";
-                    this.description[4] = "party.";
+                    this.description[0] = "抱歉, 该地牢正";
+                    this.description[1] = "被你的公会成员";
+                    this.description[2] = "努力攻略中";
+                    this.description[3] = "";
+                    this.description[4] = "";
                     this.description[5] = "";
-                    this.description[6] = "Please search for";
-                    this.description[7] = "another one.";
+                    this.description[6] = "请你去其他地方探索或者等待";
+                    this.description[7] = "队友凯旋而归";
                 }
                 else if (isLeader)
                 {
                     this.description = new String[7];
-                    this.description[0] = "Would you like to";
-                    this.description[1] = "attempt the Slider\'s";
-                    this.description[2] = "Labyrinth with your";
-                    this.description[3] = "party? If so:";
+                    this.description[0] = "你是否想要和你的公会";
+                    this.description[1] = "一起勇闯滑行者的迷宫?";
+                    this.description[2] = "";
+                    this.description[3] = "";
                     this.description[4] = "";
-                    this.description[5] = "Send requests to";
-                    this.description[6] = "your members?";
+                    this.description[5] = "如果是这样的话, 请发送";
+                    this.description[6] = "邀请给你的队友";
                 }
                 else
                 {
                     this.description = new String[8];
-                    this.description[0] = "Would you like to";
-                    this.description[1] = "attempt the Slider\'s";
-                    this.description[2] = "Labyrinth with your";
-                    this.description[3] = "party? If so:";
+                    this.description[0] = "你是否想要和你的公会";
+                    this.description[1] = "一起勇闯滑行者的迷宫?";
+                    this.description[2] = "";
+                    this.description[3] = "";
                     this.description[4] = "";
-                    this.description[5] = "Ask your leader";
-                    this.description[6] = "to start a dungeon";
-                    this.description[7] = "queue at this door.";
+                    this.description[5] = "如果是这样的话, 请发送";
+                    this.description[6] = "邀请给你的队长, ";
+                    this.description[7] = "让他申请进入地牢";
                 }
 
                 int var17 = 0;
@@ -274,16 +270,16 @@ public class GuiDungeonEntrance extends GuiScreen
             {
                 this.mc.renderEngine.func_110577_a(TEXTURE_PARTY_MAIN);
                 this.description = new String[10];
-                this.description[0] = "You are attempting the";
-                this.description[1] = "Slider\'s Labyrinth on";
-                this.description[2] = "your own. This dungeon";
-                this.description[3] = "is a very dangerous";
-                this.description[4] = "place, and you could";
-                this.description[5] = "lose all your items as";
-                this.description[6] = "a result.";
+                this.description[0] = "你试图独闯滑行者的迷宫";
+                this.description[1] = "这个迷宫危险无比";
+                this.description[2] = "你随时可能付出生命";
+                this.description[3] = "并且损失掉全部的物品";
+                this.description[4] = "你将因此失去一切";
+                this.description[5] = "但地牢深处有值得探索的宝藏";
+                this.description[6] = "";
                 this.description[7] = "";
-                this.description[8] = "Are you prepared to";
-                this.description[9] = "enter these depths?";
+                this.description[8] = "那么";
+                this.description[9] = "你是否已经准备好进入地牢?";
                 int members = 0;
                 String[] count = this.description;
                 int arr$ = count.length;

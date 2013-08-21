@@ -102,7 +102,7 @@ public class AetherOverlays
             int width = scaledresolution.getScaledWidth();
             int height = scaledresolution.getScaledHeight();
             EntityPlayer player = base.getPlayer();
-            mc.fontRenderer.drawStringWithShadow(Aether.proxy.getClientCooldownName().get(player.username) + " Cooldown", width / 2 - mc.fontRenderer.getStringWidth(Aether.proxy.getClientCooldownName().get(player.username) + " Cooldown") / 2, 32 + (handler.getCurrentBoss() != null ? 20 : 0), -1);
+            mc.fontRenderer.drawStringWithShadow(Aether.proxy.getClientCooldownName().get(player.username) + " 冷却", width / 2 - mc.fontRenderer.getStringWidth(Aether.proxy.getClientCooldownName().get(player.username) + " 冷却") / 2, 32 + (handler.getCurrentBoss() != null ? 20 : 0), -1);
             GL11.glEnable(GL11.GL_BLEND);
             GL11.glDisable(GL11.GL_DEPTH_TEST);
             GL11.glDepthMask(false);
@@ -132,7 +132,7 @@ public class AetherOverlays
             ScaledResolution scaledresolution = new ScaledResolution(mc.gameSettings, mc.displayWidth, mc.displayHeight);
             int width = scaledresolution.getScaledWidth();
             int height = scaledresolution.getScaledHeight();
-            String dungeonQueue = "Dungeon Queue: " + dungeon.getAmountQueued() + "/" + party.getMembers().size();
+            String dungeonQueue = "已准备成员: " + dungeon.getAmountQueued() + "/" + party.getMembers().size();
             mc.fontRenderer.drawStringWithShadow(dungeonQueue, width / 2 - mc.fontRenderer.getStringWidth(dungeonQueue) / 2, 16 + (player.ridingEntity instanceof Mount ? 16 : 0), -1);
         }
     }
@@ -155,7 +155,7 @@ public class AetherOverlays
                 int minutes = (dungeon.getTimerLength() - dungeon.getTimerSeconds()) / 60;
                 int seconds = dungeon.getTimerLength() - dungeon.getTimerSeconds() - minutes * 60;
                 String timer = String.valueOf(minutes + ":" + String.format("%02d", new Object[] {Integer.valueOf(seconds)}));
-                String dungeonTimer = "Dungeon Ends In: " + timer;
+                String dungeonTimer = "地牢即将关闭,倒计时: " + timer;
                 mc.fontRenderer.drawStringWithShadow(dungeonTimer, width / 2 - mc.fontRenderer.getStringWidth(dungeonTimer) / 2, 16 + (player.ridingEntity instanceof Mount ? 16 : 0), -1);
             }
         }
@@ -355,7 +355,7 @@ public class AetherOverlays
 
                 if (showName && serverPlayerAmount > 1)
                 {
-                    mc.fontRenderer.drawStringWithShadow("\u00a7n" + (var26 ? "Dungeon Group" : "Party") + ":\u00a7r " + var24.getName(), 2, 59, 15066597);
+                    mc.fontRenderer.drawStringWithShadow("\u00a7n" + (var26 ? "地牢小队" : "公会") + ":\u00a7r " + var24.getName(), 2, 59, 15066597);
                 }
 
                 GL11.glPopMatrix();
@@ -593,7 +593,7 @@ public class AetherOverlays
                     drawTexturedModalRect((float)(width / 2 - 49), 10.0F, 1.0F, 57.0F, 96.0F, 58.0F);
                 }
 
-                bossTypeString = "\u00a7o" + (staticHealth ? "Final" : "Mini") + " Boss";
+                bossTypeString = "\u00a7o" + (staticHealth ? "最终" : "迷你") + " Boss";
                 offset1 = staticHealth ? 45 : 24;
                 offset2 = staticHealth ? -10 : 11;
                 offset3 = staticHealth;

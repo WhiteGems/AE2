@@ -43,7 +43,7 @@ public class GuiNotificationSlot extends Gui
         fontRenderer.drawStringWithShadow(this.notification.getTypeName(), x + height - 19, y + 2, 15066597);
         GL11.glPushMatrix();
         GL11.glScalef(0.75F, 0.75F, 1.0F);
-        fontRenderer.drawString("From: ", (int)(((float)x + (float)height) / 0.75F - 36.0F + (float)this.notification.getTypeName().length()), (int)(((float)y + 12.0F) / 0.75F), 16777215);
+        fontRenderer.drawString("来自: ", (int)(((float)x + (float)height) / 0.75F - 36.0F + (float)this.notification.getTypeName().length()), (int)(((float)y + 12.0F) / 0.75F), 16777215);
         fontRenderer.drawString(this.notification.getSenderName(), (int)(((float)x + (float)height) / 0.75F - 6.0F + (float)this.notification.getTypeName().length()), (int)(((float)y + 12.0F) / 0.75F), 9430585);
         GL11.glPopMatrix();
     }

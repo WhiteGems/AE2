@@ -2,17 +2,19 @@ package net.aetherteam.aether.dungeons.keys;
 
 import net.aetherteam.aether.entities.bosses.EntityKey;
 
-public enum EnumKeyType
+import java.io.Serializable;
+
+public enum EnumKeyType implements Serializable
 {
-    Host("Host"),
-    Guardian("Guardian"),
-    Eye("Eye");
+    Host("主宰", "Host"),
+    Guardian("守卫者", "Guardian"),
+    Eye("迷宫之眼", "Eye");
     private String texture;
     private String keyName;
 
-    private EnumKeyType(String keyName)
+    private EnumKeyType(String keyName, String textureName)
     {
-        this.texture = "/net/aetherteam/aether/client/sprites/gui/key/" + keyName + ".png";
+        this.texture = "/net/aetherteam/aether/client/sprites/gui/key/" + textureName + ".png";
         this.keyName = keyName;
     }
 
@@ -44,10 +46,8 @@ public enum EnumKeyType
         EnumKeyType[] arr$ = values();
         int len$ = arr$.length;
 
-        for (int i$ = 0; i$ < len$; ++i$)
+        for (EnumKeyType type : arr$)
         {
-            EnumKeyType type = arr$[i$];
-
             if (type.name().equalsIgnoreCase(name))
             {
                 return type;

@@ -46,7 +46,7 @@ public class BlockAetherBed extends BlockBed
 
             if (!par1World.provider.canRespawnHere())
             {
-                par5EntityPlayer.addChatMessage("Cannot sleep in this dimension.");
+                par5EntityPlayer.addChatMessage("我试着躺下,感觉到寒意,看来这不是一个可以睡觉的地方.");
                 return true;
             }
             else

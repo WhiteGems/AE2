@@ -134,14 +134,17 @@ public class GuiPartyMenu extends GuiScreen
     public void drawScreen(int x, int y, float partialTick)
     {
         this.buttonList.clear();
+
         boolean isLeader = PartyController.instance().isLeader(this.player);
         boolean inParty = PartyController.instance().inParty(this.player);
-        this.createPartyButton = new GuiButton(5, this.xMenu - 60, this.yMenu - 36 - 28, 120, 20, "Create Party");
-        this.joinPartyButton = new GuiButton(4, this.xMenu - 60, this.yMenu - 14 - 28, 120, 20, "Join Existing Party");
-        this.membersButton = new GuiButton(7, this.xMenu - 60, this.yMenu + 30 - (inParty ? 53 : 28), 120, 20, "Members");
-        this.editPartyButton = new GuiButton(3, this.xMenu - 60, this.yMenu + 30 - (inParty ? 53 : 28), 120, 20, "Manage Party");
-        this.leavePartyButton = new GuiButton(6, this.xMenu - 60, this.yMenu + 74 - (inParty ? 53 : 28), 120, 20, (isLeader ? "Disband" : "Leave") + " Party");
-        this.addMemberButton = new GuiButton(8, this.xMenu - 60, this.yMenu + 52 - (inParty ? 53 : 28), 120, 20, isLeader ? "Add Member" : "Make Request");
+
+        this.createPartyButton = new GuiButton(5, this.xMenu - 60, this.yMenu - 36 - 28, 120, 20, "创建公会");
+        this.joinPartyButton = new GuiButton(4, this.xMenu - 60, this.yMenu - 14 - 28, 120, 20, "加入已有公会");
+        this.membersButton = new GuiButton(7, this.xMenu - 60, this.yMenu + 30 - (inParty ? 53 : 28), 120, 20, "会员");
+
+        this.editPartyButton = new GuiButton(3, this.xMenu - 60, this.yMenu + 30 - (inParty ? 53 : 28), 120, 20, "管理公会");
+        this.leavePartyButton = new GuiButton(6, this.xMenu - 60, this.yMenu + 74 - (inParty ? 53 : 28), 120, 20, (isLeader ? "解散" : "离开") + "公会");
+        this.addMemberButton = new GuiButton(8, this.xMenu - 60, this.yMenu + 52 - (inParty ? 53 : 28), 120, 20, isLeader ? "增加成员" : "发送请求");
 
         if (!inParty)
         {
@@ -179,15 +182,16 @@ public class GuiPartyMenu extends GuiScreen
             this.addMemberButton.enabled = false;
         }
 
-        this.buttonList.add(new GuiButton(2, this.xMenu - 60, this.yMenu + 8 - (inParty ? 53 : 28), 120, 20, "Party List"));
+        this.buttonList.add(new GuiButton(2, this.xMenu - 60, this.yMenu + 8 - (inParty ? 53 : 28), 120, 20, "公会列表"));
 
         if (isLeader)
         {
             this.buttonList.add(this.editPartyButton);
         }
 
-        this.buttonList.add(new GuiButton(0, this.xMenu - 60, this.yMenu + 81 - 28, 120, 20, "Back"));
-        this.drawDefaultBackground();
+        this.buttonList.add(new GuiButton(0, this.xMenu - 60, this.yMenu + 81 - 28, 120, 20, "返回"));
+
+        drawDefaultBackground();
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
         this.mc.renderEngine.func_110577_a(inParty ? TEXTURE_PARTYCREATED : TEXTURE_PARTYMAIN);
         int centerX = this.xMenu - 70;
@@ -199,18 +203,13 @@ public class GuiPartyMenu extends GuiScreen
 
         if (inParty)
         {
-            name = "Your Party:";
-        }
-        else
-        {
-            name = "Party Menu";
-        }
+            name = "你的公会:";
+        } else name = "公会菜单";
 
         if (!isLeader)
         {
-            name = "Joined Party:";
+            name = "加入公会:";
         }
-
         this.drawString(this.fontRenderer, name, centerX + 69 - this.fontRenderer.getStringWidth(name) / 2, centerY + 5, 16777215);
 
         if (inParty && party != null)

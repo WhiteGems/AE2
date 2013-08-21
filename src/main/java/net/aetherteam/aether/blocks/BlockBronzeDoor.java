@@ -114,16 +114,22 @@ public class BlockBronzeDoor extends BlockAether implements IAetherBlock
 
                                 if (world.isRemote)
                                 {
+                                    if (keyAmount > 5)
+                                    {
+                                        bronzeDoor.chatItUp(entityplayer, "你已经插入 " + keyAmount + " 把钥匙");
+                                        return true;
+                                    }
+
                                     if (keyAmount <= 0)
                                     {
-                                        System.out.println(keyAmount);
-                                        bronzeDoor.chatItUp(entityplayer, "This door seems to require " + (5 - bronzeDoor.getKeyAmount()) + (5 - keyAmount < 5 ? " more " : " ") + (5 - keyAmount > 1 ? "keys" : "key") + ". Perhaps they are elsewhere in the dungeon?");
+                                        keyAmount = 0;
+                                        bronzeDoor.chatItUp(entityplayer, "这个门似乎需要 5 把钥匙, 在地牢的深处能找到这些钥匙?");
                                         return true;
                                     }
 
                                     if (bronzeDoor.getKeyAmount() < 5)
                                     {
-                                        bronzeDoor.chatItUp(entityplayer, "You have just added " + keyAmount + " keys to this door. It seems to require " + (5 - keyAmount) + (5 - keyAmount < 5 ? " more " : " ") + (5 - keyAmount > 1 ? "keys" : "key") + ".");
+                                        bronzeDoor.chatItUp(entityplayer, "你已经插入 " + keyAmount + " 把钥匙. 还需要 " + (5 - keyAmount) + "把钥匙");
                                         return true;
                                     }
                                 }
@@ -141,7 +147,6 @@ public class BlockBronzeDoor extends BlockAether implements IAetherBlock
                 }
             }
         }
-
         return false;
     }
 }

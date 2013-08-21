@@ -20,8 +20,8 @@ public class GuiMemberList extends GuiScreen
 {
     private static final ResourceLocation TEXTURE_DIALOGUE = new ResourceLocation("aether", "textures/gui/dialogue.png");
     private static final ResourceLocation TEXTURE_PARTY = new ResourceLocation("aether", "textures/gui/party.png");
-    protected static final String ONLINE_TEXT = "ONLINE";
-    protected static final String OFFLINE_TEXT = "OFFLINE";
+    protected static final String ONLINE_TEXT = "在线";
+    protected static final String OFFLINE_TEXT = "离线";
     private static final int ONLINE_TEXT_COLOR = 6750054;
     private static final int OFFLINE_TEXT_COLOR = 16711680;
     private GuiYSlider sbar;
@@ -62,7 +62,7 @@ public class GuiMemberList extends GuiScreen
 
         this.sbar = new GuiYSlider(-1, this.xParty + 46, this.yParty - 54, 10, 103);
         this.sbar.sliderValue = this.sbarVal;
-        this.buttonList.add(new GuiButton(0, this.xParty - 58, this.yParty + 85 - 28, 120, 20, "Back"));
+        this.buttonList.add(new GuiButton(0, this.xParty - 58, this.yParty + 85 - 28, 120, 20, "返回"));
     }
 
     /**
@@ -192,7 +192,7 @@ public class GuiMemberList extends GuiScreen
             this.sbar.drawButton(this.mc, x, y);
         }
 
-        this.drawString(this.fontRenderer, "Player List", centerX + 40, centerY + 10, 16777215);
+        this.drawString(this.fontRenderer, "玩家列表", centerX + 40, centerY + 10, 16777215);
         super.drawScreen(x, y, partialTick);
     }
 
@@ -246,11 +246,11 @@ public class GuiMemberList extends GuiScreen
 
         if (playerStringList.contains(partyMember.username))
         {
-            this.fontRenderer.drawString("ONLINE", (int)(((float)x + (float)height) / 0.75F), (int)(((float)y + 12.0F) / 0.75F), 6750054);
+            this.fontRenderer.drawString("在线", (int)(((float)x + (float)height) / 0.75F), (int)(((float)y + 12.0F) / 0.75F), 6750054);
         }
         else
         {
-            this.fontRenderer.drawString("OFFLINE", (int)(((float)x + (float)height) / 0.75F), (int)(((float)y + 12.0F) / 0.75F), 16711680);
+            this.fontRenderer.drawString("离线", (int)(((float)x + (float)height) / 0.75F), (int)(((float)y + 12.0F) / 0.75F), 16711680);
         }
 
         GL11.glPopMatrix();

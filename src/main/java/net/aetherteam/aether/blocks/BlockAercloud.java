@@ -494,9 +494,9 @@ public class BlockAercloud extends BlockAether implements IAetherBlock
         this.leftArrow = iconRegister.registerIcon("aether:Purple Aercloud Left");
         this.rightArrow = iconRegister.registerIcon("aether:Purple Aercloud Right");
 
-        for (int i = 0; i < names.length; ++i)
+        for (String name : names)
         {
-            this.icons.put(names[i], iconRegister.registerIcon("aether:" + names[i]));
+            this.icons.put(name, iconRegister.registerIcon("aether:" + name));
         }
     }
 }

@@ -63,7 +63,8 @@ public class GuiMenu extends GuiScreen
     {
         this.updateScreen();
         this.buttonList.clear();
-        this.buttonList.add(new GuiButton(0, this.xParty - 60, this.yParty + 81 - 28, 120, 20, "Back"));
+
+        this.buttonList.add(new GuiButton(0, this.xParty - 60, this.yParty + 81 - 28, 120, 20, "返回"));
     }
 
     /**
@@ -122,27 +123,28 @@ public class GuiMenu extends GuiScreen
 
         if (playerList.size() > 1 || playerList.size() == 0)
         {
-            this.buttonList.add(new GuiButton(5, this.xParty - 60, this.yParty - 36 - 28, 120, 20, "Party"));
-            this.buttonList.add(new GuiButton(1, this.xParty - 60, this.yParty - 14 - 28, 120, 20, "Notifications"));
-            this.buttonList.add(new GuiButton(3, this.xParty - 60, this.yParty + 8 - 28, 120, 20, "Player List"));
-            this.buttonList.add(new GuiButton(2, this.xParty - 60, this.yParty + 30 - 28, 120, 20, "Options"));
-            this.buttonList.add(new GuiButton(4, this.xParty - 60, this.yParty + 52 - 28, 120, 20, "Friend List"));
-            ((GuiButton)this.buttonList.get(4)).enabled = false;
+            this.buttonList.add(new GuiButton(5, this.xParty - 60, this.yParty - 36 - 28, 120, 20, "公会"));
+            this.buttonList.add(new GuiButton(1, this.xParty - 60, this.yParty - 14 - 28, 120, 20, "消息"));
+            this.buttonList.add(new GuiButton(3, this.xParty - 60, this.yParty + 8 - 28, 120, 20, "玩家列表"));
+            this.buttonList.add(new GuiButton(2, this.xParty - 60, this.yParty + 30 - 28, 120, 20, "选项"));
+            this.buttonList.add(new GuiButton(4, this.xParty - 60, this.yParty + 52 - 28, 120, 20, "好友列表"));
+
+            ((GuiButton) this.buttonList.get(4)).enabled = false;
         }
 
-        this.buttonList.add(new GuiButton(0, this.xParty - 60, this.yParty + 81 - 28, 120, 20, "Back"));
+        this.buttonList.add(new GuiButton(0, this.xParty - 60, this.yParty + 81 - 28, 120, 20, "返回"));
 
         if (playerList.size() <= 1 && playerList.size() != 0)
         {
             this.mc.renderEngine.func_110577_a(TEXTURE_PARTY_MAIN);
             this.drawTexturedModalRect(centerX + 13, centerY + 40, 141, 131, 115, 125);
-            this.drawString(this.fontRenderer, "\u00a7lForever Alone :(", centerX + 20, centerY + 100, 16750199);
-            this.drawString(this.fontRenderer, "\u00a7l(Single Player)", centerX + 25, centerY + 112, 16750199);
-            this.buttonList.add(new GuiButton(2, this.xParty - 60, this.yParty - 40 - 35, 120, 20, "Options"));
+            this.drawString(this.fontRenderer, "\u00a7l注定孤独一生 :(", centerX + 20, centerY + 100, 16750199);
+            this.drawString(this.fontRenderer, "\u00a7l(单人游戏)", centerX + 25, centerY + 112, 16750199);
+            this.buttonList.add(new GuiButton(2, this.xParty - 60, this.yParty - 40 - 35, 120, 20, "选项"));
         }
         else
         {
-            this.drawString(this.fontRenderer, "Social Menu", centerX + 40, centerY + 5, 16777215);
+            this.drawString(this.fontRenderer, "社区菜单", centerX + 70 - this.fontRenderer.getStringWidth("社区菜单") / 2, centerY + 5, 16777215);
         }
 
         super.drawScreen(x, y, partialTick);

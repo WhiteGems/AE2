@@ -40,11 +40,12 @@ public class PartyRequestAction extends NotificationAction
     {
         PartyMember recruiter = PartyController.instance().getMember(notification.getSenderName());
         Party party = PartyController.instance().getParty(recruiter);
-        return "You have joined the " + (party != null ? '\"' + party.getName() + '\"' + " " : "") + "party!";
+
+        return "欢迎你加入 " + (party != null ? '"' + party.getName() + '"' + "" : "") + "公会!";
     }
 
     public String failedMessage(Notification notification)
     {
-        return "Sorry, the requested party no longer exists :(";
+        return "很抱歉, 请求的公会不存在 :(";
     }
 }

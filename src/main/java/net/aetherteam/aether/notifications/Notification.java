@@ -11,7 +11,7 @@ public class Notification
 
     public Notification(NotificationType type, String senderName, String receiverName)
     {
-        this.headerText = "Notification Received!";
+        this.headerText = "收到信息!";
         this.senderName = senderName;
         this.receiverName = receiverName;
         this.type = type;

@@ -72,7 +72,7 @@ public class PartyController
 
             if (side.isClient() && party.hasMember(this.getMember(ClientNotificationHandler.clientUsername())))
             {
-                ClientNotificationHandler.createGeneric("Party Disbanded!", "", "");
+                ClientNotificationHandler.createGeneric("公会已解散!", "", "");
             }
 
             this.parties.remove(party);
@@ -157,7 +157,7 @@ public class PartyController
         {
             if (side.isClient() && party.hasMember(this.getMember(ClientNotificationHandler.clientUsername())))
             {
-                ClientNotificationHandler.createGeneric("Member joined!", member.username, "");
+                ClientNotificationHandler.createGeneric("新成员加入!", member.username, "");
             }
 
             party.join(member);
@@ -184,7 +184,7 @@ public class PartyController
 
             if (side.isClient() && party.hasMember(this.getMember(ClientNotificationHandler.clientUsername())) && !member.username.equalsIgnoreCase(ClientNotificationHandler.clientUsername()))
             {
-                ClientNotificationHandler.createGeneric("Member left!", member.username, "");
+                ClientNotificationHandler.createGeneric("成员离开!", member.username, "");
             }
 
             if (sendPackets && side.isClient())
@@ -204,7 +204,7 @@ public class PartyController
         {
             if (side.isClient() && party.hasMember(this.getMember(ClientNotificationHandler.clientUsername())))
             {
-                ClientNotificationHandler.createGeneric("Party Name Changed!", "To: " + newName, "");
+                ClientNotificationHandler.createGeneric("公会名称改变!", "新名称为: " + newName, "");
             }
 
             if (sendPackets && side.isClient())
@@ -229,7 +229,7 @@ public class PartyController
         {
             if (side.isClient() && party.hasMember(this.getMember(ClientNotificationHandler.clientUsername())))
             {
-                ClientNotificationHandler.createGeneric("Party Changed!", "Now: " + newType.name(), "");
+                ClientNotificationHandler.createGeneric("公会类型改变!", "现在是: " + newType.name(), "");
             }
 
             party.setType(newType);

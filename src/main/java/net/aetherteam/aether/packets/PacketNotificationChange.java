@@ -47,7 +47,7 @@ public class PacketNotificationChange extends AetherPacket
 
             if (side.isClient())
             {
-                Notification server = new Notification(type, "Notification Received!", sendingPlayer, receivingPlayer);
+                Notification server = new Notification(type, "收到消息!", sendingPlayer, receivingPlayer);
 
                 if (!NotificationHandler.instance().hasReceivedFromBefore(sendingPlayer, type) && adding)
                 {
@@ -110,13 +110,13 @@ public class PacketNotificationChange extends AetherPacket
                         return;
                     }
 
-                    notification = new Notification(type, "Notification Received!", sendingPlayer, receivingPlayer);
+                    notification = new Notification(type, "收到消息!", sendingPlayer, receivingPlayer);
                     NotificationHandler.instance().receiveNotification(notification);
                     PacketDispatcher.sendPacketToPlayer(AetherPacketHandler.sendNotificationChange(notification, adding), (Player)realReceivingPlayer1);
                 }
                 else if (!adding)
                 {
-                    notification = new Notification(type, "Notification Received!", sendingPlayer, receivingPlayer);
+                    notification = new Notification(type, "收到消息!", sendingPlayer, receivingPlayer);
                     NotificationHandler.instance().removeSentNotification(notification, false);
                     PacketDispatcher.sendPacketToPlayer(AetherPacketHandler.sendNotificationChange(notification, adding), (Player)realReceivingPlayer1);
                 }

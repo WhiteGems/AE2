@@ -19,9 +19,9 @@ public class GuiPlayerList extends GuiScreen
 {
     private static final ResourceLocation TEXTURE_DIALOGUE = new ResourceLocation("aether", "textures/gui/dialogue.png");
     private static final ResourceLocation TEXTURE_PARTY = new ResourceLocation("aether", "textures/gui/party.png");
-    protected static final String DEV_TEXT = "Aether II Developer";
-    protected static final String DOUBLE_TEXT = "Nice Person";
-    protected static final String BETA_TEXT = "Aether II Beta Tester";
+    protected static final String DEV_TEXT = "以太II 开发人员";
+    protected static final String DOUBLE_TEXT = "臭熏熏的人 :3";
+    protected static final String BETA_TEXT = "以太IIBeta 测试人员";
     private static final int DEV_TEXT_COLOR = 16105765;
     private GuiYSlider sbar;
     private float sbarVal = 0.0F;
@@ -75,7 +75,7 @@ public class GuiPlayerList extends GuiScreen
 
         this.sbar = new GuiYSlider(-1, this.xParty + 46, this.yParty - 54, 10, 103);
         this.sbar.sliderValue = this.sbarVal;
-        this.buttonList.add(new GuiButton(0, this.xParty - 58, this.yParty + 85 - 28, 120, 20, "Back"));
+        this.buttonList.add(new GuiButton(0, this.xParty - 58, this.yParty + 85 - 28, 120, 20, "返回"));
     }
 
     /**
@@ -182,7 +182,7 @@ public class GuiPlayerList extends GuiScreen
             this.sbar.drawButton(this.mc, x, y);
         }
 
-        this.drawString(this.fontRenderer, "Player List", centerX + 40, centerY + 10, 16777215);
+        this.drawString(this.fontRenderer, "玩家列表", centerX + 40, centerY + 10, 16777215);
         super.drawScreen(x, y, partialTick);
     }
 
@@ -225,19 +225,19 @@ public class GuiPlayerList extends GuiScreen
 
         if (AetherRanks.getRankFromMember(playername).equals(AetherRanks.DEVELOPER))
         {
-            this.fontRenderer.drawString("Aether II Developer", (int)(((float)x + (float)height) / 0.75F), (int)(((float)y + 12.0F) / 0.75F), 16105765);
+            this.fontRenderer.drawString(DEV_TEXT, (int)(((float)x + (float)height) / 0.75F), (int)(((float)y + 12.0F) / 0.75F), 16105765);
         }
         else if (playername.toLowerCase().equals("mr360games"))
         {
-            this.fontRenderer.drawString("Nice Person", (int)(((float)x + (float)height) / 0.75F), (int)(((float)y + 12.0F) / 0.75F), 16105765);
+            this.fontRenderer.drawString(DOUBLE_TEXT, (int)(((float)x + (float)height) / 0.75F), (int)(((float)y + 12.0F) / 0.75F), 16105765);
         }
         else if (playername.toLowerCase().equals("c_hase"))
         {
-            this.fontRenderer.drawString("Epic Dinosaur", (int)(((float)x + (float)height) / 0.75F), (int)(((float)y + 12.0F) / 0.75F), 16105765);
+            this.fontRenderer.drawString("史诗恐龙", (int)(((float)x + (float)height) / 0.75F), (int)(((float)y + 12.0F) / 0.75F), 16105765);
         }
         else if (AetherRanks.getRankFromMember(playername).equals(AetherRanks.HELPER))
         {
-            this.fontRenderer.drawString("Aether II Beta Tester", (int)(((float)x + (float)height) / 0.75F), (int)(((float)y + 12.0F) / 0.75F), 16105765);
+            this.fontRenderer.drawString(BETA_TEXT, (int)(((float)x + (float)height) / 0.75F), (int)(((float)y + 12.0F) / 0.75F), 16105765);
         }
 
         GL11.glPopMatrix();

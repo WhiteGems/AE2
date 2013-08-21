@@ -20,8 +20,8 @@ public class GuiEnchanter extends GuiContainer
 
     protected void drawGuiContainerForegroundLayer()
     {
-        this.fontRenderer.drawString("Altar", 60, 6, 4210752);
-        this.fontRenderer.drawString("Inventory", 8, this.ySize - 96 + 2, 4210752);
+        this.fontRenderer.drawString("祭坛", 60, 6, 4210752);
+        this.fontRenderer.drawString("物品栏", 8, this.ySize - 96 + 2, 4210752);
     }
 
     /**

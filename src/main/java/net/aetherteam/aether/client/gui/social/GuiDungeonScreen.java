@@ -31,8 +31,8 @@ public class GuiDungeonScreen extends GuiScreen
     {
         this.mc = mc;
         this.isPlayerReady = false;
-        this.notReadyString = "CANCEL READY";
-        this.readyString = "READY UP";
+        this.notReadyString = "取消准备";
+        this.readyString = "已准备";
     }
 
     /**

@@ -20,7 +20,7 @@ public class AetherKeyHandler extends KeyBindingRegistry.KeyHandler
 
     public String getLabel()
     {
-        return "Aether Inventory";
+        return "以太物品栏";
     }
 
     public void keyDown(EnumSet<TickType> types, KeyBinding kb, boolean tickEnd, boolean isRepeat)
