@@ -2,10 +2,11 @@ package net.aetherteam.aether.entities.mounts;
 
 import java.util.ArrayList;
 import net.aetherteam.aether.Aether;
-import net.aetherteam.aether.PlayerBaseAetherServer;
+import net.aetherteam.aether.PlayerAetherServer;
 import net.aetherteam.aether.entities.EntityAetherAnimal;
 import net.aetherteam.aether.entities.ai.AIEntityControlledByPlayerPhyg;
 import net.minecraft.entity.EntityAgeable;
+import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.EntityAILookIdle;
 import net.minecraft.entity.ai.EntityAIPanic;
 import net.minecraft.entity.ai.EntityAISwimming;
@@ -22,7 +23,7 @@ import net.minecraft.world.World;
 public class EntityFlyingCow extends EntityAetherAnimal implements Mount
 {
     private AIEntityControlledByPlayerPhyg entityAIControlled;
-    float speed;
+    float speed = 0.3F;
     public float wingFold;
     public float wingAngle;
     private float aimingForFold;
@@ -32,15 +33,13 @@ public class EntityFlyingCow extends EntityAetherAnimal implements Mount
     private int ticks;
     public boolean riderJumped;
 
-    public EntityFlyingCow(World var1)
+    public EntityFlyingCow(World world)
     {
-        super(var1);
-        this.texture = this.dir + "/mobs/flyingcow/flyingcow.png";
-        this.speed = 0.3F;
+        super(world);
         this.getNavigator().setAvoidsWater(true);
         this.tasks.addTask(0, new EntityAISwimming(this));
-        this.tasks.addTask(1, new EntityAIPanic(this, 0.38F));
-        this.tasks.addTask(2, new EntityAIWander(this, this.speed));
+        this.tasks.addTask(1, new EntityAIPanic(this, 0.3799999952316284D));
+        this.tasks.addTask(2, new EntityAIWander(this, (double)this.speed));
         this.tasks.addTask(4, new EntityAIWatchClosest(this, EntityPlayer.class, 6.0F));
         this.tasks.addTask(5, new EntityAILookIdle(this));
         this.setSize(0.9F, 1.3F);
@@ -96,29 +95,29 @@ public class EntityFlyingCow extends EntityAetherAnimal implements Mount
     {
         super.entityInit();
         this.dataWatcher.addObject(16, Byte.valueOf((byte)0));
-        this.dataWatcher.addObject(17, Integer.valueOf(this.health));
+        this.dataWatcher.addObject(17, Integer.valueOf((int)this.func_110143_aJ()));
     }
 
     /**
      * (abstract) Protected helper method to write subclass entity data to NBT.
      */
-    public void writeEntityToNBT(NBTTagCompound var1)
+    public void writeEntityToNBT(NBTTagCompound nbttagcompound)
     {
-        super.writeEntityToNBT(var1);
-        var1.setShort("Jumps", (short)this.jumps);
-        var1.setShort("Remaining", (short)this.jumpsRemaining);
-        var1.setBoolean("getSaddled", this.getSaddled());
+        super.writeEntityToNBT(nbttagcompound);
+        nbttagcompound.setShort("Jumps", (short)this.jumps);
+        nbttagcompound.setShort("Remaining", (short)this.jumpsRemaining);
+        nbttagcompound.setBoolean("getSaddled", this.getSaddled());
     }
 
     /**
      * (abstract) Protected helper method to read subclass entity data from NBT.
      */
-    public void readEntityFromNBT(NBTTagCompound var1)
+    public void readEntityFromNBT(NBTTagCompound nbttagcompound)
     {
-        super.readEntityFromNBT(var1);
-        this.jumps = var1.getShort("Jumps");
-        this.jumpsRemaining = var1.getShort("Remaining");
-        this.setSaddled(var1.getBoolean("getSaddled"));
+        super.readEntityFromNBT(nbttagcompound);
+        this.jumps = nbttagcompound.getShort("Jumps");
+        this.jumpsRemaining = nbttagcompound.getShort("Remaining");
+        this.setSaddled(nbttagcompound.getBoolean("getSaddled"));
     }
 
     /**
@@ -139,80 +138,80 @@ public class EntityFlyingCow extends EntityAetherAnimal implements Mount
                 this.moveStrafing = 0.0F;
                 this.isJumping = false;
                 this.riddenByEntity.fallDistance = 0.0F;
-                EntityPlayer var1 = (EntityPlayer)this.riddenByEntity;
+                EntityPlayer player = (EntityPlayer)this.riddenByEntity;
                 this.setRotation(this.riddenByEntity.rotationYaw, this.riddenByEntity.rotationPitch);
-                double var2 = 0.40499999701976774D;
+                double mountSpeed = 0.40499999701976774D;
 
-                if (var1.isSneaking())
+                if (player.isSneaking())
                 {
-                    var2 = 0.15D;
+                    mountSpeed = 0.15D;
                 }
 
-                float var4 = (float)Math.PI;
-                float var5 = var4 / 180.0F;
-                PlayerBaseAetherServer var6 = Aether.getServerPlayer(var1);
+                float magicRotationFloat = (float)Math.PI;
+                float f1 = magicRotationFloat / 180.0F;
+                PlayerAetherServer playerBase = Aether.getServerPlayer(player);
 
-                if (var6 != null)
+                if (playerBase != null)
                 {
-                    ArrayList var7 = var6.mountInput;
-                    boolean var8 = var7.contains(MountInput.FORWARD);
-                    boolean var9 = var7.contains(MountInput.BACKWARD);
-                    boolean var10 = var7.contains(MountInput.LEFT);
-                    boolean var11 = var7.contains(MountInput.RIGHT);
-                    boolean var12 = var7.contains(MountInput.JUMP);
-                    float var13;
+                    ArrayList d = playerBase.mountInput;
+                    boolean moveForward = d.contains(MountInput.FORWARD);
+                    boolean d1 = d.contains(MountInput.BACKWARD);
+                    boolean moveLeft = d.contains(MountInput.LEFT);
+                    boolean moveRight = d.contains(MountInput.RIGHT);
+                    boolean jump = d.contains(MountInput.JUMP);
+                    float rotationFactor_RIGHT;
 
-                    if (var8)
+                    if (moveForward)
                     {
-                        var13 = var1.rotationYaw * var5;
-                        this.motionX += -Math.sin((double)var13) * var2;
-                        this.motionZ += Math.cos((double)var13) * var2;
+                        rotationFactor_RIGHT = player.rotationYaw * f1;
+                        this.motionX += -Math.sin((double)rotationFactor_RIGHT) * mountSpeed;
+                        this.motionZ += Math.cos((double)rotationFactor_RIGHT) * mountSpeed;
                     }
-                    else if (var9)
+                    else if (d1)
                     {
-                        var13 = var1.rotationYaw * var5;
-                        this.motionX += Math.sin((double)var13) * var2;
-                        this.motionZ += -Math.cos((double)var13) * var2;
-                    }
-
-                    if (var10)
-                    {
-                        var13 = var1.rotationYaw * var5;
-                        this.motionX += Math.cos((double)var13) * var2;
-                        this.motionZ += Math.sin((double)var13) * var2;
-                    }
-                    else if (var11)
-                    {
-                        var13 = var1.rotationYaw * var5;
-                        this.motionX += -Math.cos((double)var13) * var2;
-                        this.motionZ += -Math.sin((double)var13) * var2;
+                        rotationFactor_RIGHT = player.rotationYaw * f1;
+                        this.motionX += Math.sin((double)rotationFactor_RIGHT) * mountSpeed;
+                        this.motionZ += -Math.cos((double)rotationFactor_RIGHT) * mountSpeed;
                     }
 
-                    if (this.onGround && var12)
+                    if (moveLeft)
+                    {
+                        rotationFactor_RIGHT = player.rotationYaw * f1;
+                        this.motionX += Math.cos((double)rotationFactor_RIGHT) * mountSpeed;
+                        this.motionZ += Math.sin((double)rotationFactor_RIGHT) * mountSpeed;
+                    }
+                    else if (moveRight)
+                    {
+                        rotationFactor_RIGHT = player.rotationYaw * f1;
+                        this.motionX += -Math.cos((double)rotationFactor_RIGHT) * mountSpeed;
+                        this.motionZ += -Math.sin((double)rotationFactor_RIGHT) * mountSpeed;
+                    }
+
+                    if (this.onGround && jump)
                     {
                         this.onGround = false;
                         this.jump();
                         this.riderJumped = true;
                     }
-                    else if (this.handleWaterMovement() && var12)
+                    else if (this.handleWaterMovement() && jump)
                     {
                         this.jump();
                         this.riderJumped = true;
                     }
 
-                    if (this.riderJumped && !var12)
+                    if (this.riderJumped && !jump)
                     {
                         this.riderJumped = false;
                     }
                 }
 
-                double var14 = Math.abs(Math.sqrt(this.motionX * this.motionX + this.motionZ * this.motionZ));
+                double d1 = Math.abs(Math.sqrt(this.motionX * this.motionX + this.motionZ * this.motionZ));
 
-                if (var14 > var2)
+                if (d1 > mountSpeed)
                 {
-                    double var15 = var2 / var14;
-                    this.motionX *= var15;
-                    this.motionZ *= var15;
+                    double d11 = mountSpeed / d1;
+                    this.motionX *= d11;
+                    this.motionZ *= d11;
                 }
             }
             else
@@ -225,9 +224,9 @@ public class EntityFlyingCow extends EntityAetherAnimal implements Mount
     /**
      * Called when the entity is attacked.
      */
-    public boolean attackEntityFrom(DamageSource var1, int var2)
+    public boolean attackEntityFrom(DamageSource damagesource, float i)
     {
-        return var1.getEntity() instanceof EntityPlayer && this.riddenByEntity == var1.getEntity() ? false : super.attackEntityFrom(var1, var2);
+        return damagesource.getEntity() instanceof EntityPlayer && this.riddenByEntity == damagesource.getEntity() ? false : super.attackEntityFrom(damagesource, i);
     }
 
     /**
@@ -243,7 +242,7 @@ public class EntityFlyingCow extends EntityAetherAnimal implements Mount
         return this.dataWatcher.getWatchableObjectInt(17);
     }
 
-    public boolean shouldRiderFaceForward(EntityPlayer var1)
+    public boolean shouldRiderFaceForward(EntityPlayer player)
     {
         return true;
     }
@@ -259,7 +258,7 @@ public class EntityFlyingCow extends EntityAetherAnimal implements Mount
 
     public void setHealthTracked()
     {
-        this.dataWatcher.updateObject(17, Integer.valueOf(this.health));
+        this.dataWatcher.updateObject(17, Integer.valueOf((int)this.func_110143_aJ()));
     }
 
     /**
@@ -269,7 +268,7 @@ public class EntityFlyingCow extends EntityAetherAnimal implements Mount
     {
         super.onUpdate();
 
-        if (!this.worldObj.isRemote && this.getHealthTracked() != this.health)
+        if (!this.worldObj.isRemote && (float)this.getHealthTracked() != this.func_110143_aJ())
         {
             this.setHealthTracked();
         }
@@ -280,9 +279,9 @@ public class EntityFlyingCow extends EntityAetherAnimal implements Mount
             {
                 if (this.riddenByEntity instanceof EntityPlayer)
                 {
-                    EntityPlayer var1 = (EntityPlayer)this.riddenByEntity;
+                    EntityPlayer player = (EntityPlayer)this.riddenByEntity;
 
-                    if (!var1.isSneaking())
+                    if (!player.isSneaking())
                     {
                         this.motionY *= 0.6375D;
                     }
@@ -313,7 +312,7 @@ public class EntityFlyingCow extends EntityAetherAnimal implements Mount
 
         if (this.getSaddled())
         {
-            this.texture = this.dir + "/mobs/flyingcow/saddle.png";
+            ;
         }
     }
 
@@ -352,12 +351,12 @@ public class EntityFlyingCow extends EntityAetherAnimal implements Mount
     /**
      * Plays step sound at given x, y, z for the entity
      */
-    protected void playStepSound(int var1, int var2, int var3, int var4)
+    protected void playStepSound(int par1, int par2, int par3, int par4)
     {
         this.worldObj.playSoundAtEntity(this, "mob.cow.step", 0.15F, 1.0F);
     }
 
-    public EntityAnimal spawnBabyAnimal(EntityAnimal var1)
+    public EntityAnimal spawnBabyAnimal(EntityAnimal entityanimal)
     {
         return new EntityFlyingCow(this.worldObj);
     }
@@ -365,25 +364,24 @@ public class EntityFlyingCow extends EntityAetherAnimal implements Mount
     /**
      * Called when a player interacts with a mob. e.g. gets milk from a cow, gets into the saddle on a pig.
      */
-    public boolean interact(EntityPlayer var1)
+    public boolean interact(EntityPlayer entityplayer)
     {
-        if (!this.getSaddled() && var1.inventory.getCurrentItem() != null && var1.inventory.getCurrentItem().itemID == Item.saddle.itemID && !this.isChild())
+        if (!this.getSaddled() && entityplayer.inventory.getCurrentItem() != null && entityplayer.inventory.getCurrentItem().itemID == Item.saddle.itemID && !this.isChild())
         {
-            var1.inventory.setInventorySlotContents(var1.inventory.currentItem, (ItemStack)null);
+            entityplayer.inventory.setInventorySlotContents(entityplayer.inventory.currentItem, (ItemStack)null);
             this.setSaddled(true);
-            this.texture = this.dir + "/mobs/flyingcow/saddle.png";
             return true;
         }
         else if (!this.getSaddled())
         {
-            return super.interact(var1);
+            return super.interact(entityplayer);
         }
-        else if (this.getSaddled() && (this.riddenByEntity == null || var1 == this.riddenByEntity))
+        else if (this.getSaddled() && (this.riddenByEntity == null || entityplayer == this.riddenByEntity))
         {
-            if (!var1.worldObj.isRemote)
+            if (!entityplayer.worldObj.isRemote)
             {
-                var1.mountEntity(this);
-                var1.prevRotationYaw = var1.rotationYaw = this.rotationYaw;
+                entityplayer.mountEntity(this);
+                entityplayer.prevRotationYaw = entityplayer.rotationYaw = this.rotationYaw;
             }
 
             return true;
@@ -399,16 +397,18 @@ public class EntityFlyingCow extends EntityAetherAnimal implements Mount
         return (this.dataWatcher.getWatchableObjectByte(16) & 1) != 0;
     }
 
-    public void setSaddled(boolean var1)
+    public void setSaddled(boolean saddled)
     {
-        if (var1)
+        if (saddled)
         {
             this.dataWatcher.updateObject(16, Byte.valueOf((byte)1));
-            this.health = this.getMaxHealth();
+            this.func_110148_a(SharedMonsterAttributes.field_111267_a).func_111128_a(40.0D);
+            this.setEntityHealth(40.0F);
         }
         else
         {
             this.dataWatcher.updateObject(16, Byte.valueOf((byte)0));
+            this.func_110148_a(SharedMonsterAttributes.field_111267_a).func_111128_a(10.0D);
         }
     }
 
@@ -430,12 +430,7 @@ public class EntityFlyingCow extends EntityAetherAnimal implements Mount
         }
     }
 
-    public int getMaxHealth()
-    {
-        return this.getSaddled() ? 40 : 10;
-    }
-
-    public EntityAgeable createChild(EntityAgeable var1)
+    public EntityAgeable createChild(EntityAgeable entityageable)
     {
         return this;
     }

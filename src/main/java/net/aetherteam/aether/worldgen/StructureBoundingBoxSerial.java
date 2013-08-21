@@ -19,90 +19,90 @@ public class StructureBoundingBoxSerial implements Serializable
         return new StructureBoundingBoxSerial(Integer.MAX_VALUE, Integer.MAX_VALUE, Integer.MAX_VALUE, Integer.MIN_VALUE, Integer.MIN_VALUE, Integer.MIN_VALUE);
     }
 
-    public static StructureBoundingBoxSerial getComponentToAddBoundingBox(int var0, int var1, int var2, int var3, int var4, int var5, int var6, int var7, int var8, int var9)
+    public static StructureBoundingBoxSerial getComponentToAddBoundingBox(int par0, int par1, int par2, int par3, int par4, int par5, int par6, int par7, int par8, int par9)
     {
-        switch (var9)
+        switch (par9)
         {
             case 0:
-                return new StructureBoundingBoxSerial(var0 + var3, var1 + var4, var2 + var5, var0 + var6 - 1 + var3, var1 + var7 - 1 + var4, var2 + var8 - 1 + var5);
+                return new StructureBoundingBoxSerial(par0 + par3, par1 + par4, par2 + par5, par0 + par6 - 1 + par3, par1 + par7 - 1 + par4, par2 + par8 - 1 + par5);
 
             case 1:
-                return new StructureBoundingBoxSerial(var0 - var8 + 1 + var5, var1 + var4, var2 + var3, var0 + var5, var1 + var7 - 1 + var4, var2 + var6 - 1 + var3);
+                return new StructureBoundingBoxSerial(par0 - par8 + 1 + par5, par1 + par4, par2 + par3, par0 + par5, par1 + par7 - 1 + par4, par2 + par6 - 1 + par3);
 
             case 2:
-                return new StructureBoundingBoxSerial(var0 + var3, var1 + var4, var2 - var8 + 1 + var5, var0 + var6 - 1 + var3, var1 + var7 - 1 + var4, var2 + var5);
+                return new StructureBoundingBoxSerial(par0 + par3, par1 + par4, par2 - par8 + 1 + par5, par0 + par6 - 1 + par3, par1 + par7 - 1 + par4, par2 + par5);
 
             case 3:
-                return new StructureBoundingBoxSerial(var0 + var5, var1 + var4, var2 + var3, var0 + var8 - 1 + var5, var1 + var7 - 1 + var4, var2 + var6 - 1 + var3);
+                return new StructureBoundingBoxSerial(par0 + par5, par1 + par4, par2 + par3, par0 + par8 - 1 + par5, par1 + par7 - 1 + par4, par2 + par6 - 1 + par3);
 
             default:
-                return new StructureBoundingBoxSerial(var0 + var3, var1 + var4, var2 + var5, var0 + var6 - 1 + var3, var1 + var7 - 1 + var4, var2 + var8 - 1 + var5);
+                return new StructureBoundingBoxSerial(par0 + par3, par1 + par4, par2 + par5, par0 + par6 - 1 + par3, par1 + par7 - 1 + par4, par2 + par8 - 1 + par5);
         }
     }
 
-    public StructureBoundingBoxSerial(StructureBoundingBox var1)
+    public StructureBoundingBoxSerial(StructureBoundingBox par1StructureBoundingBox)
     {
-        this.minX = var1.minX;
-        this.minY = var1.minY;
-        this.minZ = var1.minZ;
-        this.maxX = var1.maxX;
-        this.maxY = var1.maxY;
-        this.maxZ = var1.maxZ;
+        this.minX = par1StructureBoundingBox.minX;
+        this.minY = par1StructureBoundingBox.minY;
+        this.minZ = par1StructureBoundingBox.minZ;
+        this.maxX = par1StructureBoundingBox.maxX;
+        this.maxY = par1StructureBoundingBox.maxY;
+        this.maxZ = par1StructureBoundingBox.maxZ;
     }
 
-    public StructureBoundingBoxSerial(int var1, int var2, int var3, int var4, int var5, int var6)
+    public StructureBoundingBoxSerial(int par1, int par2, int par3, int par4, int par5, int par6)
     {
-        this.minX = var1;
-        this.minY = var2;
-        this.minZ = var3;
-        this.maxX = var4;
-        this.maxY = var5;
-        this.maxZ = var6;
+        this.minX = par1;
+        this.minY = par2;
+        this.minZ = par3;
+        this.maxX = par4;
+        this.maxY = par5;
+        this.maxZ = par6;
     }
 
-    public StructureBoundingBoxSerial(int var1, int var2, int var3, int var4)
+    public StructureBoundingBoxSerial(int par1, int par2, int par3, int par4)
     {
-        this.minX = var1;
-        this.minZ = var2;
-        this.maxX = var3;
-        this.maxZ = var4;
+        this.minX = par1;
+        this.minZ = par2;
+        this.maxX = par3;
+        this.maxZ = par4;
         this.minY = 1;
         this.maxY = 512;
     }
 
-    public boolean intersectsWith(StructureBoundingBoxSerial var1)
+    public boolean intersectsWith(StructureBoundingBoxSerial par1StructureBoundingBox)
     {
-        return this.maxX >= var1.minX && this.minX <= var1.maxX && this.maxZ >= var1.minZ && this.minZ <= var1.maxZ && this.maxY >= var1.minY && this.minY <= var1.maxY;
+        return this.maxX >= par1StructureBoundingBox.minX && this.minX <= par1StructureBoundingBox.maxX && this.maxZ >= par1StructureBoundingBox.minZ && this.minZ <= par1StructureBoundingBox.maxZ && this.maxY >= par1StructureBoundingBox.minY && this.minY <= par1StructureBoundingBox.maxY;
     }
 
-    public boolean intersectsWith(int var1, int var2, int var3, int var4)
+    public boolean intersectsWith(int par1, int par2, int par3, int par4)
     {
-        return this.maxX >= var1 && this.minX <= var3 && this.maxZ >= var2 && this.minZ <= var4;
+        return this.maxX >= par1 && this.minX <= par3 && this.maxZ >= par2 && this.minZ <= par4;
     }
 
-    public void expandTo(StructureBoundingBoxSerial var1)
+    public void expandTo(StructureBoundingBoxSerial par1StructureBoundingBox)
     {
-        this.minX = Math.min(this.minX, var1.minX);
-        this.minY = Math.min(this.minY, var1.minY);
-        this.minZ = Math.min(this.minZ, var1.minZ);
-        this.maxX = Math.max(this.maxX, var1.maxX);
-        this.maxY = Math.max(this.maxY, var1.maxY);
-        this.maxZ = Math.max(this.maxZ, var1.maxZ);
+        this.minX = Math.min(this.minX, par1StructureBoundingBox.minX);
+        this.minY = Math.min(this.minY, par1StructureBoundingBox.minY);
+        this.minZ = Math.min(this.minZ, par1StructureBoundingBox.minZ);
+        this.maxX = Math.max(this.maxX, par1StructureBoundingBox.maxX);
+        this.maxY = Math.max(this.maxY, par1StructureBoundingBox.maxY);
+        this.maxZ = Math.max(this.maxZ, par1StructureBoundingBox.maxZ);
     }
 
-    public void offset(int var1, int var2, int var3)
+    public void offset(int par1, int par2, int par3)
     {
-        this.minX += var1;
-        this.minY += var2;
-        this.minZ += var3;
-        this.maxX += var1;
-        this.maxY += var2;
-        this.maxZ += var3;
+        this.minX += par1;
+        this.minY += par2;
+        this.minZ += par3;
+        this.maxX += par1;
+        this.maxY += par2;
+        this.maxZ += par3;
     }
 
-    public boolean isVecInside(int var1, int var2, int var3)
+    public boolean isVecInside(int par1, int par2, int par3)
     {
-        return var1 >= this.minX && var1 <= this.maxX && var3 >= this.minZ && var3 <= this.maxZ && var2 >= this.minY && var2 <= this.maxY;
+        return par1 >= this.minX && par1 <= this.maxX && par3 >= this.minZ && par3 <= this.maxZ && par2 >= this.minY && par2 <= this.maxY;
     }
 
     public int getXSize()

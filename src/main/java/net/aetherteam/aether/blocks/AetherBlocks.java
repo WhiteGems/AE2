@@ -418,7 +418,7 @@ public class AetherBlocks
 
     public static void init()
     {
-        AetherPortal = (BlockAetherPortal)(new BlockAetherPortal(makeTerrainID(terrainCat, "AetherPortal", AetherPortalID))).setUnlocalizedName("Aether:Aether Portal").setLightValue(0.75F).setCreativeTab(Aether.blocks);
+        AetherPortal = (BlockAetherPortal)(new BlockAetherPortal(makeTerrainID(terrainCat, "AetherPortal", AetherPortalID))).setUnlocalizedName("aether:Aether Portal").setLightValue(0.75F).setCreativeTab(Aether.blocks);
         AetherDirt = (new BlockAetherDirt(makeTerrainID(terrainCat, "Aether Dirt", AetherDirtID))).setIconName("Aether Dirt").setCreativeTab(Aether.blocks);
         AetherGrass = (new BlockAetherGrass(makeTerrainID(terrainCat, "Aether Grass", AetherGrassID))).setIconName("Aether Grass").setCreativeTab(Aether.blocks);
         Quicksoil = (new BlockQuicksoil(makeTerrainID(terrainCat, "Quicksoil", QuicksoilID))).setIconName("Quicksoil").setCreativeTab(Aether.blocks);
@@ -492,7 +492,7 @@ public class AetherBlocks
         CarvedDungeonStairs = (new BlockLockedAetherStairs(makeID("Locked Carved Stone Stairs", CarvedDungeonStairsID), DungeonStone, 0)).setIconName("Locked Carved Stone Stairs").setBlockUnbreakable();
         ColdFire = (BlockColdFire)(new BlockColdFire(makeID("Cold Fire", ColdFireID))).setIconName("Cold Fire").setBlockUnbreakable();
         Block.blocksList[Block.bed.blockID] = null;
-        Block.blocksList[Block.bed.blockID] = (new BlockAetherBed(26)).setHardness(0.2F).setUnlocalizedName("bed");
+        Block.blocksList[Block.bed.blockID] = (new BlockAetherBed(26)).setHardness(0.2F).setUnlocalizedName("bed").func_111022_d("bed");
         registerBlocks();
         addHarvestLevel();
     }
@@ -517,38 +517,38 @@ public class AetherBlocks
         MinecraftForge.setBlockHarvestLevel(AetherLog, 1, "axe", 1);
     }
 
-    public static boolean isGood(int var0, int var1)
+    public static boolean isGood(int blockID, int meta)
     {
-        return var0 == 0;
+        return blockID == 0;
     }
 
-    public static int makeID(String var0, int var1)
+    public static int makeID(String name, int def)
     {
-        return Aether.getConfig().getBlock(var0, var1).getInt(var1);
+        return Aether.getConfig().getBlock(name, def).getInt(def);
     }
 
-    public static int makeTerrainID(String var0, String var1, int var2)
+    public static int makeTerrainID(String catagory, String name, int def)
     {
-        return Aether.getConfig().getTerrainBlock(var0, var1, var2, "An Aether Terrain Block").getInt(var2);
+        return Aether.getConfig().getTerrainBlock(catagory, name, def, "An Aether Terrain Block").getInt(def);
     }
 
     public static void registerBlocks()
     {
-        Field[] var0 = AetherBlocks.class.getDeclaredFields();
-        int var1 = var0.length;
+        Field[] arr$ = AetherBlocks.class.getDeclaredFields();
+        int len$ = arr$.length;
 
-        for (int var2 = 0; var2 < var1; ++var2)
+        for (int i$ = 0; i$ < len$; ++i$)
         {
-            Field var3 = var0[var2];
-            net.aetherteam.aether.interfaces.AEBlock var4 = (net.aetherteam.aether.interfaces.AEBlock)var3.getAnnotation(net.aetherteam.aether.interfaces.AEBlock.class);
+            Field f = arr$[i$];
+            net.aetherteam.aether.interfaces.AEBlock ann = (net.aetherteam.aether.interfaces.AEBlock)f.getAnnotation(net.aetherteam.aether.interfaces.AEBlock.class);
 
-            if (var4 != null && Block.class.isAssignableFrom(var3.getType()))
+            if (ann != null && Block.class.isAssignableFrom(f.getType()))
             {
-                Block var5;
+                Block block;
 
                 try
                 {
-                    var5 = (Block)var3.get((Object)null);
+                    block = (Block)f.get((Object)null);
                 }
                 catch (IllegalAccessException var8)
                 {
@@ -556,19 +556,19 @@ public class AetherBlocks
                     continue;
                 }
 
-                GameRegistry.registerBlock(var5, var4.itemBlock());
-                String[] var6 = var4.names();
+                GameRegistry.registerBlock(block, ann.itemBlock());
+                String[] names = ann.names();
 
-                if (var6.length != 0)
+                if (names.length != 0)
                 {
-                    for (int var7 = 0; var7 < var6.length; ++var7)
+                    for (int i = 0; i < names.length; ++i)
                     {
-                        LanguageRegistry.addName(new ItemStack(var5, 1, var7), var6[var7]);
+                        LanguageRegistry.addName(new ItemStack(block, 1, i), names[i]);
                     }
                 }
                 else
                 {
-                    LanguageRegistry.addName(var5, var4.name());
+                    LanguageRegistry.addName(block, ann.name());
                 }
             }
         }

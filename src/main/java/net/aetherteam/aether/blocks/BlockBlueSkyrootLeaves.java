@@ -12,9 +12,9 @@ import net.minecraft.world.World;
 
 public class BlockBlueSkyrootLeaves extends BlockAether implements IAetherBlock
 {
-    public BlockBlueSkyrootLeaves(int var1)
+    public BlockBlueSkyrootLeaves(int blockID)
     {
-        super(var1, Material.leaves);
+        super(blockID, Material.leaves);
         this.setTickRandomly(true);
         this.setHardness(0.2F);
         this.setStepSound(Block.soundGrassFootstep);
@@ -29,37 +29,37 @@ public class BlockBlueSkyrootLeaves extends BlockAether implements IAetherBlock
         return false;
     }
 
-    private boolean nearTrunk(World var1, int var2, int var3, int var4)
+    private boolean nearTrunk(World world, int px, int py, int pz)
     {
-        Loc var5 = new Loc(var2, var3, var4);
-        LinkedList var6 = new LinkedList();
-        ArrayList var7 = new ArrayList();
-        var6.offer(new Loc(var2, var3, var4));
-        int var8 = this.blockID;
+        Loc startLoc = new Loc(px, py, pz);
+        LinkedList toCheck = new LinkedList();
+        ArrayList checked = new ArrayList();
+        toCheck.offer(new Loc(px, py, pz));
+        int bLeaves = this.blockID;
 
-        while (!var6.isEmpty())
+        while (!toCheck.isEmpty())
         {
-            Loc var9 = (Loc)var6.poll();
+            Loc curLoc = (Loc)toCheck.poll();
 
-            if (!var7.contains(var9))
+            if (!checked.contains(curLoc))
             {
-                if (var9.distSimple(var5) <= 4)
+                if (curLoc.distSimple(startLoc) <= 4)
                 {
-                    int var10 = var9.getBlock(var1);
-                    var9.getMeta(var1);
+                    int block = curLoc.getBlock(world);
+                    curLoc.getMeta(world);
 
-                    if (var10 == AetherBlocks.AetherLog.blockID)
+                    if (block == AetherBlocks.AetherLog.blockID)
                     {
                         return true;
                     }
 
-                    if (var10 == var8)
+                    if (block == bLeaves)
                     {
-                        var6.addAll(Arrays.asList(var9.adjacent()));
+                        toCheck.addAll(Arrays.asList(curLoc.adjacent()));
                     }
                 }
 
-                var7.add(var9);
+                checked.add(curLoc);
             }
         }
 
@@ -69,34 +69,34 @@ public class BlockBlueSkyrootLeaves extends BlockAether implements IAetherBlock
     /**
      * Returns the quantity of items to drop on block destruction.
      */
-    public int quantityDropped(Random var1)
+    public int quantityDropped(Random random)
     {
         return 0;
     }
 
-    private void removeLeaves(World var1, int var2, int var3, int var4)
+    private void removeLeaves(World world, int px, int py, int pz)
     {
-        var1.setBlock(var2, var3, var4, 0);
+        world.setBlock(px, py, pz, 0);
     }
 
     /**
      * Returns true if the given side of this block type should be rendered, if the adjacent block is at the given
      * coordinates.  Args: blockAccess, x, y, z, side
      */
-    public boolean shouldSideBeRendered(IBlockAccess var1, int var2, int var3, int var4, int var5)
+    public boolean shouldSideBeRendered(IBlockAccess iblockaccess, int i, int j, int k, int l)
     {
-        var1.getBlockId(var2, var3, var4);
+        iblockaccess.getBlockId(i, j, k);
         return true;
     }
 
     /**
      * Ticks the block if it's been scheduled
      */
-    public void updateTick(World var1, int var2, int var3, int var4, Random var5)
+    public void updateTick(World world, int i, int j, int k, Random rand)
     {
-        if (!this.nearTrunk(var1, var2, var3, var4))
+        if (!this.nearTrunk(world, i, j, k))
         {
-            this.removeLeaves(var1, var2, var3, var4);
+            this.removeLeaves(world, i, j, k);
         }
     }
 }

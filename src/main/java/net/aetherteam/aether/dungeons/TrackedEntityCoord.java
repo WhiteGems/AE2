@@ -12,17 +12,17 @@ public class TrackedEntityCoord implements Serializable
     private float y;
     private float z;
 
-    public TrackedEntityCoord(float var1, float var2, float var3, String var4)
+    public TrackedEntityCoord(float x, float y, float z, String entityName)
     {
-        this.x = var1;
-        this.y = var2;
-        this.z = var3;
-        this.entityName = var4;
+        this.x = x;
+        this.y = y;
+        this.z = z;
+        this.entityName = entityName;
     }
 
-    public EntityLiving getTrackedEntity(World var1)
+    public EntityLiving getTrackedEntity(World world)
     {
-        return (EntityLiving)EntityList.createEntityByName(this.entityName, var1);
+        return (EntityLiving)EntityList.createEntityByName(this.entityName, world);
     }
 
     public float getX()

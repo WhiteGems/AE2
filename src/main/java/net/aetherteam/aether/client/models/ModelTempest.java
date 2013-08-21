@@ -71,34 +71,34 @@ public class ModelTempest extends ModelBase
     /**
      * Sets the models various rotation angles then renders the model.
      */
-    public void render(Entity var1, float var2, float var3, float var4, float var5, float var6, float var7)
+    public void render(Entity entity, float f, float f1, float f2, float f3, float f4, float f5)
     {
-        super.render(var1, var2, var3, var4, var5, var6, var7);
-        this.setRotationAngles(var2, var3, var4, var5, var6, var7, var1);
-        this.main_body.render(var7);
-        this.RB_cloud.render(var7);
-        this.LB_cloud.render(var7);
-        this.FR_cloud.render(var7);
-        this.FL_cloud.render(var7);
+        super.render(entity, f, f1, f2, f3, f4, f5);
+        this.setRotationAngles(f, f1, f2, f3, f4, f5, entity);
+        this.main_body.render(f5);
+        this.RB_cloud.render(f5);
+        this.LB_cloud.render(f5);
+        this.FR_cloud.render(f5);
+        this.FL_cloud.render(f5);
         GL11.glPushMatrix();
         GL11.glEnable(GL11.GL_BLEND);
-        this.tail_1.render(var7);
-        this.tail_2.render(var7);
+        this.tail_1.render(f5);
+        this.tail_2.render(f5);
         GL11.glDisable(GL11.GL_BLEND);
         GL11.glPopMatrix();
     }
 
-    public void renderTransparentTail(Entity var1, float var2, float var3, float var4, float var5, float var6, float var7)
+    public void renderTransparentTail(Entity entity, float f, float f1, float f2, float f3, float f4, float f5)
     {
-        this.tail_1.render(var7);
-        this.tail_2.render(var7);
+        this.tail_1.render(f5);
+        this.tail_2.render(f5);
     }
 
-    private void setRotation(ModelRenderer var1, float var2, float var3, float var4)
+    private void setRotation(ModelRenderer model, float x, float y, float z)
     {
-        var1.rotateAngleX = var2;
-        var1.rotateAngleY = var3;
-        var1.rotateAngleZ = var4;
+        model.rotateAngleX = x;
+        model.rotateAngleY = y;
+        model.rotateAngleZ = z;
     }
 
     /**
@@ -106,31 +106,31 @@ public class ModelTempest extends ModelBase
      * and legs, where par1 represents the time(so that arms and legs swing back and forth) and par2 represents how
      * "far" arms and legs can swing at most.
      */
-    public void setRotationAngles(float var1, float var2, float var3, float var4, float var5, float var6, Entity var7)
+    public void setRotationAngles(float f, float f1, float f2, float f3, float f4, float f5, Entity entity)
     {
-        super.setRotationAngles(var1, var2, var3, var4, var5, var6, var7);
-        float var8 = this.sinage2;
-        float var9 = 7.5F;
-        float var10 = (float)(Math.sin((double)(var1 * 20.0F) / (180D / Math.PI)) * (double)this.sinage * 0.5D);
-        float var11 = (float)Math.PI;
-        float var12 = var11 / 2.0F;
-        float var13 = var11 * 3.0F / 11.0F;
-        this.FR_cloud.rotationPointY = var10 + 10.0F;
-        this.FL_cloud.rotationPointX = var10 * 0.5F;
-        this.LB_cloud.rotationPointY = 8.0F - var10 * 0.5F;
-        this.RB_cloud.rotationPointY = 9.0F + var10 * 0.5F;
-        this.tail_1.rotationPointX = (float)(Math.sin((double)(var1 * 20.0F) / (180D / Math.PI)) * (double)var2 * 0.75D);
-        this.tail_1.rotateAngleY = (float)Math.pow(0.9900000095367432D, -4.0D) * 1.0F * var11 / 4.0F * MathHelper.cos(-0.055F * var1 + var12);
-        this.tail_1.rotationPointY = 10.0F - var10;
-        this.tail_2.rotationPointX = (float)Math.pow(0.9900000095367432D, 1.0D) * 1.0F * var11 / 4.0F * MathHelper.cos(-0.055F * var1 + var12);
-        this.tail_2.rotationPointY = 10.0F - var10 * 1.25F;
+        super.setRotationAngles(f, f1, f2, f3, f4, f5, entity);
+        float boff = this.sinage2;
+        float yOffset = 7.5F;
+        float vertMotion = (float)(Math.sin((double)(f * 20.0F) / (180D / Math.PI)) * (double)this.sinage * 0.5D);
+        float PI = (float)Math.PI;
+        float initialOffset = PI / 2.0F;
+        float offset = PI * 3.0F / 11.0F;
+        this.FR_cloud.rotationPointY = vertMotion + 10.0F;
+        this.FL_cloud.rotationPointX = vertMotion * 0.5F;
+        this.LB_cloud.rotationPointY = 8.0F - vertMotion * 0.5F;
+        this.RB_cloud.rotationPointY = 9.0F + vertMotion * 0.5F;
+        this.tail_1.rotationPointX = (float)(Math.sin((double)(f * 20.0F) / (180D / Math.PI)) * (double)f1 * 0.75D);
+        this.tail_1.rotateAngleY = (float)Math.pow(0.9900000095367432D, -4.0D) * 1.0F * PI / 4.0F * MathHelper.cos(-0.055F * f + initialOffset);
+        this.tail_1.rotationPointY = 10.0F - vertMotion;
+        this.tail_2.rotationPointX = (float)Math.pow(0.9900000095367432D, 1.0D) * 1.0F * PI / 4.0F * MathHelper.cos(-0.055F * f + initialOffset);
+        this.tail_2.rotationPointY = 10.0F - vertMotion * 1.25F;
         this.tail_2.rotateAngleY = this.tail_1.rotateAngleY + 0.25F;
-        this.main_body.rotationPointY = var8 + var9 + this.sinage * 2.0F;
-        this.RB_cloud.rotationPointY = var8 + var9 + this.sinage * 2.0F;
-        this.LB_cloud.rotationPointY = var8 + var9 + this.sinage * 2.0F;
-        this.tail_2.rotationPointY = var8 + var9 + this.sinage * 2.0F;
-        this.FR_cloud.rotationPointY = var8 + var9 + this.sinage * 2.0F;
-        this.FL_cloud.rotationPointY = var8 + var9 + this.sinage * 2.0F;
-        this.tail_1.rotationPointY = var8 + var9 + this.sinage * 2.0F;
+        this.main_body.rotationPointY = boff + yOffset + this.sinage * 2.0F;
+        this.RB_cloud.rotationPointY = boff + yOffset + this.sinage * 2.0F;
+        this.LB_cloud.rotationPointY = boff + yOffset + this.sinage * 2.0F;
+        this.tail_2.rotationPointY = boff + yOffset + this.sinage * 2.0F;
+        this.FR_cloud.rotationPointY = boff + yOffset + this.sinage * 2.0F;
+        this.FL_cloud.rotationPointY = boff + yOffset + this.sinage * 2.0F;
+        this.tail_1.rotationPointY = boff + yOffset + this.sinage * 2.0F;
     }
 }

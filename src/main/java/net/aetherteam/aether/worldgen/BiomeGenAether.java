@@ -25,16 +25,16 @@ public class BiomeGenAether extends BiomeGenBase
     /**
      * Gets a WorldGen appropriate for this biome.
      */
-    public WorldGenerator getRandomWorldGenForTrees(Random var1)
+    public WorldGenerator getRandomWorldGenForTrees(Random random)
     {
-        int var2 = var1.nextInt(100);
-        return (WorldGenerator)(var2 <= 9 ? new AetherGenNormalTree(AetherBlocks.GreenSkyrootLeaves.blockID, AetherBlocks.AetherLog.blockID, 0) : (var2 > 9 && var2 <= 18 ? new AetherGenLargeTree(AetherBlocks.GreenSkyrootLeaves.blockID, AetherBlocks.AetherLog.blockID, 0) : (var2 > 18 && var2 <= 35 ? new AetherGenNormalTree(AetherBlocks.BlueSkyrootLeaves.blockID, AetherBlocks.AetherLog.blockID, 0) : (var2 > 35 && var2 <= 63 ? new AetherGenMassiveTree(AetherBlocks.GreenSkyrootLeaves.blockID, 8, false) : (var2 > 63 && var2 <= 80 ? new AetherGenMassiveTree(AetherBlocks.BlueSkyrootLeaves.blockID, 8, false) : (var2 > 80 && var2 <= 85 ? new AetherGenLargeTree(AetherBlocks.GoldenOakLeaves.blockID, AetherBlocks.AetherLog.blockID, 2) : (var2 > 85 && var2 <= 90 ? new AetherGenMassiveTree(AetherBlocks.GreenSkyrootLeaves.blockID, 20, true) : (var2 > 90 && var2 <= 95 ? new AetherGenFruitTree(AetherBlocks.PurpleCrystalLeaves.blockID, 1, 50, 5, true) : new AetherGenMassiveTree(AetherBlocks.DarkBlueSkyrootLeaves.blockID, 35, true)))))))));
+        int ratio = random.nextInt(100);
+        return (WorldGenerator)(ratio <= 9 ? new AetherGenNormalTree(AetherBlocks.GreenSkyrootLeaves.blockID, AetherBlocks.AetherLog.blockID, 0) : (ratio > 9 && ratio <= 18 ? new AetherGenLargeTree(AetherBlocks.GreenSkyrootLeaves.blockID, AetherBlocks.AetherLog.blockID, 0) : (ratio > 18 && ratio <= 35 ? new AetherGenNormalTree(AetherBlocks.BlueSkyrootLeaves.blockID, AetherBlocks.AetherLog.blockID, 0) : (ratio > 35 && ratio <= 63 ? new AetherGenMassiveTree(AetherBlocks.GreenSkyrootLeaves.blockID, 8, false) : (ratio > 63 && ratio <= 80 ? new AetherGenMassiveTree(AetherBlocks.BlueSkyrootLeaves.blockID, 8, false) : (ratio > 80 && ratio <= 85 ? new AetherGenLargeTree(AetherBlocks.GoldenOakLeaves.blockID, AetherBlocks.AetherLog.blockID, 2) : (ratio > 85 && ratio <= 90 ? new AetherGenMassiveTree(AetherBlocks.GreenSkyrootLeaves.blockID, 20, true) : (ratio > 90 && ratio <= 95 ? new AetherGenFruitTree(AetherBlocks.PurpleCrystalLeaves.blockID, 1, 50, 5, true) : new AetherGenMassiveTree(AetherBlocks.DarkBlueSkyrootLeaves.blockID, 35, true)))))))));
     }
 
     /**
      * Gets a WorldGen appropriate for this biome.
      */
-    public WorldGenerator getRandomWorldGenForGrass(Random var1)
+    public WorldGenerator getRandomWorldGenForGrass(Random par1Random)
     {
         return new WorldGenTallGrass(AetherBlocks.TallAetherGrass.blockID, 1);
     }
@@ -42,7 +42,7 @@ public class BiomeGenAether extends BiomeGenBase
     /**
      * takes temperature, returns color
      */
-    public int getSkyColorByTemp(float var1)
+    public int getSkyColorByTemp(float f)
     {
         return 12632319;
     }

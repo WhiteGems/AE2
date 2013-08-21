@@ -9,9 +9,9 @@ public enum PartyType implements Serializable
     PRIVATE(0);
     public int displayColor;
 
-    private PartyType(int var3)
+    private PartyType(int displayColor)
     {
-        this.displayColor = var3;
+        this.displayColor = displayColor;
     }
 
     public int getDisplayColor()
@@ -19,18 +19,18 @@ public enum PartyType implements Serializable
         return this.displayColor;
     }
 
-    public static PartyType getTypeFromString(String var0)
+    public static PartyType getTypeFromString(String name)
     {
-        PartyType[] var1 = values();
-        int var2 = var1.length;
+        PartyType[] arr$ = values();
+        int len$ = arr$.length;
 
-        for (int var3 = 0; var3 < var2; ++var3)
+        for (int i$ = 0; i$ < len$; ++i$)
         {
-            PartyType var4 = var1[var3];
+            PartyType type = arr$[i$];
 
-            if (var4.name().equalsIgnoreCase(var0))
+            if (type.name().equalsIgnoreCase(name))
             {
-                return var4;
+                return type;
             }
         }
 

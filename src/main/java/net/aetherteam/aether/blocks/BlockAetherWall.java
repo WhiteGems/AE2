@@ -12,34 +12,35 @@ public class BlockAetherWall extends BlockWall implements IAetherBlock
     private Block modelBlock;
     private int modelMeta;
 
-    public BlockAetherWall(int var1, Block var2, int var3)
+    public BlockAetherWall(int par1, Block par2Block, int metadata)
     {
-        super(var1, var2);
-        this.modelBlock = var2;
-        this.modelMeta = var3;
-        this.setHardness(var2.blockHardness);
-        this.setResistance(var2.blockResistance / 3.0F);
-        this.setStepSound(var2.stepSound);
+        super(par1, par2Block);
+        this.modelBlock = par2Block;
+        this.modelMeta = metadata;
+        this.setHardness(par2Block.blockHardness);
+        this.setResistance(par2Block.blockResistance / 3.0F);
+        this.setStepSound(par2Block.stepSound);
     }
 
-    public Block setIconName(String var1)
+    public Block setIconName(String name)
     {
-        return this.setUnlocalizedName("Aether:" + var1);
+        this.field_111026_f = "aether:" + name;
+        return this.setUnlocalizedName("aether:" + name);
     }
 
     /**
      * From the specified side and block metadata retrieves the blocks texture. Args: side, metadata
      */
-    public Icon getIcon(int var1, int var2)
+    public Icon getIcon(int par1, int par2)
     {
-        return this.modelBlock.getIcon(var1, this.modelMeta);
+        return this.modelBlock.getIcon(par1, this.modelMeta);
     }
 
     /**
      * returns a list of blocks with the same ID, but different meta (eg: wood returns 4 blocks)
      */
-    public void getSubBlocks(int var1, CreativeTabs var2, List var3)
+    public void getSubBlocks(int par1, CreativeTabs par2CreativeTabs, List par3List)
     {
-        var3.add(new ItemStack(var1, 1, 0));
+        par3List.add(new ItemStack(par1, 1, 0));
     }
 }

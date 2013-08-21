@@ -8,10 +8,10 @@ public enum DungeonType
     String dungeonName;
     int keepCap;
 
-    private DungeonType(String var3, int var4)
+    private DungeonType(String dungeonName, int keepCap)
     {
-        this.dungeonName = var3;
-        this.keepCap = var4;
+        this.dungeonName = dungeonName;
+        this.keepCap = keepCap;
     }
 
     public String getName()
@@ -24,18 +24,18 @@ public enum DungeonType
         return this.keepCap;
     }
 
-    public static DungeonType getTypeFromString(String var0)
+    public static DungeonType getTypeFromString(String name)
     {
-        DungeonType[] var1 = values();
-        int var2 = var1.length;
+        DungeonType[] arr$ = values();
+        int len$ = arr$.length;
 
-        for (int var3 = 0; var3 < var2; ++var3)
+        for (int i$ = 0; i$ < len$; ++i$)
         {
-            DungeonType var4 = var1[var3];
+            DungeonType type = arr$[i$];
 
-            if (var4.name().equalsIgnoreCase(var0))
+            if (type.name().equalsIgnoreCase(name))
             {
-                return var4;
+                return type;
             }
         }
 

@@ -1,44 +1,42 @@
 package net.aetherteam.aether.items;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-import net.aetherteam.aether.PlayerBaseAetherServer;
-import net.aetherteam.aether.client.PlayerBaseAetherClient;
+import net.aetherteam.aether.PlayerAetherServer;
+import net.aetherteam.aether.client.PlayerAetherClient;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.ResourceLocation;
 
 public class ItemIronBubble extends ItemAccessory
 {
-    public ItemIronBubble(int var1, int var2, int var3, int var4)
+    public ItemIronBubble(int i, int j, int k, int l)
     {
-        super(var1, var2, var3, var4, 16777215);
+        super(i, j, k, l, 16777215);
     }
 
-    public ItemIronBubble(int var1, int var2, String var3, int var4)
+    public ItemIronBubble(int i, int j, ResourceLocation path, int l)
     {
-        super(var1, var2, 0, var4);
-        this.texture = var3;
+        super(i, j, 0, l);
+        this.texture = path;
     }
 
-    public ItemIronBubble(int var1, int var2, String var3, int var4, int var5)
+    public ItemIronBubble(int i, int j, ResourceLocation path, int l, int m)
     {
-        super(var1, var2, 0, var4, var5);
-        this.texture = var3;
+        super(i, j, 0, l, m);
+        this.texture = path;
     }
 
-    public ItemIronBubble(int var1, int var2, String var3, int var4, int var5, boolean var6)
+    public ItemIronBubble(int i, int j, ResourceLocation path, int l, int m, boolean flag)
     {
-        super(var1, var2, var3, var4, var5);
-        this.colouriseRender = var6;
+        super(i, j, path, l, m);
+        this.colouriseRender = flag;
     }
 
-    public void activateServerPassive(EntityPlayer var1, PlayerBaseAetherServer var2)
+    public void activateServerPassive(EntityPlayer player, PlayerAetherServer playerBase)
     {
-        var1.setAir(0);
+        player.setAir(0);
     }
 
-    @SideOnly(Side.CLIENT)
-    public void activateClientPassive(EntityPlayer var1, PlayerBaseAetherClient var2)
+    public void activateClientPassive(EntityPlayer player, PlayerAetherClient playerBase)
     {
-        var1.setAir(0);
+        player.setAir(0);
     }
 }

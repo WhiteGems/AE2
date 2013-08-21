@@ -12,51 +12,51 @@ import org.lwjgl.opengl.GL11;
 
 public class RenderAetherTallGrass implements ISimpleBlockRenderingHandler
 {
-    public void renderInventoryBlock(Block var1, int var2, int var3, RenderBlocks var4)
+    public void renderInventoryBlock(Block block, int metadata, int modelID, RenderBlocks renderer)
     {
-        if (var3 == this.getRenderId())
+        if (modelID == this.getRenderId())
         {
-            Tessellator var5 = Tessellator.instance;
-            var5.startDrawingQuads();
-            var5.setNormal(0.0F, -1.0F, 0.0F);
+            Tessellator tessellator = Tessellator.instance;
+            tessellator.startDrawingQuads();
+            tessellator.setNormal(0.0F, -1.0F, 0.0F);
             GL11.glDisable(GL11.GL_LIGHTING);
-            var4.drawCrossedSquares(var1, var2, -0.5D, -0.5D, -0.5D, 1.0F);
-            var5.draw();
+            renderer.drawCrossedSquares(block, metadata, -0.5D, -0.5D, -0.5D, 1.0F);
+            tessellator.draw();
         }
     }
 
-    public boolean renderWorldBlock(IBlockAccess var1, int var2, int var3, int var4, Block var5, int var6, RenderBlocks var7)
+    public boolean renderWorldBlock(IBlockAccess world, int x, int y, int z, Block block, int modelID, RenderBlocks renderer)
     {
-        if (var6 == this.getRenderId())
+        if (modelID == this.getRenderId())
         {
-            Tessellator var8 = Tessellator.instance;
-            var8.setBrightness(var5.getMixedBrightnessForBlock(var1, var2, var3, var4));
-            float var9 = 1.0F;
-            int var10 = var5.colorMultiplier(var1, var2, var3, var4);
-            float var11 = (float)(var10 >> 16 & 255) / 255.0F;
-            float var12 = (float)(var10 >> 8 & 255) / 255.0F;
-            float var13 = (float)(var10 & 255) / 255.0F;
+            Tessellator tessellator = Tessellator.instance;
+            tessellator.setBrightness(block.getMixedBrightnessForBlock(world, x, y, z));
+            float f = 1.0F;
+            int l = block.colorMultiplier(world, x, y, z);
+            float f1 = (float)(l >> 16 & 255) / 255.0F;
+            float f2 = (float)(l >> 8 & 255) / 255.0F;
+            float f3 = (float)(l & 255) / 255.0F;
 
             if (EntityRenderer.anaglyphEnable)
             {
-                float var14 = (var11 * 30.0F + var12 * 59.0F + var13 * 11.0F) / 100.0F;
-                float var15 = (var11 * 30.0F + var12 * 70.0F) / 100.0F;
-                float var16 = (var11 * 30.0F + var13 * 70.0F) / 100.0F;
-                var11 = var14;
-                var12 = var15;
-                var13 = var16;
+                float d0 = (f1 * 30.0F + f2 * 59.0F + f3 * 11.0F) / 100.0F;
+                float f5 = (f1 * 30.0F + f2 * 70.0F) / 100.0F;
+                float d1 = (f1 * 30.0F + f3 * 70.0F) / 100.0F;
+                f1 = d0;
+                f2 = f5;
+                f3 = d1;
             }
 
-            var8.setColorOpaque_F(var9 * var11, var9 * var12, var9 * var13);
-            double var22 = (double)var2;
-            double var23 = (double)var3;
-            double var18 = (double)var4;
-            long var20 = (long)(var2 * 3129871) ^ (long)var4 * 116129781L ^ (long)var3;
-            var20 = var20 * var20 * 42317861L + var20 * 11L;
-            var22 += ((double)((float)(var20 >> 16 & 15L) / 15.0F) - 0.5D) * 0.5D;
-            var23 += ((double)((float)(var20 >> 20 & 15L) / 15.0F) - 1.0D) * 0.2D;
-            var18 += ((double)((float)(var20 >> 24 & 15L) / 15.0F) - 0.5D) * 0.5D;
-            this.drawCrossedSquares(var5, var1.getBlockMetadata(var2, var3, var4), var22, var23, var18, 1.0F);
+            tessellator.setColorOpaque_F(f * f1, f * f2, f * f3);
+            double d01 = (double)x;
+            double d11 = (double)y;
+            double d2 = (double)z;
+            long i1 = (long)(x * 3129871) ^ (long)z * 116129781L ^ (long)y;
+            i1 = i1 * i1 * 42317861L + i1 * 11L;
+            d01 += ((double)((float)(i1 >> 16 & 15L) / 15.0F) - 0.5D) * 0.5D;
+            d11 += ((double)((float)(i1 >> 20 & 15L) / 15.0F) - 1.0D) * 0.2D;
+            d2 += ((double)((float)(i1 >> 24 & 15L) / 15.0F) - 0.5D) * 0.5D;
+            this.drawCrossedSquares(block, world.getBlockMetadata(x, y, z), d01, d11, d2, 1.0F);
             return true;
         }
         else
@@ -65,35 +65,35 @@ public class RenderAetherTallGrass implements ISimpleBlockRenderingHandler
         }
     }
 
-    public void drawCrossedSquares(Block var1, int var2, double var3, double var5, double var7, float var9)
+    public void drawCrossedSquares(Block par1Block, int par2, double par3, double par5, double par7, float par9)
     {
-        Tessellator var10 = Tessellator.instance;
-        Icon var11 = var1.getIcon(0, var2);
-        double var12 = (double)var11.getMinU();
-        double var14 = (double)var11.getMinV();
-        double var16 = (double)var11.getMaxU();
-        double var18 = (double)var11.getMaxV();
-        double var20 = 0.45D * (double)var9;
-        double var22 = var3 + 0.5D - var20;
-        double var24 = var3 + 0.5D + var20;
-        double var26 = var7 + 0.5D - var20;
-        double var28 = var7 + 0.5D + var20;
-        var10.addVertexWithUV(var22, var5 + (double)var9, var26, var12, var14);
-        var10.addVertexWithUV(var22, var5 + 0.0D, var26, var12, var18);
-        var10.addVertexWithUV(var24, var5 + 0.0D, var28, var16, var18);
-        var10.addVertexWithUV(var24, var5 + (double)var9, var28, var16, var14);
-        var10.addVertexWithUV(var24, var5 + (double)var9, var28, var12, var14);
-        var10.addVertexWithUV(var24, var5 + 0.0D, var28, var12, var18);
-        var10.addVertexWithUV(var22, var5 + 0.0D, var26, var16, var18);
-        var10.addVertexWithUV(var22, var5 + (double)var9, var26, var16, var14);
-        var10.addVertexWithUV(var22, var5 + (double)var9, var28, var12, var14);
-        var10.addVertexWithUV(var22, var5 + 0.0D, var28, var12, var18);
-        var10.addVertexWithUV(var24, var5 + 0.0D, var26, var16, var18);
-        var10.addVertexWithUV(var24, var5 + (double)var9, var26, var16, var14);
-        var10.addVertexWithUV(var24, var5 + (double)var9, var26, var12, var14);
-        var10.addVertexWithUV(var24, var5 + 0.0D, var26, var12, var18);
-        var10.addVertexWithUV(var22, var5 + 0.0D, var28, var16, var18);
-        var10.addVertexWithUV(var22, var5 + (double)var9, var28, var16, var14);
+        Tessellator tessellator = Tessellator.instance;
+        Icon icon = par1Block.getIcon(0, par2);
+        double d3 = (double)icon.getMinU();
+        double d4 = (double)icon.getMinV();
+        double d5 = (double)icon.getMaxU();
+        double d6 = (double)icon.getMaxV();
+        double d7 = 0.45D * (double)par9;
+        double d8 = par3 + 0.5D - d7;
+        double d9 = par3 + 0.5D + d7;
+        double d10 = par7 + 0.5D - d7;
+        double d11 = par7 + 0.5D + d7;
+        tessellator.addVertexWithUV(d8, par5 + (double)par9, d10, d3, d4);
+        tessellator.addVertexWithUV(d8, par5 + 0.0D, d10, d3, d6);
+        tessellator.addVertexWithUV(d9, par5 + 0.0D, d11, d5, d6);
+        tessellator.addVertexWithUV(d9, par5 + (double)par9, d11, d5, d4);
+        tessellator.addVertexWithUV(d9, par5 + (double)par9, d11, d3, d4);
+        tessellator.addVertexWithUV(d9, par5 + 0.0D, d11, d3, d6);
+        tessellator.addVertexWithUV(d8, par5 + 0.0D, d10, d5, d6);
+        tessellator.addVertexWithUV(d8, par5 + (double)par9, d10, d5, d4);
+        tessellator.addVertexWithUV(d8, par5 + (double)par9, d11, d3, d4);
+        tessellator.addVertexWithUV(d8, par5 + 0.0D, d11, d3, d6);
+        tessellator.addVertexWithUV(d9, par5 + 0.0D, d10, d5, d6);
+        tessellator.addVertexWithUV(d9, par5 + (double)par9, d10, d5, d4);
+        tessellator.addVertexWithUV(d9, par5 + (double)par9, d10, d3, d4);
+        tessellator.addVertexWithUV(d9, par5 + 0.0D, d10, d3, d6);
+        tessellator.addVertexWithUV(d8, par5 + 0.0D, d11, d5, d6);
+        tessellator.addVertexWithUV(d8, par5 + (double)par9, d11, d5, d4);
     }
 
     public boolean shouldRender3DInInventory()

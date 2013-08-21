@@ -23,17 +23,17 @@ public class EntityAetherCoin extends Entity
     /** Threshold color for tracking players */
     private int xpTargetColor;
 
-    public EntityAetherCoin(World var1, double var2, double var4, double var6, int var8)
+    public EntityAetherCoin(World par1World, double par2, double par4, double par6, int value)
     {
-        super(var1);
+        super(par1World);
         this.setSize(0.5F, 0.5F);
         this.yOffset = this.height / 2.0F;
-        this.setPosition(var2, var4, var6);
+        this.setPosition(par2, par4, par6);
         this.rotationYaw = (float)(Math.random() * 360.0D);
         this.motionX = (double)((float)(Math.random() * 0.20000000298023224D - 0.10000000149011612D) * 2.0F);
         this.motionY = (double)((float)(Math.random() * 0.2D) * 2.0F);
         this.motionZ = (double)((float)(Math.random() * 0.20000000298023224D - 0.10000000149011612D) * 2.0F);
-        this.setCoinValue(var8);
+        this.setCoinValue(value);
 
         if (this.getCoinValue() <= 0)
         {
@@ -50,9 +50,9 @@ public class EntityAetherCoin extends Entity
         return false;
     }
 
-    public EntityAetherCoin(World var1)
+    public EntityAetherCoin(World par1World)
     {
-        super(var1);
+        super(par1World);
         this.setSize(0.25F, 0.25F);
         this.yOffset = this.height / 2.0F;
     }
@@ -67,13 +67,13 @@ public class EntityAetherCoin extends Entity
         return this.dataWatcher.getWatchableObjectShort(16);
     }
 
-    public void setCoinValue(int var1)
+    public void setCoinValue(int value)
     {
-        this.dataWatcher.updateObject(16, Short.valueOf((short)var1));
+        this.dataWatcher.updateObject(16, Short.valueOf((short)value));
     }
 
     @SideOnly(Side.CLIENT)
-    public int getBrightnessForRender(float var1)
+    public int getBrightnessForRender(float par1)
     {
         float var2 = 0.5F;
 
@@ -87,7 +87,7 @@ public class EntityAetherCoin extends Entity
             var2 = 1.0F;
         }
 
-        int var3 = super.getBrightnessForRender(var1);
+        int var3 = super.getBrightnessForRender(par1);
         int var4 = var3 & 255;
         int var5 = var3 >> 16 & 255;
         var4 += (int)(var2 * 15.0F * 16.0F);
@@ -131,38 +131,38 @@ public class EntityAetherCoin extends Entity
 
         if (this.closestPlayer != null)
         {
-            double var3 = (this.closestPlayer.posX - this.posX) / var1;
+            double var13 = (this.closestPlayer.posX - this.posX) / var1;
             double var5 = (this.closestPlayer.posY + (double)this.closestPlayer.getEyeHeight() - this.posY) / var1;
             double var7 = (this.closestPlayer.posZ - this.posZ) / var1;
-            double var9 = Math.sqrt(var3 * var3 + var5 * var5 + var7 * var7);
+            double var9 = Math.sqrt(var13 * var13 + var5 * var5 + var7 * var7);
             double var11 = 1.0D - var9;
 
             if (var11 > 0.0D)
             {
                 var11 *= var11;
-                this.motionX += var3 / var9 * var11 * 0.1D;
+                this.motionX += var13 / var9 * var11 * 0.1D;
                 this.motionY += var5 / var9 * var11 * 0.1D;
                 this.motionZ += var7 / var9 * var11 * 0.1D;
             }
         }
 
         this.moveEntity(this.motionX, this.motionY, this.motionZ);
-        float var13 = 0.98F;
+        float var131 = 0.98F;
 
         if (this.onGround)
         {
-            var13 = 0.58800006F;
+            var131 = 0.58800006F;
             int var4 = this.worldObj.getBlockId(MathHelper.floor_double(this.posX), MathHelper.floor_double(this.boundingBox.minY) - 1, MathHelper.floor_double(this.posZ));
 
             if (var4 > 0)
             {
-                var13 = Block.blocksList[var4].slipperiness * 0.98F;
+                var131 = Block.blocksList[var4].slipperiness * 0.98F;
             }
         }
 
-        this.motionX *= (double)var13;
+        this.motionX *= (double)var131;
         this.motionY *= 0.9800000190734863D;
-        this.motionZ *= (double)var13;
+        this.motionZ *= (double)var131;
 
         if (this.onGround)
         {
@@ -189,18 +189,15 @@ public class EntityAetherCoin extends Entity
      * Will deal the specified amount of damage to the entity if the entity isn't immune to fire damage. Args:
      * amountDamage
      */
-    protected void dealFireDamage(int var1)
+    protected void dealFireDamage(int par1)
     {
-        this.attackEntityFrom(DamageSource.inFire, var1);
+        this.attackEntityFrom(DamageSource.inFire, par1);
     }
 
-    /**
-     * Called when the entity is attacked.
-     */
-    public boolean attackEntityFrom(DamageSource var1, int var2)
+    public boolean attackEntityFrom(DamageSource par1DamageSource, int par2)
     {
         this.setBeenAttacked();
-        this.xpOrbHealth -= var2;
+        this.xpOrbHealth -= par2;
 
         if (this.xpOrbHealth <= 0)
         {
@@ -213,34 +210,34 @@ public class EntityAetherCoin extends Entity
     /**
      * (abstract) Protected helper method to write subclass entity data to NBT.
      */
-    public void writeEntityToNBT(NBTTagCompound var1)
+    public void writeEntityToNBT(NBTTagCompound par1NBTTagCompound)
     {
-        var1.setShort("Health", (short)((byte)this.xpOrbHealth));
-        var1.setShort("Age", (short)this.xpOrbAge);
-        var1.setShort("Value", (short)this.getCoinValue());
+        par1NBTTagCompound.setShort("Health", (short)((byte)this.xpOrbHealth));
+        par1NBTTagCompound.setShort("Age", (short)this.xpOrbAge);
+        par1NBTTagCompound.setShort("Value", (short)this.getCoinValue());
     }
 
     /**
      * (abstract) Protected helper method to read subclass entity data from NBT.
      */
-    public void readEntityFromNBT(NBTTagCompound var1)
+    public void readEntityFromNBT(NBTTagCompound par1NBTTagCompound)
     {
-        this.xpOrbHealth = var1.getShort("Health") & 255;
-        this.xpOrbAge = var1.getShort("Age");
-        this.setCoinValue(var1.getShort("Value"));
+        this.xpOrbHealth = par1NBTTagCompound.getShort("Health") & 255;
+        this.xpOrbAge = par1NBTTagCompound.getShort("Age");
+        this.setCoinValue(par1NBTTagCompound.getShort("Value"));
     }
 
     /**
      * Called by a player entity when they collide with an entity
      */
-    public void onCollideWithPlayer(EntityPlayer var1)
+    public void onCollideWithPlayer(EntityPlayer par1EntityPlayer)
     {
-        if (!this.worldObj.isRemote && this.field_70532_c == 0 && var1.xpCooldown == 0)
+        if (!this.worldObj.isRemote && this.field_70532_c == 0 && par1EntityPlayer.xpCooldown == 0)
         {
-            var1.xpCooldown = 2;
-            this.worldObj.playSoundAtEntity(this, "aemisc.coin", 0.3F, 0.5F * ((this.rand.nextFloat() - this.rand.nextFloat()) * 0.7F + 1.8F));
-            var1.onItemPickup(this, 1);
-            Aether.getServerPlayer(var1).addCoins(this.getCoinValue());
+            par1EntityPlayer.xpCooldown = 2;
+            this.worldObj.playSoundAtEntity(this, "aether:aemisc.coin", 0.3F, 0.5F * ((this.rand.nextFloat() - this.rand.nextFloat()) * 0.7F + 1.8F));
+            par1EntityPlayer.onItemPickup(this, 1);
+            Aether.getServerPlayer(par1EntityPlayer).addCoins(this.getCoinValue());
             this.setDead();
         }
     }

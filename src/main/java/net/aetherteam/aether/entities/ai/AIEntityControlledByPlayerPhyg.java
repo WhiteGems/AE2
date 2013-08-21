@@ -1,5 +1,6 @@
 package net.aetherteam.aether.entities.ai;
 
+import net.aetherteam.playercore_api.cores.IPlayerCoreCommon;
 import net.minecraft.block.Block;
 import net.minecraft.entity.EntityCreature;
 import net.minecraft.entity.EntityLiving;
@@ -26,10 +27,10 @@ public class AIEntityControlledByPlayerPhyg extends EntityAIBase
     /** Maximum time the entity's speed should be boosted for. */
     private int maxSpeedBoostTime = 0;
 
-    public AIEntityControlledByPlayerPhyg(EntityLiving var1, float var2)
+    public AIEntityControlledByPlayerPhyg(EntityLiving par1EntityLiving, float par2)
     {
-        this.thisEntity = var1;
-        this.maxSpeed = var2;
+        this.thisEntity = par1EntityLiving;
+        this.maxSpeed = par2;
         this.setMutexBits(1);
     }
 
@@ -135,11 +136,11 @@ public class AIEntityControlledByPlayerPhyg extends EntityAIBase
         if (this.thisEntity.onGround)
         {
             var8 = 0.54600006F;
-            int var9 = this.thisEntity.worldObj.getBlockId(MathHelper.floor_float((float)var4), MathHelper.floor_float((float)var5) - 1, MathHelper.floor_float((float)var6));
+            int var21 = this.thisEntity.worldObj.getBlockId(MathHelper.floor_float((float)var4), MathHelper.floor_float((float)var5) - 1, MathHelper.floor_float((float)var6));
 
-            if (var9 > 0)
+            if (var21 > 0)
             {
-                var8 = Block.blocksList[var9].slipperiness * 0.91F;
+                var8 = Block.blocksList[var21].slipperiness * 0.91F;
             }
         }
 
@@ -191,28 +192,28 @@ public class AIEntityControlledByPlayerPhyg extends EntityAIBase
             var2.getJumpHelper().setJumping();
         }
 
-        boolean var20 = false;
-        byte var21 = 0;
+        boolean jpress = false;
+        byte jrem = 0;
         int var23;
 
-        if (this.thisEntity.onGround && var1.isJumping)
+        if (this.thisEntity.onGround && ((IPlayerCoreCommon)var1).isJumping())
         {
             this.thisEntity.onGround = false;
             this.thisEntity.motionY = 1.4D;
-            var20 = true;
-            var23 = var21 - 1;
+            jpress = true;
+            var23 = jrem - 1;
         }
-        else if (this.thisEntity.handleWaterMovement() && var1.isJumping)
+        else if (this.thisEntity.handleWaterMovement() && ((IPlayerCoreCommon)var1).isJumping())
         {
             this.thisEntity.motionY = 0.5D;
-            var20 = true;
-            var23 = var21 - 1;
+            jpress = true;
+            var23 = jrem - 1;
         }
-        else if (var21 > 0 && !var20 && var1.isJumping)
+        else if (jrem > 0 && !jpress && ((IPlayerCoreCommon)var1).isJumping())
         {
             this.thisEntity.motionY = 1.2D;
-            var20 = true;
-            var23 = var21 - 1;
+            jpress = true;
+            var23 = jrem - 1;
         }
 
         this.thisEntity.moveEntityWithHeading(0.0F, var7);

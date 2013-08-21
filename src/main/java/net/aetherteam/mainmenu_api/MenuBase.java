@@ -11,36 +11,39 @@ import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
 import org.lwjgl.opengl.GL11;
 
 @SideOnly(Side.CLIENT)
-public class MenuBase extends GuiScreen
+public abstract class MenuBase extends GuiScreen
 {
+    private static final ResourceLocation TEXTURE_JUKEBOX = new ResourceLocation("mainmenu_api", "textures/gui/jukebox.png");
     private GuiMenuButton menuButton;
     private GuiButtonItemStack jukeButton;
+
+    /** The button that was just pressed. */
     private GuiButton selectedButton = null;
-    private int jukeboxTexture;
     private int menuX;
     private int menuY;
     private int jukeWidth;
     private int jukeHeight;
     private boolean jukeboxOpen = false;
     private List jukeButtonList = new ArrayList();
-    public JukeboxPlayer jukebox = (new JukeboxPlayer()).setMusicFileName(this.getMusicFileName());
+    public JukeboxPlayer jukebox = new JukeboxPlayer();
+    protected ResourceLocation splashesLocation = new ResourceLocation("texts/splashes.txt");
 
     /**
      * Adds the buttons (and other controls) to the screen in question.
      */
     public void initGui()
     {
-        this.jukeboxTexture = this.mc.renderEngine.getTexture("/net/aetherteam/mainmenu_api/gui/jukebox.png");
         this.jukeHeight = 256;
         this.jukeWidth = 256;
         this.updateScreen();
 
         if (this.useJukebox())
         {
-            this.jukebox.start();
+            this.jukebox.start(this.getPlaylist());
         }
     }
 
@@ -58,35 +61,35 @@ public class MenuBase extends GuiScreen
         }
     }
 
-    public void drawJukeboxBackground(int var1)
+    public void drawJukeboxBackground(int i)
     {
         GL11.glDisable(GL11.GL_LIGHTING);
         GL11.glDisable(GL11.GL_FOG);
-        Tessellator var2 = Tessellator.instance;
-        this.mc.renderEngine.bindTexture(this.getJukeboxBackgroundPath());
+        Tessellator tessellator = Tessellator.instance;
+        this.mc.renderEngine.func_110577_a(this.getJukeboxBackgroundPath());
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-        float var3 = 32.0F;
-        var2.startDrawingQuads();
-        var2.setColorOpaque_I(10066329);
-        var2.addVertexWithUV(0.0D, (double)this.height, 0.0D, 0.0D, (double)((float)this.height / var3 + (float)var1));
-        var2.addVertexWithUV((double)this.width, (double)this.height, 0.0D, (double)((float)this.width / var3), (double)((float)this.height / var3 + (float)var1));
-        var2.addVertexWithUV((double)this.width, 0.0D, 0.0D, (double)((float)this.width / var3), (double)(0 + var1));
-        var2.addVertexWithUV(0.0D, 0.0D, 0.0D, 0.0D, (double)(0 + var1));
-        var2.draw();
+        float f = 32.0F;
+        tessellator.startDrawingQuads();
+        tessellator.setColorOpaque_I(10066329);
+        tessellator.addVertexWithUV(0.0D, (double)this.height, 0.0D, 0.0D, (double)((float)this.height / f + (float)i));
+        tessellator.addVertexWithUV((double)this.width, (double)this.height, 0.0D, (double)((float)this.width / f), (double)((float)this.height / f + (float)i));
+        tessellator.addVertexWithUV((double)this.width, 0.0D, 0.0D, (double)((float)this.width / f), (double)(0 + i));
+        tessellator.addVertexWithUV(0.0D, 0.0D, 0.0D, 0.0D, (double)(0 + i));
+        tessellator.draw();
     }
 
     /**
      * Draws the screen and all the components in it.
      */
-    public void drawScreen(int var1, int var2, float var3)
+    public void drawScreen(int x, int y, float something)
     {
-        super.drawScreen(var1, var2, var3);
-        Minecraft var4 = Minecraft.getMinecraft();
-        ScaledResolution var5 = new ScaledResolution(var4.gameSettings, var4.displayWidth, var4.displayHeight);
-        int var6 = var5.getScaledWidth();
-        int var7 = var5.getScaledHeight();
-        this.menuX = var6 + var4.displayWidth / 2;
-        this.menuY = var7 + var4.displayHeight / 2;
+        super.drawScreen(x, y, something);
+        Minecraft mc = Minecraft.getMinecraft();
+        ScaledResolution scaledresolution = new ScaledResolution(mc.gameSettings, mc.displayWidth, mc.displayHeight);
+        int width = scaledresolution.getScaledWidth();
+        int height = scaledresolution.getScaledHeight();
+        this.menuX = width + mc.displayWidth / 2;
+        this.menuY = height + mc.displayHeight / 2;
 
         if (this.useJukebox())
         {
@@ -94,139 +97,136 @@ public class MenuBase extends GuiScreen
         }
 
         this.jukeButtonList.clear();
-        this.jukeButton = new GuiButtonItemStack(this.fontRenderer, var4, 0, this.getJukeboxButtonX(), this.getJukeboxButtonY(), new ItemStack(Block.jukebox));
+        this.jukeButton = new GuiButtonItemStack(this.fontRenderer, mc, 0, this.getJukeboxButtonX(), this.getJukeboxButtonY(), new ItemStack(Block.jukebox));
         this.menuButton = new GuiMenuButton(0, this.getListButtonX(), this.getListButtonY(), 58, 20, "Menu List");
-        this.menuButton.drawButton(this.mc, var1, var2);
+        this.menuButton.drawButton(this.mc, x, y);
 
         if (this.useJukebox())
         {
-            this.jukeButton.drawButton(this.mc, var1, var2);
+            this.jukeButton.drawButton(this.mc, x, y);
         }
 
         if (this.jukeboxOpen)
         {
             this.drawJukeboxBackground(0);
-            this.jukeButton.drawButton(this.mc, var1, var2);
-            this.menuButton.drawButton(this.mc, var1, var2);
+            this.jukeButton.drawButton(this.mc, x, y);
+            this.menuButton.drawButton(this.mc, x, y);
             GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
             GL11.glEnable(GL11.GL_BLEND);
             GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
-            GL11.glBindTexture(GL11.GL_TEXTURE_2D, this.jukeboxTexture);
-            int var8 = var6 - var6 / 2 - 75;
-            int var9 = var7 - var7 / 2 - 37;
-            new ScaledResolution(var4.gameSettings, var4.displayWidth, var4.displayHeight);
-            this.drawTexturedModalRect(var8, var9, 0, 0, 151, this.jukeHeight);
-            var4.renderEngine.resetBoundTexture();
-            this.fontRenderer.drawStringWithShadow(this.jukebox.getCurrentSongName(), var8 + 76 - this.fontRenderer.getStringWidth(this.jukebox.getCurrentSongName()) / 2, var9 + 14, 16777215);
+            mc.renderEngine.func_110577_a(TEXTURE_JUKEBOX);
+            int centerX = width - width / 2 - 75;
+            int centerY = height - height / 2 - 37;
+            new ScaledResolution(mc.gameSettings, mc.displayWidth, mc.displayHeight);
+            this.drawTexturedModalRect(centerX, centerY, 0, 0, 151, this.jukeHeight);
+            this.fontRenderer.drawStringWithShadow(this.jukebox.getCurrentSongName(), centerX + 76 - this.fontRenderer.getStringWidth(this.jukebox.getCurrentSongName()) / 2, centerY + 14, 16777215);
 
             if (!this.jukebox.isMusicPlaying() && !MenuBaseConfig.muteMusic)
             {
-                this.fontRenderer.drawStringWithShadow("Loading Song...", var8 + 76 - this.fontRenderer.getStringWidth("Loading Song...") / 2, var9 - 11, 16777215);
+                this.fontRenderer.drawStringWithShadow("Loading Song...", centerX + 76 - this.fontRenderer.getStringWidth("Loading Song...") / 2, centerY - 11, 16777215);
             }
 
-            this.jukeButtonList.add(new GuiButton(0, var8 + 12, var9 + 42, 58, 20, "Music: " + (MenuBaseConfig.muteMusic ? "Off" : "On")));
-            this.jukeButtonList.add(new GuiButton(1, var8 + 83, var9 + 42, 58, 20, "Loop: " + (MenuBaseConfig.loopMusic ? "On" : "Off")));
-            this.jukeButtonList.add(new GuiButton(2, var8 + 125, var9 + 8, 20, 20, ">"));
-            this.jukeButtonList.add(new GuiButton(3, var8 + 7, var9 + 8, 20, 20, "<"));
+            this.jukeButtonList.add(new GuiButton(0, centerX + 12, centerY + 42, 58, 20, "Music: " + (MenuBaseConfig.muteMusic ? "Off" : "On")));
+            this.jukeButtonList.add(new GuiButton(1, centerX + 83, centerY + 42, 58, 20, "Loop: " + (MenuBaseConfig.loopMusic ? "On" : "Off")));
+            this.jukeButtonList.add(new GuiButton(2, centerX + 125, centerY + 8, 20, 20, ">"));
+            this.jukeButtonList.add(new GuiButton(3, centerX + 7, centerY + 8, 20, 20, "<"));
 
-            for (int var11 = 0; var11 < this.jukeButtonList.size(); ++var11)
+            for (int k = 0; k < this.jukeButtonList.size(); ++k)
             {
-                GuiButton var12 = (GuiButton)this.jukeButtonList.get(var11);
-                var12.drawButton(this.mc, var1, var2);
+                GuiButton jukebutton = (GuiButton)this.jukeButtonList.get(k);
+                jukebutton.drawButton(this.mc, x, y);
             }
         }
     }
 
     public int getJukeboxButtonX()
     {
-        Minecraft var1 = Minecraft.getMinecraft();
-        ScaledResolution var2 = new ScaledResolution(var1.gameSettings, var1.displayWidth, var1.displayHeight);
-        int var3 = var2.getScaledWidth();
-        int var4 = var2.getScaledHeight();
-        return var3 / 2 + 192;
+        Minecraft mc = Minecraft.getMinecraft();
+        ScaledResolution scaledresolution = new ScaledResolution(mc.gameSettings, mc.displayWidth, mc.displayHeight);
+        int width = scaledresolution.getScaledWidth();
+        int height = scaledresolution.getScaledHeight();
+        return width / 2 + 192;
     }
 
     public int getJukeboxButtonY()
     {
-        Minecraft var1 = Minecraft.getMinecraft();
-        ScaledResolution var2 = new ScaledResolution(var1.gameSettings, var1.displayWidth, var1.displayHeight);
-        int var3 = var2.getScaledWidth();
-        int var4 = var2.getScaledHeight();
+        Minecraft mc = Minecraft.getMinecraft();
+        ScaledResolution scaledresolution = new ScaledResolution(mc.gameSettings, mc.displayWidth, mc.displayHeight);
+        int width = scaledresolution.getScaledWidth();
+        int height = scaledresolution.getScaledHeight();
         return 4;
     }
 
     public int getListButtonX()
     {
-        Minecraft var1 = Minecraft.getMinecraft();
-        ScaledResolution var2 = new ScaledResolution(var1.gameSettings, var1.displayWidth, var1.displayHeight);
-        int var3 = var2.getScaledWidth();
-        int var4 = var2.getScaledHeight();
+        Minecraft mc = Minecraft.getMinecraft();
+        ScaledResolution scaledresolution = new ScaledResolution(mc.gameSettings, mc.displayWidth, mc.displayHeight);
+        int width = scaledresolution.getScaledWidth();
+        int height = scaledresolution.getScaledHeight();
         return 5;
     }
 
     public int getListButtonY()
     {
-        Minecraft var1 = Minecraft.getMinecraft();
-        ScaledResolution var2 = new ScaledResolution(var1.gameSettings, var1.displayWidth, var1.displayHeight);
-        int var3 = var2.getScaledWidth();
-        int var4 = var2.getScaledHeight();
-        return var4 - 25;
+        Minecraft mc = Minecraft.getMinecraft();
+        ScaledResolution scaledresolution = new ScaledResolution(mc.gameSettings, mc.displayWidth, mc.displayHeight);
+        int width = scaledresolution.getScaledWidth();
+        int height = scaledresolution.getScaledHeight();
+        return height - 25;
     }
 
     /**
      * Called when the mouse is clicked.
      */
-    protected void mouseClicked(int var1, int var2, int var3)
+    protected void mouseClicked(int par1, int par2, int par3)
     {
-        if (var3 == 0)
+        if (par3 == 0)
         {
-            if (this.jukeButton != null && this.jukeButton.mousePressed(this.mc, var1, var2))
+            if (this.jukeButton != null && this.jukeButton.mousePressed(this.mc, par1, par2))
             {
                 this.mc.sndManager.playSoundFX("random.click", 1.0F, 1.0F);
                 this.jukeboxOpen = !this.jukeboxOpen;
             }
 
-            if (this.menuButton != null && this.menuButton.mousePressed(this.mc, var1, var2))
+            if (this.menuButton != null && this.menuButton.mousePressed(this.mc, par1, par2))
             {
                 this.mc.sndManager.playSoundFX("random.click", 1.0F, 1.0F);
                 this.menuButton.clickButton();
             }
 
-            int var4;
-            GuiButton var5;
+            int l;
+            GuiButton guibutton;
 
-            for (var4 = 0; var4 < this.jukeButtonList.size(); ++var4)
+            for (l = 0; l < this.jukeButtonList.size(); ++l)
             {
-                var5 = (GuiButton)this.jukeButtonList.get(var4);
+                guibutton = (GuiButton)this.jukeButtonList.get(l);
 
-                if (var5.mousePressed(this.mc, var1, var2))
+                if (guibutton.mousePressed(this.mc, par1, par2))
                 {
-                    this.selectedButton = var5;
+                    this.selectedButton = guibutton;
                     this.mc.sndManager.playSoundFX("random.click", 1.0F, 1.0F);
 
-                    if (var5.id == 0)
+                    if (guibutton.id == 0)
                     {
                         this.jukebox.toggleMute();
                     }
 
-                    if (var5.id == 1)
+                    if (guibutton.id == 1)
                     {
                         this.jukebox.toggleLoop();
                     }
 
-                    if (var5.id == 2)
+                    if (guibutton.id == 2)
                     {
                         ++MenuBaseConfig.musicIndex;
                         MenuBaseConfig.setProperty("musicIndex", String.valueOf(MenuBaseConfig.musicIndex));
-                        this.jukebox.defaultMusic = false;
                         this.jukebox.muteMusic();
                     }
 
-                    if (var5.id == 3)
+                    if (guibutton.id == 3)
                     {
                         --MenuBaseConfig.musicIndex;
                         MenuBaseConfig.setProperty("musicIndex", String.valueOf(MenuBaseConfig.musicIndex));
-                        this.jukebox.defaultMusic = false;
                         this.jukebox.muteMusic();
                     }
                 }
@@ -234,15 +234,15 @@ public class MenuBase extends GuiScreen
 
             if (!this.jukeboxOpen)
             {
-                for (var4 = 0; var4 < this.buttonList.size(); ++var4)
+                for (l = 0; l < this.buttonList.size(); ++l)
                 {
-                    var5 = (GuiButton)this.buttonList.get(var4);
+                    guibutton = (GuiButton)this.buttonList.get(l);
 
-                    if (var5.mousePressed(this.mc, var1, var2))
+                    if (guibutton.mousePressed(this.mc, par1, par2))
                     {
-                        this.selectedButton = var5;
+                        this.selectedButton = guibutton;
                         this.mc.sndManager.playSoundFX("random.click", 1.0F, 1.0F);
-                        this.actionPerformed(var5);
+                        this.actionPerformed(guibutton);
                     }
                 }
             }
@@ -253,11 +253,11 @@ public class MenuBase extends GuiScreen
      * Called when the mouse is moved or a mouse button is released.  Signature: (mouseX, mouseY, which) which==-1 is
      * mouseMove, which==0 or which==1 is mouseUp
      */
-    protected void mouseMovedOrUp(int var1, int var2, int var3)
+    protected void mouseMovedOrUp(int par1, int par2, int par3)
     {
-        if (this.selectedButton != null && var3 == 0 && !this.jukeboxOpen)
+        if (this.selectedButton != null && par3 == 0 && !this.jukeboxOpen)
         {
-            this.selectedButton.mouseReleased(var1, var2);
+            this.selectedButton.mouseReleased(par1, par2);
             this.selectedButton = null;
         }
     }
@@ -272,19 +272,19 @@ public class MenuBase extends GuiScreen
         return "1.0.0";
     }
 
-    public String getMusicFileName()
+    public ResourceLocation getIconPath()
     {
-        return null;
+        return new ResourceLocation("mainmenu_api", "textures/icons/minecraft.png");
     }
 
-    public String getIconPath()
+    public ResourceLocation getJukeboxBackgroundPath()
     {
-        return "/net/aetherteam/mainmenu_api/icons/minecraft.png";
+        return new ResourceLocation("mainmenu_api", "textures/icons/dirt.png");
     }
 
-    public String getJukeboxBackgroundPath()
+    public String[] getPlaylist()
     {
-        return "/net/aetherteam/mainmenu_api/icons/dirt.png";
+        return new String[0];
     }
 
     public boolean useJukebox()

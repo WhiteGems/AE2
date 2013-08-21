@@ -4,30 +4,29 @@ import com.google.common.eventbus.EventBus;
 import cpw.mods.fml.common.DummyModContainer;
 import cpw.mods.fml.common.LoadController;
 import cpw.mods.fml.common.ModMetadata;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 
 public class PlayerCoreAPI extends DummyModContainer
 {
-    public static ArrayList playerCoreClientList = new ArrayList();
-    public static ArrayList playerCoreServerList = new ArrayList();
-    public static ArrayList playerCoreRenderList = new ArrayList();
+    public static ArrayList < Class<? >> playerCoreClientList = new ArrayList();
+    public static ArrayList < Class<? >> playerCoreServerList = new ArrayList();
+    public static ArrayList < Class<? >> playerCoreRenderList = new ArrayList();
 
     public PlayerCoreAPI()
     {
         super(new ModMetadata());
-        ModMetadata var1 = this.getMetadata();
-        var1.modId = "playercoreapi";
-        var1.name = "PlayerCoreAPI";
-        var1.version = "0.1";
-        var1.credits = "Jaryt23";
-        var1.authorList = Arrays.asList(new String[] {"AetherTeam; cafaxo"});
-        var1.description = "";
-        var1.url = "";
-        var1.updateUrl = "";
-        var1.screenshots = new String[0];
-        var1.logoFile = "";
+        ModMetadata meta = this.getMetadata();
+        meta.modId = "playercoreapi";
+        meta.name = "PlayerCoreAPI";
+        meta.version = "0.1";
+        meta.credits = "Jaryt23";
+        meta.authorList = Arrays.asList(new String[] {"AetherTeam; cafaxo"});
+        meta.description = "";
+        meta.url = "";
+        meta.updateUrl = "";
+        meta.screenshots = new String[0];
+        meta.logoFile = "";
     }
 
     public static void register(PlayerCoreType var0, Class var1)
@@ -47,11 +46,10 @@ public class PlayerCoreAPI extends DummyModContainer
         }
     }
 
-    public boolean registerBus(EventBus var1, LoadController var2)
+    public boolean registerBus(EventBus bus, LoadController controller)
     {
         return true;
     }
-
 
     public enum PlayerCoreType
     {
@@ -59,5 +57,4 @@ public class PlayerCoreAPI extends DummyModContainer
         SERVER,
         RENDER;
     }
-
 }

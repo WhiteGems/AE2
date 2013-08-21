@@ -17,14 +17,14 @@ public class ContainerAetherCreative extends Container
     public EntityPlayer player;
     public InventoryAether inv;
 
-    public ContainerAetherCreative(EntityPlayer var1)
+    public ContainerAetherCreative(EntityPlayer par1EntityPlayer)
     {
-        this.player = var1;
-        InventoryPlayer var2 = var1.inventory;
+        this.player = par1EntityPlayer;
+        InventoryPlayer var2 = par1EntityPlayer.inventory;
 
         if (!this.player.worldObj.isRemote)
         {
-            this.inv = Aether.getServerPlayer(var1).inv;
+            this.inv = Aether.getServerPlayer(par1EntityPlayer).inv;
         }
 
         int var3;
@@ -50,7 +50,7 @@ public class ContainerAetherCreative extends Container
         this.scrollTo(0.0F);
     }
 
-    public boolean canInteractWith(EntityPlayer var1)
+    public boolean canInteractWith(EntityPlayer par1EntityPlayer)
     {
         return true;
     }
@@ -58,15 +58,15 @@ public class ContainerAetherCreative extends Container
     /**
      * Callback for when the crafting matrix is changed.
      */
-    public void onCraftMatrixChanged(IInventory var1)
+    public void onCraftMatrixChanged(IInventory par1IInventory)
     {
-        super.onCraftMatrixChanged(var1);
+        super.onCraftMatrixChanged(par1IInventory);
     }
 
-    public void scrollTo(float var1)
+    public void scrollTo(float par1)
     {
         int var2 = this.itemList.size() / 9 - 5 + 1;
-        int var3 = (int)((double)(var1 * (float)var2) + 0.5D);
+        int var3 = (int)((double)(par1 * (float)var2) + 0.5D);
 
         if (var3 < 0)
         {
@@ -96,7 +96,7 @@ public class ContainerAetherCreative extends Container
         return this.itemList.size() > 45;
     }
 
-    protected void retrySlotClick(int var1, int var2, boolean var3, EntityPlayer var4) {}
+    protected void retrySlotClick(int par1, int par2, boolean par3, EntityPlayer par4EntityPlayer) {}
 
     /**
      * Looks for changes made in the container, sends them to every listener.
@@ -109,11 +109,11 @@ public class ContainerAetherCreative extends Container
     /**
      * Called when a player shift-clicks on a slot. You must override this or you will crash when someone does that.
      */
-    public ItemStack transferStackInSlot(EntityPlayer var1, int var2)
+    public ItemStack transferStackInSlot(EntityPlayer par1EntityPlayer, int par2)
     {
-        if (var2 >= this.inventorySlots.size() - 9 && var2 < this.inventorySlots.size())
+        if (par2 >= this.inventorySlots.size() - 9 && par2 < this.inventorySlots.size())
         {
-            Slot var3 = (Slot)this.inventorySlots.get(var2);
+            Slot var3 = (Slot)this.inventorySlots.get(par2);
 
             if (var3 != null && var3.getHasStack())
             {

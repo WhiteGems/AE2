@@ -25,9 +25,9 @@ public class BlockAetherGrass extends BlockAether implements IAetherBlock
     public static Icon sprGoldTop;
     public static Icon sprGoldSide;
 
-    protected BlockAetherGrass(int var1)
+    protected BlockAetherGrass(int blockID)
     {
-        super(var1, Material.ground);
+        super(blockID, Material.ground);
         this.setTickRandomly(true);
         this.setHardness(0.6F);
         this.setStepSound(Block.soundGrassFootstep);
@@ -36,11 +36,11 @@ public class BlockAetherGrass extends BlockAether implements IAetherBlock
     /**
      * returns a list of blocks with the same ID, but different meta (eg: wood returns 4 blocks)
      */
-    public void getSubBlocks(int var1, CreativeTabs var2, List var3)
+    public void getSubBlocks(int par1, CreativeTabs par2CreativeTabs, List par3List)
     {
-        for (int var4 = 0; var4 < 1; ++var4)
+        for (int meta = 0; meta < 1; ++meta)
         {
-            var3.add(new ItemStack(var1, 1, var4));
+            par3List.add(new ItemStack(par1, 1, meta));
         }
     }
 
@@ -48,25 +48,25 @@ public class BlockAetherGrass extends BlockAether implements IAetherBlock
      * Called when the player destroys a block with an item that can harvest it. (i, j, k) are the coordinates of the
      * block and l is the block's subtype/damage.
      */
-    public void harvestBlock(World var1, EntityPlayer var2, int var3, int var4, int var5, int var6)
+    public void harvestBlock(World world, EntityPlayer entityplayer, int x, int y, int z, int meta)
     {
-        var2.addStat(StatList.mineBlockStatArray[this.blockID], 1);
-        var2.addExhaustion(0.025F);
+        entityplayer.addStat(StatList.mineBlockStatArray[this.blockID], 1);
+        entityplayer.addExhaustion(0.025F);
 
-        if (!var1.isRemote)
+        if (!world.isRemote)
         {
-            ItemStack var7;
+            ItemStack stack;
 
-            if (var2.getCurrentEquippedItem() != null && var2.getCurrentEquippedItem().itemID == AetherItems.SkyrootShovel.itemID)
+            if (entityplayer.getCurrentEquippedItem() != null && entityplayer.getCurrentEquippedItem().itemID == AetherItems.SkyrootShovel.itemID)
             {
-                var2.addStat(StatList.mineBlockStatArray[this.blockID], 1);
-                var7 = new ItemStack(AetherBlocks.AetherDirt.blockID, 2, 1);
-                this.dropBlockAsItem_do(var1, var3, var4, var5, var7);
+                entityplayer.addStat(StatList.mineBlockStatArray[this.blockID], 1);
+                stack = new ItemStack(AetherBlocks.AetherDirt.blockID, 2, 1);
+                this.dropBlockAsItem_do(world, x, y, z, stack);
             }
             else
             {
-                var7 = new ItemStack(AetherBlocks.AetherDirt.blockID, 1, 1);
-                this.dropBlockAsItem_do(var1, var3, var4, var5, var7);
+                stack = new ItemStack(AetherBlocks.AetherDirt.blockID, 1, 1);
+                this.dropBlockAsItem_do(world, x, y, z, stack);
             }
         }
     }
@@ -74,24 +74,24 @@ public class BlockAetherGrass extends BlockAether implements IAetherBlock
     /**
      * Called upon block activation (right click on the block.)
      */
-    public boolean onBlockActivated(World var1, int var2, int var3, int var4, EntityPlayer var5, int var6, float var7, float var8, float var9)
+    public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer entityPlayer, int par6, float par7, float par8, float par9)
     {
-        if (var5 == null)
+        if (entityPlayer == null)
         {
             return false;
         }
         else
         {
-            ItemStack var10 = var5.getCurrentEquippedItem();
+            ItemStack itemStack = entityPlayer.getCurrentEquippedItem();
 
-            if (var10 == null)
+            if (itemStack == null)
             {
                 return false;
             }
-            else if (var10.itemID == AetherItems.AmbrosiumShard.itemID && var1.getBlockMetadata(var2, var3, var4) == 0 && !var1.isRemote)
+            else if (itemStack.itemID == AetherItems.AmbrosiumShard.itemID && world.getBlockMetadata(x, y, z) == 0 && !world.isRemote)
             {
-                var1.setBlockMetadataWithNotify(var2, var3, var4, 1, 2);
-                --var10.stackSize;
+                world.setBlockMetadataWithNotify(x, y, z, 1, 2);
+                --itemStack.stackSize;
                 return true;
             }
             else
@@ -104,30 +104,30 @@ public class BlockAetherGrass extends BlockAether implements IAetherBlock
     /**
      * From the specified side and block metadata retrieves the blocks texture. Args: side, metadata
      */
-    public Icon getIcon(int var1, int var2)
+    public Icon getIcon(int side, int meta)
     {
-        if (var1 == 1)
+        if (side == 1)
         {
-            if (var2 == 0)
+            if (meta == 0)
             {
                 return sprTop;
             }
 
-            if (var2 == 1)
+            if (meta == 1)
             {
                 return sprGoldTop;
             }
         }
 
-        return var1 == 0 ? AetherBlocks.AetherDirt.getIcon(var1, var2) : (var2 == 1 ? sprGoldSide : sprSide);
+        return side == 0 ? AetherBlocks.AetherDirt.getIcon(side, meta) : (meta == 1 ? sprGoldSide : sprSide);
     }
 
     /**
      * Returns the ID of the items to drop on destruction.
      */
-    public int idDropped(int var1, Random var2, int var3)
+    public int idDropped(int i, Random random, int meta)
     {
-        return AetherBlocks.AetherDirt.idDropped(0, var2, var3);
+        return AetherBlocks.AetherDirt.idDropped(0, random, meta);
     }
 
     @SideOnly(Side.CLIENT)
@@ -135,16 +135,16 @@ public class BlockAetherGrass extends BlockAether implements IAetherBlock
     /**
      * A randomly called display update to be able to add particles or other items for display
      */
-    public void randomDisplayTick(World var1, int var2, int var3, int var4, Random var5)
+    public void randomDisplayTick(World world, int x, int y, int z, Random random)
     {
-        super.randomDisplayTick(var1, var2, var3, var4, var5);
+        super.randomDisplayTick(world, x, y, z, random);
 
-        if (var5.nextInt(4) == 0 && var1.getBlockMetadata(var2, var3, var4) == 1 && var1.isRemote)
+        if (random.nextInt(4) == 0 && world.getBlockMetadata(x, y, z) == 1 && world.isRemote)
         {
-            for (int var6 = 0; var6 < 6; ++var6)
+            for (int l = 0; l < 6; ++l)
             {
-                EntityGoldenFX var7 = new EntityGoldenFX(var1, (double)((float)var2 + var5.nextFloat()), (double)((float)var3 + 1.1F), (double)((float)var4 + var5.nextFloat()), 0.0D, 0.0D, 0.0D, true);
-                FMLClientHandler.instance().getClient().effectRenderer.addEffect(var7);
+                EntityGoldenFX obj = new EntityGoldenFX(world, (double)((float)x + random.nextFloat()), (double)((float)y + 1.1F), (double)((float)z + random.nextFloat()), 0.0D, 0.0D, 0.0D, true);
+                FMLClientHandler.instance().getClient().effectRenderer.addEffect(obj);
             }
         }
     }
@@ -152,28 +152,28 @@ public class BlockAetherGrass extends BlockAether implements IAetherBlock
     /**
      * Ticks the block if it's been scheduled
      */
-    public void updateTick(World var1, int var2, int var3, int var4, Random var5)
+    public void updateTick(World world, int x, int y, int z, Random random)
     {
-        if (!var1.isRemote)
+        if (!world.isRemote)
         {
-            if (var1.getBlockLightValue(var2, var3 + 1, var4) < 4 && var1.getBlockMaterial(var2, var3 + 1, var4).getCanBlockGrass())
+            if (world.getBlockLightValue(x, y + 1, z) < 4 && world.getBlockMaterial(x, y + 1, z).getCanBlockGrass())
             {
-                if (var5.nextInt(4) != 0 || Block.blocksList[var1.getBlockId(var2, var3 + 1, var4)] instanceof BlockWall)
+                if (random.nextInt(4) != 0 || Block.blocksList[world.getBlockId(x, y + 1, z)] instanceof BlockWall)
                 {
                     return;
                 }
 
-                var1.setBlock(var2, var3, var4, AetherBlocks.AetherDirt.blockID);
+                world.setBlock(x, y, z, AetherBlocks.AetherDirt.blockID);
             }
-            else if (var1.getBlockLightValue(var2, var3 + 1, var4) >= 9)
+            else if (world.getBlockLightValue(x, y + 1, z) >= 9)
             {
-                int var6 = var2 + var5.nextInt(3) - 1;
-                int var7 = var3 + var5.nextInt(5) - 3;
-                int var8 = var4 + var5.nextInt(3) - 1;
+                int l = x + random.nextInt(3) - 1;
+                int i1 = y + random.nextInt(5) - 3;
+                int j1 = z + random.nextInt(3) - 1;
 
-                if (var1.getBlockId(var6, var7, var8) == AetherBlocks.AetherDirt.blockID && var1.getBlockLightValue(var6, var7 + 1, var8) >= 4 && !var1.getBlockMaterial(var6, var7 + 1, var8).getCanBlockGrass())
+                if (world.getBlockId(l, i1, j1) == AetherBlocks.AetherDirt.blockID && world.getBlockLightValue(l, i1 + 1, j1) >= 4 && !world.getBlockMaterial(l, i1 + 1, j1).getCanBlockGrass())
                 {
-                    var1.setBlock(var6, var7, var8, AetherBlocks.AetherGrass.blockID, 0, 2);
+                    world.setBlock(l, i1, j1, AetherBlocks.AetherGrass.blockID, 0, 2);
                 }
             }
         }
@@ -183,12 +183,11 @@ public class BlockAetherGrass extends BlockAether implements IAetherBlock
      * When this method is called, your block should register all the icons it needs with the given IconRegister. This
      * is the only chance you get to register icons.
      */
-    public void registerIcons(IconRegister var1)
+    public void registerIcons(IconRegister par1IconRegister)
     {
-        sprTop = var1.registerIcon("Aether:Aether Grass Top");
-        sprSide = var1.registerIcon("Aether:Aether Grass Side");
-        sprGoldTop = var1.registerIcon("Aether:Enchanted Aether Grass Top");
-        sprGoldSide = var1.registerIcon("Aether:Enchanted Aether Grass Side");
-        super.registerIcons(var1);
+        sprTop = par1IconRegister.registerIcon("aether:Aether Grass Top");
+        sprSide = par1IconRegister.registerIcon("aether:Aether Grass Side");
+        sprGoldTop = par1IconRegister.registerIcon("aether:Enchanted Aether Grass Top");
+        sprGoldSide = par1IconRegister.registerIcon("aether:Enchanted Aether Grass Side");
     }
 }

@@ -6,9 +6,9 @@ import net.minecraft.world.IBlockAccess;
 
 public class BlockAerogel extends BlockAether implements IAetherBlock
 {
-    public BlockAerogel(int var1)
+    public BlockAerogel(int blockID)
     {
-        super(var1, Material.rock);
+        super(blockID, Material.rock);
         this.setHardness(1.0F);
         this.setResistance(2000.0F);
         this.setLightOpacity(3);
@@ -36,8 +36,8 @@ public class BlockAerogel extends BlockAether implements IAetherBlock
      * Returns true if the given side of this block type should be rendered, if the adjacent block is at the given
      * coordinates.  Args: blockAccess, x, y, z, side
      */
-    public boolean shouldSideBeRendered(IBlockAccess var1, int var2, int var3, int var4, int var5)
+    public boolean shouldSideBeRendered(IBlockAccess iblockaccess, int i, int j, int k, int l)
     {
-        return super.shouldSideBeRendered(var1, var2, var3, var4, 1 - var5);
+        return super.shouldSideBeRendered(iblockaccess, i, j, k, 1 - l);
     }
 }

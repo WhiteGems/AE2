@@ -11,22 +11,23 @@ import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.ResourceLocation;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;
 
 public class GuiNotificationList extends GuiScreen
 {
+    private static final ResourceLocation TEXTURE_DIALOGUE = new ResourceLocation("aether", "textures/gui/dialogue.png");
+    private static final ResourceLocation TEXTURE_PARTY = new ResourceLocation("aether", "textures/gui/party.png");
     private GuiYSlider sbar;
     private float sbarVal = 0.0F;
-    private int backgroundTexture;
-    private int dialogueTexture;
     private int xParty;
     private int yParty;
     private int wParty;
     private int hParty;
     private GuiScreen parent;
-    private ArrayList notificationSlots = new ArrayList();
+    private ArrayList<GuiNotificationSlot> notificationSlots = new ArrayList();
 
     /** Reference to the Minecraft object. */
     Minecraft mc;
@@ -37,26 +38,24 @@ public class GuiNotificationList extends GuiScreen
     private GuiButton joinButton;
     private EntityPlayer player;
 
-    public GuiNotificationList(EntityPlayer var1, GuiScreen var2)
+    public GuiNotificationList(EntityPlayer player, GuiScreen parent)
     {
-        this.player = var1;
+        this.player = player;
         this.mc = FMLClientHandler.instance().getClient();
-        this.backgroundTexture = this.mc.renderEngine.getTexture("/net/aetherteam/aether/client/sprites/gui/party.png");
-        this.dialogueTexture = this.mc.renderEngine.getTexture("/net/aetherteam/aether/client/sprites/gui/dialogue.png");
         this.wParty = 256;
         this.hParty = 256;
-        this.parent = var2;
+        this.parent = parent;
         this.updateScreen();
     }
 
     /**
      * Fired when a key is typed. This is the equivalent of KeyListener.keyTyped(KeyEvent e).
      */
-    protected void keyTyped(char var1, int var2)
+    protected void keyTyped(char charTyped, int keyTyped)
     {
-        super.keyTyped(var1, var2);
+        super.keyTyped(charTyped, keyTyped);
 
-        if (var2 == Minecraft.getMinecraft().gameSettings.keyBindInventory.keyCode)
+        if (keyTyped == Minecraft.getMinecraft().gameSettings.keyBindInventory.keyCode)
         {
             this.mc.displayGuiScreen((GuiScreen)null);
             this.mc.setIngameFocus();
@@ -83,68 +82,68 @@ public class GuiNotificationList extends GuiScreen
     /**
      * Called when the mouse is clicked.
      */
-    protected void mouseClicked(int var1, int var2, int var3)
+    protected void mouseClicked(int par1, int par2, int par3)
     {
-        if (var3 == 0)
+        if (par3 == 0)
         {
             if (this.totalHeight > 103)
             {
-                this.sbar.mousePressed(this.mc, var1, var2);
+                this.sbar.mousePressed(this.mc, par1, par2);
             }
 
-            for (int var4 = 0; var4 < this.notificationSlots.size(); ++var4)
+            for (int l = 0; l < this.notificationSlots.size(); ++l)
             {
-                int var5 = (int)((float)var2 + this.sbar.sliderValue * (float)(this.totalHeight - 103));
-                GuiNotificationSlot var6 = (GuiNotificationSlot)this.notificationSlots.get(var4);
+                int y = (int)((float)par2 + this.sbar.sliderValue * (float)(this.totalHeight - 103));
+                GuiNotificationSlot notificationSlot = (GuiNotificationSlot)this.notificationSlots.get(l);
 
-                if (var6.mousePressed(this.mc, var1, var5) && var2 < this.yParty + 50)
+                if (notificationSlot.mousePressed(this.mc, par1, y) && par2 < this.yParty + 50)
                 {
-                    var6.selected = true;
+                    notificationSlot.selected = true;
                     this.slotIsSelected = true;
-                    this.selectedNotificationSlot = var6;
+                    this.selectedNotificationSlot = notificationSlot;
                     this.mc.sndManager.playSoundFX("random.click", 1.0F, 1.0F);
 
-                    for (int var7 = 0; var7 < this.notificationSlots.size(); ++var7)
+                    for (int rr = 0; rr < this.notificationSlots.size(); ++rr)
                     {
-                        GuiNotificationSlot var8 = (GuiNotificationSlot)this.notificationSlots.get(var7);
+                        GuiNotificationSlot notificationSlot2 = (GuiNotificationSlot)this.notificationSlots.get(rr);
 
-                        if (var8 != var6)
+                        if (notificationSlot2 != notificationSlot)
                         {
-                            var8.selected = false;
+                            notificationSlot2.selected = false;
                         }
                     }
 
                     return;
                 }
 
-                var6.selected = false;
+                notificationSlot.selected = false;
                 this.slotIsSelected = false;
             }
         }
 
-        super.mouseClicked(var1, var2, var3);
+        super.mouseClicked(par1, par2, par3);
     }
 
     /**
      * Called when the mouse is moved or a mouse button is released.  Signature: (mouseX, mouseY, which) which==-1 is
      * mouseMove, which==0 or which==1 is mouseUp
      */
-    protected void mouseMovedOrUp(int var1, int var2, int var3)
+    protected void mouseMovedOrUp(int par1, int par2, int par3)
     {
-        if (var3 == 0)
+        if (par3 == 0)
         {
-            this.sbar.mouseReleased(var1, var2);
+            this.sbar.mouseReleased(par1, par2);
         }
 
-        super.mouseMovedOrUp(var1, var2, var3);
+        super.mouseMovedOrUp(par1, par2, par3);
     }
 
     /**
      * Fired when a control is clicked. This is the equivalent of ActionListener.actionPerformed(ActionEvent e).
      */
-    protected void actionPerformed(GuiButton var1)
+    protected void actionPerformed(GuiButton button)
     {
-        switch (var1.id)
+        switch (button.id)
         {
             case 0:
                 this.mc.displayGuiScreen(this.parent);
@@ -153,9 +152,9 @@ public class GuiNotificationList extends GuiScreen
             case 1:
                 if (this.selectedNotificationSlot != null)
                 {
-                    Notification var2 = this.selectedNotificationSlot.notification;
-                    NotificationType var3 = var2.getType();
-                    this.mc.displayGuiScreen(new GuiViewNotification(this.player, var2, this));
+                    Notification notification = this.selectedNotificationSlot.notification;
+                    NotificationType type = notification.getType();
+                    this.mc.displayGuiScreen(new GuiViewNotification(this.player, notification, this));
                 }
         }
     }
@@ -171,12 +170,12 @@ public class GuiNotificationList extends GuiScreen
     /**
      * Draws the screen and all the components in it.
      */
-    public void drawScreen(int var1, int var2, float var3)
+    public void drawScreen(int x, int y, float partialTick)
     {
         this.buttonList.clear();
-        ArrayList var4 = NotificationHandler.instance().getNotifications();
+        ArrayList notificationList = NotificationHandler.instance().getNotifications();
 
-        if (var4.size() != this.notificationSlots.size())
+        if (notificationList.size() != this.notificationSlots.size())
         {
             this.notificationSlots.clear();
             this.slotsCreated = false;
@@ -184,9 +183,9 @@ public class GuiNotificationList extends GuiScreen
 
         this.drawDefaultBackground();
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-        GL11.glBindTexture(GL11.GL_TEXTURE_2D, this.backgroundTexture);
-        int var5 = Mouse.getDWheel();
-        this.sbar.sliderValue -= (float)var5 / 1000.0F;
+        this.mc.renderEngine.func_110577_a(TEXTURE_PARTY);
+        int dmsy = Mouse.getDWheel();
+        this.sbar.sliderValue -= (float)dmsy / 1000.0F;
 
         if (this.sbar.sliderValue > 1.0F)
         {
@@ -198,43 +197,43 @@ public class GuiNotificationList extends GuiScreen
             this.sbar.sliderValue = 0.0F;
         }
 
-        int var6 = this.xParty - 70;
-        int var7 = this.yParty - 84;
-        ScaledResolution var8 = new ScaledResolution(this.mc.gameSettings, this.mc.displayWidth, this.mc.displayHeight);
-        this.drawTexturedModalRect(var6, var7, 0, 0, 141, this.hParty);
+        int centerX = this.xParty - 70;
+        int centerY = this.yParty - 84;
+        ScaledResolution sr = new ScaledResolution(this.mc.gameSettings, this.mc.displayWidth, this.mc.displayHeight);
+        this.drawTexturedModalRect(centerX, centerY, 0, 0, 141, this.hParty);
         this.totalHeight = 0;
-        byte var9 = 100;
-        byte var10 = 20;
-        byte var11 = 2;
+        byte slotW = 100;
+        byte slotH = 20;
+        byte gutter = 2;
         GL11.glEnable(GL11.GL_SCISSOR_TEST);
-        GL11.glScissor((var6 + 14) * var8.getScaleFactor(), (var7 + 35) * var8.getScaleFactor(), var9 * var8.getScaleFactor(), 103 * var8.getScaleFactor());
+        GL11.glScissor((centerX + 14) * sr.getScaleFactor(), (centerY + 35) * sr.getScaleFactor(), slotW * sr.getScaleFactor(), 103 * sr.getScaleFactor());
         GL11.glPushMatrix();
-        this.totalHeight = var4.size() * (var10 + var11);
-        float var12 = -this.sbar.sliderValue * (float)(this.totalHeight - 105);
+        this.totalHeight = notificationList.size() * (slotH + gutter);
+        float sVal = -this.sbar.sliderValue * (float)(this.totalHeight - 105);
 
         if (this.totalHeight > 103)
         {
-            GL11.glTranslatef(0.0F, var12, 0.0F);
+            GL11.glTranslatef(0.0F, sVal, 0.0F);
         }
 
         this.totalHeight = 0;
-        int var13;
+        int scaleFactor;
 
         if (!this.slotsCreated)
         {
-            for (var13 = 0; var13 < var4.size(); ++var13)
+            for (scaleFactor = 0; scaleFactor < notificationList.size(); ++scaleFactor)
             {
-                this.notificationSlots.add(new GuiNotificationSlot((Notification)var4.get(var13), this.notificationSlots.size(), var6 + 15, var7 + this.totalHeight + 30, var9, var10));
-                this.totalHeight += var10 + var11;
+                this.notificationSlots.add(new GuiNotificationSlot((Notification)notificationList.get(scaleFactor), this.notificationSlots.size(), centerX + 15, centerY + this.totalHeight + 30, slotW, slotH));
+                this.totalHeight += slotH + gutter;
             }
 
             this.slotsCreated = true;
         }
 
-        for (var13 = 0; var13 < this.notificationSlots.size(); ++var13)
+        for (scaleFactor = 0; scaleFactor < this.notificationSlots.size(); ++scaleFactor)
         {
-            ((GuiNotificationSlot)this.notificationSlots.get(var13)).drawPartySlot(var6 + 15, var7 + this.totalHeight + 30, var9, var10);
-            this.totalHeight += var10 + var11;
+            ((GuiNotificationSlot)this.notificationSlots.get(scaleFactor)).drawPartySlot(centerX + 15, centerY + this.totalHeight + 30, slotW, slotH);
+            this.totalHeight += slotH + gutter;
         }
 
         GL11.glPopMatrix();
@@ -242,26 +241,24 @@ public class GuiNotificationList extends GuiScreen
 
         if (this.totalHeight > 103)
         {
-            this.sbar.drawButton(this.mc, var1, var2);
+            this.sbar.drawButton(this.mc, x, y);
         }
 
-        this.mc.renderEngine.resetBoundTexture();
-        this.drawString(this.fontRenderer, "Notification List", var6 + 70 - this.fontRenderer.getStringWidth("Notification List") / 2, var7 + 10, 16777215);
+        this.drawString(this.fontRenderer, "Notification List", centerX + 70 - this.fontRenderer.getStringWidth("Notification List") / 2, centerY + 10, 16777215);
 
         if (this.notificationSlots.size() == 0)
         {
             GL11.glPushMatrix();
             GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-            GL11.glBindTexture(GL11.GL_TEXTURE_2D, this.dialogueTexture);
+            this.mc.renderEngine.func_110577_a(TEXTURE_DIALOGUE);
             float var16 = 1.3F;
-            float var14 = var16 - 0.4F;
-            GL11.glTranslatef((float)this.xParty - 100.0F * var16, (float)this.yParty - (float)((this.hParty - 201) / 2) * var14, 0.0F);
-            GL11.glScalef(var16, var14, var16);
+            float scaleFactorY = var16 - 0.4F;
+            GL11.glTranslatef((float)this.xParty - 100.0F * var16, (float)this.yParty - (float)((this.hParty - 201) / 2) * scaleFactorY, 0.0F);
+            GL11.glScalef(var16, scaleFactorY, var16);
             this.drawTexturedModalRect(0, 0, 0, 0, 201, this.hParty - 201);
             GL11.glPopMatrix();
-            this.mc.renderEngine.resetBoundTexture();
-            String var15 = "There are no notifications to display at this time.";
-            this.drawString(this.fontRenderer, var15, var6 + 70 - this.fontRenderer.getStringWidth(var15) / 2, (int)((float)this.yParty - (float)((this.hParty - 241) / 2) * var14), 16777215);
+            String warningLabel = "There are no notifications to display at this time.";
+            this.drawString(this.fontRenderer, warningLabel, centerX + 70 - this.fontRenderer.getStringWidth(warningLabel) / 2, (int)((float)this.yParty - (float)((this.hParty - 241) / 2) * scaleFactorY), 16777215);
         }
 
         this.joinButton = new GuiButton(1, this.xParty + 3, this.yParty + 85 - 28, 58, 20, "View");
@@ -277,7 +274,7 @@ public class GuiNotificationList extends GuiScreen
 
         this.buttonList.add(new GuiButton(0, this.xParty - 60, this.yParty + 85 - 28, 58, 20, "Back"));
         this.buttonList.add(this.joinButton);
-        super.drawScreen(var1, var2, var3);
+        super.drawScreen(x, y, partialTick);
     }
 
     /**
@@ -286,10 +283,10 @@ public class GuiNotificationList extends GuiScreen
     public void updateScreen()
     {
         super.updateScreen();
-        ScaledResolution var1 = new ScaledResolution(this.mc.gameSettings, this.mc.displayWidth, this.mc.displayHeight);
-        int var2 = var1.getScaledWidth();
-        int var3 = var1.getScaledHeight();
-        this.xParty = var2 / 2;
-        this.yParty = var3 / 2;
+        ScaledResolution scaledresolution = new ScaledResolution(this.mc.gameSettings, this.mc.displayWidth, this.mc.displayHeight);
+        int width = scaledresolution.getScaledWidth();
+        int height = scaledresolution.getScaledHeight();
+        this.xParty = width / 2;
+        this.yParty = height / 2;
     }
 }

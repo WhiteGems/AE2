@@ -11,27 +11,28 @@ import net.minecraftforge.client.IRenderHandler;
 
 public class WorldProviderAether extends WorldProviderSurface
 {
+    /** Array for sunrise/sunset colors (RGBA) */
     private float[] colorsSunriseSunset = new float[4];
     public static boolean isDaey = false;
 
     /**
      * Returns array with sunrise/sunset colors
      */
-    public float[] calcSunriseSunsetColors(float var1, float var2)
+    public float[] calcSunriseSunsetColors(float f, float f1)
     {
-        float var3 = 0.4F;
-        float var4 = MathHelper.cos(var1 * (float)Math.PI * 2.0F) - 0.0F;
-        float var5 = -0.0F;
+        float f2 = 0.4F;
+        float f3 = MathHelper.cos(f * (float)Math.PI * 2.0F) - 0.0F;
+        float f4 = -0.0F;
 
-        if (var4 >= var5 - var3 && var4 <= var5 + var3)
+        if (f3 >= f4 - f2 && f3 <= f4 + f2)
         {
-            float var6 = (var4 - var5) / var3 * 0.5F + 0.5F;
-            float var7 = 1.0F - (1.0F - MathHelper.sin(var6 * (float)Math.PI)) * 0.99F;
-            var7 *= var7;
-            this.colorsSunriseSunset[0] = var6 * 0.3F + 0.1F;
-            this.colorsSunriseSunset[1] = var6 * var6 * 0.7F + 0.2F;
-            this.colorsSunriseSunset[2] = var6 * var6 * 0.7F + 0.2F;
-            this.colorsSunriseSunset[3] = var7;
+            float f5 = (f3 - f4) / f2 * 0.5F + 0.5F;
+            float f6 = 1.0F - (1.0F - MathHelper.sin(f5 * (float)Math.PI)) * 0.99F;
+            f6 *= f6;
+            this.colorsSunriseSunset[0] = f5 * 0.3F + 0.1F;
+            this.colorsSunriseSunset[1] = f5 * f5 * 0.7F + 0.2F;
+            this.colorsSunriseSunset[2] = f5 * f5 * 0.7F + 0.2F;
+            this.colorsSunriseSunset[3] = f6;
             return this.colorsSunriseSunset;
         }
         else
@@ -51,10 +52,10 @@ public class WorldProviderAether extends WorldProviderSurface
     /**
      * Will check if the x, z position specified is alright to be set as the map spawn point
      */
-    public boolean canCoordinateBeSpawn(int var1, int var2)
+    public boolean canCoordinateBeSpawn(int i, int j)
     {
-        int var3 = this.worldObj.getFirstUncoveredBlock(var1, var2);
-        return var3 == 0 ? false : Block.blocksList[var3].blockMaterial.isSolid();
+        int k = this.worldObj.getFirstUncoveredBlock(i, j);
+        return k == 0 ? false : Block.blocksList[k].blockMaterial.isSolid();
     }
 
     /**
@@ -89,34 +90,34 @@ public class WorldProviderAether extends WorldProviderSurface
     /**
      * Return Vec3D with biome specific fog color
      */
-    public Vec3 getFogColor(float var1, float var2)
+    public Vec3 getFogColor(float f, float f1)
     {
-        int var3 = 8421536;
+        int i = 8421536;
 
         if (isDaey)
         {
-            var3 = 104890528;
+            i = 104890528;
         }
 
-        float var4 = MathHelper.cos(var1 * (float)Math.PI * 2.0F) * 2.0F + 0.5F;
+        float f2 = MathHelper.cos(f * (float)Math.PI * 2.0F) * 2.0F + 0.5F;
 
-        if (var4 < 0.0F)
+        if (f2 < 0.0F)
         {
-            var4 = 0.0F;
+            f2 = 0.0F;
         }
 
-        if (var4 > 1.0F)
+        if (f2 > 1.0F)
         {
-            var4 = 1.0F;
+            f2 = 1.0F;
         }
 
-        float var5 = (float)(var3 >> 16 & 255) / 255.0F;
-        float var6 = (float)(var3 >> 8 & 255) / 255.0F;
-        float var7 = (float)(var3 & 255) / 255.0F;
-        var5 *= var4 * 0.94F + 0.06F;
-        var6 *= var4 * 0.94F + 0.06F;
-        var7 *= var4 * 0.91F + 0.09F;
-        return this.worldObj.getWorldVec3Pool().getVecFromPool((double)var5, (double)var6, (double)var7);
+        float f3 = (float)(i >> 16 & 255) / 255.0F;
+        float f4 = (float)(i >> 8 & 255) / 255.0F;
+        float f5 = (float)(i & 255) / 255.0F;
+        f3 *= f2 * 0.94F + 0.06F;
+        f4 *= f2 * 0.94F + 0.06F;
+        f5 *= f2 * 0.91F + 0.09F;
+        return this.worldObj.getWorldVec3Pool().getVecFromPool((double)f3, (double)f4, (double)f5);
     }
 
     public String getSaveFolder()

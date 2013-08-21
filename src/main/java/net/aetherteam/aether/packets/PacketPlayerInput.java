@@ -7,38 +7,38 @@ import java.io.DataInputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import net.aetherteam.aether.Aether;
-import net.aetherteam.aether.PlayerBaseAetherServer;
+import net.aetherteam.aether.PlayerAetherServer;
 import net.aetherteam.aether.entities.mounts.MountInput;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.network.packet.Packet250CustomPayload;
 
 public class PacketPlayerInput extends AetherPacket
 {
-    public PacketPlayerInput(int var1)
+    public PacketPlayerInput(int packetID)
     {
-        super(var1);
+        super(packetID);
     }
 
-    public void onPacketReceived(Packet250CustomPayload var1, Player var2)
+    public void onPacketReceived(Packet250CustomPayload packet, Player player)
     {
-        DataInputStream var3 = new DataInputStream(new ByteArrayInputStream(var1.data));
-        new BufferedReader(new InputStreamReader(var3));
+        DataInputStream dat = new DataInputStream(new ByteArrayInputStream(packet.data));
+        new BufferedReader(new InputStreamReader(dat));
 
         try
         {
-            byte var5 = var3.readByte();
-            String var6 = var3.readUTF();
-            ArrayList var7 = new ArrayList();
-            int var8 = var3.readInt();
+            byte ex = dat.readByte();
+            String username = dat.readUTF();
+            ArrayList mountInput = new ArrayList();
+            int inputSize = dat.readInt();
 
-            for (int var9 = 0; var9 < var8; ++var9)
+            for (int playerBase = 0; playerBase < inputSize; ++playerBase)
             {
-                MountInput var10 = MountInput.getInputFromString(var3.readUTF());
-                var7.add(var10);
+                MountInput direction = MountInput.getInputFromString(dat.readUTF());
+                mountInput.add(direction);
             }
 
-            PlayerBaseAetherServer var12 = Aether.getServerPlayer((EntityPlayerMP)var2);
-            var12.mountInput = var7;
+            PlayerAetherServer var12 = Aether.getServerPlayer((EntityPlayerMP)player);
+            var12.mountInput = mountInput;
         }
         catch (Exception var11)
         {

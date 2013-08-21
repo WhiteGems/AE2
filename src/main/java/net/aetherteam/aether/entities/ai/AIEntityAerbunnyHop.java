@@ -7,10 +7,10 @@ public class AIEntityAerbunnyHop extends EntityAIBase
 {
     private EntityAerbunny theEntity;
 
-    public AIEntityAerbunnyHop(EntityAerbunny var1)
+    public AIEntityAerbunnyHop(EntityAerbunny entityAerbunny)
     {
         this.setMutexBits(8);
-        this.theEntity = var1;
+        this.theEntity = entityAerbunny;
     }
 
     /**

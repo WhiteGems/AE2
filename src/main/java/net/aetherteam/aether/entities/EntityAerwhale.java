@@ -5,6 +5,7 @@ import net.aetherteam.aether.items.AetherItems;
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.player.EntityPlayer;
@@ -38,26 +39,21 @@ public class EntityAerwhale extends EntityLiving implements IMob
     public double motionYaw;
     public double motionPitch;
 
-    public EntityAerwhale(World var1)
+    public EntityAerwhale(World world)
     {
-        super(var1);
+        super(world);
         this.isImmuneToFire = true;
         this.aggroCooldown = 0;
         this.prevAttackCounter = 0;
         this.attackCounter = 0;
-        this.texture = this.dir + "/mobs/aerwhale/aerwhale.png";
         this.setSize(2.0F, 2.0F);
-        this.moveSpeed = 0.5F;
-        this.health = 20;
+        this.func_110148_a(SharedMonsterAttributes.field_111263_d).func_111128_a(0.5D);
+        this.func_110148_a(SharedMonsterAttributes.field_111267_a).func_111128_a(20.0D);
+        this.setEntityHealth(20.0F);
         this.rotationYaw = 360.0F * this.rand.nextFloat();
         this.rotationPitch = 90.0F * this.rand.nextFloat() - 45.0F;
         this.ignoreFrustumCheck = true;
         this.aboveBelow = this.rand.nextInt(2);
-    }
-
-    public int getMaxHealth()
-    {
-        return 20;
     }
 
     protected void entityInit()
@@ -82,11 +78,11 @@ public class EntityAerwhale extends EntityLiving implements IMob
     /**
      * Moves the entity based on the specified heading.  Args: strafe, forward
      */
-    public void moveEntityWithHeading(float var1, float var2)
+    public void moveEntityWithHeading(float par1, float par2)
     {
         if (this.isInWater())
         {
-            this.moveFlying(var1, var2, 0.02F);
+            this.moveFlying(par1, par2, 0.02F);
             this.moveEntity(this.motionX, this.motionY, this.motionZ);
             this.motionX *= 0.800000011920929D;
             this.motionY *= 0.800000011920929D;
@@ -94,7 +90,7 @@ public class EntityAerwhale extends EntityLiving implements IMob
         }
         else if (this.handleLavaMovement())
         {
-            this.moveFlying(var1, var2, 0.02F);
+            this.moveFlying(par1, par2, 0.02F);
             this.moveEntity(this.motionX, this.motionY, this.motionZ);
             this.motionX *= 0.5D;
             this.motionY *= 0.5D;
@@ -102,51 +98,51 @@ public class EntityAerwhale extends EntityLiving implements IMob
         }
         else
         {
-            float var3 = 0.91F;
+            float d0 = 0.91F;
 
             if (this.onGround)
             {
-                var3 = 0.54600006F;
-                int var4 = this.worldObj.getBlockId(MathHelper.floor_double(this.posX), MathHelper.floor_double(this.boundingBox.minY) - 1, MathHelper.floor_double(this.posZ));
+                d0 = 0.54600006F;
+                int f3 = this.worldObj.getBlockId(MathHelper.floor_double(this.posX), MathHelper.floor_double(this.boundingBox.minY) - 1, MathHelper.floor_double(this.posZ));
 
-                if (var4 > 0)
+                if (f3 > 0)
                 {
-                    var3 = Block.blocksList[var4].slipperiness * 0.91F;
+                    d0 = Block.blocksList[f3].slipperiness * 0.91F;
                 }
             }
 
-            float var8 = 0.16277136F / (var3 * var3 * var3);
-            this.moveFlying(var1, var2, this.onGround ? 0.1F * var8 : 0.02F);
-            var3 = 0.91F;
+            float f31 = 0.16277136F / (d0 * d0 * d0);
+            this.moveFlying(par1, par2, this.onGround ? 0.1F * f31 : 0.02F);
+            d0 = 0.91F;
 
             if (this.onGround)
             {
-                var3 = 0.54600006F;
-                int var5 = this.worldObj.getBlockId(MathHelper.floor_double(this.posX), MathHelper.floor_double(this.boundingBox.minY) - 1, MathHelper.floor_double(this.posZ));
+                d0 = 0.54600006F;
+                int d1 = this.worldObj.getBlockId(MathHelper.floor_double(this.posX), MathHelper.floor_double(this.boundingBox.minY) - 1, MathHelper.floor_double(this.posZ));
 
-                if (var5 > 0)
+                if (d1 > 0)
                 {
-                    var3 = Block.blocksList[var5].slipperiness * 0.91F;
+                    d0 = Block.blocksList[d1].slipperiness * 0.91F;
                 }
             }
 
             this.moveEntity(this.motionX, this.motionY, this.motionZ);
-            this.motionX *= (double)var3;
-            this.motionY *= (double)var3;
-            this.motionZ *= (double)var3;
+            this.motionX *= (double)d0;
+            this.motionY *= (double)d0;
+            this.motionZ *= (double)d0;
         }
 
         this.prevLimbYaw = this.limbYaw;
-        double var10 = this.posX - this.prevPosX;
-        double var9 = this.posZ - this.prevPosZ;
-        float var7 = MathHelper.sqrt_double(var10 * var10 + var9 * var9) * 4.0F;
+        double d01 = this.posX - this.prevPosX;
+        double d11 = this.posZ - this.prevPosZ;
+        float f4 = MathHelper.sqrt_double(d01 * d01 + d11 * d11) * 4.0F;
 
-        if (var7 > 1.0F)
+        if (f4 > 1.0F)
         {
-            var7 = 1.0F;
+            f4 = 1.0F;
         }
 
-        this.limbYaw += (var7 - this.limbYaw) * 0.4F;
+        this.limbYaw += (f4 - this.limbYaw) * 0.4F;
         this.limbSwing += this.limbYaw;
     }
 
@@ -167,22 +163,22 @@ public class EntityAerwhale extends EntityLiving implements IMob
             this.setPosition(this.posX, 128.0D, this.posZ);
         }
 
-        double[] var1 = new double[] {this.openSpace(0.0F, 0.0F), this.openSpace(45.0F, 0.0F), this.openSpace(0.0F, 45.0F), this.openSpace(-45.0F, 0.0F), this.openSpace(0.0F, -45.0F)};
-        int var2 = 0;
-        int var3;
+        double[] distances = new double[] {this.openSpace(0.0F, 0.0F), this.openSpace(45.0F, 0.0F), this.openSpace(0.0F, 45.0F), this.openSpace(-45.0F, 0.0F), this.openSpace(0.0F, -45.0F)};
+        int longest = 0;
+        int i;
 
-        for (var3 = 1; var3 < 5; ++var3)
+        for (i = 1; i < 5; ++i)
         {
-            if (var1[var3] > var1[var2])
+            if (distances[i] > distances[longest])
             {
-                var2 = var3;
+                longest = i;
             }
         }
 
-        switch (var2)
+        switch (longest)
         {
             case 0:
-                if (var1[0] == 50.0D)
+                if (distances[0] == 50.0D)
                 {
                     this.motionYaw *= 0.8999999761581421D;
                     this.motionPitch *= 0.8999999761581421D;
@@ -243,38 +239,38 @@ public class EntityAerwhale extends EntityLiving implements IMob
         this.motionX *= 0.98D;
         this.motionY *= 0.98D;
         this.motionZ *= 0.98D;
-        var3 = MathHelper.floor_double(this.posX);
-        int var4 = MathHelper.floor_double(this.boundingBox.minY);
-        int var5 = MathHelper.floor_double(this.posZ);
+        i = MathHelper.floor_double(this.posX);
+        int j = MathHelper.floor_double(this.boundingBox.minY);
+        int k = MathHelper.floor_double(this.posZ);
 
-        if (this.motionX > 0.0D && this.worldObj.getBlockId(var3 + 1, var4, var5) != 0)
+        if (this.motionX > 0.0D && this.worldObj.getBlockId(i + 1, j, k) != 0)
         {
             this.motionX = -this.motionX;
             this.motionYaw -= 10.0D;
         }
-        else if (this.motionX < 0.0D && this.worldObj.getBlockId(var3 - 1, var4, var5) != 0)
+        else if (this.motionX < 0.0D && this.worldObj.getBlockId(i - 1, j, k) != 0)
         {
             this.motionX = -this.motionX;
             this.motionYaw += 10.0D;
         }
 
-        if (this.motionY > 0.0D && this.worldObj.getBlockId(var3, var4 + 1, var5) != 0)
+        if (this.motionY > 0.0D && this.worldObj.getBlockId(i, j + 1, k) != 0)
         {
             this.motionY = -this.motionY;
             this.motionPitch -= 10.0D;
         }
-        else if (this.motionY < 0.0D && this.worldObj.getBlockId(var3, var4 - 1, var5) != 0)
+        else if (this.motionY < 0.0D && this.worldObj.getBlockId(i, j - 1, k) != 0)
         {
             this.motionY = -this.motionY;
             this.motionPitch += 10.0D;
         }
 
-        if (this.motionZ > 0.0D && this.worldObj.getBlockId(var3, var4, var5 + 1) != 0)
+        if (this.motionZ > 0.0D && this.worldObj.getBlockId(i, j, k + 1) != 0)
         {
             this.motionZ = -this.motionZ;
             this.motionYaw -= 10.0D;
         }
-        else if (this.motionZ < 0.0D && this.worldObj.getBlockId(var3, var4, var5 - 1) != 0)
+        else if (this.motionZ < 0.0D && this.worldObj.getBlockId(i, j, k - 1) != 0)
         {
             this.motionZ = -this.motionZ;
             this.motionYaw += 10.0D;
@@ -290,31 +286,31 @@ public class EntityAerwhale extends EntityLiving implements IMob
         return Math.sqrt(this.motionX * this.motionX + this.motionY * this.motionY + this.motionZ * this.motionZ);
     }
 
-    private double openSpace(float var1, float var2)
+    private double openSpace(float rotationYawOffset, float rotationPitchOffset)
     {
-        float var3 = this.rotationYaw + var1;
-        float var4 = this.rotationYaw + var1;
-        Vec3 var5 = Vec3.createVectorHelper(this.posX, this.posY, this.posZ);
-        float var6 = MathHelper.cos(-var3 * 0.01745329F - (float)Math.PI);
-        float var7 = MathHelper.sin(-var3 * 0.01745329F - (float)Math.PI);
-        float var8 = MathHelper.cos(-var4 * 0.01745329F);
-        float var9 = MathHelper.sin(-var4 * 0.01745329F);
-        float var10 = var7 * var8;
-        float var12 = var6 * var8;
-        double var13 = 50.0D;
-        Vec3 var15 = var5.addVector((double)var10 * var13, (double)var9 * var13, (double)var12 * var13);
-        MovingObjectPosition var16 = this.worldObj.rayTraceBlocks_do(var5, var15, true);
+        float yaw = this.rotationYaw + rotationYawOffset;
+        float pitch = this.rotationYaw + rotationYawOffset;
+        Vec3 vec3d = Vec3.createVectorHelper(this.posX, this.posY, this.posZ);
+        float f3 = MathHelper.cos(-yaw * 0.01745329F - (float)Math.PI);
+        float f4 = MathHelper.sin(-yaw * 0.01745329F - (float)Math.PI);
+        float f5 = MathHelper.cos(-pitch * 0.01745329F);
+        float f6 = MathHelper.sin(-pitch * 0.01745329F);
+        float f7 = f4 * f5;
+        float f9 = f3 * f5;
+        double d3 = 50.0D;
+        Vec3 vec3d1 = vec3d.addVector((double)f7 * d3, (double)f6 * d3, (double)f9 * d3);
+        MovingObjectPosition movingobjectposition = this.worldObj.clip(vec3d, vec3d1);
 
-        if (var16 == null)
+        if (movingobjectposition == null)
         {
             return 50.0D;
         }
-        else if (var16.typeOfHit == EnumMovingObjectType.TILE)
+        else if (movingobjectposition.typeOfHit == EnumMovingObjectType.TILE)
         {
-            double var17 = (double)var16.blockX - this.posX;
-            double var19 = (double)var16.blockY - this.posY;
-            double var21 = (double)var16.blockZ - this.posZ;
-            return Math.sqrt(var17 * var17 + var19 * var19 + var21 * var21);
+            double i = (double)movingobjectposition.blockX - this.posX;
+            double j = (double)movingobjectposition.blockY - this.posY;
+            double k = (double)movingobjectposition.blockZ - this.posZ;
+            return Math.sqrt(i * i + j * j + k * k);
         }
         else
         {
@@ -324,16 +320,16 @@ public class EntityAerwhale extends EntityLiving implements IMob
 
     private void checkForBeingStuck()
     {
-        long var1 = System.currentTimeMillis();
+        long curtime = System.currentTimeMillis();
 
-        if (var1 > this.checkTime + 3000L)
+        if (curtime > this.checkTime + 3000L)
         {
-            double var3 = this.posX - this.checkX;
-            double var5 = this.posY - this.checkY;
-            double var7 = this.posZ - this.checkZ;
-            double var9 = Math.sqrt(var3 * var3 + var5 * var5 + var7 * var7);
+            double diffx = this.posX - this.checkX;
+            double diffy = this.posY - this.checkY;
+            double diffz = this.posZ - this.checkZ;
+            double distanceTravelled = Math.sqrt(diffx * diffx + diffy * diffy + diffz * diffz);
 
-            if (var9 < 3.0D && !this.isStuckWarning)
+            if (distanceTravelled < 3.0D && !this.isStuckWarning)
             {
                 this.isStuckWarning = true;
             }
@@ -341,21 +337,21 @@ public class EntityAerwhale extends EntityLiving implements IMob
             this.checkX = this.posX;
             this.checkY = this.posY;
             this.checkZ = this.posZ;
-            this.checkTime = var1;
+            this.checkTime = curtime;
         }
     }
 
-    private boolean isCourseTraversable(double var1, double var3, double var5, double var7)
+    private boolean isCourseTraversable(double d, double d1, double d2, double d3)
     {
-        double var9 = (this.waypointX - this.posX) / var7;
-        double var11 = (this.waypointZ - this.posZ) / var7;
-        AxisAlignedBB var13 = this.boundingBox.copy();
+        double d4 = (this.waypointX - this.posX) / d3;
+        double d6 = (this.waypointZ - this.posZ) / d3;
+        AxisAlignedBB axisalignedbb = this.boundingBox.copy();
 
-        for (int var14 = 1; (double)var14 < var7; ++var14)
+        for (int i = 1; (double)i < d3; ++i)
         {
-            var13.offset(var9, this.posY, var11);
+            axisalignedbb.offset(d4, this.posY, d6);
 
-            if (this.worldObj.getCollidingBoundingBoxes(this, var13).size() > 0)
+            if (this.worldObj.getCollidingBoundingBoxes(this, axisalignedbb).size() > 0)
             {
                 return false;
             }
@@ -369,7 +365,7 @@ public class EntityAerwhale extends EntityLiving implements IMob
      */
     protected String getLivingSound()
     {
-        return "aemob.aerwhale.say";
+        return "aether:aemob.aerwhale.say";
     }
 
     /**
@@ -377,7 +373,7 @@ public class EntityAerwhale extends EntityLiving implements IMob
      */
     protected String getHurtSound()
     {
-        return "aemob.aerwhale.die";
+        return "aether:aemob.aerwhale.die";
     }
 
     /**
@@ -385,7 +381,7 @@ public class EntityAerwhale extends EntityLiving implements IMob
      */
     protected String getDeathSound()
     {
-        return "aemob.aerwhale.die";
+        return "aether:aemob.aerwhale.die";
     }
 
     /**
@@ -431,16 +427,16 @@ public class EntityAerwhale extends EntityLiving implements IMob
     /**
      * Called by a player entity when they collide with an entity
      */
-    public void onCollideWithPlayer(EntityPlayer var1) {}
+    public void onCollideWithPlayer(EntityPlayer entityplayer) {}
 
     /**
      * Checks if the entity's current position is a valid location to spawn this entity.
      */
     public boolean getCanSpawnHere()
     {
-        int var1 = MathHelper.floor_double(this.posX);
-        int var2 = MathHelper.floor_double(this.boundingBox.minY);
-        int var3 = MathHelper.floor_double(this.posZ);
-        return this.rand.nextInt(65) == 0 && this.worldObj.checkNoEntityCollision(this.boundingBox) && this.worldObj.getCollidingBoundingBoxes(this, this.boundingBox).size() == 0 && !this.worldObj.isAnyLiquid(this.boundingBox) && this.worldObj.getBlockId(var1, var2 - 1, var3) == AetherBlocks.AetherGrass.blockID && this.worldObj.getBlockId(var1, var2 - 1, var3) != AetherBlocks.Holystone.blockID;
+        int i = MathHelper.floor_double(this.posX);
+        int j = MathHelper.floor_double(this.boundingBox.minY);
+        int k = MathHelper.floor_double(this.posZ);
+        return this.rand.nextInt(65) == 0 && this.worldObj.checkNoEntityCollision(this.boundingBox) && this.worldObj.getCollidingBoundingBoxes(this, this.boundingBox).size() == 0 && !this.worldObj.isAnyLiquid(this.boundingBox) && this.worldObj.getBlockId(i, j - 1, k) == AetherBlocks.AetherGrass.blockID && this.worldObj.getBlockId(i, j - 1, k) != AetherBlocks.Holystone.blockID;
     }
 }

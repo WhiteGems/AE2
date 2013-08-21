@@ -15,104 +15,104 @@ public class ContainerEnchanter extends Container
     private int burnTime = 0;
     private int itemBurnTime = 0;
 
-    public ContainerEnchanter(InventoryPlayer var1, TileEntityEnchanter var2)
+    public ContainerEnchanter(InventoryPlayer inventoryplayer, TileEntityEnchanter tileentityenchanter)
     {
-        this.enchanter = var2;
-        this.addSlotToContainer(new Slot(var2, 0, 56, 17));
-        this.addSlotToContainer(new Slot(var2, 1, 56, 53));
-        this.addSlotToContainer(new SlotFurnace(var1.player, var2, 2, 116, 35));
-        int var3;
+        this.enchanter = tileentityenchanter;
+        this.addSlotToContainer(new Slot(tileentityenchanter, 0, 56, 17));
+        this.addSlotToContainer(new Slot(tileentityenchanter, 1, 56, 53));
+        this.addSlotToContainer(new SlotFurnace(inventoryplayer.player, tileentityenchanter, 2, 116, 35));
+        int j;
 
-        for (var3 = 0; var3 < 3; ++var3)
+        for (j = 0; j < 3; ++j)
         {
-            for (int var4 = 0; var4 < 9; ++var4)
+            for (int k = 0; k < 9; ++k)
             {
-                this.addSlotToContainer(new Slot(var1, var4 + var3 * 9 + 9, 8 + var4 * 18, 84 + var3 * 18));
+                this.addSlotToContainer(new Slot(inventoryplayer, k + j * 9 + 9, 8 + k * 18, 84 + j * 18));
             }
         }
 
-        for (var3 = 0; var3 < 9; ++var3)
+        for (j = 0; j < 9; ++j)
         {
-            this.addSlotToContainer(new Slot(var1, var3, 8 + var3 * 18, 142));
+            this.addSlotToContainer(new Slot(inventoryplayer, j, 8 + j * 18, 142));
         }
     }
 
     /**
      * Called when a player shift-clicks on a slot. You must override this or you will crash when someone does that.
      */
-    public ItemStack transferStackInSlot(EntityPlayer var1, int var2)
+    public ItemStack transferStackInSlot(EntityPlayer entityplayer, int i)
     {
-        ItemStack var3 = null;
-        Slot var4 = (Slot)this.inventorySlots.get(var2);
+        ItemStack itemstack = null;
+        Slot slot = (Slot)this.inventorySlots.get(i);
 
-        if (var4 != null && var4.getHasStack())
+        if (slot != null && slot.getHasStack())
         {
-            ItemStack var5 = var4.getStack();
-            var3 = var5.copy();
+            ItemStack itemstack1 = slot.getStack();
+            itemstack = itemstack1.copy();
 
-            if (var2 == 2)
+            if (i == 2)
             {
-                if (!this.mergeItemStack(var5, 3, 39, true))
+                if (!this.mergeItemStack(itemstack1, 3, 39, true))
                 {
                     return null;
                 }
 
-                var4.onSlotChange(var5, var3);
+                slot.onSlotChange(itemstack1, itemstack);
             }
-            else if (var2 != 1 && var2 != 0)
+            else if (i != 1 && i != 0)
             {
-                if (var2 >= 3 && var2 < 30)
+                if (i >= 3 && i < 30)
                 {
-                    this.mergeItemStack(var5, 30, 39, false);
+                    this.mergeItemStack(itemstack1, 30, 39, false);
                 }
-                else if (var2 >= 30 && var2 < 39 && !this.mergeItemStack(var5, 3, 30, false))
+                else if (i >= 30 && i < 39 && !this.mergeItemStack(itemstack1, 3, 30, false))
                 {
-                    this.mergeItemStack(var5, 3, 30, false);
+                    this.mergeItemStack(itemstack1, 3, 30, false);
                 }
             }
-            else if (!this.mergeItemStack(var5, 3, 39, false))
+            else if (!this.mergeItemStack(itemstack1, 3, 39, false))
             {
                 return null;
             }
 
-            if (var5.stackSize == 0)
+            if (itemstack1.stackSize == 0)
             {
-                var4.putStack((ItemStack)null);
+                slot.putStack((ItemStack)null);
             }
             else
             {
-                var4.onSlotChanged();
+                slot.onSlotChanged();
             }
 
-            if (var5.stackSize == var3.stackSize)
+            if (itemstack1.stackSize == itemstack.stackSize)
             {
                 return null;
             }
         }
 
-        return var3;
+        return itemstack;
     }
 
-    public void updateProgressBar(int var1, int var2)
+    public void updateProgressBar(int i, int j)
     {
-        if (var1 == 0)
+        if (i == 0)
         {
-            this.enchanter.enchantTimeForItem = var2;
+            this.enchanter.enchantTimeForItem = j;
         }
 
-        if (var1 == 1)
+        if (i == 1)
         {
-            this.enchanter.enchantProgress = var2;
+            this.enchanter.enchantProgress = j;
         }
 
-        if (var1 == 2)
+        if (i == 2)
         {
-            this.enchanter.enchantPowerRemaining = var2;
+            this.enchanter.enchantPowerRemaining = j;
         }
     }
 
-    public boolean canInteractWith(EntityPlayer var1)
+    public boolean canInteractWith(EntityPlayer entityplayer)
     {
-        return this.enchanter.isUseableByPlayer(var1);
+        return this.enchanter.isUseableByPlayer(entityplayer);
     }
 }

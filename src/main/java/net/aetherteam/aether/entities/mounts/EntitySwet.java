@@ -6,6 +6,7 @@ import net.aetherteam.aether.items.AetherItems;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityAgeable;
 import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -26,10 +27,11 @@ public class EntitySwet extends EntityAetherAnimal
     public boolean kickoff;
     public boolean friendly;
 
-    public EntitySwet(World var1)
+    public EntitySwet(World world)
     {
-        super(var1);
-        this.health = 25;
+        super(world);
+        this.func_110148_a(SharedMonsterAttributes.field_111267_a).func_111128_a(25.0D);
+        this.setEntityHealth(25.0F);
 
         if (!this.textureSet)
         {
@@ -47,13 +49,11 @@ public class EntitySwet extends EntityAetherAnimal
 
         if (this.textureNum == 1)
         {
-            this.texture = this.dir + "/mobs/swet/swet_blue.png";
-            this.moveSpeed = 1.5F;
+            this.func_110148_a(SharedMonsterAttributes.field_111263_d).func_111128_a(1.5D);
         }
         else
         {
-            this.texture = this.dir + "/mobs/swet/swet_golden.png";
-            this.moveSpeed = 3.0F;
+            this.func_110148_a(SharedMonsterAttributes.field_111263_d).func_111128_a(3.0D);
         }
 
         this.setSize(0.8F, 0.8F);
@@ -91,13 +91,13 @@ public class EntitySwet extends EntityAetherAnimal
     {
         if (this.entityToAttack != null)
         {
-            for (int var1 = 0; var1 < 3; ++var1)
+            for (int list = 0; list < 3; ++list)
             {
-                float var2 = 0.01745278F;
-                double var3 = (double)((float)this.posX + (this.rand.nextFloat() - this.rand.nextFloat()) * 0.3F);
-                double var5 = (double)((float)this.posY + this.height);
-                double var7 = (double)((float)this.posZ + (this.rand.nextFloat() - this.rand.nextFloat()) * 0.3F);
-                this.worldObj.spawnParticle("splash", var3, var5 - 0.25D, var7, 0.0D, 0.0D, 0.0D);
+                float j = 0.01745278F;
+                double entity = (double)((float)this.posX + (this.rand.nextFloat() - this.rand.nextFloat()) * 0.3F);
+                double d1 = (double)((float)this.posY + this.height);
+                double d2 = (double)((float)this.posZ + (this.rand.nextFloat() - this.rand.nextFloat()) * 0.3F);
+                this.worldObj.spawnParticle("splash", entity, d1 - 0.25D, d2, 0.0D, 0.0D, 0.0D);
             }
         }
 
@@ -139,39 +139,36 @@ public class EntitySwet extends EntityAetherAnimal
     /**
      * Called when the mob is falling. Calculates and applies fall damage.
      */
-    public void fall(float var1)
+    public void fall(float f)
     {
         if (!this.friendly)
         {
-            super.fall(var1);
+            super.fall(f);
 
-            if (this.hops >= 3 && this.health > 0)
+            if (this.hops >= 3 && this.func_110143_aJ() > 0.0F)
             {
                 this.dissolve();
             }
         }
     }
 
-    /**
-     * knocks back this entity
-     */
-    public void knockBack(Entity var1, int var2, double var3, double var5)
+    public void knockBack(Entity entity, int i, double d, double d1)
     {
-        if (this.riddenByEntity == null || var1 != this.riddenByEntity)
+        if (this.riddenByEntity == null || entity != this.riddenByEntity)
         {
-            super.knockBack(var1, var2, var3, var5);
+            super.knockBack(entity, (float)i, d, d1);
         }
     }
 
     public void dissolve()
     {
-        for (int var1 = 0; var1 < 50; ++var1)
+        for (int i = 0; i < 50; ++i)
         {
-            float var2 = this.rand.nextFloat() * (float)Math.PI * 2.0F;
-            float var3 = this.rand.nextFloat() * 0.5F + 0.25F;
-            float var4 = MathHelper.sin(var2) * var3;
-            float var5 = MathHelper.cos(var2) * var3;
-            this.worldObj.spawnParticle("splash", this.posX + (double)var4, this.boundingBox.minY + 1.25D, this.posZ + (double)var5, (double)var4 * 1.5D + this.motionX, 4.0D, (double)var5 * 1.5D + this.motionZ);
+            float f = this.rand.nextFloat() * (float)Math.PI * 2.0F;
+            float f1 = this.rand.nextFloat() * 0.5F + 0.25F;
+            float f2 = MathHelper.sin(f) * f1;
+            float f3 = MathHelper.cos(f) * f1;
+            this.worldObj.spawnParticle("splash", this.posX + (double)f2, this.boundingBox.minY + 1.25D, this.posZ + (double)f3, (double)f2 * 1.5D + this.motionX, 4.0D, (double)f3 * 1.5D + this.motionZ);
         }
 
         if (this.riddenByEntity != null)
@@ -191,35 +188,35 @@ public class EntitySwet extends EntityAetherAnimal
         super.setDead();
     }
 
-    public void capturePrey(Entity var1)
+    public void capturePrey(Entity entity)
     {
         this.splorch();
-        this.prevPosX = this.posX = var1.posX;
-        this.prevPosY = this.posY = var1.posY + 0.009999999776482582D;
-        this.prevPosZ = this.posZ = var1.posZ;
-        this.prevRotationYaw = this.rotationYaw = var1.rotationYaw;
-        this.prevRotationPitch = this.rotationPitch = var1.rotationPitch;
-        this.motionX = var1.motionX;
-        this.motionY = var1.motionY;
-        this.motionZ = var1.motionZ;
-        this.setSize(var1.width, var1.height);
+        this.prevPosX = this.posX = entity.posX;
+        this.prevPosY = this.posY = entity.posY + 0.009999999776482582D;
+        this.prevPosZ = this.posZ = entity.posZ;
+        this.prevRotationYaw = this.rotationYaw = entity.rotationYaw;
+        this.prevRotationPitch = this.rotationPitch = entity.rotationPitch;
+        this.motionX = entity.motionX;
+        this.motionY = entity.motionY;
+        this.motionZ = entity.motionZ;
+        this.setSize(entity.width, entity.height);
         this.setPosition(this.posX, this.posY, this.posZ);
-        var1.mountEntity(this);
+        entity.mountEntity(this);
         this.rotationYaw = this.rand.nextFloat() * 360.0F;
     }
 
-    public boolean attackEntityFrom(EntityLiving var1, int var2)
+    public boolean attackEntityFrom(EntityLiving entity, int i)
     {
-        if (this.hops == 3 && var1 == null && this.health > 1)
+        if (this.hops == 3 && entity == null && this.func_110143_aJ() > 1.0F)
         {
-            this.health = 1;
+            this.setEntityHealth(1.0F);
         }
 
-        boolean var3 = super.attackEntityFrom(DamageSource.causeMobDamage(var1), var2);
+        boolean flag = super.attackEntityFrom(DamageSource.causeMobDamage(entity), (float)i);
 
-        if (var3 && this.riddenByEntity != null && this.riddenByEntity instanceof EntityLiving)
+        if (flag && this.riddenByEntity != null && this.riddenByEntity instanceof EntityLiving)
         {
-            if (var1 != null && this.riddenByEntity == var1)
+            if (entity != null && this.riddenByEntity == entity)
             {
                 if (this.rand.nextInt(3) == 0)
                 {
@@ -228,23 +225,23 @@ public class EntitySwet extends EntityAetherAnimal
             }
             else
             {
-                this.riddenByEntity.attackEntityFrom(DamageSource.causeMobDamage(this), var2);
+                this.riddenByEntity.attackEntityFrom(DamageSource.causeMobDamage(this), (float)i);
 
-                if (this.health <= 0)
+                if (this.func_110143_aJ() <= 0.0F)
                 {
                     this.kickoff = true;
                 }
             }
         }
 
-        if (var3 && this.health <= 0)
+        if (flag && this.func_110143_aJ() <= 0.0F)
         {
             this.dissolve();
         }
-        else if (var3 && var1 instanceof EntityLiving && var1.getHealth() > 0 && (this.riddenByEntity == null || var1 != this.riddenByEntity))
+        else if (flag && entity instanceof EntityLiving && entity.func_110143_aJ() > 0.0F && (this.riddenByEntity == null || entity != this.riddenByEntity))
         {
-            this.entityToAttack = var1;
-            this.faceEntity(var1, 180.0F, 180.0F);
+            this.entityToAttack = entity;
+            this.faceEntity(entity, 180.0F, 180.0F);
             this.kickoff = true;
         }
 
@@ -253,7 +250,7 @@ public class EntitySwet extends EntityAetherAnimal
             this.entityToAttack = null;
         }
 
-        return var3;
+        return flag;
     }
 
     public void updateEntityActionState()
@@ -263,7 +260,7 @@ public class EntitySwet extends EntityAetherAnimal
 
         if (!this.friendly || this.riddenByEntity == null)
         {
-            if (this.entityToAttack == null && this.riddenByEntity == null && this.health > 0)
+            if (this.entityToAttack == null && this.riddenByEntity == null && this.func_110143_aJ() > 0.0F)
             {
                 if (this.onGround && this.slimeJumpDelay-- <= 0)
                 {
@@ -300,7 +297,7 @@ public class EntitySwet extends EntityAetherAnimal
                 }
             }
 
-            if (this.entityToAttack != null && this.riddenByEntity == null && this.health > 0)
+            if (this.entityToAttack != null && this.riddenByEntity == null && this.func_110143_aJ() > 0.0F)
             {
                 this.faceEntity(this.entityToAttack, 10.0F, 10.0F);
             }
@@ -329,11 +326,11 @@ public class EntitySwet extends EntityAetherAnimal
 
                 if (this.entityToAttack == null && this.riddenByEntity == null)
                 {
-                    Entity var1 = this.getPrey();
+                    Entity entity = this.getPrey();
 
-                    if (var1 != null)
+                    if (entity != null)
                     {
-                        this.entityToAttack = var1;
+                        this.entityToAttack = entity;
                     }
                 }
                 else if (this.entityToAttack != null && this.riddenByEntity == null)
@@ -408,45 +405,43 @@ public class EntitySwet extends EntityAetherAnimal
     /**
      * (abstract) Protected helper method to write subclass entity data to NBT.
      */
-    public void writeEntityToNBT(NBTTagCompound var1)
+    public void writeEntityToNBT(NBTTagCompound nbttagcompound)
     {
-        super.writeEntityToNBT(var1);
-        var1.setShort("Hops", (short)this.hops);
-        var1.setShort("Flutter", (short)this.flutter);
+        super.writeEntityToNBT(nbttagcompound);
+        nbttagcompound.setShort("Hops", (short)this.hops);
+        nbttagcompound.setShort("Flutter", (short)this.flutter);
 
         if (this.riddenByEntity != null)
         {
             this.gotrider = true;
         }
 
-        var1.setBoolean("GotRider", this.gotrider);
-        var1.setBoolean("Friendly", this.friendly);
-        var1.setBoolean("textureSet", this.textureSet);
-        var1.setShort("textureNum", (short)this.textureNum);
+        nbttagcompound.setBoolean("GotRider", this.gotrider);
+        nbttagcompound.setBoolean("Friendly", this.friendly);
+        nbttagcompound.setBoolean("textureSet", this.textureSet);
+        nbttagcompound.setShort("textureNum", (short)this.textureNum);
     }
 
     /**
      * (abstract) Protected helper method to read subclass entity data from NBT.
      */
-    public void readEntityFromNBT(NBTTagCompound var1)
+    public void readEntityFromNBT(NBTTagCompound nbttagcompound)
     {
-        super.readEntityFromNBT(var1);
-        this.hops = var1.getShort("Hops");
-        this.flutter = var1.getShort("Flutter");
-        this.gotrider = var1.getBoolean("GotRider");
-        this.friendly = var1.getBoolean("Friendly");
-        this.textureSet = var1.getBoolean("textureSet");
-        this.textureNum = var1.getShort("textureNum");
+        super.readEntityFromNBT(nbttagcompound);
+        this.hops = nbttagcompound.getShort("Hops");
+        this.flutter = nbttagcompound.getShort("Flutter");
+        this.gotrider = nbttagcompound.getBoolean("GotRider");
+        this.friendly = nbttagcompound.getBoolean("Friendly");
+        this.textureSet = nbttagcompound.getBoolean("textureSet");
+        this.textureNum = nbttagcompound.getShort("textureNum");
 
         if (this.textureNum == 1)
         {
-            this.texture = "/aether/mobs/swets.png";
-            this.moveSpeed = 1.5F;
+            this.func_110148_a(SharedMonsterAttributes.field_111263_d).func_111128_a(1.5D);
         }
         else
         {
-            this.texture = "/aether/mobs/goldswets.png";
-            this.moveSpeed = 3.0F;
+            this.func_110148_a(SharedMonsterAttributes.field_111263_d).func_111128_a(3.0D);
         }
     }
 
@@ -484,25 +479,25 @@ public class EntitySwet extends EntityAetherAnimal
     /**
      * Applies a velocity to each of the entities pushing them away from each other. Args: entity
      */
-    public void applyEntityCollision(Entity var1)
+    public void applyEntityCollision(Entity entity)
     {
-        if (this.hops == 0 && this.riddenByEntity == null && this.entityToAttack != null && var1 != null && var1 == this.entityToAttack && (var1.ridingEntity == null || !(var1.ridingEntity instanceof EntitySwet)))
+        if (this.hops == 0 && this.riddenByEntity == null && this.entityToAttack != null && entity != null && entity == this.entityToAttack && (entity.ridingEntity == null || !(entity.ridingEntity instanceof EntitySwet)))
         {
-            if (var1.riddenByEntity != null)
+            if (entity.riddenByEntity != null)
             {
-                var1.riddenByEntity.mountEntity(var1);
+                entity.riddenByEntity.mountEntity(entity);
             }
 
-            this.capturePrey(var1);
+            this.capturePrey(entity);
         }
 
-        super.applyEntityCollision(var1);
+        super.applyEntityCollision(entity);
     }
 
     /**
      * Called when a player interacts with a mob. e.g. gets milk from a cow, gets into the saddle on a pig.
      */
-    public boolean interact(EntityPlayer var1)
+    public boolean interact(EntityPlayer entityplayer)
     {
         if (!this.worldObj.isRemote)
         {
@@ -511,7 +506,7 @@ public class EntitySwet extends EntityAetherAnimal
                 return true;
             }
 
-            if ((!this.friendly || this.riddenByEntity != null) && this.riddenByEntity == var1)
+            if ((!this.friendly || this.riddenByEntity != null) && this.riddenByEntity == entityplayer)
             {
                 ;
             }
@@ -522,38 +517,38 @@ public class EntitySwet extends EntityAetherAnimal
 
     protected Entity getPrey()
     {
-        List var1 = this.worldObj.getEntitiesWithinAABBExcludingEntity(this, this.boundingBox.expand(6.0D, 6.0D, 6.0D));
-        int var2 = 0;
-        Entity var3;
+        List list = this.worldObj.getEntitiesWithinAABBExcludingEntity(this, this.boundingBox.expand(6.0D, 6.0D, 6.0D));
+        int i = 0;
+        Entity entity;
 
         while (true)
         {
-            if (var2 >= var1.size())
+            if (i >= list.size())
             {
                 return null;
             }
 
-            var3 = (Entity)var1.get(var2);
+            entity = (Entity)list.get(i);
 
-            if (var3 instanceof EntityLiving && !(var3 instanceof EntitySwet))
+            if (entity instanceof EntityLiving && !(entity instanceof EntitySwet))
             {
                 if (this.friendly)
                 {
-                    if (!(var3 instanceof EntityPlayer))
+                    if (!(entity instanceof EntityPlayer))
                     {
                         break;
                     }
                 }
-                else if (!(var3 instanceof EntityMob))
+                else if (!(entity instanceof EntityMob))
                 {
                     break;
                 }
             }
 
-            ++var2;
+            ++i;
         }
 
-        return var3;
+        return entity;
     }
 
     /**
@@ -562,16 +557,11 @@ public class EntitySwet extends EntityAetherAnimal
      */
     protected void dropFewItems(boolean var1, int var2)
     {
-        ItemStack var3 = new ItemStack(this.textureNum == 1 ? AetherItems.SwettyBall.itemID : AetherItems.SwettyBall.itemID, 6, this.textureNum == 1 ? 1 : 0);
-        this.entityDropItem(var3, 0.0F);
+        ItemStack stack = new ItemStack(this.textureNum == 1 ? AetherItems.SwettyBall.itemID : AetherItems.SwettyBall.itemID, 6, this.textureNum == 1 ? 1 : 0);
+        this.entityDropItem(stack, 0.0F);
     }
 
-    public int getMaxHealth()
-    {
-        return 25;
-    }
-
-    public EntityAgeable createChild(EntityAgeable var1)
+    public EntityAgeable createChild(EntityAgeable entityageable)
     {
         return this;
     }

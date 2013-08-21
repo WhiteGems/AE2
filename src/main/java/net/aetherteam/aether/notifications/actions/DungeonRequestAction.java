@@ -10,48 +10,48 @@ import net.aetherteam.aether.party.members.PartyMember;
 
 public class DungeonRequestAction extends NotificationAction
 {
-    public boolean executeAccept(Notification var1)
+    public boolean executeAccept(Notification notification)
     {
-        PartyMember var2 = PartyController.instance().getMember(var1.getSenderName());
-        Party var3 = PartyController.instance().getParty(var2);
-        PartyMember var4 = PartyController.instance().getMember(var1.getReceiverName());
-        Dungeon var5 = DungeonHandler.instance().getDungeon(var3);
-        boolean var6 = false;
+        PartyMember requester = PartyController.instance().getMember(notification.getSenderName());
+        Party party = PartyController.instance().getParty(requester);
+        PartyMember member = PartyController.instance().getMember(notification.getReceiverName());
+        Dungeon dungeon = DungeonHandler.instance().getDungeon(party);
+        boolean dungeonQueued = false;
 
-        if (var3.hasMember(var4) && var2 != null && var2.canRecruit())
+        if (party.hasMember(member) && requester != null && requester.canRecruit())
         {
-            DungeonHandler.instance().queueMember(var5, var4, true);
-            var6 = true;
+            DungeonHandler.instance().queueMember(dungeon, member, true);
+            dungeonQueued = true;
         }
 
-        NotificationHandler.instance().removeNotification(var1);
-        NotificationHandler.instance().removeSentNotification(var1, true);
-        return var6;
+        NotificationHandler.instance().removeNotification(notification);
+        NotificationHandler.instance().removeSentNotification(notification, true);
+        return dungeonQueued;
     }
 
-    public boolean executeDecline(Notification var1)
+    public boolean executeDecline(Notification notification)
     {
-        PartyMember var2 = PartyController.instance().getMember(var1.getSenderName());
-        Party var3 = PartyController.instance().getParty(var2);
-        PartyMember var4 = PartyController.instance().getMember(var1.getReceiverName());
-        Dungeon var5 = DungeonHandler.instance().getDungeon(var3);
+        PartyMember requester = PartyController.instance().getMember(notification.getSenderName());
+        Party party = PartyController.instance().getParty(requester);
+        PartyMember member = PartyController.instance().getMember(notification.getReceiverName());
+        Dungeon dungeon = DungeonHandler.instance().getDungeon(party);
 
-        if (var5 != null && var3.hasMember(var4) && var2 != null && var2.canRecruit())
+        if (dungeon != null && party.hasMember(member) && requester != null && requester.canRecruit())
         {
-            DungeonHandler.instance().disbandQueue(var5, var3, var5.getControllerX(), var5.getControllerY(), var5.getControllerZ(), var4, true);
+            DungeonHandler.instance().disbandQueue(dungeon, party, dungeon.getControllerX(), dungeon.getControllerY(), dungeon.getControllerZ(), member, true);
         }
 
-        NotificationHandler.instance().removeNotification(var1);
-        NotificationHandler.instance().removeSentNotification(var1, true);
+        NotificationHandler.instance().removeNotification(notification);
+        NotificationHandler.instance().removeSentNotification(notification, true);
         return true;
     }
 
-    public String acceptMessage(Notification var1)
+    public String acceptMessage(Notification notification)
     {
         return "You have been queued into the Dungeon raid!";
     }
 
-    public String failedMessage(Notification var1)
+    public String failedMessage(Notification notification)
     {
         return "Sorry, the dungeon raid request no longer exists :(";
     }

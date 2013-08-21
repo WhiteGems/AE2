@@ -6,8 +6,8 @@ public class ModelPhyg1 extends ModelPig
 {
     public ModelPhyg1() {}
 
-    public ModelPhyg1(float var1)
+    public ModelPhyg1(float f)
     {
-        super(var1);
+        super(f);
     }
 }

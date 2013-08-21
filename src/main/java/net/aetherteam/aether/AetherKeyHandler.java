@@ -2,13 +2,12 @@ package net.aetherteam.aether;
 
 import cpw.mods.fml.client.registry.KeyBindingRegistry;
 import cpw.mods.fml.common.TickType;
+import java.util.EnumSet;
 import net.aetherteam.aether.client.gui.GuiInventoryAether;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityClientPlayerMP;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.settings.KeyBinding;
-
-import java.util.EnumSet;
 
 public class AetherKeyHandler extends KeyBindingRegistry.KeyHandler
 {
@@ -24,34 +23,34 @@ public class AetherKeyHandler extends KeyBindingRegistry.KeyHandler
         return "Aether Inventory";
     }
 
-    public void keyDown(EnumSet var1, KeyBinding var2, boolean var3, boolean var4)
+    public void keyDown(EnumSet<TickType> types, KeyBinding kb, boolean tickEnd, boolean isRepeat)
     {
-        EntityClientPlayerMP var5 = Minecraft.getMinecraft().thePlayer;
+        EntityClientPlayerMP player = Minecraft.getMinecraft().thePlayer;
 
-        if (var2.equals(aetherKeyBinding) && var4)
+        if (kb.equals(aetherKeyBinding) && isRepeat)
         {
             if (Minecraft.getMinecraft().currentScreen != null)
             {
-                Minecraft.getMinecraft().displayGuiScreen(null);
+                Minecraft.getMinecraft().displayGuiScreen((GuiScreen)null);
             }
             else
             {
-                Minecraft.getMinecraft().displayGuiScreen(new GuiInventoryAether(var5));
+                Minecraft.getMinecraft().displayGuiScreen(new GuiInventoryAether(player));
             }
         }
     }
 
-    public void keyUp(EnumSet var1, KeyBinding var2, boolean var3)
+    public void keyUp(EnumSet<TickType> types, KeyBinding kb, boolean tickEnd)
     {
-        EntityClientPlayerMP var4 = Minecraft.getMinecraft().thePlayer;
+        EntityClientPlayerMP player = Minecraft.getMinecraft().thePlayer;
 
-        if (var2.equals(aetherKeyBinding) && Minecraft.getMinecraft().currentScreen != null && Minecraft.getMinecraft().currentScreen instanceof GuiInventoryAether)
+        if (kb.equals(aetherKeyBinding) && Minecraft.getMinecraft().currentScreen != null && Minecraft.getMinecraft().currentScreen instanceof GuiInventoryAether)
         {
             ;
         }
     }
 
-    public EnumSet ticks()
+    public EnumSet<TickType> ticks()
     {
         return EnumSet.of(TickType.CLIENT);
     }

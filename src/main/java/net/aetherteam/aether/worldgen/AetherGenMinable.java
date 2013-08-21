@@ -11,56 +11,56 @@ public class AetherGenMinable extends WorldGenerator
     private int minableBlockId;
     private int numberOfBlocks;
 
-    public AetherGenMinable(int var1, int var2)
+    public AetherGenMinable(int i, int j)
     {
-        this.minableBlockId = var1;
-        this.numberOfBlocks = var2;
+        this.minableBlockId = i;
+        this.numberOfBlocks = j;
     }
 
-    public boolean generate(World var1, Random var2, int var3, int var4, int var5)
+    public boolean generate(World world, Random random, int i, int j, int k)
     {
-        float var6 = var2.nextFloat() * (float)Math.PI;
-        double var7 = (double)((float)(var3 + 8) + MathHelper.sin(var6) * (float)this.numberOfBlocks / 8.0F);
-        double var9 = (double)((float)(var3 + 8) - MathHelper.sin(var6) * (float)this.numberOfBlocks / 8.0F);
-        double var11 = (double)((float)(var5 + 8) + MathHelper.cos(var6) * (float)this.numberOfBlocks / 8.0F);
-        double var13 = (double)((float)(var5 + 8) - MathHelper.cos(var6) * (float)this.numberOfBlocks / 8.0F);
-        double var15 = (double)(var4 + var2.nextInt(3) + 2);
-        double var17 = (double)(var4 + var2.nextInt(3) + 2);
+        float f = random.nextFloat() * (float)Math.PI;
+        double d = (double)((float)(i + 8) + MathHelper.sin(f) * (float)this.numberOfBlocks / 8.0F);
+        double d1 = (double)((float)(i + 8) - MathHelper.sin(f) * (float)this.numberOfBlocks / 8.0F);
+        double d2 = (double)((float)(k + 8) + MathHelper.cos(f) * (float)this.numberOfBlocks / 8.0F);
+        double d3 = (double)((float)(k + 8) - MathHelper.cos(f) * (float)this.numberOfBlocks / 8.0F);
+        double d4 = (double)(j + random.nextInt(3) + 2);
+        double d5 = (double)(j + random.nextInt(3) + 2);
 
-        for (int var19 = 0; var19 <= this.numberOfBlocks; ++var19)
+        for (int l = 0; l <= this.numberOfBlocks; ++l)
         {
-            double var20 = var7 + (var9 - var7) * (double)var19 / (double)this.numberOfBlocks;
-            double var22 = var15 + (var17 - var15) * (double)var19 / (double)this.numberOfBlocks;
-            double var24 = var11 + (var13 - var11) * (double)var19 / (double)this.numberOfBlocks;
-            double var26 = var2.nextDouble() * (double)this.numberOfBlocks / 16.0D;
-            double var28 = (double)(MathHelper.sin((float)var19 * (float)Math.PI / (float)this.numberOfBlocks) + 1.0F) * var26 + 1.0D;
-            double var30 = (double)(MathHelper.sin((float)var19 * (float)Math.PI / (float)this.numberOfBlocks) + 1.0F) * var26 + 1.0D;
-            int var32 = MathHelper.floor_double(var20 - var28 / 2.0D);
-            int var33 = MathHelper.floor_double(var22 - var30 / 2.0D);
-            int var34 = MathHelper.floor_double(var24 - var28 / 2.0D);
-            int var35 = MathHelper.floor_double(var20 + var28 / 2.0D);
-            int var36 = MathHelper.floor_double(var22 + var30 / 2.0D);
-            int var37 = MathHelper.floor_double(var24 + var28 / 2.0D);
+            double d6 = d + (d1 - d) * (double)l / (double)this.numberOfBlocks;
+            double d7 = d4 + (d5 - d4) * (double)l / (double)this.numberOfBlocks;
+            double d8 = d2 + (d3 - d2) * (double)l / (double)this.numberOfBlocks;
+            double d9 = random.nextDouble() * (double)this.numberOfBlocks / 16.0D;
+            double d10 = (double)(MathHelper.sin((float)l * (float)Math.PI / (float)this.numberOfBlocks) + 1.0F) * d9 + 1.0D;
+            double d11 = (double)(MathHelper.sin((float)l * (float)Math.PI / (float)this.numberOfBlocks) + 1.0F) * d9 + 1.0D;
+            int i1 = MathHelper.floor_double(d6 - d10 / 2.0D);
+            int j1 = MathHelper.floor_double(d7 - d11 / 2.0D);
+            int k1 = MathHelper.floor_double(d8 - d10 / 2.0D);
+            int l1 = MathHelper.floor_double(d6 + d10 / 2.0D);
+            int i2 = MathHelper.floor_double(d7 + d11 / 2.0D);
+            int j2 = MathHelper.floor_double(d8 + d10 / 2.0D);
 
-            for (int var38 = var32; var38 <= var35; ++var38)
+            for (int k2 = i1; k2 <= l1; ++k2)
             {
-                double var39 = ((double)var38 + 0.5D - var20) / (var28 / 2.0D);
+                double d12 = ((double)k2 + 0.5D - d6) / (d10 / 2.0D);
 
-                if (var39 * var39 < 1.0D)
+                if (d12 * d12 < 1.0D)
                 {
-                    for (int var41 = var33; var41 <= var36; ++var41)
+                    for (int l2 = j1; l2 <= i2; ++l2)
                     {
-                        double var42 = ((double)var41 + 0.5D - var22) / (var30 / 2.0D);
+                        double d13 = ((double)l2 + 0.5D - d7) / (d11 / 2.0D);
 
-                        if (var39 * var39 + var42 * var42 < 1.0D)
+                        if (d12 * d12 + d13 * d13 < 1.0D)
                         {
-                            for (int var44 = var34; var44 <= var37; ++var44)
+                            for (int i3 = k1; i3 <= j2; ++i3)
                             {
-                                double var45 = ((double)var44 + 0.5D - var24) / (var28 / 2.0D);
+                                double d14 = ((double)i3 + 0.5D - d8) / (d10 / 2.0D);
 
-                                if (var39 * var39 + var42 * var42 + var45 * var45 < 1.0D && var1.getBlockId(var38, var41, var44) == AetherBlocks.Holystone.blockID && var1.getBlockMetadata(var38, var41, var44) <= 1)
+                                if (d12 * d12 + d13 * d13 + d14 * d14 < 1.0D && world.getBlockId(k2, l2, i3) == AetherBlocks.Holystone.blockID && world.getBlockMetadata(k2, l2, i3) <= 1)
                                 {
-                                    var1.setBlock(var38, var41, var44, this.minableBlockId);
+                                    world.setBlock(k2, l2, i3, this.minableBlockId);
                                 }
                             }
                         }

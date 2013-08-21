@@ -12,15 +12,14 @@ public class EntityMimic extends EntityDungeonMob
     public float legs;
     private float legsDirection = 1.0F;
 
-    public EntityMimic(World var1)
+    public EntityMimic(World world)
     {
-        super(var1);
-        this.texture = this.dir + "/mobs/mimic/mimic1.png";
+        super(world);
         this.yOffset = 0.0F;
         this.setSize(1.0F, 2.0F);
-        this.health = 40;
+        this.setEntityHealth(40.0F);
         this.attackStrength = 5;
-        this.entityToAttack = var1.getClosestPlayerToEntity(this, 64.0D);
+        this.entityToAttack = world.getClosestPlayerToEntity(this, 64.0D);
     }
 
     /**
@@ -51,11 +50,11 @@ public class EntityMimic extends EntityDungeonMob
     /**
      * Applies a velocity to each of the entities pushing them away from each other. Args: entity
      */
-    public void applyEntityCollision(Entity var1)
+    public void applyEntityCollision(Entity entity)
     {
-        if (!this.isDead && var1 != null)
+        if (!this.isDead && entity != null)
         {
-            var1.attackEntityFrom(DamageSource.causeMobDamage(this), 4);
+            entity.attackEntityFrom(DamageSource.causeMobDamage(this), 4.0F);
         }
     }
 

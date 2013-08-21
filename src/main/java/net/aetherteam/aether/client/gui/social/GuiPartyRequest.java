@@ -6,13 +6,13 @@ import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.ResourceLocation;
 import org.lwjgl.opengl.GL11;
 
 public class GuiPartyRequest extends GuiScreen
 {
+    private static final ResourceLocation TEXTURE_PARTYMAIN = new ResourceLocation("aether", "textures/gui/partyMain.png");
     private final PartyData pm;
-    private int backgroundTexture;
-    private int easterTexture;
     private int xParty;
     private int yParty;
     private int wParty;
@@ -23,19 +23,17 @@ public class GuiPartyRequest extends GuiScreen
     private EntityPlayer player;
     private GuiScreen parent;
 
-    public GuiPartyRequest(EntityPlayer var1, GuiScreen var2)
+    public GuiPartyRequest(EntityPlayer player, GuiScreen parent)
     {
-        this(new PartyData(), var1, var2);
+        this(new PartyData(), player, parent);
     }
 
-    public GuiPartyRequest(PartyData var1, EntityPlayer var2, GuiScreen var3)
+    public GuiPartyRequest(PartyData pm, EntityPlayer player, GuiScreen parent)
     {
-        this.parent = var3;
-        this.player = var2;
+        this.parent = parent;
+        this.player = player;
         this.mc = FMLClientHandler.instance().getClient();
-        this.pm = var1;
-        this.backgroundTexture = this.mc.renderEngine.getTexture("/net/aetherteam/aether/client/sprites/gui/partyMain.png");
-        this.easterTexture = this.mc.renderEngine.getTexture("/net/aetherteam/aether/client/sprites/gui/partyMain.png");
+        this.pm = pm;
         this.wParty = 256;
         this.hParty = 256;
         this.updateScreen();
@@ -44,11 +42,11 @@ public class GuiPartyRequest extends GuiScreen
     /**
      * Fired when a key is typed. This is the equivalent of KeyListener.keyTyped(KeyEvent e).
      */
-    protected void keyTyped(char var1, int var2)
+    protected void keyTyped(char charTyped, int keyTyped)
     {
-        super.keyTyped(var1, var2);
+        super.keyTyped(charTyped, keyTyped);
 
-        if (var2 == Minecraft.getMinecraft().gameSettings.keyBindInventory.keyCode)
+        if (keyTyped == Minecraft.getMinecraft().gameSettings.keyBindInventory.keyCode)
         {
             this.mc.displayGuiScreen((GuiScreen)null);
             this.mc.setIngameFocus();
@@ -72,9 +70,9 @@ public class GuiPartyRequest extends GuiScreen
     /**
      * Fired when a control is clicked. This is the equivalent of ActionListener.actionPerformed(ActionEvent e).
      */
-    protected void actionPerformed(GuiButton var1)
+    protected void actionPerformed(GuiButton btn)
     {
-        switch (var1.id)
+        switch (btn.id)
         {
             case 0:
                 this.mc.displayGuiScreen(this.parent);
@@ -96,20 +94,18 @@ public class GuiPartyRequest extends GuiScreen
     /**
      * Draws the screen and all the components in it.
      */
-    public void drawScreen(int var1, int var2, float var3)
+    public void drawScreen(int x, int y, float partialTick)
     {
         this.drawDefaultBackground();
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-        GL11.glBindTexture(GL11.GL_TEXTURE_2D, this.backgroundTexture);
-        int var4 = this.xParty - 70;
-        int var5 = this.yParty - 84;
+        this.mc.renderEngine.func_110577_a(TEXTURE_PARTYMAIN);
+        int centerX = this.xParty - 70;
+        int centerY = this.yParty - 84;
         new ScaledResolution(this.mc.gameSettings, this.mc.displayWidth, this.mc.displayHeight);
-        this.drawTexturedModalRect(var4, var5, 0, 0, 141, this.hParty);
-        GL11.glBindTexture(GL11.GL_TEXTURE_2D, this.backgroundTexture);
-        this.mc.renderEngine.resetBoundTexture();
-        String var7 = "Request Party Position";
-        this.drawString(this.fontRenderer, var7, var4 + 69 - this.fontRenderer.getStringWidth(var7) / 2, var5 + 5, 16777215);
-        super.drawScreen(var1, var2, var3);
+        this.drawTexturedModalRect(centerX, centerY, 0, 0, 141, this.hParty);
+        String name = "Request Party Position";
+        this.drawString(this.fontRenderer, name, centerX + 69 - this.fontRenderer.getStringWidth(name) / 2, centerY + 5, 16777215);
+        super.drawScreen(x, y, partialTick);
     }
 
     /**
@@ -118,10 +114,10 @@ public class GuiPartyRequest extends GuiScreen
     public void updateScreen()
     {
         super.updateScreen();
-        ScaledResolution var1 = new ScaledResolution(this.mc.gameSettings, this.mc.displayWidth, this.mc.displayHeight);
-        int var2 = var1.getScaledWidth();
-        int var3 = var1.getScaledHeight();
-        this.xParty = var2 / 2;
-        this.yParty = var3 / 2;
+        ScaledResolution scaledresolution = new ScaledResolution(this.mc.gameSettings, this.mc.displayWidth, this.mc.displayHeight);
+        int width = scaledresolution.getScaledWidth();
+        int height = scaledresolution.getScaledHeight();
+        this.xParty = width / 2;
+        this.yParty = height / 2;
     }
 }

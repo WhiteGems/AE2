@@ -8,18 +8,18 @@ public enum MountInput
     RIGHT,
     JUMP;
 
-    public static MountInput getInputFromString(String var0)
+    public static MountInput getInputFromString(String name)
     {
-        MountInput[] var1 = values();
-        int var2 = var1.length;
+        MountInput[] arr$ = values();
+        int len$ = arr$.length;
 
-        for (int var3 = 0; var3 < var2; ++var3)
+        for (int i$ = 0; i$ < len$; ++i$)
         {
-            MountInput var4 = var1[var3];
+            MountInput direction = arr$[i$];
 
-            if (var4.name().equals(var0))
+            if (direction.name().equals(name))
             {
-                return var4;
+                return direction;
             }
         }
 

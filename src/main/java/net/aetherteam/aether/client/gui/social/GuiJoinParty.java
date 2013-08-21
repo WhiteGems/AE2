@@ -12,22 +12,23 @@ import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.ResourceLocation;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;
 
 public class GuiJoinParty extends GuiScreen
 {
+    private static final ResourceLocation TEXTURE_DIALOGUE = new ResourceLocation("aether", "textures/gui/dialogue.png");
+    private static final ResourceLocation TEXTURE_PARTY = new ResourceLocation("aether", "textures/gui/party.png");
     private GuiYSlider sbar;
     private float sbarVal = 0.0F;
-    private int backgroundTexture;
-    private int dialogueTexture;
     private int xParty;
     private int yParty;
     private int wParty;
     private int hParty;
     private GuiScreen parent;
-    private ArrayList partySlots = new ArrayList();
+    private ArrayList<GuiPartySlot> partySlots = new ArrayList();
 
     /** Reference to the Minecraft object. */
     Minecraft mc;
@@ -38,26 +39,24 @@ public class GuiJoinParty extends GuiScreen
     private GuiButton joinButton;
     private EntityPlayer player;
 
-    public GuiJoinParty(EntityPlayer var1, GuiScreen var2)
+    public GuiJoinParty(EntityPlayer player, GuiScreen parent)
     {
-        this.player = var1;
+        this.player = player;
         this.mc = FMLClientHandler.instance().getClient();
-        this.backgroundTexture = this.mc.renderEngine.getTexture("/net/aetherteam/aether/client/sprites/gui/party.png");
-        this.dialogueTexture = this.mc.renderEngine.getTexture("/net/aetherteam/aether/client/sprites/gui/dialogue.png");
         this.wParty = 256;
         this.hParty = 256;
-        this.parent = var2;
+        this.parent = parent;
         this.updateScreen();
     }
 
     /**
      * Fired when a key is typed. This is the equivalent of KeyListener.keyTyped(KeyEvent e).
      */
-    protected void keyTyped(char var1, int var2)
+    protected void keyTyped(char charTyped, int keyTyped)
     {
-        super.keyTyped(var1, var2);
+        super.keyTyped(charTyped, keyTyped);
 
-        if (var2 == Minecraft.getMinecraft().gameSettings.keyBindInventory.keyCode)
+        if (keyTyped == Minecraft.getMinecraft().gameSettings.keyBindInventory.keyCode)
         {
             this.mc.displayGuiScreen((GuiScreen)null);
             this.mc.setIngameFocus();
@@ -84,74 +83,74 @@ public class GuiJoinParty extends GuiScreen
     /**
      * Called when the mouse is clicked.
      */
-    protected void mouseClicked(int var1, int var2, int var3)
+    protected void mouseClicked(int par1, int par2, int par3)
     {
-        if (var3 == 0)
+        if (par3 == 0)
         {
             if (this.totalHeight > 103)
             {
-                this.sbar.mousePressed(this.mc, var1, var2);
+                this.sbar.mousePressed(this.mc, par1, par2);
             }
 
-            for (int var4 = 0; var4 < this.partySlots.size(); ++var4)
+            for (int l = 0; l < this.partySlots.size(); ++l)
             {
-                int var5 = (int)((float)var2 + this.sbar.sliderValue * (float)(this.totalHeight - 103));
-                GuiPartySlot var6 = (GuiPartySlot)this.partySlots.get(var4);
+                int y = (int)((float)par2 + this.sbar.sliderValue * (float)(this.totalHeight - 103));
+                GuiPartySlot partySlot = (GuiPartySlot)this.partySlots.get(l);
 
-                if (var6.mousePressed(this.mc, var1, var5) && var2 < this.yParty + 50)
+                if (partySlot.mousePressed(this.mc, par1, y) && par2 < this.yParty + 50)
                 {
-                    if (var6.party.getType() != PartyType.OPEN)
+                    if (partySlot.party.getType() != PartyType.OPEN)
                     {
                         this.mc.sndManager.playSoundFX("random.click", 1.0F, 1.5F);
                         return;
                     }
 
-                    var6.selected = true;
+                    partySlot.selected = true;
                     this.slotIsSelected = true;
-                    this.selectedPartySlot = var6;
+                    this.selectedPartySlot = partySlot;
                     this.mc.sndManager.playSoundFX("random.click", 1.0F, 1.0F);
 
-                    for (int var7 = 0; var7 < this.partySlots.size(); ++var7)
+                    for (int rr = 0; rr < this.partySlots.size(); ++rr)
                     {
-                        GuiPartySlot var8 = (GuiPartySlot)this.partySlots.get(var7);
+                        GuiPartySlot partySlot2 = (GuiPartySlot)this.partySlots.get(rr);
 
-                        if (var8 != var6)
+                        if (partySlot2 != partySlot)
                         {
-                            var8.selected = false;
+                            partySlot2.selected = false;
                         }
                     }
 
                     return;
                 }
 
-                var6.selected = false;
+                partySlot.selected = false;
                 this.slotIsSelected = false;
             }
         }
 
-        super.mouseClicked(var1, var2, var3);
+        super.mouseClicked(par1, par2, par3);
     }
 
     /**
      * Called when the mouse is moved or a mouse button is released.  Signature: (mouseX, mouseY, which) which==-1 is
      * mouseMove, which==0 or which==1 is mouseUp
      */
-    protected void mouseMovedOrUp(int var1, int var2, int var3)
+    protected void mouseMovedOrUp(int par1, int par2, int par3)
     {
-        if (var3 == 0)
+        if (par3 == 0)
         {
-            this.sbar.mouseReleased(var1, var2);
+            this.sbar.mouseReleased(par1, par2);
         }
 
-        super.mouseMovedOrUp(var1, var2, var3);
+        super.mouseMovedOrUp(par1, par2, par3);
     }
 
     /**
      * Fired when a control is clicked. This is the equivalent of ActionListener.actionPerformed(ActionEvent e).
      */
-    protected void actionPerformed(GuiButton var1)
+    protected void actionPerformed(GuiButton button)
     {
-        switch (var1.id)
+        switch (button.id)
         {
             case 0:
                 this.mc.displayGuiScreen(this.parent);
@@ -174,24 +173,24 @@ public class GuiJoinParty extends GuiScreen
     /**
      * Draws the screen and all the components in it.
      */
-    public void drawScreen(int var1, int var2, float var3)
+    public void drawScreen(int x, int y, float partialTick)
     {
         this.buttonList.clear();
-        ArrayList var4 = (ArrayList)PartyController.instance().getParties().clone();
-        ArrayList var5 = new ArrayList();
-        Iterator var6 = var4.iterator();
+        ArrayList properList = (ArrayList)PartyController.instance().getParties().clone();
+        ArrayList partyList = new ArrayList();
+        Iterator dmsy = properList.iterator();
 
-        while (var6.hasNext())
+        while (dmsy.hasNext())
         {
-            Party var7 = (Party)var6.next();
+            Party centerX = (Party)dmsy.next();
 
-            if (var7.getType() != PartyType.PRIVATE)
+            if (centerX.getType() != PartyType.PRIVATE)
             {
-                var5.add(var7);
+                partyList.add(centerX);
             }
         }
 
-        if (var5.size() != this.partySlots.size())
+        if (partyList.size() != this.partySlots.size())
         {
             this.partySlots.clear();
             this.slotsCreated = false;
@@ -206,7 +205,7 @@ public class GuiJoinParty extends GuiScreen
 
         this.drawDefaultBackground();
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-        GL11.glBindTexture(GL11.GL_TEXTURE_2D, this.backgroundTexture);
+        this.mc.renderEngine.func_110577_a(TEXTURE_PARTY);
         int var17 = Mouse.getDWheel();
         this.sbar.sliderValue -= (float)var17 / 1000.0F;
 
@@ -221,34 +220,34 @@ public class GuiJoinParty extends GuiScreen
         }
 
         int var18 = this.xParty - 70;
-        int var8 = this.yParty - 84;
-        ScaledResolution var9 = new ScaledResolution(this.mc.gameSettings, this.mc.displayWidth, this.mc.displayHeight);
-        this.drawTexturedModalRect(var18, var8, 0, 0, 141, this.hParty);
+        int centerY = this.yParty - 84;
+        ScaledResolution sr = new ScaledResolution(this.mc.gameSettings, this.mc.displayWidth, this.mc.displayHeight);
+        this.drawTexturedModalRect(var18, centerY, 0, 0, 141, this.hParty);
         this.totalHeight = 0;
-        byte var10 = 100;
-        byte var11 = 20;
-        byte var12 = 2;
+        byte slotW = 100;
+        byte slotH = 20;
+        byte gutter = 2;
         GL11.glEnable(GL11.GL_SCISSOR_TEST);
-        GL11.glScissor((var18 + 14) * var9.getScaleFactor(), (var8 + 35) * var9.getScaleFactor(), var10 * var9.getScaleFactor(), 103 * var9.getScaleFactor());
+        GL11.glScissor((var18 + 14) * sr.getScaleFactor(), (centerY + 35) * sr.getScaleFactor(), slotW * sr.getScaleFactor(), 103 * sr.getScaleFactor());
         GL11.glPushMatrix();
-        this.totalHeight = var5.size() * (var11 + var12);
-        float var13 = -this.sbar.sliderValue * (float)(this.totalHeight - 105);
+        this.totalHeight = partyList.size() * (slotH + gutter);
+        float sVal = -this.sbar.sliderValue * (float)(this.totalHeight - 105);
 
         if (this.totalHeight > 103)
         {
-            GL11.glTranslatef(0.0F, var13, 0.0F);
+            GL11.glTranslatef(0.0F, sVal, 0.0F);
         }
 
         this.totalHeight = 0;
 
         if (!this.slotsCreated)
         {
-            for (int var14 = 0; var14 < var5.size(); ++var14)
+            for (int showNoParties = 0; showNoParties < partyList.size(); ++showNoParties)
             {
-                if (((Party)var5.get(var14)).getType() != PartyType.PRIVATE)
+                if (((Party)partyList.get(showNoParties)).getType() != PartyType.PRIVATE)
                 {
-                    this.partySlots.add(new GuiPartySlot((Party)var5.get(var14), this.partySlots.size(), var18 + 15, var8 + this.totalHeight + 30, var10, var11));
-                    this.totalHeight += var11 + var12;
+                    this.partySlots.add(new GuiPartySlot((Party)partyList.get(showNoParties), this.partySlots.size(), var18 + 15, centerY + this.totalHeight + 30, slotW, slotH));
+                    this.totalHeight += slotH + gutter;
                 }
             }
 
@@ -257,13 +256,13 @@ public class GuiJoinParty extends GuiScreen
 
         boolean var19 = true;
 
-        for (int var15 = 0; var15 < this.partySlots.size(); ++var15)
+        for (int scaleFactor = 0; scaleFactor < this.partySlots.size(); ++scaleFactor)
         {
-            if (((GuiPartySlot)this.partySlots.get(var15)).party.getType() != PartyType.PRIVATE)
+            if (((GuiPartySlot)this.partySlots.get(scaleFactor)).party.getType() != PartyType.PRIVATE)
             {
                 var19 = false;
-                ((GuiPartySlot)this.partySlots.get(var15)).drawPartySlot(var18 + 15, var8 + this.totalHeight + 30, var10, var11);
-                this.totalHeight += var11 + var12;
+                ((GuiPartySlot)this.partySlots.get(scaleFactor)).drawPartySlot(var18 + 15, centerY + this.totalHeight + 30, slotW, slotH);
+                this.totalHeight += slotH + gutter;
             }
         }
 
@@ -272,25 +271,23 @@ public class GuiJoinParty extends GuiScreen
 
         if (this.totalHeight > 103)
         {
-            this.sbar.drawButton(this.mc, var1, var2);
+            this.sbar.drawButton(this.mc, x, y);
         }
 
-        this.mc.renderEngine.resetBoundTexture();
-        this.drawString(this.fontRenderer, "Party List", var18 + 70 - this.fontRenderer.getStringWidth("Party List") / 2, var8 + 10, 16777215);
+        this.drawString(this.fontRenderer, "Party List", var18 + 70 - this.fontRenderer.getStringWidth("Party List") / 2, centerY + 10, 16777215);
 
-        if (var5.size() == 0 || var19)
+        if (partyList.size() == 0 || var19)
         {
             GL11.glPushMatrix();
             GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-            GL11.glBindTexture(GL11.GL_TEXTURE_2D, this.dialogueTexture);
+            this.mc.renderEngine.func_110577_a(TEXTURE_DIALOGUE);
             float var20 = 1.3F;
             GL11.glTranslatef((float)this.xParty - 100.0F * var20, (float)this.yParty - (float)((this.hParty - 201) / 2) * var20, 0.0F);
             GL11.glScalef(var20, var20, var20);
             this.drawTexturedModalRect(0, 0, 0, 0, 201, this.hParty - 201);
             GL11.glPopMatrix();
-            this.mc.renderEngine.resetBoundTexture();
-            String var16 = "There are no parties to display at this time.";
-            this.drawString(this.fontRenderer, var16, var18 + 70 - this.fontRenderer.getStringWidth(var16) / 2, var8 + 75, 16777215);
+            String warningLabel = "There are no parties to display at this time.";
+            this.drawString(this.fontRenderer, warningLabel, var18 + 70 - this.fontRenderer.getStringWidth(warningLabel) / 2, centerY + 75, 16777215);
         }
 
         this.joinButton = new GuiButton(1, this.xParty + 3, this.yParty + 85 - 28, 58, 20, "Join");
@@ -306,7 +303,7 @@ public class GuiJoinParty extends GuiScreen
 
         this.buttonList.add(new GuiButton(0, this.xParty - 60, this.yParty + 85 - 28, 58, 20, "Back"));
         this.buttonList.add(this.joinButton);
-        super.drawScreen(var1, var2, var3);
+        super.drawScreen(x, y, partialTick);
     }
 
     /**
@@ -315,10 +312,10 @@ public class GuiJoinParty extends GuiScreen
     public void updateScreen()
     {
         super.updateScreen();
-        ScaledResolution var1 = new ScaledResolution(this.mc.gameSettings, this.mc.displayWidth, this.mc.displayHeight);
-        int var2 = var1.getScaledWidth();
-        int var3 = var1.getScaledHeight();
-        this.xParty = var2 / 2;
-        this.yParty = var3 / 2;
+        ScaledResolution scaledresolution = new ScaledResolution(this.mc.gameSettings, this.mc.displayWidth, this.mc.displayHeight);
+        int width = scaledresolution.getScaledWidth();
+        int height = scaledresolution.getScaledHeight();
+        this.xParty = width / 2;
+        this.yParty = height / 2;
     }
 }

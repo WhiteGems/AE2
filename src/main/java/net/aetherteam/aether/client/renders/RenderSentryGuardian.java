@@ -4,39 +4,46 @@ import net.aetherteam.aether.client.models.ModelSentryGolemBoss;
 import net.aetherteam.aether.entities.bosses.EntitySentryGuardian;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.entity.RenderLiving;
-import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.util.ResourceLocation;
 import org.lwjgl.opengl.GL11;
 
 public class RenderSentryGuardian extends RenderLiving
 {
-    public RenderSentryGuardian(ModelSentryGolemBoss var1, float var2)
+    private static final ResourceLocation TEXTURE = new ResourceLocation("aether", "textures/mobs/sentrygolemboss/sentryGolemBoss.png");
+    private static final ResourceLocation TEXTURE_RED = new ResourceLocation("aether", "textures/mobs/sentrygolemboss/sentryGolemBoss.png");
+    private static final ResourceLocation TEXTURE_GLOW = new ResourceLocation("aether", "textures/mobs/sentrygolemboss/glow.png");
+    private static final ResourceLocation TEXTURE_GLOW_RED = new ResourceLocation("aether", "textures/mobs/sentrygolemboss/glow_red.png");
+
+    public RenderSentryGuardian(ModelSentryGolemBoss model, float f)
     {
-        super(var1, var2);
-        this.setRenderPassModel(var1);
+        super(model, f);
+        this.setRenderPassModel(model);
     }
 
-    protected int setMarkingBrightness(EntitySentryGuardian var1, int var2, float var3)
+    protected int setMarkingBrightness(EntitySentryGuardian golem, int i, float f)
     {
-        if (var2 != 0)
+        if (i != 0)
         {
             return -1;
         }
         else
         {
-            if (!var1.getHasBeenAttacked())
+            if (!golem.getHasBeenAttacked())
             {
-                this.loadTexture("/net/aetherteam/aether/client/sprites/mobs/sentrygolemboss/glow.png");
+                this.renderManager.renderEngine.func_110577_a(TEXTURE_GLOW);
             }
             else
             {
-                this.loadTexture("/net/aetherteam/aether/client/sprites/mobs/sentrygolemboss/glow_red.png");
+                this.renderManager.renderEngine.func_110577_a(TEXTURE_GLOW_RED);
             }
 
             float var4 = 1.0F;
             GL11.glEnable(GL11.GL_BLEND);
             GL11.glBlendFunc(GL11.GL_ONE, GL11.GL_ONE);
 
-            if (!var1.getActivePotionEffects().isEmpty())
+            if (!golem.getActivePotionEffects().isEmpty())
             {
                 GL11.glDepthMask(false);
             }
@@ -58,8 +65,13 @@ public class RenderSentryGuardian extends RenderLiving
     /**
      * Queries whether should render the specified pass or not.
      */
-    protected int shouldRenderPass(EntityLiving var1, int var2, float var3)
+    protected int shouldRenderPass(EntityLivingBase entityliving, int i, float f)
     {
-        return this.setMarkingBrightness((EntitySentryGuardian)var1, var2, var3);
+        return this.setMarkingBrightness((EntitySentryGuardian)entityliving, i, f);
+    }
+
+    protected ResourceLocation func_110775_a(Entity entity)
+    {
+        return ((EntitySentryGuardian)entity).getHasBeenAttacked() ? TEXTURE_RED : TEXTURE;
     }
 }

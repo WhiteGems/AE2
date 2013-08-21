@@ -4,10 +4,10 @@ public class TrackedMobSpawnerCoord extends TrackedCoord
 {
     private String mobID;
 
-    public TrackedMobSpawnerCoord(int var1, int var2, int var3, String var4)
+    public TrackedMobSpawnerCoord(int x, int y, int z, String mobID)
     {
-        super(var1, var2, var3);
-        this.mobID = var4;
+        super(x, y, z);
+        this.mobID = mobID;
     }
 
     public String getMobID()

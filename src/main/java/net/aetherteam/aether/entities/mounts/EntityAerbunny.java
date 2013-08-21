@@ -11,6 +11,7 @@ import net.aetherteam.aether.entities.mounts_old.RidingHandler;
 import net.aetherteam.aether.entities.mounts_old.RidingHandlerAerbunny;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityAgeable;
+import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.EntityAIAvoidEntity;
 import net.minecraft.entity.ai.EntityAISwimming;
 import net.minecraft.entity.ai.EntityAIWander;
@@ -26,6 +27,8 @@ import net.minecraft.world.World;
 public class EntityAerbunny extends EntityAetherAnimal implements Ridable
 {
     public AIEntityEatBlock aiEatGrass;
+
+    /** Number of ticks since last jump */
     private int jumpTicks;
     private int jumps;
     public RidingHandler ridinghandler;
@@ -37,21 +40,21 @@ public class EntityAerbunny extends EntityAetherAnimal implements Ridable
     public Entity runFrom;
     public float puffiness;
 
-    public EntityAerbunny(World var1)
+    public EntityAerbunny(World world)
     {
-        super(var1);
+        super(world);
         this.aiEatGrass = new AIEntityEatBlock(this, AetherBlocks.AetherGrass, AetherBlocks.AetherDirt);
-        this.moveSpeed = 2.5F;
         this.getNavigator().setAvoidsWater(true);
         this.tasks.addTask(1, new EntityAISwimming(this));
-        this.tasks.addTask(2, new EntityAIAvoidEntity(this, EntityPlayer.class, 16.0F, 2.6F, 2.8F));
-        this.tasks.addTask(3, new EntityAIWander(this, 2.5F));
+        this.tasks.addTask(2, new EntityAIAvoidEntity(this, EntityPlayer.class, 16.0F, 2.5999999046325684D, 2.799999952316284D));
+        this.tasks.addTask(3, new EntityAIWander(this, 2.5D));
         this.tasks.addTask(4, new EntityAIWatchClosest(this, EntityPlayer.class, 10.0F));
         this.tasks.addTask(5, this.aiEatGrass);
         this.tasks.addTask(6, new AIEntityAerbunnyHop(this));
-        this.texture = this.dir + "/mobs/aerbunny/aerbunny.png";
+        this.func_110148_a(SharedMonsterAttributes.field_111263_d).func_111128_a(2.5D);
         this.setSize(0.4F, 0.4F);
-        this.health = 6;
+        this.func_110148_a(SharedMonsterAttributes.field_111267_a).func_111128_a(5.0D);
+        this.setEntityHealth(5.0F);
         this.age = this.rand.nextInt(64);
         this.mate = 0;
         this.ignoreFrustumCheck = true;
@@ -62,7 +65,7 @@ public class EntityAerbunny extends EntityAetherAnimal implements Ridable
      * Checks if the entity is in range to render by using the past in distance and comparing it to its average edge
      * length * 64 * renderDistanceWeight Args: distance
      */
-    public boolean isInRangeToRenderDist(double var1)
+    public boolean isInRangeToRenderDist(double par1)
     {
         return true;
     }
@@ -80,7 +83,7 @@ public class EntityAerbunny extends EntityAetherAnimal implements Ridable
      */
     protected void jump()
     {
-        for (int var1 = 0; var1 < 5; ++var1)
+        for (int multiply = 0; multiply < 5; ++multiply)
         {
             Aether.proxy.spawnCloudSmoke(this.worldObj, this.posX, this.posY + 0.5D, this.posZ, new Random(), Double.valueOf(0.5D));
         }
@@ -95,10 +98,10 @@ public class EntityAerbunny extends EntityAetherAnimal implements Ridable
         return this.dataWatcher.getWatchableObjectInt(16);
     }
 
-    public void setPuffiness(int var1)
+    public void setPuffiness(int i)
     {
         Integer var2 = Integer.valueOf(this.dataWatcher.getWatchableObjectInt(16));
-        this.dataWatcher.updateObject(16, Integer.valueOf(var1));
+        this.dataWatcher.updateObject(16, Integer.valueOf(i));
     }
 
     protected void entityInit()
@@ -155,7 +158,7 @@ public class EntityAerbunny extends EntityAetherAnimal implements Ridable
     /**
      * Called when the mob is falling. Calculates and applies fall damage.
      */
-    protected void fall(float var1) {}
+    protected void fall(float f) {}
 
     /**
      * Checks if this entity is inside of an opaque block
@@ -168,41 +171,41 @@ public class EntityAerbunny extends EntityAetherAnimal implements Ridable
     /**
      * (abstract) Protected helper method to write subclass entity data to NBT.
      */
-    public void writeEntityToNBT(NBTTagCompound var1)
+    public void writeEntityToNBT(NBTTagCompound nbttagcompound)
     {
-        super.writeEntityToNBT(var1);
-        var1.setBoolean("Fear", this.fear);
-        var1.setShort("RepAge", (short)this.age);
-        var1.setShort("RepMate", (short)this.mate);
+        super.writeEntityToNBT(nbttagcompound);
+        nbttagcompound.setBoolean("Fear", this.fear);
+        nbttagcompound.setShort("RepAge", (short)this.age);
+        nbttagcompound.setShort("RepMate", (short)this.mate);
     }
 
     /**
      * (abstract) Protected helper method to read subclass entity data from NBT.
      */
-    public void readEntityFromNBT(NBTTagCompound var1)
+    public void readEntityFromNBT(NBTTagCompound nbttagcompound)
     {
-        super.readEntityFromNBT(var1);
-        this.fear = var1.getBoolean("Fear");
-        this.age = var1.getShort("RepAge");
-        this.mate = var1.getShort("RepMate");
+        super.readEntityFromNBT(nbttagcompound);
+        this.fear = nbttagcompound.getBoolean("Fear");
+        this.age = nbttagcompound.getShort("RepAge");
+        this.mate = nbttagcompound.getShort("RepMate");
     }
 
     /**
      * Called when the entity is attacked.
      */
-    public boolean attackEntityFrom(DamageSource var1, int var2)
+    public boolean attackEntityFrom(DamageSource damagesource, float i)
     {
-        return var1.getEntity() instanceof EntityPlayer && this.getRidingHandler().getRider() instanceof EntityPlayer ? false : super.attackEntityFrom(var1, var2);
+        return damagesource.getEntity() instanceof EntityPlayer && this.getRidingHandler().getRider() instanceof EntityPlayer ? false : super.attackEntityFrom(damagesource, i);
     }
 
     public void cloudPoop()
     {
-        double var1 = (double)(this.rand.nextFloat() - 0.5F);
-        double var5 = (double)(this.rand.nextFloat() - 0.5F);
-        double var7 = this.posX + var1 * 0.4000000059604645D;
-        double var9 = this.boundingBox.minY;
-        double var11 = this.posZ + var1 * 0.4000000059604645D;
-        this.worldObj.spawnParticle("flame", var7, var9, var11, 0.0D, -0.07500000298023224D, 0.0D);
+        double a = (double)(this.rand.nextFloat() - 0.5F);
+        double c = (double)(this.rand.nextFloat() - 0.5F);
+        double d = this.posX + a * 0.4000000059604645D;
+        double e = this.boundingBox.minY;
+        double f = this.posZ + a * 0.4000000059604645D;
+        this.worldObj.spawnParticle("flame", d, e, f, 0.0D, -0.07500000298023224D, 0.0D);
     }
 
     /**
@@ -213,33 +216,33 @@ public class EntityAerbunny extends EntityAetherAnimal implements Ridable
         return this.moveForward != 0.0F;
     }
 
-    public EntityAnimal spawnBabyAnimal(EntityAnimal var1)
+    public EntityAnimal spawnBabyAnimal(EntityAnimal entityanimal)
     {
         return new EntityAerbunny(this.worldObj);
     }
 
-    public boolean isWheat(ItemStack var1)
+    public boolean isWheat(ItemStack itemstack)
     {
-        return var1.itemID == Item.wheat.itemID;
+        return itemstack.itemID == Item.wheat.itemID;
     }
 
     /**
      * Called when a player interacts with a mob. e.g. gets milk from a cow, gets into the saddle on a pig.
      */
-    public boolean interact(EntityPlayer var1)
+    public boolean interact(EntityPlayer entityplayer)
     {
-        ItemStack var2 = var1.inventory.getCurrentItem();
+        ItemStack itemstack = entityplayer.inventory.getCurrentItem();
 
-        if (var2 != null && this.isWheat(var2))
+        if (itemstack != null && this.isWheat(itemstack))
         {
-            return super.interact(var1);
+            return super.interact(entityplayer);
         }
         else
         {
             if (this.riddenByEntity == null && !this.getRidingHandler().isBeingRidden())
             {
-                this.getRidingHandler().setRider(var1);
-                this.worldObj.playSoundAtEntity(this, "aemob.aerbunny.lift", 1.0F, (this.rand.nextFloat() - this.rand.nextFloat()) * 0.2F + 1.0F);
+                this.getRidingHandler().setRider(entityplayer);
+                this.worldObj.playSoundAtEntity(this, "aether:aemob.aerbunny.lift", 1.0F, (this.rand.nextFloat() - this.rand.nextFloat()) * 0.2F + 1.0F);
             }
             else
             {
@@ -287,7 +290,7 @@ public class EntityAerbunny extends EntityAetherAnimal implements Ridable
      */
     protected String getHurtSound()
     {
-        return "aemob.aerbunny.hurt";
+        return "aether:aemob.aerbunny.hurt";
     }
 
     /**
@@ -295,7 +298,7 @@ public class EntityAerbunny extends EntityAetherAnimal implements Ridable
      */
     protected String getDeathSound()
     {
-        return "aemob.aerbunny.die";
+        return "aether:aemob.aerbunny.die";
     }
 
     /**
@@ -314,17 +317,12 @@ public class EntityAerbunny extends EntityAetherAnimal implements Ridable
         return this.getRidingHandler().getRider() instanceof EntityPlayer ? false : super.canBeCollidedWith();
     }
 
-    public int getMaxHealth()
-    {
-        return 5;
-    }
-
     public RidingHandler getRidingHandler()
     {
         return this.ridinghandler;
     }
 
-    public EntityAgeable createChild(EntityAgeable var1)
+    public EntityAgeable createChild(EntityAgeable entityageable)
     {
         return null;
     }

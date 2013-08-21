@@ -12,9 +12,9 @@ import net.minecraft.world.World;
 
 public class BlockQuicksoil extends BlockAether implements IAetherBlock
 {
-    public BlockQuicksoil(int var1)
+    public BlockQuicksoil(int blockID)
     {
-        super(var1, Material.sand);
+        super(blockID, Material.sand);
         this.slipperiness = 1.23F;
         this.setHardness(0.5F);
         this.setStepSound(Block.soundSandFootstep);
@@ -24,24 +24,24 @@ public class BlockQuicksoil extends BlockAether implements IAetherBlock
      * Returns a bounding box from the pool of bounding boxes (this means this box can change after the pool has been
      * cleared to be reused)
      */
-    public AxisAlignedBB getCollisionBoundingBoxFromPool(World var1, int var2, int var3, int var4)
+    public AxisAlignedBB getCollisionBoundingBoxFromPool(World world, int i, int j, int k)
     {
-        float var5 = 0.125F;
-        return AxisAlignedBB.getBoundingBox((double)var2, (double)var3, (double)var4, (double)(var2 + 1), (double)((float)(var3 + 1) - var5), (double)(var4 + 1));
+        float f = 0.125F;
+        return AxisAlignedBB.getBoundingBox((double)i, (double)j, (double)k, (double)(i + 1), (double)((float)(j + 1) - f), (double)(k + 1));
     }
 
     /**
      * Triggered whenever an entity collides with this block (enters into the block). Args: world, x, y, z, entity
      */
-    public void onEntityCollidedWithBlock(World var1, int var2, int var3, int var4, Entity var5)
+    public void onEntityCollidedWithBlock(World par1World, int par2, int par3, int par4, Entity entity)
     {
-        Vec3 var6 = var5.getLookVec();
+        Vec3 vec3 = entity.getLookVec();
 
-        if (var6 != null)
+        if (vec3 != null)
         {
-            var5.motionX += var6.xCoord;
-            var5.motionZ += var6.zCoord;
-            var5.velocityChanged = true;
+            entity.motionX += vec3.xCoord;
+            entity.motionZ += vec3.zCoord;
+            entity.velocityChanged = true;
         }
     }
 
@@ -49,17 +49,17 @@ public class BlockQuicksoil extends BlockAether implements IAetherBlock
      * Called when the player destroys a block with an item that can harvest it. (i, j, k) are the coordinates of the
      * block and l is the block's subtype/damage.
      */
-    public void harvestBlock(World var1, EntityPlayer var2, int var3, int var4, int var5, int var6)
+    public void harvestBlock(World world, EntityPlayer entityplayer, int x, int y, int z, int meta)
     {
-        var2.addStat(StatList.mineBlockStatArray[this.blockID], 1);
-        var2.addExhaustion(0.025F);
+        entityplayer.addStat(StatList.mineBlockStatArray[this.blockID], 1);
+        entityplayer.addExhaustion(0.025F);
 
-        if (var6 == 0 && var2.getCurrentEquippedItem() != null && var2.getCurrentEquippedItem().itemID == AetherItems.SkyrootShovel.itemID)
+        if (meta == 0 && entityplayer.getCurrentEquippedItem() != null && entityplayer.getCurrentEquippedItem().itemID == AetherItems.SkyrootShovel.itemID)
         {
-            var2.addStat(StatList.mineBlockStatArray[this.blockID], 1);
-            this.dropBlockAsItem(var1, var3, var4, var5, var6, 0);
+            entityplayer.addStat(StatList.mineBlockStatArray[this.blockID], 1);
+            this.dropBlockAsItem(world, x, y, z, meta, 0);
         }
 
-        this.dropBlockAsItem(var1, var3, var4, var5, var6, 0);
+        this.dropBlockAsItem(world, x, y, z, meta, 0);
     }
 }

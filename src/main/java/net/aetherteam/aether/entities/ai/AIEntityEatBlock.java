@@ -14,12 +14,12 @@ public class AIEntityEatBlock extends EntityAIBase
     Block blocktoEat;
     Block blocktoReplace;
 
-    public AIEntityEatBlock(EntityLiving var1, Block var2, Block var3)
+    public AIEntityEatBlock(EntityLiving par1EntityLiving, Block aetherGrass, Block aetherDirt)
     {
-        this.blocktoEat = var2;
-        this.blocktoReplace = var3;
-        this.theEntity = var1;
-        this.theWorld = var1.worldObj;
+        this.blocktoEat = aetherGrass;
+        this.blocktoReplace = aetherDirt;
+        this.theEntity = par1EntityLiving;
+        this.theWorld = par1EntityLiving.worldObj;
         this.setMutexBits(7);
     }
 

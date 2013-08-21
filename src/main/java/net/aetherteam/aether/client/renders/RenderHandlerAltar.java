@@ -15,15 +15,15 @@ public class RenderHandlerAltar implements ISimpleBlockRenderingHandler
 {
     public TileEntityAltar dummyAltar = new TileEntityAltar();
 
-    public void renderInventoryBlock(Block var1, int var2, int var3, RenderBlocks var4)
+    public void renderInventoryBlock(Block block, int metadata, int modelID, RenderBlocks renderer)
     {
-        if (var3 == this.getRenderId())
+        if (modelID == this.getRenderId())
         {
             TileEntityRenderer.instance.renderTileEntityAt(this.dummyAltar, 0.0D, -0.1D, 0.0D, 0.0F);
         }
     }
 
-    public boolean renderWorldBlock(IBlockAccess var1, int var2, int var3, int var4, Block var5, int var6, RenderBlocks var7)
+    public boolean renderWorldBlock(IBlockAccess world, int x, int y, int z, Block block, int modelId, RenderBlocks renderer)
     {
         return false;
     }

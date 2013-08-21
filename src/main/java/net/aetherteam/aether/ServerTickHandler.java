@@ -27,42 +27,42 @@ public class ServerTickHandler implements ITickHandler
         return null;
     }
 
-    public void tickEnd(EnumSet var1, Object ... var2)
+    public void tickEnd(EnumSet<TickType> type, Object ... tickData)
     {
-        if (var1.equals(EnumSet.of(TickType.SERVER)))
+        if (type.equals(EnumSet.of(TickType.SERVER)))
         {
-            Iterator var3 = DungeonHandler.instance().getInstances().iterator();
+            Iterator i$ = DungeonHandler.instance().getInstances().iterator();
 
-            while (var3.hasNext())
+            while (i$.hasNext())
             {
-                Dungeon var4 = (Dungeon)var3.next();
+                Dungeon dungeon = (Dungeon)i$.next();
 
-                if (var4.timerStarted() && var4.timerFinished())
+                if (dungeon.timerStarted() && dungeon.timerFinished())
                 {
-                    MinecraftServer var5 = FMLCommonHandler.instance().getMinecraftServerInstance();
-                    ServerConfigurationManager var6 = var5.getConfigurationManager();
-                    Party var7 = var4.getQueuedParty();
-                    EntityPlayer var8 = null;
+                    MinecraftServer server = FMLCommonHandler.instance().getMinecraftServerInstance();
+                    ServerConfigurationManager configManager = server.getConfigurationManager();
+                    Party party = dungeon.getQueuedParty();
+                    EntityPlayer partyLeader = null;
 
-                    if (var7 != null)
+                    if (party != null)
                     {
-                        Iterator var9 = var6.playerEntityList.iterator();
+                        Iterator controller = configManager.playerEntityList.iterator();
 
-                        while (var9.hasNext())
+                        while (controller.hasNext())
                         {
-                            Object var10 = var9.next();
+                            Object obj = controller.next();
 
-                            if (var10 instanceof EntityPlayer && var7.hasMember(PartyController.instance().getMember((EntityPlayer)var10)) && ((EntityPlayer)var10).username.equalsIgnoreCase(var7.getLeader().username))
+                            if (obj instanceof EntityPlayer && party.hasMember(PartyController.instance().getMember((EntityPlayer)obj)) && ((EntityPlayer)obj).username.equalsIgnoreCase(party.getLeader().username))
                             {
-                                var8 = (EntityPlayer)var10;
+                                partyLeader = (EntityPlayer)obj;
                             }
                         }
 
-                        if (var8 != null)
+                        if (partyLeader != null)
                         {
-                            TileEntityEntranceController var11 = (TileEntityEntranceController)var8.worldObj.getBlockTileEntity(var4.getControllerX(), var4.getControllerY(), var4.getControllerZ());
-                            DungeonHandler.instance().finishDungeon(var4, var7, var11, false);
-                            PacketDispatcher.sendPacketToAllPlayers(AetherPacketHandler.sendDungeonFinish(var4, var11, var7));
+                            TileEntityEntranceController controller1 = (TileEntityEntranceController)partyLeader.worldObj.getBlockTileEntity(dungeon.getControllerX(), dungeon.getControllerY(), dungeon.getControllerZ());
+                            DungeonHandler.instance().finishDungeon(dungeon, party, controller1, false);
+                            PacketDispatcher.sendPacketToAllPlayers(AetherPacketHandler.sendDungeonFinish(dungeon, controller1, party));
                         }
 
                         return;
@@ -72,10 +72,10 @@ public class ServerTickHandler implements ITickHandler
         }
     }
 
-    public EnumSet ticks()
+    public EnumSet<TickType> ticks()
     {
         return EnumSet.of(TickType.SERVER);
     }
 
-    public void tickStart(EnumSet var1, Object ... var2) {}
+    public void tickStart(EnumSet<TickType> type, Object ... tickData) {}
 }

@@ -1,9 +1,7 @@
 package net.aetherteam.aether.interfaces;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-import net.aetherteam.aether.PlayerBaseAetherServer;
-import net.aetherteam.aether.client.PlayerBaseAetherClient;
+import net.aetherteam.aether.PlayerAetherServer;
+import net.aetherteam.aether.client.PlayerAetherClient;
 import net.minecraft.entity.player.EntityPlayer;
 
 public interface IAetherAccessory
@@ -19,8 +17,7 @@ public interface IAetherAccessory
 
     void activatePassive(EntityPlayer var1);
 
-    void activateServerPassive(EntityPlayer var1, PlayerBaseAetherServer var2);
+    void activateServerPassive(EntityPlayer var1, PlayerAetherServer var2);
 
-    @SideOnly(Side.CLIENT)
-    void activateClientPassive(EntityPlayer var1, PlayerBaseAetherClient var2);
+    void activateClientPassive(EntityPlayer var1, PlayerAetherClient var2);
 }

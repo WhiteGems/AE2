@@ -5,7 +5,8 @@ import net.aetherteam.aether.Aether;
 import net.aetherteam.aether.blocks.AetherBlocks;
 import net.aetherteam.aether.interfaces.IAetherMob;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.item.Item;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.potion.Potion;
@@ -16,8 +17,7 @@ import net.minecraft.world.World;
 
 public class EntityCockatrice extends EntityAetherMob implements IAetherMob
 {
-    public String dir = "/net/aetherteam/aether/client/sprites";
-    public EntityLiving target;
+    public EntityLivingBase target;
     public float field_752_b;
     public float destPos = 0.0F;
     public float field_757_d;
@@ -29,25 +29,21 @@ public class EntityCockatrice extends EntityAetherMob implements IAetherMob
     public boolean jpress;
     public boolean gotrider;
 
-    public EntityCockatrice(World var1)
+    public EntityCockatrice(World world)
     {
-        super(var1);
+        super(world);
         this.stepHeight = 1.0F;
         this.jrem = 0;
         this.jumps = 3;
-        this.texture = this.dir + "/mobs/cockatrice/cockatrice.png";
         this.setSize(1.0F, 2.0F);
+        this.func_110148_a(SharedMonsterAttributes.field_111267_a).func_111128_a(10.0D);
+        this.setEntityHealth(10.0F);
         this.timeUntilNextEgg = this.rand.nextInt(6000) + 6000;
     }
 
-    public int getMaxHealth()
+    public boolean isPotionApplicable(PotionEffect par1PotionEffect)
     {
-        return 10;
-    }
-
-    public boolean isPotionApplicable(PotionEffect var1)
-    {
-        return var1.getPotionID() == Potion.poison.id ? false : super.isPotionApplicable(var1);
+        return par1PotionEffect.getPotionID() == Potion.poison.id ? false : super.isPotionApplicable(par1PotionEffect);
     }
 
     /**
@@ -55,10 +51,10 @@ public class EntityCockatrice extends EntityAetherMob implements IAetherMob
      */
     public boolean getCanSpawnHere()
     {
-        int var1 = MathHelper.floor_double(this.posX);
-        int var2 = MathHelper.floor_double(this.boundingBox.minY);
-        int var3 = MathHelper.floor_double(this.posZ);
-        return this.rand.nextInt(25) == 0 && this.getBlockPathWeight(var1, var2, var3) >= 0.0F && this.worldObj.checkNoEntityCollision(this.boundingBox) && this.worldObj.getCollidingBoundingBoxes(this, this.boundingBox).size() == 0 && !this.worldObj.isAnyLiquid(this.boundingBox) && this.worldObj.getBlockId(var1, var2 - 1, var3) != AetherBlocks.DungeonStone.blockID && this.worldObj.getBlockId(var1, var2 - 1, var3) != AetherBlocks.LightDungeonStone.blockID && this.worldObj.getBlockId(var1, var2 - 1, var3) != AetherBlocks.LockedDungeonStone.blockID && this.worldObj.getBlockId(var1, var2 - 1, var3) != AetherBlocks.LockedLightDungeonStone.blockID && this.worldObj.getBlockId(var1, var2 - 1, var3) != AetherBlocks.Holystone.blockID && this.worldObj.difficultySetting > 0 && !this.worldObj.isDaytime();
+        int i = MathHelper.floor_double(this.posX);
+        int j = MathHelper.floor_double(this.boundingBox.minY);
+        int k = MathHelper.floor_double(this.posZ);
+        return this.rand.nextInt(25) == 0 && this.getBlockPathWeight(i, j, k) >= 0.0F && this.worldObj.checkNoEntityCollision(this.boundingBox) && this.worldObj.getCollidingBoundingBoxes(this, this.boundingBox).size() == 0 && !this.worldObj.isAnyLiquid(this.boundingBox) && this.worldObj.getBlockId(i, j - 1, k) != AetherBlocks.DungeonStone.blockID && this.worldObj.getBlockId(i, j - 1, k) != AetherBlocks.LightDungeonStone.blockID && this.worldObj.getBlockId(i, j - 1, k) != AetherBlocks.LockedDungeonStone.blockID && this.worldObj.getBlockId(i, j - 1, k) != AetherBlocks.LockedLightDungeonStone.blockID && this.worldObj.getBlockId(i, j - 1, k) != AetherBlocks.Holystone.blockID && this.worldObj.difficultySetting > 0 && !this.worldObj.isDaytime();
     }
 
     /**
@@ -76,13 +72,13 @@ public class EntityCockatrice extends EntityAetherMob implements IAetherMob
                 return;
             }
 
-            List var1 = this.worldObj.getEntitiesWithinAABBExcludingEntity(this, this.boundingBox.expand(0.5D, 0.75D, 0.5D));
-            byte var2 = 0;
+            List list = this.worldObj.getEntitiesWithinAABBExcludingEntity(this, this.boundingBox.expand(0.5D, 0.75D, 0.5D));
+            byte i = 0;
 
-            if (var2 < var1.size())
+            if (i < list.size())
             {
-                Entity var3 = (Entity)var1.get(var2);
-                var3.mountEntity(this);
+                Entity entity = (Entity)list.get(i);
+                entity.mountEntity(this);
             }
 
             this.gotrider = false;
@@ -97,16 +93,16 @@ public class EntityCockatrice extends EntityAetherMob implements IAetherMob
     /**
      * Basic mob attack. Default to touch of death in EntityCreature. Overridden by each mob to define their attack.
      */
-    protected void attackEntity(Entity var1, float var2)
+    protected void attackEntity(Entity entity, float f)
     {
-        if (var1 instanceof EntityLiving)
+        if (entity instanceof EntityLivingBase)
         {
-            this.target = (EntityLiving)var1;
+            this.target = (EntityLivingBase)entity;
 
-            if (var2 < 10.0F)
+            if (f < 10.0F)
             {
-                double var3 = var1.posX - this.posX;
-                double var5 = var1.posZ - this.posZ;
+                double d = entity.posX - this.posX;
+                double d1 = entity.posZ - this.posZ;
 
                 if (this.target != null)
                 {
@@ -128,7 +124,7 @@ public class EntityCockatrice extends EntityAetherMob implements IAetherMob
                     }
                 }
 
-                this.rotationYaw = (float)(Math.atan2(var5, var3) * 180.0D / Math.PI) - 90.0F;
+                this.rotationYaw = (float)(Math.atan2(d1, d) * 180.0D / Math.PI) - 90.0F;
                 this.hasAttacked = true;
             }
         }
@@ -138,30 +134,25 @@ public class EntityCockatrice extends EntityAetherMob implements IAetherMob
     {
         if (this.worldObj.difficultySetting != 0)
         {
-            double var1 = this.target.posX - this.posX;
-            double var3 = this.target.posZ - this.posZ;
-            double var5 = 1.5D / Math.sqrt(var1 * var1 + var3 * var3 + 0.1D);
-            double var7 = 0.1D + Math.sqrt(var1 * var1 + var3 * var3 + 0.1D) * 0.5D + (this.posY - this.target.posY) * 0.25D;
-            double var10000 = var1 * var5;
-            var10000 = var3 * var5;
-            EntityPoisonNeedle var9 = new EntityPoisonNeedle(this.worldObj, this);
-            var9.posY = this.posY + 0.5D;
-            this.worldObj.playSoundAtEntity(this, "aemisc.shootDart", 2.0F, 1.0F / (this.rand.nextFloat() * 0.4F + 0.8F));
+            double d1 = this.target.posX - this.posX;
+            double d2 = this.target.posZ - this.posZ;
+            double d3 = 1.5D / Math.sqrt(d1 * d1 + d2 * d2 + 0.1D);
+            double d4 = 0.1D + Math.sqrt(d1 * d1 + d2 * d2 + 0.1D) * 0.5D + (this.posY - this.target.posY) * 0.25D;
+            double var10000 = d1 * d3;
+            var10000 = d2 * d3;
+            EntityPoisonNeedle entityarrow = new EntityPoisonNeedle(this.worldObj, this);
+            entityarrow.posY = this.posY + 0.5D;
+            this.worldObj.playSoundAtEntity(this, "aether:aemisc.shootDart", 2.0F, 1.0F / (this.rand.nextFloat() * 0.4F + 0.8F));
 
             if (!this.worldObj.isRemote)
             {
-                this.worldObj.spawnEntityInWorld(var9);
+                this.worldObj.spawnEntityInWorld(entityarrow);
             }
         }
     }
 
-    /**
-     * Called frequently so the entity can update its state every tick as required. For example, zombies and skeletons
-     * use this to react to sunlight and start to burn.
-     */
-    public void onLivingUpdate()
+    public void updateWingFields()
     {
-        super.onLivingUpdate();
         this.field_756_e = this.field_752_b;
         this.field_757_d = this.destPos;
         this.destPos = (float)((double)this.destPos + (double)(this.onGround ? -1 : 4) * 0.05D);
@@ -179,8 +170,6 @@ public class EntityCockatrice extends EntityAetherMob implements IAetherMob
         if (this.onGround)
         {
             this.destPos = 0.0F;
-            this.jpress = false;
-            this.jrem = this.jumps;
         }
 
         if (!this.onGround && this.field_755_h < 1.0F)
@@ -189,20 +178,17 @@ public class EntityCockatrice extends EntityAetherMob implements IAetherMob
         }
 
         this.field_755_h = (float)((double)this.field_755_h * 0.9D);
-
-        if (!this.onGround && this.motionY < 0.0D)
-        {
-            if (this.riddenByEntity == null)
-            {
-                this.motionY *= 0.6D;
-            }
-            else
-            {
-                this.motionY *= 0.6375D;
-            }
-        }
-
         this.field_752_b += this.field_755_h * 2.0F;
+    }
+
+    /**
+     * Called frequently so the entity can update its state every tick as required. For example, zombies and skeletons
+     * use this to react to sunlight and start to burn.
+     */
+    public void onLivingUpdate()
+    {
+        super.onLivingUpdate();
+        this.updateWingFields();
 
         if (!this.worldObj.isRemote && --this.timeUntilNextEgg <= 0)
         {
@@ -213,58 +199,55 @@ public class EntityCockatrice extends EntityAetherMob implements IAetherMob
     /**
      * Called when the mob is falling. Calculates and applies fall damage.
      */
-    protected void fall(float var1) {}
+    protected void fall(float f) {}
 
-    /**
-     * Called when the entity is attacked.
-     */
-    public boolean attackEntityFrom(DamageSource var1, int var2)
+    public boolean attackEntityFrom(DamageSource src, int i)
     {
-        Entity var3 = var1.getEntity();
+        Entity entity = src.getEntity();
 
-        if (var3 != null && this.riddenByEntity != null && var3 == this.riddenByEntity)
+        if (entity != null && this.riddenByEntity != null && entity == this.riddenByEntity)
         {
             return false;
         }
         else
         {
-            boolean var4 = super.attackEntityFrom(var1, var2);
+            boolean flag = super.attackEntityFrom(src, (float)i);
 
-            if (var4 && this.riddenByEntity != null && (this.health <= 0 || this.rand.nextInt(3) == 0))
+            if (flag && this.riddenByEntity != null && (this.func_110143_aJ() <= 0.0F || this.rand.nextInt(3) == 0))
             {
                 this.riddenByEntity.mountEntity(this);
             }
 
-            return var4;
+            return flag;
         }
     }
 
     /**
      * (abstract) Protected helper method to write subclass entity data to NBT.
      */
-    public void writeEntityToNBT(NBTTagCompound var1)
+    public void writeEntityToNBT(NBTTagCompound nbttagcompound)
     {
-        super.writeEntityToNBT(var1);
-        var1.setShort("Jumps", (short)this.jumps);
-        var1.setShort("Remaining", (short)this.jrem);
+        super.writeEntityToNBT(nbttagcompound);
+        nbttagcompound.setShort("Jumps", (short)this.jumps);
+        nbttagcompound.setShort("Remaining", (short)this.jrem);
 
         if (this.riddenByEntity != null)
         {
             this.gotrider = true;
         }
 
-        var1.setBoolean("GotRider", this.gotrider);
+        nbttagcompound.setBoolean("GotRider", this.gotrider);
     }
 
     /**
      * (abstract) Protected helper method to read subclass entity data from NBT.
      */
-    public void readEntityFromNBT(NBTTagCompound var1)
+    public void readEntityFromNBT(NBTTagCompound nbttagcompound)
     {
-        super.readEntityFromNBT(var1);
-        this.jumps = var1.getShort("Jumps");
-        this.jrem = var1.getShort("Remaining");
-        this.gotrider = var1.getBoolean("GotRider");
+        super.readEntityFromNBT(nbttagcompound);
+        this.jumps = nbttagcompound.getShort("Jumps");
+        this.jrem = nbttagcompound.getShort("Remaining");
+        this.gotrider = nbttagcompound.getBoolean("GotRider");
     }
 
     /**
@@ -272,7 +255,7 @@ public class EntityCockatrice extends EntityAetherMob implements IAetherMob
      */
     protected String getLivingSound()
     {
-        return "aemob.moa.say";
+        return "aether:aemob.moa.say";
     }
 
     /**
@@ -280,7 +263,7 @@ public class EntityCockatrice extends EntityAetherMob implements IAetherMob
      */
     protected String getHurtSound()
     {
-        return "aemob.moa.say";
+        return "aether:aemob.moa.say";
     }
 
     /**
@@ -288,7 +271,7 @@ public class EntityCockatrice extends EntityAetherMob implements IAetherMob
      */
     protected String getDeathSound()
     {
-        return "aemob.moa.say";
+        return "aether:aemob.moa.say";
     }
 
     /**

@@ -13,10 +13,10 @@ public class SlotMoreArmor extends Slot
     final int armorType;
     public int iconIndex = 0;
 
-    public SlotMoreArmor(Container var1, IInventory var2, int var3, int var4, int var5, int var6)
+    public SlotMoreArmor(Container containerplayer, IInventory iinventory, int i, int j, int k, int l)
     {
-        super(var2, var3, var4, var5);
-        this.armorType = var6;
+        super(iinventory, i, j, k);
+        this.armorType = l;
     }
 
     /**
@@ -31,14 +31,14 @@ public class SlotMoreArmor extends Slot
     /**
      * Check if the stack is a valid item for this slot. Always true beside for the armor slots.
      */
-    public boolean isItemValid(ItemStack var1)
+    public boolean isItemValid(ItemStack itemstack)
     {
-        return var1.getItem() instanceof IAetherAccessory ? ((ItemAccessory)var1.getItem()).isTypeValid(this.armorType) : false;
+        return itemstack.getItem() instanceof IAetherAccessory ? ((ItemAccessory)itemstack.getItem()).isTypeValid(this.armorType) : false;
     }
 
-    public void setBackgroundIconIndex(int var1)
+    public void setBackgroundIconIndex(int index)
     {
-        this.iconIndex = var1;
+        this.iconIndex = index;
     }
 
     /**

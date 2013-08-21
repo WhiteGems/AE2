@@ -2,28 +2,28 @@ package net.aetherteam.aether.entities;
 
 import net.aetherteam.aether.items.AetherItems;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 
 public class EntityDartGolden extends EntityProjectileBase
 {
-    public EntityLiving victim;
+    public EntityLivingBase victim;
     public static int texfxindex = 94;
 
-    public EntityDartGolden(World var1)
+    public EntityDartGolden(World world)
     {
-        super(var1);
+        super(world);
     }
 
-    public EntityDartGolden(World var1, double var2, double var4, double var6)
+    public EntityDartGolden(World world, double x, double y, double z)
     {
-        super(var1, var2, var4, var6);
+        super(world, x, y, z);
     }
 
-    public EntityDartGolden(World var1, EntityLiving var2)
+    public EntityDartGolden(World world, EntityLivingBase ent)
     {
-        super(var1, var2);
+        super(world, ent);
     }
 
     public void entityInit()
@@ -72,8 +72,8 @@ public class EntityDartGolden extends EntityProjectileBase
         return this.victim == null;
     }
 
-    public boolean canBeShot(Entity var1)
+    public boolean canBeShot(Entity ent)
     {
-        return super.canBeShot(var1) && this.victim == null;
+        return super.canBeShot(ent) && this.victim == null;
     }
 }

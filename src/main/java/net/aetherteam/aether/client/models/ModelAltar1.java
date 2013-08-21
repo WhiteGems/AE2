@@ -102,33 +102,33 @@ public class ModelAltar1 extends ModelBase
         this.setRotation(this.Scroll, 0.0F, 0.0F, -0.1047198F);
     }
 
-    public void renderAll(float var1)
+    public void renderAll(float f5)
     {
-        this.TopBase.render(var1);
-        this.CornerTopLeft.render(var1);
-        this.AmbrosiumTopLeft.render(var1);
-        this.CornerBottomLeft.render(var1);
-        this.CornerBottomRight.render(var1);
-        this.CornerTopRight.render(var1);
-        this.AmbrosiumTopRight.render(var1);
-        this.AmbrosiumBottomLeft.render(var1);
-        this.AmbrosiumBottomRight.render(var1);
-        this.LowerTopBase.render(var1);
-        this.SupportPole.render(var1);
-        this.BottomBase.render(var1);
-        this.UpperBottomBase.render(var1);
-        this.Scroll.render(var1);
+        this.TopBase.render(f5);
+        this.CornerTopLeft.render(f5);
+        this.AmbrosiumTopLeft.render(f5);
+        this.CornerBottomLeft.render(f5);
+        this.CornerBottomRight.render(f5);
+        this.CornerTopRight.render(f5);
+        this.AmbrosiumTopRight.render(f5);
+        this.AmbrosiumBottomLeft.render(f5);
+        this.AmbrosiumBottomRight.render(f5);
+        this.LowerTopBase.render(f5);
+        this.SupportPole.render(f5);
+        this.BottomBase.render(f5);
+        this.UpperBottomBase.render(f5);
+        this.Scroll.render(f5);
     }
 
-    private void setRotation(ModelRenderer var1, float var2, float var3, float var4)
+    private void setRotation(ModelRenderer model, float x, float y, float z)
     {
-        var1.rotateAngleX = var2;
-        var1.rotateAngleY = var3;
-        var1.rotateAngleZ = var4;
+        model.rotateAngleX = x;
+        model.rotateAngleY = y;
+        model.rotateAngleZ = z;
     }
 
-    private void setRotationPointWithOffset(ModelRenderer var1, float var2, float var3, float var4)
+    private void setRotationPointWithOffset(ModelRenderer renderer, float x, float y, float z)
     {
-        var1.setRotationPoint(var2 + this.offsetX, var3 + this.offsetY, var4 + this.offsetZ);
+        renderer.setRotationPoint(x + this.offsetX, y + this.offsetY, z + this.offsetZ);
     }
 }

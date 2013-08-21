@@ -9,7 +9,7 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IconRegister;
-import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -25,48 +25,47 @@ public class BlockIncubator extends BlockContainer implements IAetherBlock
     private Icon sideIcon;
     private Icon topIcon;
 
-    public static void updateIncubatorBlockState(boolean var0, World var1, int var2, int var3, int var4)
+    public static void updateIncubatorBlockState(boolean flag, World world, int i, int j, int k)
     {
-        int var5 = var1.getBlockMetadata(var2, var3, var4);
-        TileEntity var6 = var1.getBlockTileEntity(var2, var3, var4);
-        var1.setBlockMetadataWithNotify(var2, var3, var4, var5, 4);
-        var1.setBlockTileEntity(var2, var3, var4, var6);
+        int l = world.getBlockMetadata(i, j, k);
+        TileEntity tileentity = world.getBlockTileEntity(i, j, k);
+        world.setBlockMetadataWithNotify(i, j, k, l, 4);
+        world.setBlockTileEntity(i, j, k, tileentity);
     }
 
     /**
      * When this method is called, your block should register all the icons it needs with the given IconRegister. This
      * is the only chance you get to register icons.
      */
-    public void registerIcons(IconRegister var1)
+    public void registerIcons(IconRegister par1IconRegister)
     {
-        this.topIcon = var1.registerIcon("Aether:Incubator Top");
-        this.sideIcon = var1.registerIcon("Aether:Incubator Side");
-        super.registerIcons(var1);
+        this.topIcon = par1IconRegister.registerIcon("aether:Incubator Top");
+        this.sideIcon = par1IconRegister.registerIcon("aether:Incubator Side");
     }
 
-    protected BlockIncubator(int var1)
+    protected BlockIncubator(int blockID)
     {
-        super(var1, Material.rock);
+        super(blockID, Material.rock);
         this.setHardness(2.0F);
     }
 
-    public Block setIconName(String var1)
+    public Block setIconName(String name)
     {
-        return this.setUnlocalizedName("Aether:" + var1);
+        return this.setUnlocalizedName("aether:" + name);
     }
 
     /**
      * Called upon block activation (right click on the block.)
      */
-    public boolean onBlockActivated(World var1, int var2, int var3, int var4, EntityPlayer var5, int var6, float var7, float var8, float var9)
+    public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer entityplayer, int par6, float par7, float par8, float par9)
     {
-        TileEntityIncubator var10 = (TileEntityIncubator)var1.getBlockTileEntity(var2, var3, var4);
-        int var11 = AetherGuiHandler.incubatorID;
-        var5.openGui(Aether.instance, var11, var1, var2, var3, var4);
+        TileEntityIncubator incubator = (TileEntityIncubator)world.getBlockTileEntity(x, y, z);
+        int guiID = AetherGuiHandler.incubatorID;
+        entityplayer.openGui(Aether.instance, guiID, world, x, y, z);
         return true;
     }
 
-    public boolean hasTileEntity(int var1)
+    public boolean hasTileEntity(int metadata)
     {
         return true;
     }
@@ -74,7 +73,7 @@ public class BlockIncubator extends BlockContainer implements IAetherBlock
     /**
      * Returns a new instance of a block's tile entity class. Called on placing the block.
      */
-    public TileEntity createNewTileEntity(World var1)
+    public TileEntity createNewTileEntity(World par1World)
     {
         try
         {
@@ -89,59 +88,59 @@ public class BlockIncubator extends BlockContainer implements IAetherBlock
     /**
      * From the specified side and block metadata retrieves the blocks texture. Args: side, metadata
      */
-    public Icon getIcon(int var1, int var2)
+    public Icon getIcon(int i, int meta)
     {
-        return var1 == 1 ? this.topIcon : (var1 == 0 ? this.topIcon : this.sideIcon);
+        return i == 1 ? this.topIcon : (i == 0 ? this.topIcon : this.sideIcon);
     }
 
-    public void addCreativeBlocks(ArrayList var1)
+    public void addCreativeBlocks(ArrayList itemList)
     {
-        var1.add(new ItemStack(this));
+        itemList.add(new ItemStack(this));
     }
 
     /**
      * Called whenever the block is added into the world. Args: world, x, y, z
      */
-    public void onBlockAdded(World var1, int var2, int var3, int var4)
+    public void onBlockAdded(World world, int i, int j, int k)
     {
-        super.onBlockAdded(var1, var2, var3, var4);
-        this.setDefaultDirection(var1, var2, var3, var4);
+        super.onBlockAdded(world, i, j, k);
+        this.setDefaultDirection(world, i, j, k);
     }
 
     /**
      * Called when the block is placed in the world.
      */
-    public void onBlockPlacedBy(World var1, int var2, int var3, int var4, EntityLiving var5, ItemStack var6)
+    public void onBlockPlacedBy(World world, int i, int j, int k, EntityLivingBase entityliving, ItemStack stack)
     {
-        int var7 = MathHelper.floor_double((double)(var5.rotationYaw * 4.0F / 360.0F) + 0.5D) & 3;
+        int l = MathHelper.floor_double((double)(entityliving.rotationYaw * 4.0F / 360.0F) + 0.5D) & 3;
 
-        if (var7 == 0)
+        if (l == 0)
         {
-            var1.setBlockMetadataWithNotify(var2, var3, var4, 2, 4);
+            world.setBlockMetadataWithNotify(i, j, k, 2, 4);
         }
 
-        if (var7 == 1)
+        if (l == 1)
         {
-            var1.setBlockMetadataWithNotify(var2, var3, var4, 5, 4);
+            world.setBlockMetadataWithNotify(i, j, k, 5, 4);
         }
 
-        if (var7 == 2)
+        if (l == 2)
         {
-            var1.setBlockMetadataWithNotify(var2, var3, var4, 3, 4);
+            world.setBlockMetadataWithNotify(i, j, k, 3, 4);
         }
 
-        if (var7 == 3)
+        if (l == 3)
         {
-            var1.setBlockMetadataWithNotify(var2, var3, var4, 4, 4);
+            world.setBlockMetadataWithNotify(i, j, k, 4, 4);
         }
     }
 
     /**
      * ejects contained items into the world, and notifies neighbours of an update, as appropriate
      */
-    public void breakBlock(World var1, int var2, int var3, int var4, int var5, int var6)
+    public void breakBlock(World par1World, int par2, int par3, int par4, int par5, int par6)
     {
-        TileEntityIncubator var7 = (TileEntityIncubator)var1.getBlockTileEntity(var2, var3, var4);
+        TileEntityIncubator var7 = (TileEntityIncubator)par1World.getBlockTileEntity(par2, par3, par4);
 
         if (var7 != null)
         {
@@ -153,67 +152,67 @@ public class BlockIncubator extends BlockContainer implements IAetherBlock
                 {
                     float var10 = this.IncubatorRand.nextFloat() * 0.8F + 0.1F;
                     float var11 = this.IncubatorRand.nextFloat() * 0.8F + 0.1F;
-                    EntityItem var12;
+                    EntityItem var14;
 
-                    for (float var13 = this.IncubatorRand.nextFloat() * 0.8F + 0.1F; var9.stackSize > 0; var1.spawnEntityInWorld(var12))
+                    for (float var12 = this.IncubatorRand.nextFloat() * 0.8F + 0.1F; var9.stackSize > 0; par1World.spawnEntityInWorld(var14))
                     {
-                        int var14 = this.IncubatorRand.nextInt(21) + 10;
+                        int var13 = this.IncubatorRand.nextInt(21) + 10;
 
-                        if (var14 > var9.stackSize)
+                        if (var13 > var9.stackSize)
                         {
-                            var14 = var9.stackSize;
+                            var13 = var9.stackSize;
                         }
 
-                        var9.stackSize -= var14;
-                        var12 = new EntityItem(var1, (double)((float)var2 + var10), (double)((float)var3 + var11), (double)((float)var4 + var13), new ItemStack(var9.itemID, var14, var9.getItemDamage()));
+                        var9.stackSize -= var13;
+                        var14 = new EntityItem(par1World, (double)((float)par2 + var10), (double)((float)par3 + var11), (double)((float)par4 + var12), new ItemStack(var9.itemID, var13, var9.getItemDamage()));
                         float var15 = 0.05F;
-                        var12.motionX = (double)((float)this.IncubatorRand.nextGaussian() * var15);
-                        var12.motionY = (double)((float)this.IncubatorRand.nextGaussian() * var15 + 0.2F);
-                        var12.motionZ = (double)((float)this.IncubatorRand.nextGaussian() * var15);
+                        var14.motionX = (double)((float)this.IncubatorRand.nextGaussian() * var15);
+                        var14.motionY = (double)((float)this.IncubatorRand.nextGaussian() * var15 + 0.2F);
+                        var14.motionZ = (double)((float)this.IncubatorRand.nextGaussian() * var15);
 
                         if (var9.hasTagCompound())
                         {
-                            var12.getEntityItem().setTagCompound((NBTTagCompound)var9.getTagCompound().copy());
+                            var14.getEntityItem().setTagCompound((NBTTagCompound)var9.getTagCompound().copy());
                         }
                     }
                 }
             }
         }
 
-        super.breakBlock(var1, var2, var3, var4, var5, var6);
+        super.breakBlock(par1World, par2, par3, par4, par5, par6);
     }
 
-    private void setDefaultDirection(World var1, int var2, int var3, int var4)
+    private void setDefaultDirection(World world, int i, int j, int k)
     {
-        if (!var1.isRemote)
+        if (!world.isRemote)
         {
-            int var5 = var1.getBlockId(var2, var3, var4 - 1);
-            int var6 = var1.getBlockId(var2, var3, var4 + 1);
-            int var7 = var1.getBlockId(var2 - 1, var3, var4);
-            int var8 = var1.getBlockId(var2 + 1, var3, var4);
-            byte var9 = 3;
+            int l = world.getBlockId(i, j, k - 1);
+            int i1 = world.getBlockId(i, j, k + 1);
+            int j1 = world.getBlockId(i - 1, j, k);
+            int k1 = world.getBlockId(i + 1, j, k);
+            byte byte0 = 3;
 
-            if (Block.opaqueCubeLookup[var5] && !Block.opaqueCubeLookup[var6])
+            if (Block.opaqueCubeLookup[l] && !Block.opaqueCubeLookup[i1])
             {
-                var9 = 3;
+                byte0 = 3;
             }
 
-            if (Block.opaqueCubeLookup[var6] && !Block.opaqueCubeLookup[var5])
+            if (Block.opaqueCubeLookup[i1] && !Block.opaqueCubeLookup[l])
             {
-                var9 = 2;
+                byte0 = 2;
             }
 
-            if (Block.opaqueCubeLookup[var7] && !Block.opaqueCubeLookup[var8])
+            if (Block.opaqueCubeLookup[j1] && !Block.opaqueCubeLookup[k1])
             {
-                var9 = 5;
+                byte0 = 5;
             }
 
-            if (Block.opaqueCubeLookup[var8] && !Block.opaqueCubeLookup[var7])
+            if (Block.opaqueCubeLookup[k1] && !Block.opaqueCubeLookup[j1])
             {
-                var9 = 4;
+                byte0 = 4;
             }
 
-            var1.setBlockMetadataWithNotify(var2, var3, var4, var9, 4);
+            world.setBlockMetadataWithNotify(i, j, k, byte0, 4);
         }
     }
 }

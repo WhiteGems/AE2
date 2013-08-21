@@ -5,7 +5,9 @@ import net.aetherteam.aether.entities.EntityTNTPresent;
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.client.renderer.entity.Render;
+import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.entity.Entity;
+import net.minecraft.util.ResourceLocation;
 import org.lwjgl.opengl.GL11;
 
 public class RenderTNTPresent extends Render
@@ -17,15 +19,15 @@ public class RenderTNTPresent extends Render
         this.shadowSize = 0.5F;
     }
 
-    public void renderPrimedTNT(EntityTNTPresent var1, double var2, double var4, double var6, float var8, float var9)
+    public void renderPrimedTNT(EntityTNTPresent par1EntityTNTPrimed, double par2, double par4, double par6, float par8, float par9)
     {
         GL11.glPushMatrix();
-        GL11.glTranslatef((float)var2, (float)var4, (float)var6);
+        GL11.glTranslatef((float)par2, (float)par4, (float)par6);
         float var10;
 
-        if ((float)var1.fuse - var9 + 1.0F < 10.0F)
+        if ((float)par1EntityTNTPrimed.fuse - par9 + 1.0F < 10.0F)
         {
-            var10 = 1.0F - ((float)var1.fuse - var9 + 1.0F) / 10.0F;
+            var10 = 1.0F - ((float)par1EntityTNTPrimed.fuse - par9 + 1.0F) / 10.0F;
 
             if (var10 < 0.0F)
             {
@@ -43,11 +45,11 @@ public class RenderTNTPresent extends Render
             GL11.glScalef(1.0F, 1.0F, 1.0F);
         }
 
-        var10 = (1.0F - ((float)var1.fuse - var9 + 1.0F) / 100.0F) * 0.8F;
-        this.loadTexture("/terrain.png");
-        this.blockRenderer.renderBlockAsItem(AetherBlocks.Present, 0, var1.getBrightness(var9));
+        var10 = (1.0F - ((float)par1EntityTNTPrimed.fuse - par9 + 1.0F) / 100.0F) * 0.8F;
+        this.renderManager.renderEngine.func_110577_a(TextureMap.field_110575_b);
+        this.blockRenderer.renderBlockAsItem(AetherBlocks.Present, 0, par1EntityTNTPrimed.getBrightness(par9));
 
-        if (var1.fuse / 5 % 2 == 0)
+        if (par1EntityTNTPrimed.fuse / 5 % 2 == 0)
         {
             GL11.glDisable(GL11.GL_TEXTURE_2D);
             GL11.glDisable(GL11.GL_LIGHTING);
@@ -70,8 +72,13 @@ public class RenderTNTPresent extends Render
      * (Render<T extends Entity) and this method has signature public void doRender(T entity, double d, double d1,
      * double d2, float f, float f1). But JAD is pre 1.5 so doesn't do that.
      */
-    public void doRender(Entity var1, double var2, double var4, double var6, float var8, float var9)
+    public void doRender(Entity par1Entity, double par2, double par4, double par6, float par8, float par9)
     {
-        this.renderPrimedTNT((EntityTNTPresent)var1, var2, var4, var6, var8, var9);
+        this.renderPrimedTNT((EntityTNTPresent)par1Entity, par2, par4, par6, par8, par9);
+    }
+
+    protected ResourceLocation func_110775_a(Entity entity)
+    {
+        return null;
     }
 }

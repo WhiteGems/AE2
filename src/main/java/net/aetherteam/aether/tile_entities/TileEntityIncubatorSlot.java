@@ -5,9 +5,9 @@ import net.minecraft.inventory.Slot;
 
 public class TileEntityIncubatorSlot extends Slot
 {
-    public TileEntityIncubatorSlot(IInventory var1, int var2, int var3, int var4)
+    public TileEntityIncubatorSlot(IInventory inv, int slot, int x, int y)
     {
-        super(var1, var2, var3, var4);
+        super(inv, slot, x, y);
     }
 
     /**

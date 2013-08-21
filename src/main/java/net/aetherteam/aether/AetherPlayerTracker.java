@@ -29,7 +29,7 @@ public class AetherPlayerTracker implements IPlayerTracker
 {
     private EntityPlayerMP entityPlayer;
     private NBTTagList taglist;
-    private Set username;
+    private Set<String> username;
     private String cooldownName;
     private int maxHealth;
     private int cooldown;
@@ -38,12 +38,12 @@ public class AetherPlayerTracker implements IPlayerTracker
     private boolean isParachuting;
     private int parachuteType;
 
-    public void onPlayerLogin(EntityPlayer var1)
+    public void onPlayerLogin(EntityPlayer player)
     {
-        MinecraftServer var2 = FMLCommonHandler.instance().getMinecraftServerInstance();
-        ServerConfigurationManager var3 = var2.getConfigurationManager();
+        MinecraftServer server = FMLCommonHandler.instance().getMinecraftServerInstance();
+        ServerConfigurationManager configManager = server.getConfigurationManager();
 
-        if (var3.playerEntityList.size() == 1)
+        if (configManager.playerEntityList.size() == 1)
         {
             Aether.proxy.getClientInventories().clear();
             Aether.proxy.getClientExtraHearts().clear();
@@ -52,15 +52,15 @@ public class AetherPlayerTracker implements IPlayerTracker
             Aether.proxy.getPlayerClientInfo().clear();
         }
 
-        PacketDispatcher.sendPacketToAllPlayers(AetherPacketHandler.sendAccessoryChange(Aether.getServerPlayer((EntityPlayerMP)var1).inv.writeToNBT(new NBTTagList()), false, true, Collections.singleton(var1.username), (byte)1));
-        PacketDispatcher.sendPacketToAllPlayers(AetherPacketHandler.sendHeartChange(false, true, Aether.getServerPlayer(var1).maxHealth, Collections.singleton(var1.username)));
+        PacketDispatcher.sendPacketToAllPlayers(AetherPacketHandler.sendAccessoryChange(Aether.getServerPlayer((EntityPlayerMP)player).inv.writeToNBT(new NBTTagList()), false, true, Collections.singleton(player.username), (byte)1));
+        PacketDispatcher.sendPacketToAllPlayers(AetherPacketHandler.sendHeartChange(false, true, (int)player.func_110138_aP(), Collections.singleton(player.username)));
         Aether var10000;
 
-        for (int var4 = 0; var4 < var3.playerEntityList.size(); ++var4)
+        for (int RSA = 0; RSA < configManager.playerEntityList.size(); ++RSA)
         {
-            this.entityPlayer = (EntityPlayerMP)var3.playerEntityList.get(var4);
+            this.entityPlayer = (EntityPlayerMP)configManager.playerEntityList.get(RSA);
             this.taglist = Aether.getServerPlayer(this.entityPlayer).inv.writeToNBT(new NBTTagList());
-            this.maxHealth = Aether.getServerPlayer(this.entityPlayer).maxHealth;
+            this.maxHealth = (int)this.entityPlayer.func_110138_aP();
             this.username = Collections.singleton(this.entityPlayer.username);
             this.cooldown = Aether.getServerPlayer(this.entityPlayer).generalcooldown;
             this.cooldownMax = Aether.getServerPlayer(this.entityPlayer).generalcooldownmax;
@@ -68,13 +68,13 @@ public class AetherPlayerTracker implements IPlayerTracker
             this.coinAmount = Aether.getServerPlayer(this.entityPlayer).getCoins();
             this.isParachuting = Aether.getServerPlayer(this.entityPlayer).getParachuting();
             this.parachuteType = Aether.getServerPlayer(this.entityPlayer).getParachuteType();
-            ((EntityPlayerMP)var1).playerNetServerHandler.sendPacketToPlayer(AetherPacketHandler.sendAccessoryChange(this.taglist, false, true, this.username, (byte)1));
-            ((EntityPlayerMP)var1).playerNetServerHandler.sendPacketToPlayer(AetherPacketHandler.sendHeartChange(false, true, this.maxHealth, this.username));
-            String var5 = Aether.getInstance().getKey(this.entityPlayer.username);
+            ((EntityPlayerMP)player).playerNetServerHandler.sendPacketToPlayer(AetherPacketHandler.sendAccessoryChange(this.taglist, false, true, this.username, (byte)1));
+            ((EntityPlayerMP)player).playerNetServerHandler.sendPacketToPlayer(AetherPacketHandler.sendHeartChange(false, true, this.maxHealth, this.username));
+            String it = Aether.getInstance().getKey(this.entityPlayer.username);
 
-            if (var5 != null)
+            if (it != null)
             {
-                ((EntityPlayerMP)var1).playerNetServerHandler.sendPacketToPlayer(AetherPacketHandler.sendDonatorChange(this.entityPlayer.username, new Donator(this.entityPlayer.username, var5)));
+                ((EntityPlayerMP)player).playerNetServerHandler.sendPacketToPlayer(AetherPacketHandler.sendDonatorChange(this.entityPlayer.username, new Donator(this.entityPlayer.username, it)));
             }
 
             var10000 = Aether.instance;
@@ -82,33 +82,33 @@ public class AetherPlayerTracker implements IPlayerTracker
             if (Aether.syncDonatorList.getDonator(this.entityPlayer.username) != null)
             {
                 var10000 = Aether.instance;
-                HashMap var6 = Aether.syncDonatorList.getDonator(this.entityPlayer.username).choices;
+                HashMap i$ = Aether.syncDonatorList.getDonator(this.entityPlayer.username).choices;
 
-                if (var6 != null)
+                if (i$ != null)
                 {
-                    if (var6.get(EnumChoiceType.CAPE) != null)
+                    if (i$.get(EnumChoiceType.CAPE) != null)
                     {
-                        ((EntityPlayerMP)var1).playerNetServerHandler.sendPacketToPlayer(AetherPacketHandler.sendDonatorChoice(this.entityPlayer.username, (DonatorChoice)var6.get(EnumChoiceType.CAPE), true, (byte)1));
+                        ((EntityPlayerMP)player).playerNetServerHandler.sendPacketToPlayer(AetherPacketHandler.sendDonatorChoice(this.entityPlayer.username, (DonatorChoice)i$.get(EnumChoiceType.CAPE), true, (byte)1));
                     }
 
-                    if (var6.get(EnumChoiceType.MOA) != null)
+                    if (i$.get(EnumChoiceType.MOA) != null)
                     {
-                        ((EntityPlayerMP)var1).playerNetServerHandler.sendPacketToPlayer(AetherPacketHandler.sendDonatorChoice(this.entityPlayer.username, (DonatorChoice)var6.get(EnumChoiceType.MOA), true, (byte)1));
+                        ((EntityPlayerMP)player).playerNetServerHandler.sendPacketToPlayer(AetherPacketHandler.sendDonatorChoice(this.entityPlayer.username, (DonatorChoice)i$.get(EnumChoiceType.MOA), true, (byte)1));
                     }
                 }
             }
         }
 
-        PacketDispatcher.sendPacketToAllPlayers(AetherPacketHandler.sendParachuteCheck(false, this.isParachuting, this.isParachuting, this.parachuteType, Collections.singleton(var1.username)));
-        ((EntityPlayerMP)var1).playerNetServerHandler.sendPacketToPlayer(AetherPacketHandler.sendCooldown(false, true, this.cooldown, this.cooldownMax, this.cooldownName, Collections.singleton(var1.username)));
-        ((EntityPlayerMP)var1).playerNetServerHandler.sendPacketToPlayer(AetherPacketHandler.sendCoinChange(false, true, this.coinAmount, Collections.singleton(var1.username)));
-        ((EntityPlayerMP)var1).playerNetServerHandler.sendPacketToPlayer(AetherPacketHandler.sendAllParties(PartyController.instance().getParties()));
-        String var9 = Aether.getInstance().getKey(var1.username);
+        PacketDispatcher.sendPacketToAllPlayers(AetherPacketHandler.sendParachuteCheck(false, this.isParachuting, this.isParachuting, this.parachuteType, Collections.singleton(player.username)));
+        ((EntityPlayerMP)player).playerNetServerHandler.sendPacketToPlayer(AetherPacketHandler.sendCooldown(false, true, this.cooldown, this.cooldownMax, this.cooldownName, Collections.singleton(player.username)));
+        ((EntityPlayerMP)player).playerNetServerHandler.sendPacketToPlayer(AetherPacketHandler.sendCoinChange(false, true, this.coinAmount, Collections.singleton(player.username)));
+        ((EntityPlayerMP)player).playerNetServerHandler.sendPacketToPlayer(AetherPacketHandler.sendAllParties(PartyController.instance().getParties()));
+        String var9 = Aether.getInstance().getKey(player.username);
 
         if (var9 != null)
         {
             Aether.getInstance();
-            Aether.syncDonatorList.sendDonatorToAll(var1.username, new Donator(var1.username, var9));
+            Aether.syncDonatorList.sendDonatorToAll(player.username, new Donator(player.username, var9));
         }
 
         var10000 = Aether.instance;
@@ -139,74 +139,74 @@ public class AetherPlayerTracker implements IPlayerTracker
         while (var11.hasNext())
         {
             Entry var13 = (Entry)var11.next();
-            String var7 = (String)var13.getKey();
-            PlayerClientInfo var8 = (PlayerClientInfo)var13.getValue();
-            ((EntityPlayerMP)var1).playerNetServerHandler.sendPacketToPlayer(AetherPacketHandler.sendPlayerClientInfo(false, true, var7, var8));
+            String dungeon = (String)var13.getKey();
+            PlayerClientInfo playerClientInfo = (PlayerClientInfo)var13.getValue();
+            ((EntityPlayerMP)player).playerNetServerHandler.sendPacketToPlayer(AetherPacketHandler.sendPlayerClientInfo(false, true, dungeon, playerClientInfo));
         }
 
-        this.updatePlayerClientInfo((EntityPlayerMP)var1, true);
+        this.updatePlayerClientInfo((EntityPlayerMP)player, true);
         Iterator var12 = DungeonHandler.instance().getInstances().iterator();
 
         while (var12.hasNext())
         {
             Dungeon var14 = (Dungeon)var12.next();
-            ((EntityPlayerMP)var1).playerNetServerHandler.sendPacketToPlayer(AetherPacketHandler.sendDungeonChange(true, var14));
+            ((EntityPlayerMP)player).playerNetServerHandler.sendPacketToPlayer(AetherPacketHandler.sendDungeonChange(true, var14));
         }
     }
 
-    public void updatePlayerClientInfo(EntityPlayerMP var1, boolean var2)
+    public void updatePlayerClientInfo(EntityPlayerMP player, boolean adding)
     {
-        if (!var1.worldObj.isRemote)
+        if (!player.worldObj.isRemote)
         {
-            MinecraftServer var3 = FMLCommonHandler.instance().getMinecraftServerInstance();
-            ServerConfigurationManager var4 = var3.getConfigurationManager();
-            PlayerClientInfo var5 = new PlayerClientInfo(var1.getHealth(), var1.getMaxHealth(), var1.getFoodStats().getFoodLevel(), var1.getTotalArmorValue(), Aether.getServerPlayer(var1).getCoins());
-            Aether.proxy.getPlayerClientInfo().put(var1.username, var5);
-            PartyMember var6 = PartyController.instance().getMember(var1.username);
-            Party var7 = PartyController.instance().getParty(var6);
+            MinecraftServer server = FMLCommonHandler.instance().getMinecraftServerInstance();
+            ServerConfigurationManager configManager = server.getConfigurationManager();
+            PlayerClientInfo playerClientInfo = new PlayerClientInfo((int)player.func_110143_aJ(), (int)player.func_110138_aP(), player.getFoodStats().getFoodLevel(), player.getTotalArmorValue(), Aether.getServerPlayer(player).getCoins());
+            Aether.proxy.getPlayerClientInfo().put(player.username, playerClientInfo);
+            PartyMember member = PartyController.instance().getMember(player.username);
+            Party party = PartyController.instance().getParty(member);
 
-            for (int var8 = 0; var8 < var4.playerEntityList.size(); ++var8)
+            for (int playerAmount = 0; playerAmount < configManager.playerEntityList.size(); ++playerAmount)
             {
-                EntityPlayerMP var9 = (EntityPlayerMP)var4.playerEntityList.get(var8);
-                var9.playerNetServerHandler.sendPacketToPlayer(AetherPacketHandler.sendPlayerClientInfo(false, var2, var1.username, var5));
+                EntityPlayerMP entityPlayer = (EntityPlayerMP)configManager.playerEntityList.get(playerAmount);
+                entityPlayer.playerNetServerHandler.sendPacketToPlayer(AetherPacketHandler.sendPlayerClientInfo(false, adding, player.username, playerClientInfo));
             }
 
-            var1.playerNetServerHandler.sendPacketToPlayer(AetherPacketHandler.sendPlayerClientInfo(false, var2, var1.username, var5));
+            player.playerNetServerHandler.sendPacketToPlayer(AetherPacketHandler.sendPlayerClientInfo(false, adding, player.username, playerClientInfo));
         }
     }
 
-    public void onPlayerLogout(EntityPlayer var1)
+    public void onPlayerLogout(EntityPlayer player)
     {
-        PartyMember var2 = PartyController.instance().getMember(var1);
-        int var3 = MathHelper.floor_double(var1.posX);
-        int var4 = MathHelper.floor_double(var1.posY);
-        int var5 = MathHelper.floor_double(var1.posZ);
-        MinecraftServer var6 = FMLCommonHandler.instance().getMinecraftServerInstance();
-        ServerConfigurationManager var7 = var6.getConfigurationManager();
-        Party var8 = PartyController.instance().getParty(var2);
+        PartyMember member = PartyController.instance().getMember(player);
+        int x = MathHelper.floor_double(player.posX);
+        int y = MathHelper.floor_double(player.posY);
+        int z = MathHelper.floor_double(player.posZ);
+        MinecraftServer server = FMLCommonHandler.instance().getMinecraftServerInstance();
+        ServerConfigurationManager configManager = server.getConfigurationManager();
+        Party party = PartyController.instance().getParty(member);
 
-        if (var2 != null && var7.playerEntityList.size() > 1 && var8 != null)
+        if (member != null && configManager.playerEntityList.size() > 1 && party != null)
         {
-            Dungeon var9 = DungeonHandler.instance().getDungeon(var8);
-            PartyController.instance().leaveParty(var8, var2, false);
-            PacketDispatcher.sendPacketToAllPlayers(AetherPacketHandler.sendPartyMemberChange(false, var8.getName(), var2.username, ""));
+            Dungeon dungeon = DungeonHandler.instance().getDungeon(party);
+            PartyController.instance().leaveParty(party, member, false);
+            PacketDispatcher.sendPacketToAllPlayers(AetherPacketHandler.sendPartyMemberChange(false, party.getName(), member.username));
 
-            if (var9 != null && !var9.hasStarted())
+            if (dungeon != null && !dungeon.hasStarted())
             {
-                DungeonHandler.instance().checkForQueue(var9);
-                PacketDispatcher.sendPacketToAllPlayers(AetherPacketHandler.sendDungeonQueueCheck(var9));
+                DungeonHandler.instance().checkForQueue(dungeon);
+                PacketDispatcher.sendPacketToAllPlayers(AetherPacketHandler.sendDungeonQueueCheck(dungeon));
             }
         }
 
-        PacketDispatcher.sendPacketToAllPlayers(AetherPacketHandler.sendAccessoryChange(Aether.getServerPlayer((EntityPlayerMP)var1).inv.writeToNBT(new NBTTagList()), false, false, Collections.singleton(var1.username), (byte)1));
-        PacketDispatcher.sendPacketToAllPlayers(AetherPacketHandler.sendHeartChange(false, false, Aether.getServerPlayer(var1).maxHealth, Collections.singleton(var1.username)));
-        PacketDispatcher.sendPacketToAllPlayers(AetherPacketHandler.sendCooldown(false, false, Aether.getServerPlayer(var1).generalcooldown, Aether.getServerPlayer(var1).generalcooldownmax, Aether.getServerPlayer(var1).cooldownName, Collections.singleton(var1.username)));
-        PacketDispatcher.sendPacketToAllPlayers(AetherPacketHandler.sendCoinChange(false, false, Aether.getServerPlayer(var1).getCoins(), Collections.singleton(var1.username)));
-        PacketDispatcher.sendPacketToAllPlayers(AetherPacketHandler.sendParachuteCheck(false, false, Aether.getServerPlayer(var1).getParachuting(), Aether.getServerPlayer(var1).getParachuteType(), Collections.singleton(var1.username)));
-        this.updatePlayerClientInfo((EntityPlayerMP)var1, false);
+        PacketDispatcher.sendPacketToAllPlayers(AetherPacketHandler.sendAccessoryChange(Aether.getServerPlayer((EntityPlayerMP)player).inv.writeToNBT(new NBTTagList()), false, false, Collections.singleton(player.username), (byte)1));
+        PacketDispatcher.sendPacketToAllPlayers(AetherPacketHandler.sendHeartChange(false, false, (int)this.entityPlayer.func_110138_aP(), Collections.singleton(player.username)));
+        PacketDispatcher.sendPacketToAllPlayers(AetherPacketHandler.sendCooldown(false, false, Aether.getServerPlayer(player).generalcooldown, Aether.getServerPlayer(player).generalcooldownmax, Aether.getServerPlayer(player).cooldownName, Collections.singleton(player.username)));
+        PacketDispatcher.sendPacketToAllPlayers(AetherPacketHandler.sendCoinChange(false, false, Aether.getServerPlayer(player).getCoins(), Collections.singleton(player.username)));
+        PacketDispatcher.sendPacketToAllPlayers(AetherPacketHandler.sendParachuteCheck(false, false, Aether.getServerPlayer(player).getParachuting(), Aether.getServerPlayer(player).getParachuteType(), Collections.singleton(player.username)));
+        this.updatePlayerClientInfo((EntityPlayerMP)player, false);
     }
 
-    public void onPlayerChangedDimension(EntityPlayer var1) {}
+    public void onPlayerChangedDimension(EntityPlayer player) {}
 
-    public void onPlayerRespawn(EntityPlayer var1) {}
+    public void onPlayerRespawn(EntityPlayer player) {}
 }

@@ -10,22 +10,22 @@ import net.minecraft.network.packet.Packet250CustomPayload;
 
 public class PacketDonatorChange extends AetherPacket
 {
-    public PacketDonatorChange(int var1)
+    public PacketDonatorChange(int packetID)
     {
-        super(var1);
+        super(packetID);
     }
 
-    public void onPacketReceived(Packet250CustomPayload var1, Player var2)
+    public void onPacketReceived(Packet250CustomPayload packet, Player player)
     {
-        DataInputStream var3 = new DataInputStream(new ByteArrayInputStream(var1.data));
+        DataInputStream dat = new DataInputStream(new ByteArrayInputStream(packet.data));
 
         try
         {
-            byte var4 = var3.readByte();
-            String var5 = var3.readUTF();
-            String var6 = var3.readUTF();
+            byte e = dat.readByte();
+            String username = dat.readUTF();
+            String RSA = dat.readUTF();
             Aether.getInstance();
-            Aether.syncDonatorList.addDonator(var5, new Donator(var5, var6));
+            Aether.syncDonatorList.addDonator(username, new Donator(username, RSA));
         }
         catch (IOException var7)
         {

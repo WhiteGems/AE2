@@ -5,11 +5,11 @@ public class TrackedTileEntityCoord extends TrackedCoord
     private int trackedBlock;
     private int trackedBlockMeta;
 
-    public TrackedTileEntityCoord(int var1, int var2, int var3, int var4, int var5)
+    public TrackedTileEntityCoord(int x, int y, int z, int trackedBlock, int trackedBlockMeta)
     {
-        super(var1, var2, var3);
-        this.trackedBlock = var4;
-        this.trackedBlockMeta = var5;
+        super(x, y, z);
+        this.trackedBlock = trackedBlock;
+        this.trackedBlockMeta = trackedBlockMeta;
     }
 
     public int getBlock()

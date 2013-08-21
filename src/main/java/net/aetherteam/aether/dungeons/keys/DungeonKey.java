@@ -4,9 +4,9 @@ public class DungeonKey
 {
     EnumKeyType type;
 
-    public DungeonKey(EnumKeyType var1)
+    public DungeonKey(EnumKeyType type)
     {
-        this.type = var1;
+        this.type = type;
     }
 
     public EnumKeyType getType()

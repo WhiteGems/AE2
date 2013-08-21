@@ -92,27 +92,27 @@ public class ModelNewZephyr extends ModelBase
     /**
      * Sets the models various rotation angles then renders the model.
      */
-    public void render(Entity var1, float var2, float var3, float var4, float var5, float var6, float var7)
+    public void render(Entity entity, float f, float f1, float f2, float f3, float f4, float f5)
     {
-        super.render(var1, var2, var3, var4, var5, var6, var7);
-        this.setRotationAngles(var2, var3, var4, var5, var6, var7, var1);
-        this.mainbody.render(var7);
-        this.RBcloud.render(var7);
-        this.LBcloud.render(var7);
-        this.tail2.render(var7);
-        this.FRcloud.render(var7);
-        this.FLcloud.render(var7);
-        this.tail1.render(var7);
-        this.Shape1.render(var7);
-        this.Shape2.render(var7);
-        this.Shape3.render(var7);
+        super.render(entity, f, f1, f2, f3, f4, f5);
+        this.setRotationAngles(f, f1, f2, f3, f4, f5, entity);
+        this.mainbody.render(f5);
+        this.RBcloud.render(f5);
+        this.LBcloud.render(f5);
+        this.tail2.render(f5);
+        this.FRcloud.render(f5);
+        this.FLcloud.render(f5);
+        this.tail1.render(f5);
+        this.Shape1.render(f5);
+        this.Shape2.render(f5);
+        this.Shape3.render(f5);
     }
 
-    private void setRotation(ModelRenderer var1, float var2, float var3, float var4)
+    private void setRotation(ModelRenderer model, float x, float y, float z)
     {
-        var1.rotateAngleX = var2;
-        var1.rotateAngleY = var3;
-        var1.rotateAngleZ = var4;
+        model.rotateAngleX = x;
+        model.rotateAngleY = y;
+        model.rotateAngleZ = z;
     }
 
     /**
@@ -120,39 +120,39 @@ public class ModelNewZephyr extends ModelBase
      * and legs, where par1 represents the time(so that arms and legs swing back and forth) and par2 represents how
      * "far" arms and legs can swing at most.
      */
-    public void setRotationAngles(float var1, float var2, float var3, float var4, float var5, float var6, Entity var7)
+    public void setRotationAngles(float f, float f1, float f2, float f3, float f4, float f5, Entity entity)
     {
-        super.setRotationAngles(var1, var2, var3, var4, var5, var6, var7);
-        float var8 = this.sinage2;
-        float var9 = 5.5F;
-        float var10 = (float)(Math.sin((double)(var1 * 20.0F) / (180D / Math.PI)) * (double)var2 * 0.5D);
-        float var11 = (float)Math.PI;
-        float var12 = var11 / 2.0F;
-        float var13 = var11 * 3.0F / 11.0F;
-        this.FRcloud.rotationPointY = var10 + 10.0F;
-        this.FLcloud.rotationPointX = var10 * 0.5F;
-        this.LBcloud.rotationPointY = 8.0F - var10 * 0.5F;
-        this.RBcloud.rotationPointY = 9.0F + var10 * 0.5F;
-        this.Shape2.rotationPointY = 10.0F - var10;
-        this.Shape2.rotationPointX = -var10 * 0.5F;
-        this.Shape1.rotationPointY = 10.0F + var10;
-        this.Shape1.rotationPointX = var10 * 0.5F;
-        this.tail1.rotationPointX = (float)(Math.sin((double)(var1 * 20.0F) / (180D / Math.PI)) * (double)var2 * 0.75D);
-        this.tail1.rotateAngleY = (float)Math.pow(0.9900000095367432D, -4.0D) * 1.0F * var11 / 4.0F * MathHelper.cos(-0.055F * var1 + var12);
-        this.tail1.rotationPointY = 10.0F - var10;
-        this.tail2.rotationPointX = (float)Math.pow(0.9900000095367432D, 1.0D) * 1.0F * var11 / 4.0F * MathHelper.cos(-0.055F * var1 + var12);
-        this.tail2.rotationPointY = 10.0F - var10 * 1.25F;
+        super.setRotationAngles(f, f1, f2, f3, f4, f5, entity);
+        float boff = this.sinage2;
+        float yOffset = 5.5F;
+        float vertMotion = (float)(Math.sin((double)(f * 20.0F) / (180D / Math.PI)) * (double)f1 * 0.5D);
+        float PI = (float)Math.PI;
+        float initialOffset = PI / 2.0F;
+        float offset = PI * 3.0F / 11.0F;
+        this.FRcloud.rotationPointY = vertMotion + 10.0F;
+        this.FLcloud.rotationPointX = vertMotion * 0.5F;
+        this.LBcloud.rotationPointY = 8.0F - vertMotion * 0.5F;
+        this.RBcloud.rotationPointY = 9.0F + vertMotion * 0.5F;
+        this.Shape2.rotationPointY = 10.0F - vertMotion;
+        this.Shape2.rotationPointX = -vertMotion * 0.5F;
+        this.Shape1.rotationPointY = 10.0F + vertMotion;
+        this.Shape1.rotationPointX = vertMotion * 0.5F;
+        this.tail1.rotationPointX = (float)(Math.sin((double)(f * 20.0F) / (180D / Math.PI)) * (double)f1 * 0.75D);
+        this.tail1.rotateAngleY = (float)Math.pow(0.9900000095367432D, -4.0D) * 1.0F * PI / 4.0F * MathHelper.cos(-0.055F * f + initialOffset);
+        this.tail1.rotationPointY = 10.0F - vertMotion;
+        this.tail2.rotationPointX = (float)Math.pow(0.9900000095367432D, 1.0D) * 1.0F * PI / 4.0F * MathHelper.cos(-0.055F * f + initialOffset);
+        this.tail2.rotationPointY = 10.0F - vertMotion * 1.25F;
         this.tail2.rotateAngleY = this.tail1.rotateAngleY + 0.25F;
-        this.Shape3.rotationPointY = (float)(8 + ((EntityNewZephyr)var7).attackTime + 1);
-        this.mainbody.rotationPointY = var8 + var9 + this.sinage * 2.0F;
-        this.RBcloud.rotationPointY = var8 + var9 + this.sinage * 2.0F;
-        this.LBcloud.rotationPointY = var8 + var9 + this.sinage * 2.0F;
-        this.tail2.rotationPointY = var8 + var9 + this.sinage * 2.0F;
-        this.FRcloud.rotationPointY = var8 + var9 + this.sinage * 2.0F;
-        this.FLcloud.rotationPointY = var8 + var9 + this.sinage * 2.0F;
-        this.tail1.rotationPointY = var8 + var9 + this.sinage * 2.0F;
-        this.Shape1.rotationPointY = var8 + var9 + this.sinage * 2.0F;
-        this.Shape2.rotationPointY = var8 + var9 + this.sinage * 2.0F;
-        this.Shape3.rotationPointY = var8 + var9 + this.sinage * 2.0F;
+        this.Shape3.rotationPointY = (float)(8 + ((EntityNewZephyr)entity).attackTime + 1);
+        this.mainbody.rotationPointY = boff + yOffset + this.sinage * 2.0F;
+        this.RBcloud.rotationPointY = boff + yOffset + this.sinage * 2.0F;
+        this.LBcloud.rotationPointY = boff + yOffset + this.sinage * 2.0F;
+        this.tail2.rotationPointY = boff + yOffset + this.sinage * 2.0F;
+        this.FRcloud.rotationPointY = boff + yOffset + this.sinage * 2.0F;
+        this.FLcloud.rotationPointY = boff + yOffset + this.sinage * 2.0F;
+        this.tail1.rotationPointY = boff + yOffset + this.sinage * 2.0F;
+        this.Shape1.rotationPointY = boff + yOffset + this.sinage * 2.0F;
+        this.Shape2.rotationPointY = boff + yOffset + this.sinage * 2.0F;
+        this.Shape3.rotationPointY = boff + yOffset + this.sinage * 2.0F;
     }
 }

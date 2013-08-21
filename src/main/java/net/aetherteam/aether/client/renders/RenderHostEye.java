@@ -4,50 +4,54 @@ import net.aetherteam.aether.entities.bosses.EntityHostEye;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.entity.RenderLiving;
-import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.util.ResourceLocation;
 import org.lwjgl.opengl.GL11;
 
 public class RenderHostEye extends RenderLiving
 {
-    public RenderHostEye(ModelBase var1, float var2)
+    public static final ResourceLocation TEXTURE = new ResourceLocation("aether", "textures/mobs/host/hosteye.png");
+
+    public RenderHostEye(ModelBase ms, float f)
     {
-        super(var1, var2);
-        this.renderPassModel = var1;
+        super(ms, f);
+        this.renderPassModel = ms;
     }
 
     /**
      * Allows the render to do any OpenGL state modifications necessary before the model is rendered. Args:
      * entityLiving, partialTickTime
      */
-    protected void preRenderCallback(EntityLiving var1, float var2)
+    protected void preRenderCallback(EntityLivingBase entityliving, float f)
     {
-        EntityHostEye var3 = (EntityHostEye)var1;
+        EntityHostEye eye = (EntityHostEye)entityliving;
 
-        if (var3.harvey > 0.01F)
+        if (eye.harvey > 0.01F)
         {
-            GL11.glRotatef(var3.harvey * -30.0F, (float)var3.rennis, 0.0F, (float)var3.dennis);
+            GL11.glRotatef(eye.harvey * -30.0F, (float)eye.rennis, 0.0F, (float)eye.dennis);
         }
     }
 
-    protected int setSliderEyeBrightness(EntityHostEye var1, int var2, float var3)
+    protected int setSliderEyeBrightness(EntityHostEye eye, int i, float f)
     {
-        if (var2 != 0)
+        if (i != 0)
         {
             return -1;
         }
         else
         {
-            this.loadTexture("/net/aetherteam/aether/client/sprites/mobs/host/hosteye.png");
-            float var4 = 1.0F;
+            this.func_110777_b(eye);
+            float f1 = 1.0F;
             GL11.glEnable(GL11.GL_BLEND);
             GL11.glDisable(GL11.GL_ALPHA_TEST);
             GL11.glBlendFunc(GL11.GL_ONE, GL11.GL_ONE);
-            char var5 = 61680;
-            int var6 = var5 % 65536;
-            int var7 = var5 / 65536;
-            OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, (float)var6 / 1.0F, (float)var7 / 1.0F);
+            char j = 61680;
+            int k = j % 65536;
+            int l = j / 65536;
+            OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, (float)k / 1.0F, (float)l / 1.0F);
             GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-            GL11.glColor4f(1.0F, 1.0F, 1.0F, var4);
+            GL11.glColor4f(1.0F, 1.0F, 1.0F, f1);
             return 1;
         }
     }
@@ -55,8 +59,13 @@ public class RenderHostEye extends RenderLiving
     /**
      * Queries whether should render the specified pass or not.
      */
-    protected int shouldRenderPass(EntityLiving var1, int var2, float var3)
+    protected int shouldRenderPass(EntityLivingBase entityliving, int i, float f)
     {
-        return this.setSliderEyeBrightness((EntityHostEye)var1, var2, var3);
+        return this.setSliderEyeBrightness((EntityHostEye)entityliving, i, f);
+    }
+
+    protected ResourceLocation func_110775_a(Entity entity)
+    {
+        return TEXTURE;
     }
 }

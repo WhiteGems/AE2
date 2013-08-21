@@ -26,19 +26,19 @@ public class ModelMimic extends ModelBase
         this.rightLeg.setRotationPoint(4.0F, 9.0F, 0.0F);
     }
 
-    public void render1(float var1, float var2, float var3, float var4, float var5, float var6, EntityMimic var7)
+    public void render1(float f, float f1, float f2, float f3, float f4, float f5, EntityMimic mimic)
     {
-        this.setRotationAngles(var1, var2, var3, var4, var5, var6, var7);
-        this.boxLid.rotateAngleX = (float)Math.PI - var7.mouth;
-        this.rightLeg.rotateAngleX = var7.legs;
-        this.leftLeg.rotateAngleX = -var7.legs;
-        this.box.render(var6);
+        this.setRotationAngles(f, f1, f2, f3, f4, f5, mimic);
+        this.boxLid.rotateAngleX = (float)Math.PI - mimic.mouth;
+        this.rightLeg.rotateAngleX = mimic.legs;
+        this.leftLeg.rotateAngleX = -mimic.legs;
+        this.box.render(f5);
     }
 
-    public void render2(float var1, float var2, float var3, float var4, float var5, float var6, EntityMimic var7)
+    public void render2(float f, float f1, float f2, float f3, float f4, float f5, EntityMimic mimic)
     {
-        this.boxLid.render(var6);
-        this.leftLeg.render(var6);
-        this.rightLeg.render(var6);
+        this.boxLid.render(f5);
+        this.leftLeg.render(f5);
+        this.rightLeg.render(f5);
     }
 }

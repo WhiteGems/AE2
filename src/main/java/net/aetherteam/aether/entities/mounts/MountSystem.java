@@ -3,6 +3,7 @@ package net.aetherteam.aether.entities.mounts;
 import cpw.mods.fml.common.network.PacketDispatcher;
 import java.util.ArrayList;
 import net.aetherteam.aether.packets.AetherPacketHandler;
+import net.aetherteam.playercore_api.cores.IPlayerCoreCommon;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
 
@@ -10,7 +11,7 @@ public class MountSystem
 {
     private static Minecraft mc = Minecraft.getMinecraft();
     private static EntityPlayerSP player;
-    public static ArrayList mountInput = new ArrayList();
+    public static ArrayList<MountInput> mountInput = new ArrayList();
     private static boolean isJumping;
     private static boolean movingForward;
     private static boolean movingBackward;
@@ -23,13 +24,13 @@ public class MountSystem
 
         if (player != null)
         {
-            float var0 = player.movementInput.moveForward;
-            float var1 = player.movementInput.moveStrafe;
-            movingForward = var0 > 0.1F;
-            movingBackward = var0 < -0.1F;
-            movingLeft = var1 > 0.1F;
-            movingRight = var1 < -0.1F;
-            isJumping = player.isJumping;
+            float forward = player.movementInput.moveForward;
+            float strafe = player.movementInput.moveStrafe;
+            movingForward = forward > 0.1F;
+            movingBackward = forward < -0.1F;
+            movingLeft = strafe > 0.1F;
+            movingRight = strafe < -0.1F;
+            isJumping = ((IPlayerCoreCommon)player).isJumping();
 
             if (player.ridingEntity != null)
             {
@@ -42,25 +43,25 @@ public class MountSystem
         }
     }
 
-    public static void applyInput(MountInput var0, boolean var1)
+    public static void applyInput(MountInput direction, boolean add)
     {
-        if (var1)
+        if (add)
         {
-            if (!mountInput.contains(var0))
+            if (!mountInput.contains(direction))
             {
-                mountInput.add(var0);
+                mountInput.add(direction);
                 sendInputPacket();
             }
         }
-        else if (mountInput.contains(var0))
+        else if (mountInput.contains(direction))
         {
-            mountInput.remove(var0);
+            mountInput.remove(direction);
             sendInputPacket();
         }
     }
 
     private static void sendInputPacket()
     {
-        PacketDispatcher.sendPacketToServer(AetherPacketHandler.sendPlayerInput(player.username, mountInput, player.isJumping));
+        PacketDispatcher.sendPacketToServer(AetherPacketHandler.sendPlayerInput(player.username, mountInput, ((IPlayerCoreCommon)player).isJumping()));
     }
 }

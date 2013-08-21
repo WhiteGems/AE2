@@ -22,7 +22,6 @@ import net.aetherteam.aether.worldgen.StructureBoundingBoxSerial;
 import net.aetherteam.aether.worldgen.StructureBronzeDungeonStart;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.audio.SoundManager;
 import net.minecraft.entity.EntityList;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.player.EntityPlayer;
@@ -42,25 +41,25 @@ public class Dungeon implements Serializable
     public int centerX;
     public int centerZ;
     private Party currentActiveParty;
-    private ArrayList conquerers;
-    private HashMap leavers;
-    public ArrayList boundingBoxes;
+    private ArrayList<String> conquerers;
+    private HashMap<String, Integer> leavers;
+    public ArrayList<StructureBoundingBoxSerial> boundingBoxes;
     public StructureBoundingBoxSerial boundingBox;
     private int dungeonID;
     private boolean active;
-    private HashMap queuedMembers;
+    private HashMap<String, PartyMember> queuedMembers;
     private Integer[] controllerCoords;
     private long startingTime;
     private boolean timerStarted;
     private int timerLength;
-    private ArrayList keyList;
-    private ArrayList savedBlockCoords;
-    private ArrayList savedEntityCoords;
-    private ArrayList savedTileEntities;
-    private ArrayList savedMobSpawners;
+    private ArrayList<DungeonKey> keyList;
+    private ArrayList<TrackedCoord> savedBlockCoords;
+    private ArrayList<TrackedEntityCoord> savedEntityCoords;
+    private ArrayList<TrackedTileEntityCoord> savedTileEntities;
+    private ArrayList<TrackedMobSpawnerCoord> savedMobSpawners;
     String aetherVersion;
 
-    public Dungeon(DungeonType var1, int var2, int var3, StructureBronzeDungeonStart var4)
+    public Dungeon(DungeonType type, int x, int z, StructureBronzeDungeonStart start)
     {
         this.conquerers = new ArrayList();
         this.leavers = new HashMap();
@@ -73,44 +72,44 @@ public class Dungeon implements Serializable
         this.savedEntityCoords = new ArrayList();
         this.savedTileEntities = new ArrayList();
         this.savedMobSpawners = new ArrayList();
-        this.dungeonType = var1;
+        this.dungeonType = type;
         this.name = this.dungeonType.getName();
         this.aetherVersion = Aether.getVersion();
-        this.centerX = var2;
-        this.centerZ = var3;
-        this.updateBoundingBox(var4);
+        this.centerX = x;
+        this.centerZ = z;
+        this.updateBoundingBox(start);
         this.dungeonID = DungeonHandler.instance().getInstances().size();
     }
 
-    public Dungeon(DungeonType var1, int var2, int var3, StructureBoundingBoxSerial var4, ArrayList var5)
+    public Dungeon(DungeonType type, int x, int z, StructureBoundingBoxSerial box, ArrayList<StructureBoundingBoxSerial> boxes)
     {
-        this(var1, var2, var3, (StructureBronzeDungeonStart)null);
-        this.boundingBox = var4;
-        this.boundingBoxes = var5;
+        this(type, x, z, (StructureBronzeDungeonStart)null);
+        this.boundingBox = box;
+        this.boundingBoxes = boxes;
     }
 
-    public void addKey(DungeonKey var1)
+    public void addKey(DungeonKey key)
     {
-        this.keyList.add(var1);
+        this.keyList.add(key);
     }
 
-    public void removeKey(DungeonKey var1)
+    public void removeKey(DungeonKey key)
     {
-        Iterator var2 = this.keyList.iterator();
-        DungeonKey var3;
+        Iterator i$ = this.keyList.iterator();
+        DungeonKey keyToRemove;
 
         do
         {
-            if (!var2.hasNext())
+            if (!i$.hasNext())
             {
                 return;
             }
 
-            var3 = (DungeonKey)var2.next();
+            keyToRemove = (DungeonKey)i$.next();
         }
-        while (var3.getType() != var1.getType());
+        while (keyToRemove.getType() != key.getType());
 
-        this.keyList.remove(var3);
+        this.keyList.remove(keyToRemove);
     }
 
     public int getKeyAmount()
@@ -118,49 +117,49 @@ public class Dungeon implements Serializable
         return this.keyList.size();
     }
 
-    public int getKeyAmount(DungeonKey var1)
+    public int getKeyAmount(DungeonKey key)
     {
-        return this.getKeyAmount(var1.getType());
+        return this.getKeyAmount(key.getType());
     }
 
-    public ArrayList getKeys()
+    public ArrayList<DungeonKey> getKeys()
     {
         return this.keyList;
     }
 
-    public int getKeyAmount(EnumKeyType var1)
+    public int getKeyAmount(EnumKeyType type)
     {
-        int var2 = 0;
+        int keyAmount = 0;
 
-        if (var1 != null)
+        if (type != null)
         {
-            Iterator var3 = this.keyList.iterator();
+            Iterator i$ = this.keyList.iterator();
 
-            while (var3.hasNext())
+            while (i$.hasNext())
             {
-                DungeonKey var4 = (DungeonKey)var3.next();
+                DungeonKey keyIt = (DungeonKey)i$.next();
 
-                if (var4.getType() == var1)
+                if (keyIt.getType() == type)
                 {
-                    ++var2;
+                    ++keyAmount;
                 }
             }
         }
 
-        return var2;
+        return keyAmount;
     }
 
-    public boolean hasKeyType(EnumKeyType var1)
+    public boolean hasKeyType(EnumKeyType type)
     {
-        if (var1 != null)
+        if (type != null)
         {
-            Iterator var2 = this.keyList.iterator();
+            Iterator i$ = this.keyList.iterator();
 
-            while (var2.hasNext())
+            while (i$.hasNext())
             {
-                DungeonKey var3 = (DungeonKey)var2.next();
+                DungeonKey keyIt = (DungeonKey)i$.next();
 
-                if (var3.getType() == var1)
+                if (keyIt.getType() == type)
                 {
                     return true;
                 }
@@ -175,9 +174,9 @@ public class Dungeon implements Serializable
         return this.dungeonType;
     }
 
-    public Dungeon setID(int var1)
+    public Dungeon setID(int id)
     {
-        this.dungeonID = var1;
+        this.dungeonID = id;
         return this;
     }
 
@@ -186,62 +185,62 @@ public class Dungeon implements Serializable
         return this.dungeonID;
     }
 
-    public void updateBoundingBox(StructureBronzeDungeonStart var1)
+    public void updateBoundingBox(StructureBronzeDungeonStart structure)
     {
-        if (var1 != null)
+        if (structure != null)
         {
             this.boundingBox = StructureBoundingBoxSerial.getNewBoundingBox();
-            Iterator var2 = var1.components.iterator();
+            Iterator componentsIt = structure.components.iterator();
 
-            while (var2.hasNext())
+            while (componentsIt.hasNext())
             {
-                ComponentDungeonBronzeRoom var3 = (ComponentDungeonBronzeRoom)var2.next();
-                StructureBoundingBoxSerial var4 = new StructureBoundingBoxSerial(var3.getBoundingBox());
-                this.boundingBoxes.add(var4);
-                this.boundingBox.expandTo(var4);
+                ComponentDungeonBronzeRoom component = (ComponentDungeonBronzeRoom)componentsIt.next();
+                StructureBoundingBoxSerial serialBox = new StructureBoundingBoxSerial(component.getBoundingBox());
+                this.boundingBoxes.add(serialBox);
+                this.boundingBox.expandTo(serialBox);
             }
         }
     }
 
-    public void finishDungeon(Party var1)
+    public void finishDungeon(Party party)
     {
         if (this.currentActiveParty != null)
         {
-            Side var2 = FMLCommonHandler.instance().getEffectiveSide();
+            Side side = FMLCommonHandler.instance().getEffectiveSide();
 
-            if (this.currentActiveParty.getName().equalsIgnoreCase(var1.getName()) && this.active)
+            if (this.currentActiveParty.getName().equalsIgnoreCase(party.getName()) && this.active)
             {
-                if (var2.isServer())
+                if (side.isServer())
                 {
-                    MinecraftServer var3 = FMLCommonHandler.instance().getMinecraftServerInstance();
-                    ServerConfigurationManager var4 = var3.getConfigurationManager();
-                    EntityPlayer var5 = null;
-                    Iterator var6 = var4.playerEntityList.iterator();
+                    MinecraftServer i$ = FMLCommonHandler.instance().getMinecraftServerInstance();
+                    ServerConfigurationManager member = i$.getConfigurationManager();
+                    EntityPlayer player = null;
+                    Iterator controller = member.playerEntityList.iterator();
 
-                    while (var6.hasNext())
+                    while (controller.hasNext())
                     {
-                        Object var7 = var6.next();
+                        Object obj = controller.next();
 
-                        if (var7 instanceof EntityPlayer && var1.hasMember(((EntityPlayer)var7).username.toLowerCase()) && ((EntityPlayer)var7).username.equalsIgnoreCase(var1.getLeader().username.toLowerCase()))
+                        if (obj instanceof EntityPlayer && party.hasMember(((EntityPlayer)obj).username.toLowerCase()) && ((EntityPlayer)obj).username.equalsIgnoreCase(party.getLeader().username.toLowerCase()))
                         {
-                            var5 = (EntityPlayer)var7;
+                            player = (EntityPlayer)obj;
                         }
                     }
 
-                    if (var5 != null)
+                    if (player != null)
                     {
-                        TileEntityEntranceController var10 = (TileEntityEntranceController)var5.worldObj.getBlockTileEntity(this.controllerCoords[0].intValue(), this.controllerCoords[1].intValue(), this.controllerCoords[2].intValue());
-                        var10.teleportMembersFromParty(this.getQueuedMembers(), true);
-                        this.cleanUpDungeon(var10.worldObj);
+                        TileEntityEntranceController controller1 = (TileEntityEntranceController)player.worldObj.getBlockTileEntity(this.controllerCoords[0].intValue(), this.controllerCoords[1].intValue(), this.controllerCoords[2].intValue());
+                        controller1.teleportMembersFromParty(this.getQueuedMembers(), true);
+                        this.cleanUpDungeon(controller1.worldObj);
                     }
                 }
 
-                Iterator var8 = this.getQueuedMembers().iterator();
+                Iterator i$1 = this.getQueuedMembers().iterator();
 
-                while (var8.hasNext())
+                while (i$1.hasNext())
                 {
-                    PartyMember var9 = (PartyMember)var8.next();
-                    this.conquerers.add(var9.username.toLowerCase());
+                    PartyMember member1 = (PartyMember)i$1.next();
+                    this.conquerers.add(member1.username.toLowerCase());
                 }
 
                 this.currentActiveParty = null;
@@ -257,72 +256,72 @@ public class Dungeon implements Serializable
         }
     }
 
-    public boolean hasConqueredDungeon(String var1)
+    public boolean hasConqueredDungeon(String username)
     {
-        Iterator var2 = this.conquerers.iterator();
-        String var3;
+        Iterator i$ = this.conquerers.iterator();
+        String leaverName;
 
         do
         {
-            if (!var2.hasNext())
+            if (!i$.hasNext())
             {
-                var2 = this.leavers.keySet().iterator();
+                i$ = this.leavers.keySet().iterator();
 
                 do
                 {
-                    if (!var2.hasNext())
+                    if (!i$.hasNext())
                     {
                         return false;
                     }
 
-                    var3 = (String)var2.next();
+                    leaverName = (String)i$.next();
 
-                    if (this.leavers.get(var1.toLowerCase()) != null)
+                    if (this.leavers.get(username.toLowerCase()) != null)
                     {
                         ;
                     }
                 }
-                while (!var1.equalsIgnoreCase(var3) || this.leavers.get(var1.toLowerCase()) == null || ((Integer)this.leavers.get(var1.toLowerCase())).intValue() < 3);
+                while (!username.equalsIgnoreCase(leaverName) || this.leavers.get(username.toLowerCase()) == null || ((Integer)this.leavers.get(username.toLowerCase())).intValue() < 3);
 
                 return true;
             }
 
-            var3 = (String)var2.next();
+            leaverName = (String)i$.next();
         }
-        while (!var1.equalsIgnoreCase(var3));
+        while (!username.equalsIgnoreCase(leaverName));
 
         return true;
     }
 
-    public boolean hasConqueredDungeon(EntityPlayer var1)
+    public boolean hasConqueredDungeon(EntityPlayer player)
     {
-        return this.hasConqueredDungeon(var1.username);
+        return this.hasConqueredDungeon(player.username);
     }
 
-    public boolean hasConqueredDungeon(PartyMember var1)
+    public boolean hasConqueredDungeon(PartyMember player)
     {
-        return this.hasConqueredDungeon(var1.username);
+        return this.hasConqueredDungeon(player.username);
     }
 
-    public boolean hasAnyConqueredDungeon(ArrayList var1)
+    public boolean hasAnyConqueredDungeon(ArrayList players)
     {
-        for (int var2 = 0; var2 < var1.size(); ++var2)
+        for (int count = 0; count < players.size(); ++count)
         {
-            if (var1.get(var2) instanceof PartyMember)
+            if (players.get(count) instanceof PartyMember)
             {
-                if (this.hasConqueredDungeon((PartyMember)var1.get(var2)))
+                if (this.hasConqueredDungeon((PartyMember)players.get(count)))
                 {
                     return true;
                 }
             }
-            else if (var1.get(var2) instanceof EntityPlayer)
+            else if (players.get(count) instanceof EntityPlayer)
             {
-                if (this.hasConqueredDungeon((EntityPlayer)var1.get(var2)))
+                if (this.hasConqueredDungeon((EntityPlayer)players.get(count)))
                 {
                     return true;
                 }
             }
-            else if (var1.get(var2) instanceof String && this.hasConqueredDungeon((String)var1.get(var2)))
+            else if (players.get(count) instanceof String && this.hasConqueredDungeon((String)players.get(count)))
             {
                 return true;
             }
@@ -331,19 +330,19 @@ public class Dungeon implements Serializable
         return false;
     }
 
-    public boolean hasListConqueredDungeon(ArrayList var1)
+    public boolean hasListConqueredDungeon(ArrayList players)
     {
-        return !this.hasAnyConqueredDungeon(var1);
+        return !this.hasAnyConqueredDungeon(players);
     }
 
-    public void queueParty(Party var1, int var2, int var3, int var4)
+    public void queueParty(Party party, int controlX, int controlY, int controlZ)
     {
-        if (this.currentActiveParty == null && var1 != null)
+        if (this.currentActiveParty == null && party != null)
         {
-            this.currentActiveParty = var1;
-            this.controllerCoords[0] = Integer.valueOf(MathHelper.floor_double((double)var2));
-            this.controllerCoords[1] = Integer.valueOf(MathHelper.floor_double((double)var3));
-            this.controllerCoords[2] = Integer.valueOf(MathHelper.floor_double((double)var4));
+            this.currentActiveParty = party;
+            this.controllerCoords[0] = Integer.valueOf(MathHelper.floor_double((double)controlX));
+            this.controllerCoords[1] = Integer.valueOf(MathHelper.floor_double((double)controlY));
+            this.controllerCoords[2] = Integer.valueOf(MathHelper.floor_double((double)controlZ));
         }
 
         DungeonHandler.instance().saveDungeons();
@@ -351,21 +350,7 @@ public class Dungeon implements Serializable
 
     public boolean isSoundOn()
     {
-        boolean var1;
-
-        if (this.isClient() && Aether.proxy.getClient().sndManager != null)
-        {
-            SoundManager var10000 = Aether.proxy.getClient().sndManager;
-
-            if (SoundManager.sndSystem != null)
-            {
-                var1 = true;
-                return var1;
-            }
-        }
-
-        var1 = false;
-        return var1;
+        return this.isClient() && Aether.proxy.getClient().sndManager != null && Aether.proxy.getClient().sndManager.sndSystem != null;
     }
 
     public boolean isClient()
@@ -375,80 +360,64 @@ public class Dungeon implements Serializable
 
     public boolean isMusicPlaying()
     {
-        SoundManager var10000 = Aether.proxy.getClient().sndManager;
-        boolean var1;
-
-        if (SoundManager.sndSystem != null)
-        {
-            var10000 = Aether.proxy.getClient().sndManager;
-
-            if (SoundManager.sndSystem.playing("streaming"))
-            {
-                var1 = true;
-                return var1;
-            }
-        }
-
-        var1 = false;
-        return var1;
+        return Aether.proxy.getClient().sndManager.sndSystem != null && Aether.proxy.getClient().sndManager.sndSystem.playing("streaming");
     }
 
     public void turnMusicOff()
     {
         if (this.isSoundOn())
         {
-            SoundManager var10000 = Aether.proxy.getClient().sndManager;
-            SoundManager.sndSystem.stop("streaming");
+            Aether.proxy.getClient().sndManager.sndSystem.stop("streaming");
         }
     }
 
-    public void playMusicFile(String var1, int var2, int var3, int var4)
+    public void playMusicFile(String fileName, int x, int y, int z)
     {
         if (this.isSoundOn())
         {
-            Aether.proxy.getClient().sndManager.playStreaming(var1, (float)var2, (float)var3, (float)var4);
+            Aether.proxy.getClient().sndManager.playStreaming(fileName, (float)x, (float)y, (float)z);
         }
     }
 
     public void checkForQueue()
     {
-        Side var1 = FMLCommonHandler.instance().getEffectiveSide();
+        Side side = FMLCommonHandler.instance().getEffectiveSide();
 
         if (this.currentActiveParty != null && this.queuedMembers.size() >= this.currentActiveParty.getMembers().size() && !this.hasStarted && this.currentActiveParty.getMembers() != null)
         {
             this.hasStarted = true;
 
-            if (var1.isServer())
+            if (side.isServer())
             {
-                MinecraftServer var2 = FMLCommonHandler.instance().getMinecraftServerInstance();
-                ServerConfigurationManager var3 = var2.getConfigurationManager();
-                EntityPlayer var4 = null;
-                Iterator var5 = var3.playerEntityList.iterator();
+                MinecraftServer server = FMLCommonHandler.instance().getMinecraftServerInstance();
+                ServerConfigurationManager configManager = server.getConfigurationManager();
+                EntityPlayer player = null;
+                Iterator controller = configManager.playerEntityList.iterator();
 
-                while (var5.hasNext())
+                while (controller.hasNext())
                 {
-                    Object var6 = var5.next();
+                    Object obj = controller.next();
 
-                    if (var6 instanceof EntityPlayer && this.currentActiveParty.hasMember(((EntityPlayer)var6).username.toLowerCase()))
+                    if (obj instanceof EntityPlayer && this.currentActiveParty.hasMember(((EntityPlayer)obj).username.toLowerCase()))
                     {
-                        if (((EntityPlayer)var6).username.equalsIgnoreCase(this.currentActiveParty.getLeader().username.toLowerCase()))
+                        if (((EntityPlayer)obj).username.equalsIgnoreCase(this.currentActiveParty.getLeader().username.toLowerCase()))
                         {
-                            var4 = (EntityPlayer)var6;
+                            player = (EntityPlayer)obj;
                         }
 
-                        EntityPlayer var7 = (EntityPlayer)var6;
+                        EntityPlayer player2 = (EntityPlayer)obj;
 
-                        if (var7.dimension != 3)
+                        if (player2.dimension != 3)
                         {
-                            TileEntityEntranceController var8 = (TileEntityEntranceController)var4.worldObj.getBlockTileEntity(this.controllerCoords[0].intValue(), this.controllerCoords[1].intValue(), this.controllerCoords[2].intValue());
+                            TileEntityEntranceController controller1 = (TileEntityEntranceController)player.worldObj.getBlockTileEntity(this.controllerCoords[0].intValue(), this.controllerCoords[1].intValue(), this.controllerCoords[2].intValue());
 
-                            if (var8 != null)
+                            if (controller1 != null)
                             {
-                                int var9 = MathHelper.floor_double((double)var8.xCoord);
-                                int var10 = MathHelper.floor_double((double)var8.yCoord);
-                                int var11 = MathHelper.floor_double((double)var8.zCoord);
-                                DungeonHandler.instance().disbandQueue(this, this.currentActiveParty, var9, var10, var11, PartyController.instance().getMember((EntityPlayer)var6), false);
-                                PacketDispatcher.sendPacketToAllPlayers(AetherPacketHandler.sendDungeonQueueChange(false, this, var9, var10, var11, this.currentActiveParty));
+                                int x = MathHelper.floor_double((double)controller1.xCoord);
+                                int y = MathHelper.floor_double((double)controller1.yCoord);
+                                int z = MathHelper.floor_double((double)controller1.zCoord);
+                                DungeonHandler.instance().disbandQueue(this, this.currentActiveParty, x, y, z, PartyController.instance().getMember((EntityPlayer)obj), false);
+                                PacketDispatcher.sendPacketToAllPlayers(AetherPacketHandler.sendDungeonQueueChange(false, this, x, y, z, this.currentActiveParty));
                             }
 
                             return;
@@ -456,37 +425,37 @@ public class Dungeon implements Serializable
                     }
                 }
 
-                if (var4 != null)
+                if (player != null)
                 {
-                    TileEntityEntranceController var12 = (TileEntityEntranceController)var4.worldObj.getBlockTileEntity(this.controllerCoords[0].intValue(), this.controllerCoords[1].intValue(), this.controllerCoords[2].intValue());
-                    var12.teleportMembersFromParty(this.currentActiveParty.getMembers(), false);
-                    this.regenBosses(var4.worldObj);
+                    TileEntityEntranceController controller2 = (TileEntityEntranceController)player.worldObj.getBlockTileEntity(this.controllerCoords[0].intValue(), this.controllerCoords[1].intValue(), this.controllerCoords[2].intValue());
+                    controller2.teleportMembersFromParty(this.currentActiveParty.getMembers(), false);
+                    this.regenBosses(player.worldObj);
                 }
             }
-            else if (this.hasMember(PartyController.instance().getMember(Minecraft.getMinecraft().session.username)))
+            else if (this.hasMember(PartyController.instance().getMember(Minecraft.getMinecraft().func_110432_I().func_111285_a())))
             {
                 this.playMusicFile("Dungeon Background", this.controllerCoords[0].intValue(), this.controllerCoords[1].intValue(), this.controllerCoords[2].intValue());
             }
         }
     }
 
-    public void queueMember(Party var1, PartyMember var2)
+    public void queueMember(Party party, PartyMember member)
     {
-        Side var3 = FMLCommonHandler.instance().getEffectiveSide();
+        Side side = FMLCommonHandler.instance().getEffectiveSide();
 
-        if (this.isQueuedParty(var1) && var1.hasMember(var2))
+        if (this.isQueuedParty(party) && party.hasMember(member))
         {
             this.setActive(true);
-            this.queuedMembers.put(var2.username.toLowerCase(), var2);
+            this.queuedMembers.put(member.username.toLowerCase(), member);
             this.checkForQueue();
         }
 
         DungeonHandler.instance().saveDungeons();
     }
 
-    public void startTimer(int var1)
+    public void startTimer(int seconds)
     {
-        this.timerLength = var1;
+        this.timerLength = seconds;
         this.startingTime = System.currentTimeMillis() / 1000L;
         this.timerStarted = true;
     }
@@ -503,8 +472,8 @@ public class Dungeon implements Serializable
 
     public int getTimerSeconds()
     {
-        long var1 = System.currentTimeMillis() / 1000L;
-        return (int)(var1 - this.startingTime);
+        long currentTime = System.currentTimeMillis() / 1000L;
+        return (int)(currentTime - this.startingTime);
     }
 
     public int getTimerLength()
@@ -522,9 +491,9 @@ public class Dungeon implements Serializable
         return this.currentActiveParty;
     }
 
-    public boolean isQueuedParty(Party var1)
+    public boolean isQueuedParty(Party party)
     {
-        return var1 != null && this.currentActiveParty != null && this.currentActiveParty.getName().equalsIgnoreCase(var1.getName());
+        return party != null && this.currentActiveParty != null && this.currentActiveParty.getName().equalsIgnoreCase(party.getName());
     }
 
     public boolean isActive()
@@ -532,39 +501,39 @@ public class Dungeon implements Serializable
         return this.active;
     }
 
-    public void setActive(boolean var1)
+    public void setActive(boolean flag)
     {
-        this.active = var1;
+        this.active = flag;
     }
 
-    public void disbandQueue(Party var1)
+    public void disbandQueue(Party party)
     {
-        Side var2 = FMLCommonHandler.instance().getEffectiveSide();
+        Side side = FMLCommonHandler.instance().getEffectiveSide();
 
         if (this.currentActiveParty != null)
         {
-            if (this.currentActiveParty.getName().equalsIgnoreCase(var1.getName()) && this.active && this.getQueuedMembers() != null && var2.isServer())
+            if (this.currentActiveParty.getName().equalsIgnoreCase(party.getName()) && this.active && this.getQueuedMembers() != null && side.isServer())
             {
-                MinecraftServer var3 = FMLCommonHandler.instance().getMinecraftServerInstance();
-                ServerConfigurationManager var4 = var3.getConfigurationManager();
-                EntityPlayer var5 = null;
-                Iterator var6 = var4.playerEntityList.iterator();
+                MinecraftServer server = FMLCommonHandler.instance().getMinecraftServerInstance();
+                ServerConfigurationManager configManager = server.getConfigurationManager();
+                EntityPlayer player = null;
+                Iterator controller = configManager.playerEntityList.iterator();
 
-                while (var6.hasNext())
+                while (controller.hasNext())
                 {
-                    Object var7 = var6.next();
+                    Object obj = controller.next();
 
-                    if (var7 instanceof EntityPlayer && var1.hasMember(((EntityPlayer)var7).username.toLowerCase()) && ((EntityPlayer)var7).username.equalsIgnoreCase(var1.getLeader().username.toLowerCase()))
+                    if (obj instanceof EntityPlayer && party.hasMember(((EntityPlayer)obj).username.toLowerCase()) && ((EntityPlayer)obj).username.equalsIgnoreCase(party.getLeader().username.toLowerCase()))
                     {
-                        var5 = (EntityPlayer)var7;
+                        player = (EntityPlayer)obj;
                     }
                 }
 
-                if (var5 != null)
+                if (player != null)
                 {
-                    TileEntityEntranceController var8 = (TileEntityEntranceController)var5.worldObj.getBlockTileEntity(this.controllerCoords[0].intValue(), this.controllerCoords[1].intValue(), this.controllerCoords[2].intValue());
-                    var8.teleportMembersFromParty(this.getQueuedMembers(), true);
-                    this.cleanUpDungeon(var8.worldObj);
+                    TileEntityEntranceController controller1 = (TileEntityEntranceController)player.worldObj.getBlockTileEntity(this.controllerCoords[0].intValue(), this.controllerCoords[1].intValue(), this.controllerCoords[2].intValue());
+                    controller1.teleportMembersFromParty(this.getQueuedMembers(), true);
+                    this.cleanUpDungeon(controller1.worldObj);
                 }
             }
 
@@ -579,40 +548,40 @@ public class Dungeon implements Serializable
         DungeonHandler.instance().saveDungeons();
     }
 
-    public void disbandMember(PartyMember var1)
+    public void disbandMember(PartyMember member)
     {
-        Side var2 = FMLCommonHandler.instance().getEffectiveSide();
-        Object var3 = null;
+        Side side = FMLCommonHandler.instance().getEffectiveSide();
+        Object removingMember = null;
 
-        if (this.currentActiveParty != null && this.hasMember(var1))
+        if (this.currentActiveParty != null && this.hasMember(member))
         {
-            if (var2.isServer())
+            if (side.isServer())
             {
-                MinecraftServer var4 = FMLCommonHandler.instance().getMinecraftServerInstance();
-                ServerConfigurationManager var5 = var4.getConfigurationManager();
-                EntityPlayer var6 = null;
-                Iterator var7 = var5.playerEntityList.iterator();
+                MinecraftServer count = FMLCommonHandler.instance().getMinecraftServerInstance();
+                ServerConfigurationManager configManager = count.getConfigurationManager();
+                EntityPlayer player = null;
+                Iterator controller = configManager.playerEntityList.iterator();
 
-                while (var7.hasNext())
+                while (controller.hasNext())
                 {
-                    Object var8 = var7.next();
+                    Object obj = controller.next();
 
-                    if (var8 instanceof EntityPlayer && var1.username.equalsIgnoreCase(((EntityPlayer)var8).username.toLowerCase()))
+                    if (obj instanceof EntityPlayer && member.username.equalsIgnoreCase(((EntityPlayer)obj).username.toLowerCase()))
                     {
-                        var6 = (EntityPlayer)var8;
+                        player = (EntityPlayer)obj;
                     }
                 }
 
-                if (var6 != null)
+                if (player != null)
                 {
-                    TileEntityEntranceController var10000 = (TileEntityEntranceController)var6.worldObj.getBlockTileEntity(this.controllerCoords[0].intValue(), this.controllerCoords[1].intValue(), this.controllerCoords[2].intValue());
-                    var6.setPositionAndUpdate((double)this.controllerCoords[0].intValue() + 0.5D, (double)this.controllerCoords[1].intValue() + 1.5D, (double)this.controllerCoords[2].intValue() + 3.5D);
+                    TileEntityEntranceController var10000 = (TileEntityEntranceController)player.worldObj.getBlockTileEntity(this.controllerCoords[0].intValue(), this.controllerCoords[1].intValue(), this.controllerCoords[2].intValue());
+                    player.setPositionAndUpdate((double)this.controllerCoords[0].intValue() + 0.5D, (double)this.controllerCoords[1].intValue() + 1.5D, (double)this.controllerCoords[2].intValue() + 3.5D);
                 }
             }
 
-            this.queuedMembers.remove(var1.username.toLowerCase());
-            int var9 = this.leavers.containsKey(var1.username.toLowerCase()) && this.leavers.get(var1.username.toLowerCase()) != null ? ((Integer)this.leavers.get(var1.username.toLowerCase())).intValue() : 0;
-            this.leavers.put(var1.username.toLowerCase(), Integer.valueOf(var9 + 1));
+            this.queuedMembers.remove(member.username.toLowerCase());
+            int count1 = this.leavers.containsKey(member.username.toLowerCase()) && this.leavers.get(member.username.toLowerCase()) != null ? ((Integer)this.leavers.get(member.username.toLowerCase())).intValue() : 0;
+            this.leavers.put(member.username.toLowerCase(), Integer.valueOf(count1 + 1));
 
             if (this.queuedMembers.size() <= 0)
             {
@@ -625,14 +594,14 @@ public class Dungeon implements Serializable
         DungeonHandler.instance().saveDungeons();
     }
 
-    public boolean hasMember(PartyMember var1)
+    public boolean hasMember(PartyMember member)
     {
-        return var1 != null && this.queuedMembers.get(var1.username.toLowerCase()) != null;
+        return member != null && this.queuedMembers.get(member.username.toLowerCase()) != null;
     }
 
-    public int getMemberLeaves(PartyMember var1)
+    public int getMemberLeaves(PartyMember member)
     {
-        return this.leavers.get(var1.username.toLowerCase()) != null ? ((Integer)this.leavers.get(var1.username.toLowerCase())).intValue() : 0;
+        return this.leavers.get(member.username.toLowerCase()) != null ? ((Integer)this.leavers.get(member.username.toLowerCase())).intValue() : 0;
     }
 
     public int getAmountQueued()
@@ -655,79 +624,79 @@ public class Dungeon implements Serializable
         return this.controllerCoords[2].intValue();
     }
 
-    public ArrayList getQueuedMembers()
+    public ArrayList<PartyMember> getQueuedMembers()
     {
-        ArrayList var1 = new ArrayList(this.queuedMembers.values());
-        return var1;
+        ArrayList members = new ArrayList(this.queuedMembers.values());
+        return members;
     }
 
-    public void cleanUpDungeon(World var1)
+    public void cleanUpDungeon(World world)
     {
-        Side var2 = FMLCommonHandler.instance().getEffectiveSide();
+        Side side = FMLCommonHandler.instance().getEffectiveSide();
         this.setActive(false);
 
-        if (var2.isServer() && !var1.isRemote)
+        if (side.isServer() && !world.isRemote)
         {
-            Object var3 = null;
-            int var4;
+            Object savedEntityLiving = null;
+            int i;
 
-            for (var4 = 0; var4 < this.savedBlockCoords.size(); ++var4)
+            for (i = 0; i < this.savedBlockCoords.size(); ++i)
             {
-                var1.setBlockToAir(((TrackedCoord)this.savedBlockCoords.get(var4)).getX(), ((TrackedCoord)this.savedBlockCoords.get(var4)).getY(), ((TrackedCoord)this.savedBlockCoords.get(var4)).getZ());
+                world.setBlockToAir(((TrackedCoord)this.savedBlockCoords.get(i)).getX(), ((TrackedCoord)this.savedBlockCoords.get(i)).getY(), ((TrackedCoord)this.savedBlockCoords.get(i)).getZ());
             }
 
-            int var6;
+            int y;
 
-            for (var4 = 0; var4 < this.savedTileEntities.size(); ++var4)
+            for (i = 0; i < this.savedTileEntities.size(); ++i)
             {
-                TileEntitySkyrootChest var5;
+                TileEntitySkyrootChest x;
 
-                if (var1.getBlockTileEntity(((TrackedTileEntityCoord)this.savedTileEntities.get(var4)).getX(), ((TrackedTileEntityCoord)this.savedTileEntities.get(var4)).getY(), ((TrackedTileEntityCoord)this.savedTileEntities.get(var4)).getZ()) != null && var1.getBlockTileEntity(((TrackedTileEntityCoord)this.savedTileEntities.get(var4)).getX(), ((TrackedTileEntityCoord)this.savedTileEntities.get(var4)).getY(), ((TrackedTileEntityCoord)this.savedTileEntities.get(var4)).getZ()) instanceof TileEntitySkyrootChest)
+                if (world.getBlockTileEntity(((TrackedTileEntityCoord)this.savedTileEntities.get(i)).getX(), ((TrackedTileEntityCoord)this.savedTileEntities.get(i)).getY(), ((TrackedTileEntityCoord)this.savedTileEntities.get(i)).getZ()) != null && world.getBlockTileEntity(((TrackedTileEntityCoord)this.savedTileEntities.get(i)).getX(), ((TrackedTileEntityCoord)this.savedTileEntities.get(i)).getY(), ((TrackedTileEntityCoord)this.savedTileEntities.get(i)).getZ()) instanceof TileEntitySkyrootChest)
                 {
-                    var5 = (TileEntitySkyrootChest)var1.getBlockTileEntity(((TrackedTileEntityCoord)this.savedTileEntities.get(var4)).getX(), ((TrackedTileEntityCoord)this.savedTileEntities.get(var4)).getY(), ((TrackedTileEntityCoord)this.savedTileEntities.get(var4)).getZ());
-                    var5.getChestContents();
+                    x = (TileEntitySkyrootChest)world.getBlockTileEntity(((TrackedTileEntityCoord)this.savedTileEntities.get(i)).getX(), ((TrackedTileEntityCoord)this.savedTileEntities.get(i)).getY(), ((TrackedTileEntityCoord)this.savedTileEntities.get(i)).getZ());
+                    x.getChestContents();
 
-                    for (var6 = 0; var6 < var5.getSizeInventory(); ++var6)
+                    for (y = 0; y < x.getSizeInventory(); ++y)
                     {
-                        var5.setInventorySlotContents(var6, (ItemStack)null);
+                        x.setInventorySlotContents(y, (ItemStack)null);
                     }
                 }
 
-                var1.setBlockToAir(((TrackedTileEntityCoord)this.savedTileEntities.get(var4)).getX(), ((TrackedTileEntityCoord)this.savedTileEntities.get(var4)).getY(), ((TrackedTileEntityCoord)this.savedTileEntities.get(var4)).getZ());
-                var1.setBlock(((TrackedTileEntityCoord)this.savedTileEntities.get(var4)).getX(), ((TrackedTileEntityCoord)this.savedTileEntities.get(var4)).getY(), ((TrackedTileEntityCoord)this.savedTileEntities.get(var4)).getZ(), ((TrackedTileEntityCoord)this.savedTileEntities.get(var4)).getBlock(), ((TrackedTileEntityCoord)this.savedTileEntities.get(var4)).getBlockMeta(), 2);
+                world.setBlockToAir(((TrackedTileEntityCoord)this.savedTileEntities.get(i)).getX(), ((TrackedTileEntityCoord)this.savedTileEntities.get(i)).getY(), ((TrackedTileEntityCoord)this.savedTileEntities.get(i)).getZ());
+                world.setBlock(((TrackedTileEntityCoord)this.savedTileEntities.get(i)).getX(), ((TrackedTileEntityCoord)this.savedTileEntities.get(i)).getY(), ((TrackedTileEntityCoord)this.savedTileEntities.get(i)).getZ(), ((TrackedTileEntityCoord)this.savedTileEntities.get(i)).getBlock(), ((TrackedTileEntityCoord)this.savedTileEntities.get(i)).getBlockMeta(), 2);
 
-                if (var1.getBlockTileEntity(((TrackedTileEntityCoord)this.savedTileEntities.get(var4)).getX(), ((TrackedTileEntityCoord)this.savedTileEntities.get(var4)).getY(), ((TrackedTileEntityCoord)this.savedTileEntities.get(var4)).getZ()) instanceof TileEntitySkyrootChest)
+                if (world.getBlockTileEntity(((TrackedTileEntityCoord)this.savedTileEntities.get(i)).getX(), ((TrackedTileEntityCoord)this.savedTileEntities.get(i)).getY(), ((TrackedTileEntityCoord)this.savedTileEntities.get(i)).getZ()) instanceof TileEntitySkyrootChest)
                 {
-                    var5 = (TileEntitySkyrootChest)var1.getBlockTileEntity(((TrackedTileEntityCoord)this.savedTileEntities.get(var4)).getX(), ((TrackedTileEntityCoord)this.savedTileEntities.get(var4)).getY(), ((TrackedTileEntityCoord)this.savedTileEntities.get(var4)).getZ());
+                    x = (TileEntitySkyrootChest)world.getBlockTileEntity(((TrackedTileEntityCoord)this.savedTileEntities.get(i)).getX(), ((TrackedTileEntityCoord)this.savedTileEntities.get(i)).getY(), ((TrackedTileEntityCoord)this.savedTileEntities.get(i)).getZ());
 
-                    for (var6 = 0; var6 < 3 + var1.rand.nextInt(3); ++var6)
+                    for (y = 0; y < 3 + world.rand.nextInt(3); ++y)
                     {
-                        ItemStack var7 = AetherLoot.NORMAL.getRandomItem(var1.rand);
+                        ItemStack z = AetherLoot.NORMAL.getRandomItem(world.rand);
 
-                        if (var7.stackSize <= 0)
+                        if (z.stackSize <= 0)
                         {
-                            var7.stackSize = 1;
+                            z.stackSize = 1;
                         }
 
-                        System.out.println(var1.isRemote);
-                        var5.setInventorySlotContents(var1.rand.nextInt(var5.getSizeInventory()), var7);
+                        System.out.println(world.isRemote);
+                        x.setInventorySlotContents(world.rand.nextInt(x.getSizeInventory()), z);
                     }
                 }
             }
 
-            for (var4 = 0; var4 < this.savedMobSpawners.size(); ++var4)
+            for (i = 0; i < this.savedMobSpawners.size(); ++i)
             {
-                int var10 = ((TrackedMobSpawnerCoord)this.savedMobSpawners.get(var4)).getX();
-                var6 = ((TrackedMobSpawnerCoord)this.savedMobSpawners.get(var4)).getY();
-                int var11 = ((TrackedMobSpawnerCoord)this.savedMobSpawners.get(var4)).getZ();
-                String var8 = ((TrackedMobSpawnerCoord)this.savedMobSpawners.get(var4)).getMobID();
-                var1.setBlockToAir(var10, var6, var11);
-                var1.setBlock(var10, var6, var11, Block.mobSpawner.blockID);
-                TileEntityMobSpawner var9 = (TileEntityMobSpawner)var1.getBlockTileEntity(var10, var6, var11);
+                int var10 = ((TrackedMobSpawnerCoord)this.savedMobSpawners.get(i)).getX();
+                y = ((TrackedMobSpawnerCoord)this.savedMobSpawners.get(i)).getY();
+                int var11 = ((TrackedMobSpawnerCoord)this.savedMobSpawners.get(i)).getZ();
+                String mobID = ((TrackedMobSpawnerCoord)this.savedMobSpawners.get(i)).getMobID();
+                world.setBlockToAir(var10, y, var11);
+                world.setBlock(var10, y, var11, Block.mobSpawner.blockID);
+                TileEntityMobSpawner spawner = (TileEntityMobSpawner)world.getBlockTileEntity(var10, y, var11);
 
-                if (var9 != null)
+                if (spawner != null)
                 {
-                    var9.func_98049_a().setMobID(var8);
+                    spawner.getSpawnerLogic().setMobID(mobID);
                 }
             }
         }
@@ -735,19 +704,19 @@ public class Dungeon implements Serializable
         DungeonHandler.instance().saveDungeons();
     }
 
-    public void regenBosses(World var1)
+    public void regenBosses(World world)
     {
-        Side var2 = FMLCommonHandler.instance().getEffectiveSide();
+        Side side = FMLCommonHandler.instance().getEffectiveSide();
 
-        if (var2.isServer())
+        if (side.isServer())
         {
-            EntityLiving var3 = null;
+            EntityLiving savedEntityLiving = null;
 
-            for (int var4 = 0; var4 < this.savedEntityCoords.size(); ++var4)
+            for (int i = 0; i < this.savedEntityCoords.size(); ++i)
             {
-                var3 = ((TrackedEntityCoord)this.savedEntityCoords.get(var4)).getTrackedEntity(var1);
-                var3.setPosition((double)((TrackedEntityCoord)this.savedEntityCoords.get(var4)).getX(), (double)((TrackedEntityCoord)this.savedEntityCoords.get(var4)).getY(), (double)((TrackedEntityCoord)this.savedEntityCoords.get(var4)).getZ());
-                var1.spawnEntityInWorld(var3);
+                savedEntityLiving = ((TrackedEntityCoord)this.savedEntityCoords.get(i)).getTrackedEntity(world);
+                savedEntityLiving.setPosition((double)((TrackedEntityCoord)this.savedEntityCoords.get(i)).getX(), (double)((TrackedEntityCoord)this.savedEntityCoords.get(i)).getY(), (double)((TrackedEntityCoord)this.savedEntityCoords.get(i)).getZ());
+                world.spawnEntityInWorld(savedEntityLiving);
             }
         }
 
@@ -759,49 +728,49 @@ public class Dungeon implements Serializable
         return this.hasStarted;
     }
 
-    public void registerBlockPlacement(int var1, int var2, int var3)
+    public void registerBlockPlacement(int x, int y, int z)
     {
-        Side var4 = FMLCommonHandler.instance().getEffectiveSide();
+        Side side = FMLCommonHandler.instance().getEffectiveSide();
 
-        if (var4.isServer())
+        if (side.isServer())
         {
-            this.savedBlockCoords.add(new TrackedCoord(var1, var2, var3));
+            this.savedBlockCoords.add(new TrackedCoord(x, y, z));
         }
 
         DungeonHandler.instance().saveDungeons();
     }
 
-    public void registerEntity(float var1, float var2, float var3, EntityLiving var4)
+    public void registerEntity(float f, float g, float h, EntityLiving entityLiving)
     {
-        Side var5 = FMLCommonHandler.instance().getEffectiveSide();
+        Side side = FMLCommonHandler.instance().getEffectiveSide();
 
-        if (var5.isServer())
+        if (side.isServer())
         {
-            this.savedEntityCoords.add(new TrackedEntityCoord(var1, var2, var3, EntityList.getEntityString(var4)));
+            this.savedEntityCoords.add(new TrackedEntityCoord(f, g, h, EntityList.getEntityString(entityLiving)));
         }
 
         DungeonHandler.instance().saveDungeons();
     }
 
-    public void registerSafeBlock(int var1, int var2, int var3, int var4, int var5)
+    public void registerSafeBlock(int x, int y, int z, int blockID, int meta)
     {
-        Side var6 = FMLCommonHandler.instance().getEffectiveSide();
+        Side side = FMLCommonHandler.instance().getEffectiveSide();
 
-        if (var6.isServer())
+        if (side.isServer())
         {
-            this.savedTileEntities.add(new TrackedTileEntityCoord(var1, var2, var3, var4, var5));
+            this.savedTileEntities.add(new TrackedTileEntityCoord(x, y, z, blockID, meta));
         }
 
         DungeonHandler.instance().saveDungeons();
     }
 
-    public void registerMobSpawner(int var1, int var2, int var3, String var4)
+    public void registerMobSpawner(int x, int y, int z, String mobID)
     {
-        Side var5 = FMLCommonHandler.instance().getEffectiveSide();
+        Side side = FMLCommonHandler.instance().getEffectiveSide();
 
-        if (var5.isServer())
+        if (side.isServer())
         {
-            this.savedMobSpawners.add(new TrackedMobSpawnerCoord(var1, var2, var3, var4));
+            this.savedMobSpawners.add(new TrackedMobSpawnerCoord(x, y, z, mobID));
         }
 
         DungeonHandler.instance().saveDungeons();

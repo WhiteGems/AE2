@@ -6,18 +6,18 @@ import java.util.HashMap;
 
 public class MenuBaseSorter
 {
-    public static HashMap menuBaseClasses = new HashMap();
+    public static HashMap < String, Class <? extends MenuBase >> menuBaseClasses = new HashMap();
 
-    public static void addMenuToSorter(String var0, Class var1)
+    public static void addMenuToSorter(String menuName, Class <? extends MenuBase > menu)
     {
-        menuBaseClasses.put(var0, var1);
+        menuBaseClasses.put(menuName, menu);
     }
 
-    public static boolean isMenuRegistered(String var0)
+    public static boolean isMenuRegistered(String menuName)
     {
-        for (int var1 = 0; var1 < menuBaseClasses.size(); ++var1)
+        for (int count = 0; count < menuBaseClasses.size(); ++count)
         {
-            if (menuBaseClasses.get(var0) != null)
+            if (menuBaseClasses.get(menuName) != null)
             {
                 return true;
             }
@@ -26,32 +26,32 @@ public class MenuBaseSorter
         return false;
     }
 
-    public static MenuBase createMenuBaseObject(String var0)
+    public static MenuBase createMenuBaseObject(String menuName)
     {
-        if (!isMenuRegistered(var0))
+        if (!isMenuRegistered(menuName))
         {
-            System.out.println("The Menu Base \'" + var0 + "\' has not been registered!");
+            System.out.println("The Menu Base \'" + menuName + "\' has not been registered!");
             return null;
         }
         else
         {
-            Class var1 = (Class)menuBaseClasses.get(var0);
+            Class menuBase = (Class)menuBaseClasses.get(menuName);
 
-            if (var1 == null)
+            if (menuBase == null)
             {
-                throw new NullPointerException("The Menu Base \'" + var0 + "\' has a null MenuBase class!");
+                throw new NullPointerException("The Menu Base \'" + menuName + "\' has a null MenuBase class!");
             }
             else
             {
-                MenuBase var2 = null;
+                MenuBase menu = null;
 
                 try
                 {
-                    Constructor var3 = null;
+                    Constructor e = null;
 
                     try
                     {
-                        var3 = var1.getConstructor(new Class[0]);
+                        e = menuBase.getConstructor(new Class[0]);
                     }
                     catch (NoSuchMethodException var7)
                     {
@@ -64,7 +64,7 @@ public class MenuBaseSorter
 
                     try
                     {
-                        var2 = (MenuBase)var3.newInstance(new Object[0]);
+                        menu = (MenuBase)e.newInstance(new Object[0]);
                     }
                     catch (IllegalArgumentException var5)
                     {
@@ -84,21 +84,21 @@ public class MenuBaseSorter
                     var10.printStackTrace();
                 }
 
-                if (var2 == null)
+                if (menu == null)
                 {
-                    throw new NullPointerException("Menu API failed to create a Menu Base object of \'" + var0 + "\'!");
+                    throw new NullPointerException("Menu API failed to create a Menu Base object of \'" + menuName + "\'!");
                 }
                 else
                 {
-                    return var2;
+                    return menu;
                 }
             }
         }
     }
 
-    public static Class getMenuBaseClass(String var0)
+    public static Class getMenuBaseClass(String menuName)
     {
-        return (Class)menuBaseClasses.get(var0);
+        return (Class)menuBaseClasses.get(menuName);
     }
 
     public static int getSize()
@@ -106,7 +106,7 @@ public class MenuBaseSorter
         return menuBaseClasses.size();
     }
 
-    public static HashMap getMenuHashMap()
+    public static HashMap < String, Class <? extends MenuBase >> getMenuHashMap()
     {
         return menuBaseClasses;
     }

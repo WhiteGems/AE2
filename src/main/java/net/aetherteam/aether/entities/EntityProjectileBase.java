@@ -6,7 +6,7 @@ import java.util.Iterator;
 import java.util.List;
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -34,32 +34,32 @@ public abstract class EntityProjectileBase extends Entity
     public int inData;
     public boolean inGround;
     public int arrowShake;
-    public EntityLiving shooter;
+    public EntityLivingBase shooter;
     public int ticksInGround;
     public int ticksFlying;
     public boolean shotByPlayer;
     public int canBePickedUp;
 
-    public EntityProjectileBase(World var1)
+    public EntityProjectileBase(World world)
     {
-        super(var1);
+        super(world);
         this.xTile = -1;
         this.yTile = -1;
         this.zTile = -1;
     }
 
-    public EntityProjectileBase(World var1, double var2, double var4, double var6)
+    public EntityProjectileBase(World world, double d, double d1, double d2)
     {
-        this(var1);
-        this.setPositionAndRotation(var2, var4 - 1.0D, var6, this.rotationYaw, this.rotationPitch);
+        this(world);
+        this.setPositionAndRotation(d, d1 - 1.0D, d2, this.rotationYaw, this.rotationPitch);
     }
 
-    public EntityProjectileBase(World var1, EntityLiving var2)
+    public EntityProjectileBase(World world, EntityLivingBase entityliving)
     {
-        this(var1);
-        this.shooter = var2;
-        this.shotByPlayer = var2 instanceof EntityPlayer;
-        this.setLocationAndAngles(var2.posX, var2.posY + (double)var2.getEyeHeight(), var2.posZ, var2.rotationYaw, var2.rotationPitch);
+        this(world);
+        this.shooter = entityliving;
+        this.shotByPlayer = entityliving instanceof EntityPlayer;
+        this.setLocationAndAngles(entityliving.posX, entityliving.posY + (double)entityliving.getEyeHeight(), entityliving.posZ, entityliving.rotationYaw, entityliving.rotationPitch);
         this.posX -= (double)(MathHelper.cos(this.rotationYaw / 180.0F * (float)Math.PI) * 0.16F);
         this.posY -= 0.10000000149011612D;
         this.posZ -= (double)(MathHelper.sin(this.rotationYaw / 180.0F * (float)Math.PI) * 0.16F);
@@ -100,24 +100,24 @@ public abstract class EntityProjectileBase extends Entity
         super.setDead();
     }
 
-    public void setArrowHeading(double var1, double var3, double var5, float var7, float var8)
+    public void setArrowHeading(double d, double d1, double d2, float f, float f1)
     {
-        float var9 = MathHelper.sqrt_double(var1 * var1 + var3 * var3 + var5 * var5);
-        var1 /= (double)var9;
-        var3 /= (double)var9;
-        var5 /= (double)var9;
-        var1 += this.rand.nextGaussian() * 0.007499999832361937D * (double)var8;
-        var3 += this.rand.nextGaussian() * 0.007499999832361937D * (double)var8;
-        var5 += this.rand.nextGaussian() * 0.007499999832361937D * (double)var8;
-        var1 *= (double)var7;
-        var3 *= (double)var7;
-        var5 *= (double)var7;
-        this.motionX = var1;
-        this.motionY = var3;
-        this.motionZ = var5;
-        float var10 = MathHelper.sqrt_double(var1 * var1 + var5 * var5);
-        this.prevRotationYaw = this.rotationYaw = (float)(Math.atan2(var1, var5) * 180.0D / Math.PI);
-        this.prevRotationPitch = this.rotationPitch = (float)(Math.atan2(var3, (double)var10) * 180.0D / Math.PI);
+        float f2 = MathHelper.sqrt_double(d * d + d1 * d1 + d2 * d2);
+        d /= (double)f2;
+        d1 /= (double)f2;
+        d2 /= (double)f2;
+        d += this.rand.nextGaussian() * 0.007499999832361937D * (double)f1;
+        d1 += this.rand.nextGaussian() * 0.007499999832361937D * (double)f1;
+        d2 += this.rand.nextGaussian() * 0.007499999832361937D * (double)f1;
+        d *= (double)f;
+        d1 *= (double)f;
+        d2 *= (double)f;
+        this.motionX = d;
+        this.motionY = d1;
+        this.motionZ = d2;
+        float f3 = MathHelper.sqrt_double(d * d + d2 * d2);
+        this.prevRotationYaw = this.rotationYaw = (float)(Math.atan2(d, d2) * 180.0D / Math.PI);
+        this.prevRotationPitch = this.rotationPitch = (float)(Math.atan2(d1, (double)f3) * 180.0D / Math.PI);
         this.ticksInGround = 0;
     }
 
@@ -126,17 +126,17 @@ public abstract class EntityProjectileBase extends Entity
     /**
      * Sets the velocity to the args. Args: x, y, z
      */
-    public void setVelocity(double var1, double var3, double var5)
+    public void setVelocity(double d, double d1, double d2)
     {
-        this.motionX = var1;
-        this.motionY = var3;
-        this.motionZ = var5;
+        this.motionX = d;
+        this.motionY = d1;
+        this.motionZ = d2;
 
         if (this.prevRotationPitch == 0.0F && this.prevRotationYaw == 0.0F)
         {
-            float var7 = MathHelper.sqrt_double(var1 * var1 + var5 * var5);
-            this.prevRotationYaw = this.rotationYaw = (float)(Math.atan2(var1, var5) * 180.0D / Math.PI);
-            this.prevRotationPitch = this.rotationPitch = (float)(Math.atan2(var3, (double)var7) * 180.0D / Math.PI);
+            float f = MathHelper.sqrt_double(d * d + d2 * d2);
+            this.prevRotationYaw = this.rotationYaw = (float)(Math.atan2(d, d2) * 180.0D / Math.PI);
+            this.prevRotationPitch = this.rotationPitch = (float)(Math.atan2(d1, (double)f) * 180.0D / Math.PI);
             this.prevRotationYaw = this.rotationYaw;
             this.setLocationAndAngles(this.posX, this.posY, this.posZ, this.rotationYaw, this.rotationPitch);
             this.ticksInGround = 0;
@@ -161,19 +161,19 @@ public abstract class EntityProjectileBase extends Entity
 
         if (this.prevRotationPitch == 0.0F && this.prevRotationYaw == 0.0F)
         {
-            float var1 = MathHelper.sqrt_double(this.motionX * this.motionX + this.motionZ * this.motionZ);
+            float var16 = MathHelper.sqrt_double(this.motionX * this.motionX + this.motionZ * this.motionZ);
             this.prevRotationYaw = this.rotationYaw = (float)(Math.atan2(this.motionX, this.motionZ) * 180.0D / Math.PI);
-            this.prevRotationPitch = this.rotationPitch = (float)(Math.atan2(this.motionY, (double)var1) * 180.0D / Math.PI);
+            this.prevRotationPitch = this.rotationPitch = (float)(Math.atan2(this.motionY, (double)var16) * 180.0D / Math.PI);
         }
 
-        int var16 = this.worldObj.getBlockId(this.xTile, this.yTile, this.zTile);
+        int var161 = this.worldObj.getBlockId(this.xTile, this.yTile, this.zTile);
 
-        if (var16 > 0)
+        if (var161 > 0)
         {
-            Block.blocksList[var16].setBlockBoundsBasedOnState(this.worldObj, this.xTile, this.yTile, this.zTile);
-            AxisAlignedBB var2 = Block.blocksList[var16].getCollisionBoundingBoxFromPool(this.worldObj, this.xTile, this.yTile, this.zTile);
+            Block.blocksList[var161].setBlockBoundsBasedOnState(this.worldObj, this.xTile, this.yTile, this.zTile);
+            AxisAlignedBB var17 = Block.blocksList[var161].getCollisionBoundingBoxFromPool(this.worldObj, this.xTile, this.yTile, this.zTile);
 
-            if (var2 != null && var2.isVecInside(this.worldObj.getWorldVec3Pool().getVecFromPool(this.posX, this.posY, this.posZ)))
+            if (var17 != null && var17.isVecInside(this.worldObj.getWorldVec3Pool().getVecFromPool(this.posX, this.posY, this.posZ)))
             {
                 this.inGround = true;
             }
@@ -186,10 +186,10 @@ public abstract class EntityProjectileBase extends Entity
 
         if (this.inGround)
         {
-            int var17 = this.worldObj.getBlockId(this.xTile, this.yTile, this.zTile);
+            int var171 = this.worldObj.getBlockId(this.xTile, this.yTile, this.zTile);
             int var3 = this.worldObj.getBlockMetadata(this.xTile, this.yTile, this.zTile);
 
-            if (var17 == this.inTile && var3 == this.inData)
+            if (var171 == this.inTile && var3 == this.inData)
             {
                 ++this.ticksInGround;
 
@@ -226,27 +226,27 @@ public abstract class EntityProjectileBase extends Entity
             List var6 = this.worldObj.getEntitiesWithinAABBExcludingEntity(this, this.boundingBox.addCoord(this.motionX, this.motionY, this.motionZ).expand(1.0D, 1.0D, 1.0D));
             double var7 = 0.0D;
             Iterator var9 = var6.iterator();
-            float var10;
-            MovingObjectPosition var13;
+            float var11;
+            MovingObjectPosition var23;
 
             while (var9.hasNext())
             {
-                Entity var11 = (Entity)var9.next();
+                Entity var20 = (Entity)var9.next();
 
-                if (var11.canBeCollidedWith() && (var11 != this.shooter || this.ticksFlying >= 5))
+                if (var20.canBeCollidedWith() && (var20 != this.shooter || this.ticksFlying >= 5))
                 {
-                    var10 = 0.3F;
-                    AxisAlignedBB var12 = var11.boundingBox.expand((double)var10, (double)var10, (double)var10);
-                    var13 = var12.calculateIntercept(var18, var19);
+                    var11 = 0.3F;
+                    AxisAlignedBB f2 = var20.boundingBox.expand((double)var11, (double)var11, (double)var11);
+                    var23 = f2.calculateIntercept(var18, var19);
 
-                    if (var13 != null)
+                    if (var23 != null)
                     {
-                        double var14 = var18.distanceTo(var13.hitVec);
+                        double var26 = var18.distanceTo(var23.hitVec);
 
-                        if (var14 < var7 || var7 == 0.0D)
+                        if (var26 < var7 || var7 == 0.0D)
                         {
-                            var5 = var11;
-                            var7 = var14;
+                            var5 = var20;
+                            var7 = var26;
                         }
                     }
                 }
@@ -259,7 +259,7 @@ public abstract class EntityProjectileBase extends Entity
 
             if (var4 != null)
             {
-                float var20;
+                float var201;
 
                 if (var4.entityHit != null && this.onHitTarget(var4.entityHit))
                 {
@@ -268,18 +268,18 @@ public abstract class EntityProjectileBase extends Entity
                         return;
                     }
 
-                    var20 = MathHelper.sqrt_double(this.motionX * this.motionX + this.motionY * this.motionY + this.motionZ * this.motionZ);
-                    int var21 = MathHelper.ceiling_double_int((double)var20 * (double)this.dmg);
-                    var13 = null;
-                    DamageSource var23;
+                    var201 = MathHelper.sqrt_double(this.motionX * this.motionX + this.motionY * this.motionY + this.motionZ * this.motionZ);
+                    int var21 = MathHelper.ceiling_double_int((double)var201 * (double)this.dmg);
+                    var23 = null;
+                    DamageSource var231;
 
                     if (this.shooter == null)
                     {
-                        var23 = (new CustomDamageSource("dart", this, this)).setDeathMessage(" died covered in darts.").setProjectile();
+                        var231 = (new CustomDamageSource("dart", this, this)).setDeathMessage(" died covered in darts.").setProjectile();
                     }
                     else
                     {
-                        var23 = (new CustomDamageSource("dart", this, this.shooter)).setDeathMessage(" died covered in " + this.shooter.getEntityName() + "\'s darts.").setProjectile();
+                        var231 = (new CustomDamageSource("dart", this, this.shooter)).setDeathMessage(" died covered in " + this.shooter.getEntityName() + "\'s darts.").setProjectile();
                     }
 
                     if (this.isBurning())
@@ -287,7 +287,7 @@ public abstract class EntityProjectileBase extends Entity
                         var4.entityHit.setFire(5);
                     }
 
-                    if (var4.entityHit.attackEntityFrom(var23, var21))
+                    if (var4.entityHit.attackEntityFrom(var231, (float)var21))
                     {
                         this.worldObj.playSoundAtEntity(this, "random.bowhit", 1.0F, 1.2F / (this.rand.nextFloat() * 0.2F + 0.9F));
 
@@ -307,11 +307,11 @@ public abstract class EntityProjectileBase extends Entity
                     this.motionX = (double)((float)(var4.hitVec.xCoord - this.posX));
                     this.motionY = (double)((float)(var4.hitVec.yCoord - this.posY));
                     this.motionZ = (double)((float)(var4.hitVec.zCoord - this.posZ));
-                    var20 = MathHelper.sqrt_double(this.motionX * this.motionX + this.motionY * this.motionY + this.motionZ * this.motionZ);
-                    this.posX -= this.motionX / (double)var20 * 0.05000000074505806D;
-                    this.posY -= this.motionY / (double)var20 * 0.05000000074505806D;
-                    this.posZ -= this.motionZ / (double)var20 * 0.05000000074505806D;
-                    this.worldObj.playSoundAtEntity(this, "random.bowhit", 1.0F, 1.2F / (this.rand.nextFloat() * 0.2F + 0.9F));
+                    var201 = MathHelper.sqrt_double(this.motionX * this.motionX + this.motionY * this.motionY + this.motionZ * this.motionZ);
+                    this.posX -= this.motionX / (double)var201 * 0.05000000074505806D;
+                    this.posY -= this.motionY / (double)var201 * 0.05000000074505806D;
+                    this.posZ -= this.motionZ / (double)var201 * 0.05000000074505806D;
+                    this.worldObj.playSoundAtEntity(this, "aether:random.bowhit", 1.0F, 1.2F / (this.rand.nextFloat() * 0.2F + 0.9F));
                     this.inGround = true;
                     this.arrowShake = 7;
                 }
@@ -344,14 +344,14 @@ public abstract class EntityProjectileBase extends Entity
             this.rotationPitch = this.prevRotationPitch + (this.rotationPitch - this.prevRotationPitch) * 0.2F;
             this.rotationYaw = this.prevRotationYaw + (this.rotationYaw - this.prevRotationYaw) * 0.2F;
             float var25 = 0.99F;
-            var10 = 0.05F;
+            var11 = 0.05F;
 
             if (this.isInWater())
             {
                 for (int var24 = 0; var24 < 4; ++var24)
                 {
-                    float var15 = 0.25F;
-                    this.worldObj.spawnParticle("bubble", this.posX - this.motionX * (double)var15, this.posY - this.motionY * (double)var15, this.posZ - this.motionZ * (double)var15, this.motionX, this.motionY, this.motionZ);
+                    float var27 = 0.25F;
+                    this.worldObj.spawnParticle("bubble", this.posX - this.motionX * (double)var27, this.posY - this.motionY * (double)var27, this.posZ - this.motionZ * (double)var27, this.motionX, this.motionY, this.motionZ);
                 }
 
                 var25 = 0.8F;
@@ -368,67 +368,67 @@ public abstract class EntityProjectileBase extends Entity
 
     public void handleMotionUpdate()
     {
-        float var1 = this.slowdown;
+        float slow = this.slowdown;
 
         if (this.handleWaterMovement())
         {
-            for (int var2 = 0; var2 < 4; ++var2)
+            for (int k = 0; k < 4; ++k)
             {
-                float var3 = 0.25F;
-                this.worldObj.spawnParticle("bubble", this.posX - this.motionX * (double)var3, this.posY - this.motionY * (double)var3, this.posZ - this.motionZ * (double)var3, this.motionX, this.motionY, this.motionZ);
+                float f6 = 0.25F;
+                this.worldObj.spawnParticle("bubble", this.posX - this.motionX * (double)f6, this.posY - this.motionY * (double)f6, this.posZ - this.motionZ * (double)f6, this.motionX, this.motionY, this.motionZ);
             }
 
-            var1 *= 0.8F;
+            slow *= 0.8F;
         }
 
-        this.motionX *= (double)var1;
-        this.motionY *= (double)var1;
-        this.motionZ *= (double)var1;
+        this.motionX *= (double)slow;
+        this.motionY *= (double)slow;
+        this.motionZ *= (double)slow;
         this.motionY -= (double)this.curvature;
     }
 
     /**
      * (abstract) Protected helper method to write subclass entity data to NBT.
      */
-    public void writeEntityToNBT(NBTTagCompound var1)
+    public void writeEntityToNBT(NBTTagCompound nbttagcompound)
     {
-        var1.setShort("xTile", (short)this.xTile);
-        var1.setShort("yTile", (short)this.yTile);
-        var1.setShort("zTile", (short)this.zTile);
-        var1.setByte("inTile", (byte)this.inTile);
-        var1.setByte("inData", (byte)this.inData);
-        var1.setByte("shake", (byte)this.arrowShake);
-        var1.setByte("inGround", (byte)(this.inGround ? 1 : 0));
-        var1.setBoolean("player", this.shotByPlayer);
-        var1.setByte("pickup", (byte)this.canBePickedUp);
+        nbttagcompound.setShort("xTile", (short)this.xTile);
+        nbttagcompound.setShort("yTile", (short)this.yTile);
+        nbttagcompound.setShort("zTile", (short)this.zTile);
+        nbttagcompound.setByte("inTile", (byte)this.inTile);
+        nbttagcompound.setByte("inData", (byte)this.inData);
+        nbttagcompound.setByte("shake", (byte)this.arrowShake);
+        nbttagcompound.setByte("inGround", (byte)(this.inGround ? 1 : 0));
+        nbttagcompound.setBoolean("player", this.shotByPlayer);
+        nbttagcompound.setByte("pickup", (byte)this.canBePickedUp);
     }
 
     /**
      * (abstract) Protected helper method to read subclass entity data from NBT.
      */
-    public void readEntityFromNBT(NBTTagCompound var1)
+    public void readEntityFromNBT(NBTTagCompound nbttagcompound)
     {
-        this.xTile = var1.getShort("xTile");
-        this.yTile = var1.getShort("yTile");
-        this.zTile = var1.getShort("zTile");
-        this.inTile = var1.getByte("inTile") & 255;
-        this.inData = var1.getByte("inData") & 255;
-        this.arrowShake = var1.getByte("shake") & 255;
-        this.inGround = var1.getByte("inGround") == 1;
-        this.shotByPlayer = var1.getBoolean("player");
-        this.canBePickedUp = var1.getByte("pickup");
+        this.xTile = nbttagcompound.getShort("xTile");
+        this.yTile = nbttagcompound.getShort("yTile");
+        this.zTile = nbttagcompound.getShort("zTile");
+        this.inTile = nbttagcompound.getByte("inTile") & 255;
+        this.inData = nbttagcompound.getByte("inData") & 255;
+        this.arrowShake = nbttagcompound.getByte("shake") & 255;
+        this.inGround = nbttagcompound.getByte("inGround") == 1;
+        this.shotByPlayer = nbttagcompound.getBoolean("player");
+        this.canBePickedUp = nbttagcompound.getByte("pickup");
     }
 
     /**
      * Called by a player entity when they collide with an entity
      */
-    public void onCollideWithPlayer(EntityPlayer var1)
+    public void onCollideWithPlayer(EntityPlayer par1EntityPlayer)
     {
         if (!this.worldObj.isRemote && this.inGround && this.arrowShake <= 0)
         {
-            boolean var2 = this.canBePickedUp == 1 || this.canBePickedUp == 2 && var1.capabilities.isCreativeMode;
+            boolean var2 = this.canBePickedUp == 1 || this.canBePickedUp == 2 && par1EntityPlayer.capabilities.isCreativeMode;
 
-            if (this.canBePickedUp == 1 && !var1.inventory.addItemStackToInventory(this.item.copy()))
+            if (this.canBePickedUp == 1 && !par1EntityPlayer.inventory.addItemStackToInventory(this.item.copy()))
             {
                 var2 = false;
             }
@@ -436,15 +436,15 @@ public abstract class EntityProjectileBase extends Entity
             if (var2)
             {
                 this.worldObj.playSoundAtEntity(this, "random.pop", 0.2F, ((this.rand.nextFloat() - this.rand.nextFloat()) * 0.7F + 1.0F) * 2.0F);
-                var1.onItemPickup(this, 1);
+                par1EntityPlayer.onItemPickup(this, 1);
                 this.setDead();
             }
         }
     }
 
-    public boolean canBeShot(Entity var1)
+    public boolean canBeShot(Entity ent)
     {
-        return var1 instanceof EntityLiving && (EntityLiving)var1 == this.shooter ? false : var1.canBeCollidedWith() && (!(var1 instanceof EntityLiving) || ((EntityLiving)var1).deathTime <= 0);
+        return ent instanceof EntityLivingBase && (EntityLivingBase)ent == this.shooter ? false : ent.canBeCollidedWith() && (!(ent instanceof EntityLivingBase) || ((EntityLivingBase)ent).deathTime <= 0);
     }
 
     public boolean onHit()
@@ -452,7 +452,7 @@ public abstract class EntityProjectileBase extends Entity
         return true;
     }
 
-    public boolean onHitTarget(Entity var1)
+    public boolean onHitTarget(Entity target)
     {
         this.worldObj.playSoundAtEntity(this, "random.drr", 1.0F, 1.2F / (this.rand.nextFloat() * 0.2F + 0.9F));
         return true;
@@ -462,7 +462,7 @@ public abstract class EntityProjectileBase extends Entity
 
     public void tickInGround() {}
 
-    public boolean onHitBlock(MovingObjectPosition var1)
+    public boolean onHitBlock(MovingObjectPosition mop)
     {
         return this.onHitBlock();
     }

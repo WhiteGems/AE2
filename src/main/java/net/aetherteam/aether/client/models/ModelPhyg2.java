@@ -26,69 +26,69 @@ public class ModelPhyg2 extends ModelBase
     /**
      * Sets the models various rotation angles then renders the model.
      */
-    public void render(Entity var1, float var2, float var3, float var4, float var5, float var6, float var7)
+    public void render(Entity e, float f, float f1, float f2, float f3, float f4, float f5)
     {
-        float var8;
-        float var9;
-        float var10;
-        float var11;
-        float var12;
-        float var13;
+        float wingBend;
+        float x;
+        float y;
+        float z;
+        float x2;
+        float y2;
 
         if (this.isChild)
         {
-            var8 = 2.0F;
+            wingBend = 2.0F;
             GL11.glPushMatrix();
             GL11.glPopMatrix();
-            GL11.glScalef(1.0F / var8, 1.0F / var8, 1.0F / var8);
-            GL11.glTranslatef(0.0F, 24.0F * var7, 0.0F);
-            var9 = -((float)Math.acos((double)pig.wingFold));
-            var10 = 32.0F * pig.wingFold / 4.0F;
-            var11 = -32.0F * (float)Math.sqrt((double)(1.0F - pig.wingFold * pig.wingFold)) / 4.0F;
-            var12 = 0.0F;
-            var13 = var10 * (float)Math.cos((double)pig.wingAngle) - var11 * (float)Math.sin((double)pig.wingAngle);
-            float var14 = var10 * (float)Math.sin((double)pig.wingAngle) + var11 * (float)Math.cos((double)pig.wingAngle);
-            this.leftWingInner.setRotationPoint(4.0F + var13, var14 + 12.0F, var12);
-            this.rightWingInner.setRotationPoint(-4.0F - var13, var14 + 12.0F, var12);
-            var10 *= 3.0F;
-            var13 = var10 * (float)Math.cos((double)pig.wingAngle) - var11 * (float)Math.sin((double)pig.wingAngle);
-            var14 = var10 * (float)Math.sin((double)pig.wingAngle) + var11 * (float)Math.cos((double)pig.wingAngle);
-            this.leftWingOuter.setRotationPoint(4.0F + var13, var14 + 12.0F, var12);
-            this.rightWingOuter.setRotationPoint(-4.0F - var13, var14 + 12.0F, var12);
-            this.leftWingInner.rotateAngleZ = pig.wingAngle + var9 + ((float)Math.PI / 2F);
-            this.leftWingOuter.rotateAngleZ = pig.wingAngle - var9 + ((float)Math.PI / 2F);
-            this.rightWingInner.rotateAngleZ = -(pig.wingAngle + var9 - ((float)Math.PI / 2F));
-            this.rightWingOuter.rotateAngleZ = -(pig.wingAngle - var9 + ((float)Math.PI / 2F));
-            this.leftWingOuter.render(var7);
-            this.leftWingInner.render(var7);
-            this.rightWingOuter.render(var7);
-            this.rightWingInner.render(var7);
+            GL11.glScalef(1.0F / wingBend, 1.0F / wingBend, 1.0F / wingBend);
+            GL11.glTranslatef(0.0F, 24.0F * f5, 0.0F);
+            x = -((float)Math.acos((double)pig.wingFold));
+            y = 32.0F * pig.wingFold / 4.0F;
+            z = -32.0F * (float)Math.sqrt((double)(1.0F - pig.wingFold * pig.wingFold)) / 4.0F;
+            x2 = 0.0F;
+            y2 = y * (float)Math.cos((double)pig.wingAngle) - z * (float)Math.sin((double)pig.wingAngle);
+            float y21 = y * (float)Math.sin((double)pig.wingAngle) + z * (float)Math.cos((double)pig.wingAngle);
+            this.leftWingInner.setRotationPoint(4.0F + y2, y21 + 12.0F, x2);
+            this.rightWingInner.setRotationPoint(-4.0F - y2, y21 + 12.0F, x2);
+            y *= 3.0F;
+            y2 = y * (float)Math.cos((double)pig.wingAngle) - z * (float)Math.sin((double)pig.wingAngle);
+            y21 = y * (float)Math.sin((double)pig.wingAngle) + z * (float)Math.cos((double)pig.wingAngle);
+            this.leftWingOuter.setRotationPoint(4.0F + y2, y21 + 12.0F, x2);
+            this.rightWingOuter.setRotationPoint(-4.0F - y2, y21 + 12.0F, x2);
+            this.leftWingInner.rotateAngleZ = pig.wingAngle + x + ((float)Math.PI / 2F);
+            this.leftWingOuter.rotateAngleZ = pig.wingAngle - x + ((float)Math.PI / 2F);
+            this.rightWingInner.rotateAngleZ = -(pig.wingAngle + x - ((float)Math.PI / 2F));
+            this.rightWingOuter.rotateAngleZ = -(pig.wingAngle - x + ((float)Math.PI / 2F));
+            this.leftWingOuter.render(f5);
+            this.leftWingInner.render(f5);
+            this.rightWingOuter.render(f5);
+            this.rightWingInner.render(f5);
         }
         else
         {
-            var8 = -((float)Math.acos((double)pig.wingFold));
-            var9 = 32.0F * pig.wingFold / 4.0F;
-            var10 = -32.0F * (float)Math.sqrt((double)(1.0F - pig.wingFold * pig.wingFold)) / 4.0F;
-            var11 = 0.0F;
-            var12 = var9 * (float)Math.cos((double)pig.wingAngle) - var10 * (float)Math.sin((double)pig.wingAngle);
-            var13 = var9 * (float)Math.sin((double)pig.wingAngle) + var10 * (float)Math.cos((double)pig.wingAngle);
-            this.leftWingInner.setRotationPoint(4.0F + var12, var13 + 12.0F, var11);
-            this.rightWingInner.setRotationPoint(-4.0F - var12, var13 + 12.0F, var11);
-            var9 *= 3.0F;
-            var12 = var9 * (float)Math.cos((double)pig.wingAngle) - var10 * (float)Math.sin((double)pig.wingAngle);
-            var13 = var9 * (float)Math.sin((double)pig.wingAngle) + var10 * (float)Math.cos((double)pig.wingAngle);
-            this.leftWingOuter.setRotationPoint(4.0F + var12, var13 + 12.0F, var11);
-            this.rightWingOuter.setRotationPoint(-4.0F - var12, var13 + 12.0F, var11);
-            this.leftWingInner.rotateAngleZ = pig.wingAngle + var8 + ((float)Math.PI / 2F);
-            this.leftWingOuter.rotateAngleZ = pig.wingAngle - var8 + ((float)Math.PI / 2F);
-            this.rightWingInner.rotateAngleZ = -(pig.wingAngle + var8 - ((float)Math.PI / 2F));
-            this.rightWingOuter.rotateAngleZ = -(pig.wingAngle - var8 + ((float)Math.PI / 2F));
-            this.leftWingOuter.render(var7);
-            this.leftWingInner.render(var7);
-            this.rightWingOuter.render(var7);
-            this.rightWingInner.render(var7);
+            wingBend = -((float)Math.acos((double)pig.wingFold));
+            x = 32.0F * pig.wingFold / 4.0F;
+            y = -32.0F * (float)Math.sqrt((double)(1.0F - pig.wingFold * pig.wingFold)) / 4.0F;
+            z = 0.0F;
+            x2 = x * (float)Math.cos((double)pig.wingAngle) - y * (float)Math.sin((double)pig.wingAngle);
+            y2 = x * (float)Math.sin((double)pig.wingAngle) + y * (float)Math.cos((double)pig.wingAngle);
+            this.leftWingInner.setRotationPoint(4.0F + x2, y2 + 12.0F, z);
+            this.rightWingInner.setRotationPoint(-4.0F - x2, y2 + 12.0F, z);
+            x *= 3.0F;
+            x2 = x * (float)Math.cos((double)pig.wingAngle) - y * (float)Math.sin((double)pig.wingAngle);
+            y2 = x * (float)Math.sin((double)pig.wingAngle) + y * (float)Math.cos((double)pig.wingAngle);
+            this.leftWingOuter.setRotationPoint(4.0F + x2, y2 + 12.0F, z);
+            this.rightWingOuter.setRotationPoint(-4.0F - x2, y2 + 12.0F, z);
+            this.leftWingInner.rotateAngleZ = pig.wingAngle + wingBend + ((float)Math.PI / 2F);
+            this.leftWingOuter.rotateAngleZ = pig.wingAngle - wingBend + ((float)Math.PI / 2F);
+            this.rightWingInner.rotateAngleZ = -(pig.wingAngle + wingBend - ((float)Math.PI / 2F));
+            this.rightWingOuter.rotateAngleZ = -(pig.wingAngle - wingBend + ((float)Math.PI / 2F));
+            this.leftWingOuter.render(f5);
+            this.leftWingInner.render(f5);
+            this.rightWingOuter.render(f5);
+            this.rightWingInner.render(f5);
         }
     }
 
-    public void setRotationAngles(float var1, float var2, float var3, float var4, float var5, float var6) {}
+    public void setRotationAngles(float f, float f1, float f2, float f3, float f4, float f5) {}
 }

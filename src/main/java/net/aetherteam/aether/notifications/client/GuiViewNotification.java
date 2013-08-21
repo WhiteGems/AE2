@@ -14,12 +14,13 @@ import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.ResourceLocation;
 import org.lwjgl.opengl.GL11;
 
 public class GuiViewNotification extends GuiScreen
 {
+    private static final ResourceLocation TEXTURE_NOTIFICATION_VIEW = new ResourceLocation("aether", "textures/gui/notification/view.png");
     private final PartyData pm;
-    private int backgroundTexture;
     private int xParty;
     private int yParty;
     private int wParty;
@@ -34,19 +35,18 @@ public class GuiViewNotification extends GuiScreen
     private GuiButton denyButton;
     private GuiButton backButton;
 
-    public GuiViewNotification(EntityPlayer var1, Notification var2, GuiScreen var3)
+    public GuiViewNotification(EntityPlayer player, Notification notification, GuiScreen parent)
     {
-        this(new PartyData(), var1, var2, var3);
+        this(new PartyData(), player, notification, parent);
     }
 
-    public GuiViewNotification(PartyData var1, EntityPlayer var2, Notification var3, GuiScreen var4)
+    public GuiViewNotification(PartyData pm, EntityPlayer player, Notification notification, GuiScreen parent)
     {
-        this.parent = var4;
-        this.notification = var3;
-        this.player = var2;
+        this.parent = parent;
+        this.notification = notification;
+        this.player = player;
         this.mc = FMLClientHandler.instance().getClient();
-        this.pm = var1;
-        this.backgroundTexture = this.mc.renderEngine.getTexture("/net/aetherteam/aether/client/sprites/gui/notification/view.png");
+        this.pm = pm;
         this.wParty = 256;
         this.hParty = 126;
         this.updateScreen();
@@ -55,11 +55,11 @@ public class GuiViewNotification extends GuiScreen
     /**
      * Fired when a key is typed. This is the equivalent of KeyListener.keyTyped(KeyEvent e).
      */
-    protected void keyTyped(char var1, int var2)
+    protected void keyTyped(char charTyped, int keyTyped)
     {
-        super.keyTyped(var1, var2);
+        super.keyTyped(charTyped, keyTyped);
 
-        if (var2 == Minecraft.getMinecraft().gameSettings.keyBindInventory.keyCode)
+        if (keyTyped == Minecraft.getMinecraft().gameSettings.keyBindInventory.keyCode)
         {
             this.mc.displayGuiScreen((GuiScreen)null);
             this.mc.setIngameFocus();
@@ -84,20 +84,20 @@ public class GuiViewNotification extends GuiScreen
     /**
      * Fired when a control is clicked. This is the equivalent of ActionListener.actionPerformed(ActionEvent e).
      */
-    protected void actionPerformed(GuiButton var1)
+    protected void actionPerformed(GuiButton button)
     {
-        NotificationType var2 = this.notification.getType();
+        NotificationType type = this.notification.getType();
 
-        switch (var1.id)
+        switch (button.id)
         {
             case 0:
-                PartyMember var3 = PartyController.instance().getMember(this.notification.getSenderName());
-                Party var4 = PartyController.instance().getParty(var3);
-                this.mc.displayGuiScreen(new GuiDialogueBox(this.parent, var2.action.acceptMessage(this.notification), var2.action.failedMessage(this.notification), var2.action.executeAccept(this.notification)));
+                PartyMember recruiter = PartyController.instance().getMember(this.notification.getSenderName());
+                Party party = PartyController.instance().getParty(recruiter);
+                this.mc.displayGuiScreen(new GuiDialogueBox(this.parent, type.action.acceptMessage(this.notification), type.action.failedMessage(this.notification), type.action.executeAccept(this.notification)));
                 break;
 
             case 1:
-                var2.action.executeDecline(this.notification);
+                type.action.executeDecline(this.notification);
                 this.mc.displayGuiScreen(this.parent);
                 break;
 
@@ -117,33 +117,30 @@ public class GuiViewNotification extends GuiScreen
     /**
      * Draws the screen and all the components in it.
      */
-    public void drawScreen(int var1, int var2, float var3)
+    public void drawScreen(int x, int y, float partialTick)
     {
         this.drawDefaultBackground();
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-        GL11.glBindTexture(GL11.GL_TEXTURE_2D, this.backgroundTexture);
-        int var4 = this.xParty - 128;
-        int var5 = this.yParty - 63;
+        this.mc.renderEngine.func_110577_a(TEXTURE_NOTIFICATION_VIEW);
+        int centerX = this.xParty - 128;
+        int centerY = this.yParty - 63;
         new ScaledResolution(this.mc.gameSettings, this.mc.displayWidth, this.mc.displayHeight);
-        this.drawTexturedModalRect(var4, var5, 0, 0, 256, this.hParty);
-        GL11.glBindTexture(GL11.GL_TEXTURE_2D, this.backgroundTexture);
-        String var7 = "Viewing Notification";
-        this.mc.renderEngine.resetBoundTexture();
-        this.drawString(this.fontRenderer, var7, this.width / 2 - this.fontRenderer.getStringWidth(var7) / 2, var5 + 7, 16777215);
-        String var8 = this.notification.getTypeContents().getTitle(this.notification);
-        this.mc.renderEngine.resetBoundTexture();
-        this.drawString(this.fontRenderer, var8, this.width / 2 - this.fontRenderer.getStringWidth(var8) / 2, var5 + 27, 16777215);
-        String var9 = this.notification.getTypeContents().getDescription(this.notification);
-        ArrayList var10 = (new StringBox(var9, 45)).getStringList();
+        this.drawTexturedModalRect(centerX, centerY, 0, 0, 256, this.hParty);
+        this.mc.renderEngine.func_110577_a(TEXTURE_NOTIFICATION_VIEW);
+        String name = "Viewing Notification";
+        this.drawString(this.fontRenderer, name, this.width / 2 - this.fontRenderer.getStringWidth(name) / 2, centerY + 7, 16777215);
+        String title = this.notification.getTypeContents().getTitle(this.notification);
+        this.drawString(this.fontRenderer, title, this.width / 2 - this.fontRenderer.getStringWidth(title) / 2, centerY + 27, 16777215);
+        String description = this.notification.getTypeContents().getDescription(this.notification);
+        ArrayList descriptions = (new StringBox(description, 45)).getStringList();
 
-        for (int var11 = 0; var11 < var10.size(); ++var11)
+        for (int count = 0; count < descriptions.size(); ++count)
         {
-            String var12 = (String)var10.get(var11);
-            this.mc.renderEngine.resetBoundTexture();
-            this.drawString(this.fontRenderer, var12, this.width / 2 - this.fontRenderer.getStringWidth(var12) / 2, var5 + 45 + var11 * 10, 16777215);
+            String newLine = (String)descriptions.get(count);
+            this.drawString(this.fontRenderer, newLine, this.width / 2 - this.fontRenderer.getStringWidth(newLine) / 2, centerY + 45 + count * 10, 16777215);
         }
 
-        super.drawScreen(var1, var2, var3);
+        super.drawScreen(x, y, partialTick);
     }
 
     /**
@@ -152,10 +149,10 @@ public class GuiViewNotification extends GuiScreen
     public void updateScreen()
     {
         super.updateScreen();
-        ScaledResolution var1 = new ScaledResolution(this.mc.gameSettings, this.mc.displayWidth, this.mc.displayHeight);
-        int var2 = var1.getScaledWidth();
-        int var3 = var1.getScaledHeight();
-        this.xParty = var2 / 2;
-        this.yParty = var3 / 2;
+        ScaledResolution scaledresolution = new ScaledResolution(this.mc.gameSettings, this.mc.displayWidth, this.mc.displayHeight);
+        int width = scaledresolution.getScaledWidth();
+        int height = scaledresolution.getScaledHeight();
+        this.xParty = width / 2;
+        this.yParty = height / 2;
     }
 }

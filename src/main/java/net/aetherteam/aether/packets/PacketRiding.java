@@ -14,40 +14,40 @@ import net.minecraft.network.packet.Packet250CustomPayload;
 
 public class PacketRiding extends AetherPacket
 {
-    public PacketRiding(int var1)
+    public PacketRiding(int packetID)
     {
-        super(var1);
+        super(packetID);
     }
 
-    public void onPacketReceived(Packet250CustomPayload var1, Player var2)
+    public void onPacketReceived(Packet250CustomPayload packet, Player player)
     {
-        DataInputStream var3 = new DataInputStream(new ByteArrayInputStream(var1.data));
-        int var4 = -1;
+        DataInputStream dat = new DataInputStream(new ByteArrayInputStream(packet.data));
+        int id = -1;
 
         try
         {
-            byte var5 = var3.readByte();
-            var4 = var3.readInt();
+            byte entity = dat.readByte();
+            id = dat.readInt();
         }
         catch (IOException var6)
         {
             var6.printStackTrace();
         }
 
-        Ridable var7 = null;
+        Ridable entity1 = null;
 
-        if (var4 != -1)
+        if (id != -1)
         {
-            var7 = (Ridable)Minecraft.getMinecraft().theWorld.getEntityByID(var4);
+            entity1 = (Ridable)Minecraft.getMinecraft().theWorld.getEntityByID(id);
         }
 
-        if (var7 != null)
+        if (entity1 != null)
         {
-            var7.getRidingHandler().setRider((EntityPlayer)var2);
+            entity1.getRidingHandler().setRider((EntityPlayer)player);
         }
         else
         {
-            Aether.getPlayerBase((EntityPlayer)var2).rideEntity((Entity)null, (RidingHandler)null);
+            Aether.getPlayerBase((EntityPlayer)player).rideEntity((Entity)null, (RidingHandler)null);
         }
     }
 }

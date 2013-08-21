@@ -9,40 +9,40 @@ import net.minecraft.network.packet.Packet250CustomPayload;
 
 public class PacketHeartChange extends AetherPacket
 {
-    public PacketHeartChange(int var1)
+    public PacketHeartChange(int packetID)
     {
-        super(var1);
+        super(packetID);
     }
 
-    public void onPacketReceived(Packet250CustomPayload var1, Player var2)
+    public void onPacketReceived(Packet250CustomPayload packet, Player player)
     {
-        DataInputStream var3 = new DataInputStream(new ByteArrayInputStream(var1.data));
+        DataInputStream dat = new DataInputStream(new ByteArrayInputStream(packet.data));
 
         try
         {
-            byte var4 = var3.readByte();
-            boolean var5 = var3.readBoolean();
-            boolean var6 = var3.readBoolean();
-            short var7 = var3.readShort();
-            int var8 = var3.readInt();
-            HashMap var9 = Aether.proxy.getClientExtraHearts();
+            byte ex = dat.readByte();
+            boolean clearFirst = dat.readBoolean();
+            boolean adding = dat.readBoolean();
+            short length = dat.readShort();
+            int maxHealth = dat.readInt();
+            HashMap extraHearts = Aether.proxy.getClientExtraHearts();
 
-            if (var5)
+            if (clearFirst)
             {
-                var9.clear();
+                extraHearts.clear();
             }
 
-            for (int var10 = 0; var10 < var7; ++var10)
+            for (int i = 0; i < length; ++i)
             {
-                String var11 = var3.readUTF();
+                String username = dat.readUTF();
 
-                if (var6)
+                if (adding)
                 {
-                    var9.put(var11, Integer.valueOf(var8));
+                    extraHearts.put(username, Integer.valueOf(maxHealth));
                 }
                 else
                 {
-                    var9.remove(var11);
+                    extraHearts.remove(username);
                 }
             }
         }

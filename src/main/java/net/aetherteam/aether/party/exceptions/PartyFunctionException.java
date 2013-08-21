@@ -2,8 +2,8 @@ package net.aetherteam.aether.party.exceptions;
 
 public class PartyFunctionException extends Exception
 {
-    public PartyFunctionException(String var1)
+    public PartyFunctionException(String cause)
     {
-        super(var1);
+        super(cause);
     }
 }

@@ -80,26 +80,26 @@ public class ModelParachute extends ModelBase
     /**
      * Sets the models various rotation angles then renders the model.
      */
-    public void render(Entity var1, float var2, float var3, float var4, float var5, float var6, float var7)
+    public void render(Entity entity, float f, float f1, float f2, float f3, float f4, float f5)
     {
-        super.render(var1, var2, var3, var4, var5, var6, var7);
-        this.setRotationAngles(var2, var3, var4, var5, var6, var7, var1);
-        this.Cloud1.render(var7);
-        this.Cloud2.render(var7);
-        this.Cloud3.render(var7);
-        this.Cloud4.render(var7);
-        this.Cloud5.render(var7);
-        this.Shape2.render(var7);
-        this.Shape3.render(var7);
-        this.Shape4.render(var7);
-        this.Shape1.render(var7);
+        super.render(entity, f, f1, f2, f3, f4, f5);
+        this.setRotationAngles(f, f1, f2, f3, f4, f5, entity);
+        this.Cloud1.render(f5);
+        this.Cloud2.render(f5);
+        this.Cloud3.render(f5);
+        this.Cloud4.render(f5);
+        this.Cloud5.render(f5);
+        this.Shape2.render(f5);
+        this.Shape3.render(f5);
+        this.Shape4.render(f5);
+        this.Shape1.render(f5);
     }
 
-    private void setRotation(ModelRenderer var1, float var2, float var3, float var4)
+    private void setRotation(ModelRenderer model, float x, float y, float z)
     {
-        var1.rotateAngleX = var2;
-        var1.rotateAngleY = var3;
-        var1.rotateAngleZ = var4;
+        model.rotateAngleX = x;
+        model.rotateAngleY = y;
+        model.rotateAngleZ = z;
     }
 
     /**
@@ -107,5 +107,5 @@ public class ModelParachute extends ModelBase
      * and legs, where par1 represents the time(so that arms and legs swing back and forth) and par2 represents how
      * "far" arms and legs can swing at most.
      */
-    public void setRotationAngles(float var1, float var2, float var3, float var4, float var5, float var6, Entity var7) {}
+    public void setRotationAngles(float f, float f1, float f2, float f3, float f4, float f5, Entity entity) {}
 }

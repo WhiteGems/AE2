@@ -32,35 +32,35 @@ public class TileEntitySkyrootChest extends TileEntity implements IInventory
     /**
      * Returns the stack in slot i
      */
-    public ItemStack getStackInSlot(int var1)
+    public ItemStack getStackInSlot(int par1)
     {
-        return this.getChestContents()[var1];
+        return this.getChestContents()[par1];
     }
 
     /**
      * Removes from an inventory slot (first arg) up to a specified number (second arg) of items and returns them in a
      * new stack.
      */
-    public ItemStack decrStackSize(int var1, int var2)
+    public ItemStack decrStackSize(int par1, int par2)
     {
-        if (this.getChestContents()[var1] != null)
+        if (this.getChestContents()[par1] != null)
         {
             ItemStack var3;
 
-            if (this.getChestContents()[var1].stackSize <= var2)
+            if (this.getChestContents()[par1].stackSize <= par2)
             {
-                var3 = this.getChestContents()[var1];
-                this.getChestContents()[var1] = null;
+                var3 = this.getChestContents()[par1];
+                this.getChestContents()[par1] = null;
                 this.onInventoryChanged();
                 return var3;
             }
             else
             {
-                var3 = this.getChestContents()[var1].splitStack(var2);
+                var3 = this.getChestContents()[par1].splitStack(par2);
 
-                if (this.getChestContents()[var1].stackSize == 0)
+                if (this.getChestContents()[par1].stackSize == 0)
                 {
-                    this.getChestContents()[var1] = null;
+                    this.getChestContents()[par1] = null;
                 }
 
                 this.onInventoryChanged();
@@ -77,12 +77,12 @@ public class TileEntitySkyrootChest extends TileEntity implements IInventory
      * When some containers are closed they call this on each slot, then drop whatever it returns as an EntityItem -
      * like when you close a workbench GUI.
      */
-    public ItemStack getStackInSlotOnClosing(int var1)
+    public ItemStack getStackInSlotOnClosing(int par1)
     {
-        if (this.getChestContents()[var1] != null)
+        if (this.getChestContents()[par1] != null)
         {
-            ItemStack var2 = this.getChestContents()[var1];
-            this.getChestContents()[var1] = null;
+            ItemStack var2 = this.getChestContents()[par1];
+            this.getChestContents()[par1] = null;
             return var2;
         }
         else
@@ -94,13 +94,13 @@ public class TileEntitySkyrootChest extends TileEntity implements IInventory
     /**
      * Sets the given item stack to the specified slot in the inventory (can be crafting or armor sections).
      */
-    public void setInventorySlotContents(int var1, ItemStack var2)
+    public void setInventorySlotContents(int par1, ItemStack par2ItemStack)
     {
-        this.getChestContents()[var1] = var2;
+        this.getChestContents()[par1] = par2ItemStack;
 
-        if (var2 != null && var2.stackSize > this.getInventoryStackLimit())
+        if (par2ItemStack != null && par2ItemStack.stackSize > this.getInventoryStackLimit())
         {
-            var2.stackSize = this.getInventoryStackLimit();
+            par2ItemStack.stackSize = this.getInventoryStackLimit();
         }
 
         this.onInventoryChanged();
@@ -117,10 +117,10 @@ public class TileEntitySkyrootChest extends TileEntity implements IInventory
     /**
      * Reads a tile entity from NBT.
      */
-    public void readFromNBT(NBTTagCompound var1)
+    public void readFromNBT(NBTTagCompound par1NBTTagCompound)
     {
-        super.readFromNBT(var1);
-        NBTTagList var2 = var1.getTagList("Items");
+        super.readFromNBT(par1NBTTagCompound);
+        NBTTagList var2 = par1NBTTagCompound.getTagList("Items");
         this.setChestContents(new ItemStack[this.getSizeInventory()]);
 
         for (int var3 = 0; var3 < var2.tagCount(); ++var3)
@@ -138,9 +138,9 @@ public class TileEntitySkyrootChest extends TileEntity implements IInventory
     /**
      * Writes a tile entity to NBT.
      */
-    public void writeToNBT(NBTTagCompound var1)
+    public void writeToNBT(NBTTagCompound par1NBTTagCompound)
     {
-        super.writeToNBT(var1);
+        super.writeToNBT(par1NBTTagCompound);
         NBTTagList var2 = new NBTTagList();
 
         for (int var3 = 0; var3 < this.getChestContents().length; ++var3)
@@ -154,7 +154,7 @@ public class TileEntitySkyrootChest extends TileEntity implements IInventory
             }
         }
 
-        var1.setTag("Items", var2);
+        par1NBTTagCompound.setTag("Items", var2);
     }
 
     /**
@@ -169,9 +169,9 @@ public class TileEntitySkyrootChest extends TileEntity implements IInventory
     /**
      * Do not make give this method the name canInteractWith because it clashes with Container
      */
-    public boolean isUseableByPlayer(EntityPlayer var1)
+    public boolean isUseableByPlayer(EntityPlayer par1EntityPlayer)
     {
-        return this.worldObj.getBlockTileEntity(this.xCoord, this.yCoord, this.zCoord) != this ? false : var1.getDistanceSq((double)this.xCoord + 0.5D, (double)this.yCoord + 0.5D, (double)this.zCoord + 0.5D) <= 64.0D;
+        return this.worldObj.getBlockTileEntity(this.xCoord, this.yCoord, this.zCoord) != this ? false : par1EntityPlayer.getDistanceSq((double)this.xCoord + 0.5D, (double)this.yCoord + 0.5D, (double)this.zCoord + 0.5D) <= 64.0D;
     }
 
     /**
@@ -252,29 +252,29 @@ public class TileEntitySkyrootChest extends TileEntity implements IInventory
 
         this.prevLidAngle = this.lidAngle;
         float var1 = 0.1F;
-        double var2;
+        double var4;
 
         if (this.numUsingPlayers > 0 && this.lidAngle == 0.0F && this.adjacentChestZNeg == null && this.adjacentChestXNeg == null)
         {
-            double var4 = (double)this.xCoord + 0.5D;
-            var2 = (double)this.zCoord + 0.5D;
+            double var8 = (double)this.xCoord + 0.5D;
+            var4 = (double)this.zCoord + 0.5D;
 
             if (this.adjacentChestZPosition != null)
-            {
-                var2 += 0.5D;
-            }
-
-            if (this.adjacentChestXPos != null)
             {
                 var4 += 0.5D;
             }
 
-            this.worldObj.playSoundEffect(var4, (double)this.yCoord + 0.5D, var2, "random.chestopen", 0.5F, this.worldObj.rand.nextFloat() * 0.1F + 0.9F);
+            if (this.adjacentChestXPos != null)
+            {
+                var8 += 0.5D;
+            }
+
+            this.worldObj.playSoundEffect(var8, (double)this.yCoord + 0.5D, var4, "random.chestopen", 0.5F, this.worldObj.rand.nextFloat() * 0.1F + 0.9F);
         }
 
         if (this.numUsingPlayers == 0 && this.lidAngle > 0.0F || this.numUsingPlayers > 0 && this.lidAngle < 1.0F)
         {
-            float var8 = this.lidAngle;
+            float var81 = this.lidAngle;
 
             if (this.numUsingPlayers > 0)
             {
@@ -290,11 +290,11 @@ public class TileEntitySkyrootChest extends TileEntity implements IInventory
                 this.lidAngle = 1.0F;
             }
 
-            float var5 = 0.5F;
+            float var3 = 0.5F;
 
-            if (this.lidAngle < var5 && var8 >= var5 && this.adjacentChestZNeg == null && this.adjacentChestXNeg == null)
+            if (this.lidAngle < var3 && var81 >= var3 && this.adjacentChestZNeg == null && this.adjacentChestXNeg == null)
             {
-                var2 = (double)this.xCoord + 0.5D;
+                var4 = (double)this.xCoord + 0.5D;
                 double var6 = (double)this.zCoord + 0.5D;
 
                 if (this.adjacentChestZPosition != null)
@@ -304,10 +304,10 @@ public class TileEntitySkyrootChest extends TileEntity implements IInventory
 
                 if (this.adjacentChestXPos != null)
                 {
-                    var2 += 0.5D;
+                    var4 += 0.5D;
                 }
 
-                this.worldObj.playSoundEffect(var2, (double)this.yCoord + 0.5D, var6, "random.chestclosed", 0.5F, this.worldObj.rand.nextFloat() * 0.1F + 0.9F);
+                this.worldObj.playSoundEffect(var4, (double)this.yCoord + 0.5D, var6, "random.chestclosed", 0.5F, this.worldObj.rand.nextFloat() * 0.1F + 0.9F);
             }
 
             if (this.lidAngle < 0.0F)
@@ -320,11 +320,11 @@ public class TileEntitySkyrootChest extends TileEntity implements IInventory
     /**
      * Called when a client event is received with the event number and argument, see World.sendClientEvent
      */
-    public boolean receiveClientEvent(int var1, int var2)
+    public boolean receiveClientEvent(int par1, int par2)
     {
-        if (var1 == 1)
+        if (par1 == 1)
         {
-            this.numUsingPlayers = var2;
+            this.numUsingPlayers = par2;
         }
 
         return true;
@@ -357,9 +357,9 @@ public class TileEntitySkyrootChest extends TileEntity implements IInventory
         return this.chestContents;
     }
 
-    public void setChestContents(ItemStack[] var1)
+    public void setChestContents(ItemStack[] chestContents)
     {
-        this.chestContents = var1;
+        this.chestContents = chestContents;
     }
 
     /**
@@ -374,7 +374,7 @@ public class TileEntitySkyrootChest extends TileEntity implements IInventory
     /**
      * Returns true if automation is allowed to insert the given stack (ignoring stack size) into the given slot.
      */
-    public boolean isStackValidForSlot(int var1, ItemStack var2)
+    public boolean isItemValidForSlot(int i, ItemStack itemstack)
     {
         return false;
     }

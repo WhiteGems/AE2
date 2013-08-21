@@ -3,25 +3,25 @@ package net.aetherteam.aether.entities.mounts_old;
 import net.aetherteam.aether.Aether;
 import net.aetherteam.aether.AetherCommonPlayerHandler;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 
 public class RidingHandler
 {
     protected Entity mount;
-    protected EntityLiving rider;
+    protected EntityLivingBase rider;
 
-    public RidingHandler(Entity var1)
+    public RidingHandler(Entity entity)
     {
-        this.mount = var1;
+        this.mount = entity;
     }
 
-    public void setRider(EntityPlayer var1)
+    public void setRider(EntityPlayer player)
     {
-        if (!(this.rider instanceof EntityPlayer) && Aether.getPlayerBase(var1).riddenBy == null)
+        if (!(this.rider instanceof EntityPlayer) && Aether.getPlayerBase(player).riddenBy == null)
         {
-            Aether.getPlayerBase(var1).rideEntity(this.mount, this);
-            this.rider = var1;
+            Aether.getPlayerBase(player).rideEntity(this.mount, this);
+            this.rider = player;
             this.onMount();
         }
     }
@@ -31,7 +31,7 @@ public class RidingHandler
         return this.rider != null;
     }
 
-    public boolean jump(AetherCommonPlayerHandler var1, EntityPlayer var2)
+    public boolean jump(AetherCommonPlayerHandler aetherCommonPlayerHandler, EntityPlayer player)
     {
         return true;
     }
@@ -65,7 +65,7 @@ public class RidingHandler
         this.rider = null;
     }
 
-    public EntityLiving getRider()
+    public EntityLivingBase getRider()
     {
         return this.rider;
     }

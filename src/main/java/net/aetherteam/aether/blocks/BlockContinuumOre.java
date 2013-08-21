@@ -7,9 +7,9 @@ import net.minecraft.block.material.Material;
 
 public class BlockContinuumOre extends BlockAether implements IAetherBlock
 {
-    public BlockContinuumOre(int var1)
+    public BlockContinuumOre(int blockID)
     {
-        super(var1, Material.rock);
+        super(blockID, Material.rock);
         this.setHardness(3.0F);
         this.setResistance(5.0F);
         this.setStepSound(Block.soundStoneFootstep);
@@ -18,7 +18,7 @@ public class BlockContinuumOre extends BlockAether implements IAetherBlock
     /**
      * Returns the ID of the items to drop on destruction.
      */
-    public int idDropped(int var1, Random var2, int var3)
+    public int idDropped(int i, Random random, int k)
     {
         return AetherItems.ContinuumOrb.itemID;
     }

@@ -7,25 +7,25 @@ import net.minecraft.world.World;
 
 public class ItemLightningKnife extends ItemAether
 {
-    public ItemLightningKnife(int var1)
+    public ItemLightningKnife(int i)
     {
-        super(var1);
+        super(i);
         this.maxStackSize = 16;
     }
 
     /**
      * Called whenever this item is equipped and the right mouse button is pressed. Args: itemStack, world, entityPlayer
      */
-    public ItemStack onItemRightClick(ItemStack var1, World var2, EntityPlayer var3)
+    public ItemStack onItemRightClick(ItemStack itemstack, World world, EntityPlayer entityplayer)
     {
-        --var1.stackSize;
-        var2.playSoundAtEntity(var3, "mob.aether.dartshoot", 2.0F, 1.0F / (itemRand.nextFloat() * 0.4F + 0.8F));
+        --itemstack.stackSize;
+        world.playSoundAtEntity(entityplayer, "random.drr", 2.0F, 1.0F / (itemRand.nextFloat() * 0.4F + 0.8F));
 
-        if (!var2.isRemote)
+        if (!world.isRemote)
         {
-            var2.spawnEntityInWorld(new EntityLightningKnife(var2, var3));
+            world.spawnEntityInWorld(new EntityLightningKnife(world, entityplayer));
         }
 
-        return var1;
+        return itemstack;
     }
 }

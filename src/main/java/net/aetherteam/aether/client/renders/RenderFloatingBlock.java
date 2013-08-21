@@ -2,14 +2,16 @@ package net.aetherteam.aether.client.renders;
 
 import net.aetherteam.aether.entities.EntityFloatingBlock;
 import net.minecraft.block.Block;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.client.renderer.entity.Render;
+import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.entity.Entity;
+import net.minecraft.util.ResourceLocation;
 import org.lwjgl.opengl.GL11;
 
 public class RenderFloatingBlock extends Render
 {
+    public static final ResourceLocation TEXTURE = new ResourceLocation("aether", "textures/mobs/aechorplant/aechorplant.png");
     static RenderBlocks renderBlocks;
 
     public RenderFloatingBlock()
@@ -18,19 +20,18 @@ public class RenderFloatingBlock extends Render
         renderBlocks = new RenderBlocks();
     }
 
-    public void renderFloatingBlock(EntityFloatingBlock var1, double var2, double var4, double var6, float var8, float var9)
+    public void renderFloatingBlock(EntityFloatingBlock entityFloatingBlock, double d, double d1, double d2, float f, float f1)
     {
-        Block var10 = Block.blocksList[var1.getBlockID()];
+        Block block = Block.blocksList[entityFloatingBlock.getBlockID()];
         GL11.glPushMatrix();
-        GL11.glTranslatef((float)var2, (float)var4, (float)var6);
+        GL11.glTranslatef((float)d, (float)d1, (float)d2);
         GL11.glDisable(GL11.GL_LIGHTING);
         GL11.glRotatef(-90.0F, 0.0F, 1.0F, 0.0F);
 
-        if (var10 != null)
+        if (block != null)
         {
-            Minecraft.getMinecraft().renderEngine.resetBoundTexture();
-            this.loadTexture("/terrain.png");
-            renderBlocks.renderBlockAsItem(var10, var1.getMetadata(), var1.getBrightness(var9));
+            this.renderManager.renderEngine.func_110577_a(TextureMap.field_110575_b);
+            renderBlocks.renderBlockAsItem(block, entityFloatingBlock.getMetadata(), entityFloatingBlock.getBrightness(f1));
         }
 
         GL11.glPopMatrix();
@@ -42,8 +43,13 @@ public class RenderFloatingBlock extends Render
      * (Render<T extends Entity) and this method has signature public void doRender(T entity, double d, double d1,
      * double d2, float f, float f1). But JAD is pre 1.5 so doesn't do that.
      */
-    public void doRender(Entity var1, double var2, double var4, double var6, float var8, float var9)
+    public void doRender(Entity entity, double d, double d1, double d2, float f, float f1)
     {
-        this.renderFloatingBlock((EntityFloatingBlock)var1, var2, var4, var6, var8, var9);
+        this.renderFloatingBlock((EntityFloatingBlock)entity, d, d1, d2, f, f1);
+    }
+
+    protected ResourceLocation func_110775_a(Entity entity)
+    {
+        return null;
     }
 }

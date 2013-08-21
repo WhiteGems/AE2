@@ -1710,312 +1710,312 @@ public class ModelLabyrinthEye extends ModelBase
         this.setRotation(this.cog12t, 2.094395F, 0.0F, 2.617994F);
     }
 
-    public void renderEye(Entity var1, float var2, float var3, float var4, float var5, float var6, float var7)
+    public void renderEye(Entity entity, float f, float f1, float f2, float f3, float f4, float f5)
     {
-        this.eye.render(var7);
+        this.eye.render(f5);
     }
 
     /**
      * Sets the models various rotation angles then renders the model.
      */
-    public void render(Entity var1, float var2, float var3, float var4, float var5, float var6, float var7)
+    public void render(Entity entity, float f, float f1, float f2, float f3, float f4, float ff)
     {
-        super.render(var1, var2, var3, var4, var5, var6, var7);
-        this.setRotationAngles(var2, var3, var4, var5, var6, var7, var1);
+        super.render(entity, f, f1, f2, f3, f4, ff);
+        this.setRotationAngles(f, f1, f2, f3, f4, ff, entity);
 
         if (this.cogNumber < 1)
         {
-            this.cog1a.render(var7);
-            this.cog1b.render(var7);
-            this.cog1c.render(var7);
-            this.cog1d.render(var7);
-            this.cog1e.render(var7);
-            this.cog1f.render(var7);
-            this.cog1g.render(var7);
-            this.cog1h.render(var7);
-            this.cog1i.render(var7);
-            this.cog1j.render(var7);
-            this.cog1k.render(var7);
-            this.cog1l.render(var7);
-            this.cog1m.render(var7);
-            this.cog1n.render(var7);
-            this.cog1o.render(var7);
-            this.cog1p.render(var7);
-            this.cog1q.render(var7);
-            this.cog1r.render(var7);
-            this.cog1s.render(var7);
-            this.cog1t.render(var7);
+            this.cog1a.render(ff);
+            this.cog1b.render(ff);
+            this.cog1c.render(ff);
+            this.cog1d.render(ff);
+            this.cog1e.render(ff);
+            this.cog1f.render(ff);
+            this.cog1g.render(ff);
+            this.cog1h.render(ff);
+            this.cog1i.render(ff);
+            this.cog1j.render(ff);
+            this.cog1k.render(ff);
+            this.cog1l.render(ff);
+            this.cog1m.render(ff);
+            this.cog1n.render(ff);
+            this.cog1o.render(ff);
+            this.cog1p.render(ff);
+            this.cog1q.render(ff);
+            this.cog1r.render(ff);
+            this.cog1s.render(ff);
+            this.cog1t.render(ff);
         }
 
         if (this.cogNumber < 2)
         {
-            this.cog2a.render(var7);
-            this.cog2b.render(var7);
-            this.cog2c.render(var7);
-            this.cog2d.render(var7);
-            this.cog2e.render(var7);
-            this.cog2f.render(var7);
-            this.cog2g.render(var7);
-            this.cog2h.render(var7);
-            this.cog2i.render(var7);
-            this.cog2j.render(var7);
-            this.cog2k.render(var7);
-            this.cog2l.render(var7);
-            this.cog2m.render(var7);
-            this.cog2n.render(var7);
-            this.cog2o.render(var7);
-            this.cog2p.render(var7);
-            this.cog2q.render(var7);
-            this.cog2r.render(var7);
-            this.cog2s.render(var7);
-            this.cog2t.render(var7);
+            this.cog2a.render(ff);
+            this.cog2b.render(ff);
+            this.cog2c.render(ff);
+            this.cog2d.render(ff);
+            this.cog2e.render(ff);
+            this.cog2f.render(ff);
+            this.cog2g.render(ff);
+            this.cog2h.render(ff);
+            this.cog2i.render(ff);
+            this.cog2j.render(ff);
+            this.cog2k.render(ff);
+            this.cog2l.render(ff);
+            this.cog2m.render(ff);
+            this.cog2n.render(ff);
+            this.cog2o.render(ff);
+            this.cog2p.render(ff);
+            this.cog2q.render(ff);
+            this.cog2r.render(ff);
+            this.cog2s.render(ff);
+            this.cog2t.render(ff);
         }
 
         if (this.cogNumber < 3)
         {
-            this.cog3a.render(var7);
-            this.cog3b.render(var7);
-            this.cog3c.render(var7);
-            this.cog3d.render(var7);
-            this.cog3e.render(var7);
-            this.cog3f.render(var7);
-            this.cog3g.render(var7);
-            this.cog3h.render(var7);
-            this.cog3i.render(var7);
-            this.cog3j.render(var7);
-            this.cog3k.render(var7);
-            this.cog3l.render(var7);
-            this.cog3m.render(var7);
-            this.cog3n.render(var7);
-            this.cog3o.render(var7);
-            this.cog3p.render(var7);
-            this.cog3q.render(var7);
-            this.cog3r.render(var7);
-            this.cog3s.render(var7);
-            this.cog3t.render(var7);
+            this.cog3a.render(ff);
+            this.cog3b.render(ff);
+            this.cog3c.render(ff);
+            this.cog3d.render(ff);
+            this.cog3e.render(ff);
+            this.cog3f.render(ff);
+            this.cog3g.render(ff);
+            this.cog3h.render(ff);
+            this.cog3i.render(ff);
+            this.cog3j.render(ff);
+            this.cog3k.render(ff);
+            this.cog3l.render(ff);
+            this.cog3m.render(ff);
+            this.cog3n.render(ff);
+            this.cog3o.render(ff);
+            this.cog3p.render(ff);
+            this.cog3q.render(ff);
+            this.cog3r.render(ff);
+            this.cog3s.render(ff);
+            this.cog3t.render(ff);
         }
 
         if (this.cogNumber < 4)
         {
-            this.cog4a.render(var7);
-            this.cog4b.render(var7);
-            this.cog4c.render(var7);
-            this.cog4d.render(var7);
-            this.cog4e.render(var7);
-            this.cog4f.render(var7);
-            this.cog4g.render(var7);
-            this.cog4h.render(var7);
-            this.cog4i.render(var7);
-            this.cog4j.render(var7);
-            this.cog4k.render(var7);
-            this.cog4l.render(var7);
-            this.cog4m.render(var7);
-            this.cog4n.render(var7);
-            this.cog4o.render(var7);
-            this.cog4p.render(var7);
-            this.cog4q.render(var7);
-            this.cog4r.render(var7);
-            this.cog4s.render(var7);
-            this.cog4t.render(var7);
+            this.cog4a.render(ff);
+            this.cog4b.render(ff);
+            this.cog4c.render(ff);
+            this.cog4d.render(ff);
+            this.cog4e.render(ff);
+            this.cog4f.render(ff);
+            this.cog4g.render(ff);
+            this.cog4h.render(ff);
+            this.cog4i.render(ff);
+            this.cog4j.render(ff);
+            this.cog4k.render(ff);
+            this.cog4l.render(ff);
+            this.cog4m.render(ff);
+            this.cog4n.render(ff);
+            this.cog4o.render(ff);
+            this.cog4p.render(ff);
+            this.cog4q.render(ff);
+            this.cog4r.render(ff);
+            this.cog4s.render(ff);
+            this.cog4t.render(ff);
         }
 
         if (this.cogNumber < 5)
         {
-            this.cog5a.render(var7);
-            this.cog5b.render(var7);
-            this.cog5c.render(var7);
-            this.cog5d.render(var7);
-            this.cog5e.render(var7);
-            this.cog5f.render(var7);
-            this.cog5g.render(var7);
-            this.cog5h.render(var7);
-            this.cog5i.render(var7);
-            this.cog5j.render(var7);
-            this.cog5k.render(var7);
-            this.cog5l.render(var7);
-            this.cog5m.render(var7);
-            this.cog5n.render(var7);
-            this.cog5o.render(var7);
-            this.cog5p.render(var7);
-            this.cog5q.render(var7);
-            this.cog5r.render(var7);
-            this.cog5s.render(var7);
-            this.cog5t.render(var7);
+            this.cog5a.render(ff);
+            this.cog5b.render(ff);
+            this.cog5c.render(ff);
+            this.cog5d.render(ff);
+            this.cog5e.render(ff);
+            this.cog5f.render(ff);
+            this.cog5g.render(ff);
+            this.cog5h.render(ff);
+            this.cog5i.render(ff);
+            this.cog5j.render(ff);
+            this.cog5k.render(ff);
+            this.cog5l.render(ff);
+            this.cog5m.render(ff);
+            this.cog5n.render(ff);
+            this.cog5o.render(ff);
+            this.cog5p.render(ff);
+            this.cog5q.render(ff);
+            this.cog5r.render(ff);
+            this.cog5s.render(ff);
+            this.cog5t.render(ff);
         }
 
         if (this.cogNumber < 6)
         {
-            this.cog6a.render(var7);
-            this.cog6b.render(var7);
-            this.cog6c.render(var7);
-            this.cog6d.render(var7);
-            this.cog6e.render(var7);
-            this.cog6f.render(var7);
-            this.cog6g.render(var7);
-            this.cog6h.render(var7);
-            this.cog6i.render(var7);
-            this.cog6j.render(var7);
-            this.cog6k.render(var7);
-            this.cog6l.render(var7);
-            this.cog6m.render(var7);
-            this.cog6n.render(var7);
-            this.cog6o.render(var7);
-            this.cog6p.render(var7);
-            this.cog6q.render(var7);
-            this.cog6r.render(var7);
-            this.cog6s.render(var7);
-            this.cog6t.render(var7);
+            this.cog6a.render(ff);
+            this.cog6b.render(ff);
+            this.cog6c.render(ff);
+            this.cog6d.render(ff);
+            this.cog6e.render(ff);
+            this.cog6f.render(ff);
+            this.cog6g.render(ff);
+            this.cog6h.render(ff);
+            this.cog6i.render(ff);
+            this.cog6j.render(ff);
+            this.cog6k.render(ff);
+            this.cog6l.render(ff);
+            this.cog6m.render(ff);
+            this.cog6n.render(ff);
+            this.cog6o.render(ff);
+            this.cog6p.render(ff);
+            this.cog6q.render(ff);
+            this.cog6r.render(ff);
+            this.cog6s.render(ff);
+            this.cog6t.render(ff);
         }
 
         if (this.cogNumber < 7)
         {
-            this.cog7a.render(var7);
-            this.cog7b.render(var7);
-            this.cog7c.render(var7);
-            this.cog7d.render(var7);
-            this.cog7e.render(var7);
-            this.cog7f.render(var7);
-            this.cog7g.render(var7);
-            this.cog7h.render(var7);
-            this.cog7i.render(var7);
-            this.cog7j.render(var7);
-            this.cog7k.render(var7);
-            this.cog7l.render(var7);
-            this.cog7m.render(var7);
-            this.cog7n.render(var7);
-            this.cog7o.render(var7);
-            this.cog7p.render(var7);
-            this.cog7q.render(var7);
-            this.cog7r.render(var7);
-            this.cog7s.render(var7);
-            this.cog7t.render(var7);
+            this.cog7a.render(ff);
+            this.cog7b.render(ff);
+            this.cog7c.render(ff);
+            this.cog7d.render(ff);
+            this.cog7e.render(ff);
+            this.cog7f.render(ff);
+            this.cog7g.render(ff);
+            this.cog7h.render(ff);
+            this.cog7i.render(ff);
+            this.cog7j.render(ff);
+            this.cog7k.render(ff);
+            this.cog7l.render(ff);
+            this.cog7m.render(ff);
+            this.cog7n.render(ff);
+            this.cog7o.render(ff);
+            this.cog7p.render(ff);
+            this.cog7q.render(ff);
+            this.cog7r.render(ff);
+            this.cog7s.render(ff);
+            this.cog7t.render(ff);
         }
 
         if (this.cogNumber < 8)
         {
-            this.cog8a.render(var7);
-            this.cog8b.render(var7);
-            this.cog8c.render(var7);
-            this.cog8d.render(var7);
-            this.cog8e.render(var7);
-            this.cog8f.render(var7);
-            this.cog8g.render(var7);
-            this.cog8h.render(var7);
-            this.cog8i.render(var7);
-            this.cog8j.render(var7);
-            this.cog8k.render(var7);
-            this.cog8l.render(var7);
-            this.cog8m.render(var7);
-            this.cog8n.render(var7);
-            this.cog8o.render(var7);
-            this.cog8p.render(var7);
-            this.cog8q.render(var7);
-            this.cog8r.render(var7);
-            this.cog8s.render(var7);
-            this.cog8t.render(var7);
+            this.cog8a.render(ff);
+            this.cog8b.render(ff);
+            this.cog8c.render(ff);
+            this.cog8d.render(ff);
+            this.cog8e.render(ff);
+            this.cog8f.render(ff);
+            this.cog8g.render(ff);
+            this.cog8h.render(ff);
+            this.cog8i.render(ff);
+            this.cog8j.render(ff);
+            this.cog8k.render(ff);
+            this.cog8l.render(ff);
+            this.cog8m.render(ff);
+            this.cog8n.render(ff);
+            this.cog8o.render(ff);
+            this.cog8p.render(ff);
+            this.cog8q.render(ff);
+            this.cog8r.render(ff);
+            this.cog8s.render(ff);
+            this.cog8t.render(ff);
         }
 
         if (this.cogNumber < 9)
         {
-            this.cog9a.render(var7);
-            this.cog9b.render(var7);
-            this.cog9c.render(var7);
-            this.cog9d.render(var7);
-            this.cog9e.render(var7);
-            this.cog9f.render(var7);
-            this.cog9g.render(var7);
-            this.cog9h.render(var7);
-            this.cog9i.render(var7);
-            this.cog9j.render(var7);
-            this.cog9k.render(var7);
-            this.cog9l.render(var7);
-            this.cog9m.render(var7);
-            this.cog9n.render(var7);
-            this.cog9o.render(var7);
-            this.cog9p.render(var7);
-            this.cog9q.render(var7);
-            this.cog9r.render(var7);
-            this.cog9s.render(var7);
-            this.cog9t.render(var7);
+            this.cog9a.render(ff);
+            this.cog9b.render(ff);
+            this.cog9c.render(ff);
+            this.cog9d.render(ff);
+            this.cog9e.render(ff);
+            this.cog9f.render(ff);
+            this.cog9g.render(ff);
+            this.cog9h.render(ff);
+            this.cog9i.render(ff);
+            this.cog9j.render(ff);
+            this.cog9k.render(ff);
+            this.cog9l.render(ff);
+            this.cog9m.render(ff);
+            this.cog9n.render(ff);
+            this.cog9o.render(ff);
+            this.cog9p.render(ff);
+            this.cog9q.render(ff);
+            this.cog9r.render(ff);
+            this.cog9s.render(ff);
+            this.cog9t.render(ff);
         }
 
         if (this.cogNumber < 10)
         {
-            this.cog10a.render(var7);
-            this.cog10b.render(var7);
-            this.cog10c.render(var7);
-            this.cog10d.render(var7);
-            this.cog10e.render(var7);
-            this.cog10f.render(var7);
-            this.cog10g.render(var7);
-            this.cog10h.render(var7);
-            this.cog10i.render(var7);
-            this.cog10j.render(var7);
-            this.cog10k.render(var7);
-            this.cog10l.render(var7);
-            this.cog10m.render(var7);
-            this.cog10n.render(var7);
-            this.cog10o.render(var7);
-            this.cog10p.render(var7);
-            this.cog10q.render(var7);
-            this.cog10r.render(var7);
-            this.cog10s.render(var7);
-            this.cog10t.render(var7);
+            this.cog10a.render(ff);
+            this.cog10b.render(ff);
+            this.cog10c.render(ff);
+            this.cog10d.render(ff);
+            this.cog10e.render(ff);
+            this.cog10f.render(ff);
+            this.cog10g.render(ff);
+            this.cog10h.render(ff);
+            this.cog10i.render(ff);
+            this.cog10j.render(ff);
+            this.cog10k.render(ff);
+            this.cog10l.render(ff);
+            this.cog10m.render(ff);
+            this.cog10n.render(ff);
+            this.cog10o.render(ff);
+            this.cog10p.render(ff);
+            this.cog10q.render(ff);
+            this.cog10r.render(ff);
+            this.cog10s.render(ff);
+            this.cog10t.render(ff);
         }
 
         if (this.cogNumber < 11)
         {
-            this.cog11a.render(var7);
-            this.cog11b.render(var7);
-            this.cog11c.render(var7);
-            this.cog11d.render(var7);
-            this.cog11e.render(var7);
-            this.cog11f.render(var7);
-            this.cog11g.render(var7);
-            this.cog11h.render(var7);
-            this.cog11i.render(var7);
-            this.cog11j.render(var7);
-            this.cog11k.render(var7);
-            this.cog11l.render(var7);
-            this.cog11m.render(var7);
-            this.cog11n.render(var7);
-            this.cog11o.render(var7);
-            this.cog11p.render(var7);
-            this.cog11q.render(var7);
-            this.cog11r.render(var7);
-            this.cog11s.render(var7);
-            this.cog11t.render(var7);
+            this.cog11a.render(ff);
+            this.cog11b.render(ff);
+            this.cog11c.render(ff);
+            this.cog11d.render(ff);
+            this.cog11e.render(ff);
+            this.cog11f.render(ff);
+            this.cog11g.render(ff);
+            this.cog11h.render(ff);
+            this.cog11i.render(ff);
+            this.cog11j.render(ff);
+            this.cog11k.render(ff);
+            this.cog11l.render(ff);
+            this.cog11m.render(ff);
+            this.cog11n.render(ff);
+            this.cog11o.render(ff);
+            this.cog11p.render(ff);
+            this.cog11q.render(ff);
+            this.cog11r.render(ff);
+            this.cog11s.render(ff);
+            this.cog11t.render(ff);
         }
 
         if (this.cogNumber < 12)
         {
-            this.cog12a.render(var7);
-            this.cog12b.render(var7);
-            this.cog12c.render(var7);
-            this.cog12d.render(var7);
-            this.cog12e.render(var7);
-            this.cog12f.render(var7);
-            this.cog12g.render(var7);
-            this.cog12h.render(var7);
-            this.cog12i.render(var7);
-            this.cog12j.render(var7);
-            this.cog12k.render(var7);
-            this.cog12l.render(var7);
-            this.cog12m.render(var7);
-            this.cog12n.render(var7);
-            this.cog12o.render(var7);
-            this.cog12p.render(var7);
-            this.cog12q.render(var7);
-            this.cog12r.render(var7);
-            this.cog12s.render(var7);
-            this.cog12t.render(var7);
+            this.cog12a.render(ff);
+            this.cog12b.render(ff);
+            this.cog12c.render(ff);
+            this.cog12d.render(ff);
+            this.cog12e.render(ff);
+            this.cog12f.render(ff);
+            this.cog12g.render(ff);
+            this.cog12h.render(ff);
+            this.cog12i.render(ff);
+            this.cog12j.render(ff);
+            this.cog12k.render(ff);
+            this.cog12l.render(ff);
+            this.cog12m.render(ff);
+            this.cog12n.render(ff);
+            this.cog12o.render(ff);
+            this.cog12p.render(ff);
+            this.cog12q.render(ff);
+            this.cog12r.render(ff);
+            this.cog12s.render(ff);
+            this.cog12t.render(ff);
         }
     }
 
-    private void setRotation(ModelRenderer var1, float var2, float var3, float var4)
+    private void setRotation(ModelRenderer model, float x, float y, float z)
     {
-        var1.rotateAngleX = var2;
-        var1.rotateAngleY = var3;
-        var1.rotateAngleZ = var4;
+        model.rotateAngleX = x;
+        model.rotateAngleY = y;
+        model.rotateAngleZ = z;
     }
 }

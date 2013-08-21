@@ -9,20 +9,20 @@ public class Notification
     private String receiverName;
     private NotificationType type;
 
-    public Notification(NotificationType var1, String var2, String var3)
+    public Notification(NotificationType type, String senderName, String receiverName)
     {
         this.headerText = "Notification Received!";
-        this.senderName = var2;
-        this.receiverName = var3;
-        this.type = var1;
+        this.senderName = senderName;
+        this.receiverName = receiverName;
+        this.type = type;
     }
 
-    public Notification(NotificationType var1, String var2, String var3, String var4)
+    public Notification(NotificationType type, String headerText, String senderName, String receiverName)
     {
-        this.headerText = var2;
-        this.senderName = var3;
-        this.receiverName = var4;
-        this.type = var1;
+        this.headerText = headerText;
+        this.senderName = senderName;
+        this.receiverName = receiverName;
+        this.type = type;
     }
 
     public String getHeaderText()
@@ -55,9 +55,9 @@ public class Notification
         return this.type;
     }
 
-    public void executeAction(boolean var1)
+    public void executeAction(boolean accept)
     {
-        if (var1)
+        if (accept)
         {
             this.type.action.executeAccept(this);
         }

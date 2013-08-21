@@ -4,39 +4,46 @@ import net.aetherteam.aether.entities.EntityTrackingGolem;
 import net.minecraft.client.model.ModelBiped;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.entity.RenderBiped;
-import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.util.ResourceLocation;
 import org.lwjgl.opengl.GL11;
 
 public class RenderTrackingGolem extends RenderBiped
 {
-    public RenderTrackingGolem(ModelBiped var1, float var2)
+    public static final ResourceLocation TEXTURE = new ResourceLocation("aether", "textures/mobs/sentrygolem/sentryGolem.png");
+    public static final ResourceLocation TEXTURE_RED = new ResourceLocation("aether", "textures/mobs/sentrygolem/sentryGolem_red.png");
+    private static final ResourceLocation TEXTURE_EYES = new ResourceLocation("aether", "textures/mobs/sentrygolem/eyes.png");
+    private static final ResourceLocation TEXTURE_EYES_RED = new ResourceLocation("aether", "textures/mobs/sentrygolem/eyes_red.png");
+
+    public RenderTrackingGolem(ModelBiped model, float f)
     {
-        super(var1, var2);
-        this.setRenderPassModel(var1);
+        super(model, f);
+        this.setRenderPassModel(model);
     }
 
-    protected int setMarkingBrightness(EntityTrackingGolem var1, int var2, float var3)
+    protected int setMarkingBrightness(EntityTrackingGolem golem, int i, float f)
     {
-        if (var2 != 0)
+        if (i != 0)
         {
             return -1;
         }
         else
         {
-            if (!var1.getSeenEnemy())
+            if (!golem.getSeenEnemy())
             {
-                this.loadTexture("/net/aetherteam/aether/client/sprites/mobs/sentrygolem/eyes.png");
+                this.renderManager.renderEngine.func_110577_a(TEXTURE_EYES);
             }
             else
             {
-                this.loadTexture("/net/aetherteam/aether/client/sprites/mobs/sentrygolem/eyes_red.png");
+                this.renderManager.renderEngine.func_110577_a(TEXTURE_EYES_RED);
             }
 
             float var4 = 1.0F;
             GL11.glEnable(GL11.GL_BLEND);
             GL11.glBlendFunc(GL11.GL_ONE, GL11.GL_ONE);
 
-            if (!var1.getActivePotionEffects().isEmpty())
+            if (!golem.getActivePotionEffects().isEmpty())
             {
                 GL11.glDepthMask(false);
             }
@@ -58,8 +65,13 @@ public class RenderTrackingGolem extends RenderBiped
     /**
      * Queries whether should render the specified pass or not.
      */
-    protected int shouldRenderPass(EntityLiving var1, int var2, float var3)
+    protected int shouldRenderPass(EntityLivingBase entityliving, int i, float f)
     {
-        return this.setMarkingBrightness((EntityTrackingGolem)var1, var2, var3);
+        return this.setMarkingBrightness((EntityTrackingGolem)entityliving, i, f);
+    }
+
+    protected ResourceLocation func_110775_a(Entity entity)
+    {
+        return ((EntityTrackingGolem)entity).getSeenEnemy() ? TEXTURE_RED : TEXTURE;
     }
 }

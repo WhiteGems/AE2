@@ -7,20 +7,18 @@ import net.aetherteam.aether.interfaces.IAetherBoss;
 import net.aetherteam.aether.party.Party;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityFlying;
+import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 
 public class EntityFlyingMiniBoss extends EntityFlying implements IAetherBoss
 {
-    public EntityFlyingMiniBoss(World var1)
+    public EntityFlyingMiniBoss(World par1World)
     {
-        super(var1);
-    }
-
-    public int getMaxHealth()
-    {
-        return 200;
+        super(par1World);
+        this.func_110148_a(SharedMonsterAttributes.field_111267_a).func_111128_a(200.0D);
+        this.setEntityHealth(200.0F);
     }
 
     /**
@@ -29,45 +27,42 @@ public class EntityFlyingMiniBoss extends EntityFlying implements IAetherBoss
     public void onUpdate()
     {
         super.onUpdate();
-        DungeonHandler var1 = DungeonHandler.instance();
-        Dungeon var2 = var1.getInstanceAt(MathHelper.floor_double(this.posX), MathHelper.floor_double(this.posY), MathHelper.floor_double(this.posZ));
+        DungeonHandler handler = DungeonHandler.instance();
+        Dungeon dungeon = handler.getInstanceAt(MathHelper.floor_double(this.posX), MathHelper.floor_double(this.posY), MathHelper.floor_double(this.posZ));
 
-        if (var2 != null && !var2.isActive())
+        if (dungeon != null && !dungeon.isActive())
         {
             this.setDead();
         }
 
-        if (!this.worldObj.isRemote && this.getHealthTracked() != this.health)
+        if (!this.worldObj.isRemote && (float)this.getHealthTracked() != this.func_110143_aJ())
         {
             this.setHealthTracked();
         }
     }
 
-    /**
-     * Called when the entity is attacked.
-     */
-    public boolean attackEntityFrom(DamageSource var1, int var2)
+    public boolean attackEntityFrom(DamageSource src, int damage)
     {
-        Dungeon var3 = DungeonHandler.instance().getInstanceAt(MathHelper.floor_double(this.posX), MathHelper.floor_double(this.posY), MathHelper.floor_double(this.posZ));
+        Dungeon dungeon = DungeonHandler.instance().getInstanceAt(MathHelper.floor_double(this.posX), MathHelper.floor_double(this.posY), MathHelper.floor_double(this.posZ));
 
-        if (var3 != null && var3.hasQueuedParty())
+        if (dungeon != null && dungeon.hasQueuedParty())
         {
-            Party var4 = var3.getQueuedParty();
-            int var5 = var3.getQueuedMembers().size() + 1;
-            float var6 = (float)(var5 - 1) * 0.075F;
-            int var7 = MathHelper.clamp_int((int)((float)var2 - (float)var2 * var6), 1, var2);
-            return super.attackEntityFrom(var1, var7);
+            Party party = dungeon.getQueuedParty();
+            int players = dungeon.getQueuedMembers().size() + 1;
+            float damageFactor = (float)(players - 1) * 0.075F;
+            int newDamage = MathHelper.clamp_int((int)((float)damage - (float)damage * damageFactor), 1, damage);
+            return super.attackEntityFrom(src, (float)newDamage);
         }
         else
         {
-            return super.attackEntityFrom(var1, var2);
+            return super.attackEntityFrom(src, (float)damage);
         }
     }
 
     public void entityInit()
     {
         super.entityInit();
-        this.dataWatcher.addObject(26, Integer.valueOf(this.health));
+        this.dataWatcher.addObject(26, Integer.valueOf((int)this.func_110143_aJ()));
     }
 
     public int getHealthTracked()
@@ -77,7 +72,7 @@ public class EntityFlyingMiniBoss extends EntityFlying implements IAetherBoss
 
     public void setHealthTracked()
     {
-        this.dataWatcher.updateObject(26, Integer.valueOf(this.health));
+        this.dataWatcher.updateObject(26, Integer.valueOf((int)this.func_110143_aJ()));
     }
 
     public int getBossHP()
@@ -87,7 +82,7 @@ public class EntityFlyingMiniBoss extends EntityFlying implements IAetherBoss
 
     public int getBossMaxHP()
     {
-        return this.getMaxHealth();
+        return 200;
     }
 
     public int getBossEntityID()

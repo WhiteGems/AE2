@@ -3,57 +3,60 @@ package net.aetherteam.aether.client.renders;
 import net.aetherteam.aether.client.models.ModelAechorPlant;
 import net.aetherteam.aether.entities.EntityAechorPlant;
 import net.minecraft.client.renderer.entity.RenderLiving;
-import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.util.ResourceLocation;
 import org.lwjgl.opengl.GL11;
 
 public class RenderAechorPlant extends RenderLiving
 {
+    public static final ResourceLocation TEXTURE = new ResourceLocation("aether", "textures/mobs/aechorplant/aechorplant.png");
     public ModelAechorPlant xd;
 
-    public RenderAechorPlant(ModelAechorPlant var1, float var2)
+    public RenderAechorPlant(ModelAechorPlant mb, float f)
     {
-        super(var1, var2);
-        this.setRenderPassModel(var1);
-        this.xd = var1;
+        super(mb, f);
+        this.setRenderPassModel(mb);
+        this.xd = mb;
     }
 
     /**
      * Allows the render to do any OpenGL state modifications necessary before the model is rendered. Args:
      * entityLiving, partialTickTime
      */
-    protected void preRenderCallback(EntityLiving var1, float var2)
+    protected void preRenderCallback(EntityLivingBase entityliving, float f)
     {
-        EntityAechorPlant var3 = (EntityAechorPlant)var1;
-        float var4 = (float)Math.sin((double)var3.sinage);
-        float var5;
+        EntityAechorPlant b1 = (EntityAechorPlant)entityliving;
+        float f1 = (float)Math.sin((double)b1.sinage);
+        float f3;
 
-        if (var3.hurtTime > 0)
+        if (b1.hurtTime > 0)
         {
-            var4 *= 0.45F;
-            var4 -= 0.125F;
-            var5 = 1.75F + (float)Math.sin((double)(var3.sinage + 2.0F)) * 1.5F;
+            f1 *= 0.45F;
+            f1 -= 0.125F;
+            f3 = 1.75F + (float)Math.sin((double)(b1.sinage + 2.0F)) * 1.5F;
         }
-        else if (var3.seeprey)
+        else if (b1.seeprey)
         {
-            var4 *= 0.25F;
-            var5 = 1.75F + (float)Math.sin((double)(var3.sinage + 2.0F)) * 1.5F;
+            f1 *= 0.25F;
+            f3 = 1.75F + (float)Math.sin((double)(b1.sinage + 2.0F)) * 1.5F;
         }
         else
         {
-            var4 *= 0.125F;
-            var5 = 1.75F;
+            f1 *= 0.125F;
+            f3 = 1.75F;
         }
 
-        this.xd.sinage = var4;
-        this.xd.sinage2 = var5;
-        float var6 = 0.625F + (float)var3.getSize() / 6.0F;
-        this.xd.size = var6;
-        this.shadowSize = var6 - 0.25F;
+        this.xd.sinage = f1;
+        this.xd.sinage2 = f3;
+        float f2 = 0.625F + (float)b1.getSize() / 6.0F;
+        this.xd.size = f2;
+        this.shadowSize = f2 - 0.25F;
     }
 
-    protected int a(EntityAechorPlant var1, int var2, float var3)
+    protected int a(EntityAechorPlant entityaechorplant, int i, float f)
     {
-        if (var2 != 0)
+        if (i != 0)
         {
             return -1;
         }
@@ -70,8 +73,13 @@ public class RenderAechorPlant extends RenderLiving
     /**
      * Queries whether should render the specified pass or not.
      */
-    protected int shouldRenderPass(EntityLiving var1, int var2, float var3)
+    protected int shouldRenderPass(EntityLivingBase entityliving, int i, float f)
     {
-        return this.a((EntityAechorPlant)var1, var2, var3);
+        return this.a((EntityAechorPlant)entityliving, i, f);
+    }
+
+    protected ResourceLocation func_110775_a(Entity entity)
+    {
+        return TEXTURE;
     }
 }

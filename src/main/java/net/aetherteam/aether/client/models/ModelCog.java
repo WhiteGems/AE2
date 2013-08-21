@@ -156,36 +156,36 @@ public class ModelCog extends ModelBase
     /**
      * Sets the models various rotation angles then renders the model.
      */
-    public void render(Entity var1, float var2, float var3, float var4, float var5, float var6, float var7)
+    public void render(Entity entity, float f, float f1, float f2, float f3, float f4, float f5)
     {
-        super.render(var1, var2, var3, var4, var5, var6, var7);
-        this.setRotationAngles(var2, var3, var4, var5, var6, var7, var1);
-        this.c11.render(var7);
-        this.c21.render(var7);
-        this.c31.render(var7);
-        this.c41.render(var7);
-        this.c51.render(var7);
-        this.c61.render(var7);
-        this.c71.render(var7);
-        this.c81.render(var7);
-        this.t11.render(var7);
-        this.t21.render(var7);
-        this.t31.render(var7);
-        this.t41.render(var7);
-        this.t51.render(var7);
-        this.t61.render(var7);
-        this.t71.render(var7);
-        this.t81.render(var7);
-        this.t91.render(var7);
-        this.t111.render(var7);
-        this.t101.render(var7);
-        this.t121.render(var7);
+        super.render(entity, f, f1, f2, f3, f4, f5);
+        this.setRotationAngles(f, f1, f2, f3, f4, f5, entity);
+        this.c11.render(f5);
+        this.c21.render(f5);
+        this.c31.render(f5);
+        this.c41.render(f5);
+        this.c51.render(f5);
+        this.c61.render(f5);
+        this.c71.render(f5);
+        this.c81.render(f5);
+        this.t11.render(f5);
+        this.t21.render(f5);
+        this.t31.render(f5);
+        this.t41.render(f5);
+        this.t51.render(f5);
+        this.t61.render(f5);
+        this.t71.render(f5);
+        this.t81.render(f5);
+        this.t91.render(f5);
+        this.t111.render(f5);
+        this.t101.render(f5);
+        this.t121.render(f5);
     }
 
-    private void setRotation(ModelRenderer var1, float var2, float var3, float var4)
+    private void setRotation(ModelRenderer model, float x, float y, float z)
     {
-        var1.rotateAngleX = var2;
-        var1.rotateAngleY = var3;
-        var1.rotateAngleZ = var4;
+        model.rotateAngleX = x;
+        model.rotateAngleY = y;
+        model.rotateAngleZ = z;
     }
 }

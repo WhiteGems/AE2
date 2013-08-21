@@ -13,25 +13,28 @@ import net.minecraft.world.World;
 public class ItemHolystonePickaxe extends ItemPickaxe
 {
     private static Random random = new Random();
+
+    /** an array of the blocks this pickaxe is effective against */
     public static final Block[] blocksEffectiveAgainst = new Block[] {Block.cobblestone, Block.stoneDoubleSlab, Block.stoneSingleSlab, Block.stone, Block.sandStone, Block.cobblestoneMossy, Block.oreIron, Block.blockIron, Block.oreCoal, Block.blockGold, Block.oreGold, Block.oreDiamond, Block.blockDiamond, Block.ice, Block.netherrack, Block.oreLapis, Block.blockLapis, Block.oreRedstone, Block.oreRedstoneGlowing, Block.rail, Block.railDetector, Block.railPowered, Block.railActivator, AetherBlocks.Holystone, AetherBlocks.HolystoneBrick, AetherBlocks.HolystoneStairs, AetherBlocks.HolystoneWall};
 
-    protected ItemHolystonePickaxe(int var1, EnumToolMaterial var2)
+    protected ItemHolystonePickaxe(int i, EnumToolMaterial enumtoolmaterial)
     {
-        super(var1, var2);
+        super(i, enumtoolmaterial);
     }
 
-    public Item setIconName(String var1)
+    public Item setIconName(String name)
     {
-        return this.setUnlocalizedName("Aether:" + var1);
+        this.field_111218_cA = "aether:" + name;
+        return this.setUnlocalizedName("aether:" + name);
     }
 
-    public boolean onBlockDestroyed(ItemStack var1, World var2, int var3, int var4, int var5, int var6, EntityLiving var7)
+    public boolean onBlockDestroyed(ItemStack itemstack, World world, int i, int j, int k, int l, EntityLiving entityliving)
     {
-        if (random.nextInt(20) == 0 && !var2.isRemote)
+        if (random.nextInt(20) == 0 && !world.isRemote)
         {
-            var7.dropItemWithOffset(AetherItems.AmbrosiumShard.itemID, 1, 0.0F);
+            entityliving.dropItemWithOffset(AetherItems.AmbrosiumShard.itemID, 1, 0.0F);
         }
 
-        return super.onBlockDestroyed(var1, var2, var3, var4, var5, var6, var7);
+        return super.onBlockDestroyed(itemstack, world, i, j, k, l, entityliving);
     }
 }

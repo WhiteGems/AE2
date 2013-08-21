@@ -16,51 +16,49 @@ import net.minecraft.network.packet.Packet250CustomPayload;
 
 public class PacketSyncAllParties extends AetherPacket
 {
-    public PacketSyncAllParties(int var1)
+    public PacketSyncAllParties(int packetID)
     {
-        super(var1);
+        super(packetID);
     }
 
-    public void onPacketReceived(Packet250CustomPayload var1, Player var2)
+    public void onPacketReceived(Packet250CustomPayload packet, Player player)
     {
-        DataInputStream var3 = new DataInputStream(new ByteArrayInputStream(var1.data));
-        new BufferedReader(new InputStreamReader(var3));
+        DataInputStream dat = new DataInputStream(new ByteArrayInputStream(packet.data));
+        new BufferedReader(new InputStreamReader(dat));
 
         try
         {
-            Side var5 = FMLCommonHandler.instance().getEffectiveSide();
+            Side ex = FMLCommonHandler.instance().getEffectiveSide();
 
-            if (var5.isClient())
+            if (ex.isClient())
             {
                 PartyController.instance().getParties().clear();
-                byte var6 = var3.readByte();
-                int var7 = var3.readInt();
+                byte packetType = dat.readByte();
+                int partyAmount = dat.readInt();
 
-                for (int var8 = 0; var8 < var7; ++var8)
+                for (int i = 0; i < partyAmount; ++i)
                 {
-                    String var9 = var3.readUTF();
-                    String var10 = var3.readUTF();
-                    String var11 = "";
-                    PartyType var12 = PartyType.getTypeFromString(var3.readUTF());
-                    int var13 = var3.readInt();
-                    Party var14 = (new Party(var9, new PartyMember(var10, var11))).setType(var12);
-                    PartyController.instance().addParty(var14, false);
-                    int var15 = var3.readInt();
+                    String partyName = dat.readUTF();
+                    String leaderUsername = dat.readUTF();
+                    PartyType partyType = PartyType.getTypeFromString(dat.readUTF());
+                    int memberSizeLimit = dat.readInt();
+                    Party party = (new Party(partyName, new PartyMember(leaderUsername))).setType(partyType);
+                    PartyController.instance().addParty(party, false);
+                    int memberAmount = dat.readInt();
 
-                    for (int var16 = 0; var16 < var15; ++var16)
+                    for (int j = 0; j < memberAmount; ++j)
                     {
-                        String var17 = var3.readUTF();
-                        String var18 = "";
-                        MemberType var19 = MemberType.getTypeFromString(var3.readUTF());
-                        PartyMember var20 = (new PartyMember(var17, var18)).promoteTo(var19);
-                        PartyController.instance().joinParty(var14, var20, false);
+                        String memberUsername = dat.readUTF();
+                        MemberType memberType = MemberType.getTypeFromString(dat.readUTF());
+                        PartyMember member = (new PartyMember(memberUsername)).promoteTo(memberType);
+                        PartyController.instance().joinParty(party, member, false);
                     }
                 }
             }
         }
-        catch (Exception var21)
+        catch (Exception var19)
         {
-            var21.printStackTrace();
+            var19.printStackTrace();
         }
     }
 }

@@ -16,33 +16,33 @@ public class ModelAetherWings extends ModelBiped
         this(0.0F);
     }
 
-    public ModelAetherWings(float var1)
+    public ModelAetherWings(float f)
     {
-        this(var1, 0.0F);
+        this(f, 0.0F);
     }
 
-    public ModelAetherWings(float var1, float var2)
+    public ModelAetherWings(float f, float f1)
     {
         this.heldItemLeft = 0;
         this.heldItemRight = 0;
         this.isSneak = false;
         this.wingLeft = new ModelRenderer(this, 24, 31);
-        this.wingLeft.addBox(0.0F, -7.0F, 1.0F, 19, 8, 0, var1);
-        this.wingLeft.setRotationPoint(0.5F, 5.0F + var2, 2.625F);
+        this.wingLeft.addBox(0.0F, -7.0F, 1.0F, 19, 8, 0, f);
+        this.wingLeft.setRotationPoint(0.5F, 5.0F + f1, 2.625F);
         this.wingRight = new ModelRenderer(this, 24, 31);
         this.wingRight.mirror = true;
-        this.wingRight.addBox(-19.0F, -7.0F, 1.0F, 19, 8, 0, var1);
-        this.wingRight.setRotationPoint(-0.5F, 5.0F + var2, 2.625F);
+        this.wingRight.addBox(-19.0F, -7.0F, 1.0F, 19, 8, 0, f);
+        this.wingRight.setRotationPoint(-0.5F, 5.0F + f1, 2.625F);
     }
 
     /**
      * Sets the models various rotation angles then renders the model.
      */
-    public void render(Entity var1, float var2, float var3, float var4, float var5, float var6, float var7)
+    public void render(Entity e, float f, float f1, float f2, float f3, float f4, float f5)
     {
-        this.setRotationAngles(var2, var3, var4, var5, var6, var7, var1);
-        this.wingLeft.renderWithRotation(var7);
-        this.wingRight.renderWithRotation(var7);
+        this.setRotationAngles(f, f1, f2, f3, f4, f5, e);
+        this.wingLeft.renderWithRotation(f5);
+        this.wingRight.renderWithRotation(f5);
     }
 
     /**
@@ -50,7 +50,7 @@ public class ModelAetherWings extends ModelBiped
      * and legs, where par1 represents the time(so that arms and legs swing back and forth) and par2 represents how
      * "far" arms and legs can swing at most.
      */
-    public void setRotationAngles(float var1, float var2, float var3, float var4, float var5, float var6, Entity var7)
+    public void setRotationAngles(float f, float f1, float f2, float f3, float f4, float f5, Entity entity)
     {
         this.wingLeft.rotateAngleY = -0.2F;
         this.wingRight.rotateAngleY = 0.2F;

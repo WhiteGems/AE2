@@ -9,5 +9,5 @@ public class AetherEventReceiver
     @ForgeSubscribe(
         priority = EventPriority.NORMAL
     )
-    public void onRenderGui(RenderGameOverlayEvent var1) {}
+    public void onRenderGui(RenderGameOverlayEvent event) {}
 }

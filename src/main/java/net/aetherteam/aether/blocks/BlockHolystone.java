@@ -15,12 +15,12 @@ import net.minecraft.world.World;
 
 public class BlockHolystone extends BlockAether implements IAetherBlock
 {
-    private HashMap icons = new HashMap();
+    private HashMap<String, Icon> icons = new HashMap();
     public static final String[] names = new String[] {"Holystone", "Mossy Holystone"};
 
-    protected BlockHolystone(int var1)
+    protected BlockHolystone(int blockID)
     {
-        super(var1, Material.rock);
+        super(blockID, Material.rock);
         this.setHardness(1.5F);
         this.setStepSound(Block.soundStoneFootstep);
     }
@@ -28,31 +28,31 @@ public class BlockHolystone extends BlockAether implements IAetherBlock
     /**
      * returns a list of blocks with the same ID, but different meta (eg: wood returns 4 blocks)
      */
-    public void getSubBlocks(int var1, CreativeTabs var2, List var3)
+    public void getSubBlocks(int par1, CreativeTabs par2CreativeTabs, List par3List)
     {
-        var3.add(new ItemStack(var1, 1, 1));
-        var3.add(new ItemStack(var1, 1, 3));
+        par3List.add(new ItemStack(par1, 1, 1));
+        par3List.add(new ItemStack(par1, 1, 3));
     }
 
     /**
      * From the specified side and block metadata retrieves the blocks texture. Args: side, metadata
      */
-    public Icon getIcon(int var1, int var2)
+    public Icon getIcon(int i, int meta)
     {
-        ItemStack var3 = new ItemStack(AetherBlocks.Holystone, 1, var2);
-        String var4 = var3.getItem().getItemDisplayName(var3);
-        return (Icon)this.icons.get(var4);
+        ItemStack stack = new ItemStack(AetherBlocks.Holystone, 1, meta);
+        String name = stack.getItem().getItemDisplayName(stack);
+        return (Icon)this.icons.get(name);
     }
 
     /**
      * When this method is called, your block should register all the icons it needs with the given IconRegister. This
      * is the only chance you get to register icons.
      */
-    public void registerIcons(IconRegister var1)
+    public void registerIcons(IconRegister par1IconRegister)
     {
-        for (int var2 = 0; var2 < names.length; ++var2)
+        for (int i = 0; i < names.length; ++i)
         {
-            this.icons.put(names[var2], var1.registerIcon("Aether:" + names[var2]));
+            this.icons.put(names[i], par1IconRegister.registerIcon("aether:" + names[i]));
         }
     }
 
@@ -60,47 +60,47 @@ public class BlockHolystone extends BlockAether implements IAetherBlock
      * Called when the player destroys a block with an item that can harvest it. (i, j, k) are the coordinates of the
      * block and l is the block's subtype/damage.
      */
-    public void harvestBlock(World var1, EntityPlayer var2, int var3, int var4, int var5, int var6)
+    public void harvestBlock(World world, EntityPlayer entityplayer, int x, int y, int z, int meta)
     {
-        var2.addStat(StatList.mineBlockStatArray[this.blockID], 1);
-        var2.addExhaustion(0.025F);
+        entityplayer.addStat(StatList.mineBlockStatArray[this.blockID], 1);
+        entityplayer.addExhaustion(0.025F);
 
-        if (!var1.isRemote)
+        if (!world.isRemote)
         {
-            ItemStack var7;
+            ItemStack stack;
 
-            if (var6 == 0)
+            if (meta == 0)
             {
-                if (var2.getCurrentEquippedItem() != null && var2.getCurrentEquippedItem().itemID == AetherItems.SkyrootPickaxe.itemID)
+                if (entityplayer.getCurrentEquippedItem() != null && entityplayer.getCurrentEquippedItem().itemID == AetherItems.SkyrootPickaxe.itemID)
                 {
-                    var2.addStat(StatList.mineBlockStatArray[this.blockID], 1);
-                    var7 = new ItemStack(AetherBlocks.Holystone.blockID, 2, 1);
-                    this.dropBlockAsItem_do(var1, var3, var4, var5, var7);
+                    entityplayer.addStat(StatList.mineBlockStatArray[this.blockID], 1);
+                    stack = new ItemStack(AetherBlocks.Holystone.blockID, 2, 1);
+                    this.dropBlockAsItem_do(world, x, y, z, stack);
                 }
                 else
                 {
-                    var7 = new ItemStack(AetherBlocks.Holystone.blockID, 1, 1);
-                    this.dropBlockAsItem_do(var1, var3, var4, var5, var7);
+                    stack = new ItemStack(AetherBlocks.Holystone.blockID, 1, 1);
+                    this.dropBlockAsItem_do(world, x, y, z, stack);
                 }
             }
-            else if (var6 == 2)
+            else if (meta == 2)
             {
-                if (var2.getCurrentEquippedItem() != null && var2.getCurrentEquippedItem().itemID == AetherItems.SkyrootPickaxe.itemID)
+                if (entityplayer.getCurrentEquippedItem() != null && entityplayer.getCurrentEquippedItem().itemID == AetherItems.SkyrootPickaxe.itemID)
                 {
-                    var2.addStat(StatList.mineBlockStatArray[this.blockID], 1);
-                    var7 = new ItemStack(AetherBlocks.Holystone.blockID, 2, 3);
-                    this.dropBlockAsItem_do(var1, var3, var4, var5, var7);
+                    entityplayer.addStat(StatList.mineBlockStatArray[this.blockID], 1);
+                    stack = new ItemStack(AetherBlocks.Holystone.blockID, 2, 3);
+                    this.dropBlockAsItem_do(world, x, y, z, stack);
                 }
                 else
                 {
-                    var7 = new ItemStack(AetherBlocks.Holystone.blockID, 1, 3);
-                    this.dropBlockAsItem_do(var1, var3, var4, var5, var7);
+                    stack = new ItemStack(AetherBlocks.Holystone.blockID, 1, 3);
+                    this.dropBlockAsItem_do(world, x, y, z, stack);
                 }
             }
             else
             {
-                var7 = new ItemStack(AetherBlocks.Holystone.blockID, 1, var6);
-                this.dropBlockAsItem_do(var1, var3, var4, var5, var7);
+                stack = new ItemStack(AetherBlocks.Holystone.blockID, 1, meta);
+                this.dropBlockAsItem_do(world, x, y, z, stack);
             }
         }
     }

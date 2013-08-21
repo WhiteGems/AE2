@@ -16,34 +16,34 @@ import net.minecraft.entity.player.EntityPlayer;
 
 public class PartyController
 {
-    private ArrayList parties = new ArrayList();
+    private ArrayList<Party> parties = new ArrayList();
     private static PartyController clientController = new PartyController();
     private static PartyController serverController = new PartyController();
 
     public static PartyController instance()
     {
-        Side var0 = FMLCommonHandler.instance().getEffectiveSide();
-        return var0.isClient() ? clientController : serverController;
+        Side side = FMLCommonHandler.instance().getEffectiveSide();
+        return side.isClient() ? clientController : serverController;
     }
 
-    public boolean addParty(Party var1, boolean var2)
+    public boolean addParty(Party party, boolean sendPackets)
     {
-        Side var3 = FMLCommonHandler.instance().getEffectiveSide();
+        Side side = FMLCommonHandler.instance().getEffectiveSide();
 
         try
         {
-            if (var1 == null)
+            if (party == null)
             {
                 throw new PartyFunctionException("The party getting added was null! Aborting!");
             }
 
-            if (this.getParty(var1.getName()) == null)
+            if (this.getParty(party.getName()) == null)
             {
-                this.parties.add(var1);
+                this.parties.add(party);
 
-                if (var2 && var3.isClient())
+                if (sendPackets && side.isClient())
                 {
-                    PacketDispatcher.sendPacketToServer(AetherPacketHandler.sendPartyChange(true, var1.getName(), var1.getLeader().username, var1.getLeader().skinUrl));
+                    PacketDispatcher.sendPacketToServer(AetherPacketHandler.sendPartyChange(true, party.getName(), party.getLeader().username));
                 }
 
                 return true;
@@ -57,29 +57,29 @@ public class PartyController
         return false;
     }
 
-    public boolean removeParty(Party var1, boolean var2)
+    public boolean removeParty(Party party, boolean sendPackets)
     {
-        Side var3 = FMLCommonHandler.instance().getEffectiveSide();
+        Side side = FMLCommonHandler.instance().getEffectiveSide();
 
-        if (var1 != null)
+        if (party != null)
         {
-            Dungeon var4 = DungeonHandler.instance().getDungeon(var1);
+            Dungeon dungeon = DungeonHandler.instance().getDungeon(party);
 
-            if (var4 != null)
+            if (dungeon != null)
             {
-                var4.disbandQueue(var1);
+                dungeon.disbandQueue(party);
             }
 
-            if (var3.isClient() && var1.hasMember(this.getMember(ClientNotificationHandler.clientUsername())))
+            if (side.isClient() && party.hasMember(this.getMember(ClientNotificationHandler.clientUsername())))
             {
                 ClientNotificationHandler.createGeneric("Party Disbanded!", "", "");
             }
 
-            this.parties.remove(var1);
+            this.parties.remove(party);
 
-            if (var2 && var3 == Side.CLIENT)
+            if (sendPackets && side == Side.CLIENT)
             {
-                PacketDispatcher.sendPacketToServer(AetherPacketHandler.sendPartyChange(false, var1.getName(), var1.getLeader().username, var1.getLeader().skinUrl));
+                PacketDispatcher.sendPacketToServer(AetherPacketHandler.sendPartyChange(false, party.getName(), party.getLeader().username));
             }
 
             return true;
@@ -91,21 +91,21 @@ public class PartyController
         }
     }
 
-    public boolean promoteMember(PartyMember var1, MemberType var2, boolean var3)
+    public boolean promoteMember(PartyMember member, MemberType type, boolean sendPackets)
     {
-        Side var4 = FMLCommonHandler.instance().getEffectiveSide();
+        Side side = FMLCommonHandler.instance().getEffectiveSide();
 
-        if (var1 != null && var2 != null)
+        if (member != null && type != null)
         {
-            Party var5 = this.getParty(var1);
+            Party party = this.getParty(member);
 
-            if (var5 != null)
+            if (party != null)
             {
-                var5.promoteMember(var1, var2);
+                party.promoteMember(member, type);
 
-                if (var3 && var4.isClient())
+                if (sendPackets && side.isClient())
                 {
-                    PacketDispatcher.sendPacketToServer(AetherPacketHandler.sendMemberTypeChange(var1.username, var2));
+                    PacketDispatcher.sendPacketToServer(AetherPacketHandler.sendMemberTypeChange(member.username, type));
                 }
 
                 return true;
@@ -119,100 +119,100 @@ public class PartyController
         return false;
     }
 
-    public void requestPlayer(Party var1, PartyMember var2, String var3, boolean var4)
+    public void requestPlayer(Party party, PartyMember member, String requestedPlayer, boolean sendPackets)
     {
-        Side var5 = FMLCommonHandler.instance().getEffectiveSide();
+        Side side = FMLCommonHandler.instance().getEffectiveSide();
 
-        if (this.parties.contains(var1) && var1 != null && !var3.isEmpty() && var3 != null)
+        if (this.parties.contains(party) && party != null && !requestedPlayer.isEmpty() && requestedPlayer != null)
         {
-            var1.queueRequestedPlayer(var3);
+            party.queueRequestedPlayer(requestedPlayer);
 
-            if (var4 && var5.isClient())
+            if (sendPackets && side.isClient())
             {
-                PacketDispatcher.sendPacketToServer(AetherPacketHandler.sendRequestPlayer(true, var1.getName(), var2.username, var2.skinUrl, var3));
+                PacketDispatcher.sendPacketToServer(AetherPacketHandler.sendRequestPlayer(true, party.getName(), member.username, requestedPlayer));
             }
         }
     }
 
-    public void removePlayerRequest(Party var1, PartyMember var2, String var3, boolean var4)
+    public void removePlayerRequest(Party party, PartyMember member, String requestedPlayer, boolean sendPackets)
     {
-        Side var5 = FMLCommonHandler.instance().getEffectiveSide();
+        Side side = FMLCommonHandler.instance().getEffectiveSide();
 
-        if (this.parties.contains(var1) && var1 != null && !var3.isEmpty() && var3 != null)
+        if (this.parties.contains(party) && party != null && !requestedPlayer.isEmpty() && requestedPlayer != null)
         {
-            var1.removeRequestedPlayer(var3);
+            party.removeRequestedPlayer(requestedPlayer);
 
-            if (var4 && var5.isClient())
+            if (sendPackets && side.isClient())
             {
-                PacketDispatcher.sendPacketToServer(AetherPacketHandler.sendRequestPlayer(false, var1.getName(), var2.username, var2.skinUrl, var3));
+                PacketDispatcher.sendPacketToServer(AetherPacketHandler.sendRequestPlayer(false, party.getName(), member.username, requestedPlayer));
             }
         }
     }
 
-    public void joinParty(Party var1, PartyMember var2, boolean var3)
+    public void joinParty(Party party, PartyMember member, boolean sendPackets)
     {
-        Side var4 = FMLCommonHandler.instance().getEffectiveSide();
+        Side side = FMLCommonHandler.instance().getEffectiveSide();
 
-        if (this.parties.contains(var1) && var1 != null && var2 != null)
+        if (this.parties.contains(party) && party != null && member != null)
         {
-            if (var4.isClient() && var1.hasMember(this.getMember(ClientNotificationHandler.clientUsername())))
+            if (side.isClient() && party.hasMember(this.getMember(ClientNotificationHandler.clientUsername())))
             {
-                ClientNotificationHandler.createGeneric("Member joined!", var2.username, "");
+                ClientNotificationHandler.createGeneric("Member joined!", member.username, "");
             }
 
-            var1.join(var2);
+            party.join(member);
 
-            if (var3 && var4.isClient())
+            if (sendPackets && side.isClient())
             {
-                PacketDispatcher.sendPacketToServer(AetherPacketHandler.sendPartyMemberChange(true, var1.getName(), var2.username, var2.skinUrl));
+                PacketDispatcher.sendPacketToServer(AetherPacketHandler.sendPartyMemberChange(true, party.getName(), member.username));
             }
         }
     }
 
-    public void leaveParty(Party var1, PartyMember var2, boolean var3)
+    public void leaveParty(Party party, PartyMember member, boolean sendPackets)
     {
-        Side var4 = FMLCommonHandler.instance().getEffectiveSide();
+        Side side = FMLCommonHandler.instance().getEffectiveSide();
 
-        if (this.parties.contains(var1) && var1.hasMember(var2) && var1 != null && var2 != null)
+        if (this.parties.contains(party) && party.hasMember(member) && party != null && member != null)
         {
-            Dungeon var5 = DungeonHandler.instance().getDungeon(var1);
+            Dungeon dungeon = DungeonHandler.instance().getDungeon(party);
 
-            if (var5 != null)
+            if (dungeon != null)
             {
-                var5.disbandMember(var2);
+                dungeon.disbandMember(member);
             }
 
-            if (var4.isClient() && var1.hasMember(this.getMember(ClientNotificationHandler.clientUsername())) && !var2.username.equalsIgnoreCase(ClientNotificationHandler.clientUsername()))
+            if (side.isClient() && party.hasMember(this.getMember(ClientNotificationHandler.clientUsername())) && !member.username.equalsIgnoreCase(ClientNotificationHandler.clientUsername()))
             {
-                ClientNotificationHandler.createGeneric("Member left!", var2.username, "");
+                ClientNotificationHandler.createGeneric("Member left!", member.username, "");
             }
 
-            if (var3 && var4.isClient())
+            if (sendPackets && side.isClient())
             {
-                PacketDispatcher.sendPacketToServer(AetherPacketHandler.sendPartyMemberChange(false, var1.getName(), var2.username, var2.skinUrl));
+                PacketDispatcher.sendPacketToServer(AetherPacketHandler.sendPartyMemberChange(false, party.getName(), member.username));
             }
 
-            var1.leave(var2);
+            party.leave(member);
         }
     }
 
-    public boolean changePartyName(Party var1, String var2, boolean var3)
+    public boolean changePartyName(Party party, String newName, boolean sendPackets)
     {
-        Side var4 = FMLCommonHandler.instance().getEffectiveSide();
+        Side side = FMLCommonHandler.instance().getEffectiveSide();
 
-        if (this.parties.contains(var1) && var1 != null && !var2.isEmpty() && this.getParty(var2) == null)
+        if (this.parties.contains(party) && party != null && !newName.isEmpty() && this.getParty(newName) == null)
         {
-            if (var4.isClient() && var1.hasMember(this.getMember(ClientNotificationHandler.clientUsername())))
+            if (side.isClient() && party.hasMember(this.getMember(ClientNotificationHandler.clientUsername())))
             {
-                ClientNotificationHandler.createGeneric("Party Name Changed!", "To: " + var2, "");
+                ClientNotificationHandler.createGeneric("Party Name Changed!", "To: " + newName, "");
             }
 
-            if (var3 && var4.isClient())
+            if (sendPackets && side.isClient())
             {
-                PacketDispatcher.sendPacketToServer(AetherPacketHandler.sendPartyNameChange(var1.getName(), var2));
+                PacketDispatcher.sendPacketToServer(AetherPacketHandler.sendPartyNameChange(party.getName(), newName));
             }
 
-            var1.setName(var2);
+            party.setName(newName);
             return true;
         }
         else
@@ -221,100 +221,100 @@ public class PartyController
         }
     }
 
-    public void changePartyType(Party var1, PartyType var2, boolean var3)
+    public void changePartyType(Party party, PartyType newType, boolean sendPackets)
     {
-        Side var4 = FMLCommonHandler.instance().getEffectiveSide();
+        Side side = FMLCommonHandler.instance().getEffectiveSide();
 
-        if (this.parties.contains(var1) && var1 != null && var2 != null)
+        if (this.parties.contains(party) && party != null && newType != null)
         {
-            if (var4.isClient() && var1.hasMember(this.getMember(ClientNotificationHandler.clientUsername())))
+            if (side.isClient() && party.hasMember(this.getMember(ClientNotificationHandler.clientUsername())))
             {
-                ClientNotificationHandler.createGeneric("Party Changed!", "Now: " + var2.name(), "");
+                ClientNotificationHandler.createGeneric("Party Changed!", "Now: " + newType.name(), "");
             }
 
-            var1.setType(var2);
+            party.setType(newType);
 
-            if (var3 && var4 == Side.CLIENT)
+            if (sendPackets && side == Side.CLIENT)
             {
-                PacketDispatcher.sendPacketToServer(AetherPacketHandler.sendPartyTypeChange(var1.getName(), var2));
+                PacketDispatcher.sendPacketToServer(AetherPacketHandler.sendPartyTypeChange(party.getName(), newType));
             }
         }
     }
 
-    public Party getParty(String var1)
+    public Party getParty(String partyName)
     {
-        Iterator var2 = this.parties.iterator();
-        Party var3;
+        Iterator i$ = this.parties.iterator();
+        Party party;
 
         do
         {
-            if (!var2.hasNext())
+            if (!i$.hasNext())
             {
                 return null;
             }
 
-            var3 = (Party)var2.next();
+            party = (Party)i$.next();
         }
-        while (!var3.getName().equalsIgnoreCase(var1));
+        while (!party.getName().equalsIgnoreCase(partyName));
 
-        return var3;
+        return party;
     }
 
-    public Party getParty(EntityPlayer var1)
+    public Party getParty(EntityPlayer player)
     {
-        PartyMember var2 = this.getMember(var1);
-        Iterator var3 = this.parties.iterator();
-        Party var4;
+        PartyMember member = this.getMember(player);
+        Iterator i$ = this.parties.iterator();
+        Party party;
 
         do
         {
-            if (!var3.hasNext())
+            if (!i$.hasNext())
             {
                 return null;
             }
 
-            var4 = (Party)var3.next();
+            party = (Party)i$.next();
         }
-        while (!var4.getMembers().contains(var2));
+        while (!party.getMembers().contains(member));
 
-        return var4;
+        return party;
     }
 
-    public Party getParty(PartyMember var1)
+    public Party getParty(PartyMember member)
     {
-        Iterator var2 = this.parties.iterator();
-        Party var3;
+        Iterator i$ = this.parties.iterator();
+        Party party;
 
         do
         {
-            if (!var2.hasNext())
+            if (!i$.hasNext())
             {
                 return null;
             }
 
-            var3 = (Party)var2.next();
+            party = (Party)i$.next();
         }
-        while (!var3.getMembers().contains(var1));
+        while (!party.getMembers().contains(member));
 
-        return var3;
+        return party;
     }
 
-    public PartyMember getMember(String var1)
+    public PartyMember getMember(String playerUsername)
     {
-        Iterator var2 = this.parties.iterator();
+        Iterator i$ = this.parties.iterator();
 
-        while (var2.hasNext())
+        while (i$.hasNext())
         {
-            Party var3 = (Party)var2.next();
-            Iterator var4 = var3.getMembers().iterator();
+            Party party = (Party)i$.next();
+            Iterator i$1 = party.getMembers().iterator();
 
-            while (var4.hasNext())
+            while (i$1.hasNext())
             {
-                PartyMember var5 = (PartyMember)var4.next();
+                PartyMember member = (PartyMember)i$1.next();
 
-                if (var5.username.equalsIgnoreCase(var1))
+                if (member.username.equalsIgnoreCase(playerUsername))
                 {
-                    return var5;
+                    return member;
                 }
             }
         }
@@ -322,63 +322,63 @@ public class PartyController
         return null;
     }
 
-    public PartyMember getMember(EntityPlayer var1)
+    public PartyMember getMember(EntityPlayer player)
     {
-        return this.getMember(var1.username);
+        return this.getMember(player.username);
     }
 
-    public boolean inParty(Party var1, String var2)
+    public boolean inParty(Party party, String playerUsername)
     {
-        return this.getMember(var2) != null && var1.hasMember(this.getMember(var2));
+        return this.getMember(playerUsername) != null && party.hasMember(this.getMember(playerUsername));
     }
 
-    public boolean inParty(Party var1, EntityPlayer var2)
+    public boolean inParty(Party party, EntityPlayer player)
     {
-        return this.inParty(var1, var2.username);
+        return this.inParty(party, player.username);
     }
 
-    public boolean inParty(Party var1, PartyMember var2)
+    public boolean inParty(Party party, PartyMember member)
     {
-        return this.inParty(var1, var2.username);
+        return this.inParty(party, member.username);
     }
 
-    public boolean inParty(String var1)
+    public boolean inParty(String playerUsername)
     {
-        return this.getMember(var1) != null;
+        return this.getMember(playerUsername) != null;
     }
 
-    public boolean inParty(EntityPlayer var1)
+    public boolean inParty(EntityPlayer player)
     {
-        return this.inParty(var1.username);
+        return this.inParty(player.username);
     }
 
-    public boolean inParty(PartyMember var1)
+    public boolean inParty(PartyMember member)
     {
-        return this.inParty(var1.username);
+        return this.inParty(member.username);
     }
 
-    public boolean isLeader(String var1)
+    public boolean isLeader(String playerUsername)
     {
-        return this.getMember(var1) != null && this.getMember(var1).isLeader();
+        return this.getMember(playerUsername) != null && this.getMember(playerUsername).isLeader();
     }
 
-    public boolean isLeader(EntityPlayer var1)
+    public boolean isLeader(EntityPlayer player)
     {
-        return this.isLeader(var1.username);
+        return this.isLeader(player.username);
     }
 
-    public boolean isLeader(PartyMember var1)
+    public boolean isLeader(PartyMember member)
     {
-        return this.isLeader(var1.username);
+        return this.isLeader(member.username);
     }
 
-    public void setParties(ArrayList var1)
+    public void setParties(ArrayList<Party> parties)
     {
-        Side var2 = FMLCommonHandler.instance().getEffectiveSide();
-        this.parties = var1;
+        Side side = FMLCommonHandler.instance().getEffectiveSide();
+        this.parties = parties;
     }
 
-    public ArrayList getParties()
+    public ArrayList<Party> getParties()
     {
         return this.parties;
     }

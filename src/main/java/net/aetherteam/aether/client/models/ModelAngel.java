@@ -98,33 +98,33 @@ public class ModelAngel extends ModelBiped
     /**
      * Sets the models various rotation angles then renders the model.
      */
-    public void render(Entity var1, float var2, float var3, float var4, float var5, float var6, float var7)
+    public void render(Entity entity, float f, float f1, float f2, float f3, float f4, float f5)
     {
-        super.render(var1, var2, var3, var4, var5, var6, var7);
-        this.setRotationAngles(var2, var3, var4, var5, var6, var7, var1);
+        super.render(entity, f, f1, f2, f3, f4, f5);
+        this.setRotationAngles(f, f1, f2, f3, f4, f5, entity);
         this.bipedHeadwear.isHidden = true;
         this.hair.rotateAngleY = this.bipedHead.rotateAngleY;
         this.hair.rotateAngleX = this.bipedHead.rotateAngleX;
         this.hair_back.rotateAngleY = this.bipedHead.rotateAngleY;
         this.hair_back.rotateAngleX = this.bipedHead.rotateAngleX;
-        this.Scalf.render(var7);
-        this.bipedHead.render(var7);
-        this.bipedBody.render(var7);
-        this.bipedRightArm.render(var7);
-        this.bipedLeftArm.render(var7);
-        this.bipedRightLeg.render(var7);
-        this.bipedLeftLeg.render(var7);
-        this.Wing_base.render(var7);
-        this.Wing.render(var7);
-        this.hair.render(var7);
-        this.hair_back.render(var7);
-        this.Shape1.render(var7);
+        this.Scalf.render(f5);
+        this.bipedHead.render(f5);
+        this.bipedBody.render(f5);
+        this.bipedRightArm.render(f5);
+        this.bipedLeftArm.render(f5);
+        this.bipedRightLeg.render(f5);
+        this.bipedLeftLeg.render(f5);
+        this.Wing_base.render(f5);
+        this.Wing.render(f5);
+        this.hair.render(f5);
+        this.hair_back.render(f5);
+        this.Shape1.render(f5);
     }
 
-    private void setRotation(ModelRenderer var1, float var2, float var3, float var4)
+    private void setRotation(ModelRenderer model, float x, float y, float z)
     {
-        var1.rotateAngleX = var2;
-        var1.rotateAngleY = var3;
-        var1.rotateAngleZ = var4;
+        model.rotateAngleX = x;
+        model.rotateAngleY = y;
+        model.rotateAngleZ = z;
     }
 }

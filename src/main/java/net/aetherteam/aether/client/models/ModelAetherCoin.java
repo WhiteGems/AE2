@@ -170,65 +170,65 @@ public class ModelAetherCoin extends ModelBase
     /**
      * Sets the models various rotation angles then renders the model.
      */
-    public void render(Entity var1, float var2, float var3, float var4, float var5, float var6, float var7)
+    public void render(Entity entity, float f, float f1, float f2, float f3, float f4, float f5)
     {
-        super.render(var1, var2, var3, var4, var5, var6, var7);
-        this.setRotationAngles(var2, var3, var4, var5, var6, var7, var1);
-        this.Shape1.render(var7);
-        this.Shape2.render(var7);
-        this.Shape3.render(var7);
-        this.Shape4.render(var7);
-        this.Shape5.render(var7);
-        this.Shape6.render(var7);
-        this.Shape7.render(var7);
-        this.Shape8.render(var7);
-        this.Shape9.render(var7);
-        this.Shape10.render(var7);
-        this.Shape11.render(var7);
-        this.Shape12.render(var7);
-        this.Shape13.render(var7);
-        this.Shape14.render(var7);
-        this.Shape15.render(var7);
-        this.Shape16.render(var7);
-        this.Shape17.render(var7);
-        this.Shape18.render(var7);
-        this.Shape19.render(var7);
-        this.Shape20.render(var7);
-        this.Shape21.render(var7);
-        this.Shape22.render(var7);
+        super.render(entity, f, f1, f2, f3, f4, f5);
+        this.setRotationAngles(f, f1, f2, f3, f4, f5, entity);
+        this.Shape1.render(f5);
+        this.Shape2.render(f5);
+        this.Shape3.render(f5);
+        this.Shape4.render(f5);
+        this.Shape5.render(f5);
+        this.Shape6.render(f5);
+        this.Shape7.render(f5);
+        this.Shape8.render(f5);
+        this.Shape9.render(f5);
+        this.Shape10.render(f5);
+        this.Shape11.render(f5);
+        this.Shape12.render(f5);
+        this.Shape13.render(f5);
+        this.Shape14.render(f5);
+        this.Shape15.render(f5);
+        this.Shape16.render(f5);
+        this.Shape17.render(f5);
+        this.Shape18.render(f5);
+        this.Shape19.render(f5);
+        this.Shape20.render(f5);
+        this.Shape21.render(f5);
+        this.Shape22.render(f5);
     }
 
-    private void setRotation(ModelRenderer var1, float var2, float var3, float var4)
+    private void setRotation(ModelRenderer model, float x, float y, float z)
     {
-        var1.rotateAngleX = var2;
-        var1.rotateAngleY = var3;
-        var1.rotateAngleZ = var4;
+        model.rotateAngleX = x;
+        model.rotateAngleY = y;
+        model.rotateAngleZ = z;
     }
 
-    public void spinCoin(float var1, float var2, float var3)
+    public void spinCoin(float x, float y, float z)
     {
-        this.setRotation(this.Shape1, var1, var2, var3);
-        this.setRotation(this.Shape2, var1, var2, var3);
-        this.setRotation(this.Shape3, var1, var2, var3);
-        this.setRotation(this.Shape4, var1, var2, var3);
-        this.setRotation(this.Shape5, var1, var2, var3);
-        this.setRotation(this.Shape6, var1, var2, var3);
-        this.setRotation(this.Shape7, var1, var2, var3);
-        this.setRotation(this.Shape8, var1, var2, var3);
-        this.setRotation(this.Shape9, var1, var2, var3);
-        this.setRotation(this.Shape10, var1, var2, var3);
-        this.setRotation(this.Shape11, var1, var2, var3);
-        this.setRotation(this.Shape12, var1, var2, var3);
-        this.setRotation(this.Shape13, var1, var2, var3);
-        this.setRotation(this.Shape14, var1, var2, var3);
-        this.setRotation(this.Shape15, var1, var2, var3);
-        this.setRotation(this.Shape16, var1, var2, var3);
-        this.setRotation(this.Shape17, var1, var2, var3);
-        this.setRotation(this.Shape18, var1, var2, var3);
-        this.setRotation(this.Shape19, var1, var2, var3);
-        this.setRotation(this.Shape20, var1, var2, var3);
-        this.setRotation(this.Shape21, var1, var2, var3);
-        this.setRotation(this.Shape22, var1, var2, var3);
+        this.setRotation(this.Shape1, x, y, z);
+        this.setRotation(this.Shape2, x, y, z);
+        this.setRotation(this.Shape3, x, y, z);
+        this.setRotation(this.Shape4, x, y, z);
+        this.setRotation(this.Shape5, x, y, z);
+        this.setRotation(this.Shape6, x, y, z);
+        this.setRotation(this.Shape7, x, y, z);
+        this.setRotation(this.Shape8, x, y, z);
+        this.setRotation(this.Shape9, x, y, z);
+        this.setRotation(this.Shape10, x, y, z);
+        this.setRotation(this.Shape11, x, y, z);
+        this.setRotation(this.Shape12, x, y, z);
+        this.setRotation(this.Shape13, x, y, z);
+        this.setRotation(this.Shape14, x, y, z);
+        this.setRotation(this.Shape15, x, y, z);
+        this.setRotation(this.Shape16, x, y, z);
+        this.setRotation(this.Shape17, x, y, z);
+        this.setRotation(this.Shape18, x, y, z);
+        this.setRotation(this.Shape19, x, y, z);
+        this.setRotation(this.Shape20, x, y, z);
+        this.setRotation(this.Shape21, x, y, z);
+        this.setRotation(this.Shape22, x, y, z);
     }
 
     /**
@@ -236,8 +236,8 @@ public class ModelAetherCoin extends ModelBase
      * and legs, where par1 represents the time(so that arms and legs swing back and forth) and par2 represents how
      * "far" arms and legs can swing at most.
      */
-    public void setRotationAngles(float var1, float var2, float var3, float var4, float var5, float var6, Entity var7)
+    public void setRotationAngles(float f, float f1, float f2, float f3, float f4, float f5, Entity entity)
     {
-        super.setRotationAngles(var1, var2, var3, var4, var5, var6, var7);
+        super.setRotationAngles(f, f1, f2, f3, f4, f5, entity);
     }
 }

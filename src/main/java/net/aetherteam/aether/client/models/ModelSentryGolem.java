@@ -97,30 +97,30 @@ public class ModelSentryGolem extends ModelBiped
     /**
      * Sets the models various rotation angles then renders the model.
      */
-    public void render(Entity var1, float var2, float var3, float var4, float var5, float var6, float var7)
+    public void render(Entity entity, float f, float f1, float f2, float f3, float f4, float f5)
     {
-        super.render(var1, var2, var3, var4, var5, var6, var7);
-        this.setRotationAngles(var2, var3, var4, var5, var6, var7, var1);
-        this.bipedBody.render(var7);
-        this.bipedLeftLeg.render(var7);
-        this.bipedLeftArm.render(var7);
-        this.LowerBody.render(var7);
-        this.bipedRightLeg.render(var7);
-        this.bipedBody.render(var7);
-        this.RightArmHand.render(var7);
-        this.bipedRightArm.render(var7);
-        this.LeftArmHand.render(var7);
-        this.SentryHead.render(var7);
-        this.SentryBody.render(var7);
+        super.render(entity, f, f1, f2, f3, f4, f5);
+        this.setRotationAngles(f, f1, f2, f3, f4, f5, entity);
+        this.bipedBody.render(f5);
+        this.bipedLeftLeg.render(f5);
+        this.bipedLeftArm.render(f5);
+        this.LowerBody.render(f5);
+        this.bipedRightLeg.render(f5);
+        this.bipedBody.render(f5);
+        this.RightArmHand.render(f5);
+        this.bipedRightArm.render(f5);
+        this.LeftArmHand.render(f5);
+        this.SentryHead.render(f5);
+        this.SentryBody.render(f5);
         this.SentryHead.isHidden = true;
         this.SentryBody.isHidden = true;
     }
 
-    private void setRotation(ModelRenderer var1, float var2, float var3, float var4)
+    private void setRotation(ModelRenderer model, float x, float y, float z)
     {
-        var1.rotateAngleX = var2;
-        var1.rotateAngleY = var3;
-        var1.rotateAngleZ = var4;
+        model.rotateAngleX = x;
+        model.rotateAngleY = y;
+        model.rotateAngleZ = z;
     }
 
     /**
@@ -128,31 +128,31 @@ public class ModelSentryGolem extends ModelBiped
      * and legs, where par1 represents the time(so that arms and legs swing back and forth) and par2 represents how
      * "far" arms and legs can swing at most.
      */
-    public void setRotationAngles(float var1, float var2, float var3, float var4, float var5, float var6, Entity var7)
+    public void setRotationAngles(float f, float f1, float f2, float f3, float f4, float f5, Entity entity)
     {
-        super.setRotationAngles(var1, var2, var3, var4, var5, var6, var7);
+        super.setRotationAngles(f, f1, f2, f3, f4, f5, entity);
 
-        if (var7 instanceof EntitySentryGolem)
+        if (entity instanceof EntitySentryGolem)
         {
-            EntitySentryGolem var8 = (EntitySentryGolem)var7;
-            this.armState = var8.getHandState();
+            EntitySentryGolem entityS = (EntitySentryGolem)entity;
+            this.armState = entityS.getHandState();
 
-            if (var8.progress < this.armsAngles[this.armState])
+            if (entityS.progress < this.armsAngles[this.armState])
             {
-                var8.progress += 0.02F;
+                entityS.progress += 0.02F;
             }
 
-            if (var8.progress > this.armsAngles[this.armState])
+            if (entityS.progress > this.armsAngles[this.armState])
             {
-                var8.progress -= 0.02F;
+                entityS.progress -= 0.02F;
             }
 
-            this.bipedRightArm.rotateAngleX = -3.0F * var8.progress;
-            this.bipedLeftArm.rotateAngleX = -3.0F * var8.progress;
-            this.bipedRightArm.rotateAngleY -= 0.3F * var8.progress;
-            this.bipedLeftArm.rotateAngleY += 0.3F * var8.progress;
-            this.bipedRightArm.rotateAngleZ += 0.3F * var8.progress;
-            this.bipedLeftArm.rotateAngleZ -= 0.3F * var8.progress;
+            this.bipedRightArm.rotateAngleX = -3.0F * entityS.progress;
+            this.bipedLeftArm.rotateAngleX = -3.0F * entityS.progress;
+            this.bipedRightArm.rotateAngleY -= 0.3F * entityS.progress;
+            this.bipedLeftArm.rotateAngleY += 0.3F * entityS.progress;
+            this.bipedRightArm.rotateAngleZ += 0.3F * entityS.progress;
+            this.bipedLeftArm.rotateAngleZ -= 0.3F * entityS.progress;
         }
 
         this.RightArmHand.rotateAngleX = this.bipedRightArm.rotateAngleX;

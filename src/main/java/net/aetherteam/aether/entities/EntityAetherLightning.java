@@ -11,19 +11,26 @@ import net.minecraft.world.World;
 
 public class EntityAetherLightning extends EntityLightningBolt
 {
+    /**
+     * Declares which state the lightning bolt is in. Whether it's in the air, hit the ground, etc.
+     */
     private int lightningState;
 
     /**
      * A random long that is used to change the vertex of the lightning rendered in RenderLightningBolt
      */
     public long boltVertex = 0L;
+
+    /**
+     * Determines the time before the EntityLightningBolt is destroyed. It is a random integer decremented over time.
+     */
     private int boltLivingTime;
     public EntityPlayer playerUsing;
 
-    public EntityAetherLightning(World var1, double var2, double var4, double var6, EntityPlayer var8)
+    public EntityAetherLightning(World var1, double var2, double var4, double var6, EntityPlayer player)
     {
         super(var1, var2, var4, var6);
-        this.playerUsing = var8;
+        this.playerUsing = player;
         this.setLocationAndAngles(var2, var4, var6, 0.0F, 0.0F);
         this.lightningState = 2;
         this.boltVertex = this.rand.nextLong();
@@ -59,13 +66,13 @@ public class EntityAetherLightning extends EntityLightningBolt
 
                 if (!this.worldObj.isRemote && this.worldObj.doChunksNearChunkExist(MathHelper.floor_double(this.posX), MathHelper.floor_double(this.posY), MathHelper.floor_double(this.posZ), 10))
                 {
-                    int var1 = MathHelper.floor_double(this.posX);
-                    int var2 = MathHelper.floor_double(this.posY);
-                    int var3 = MathHelper.floor_double(this.posZ);
+                    int d0 = MathHelper.floor_double(this.posX);
+                    int j = MathHelper.floor_double(this.posY);
+                    int list = MathHelper.floor_double(this.posZ);
 
-                    if (this.worldObj.getBlockId(var1, var2, var3) == 0 && Block.fire.canPlaceBlockAt(this.worldObj, var1, var2, var3))
+                    if (this.worldObj.getBlockId(d0, j, list) == 0 && Block.fire.canPlaceBlockAt(this.worldObj, d0, j, list))
                     {
-                        this.worldObj.setBlock(var1, var2, var3, Block.fire.blockID);
+                        this.worldObj.setBlock(d0, j, list, Block.fire.blockID);
                     }
                 }
             }
@@ -82,10 +89,10 @@ public class EntityAetherLightning extends EntityLightningBolt
                 double var6 = 3.0D;
                 List var7 = this.worldObj.getEntitiesWithinAABBExcludingEntity(this, AxisAlignedBB.getAABBPool().getAABB(this.posX - var6, this.posY - var6, this.posZ - var6, this.posX + var6, this.posY + 6.0D + var6, this.posZ + var6));
 
-                for (int var4 = 0; var4 < var7.size(); ++var4)
+                for (int l = 0; l < var7.size(); ++l)
                 {
-                    Entity var5 = (Entity)var7.get(var4);
-                    var5.onStruckByLightning(this);
+                    Entity entity = (Entity)var7.get(l);
+                    entity.onStruckByLightning(this);
                 }
             }
         }

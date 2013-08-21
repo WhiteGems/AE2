@@ -23,9 +23,9 @@ public abstract class EntityBossMob extends EntityCreature implements IMob, IAet
 {
     Random random = new Random();
 
-    public EntityBossMob(World var1)
+    public EntityBossMob(World par1World)
     {
-        super(var1);
+        super(par1World);
         this.experienceValue = 5;
     }
 
@@ -49,36 +49,36 @@ public abstract class EntityBossMob extends EntityCreature implements IMob, IAet
     /**
      * Called when the entity is attacked.
      */
-    public boolean attackEntityFrom(DamageSource var1, int var2)
+    public boolean attackEntityFrom(DamageSource src, float damage)
     {
-        Dungeon var3 = DungeonHandler.instance().getInstanceAt(MathHelper.floor_double(this.posX), MathHelper.floor_double(this.posY), MathHelper.floor_double(this.posZ));
+        Dungeon dungeon = DungeonHandler.instance().getInstanceAt(MathHelper.floor_double(this.posX), MathHelper.floor_double(this.posY), MathHelper.floor_double(this.posZ));
 
-        if (var3 != null && var3.hasQueuedParty())
+        if (dungeon != null && dungeon.hasQueuedParty())
         {
-            Party var8 = var3.getQueuedParty();
-            int var5 = var3.getQueuedMembers().size() + 1;
-            float var6 = (float)(var5 - 1) * 0.075F;
-            int var7 = MathHelper.clamp_int((int)((float)var2 - (float)var2 * var6), 1, var2);
-            return super.attackEntityFrom(var1, var7);
+            Party entity1 = dungeon.getQueuedParty();
+            int players = dungeon.getQueuedMembers().size() + 1;
+            float damageFactor = (float)(players - 1) * 0.075F;
+            float newDamage = MathHelper.clamp_float((float)((int)(damage - damage * damageFactor)), 1.0F, damage);
+            return super.attackEntityFrom(src, newDamage);
         }
-        else if (!super.attackEntityFrom(var1, var2))
+        else if (!super.attackEntityFrom(src, damage))
         {
             return false;
         }
         else
         {
-            Entity var4 = var1.getEntity();
+            Entity entity = src.getEntity();
 
-            if (var4 != null)
+            if (entity != null)
             {
-                if (this.riddenByEntity == var4 || this.ridingEntity == var4)
+                if (this.riddenByEntity == entity || this.ridingEntity == entity)
                 {
                     return true;
                 }
 
-                if (var4 != this)
+                if (entity != this)
                 {
-                    this.entityToAttack = var4;
+                    this.entityToAttack = entity;
                 }
             }
 
@@ -93,7 +93,7 @@ public abstract class EntityBossMob extends EntityCreature implements IMob, IAet
     {
         if (this.deathTime == 0 && !this.worldObj.isRemote && (this.recentlyHit > 0 || this.isPlayer()) && !this.isChild())
         {
-            for (int var1 = 0; var1 < 10 + this.random.nextInt(15); ++var1)
+            for (int amount = 0; amount < 10 + this.random.nextInt(15); ++amount)
             {
                 this.worldObj.spawnEntityInWorld(new EntityAetherCoin(this.worldObj, this.posX, this.posY, this.posZ, 1));
             }
@@ -120,9 +120,9 @@ public abstract class EntityBossMob extends EntityCreature implements IMob, IAet
         return var1 != null && this.canEntityBeSeen(var1) ? var1 : null;
     }
 
-    public boolean attackEntityAsMob(Entity var1)
+    public boolean attackEntityAsMob(Entity par1Entity)
     {
-        int var2 = this.getAttackStrength(var1);
+        int var2 = this.getAttackStrength(par1Entity);
 
         if (this.isPotionActive(Potion.damageBoost))
         {
@@ -136,19 +136,19 @@ public abstract class EntityBossMob extends EntityCreature implements IMob, IAet
 
         int var3 = 0;
 
-        if (var1 instanceof EntityLiving)
+        if (par1Entity instanceof EntityLiving)
         {
-            var2 += EnchantmentHelper.getEnchantmentModifierLiving(this, (EntityLiving)var1);
-            var3 += EnchantmentHelper.getKnockbackModifier(this, (EntityLiving)var1);
+            var2 = (int)((float)var2 + EnchantmentHelper.getEnchantmentModifierLiving(this, (EntityLiving)par1Entity));
+            var3 += EnchantmentHelper.getKnockbackModifier(this, (EntityLiving)par1Entity);
         }
 
-        boolean var4 = var1.attackEntityFrom(DamageSource.causeMobDamage(this), var2);
+        boolean var4 = par1Entity.attackEntityFrom(DamageSource.causeMobDamage(this), (float)var2);
 
         if (var4)
         {
             if (var3 > 0)
             {
-                var1.addVelocity((double)(-MathHelper.sin(this.rotationYaw * (float)Math.PI / 180.0F) * (float)var3 * 0.5F), 0.1D, (double)(MathHelper.cos(this.rotationYaw * (float)Math.PI / 180.0F) * (float)var3 * 0.5F));
+                par1Entity.addVelocity((double)(-MathHelper.sin(this.rotationYaw * (float)Math.PI / 180.0F) * (float)var3 * 0.5F), 0.1D, (double)(MathHelper.cos(this.rotationYaw * (float)Math.PI / 180.0F) * (float)var3 * 0.5F));
                 this.motionX *= 0.6D;
                 this.motionZ *= 0.6D;
             }
@@ -157,7 +157,7 @@ public abstract class EntityBossMob extends EntityCreature implements IMob, IAet
 
             if (var5 > 0)
             {
-                var1.setFire(var5 * 4);
+                par1Entity.setFire(var5 * 4);
             }
         }
 
@@ -167,12 +167,12 @@ public abstract class EntityBossMob extends EntityCreature implements IMob, IAet
     /**
      * Basic mob attack. Default to touch of death in EntityCreature. Overridden by each mob to define their attack.
      */
-    protected void attackEntity(Entity var1, float var2)
+    protected void attackEntity(Entity par1Entity, float par2)
     {
-        if (this.attackTime <= 0 && var2 < 2.0F && var1.boundingBox.maxY > this.boundingBox.minY && var1.boundingBox.minY < this.boundingBox.maxY)
+        if (this.attackTime <= 0 && par2 < 2.0F && par1Entity.boundingBox.maxY > this.boundingBox.minY && par1Entity.boundingBox.minY < this.boundingBox.maxY)
         {
             this.attackTime = 20;
-            this.attackEntityAsMob(var1);
+            this.attackEntityAsMob(par1Entity);
         }
     }
 
@@ -180,9 +180,9 @@ public abstract class EntityBossMob extends EntityCreature implements IMob, IAet
      * Takes a coordinate in and returns a weight to determine how likely this creature will try to path to the block.
      * Args: x, y, z
      */
-    public float getBlockPathWeight(int var1, int var2, int var3)
+    public float getBlockPathWeight(int par1, int par2, int par3)
     {
-        return 0.5F - this.worldObj.getLightBrightness(var1, var2, var3);
+        return 0.5F - this.worldObj.getLightBrightness(par1, par2, par3);
     }
 
     protected boolean isValidLightLevel()
@@ -222,7 +222,7 @@ public abstract class EntityBossMob extends EntityCreature implements IMob, IAet
     /**
      * Returns the amount of damage a mob should deal.
      */
-    public int getAttackStrength(Entity var1)
+    public int getAttackStrength(Entity par1Entity)
     {
         return 2;
     }
@@ -234,7 +234,7 @@ public abstract class EntityBossMob extends EntityCreature implements IMob, IAet
     {
         super.onUpdate();
 
-        if (!this.worldObj.isRemote && this.getBossHP() != this.health)
+        if (!this.worldObj.isRemote && (float)this.getBossHP() != this.func_110143_aJ())
         {
             this.setBossHP();
         }
@@ -243,7 +243,7 @@ public abstract class EntityBossMob extends EntityCreature implements IMob, IAet
     protected void entityInit()
     {
         super.entityInit();
-        this.dataWatcher.addObject(26, Integer.valueOf(this.health));
+        this.dataWatcher.addObject(26, Integer.valueOf((int)this.func_110143_aJ()));
     }
 
     public int getBossHP()
@@ -253,7 +253,7 @@ public abstract class EntityBossMob extends EntityCreature implements IMob, IAet
 
     public void setBossHP()
     {
-        this.dataWatcher.updateObject(26, Integer.valueOf(this.health));
+        this.dataWatcher.updateObject(26, Integer.valueOf((int)this.func_110143_aJ()));
     }
 
     public int getBossEntityID()

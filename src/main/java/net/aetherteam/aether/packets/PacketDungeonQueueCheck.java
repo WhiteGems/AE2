@@ -13,29 +13,29 @@ import net.minecraft.network.packet.Packet250CustomPayload;
 
 public class PacketDungeonQueueCheck extends AetherPacket
 {
-    public PacketDungeonQueueCheck(int var1)
+    public PacketDungeonQueueCheck(int packetID)
     {
-        super(var1);
+        super(packetID);
     }
 
-    public void onPacketReceived(Packet250CustomPayload var1, Player var2)
+    public void onPacketReceived(Packet250CustomPayload packet, Player player)
     {
-        DataInputStream var3 = new DataInputStream(new ByteArrayInputStream(var1.data));
-        new BufferedReader(new InputStreamReader(var3));
+        DataInputStream dat = new DataInputStream(new ByteArrayInputStream(packet.data));
+        new BufferedReader(new InputStreamReader(dat));
 
         try
         {
-            byte var5 = var3.readByte();
-            int var6 = var3.readInt();
-            Side var7 = FMLCommonHandler.instance().getEffectiveSide();
+            byte ex = dat.readByte();
+            int dungeonID = dat.readInt();
+            Side side = FMLCommonHandler.instance().getEffectiveSide();
 
-            if (var7.isClient())
+            if (side.isClient())
             {
-                Dungeon var8 = DungeonHandler.instance().getDungeon(var6);
+                Dungeon dungeon = DungeonHandler.instance().getDungeon(dungeonID);
 
-                if (var8 != null)
+                if (dungeon != null)
                 {
-                    DungeonHandler.instance().checkForQueue(var8);
+                    DungeonHandler.instance().checkForQueue(dungeon);
                 }
             }
         }

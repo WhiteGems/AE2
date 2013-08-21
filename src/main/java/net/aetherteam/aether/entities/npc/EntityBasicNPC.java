@@ -4,6 +4,7 @@ import java.util.Iterator;
 import java.util.List;
 import net.aetherteam.aether.items.AetherItems;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.EntityAILookIdle;
 import net.minecraft.entity.ai.EntityAIPanic;
 import net.minecraft.entity.ai.EntityAISwimming;
@@ -31,19 +32,20 @@ public class EntityBasicNPC extends EntityMob
     double restY;
     double restZ;
 
-    public EntityBasicNPC(World var1)
+    public EntityBasicNPC(World world)
     {
-        super(var1);
+        super(world);
         this.addRandomArmor();
-        this.texture = this.dir + "/npc/angel.png";
+        this.func_110148_a(SharedMonsterAttributes.field_111267_a).func_111128_a(100.0D);
+        this.setEntityHealth(100.0F);
         this.pleasure = this.rand.nextBoolean() ? this.rand.nextFloat() : -this.rand.nextFloat();
         this.arousal = this.rand.nextBoolean() ? this.rand.nextFloat() : -this.rand.nextFloat();
         this.dominance = this.rand.nextBoolean() ? this.rand.nextFloat() : -this.rand.nextFloat();
         this.getNavigator().setAvoidsWater(true);
         this.tasks.addTask(0, new EntityAISwimming(this));
-        this.tasks.addTask(1, new EntityAIPanic(this, 0.45F));
-        this.tasks.addTask(2, new EntityAIWander(this, 0.38F));
-        this.tasks.addTask(3, new EntityAITempt(this, 0.25F, AetherItems.EnchantedBerry.itemID, false));
+        this.tasks.addTask(1, new EntityAIPanic(this, 0.44999998807907104D));
+        this.tasks.addTask(2, new EntityAIWander(this, 0.3799999952316284D));
+        this.tasks.addTask(3, new EntityAITempt(this, 0.25D, AetherItems.EnchantedBerry.itemID, false));
         this.tasks.addTask(4, new EntityAIWatchClosest(this, EntityPlayer.class, 6.0F));
         this.tasks.addTask(5, new EntityAILookIdle(this));
 
@@ -70,58 +72,61 @@ public class EntityBasicNPC extends EntityMob
     {
         if (this.rand.nextBoolean())
         {
-            int var1 = this.rand.nextInt(2);
-            float var2 = this.worldObj.difficultySetting == 3 ? 0.1F : 0.25F;
+            int i = this.rand.nextInt(2);
+            float f = this.worldObj.difficultySetting == 3 ? 0.1F : 0.25F;
 
             if (this.rand.nextFloat() < 0.095F)
             {
-                ++var1;
+                ++i;
             }
 
             if (this.rand.nextFloat() < 0.095F)
             {
-                ++var1;
+                ++i;
             }
 
             if (this.rand.nextFloat() < 0.095F)
             {
-                ++var1;
+                ++i;
             }
 
-            for (int var3 = 3; var3 >= 0; --var3)
+            for (int j = 3; j >= 0; --j)
             {
-                ItemStack var4 = this.getCurrentArmor(var3);
+                ItemStack itemstack = this.getCurrentItemOrArmor(j);
 
-                if (var3 < 3 && this.rand.nextFloat() < var2)
+                if (j < 3 && this.rand.nextFloat() < f)
                 {
                     break;
                 }
 
-                if (var4 == null)
+                if (itemstack == null)
                 {
-                    Item var5 = getArmorItemForSlot(var3 + 1, var1);
+                    Item item = getArmorItemForSlot(j + 1, i);
 
-                    if (var5 != null)
+                    if (item != null)
                     {
-                        this.setCurrentItemOrArmor(var3 + 1, new ItemStack(var5));
+                        this.setCurrentItemOrArmor(j + 1, new ItemStack(item));
                     }
                 }
             }
         }
     }
 
-    public static Item getArmorItemForSlot(int var0, int var1)
+    /**
+     * Params: Armor slot, Item tier
+     */
+    public static Item getArmorItemForSlot(int par0, int par1)
     {
-        switch (var0)
+        switch (par0)
         {
             case 1:
-                if (var1 == 0)
+                if (par1 == 0)
                 {
                     return AetherItems.ZaniteBoots;
                 }
                 else
                 {
-                    if (var1 == 1)
+                    if (par1 == 1)
                     {
                         return AetherItems.ValkyrieBoots;
                     }
@@ -130,13 +135,13 @@ public class EntityBasicNPC extends EntityMob
                 }
 
             case 2:
-                if (var1 == 0)
+                if (par1 == 0)
                 {
                     return AetherItems.ZaniteLeggings;
                 }
                 else
                 {
-                    if (var1 == 1)
+                    if (par1 == 1)
                     {
                         return AetherItems.ValkyrieLeggings;
                     }
@@ -145,13 +150,13 @@ public class EntityBasicNPC extends EntityMob
                 }
 
             case 3:
-                if (var1 == 0)
+                if (par1 == 0)
                 {
                     return AetherItems.ZaniteChestplate;
                 }
                 else
                 {
-                    if (var1 == 1)
+                    if (par1 == 1)
                     {
                         return AetherItems.ValkyrieChestplate;
                     }
@@ -160,13 +165,13 @@ public class EntityBasicNPC extends EntityMob
                 }
 
             case 4:
-                if (var1 == 0)
+                if (par1 == 0)
                 {
                     return AetherItems.ZaniteHelmet;
                 }
                 else
                 {
-                    if (var1 == 1)
+                    if (par1 == 1)
                     {
                         return AetherItems.ValkyrieHelmet;
                     }
@@ -202,19 +207,19 @@ public class EntityBasicNPC extends EntityMob
         return Float.valueOf(this.dataWatcher.getWatchableObjectString(16)).floatValue();
     }
 
-    public void setPleasure(float var1)
+    public void setPleasure(float pleasure)
     {
-        this.dataWatcher.updateObject(14, String.valueOf(var1));
+        this.dataWatcher.updateObject(14, String.valueOf(pleasure));
     }
 
-    public void setArousal(float var1)
+    public void setArousal(float arousal)
     {
-        this.dataWatcher.updateObject(15, String.valueOf(var1));
+        this.dataWatcher.updateObject(15, String.valueOf(arousal));
     }
 
-    public void setDominance(float var1)
+    public void setDominance(float dominance)
     {
-        this.dataWatcher.updateObject(16, String.valueOf(var1));
+        this.dataWatcher.updateObject(16, String.valueOf(dominance));
     }
 
     public boolean isPleasured()
@@ -292,28 +297,28 @@ public class EntityBasicNPC extends EntityMob
         return (double)this.getPleasure() <= -0.5D && (double)this.getArousal() >= 0.62D && (double)this.getDominance() >= 0.38D;
     }
 
-    public float getSpeedWithFactors(float var1)
+    public float getSpeedWithFactors(float moveSpeed)
     {
-        float var3 = 1.0F;
-        var3 += 0.5F * this.arousal;
-        var3 += this.isViolent() && this.entityToAttack != null ? 4.0F : 0.0F;
-        var3 += this.isSubmissive() ? -1.0F : 0.0F;
-        float var2 = Math.max(var1 * var3, 0.1F);
-        return var2;
+        float factor = 1.0F;
+        factor += 0.5F * this.arousal;
+        factor += this.isViolent() && this.entityToAttack != null ? 4.0F : 0.0F;
+        factor += this.isSubmissive() ? -1.0F : 0.0F;
+        float factoredMoveSpeed = Math.max(moveSpeed * factor, 0.1F);
+        return factoredMoveSpeed;
     }
 
-    public void rest(double var1, double var3, double var5, int var7)
+    public void rest(double x, double y, double z, int howLong)
     {
         this.motionX = 0.0D;
         this.motionZ = 0.0D;
-        this.setPositionAndRotation(var1, var3, var5, this.rotationYaw, this.rotationPitch);
+        this.setPositionAndRotation(x, y, z, this.rotationYaw, this.rotationPitch);
 
         if (this.ticksExisted % 20 == 0)
         {
             ++this.restSeconds;
         }
 
-        if (this.restSeconds >= var7)
+        if (this.restSeconds >= howLong)
         {
             this.energy = 0.5D;
         }
@@ -341,7 +346,7 @@ public class EntityBasicNPC extends EntityMob
         }
 
         this.energy = this.energy < 1.0D ? Math.max(this.energy, 0.1D) : 1.0D;
-        this.moveSpeed = this.getSpeedWithFactors(2.0F);
+        this.func_110148_a(SharedMonsterAttributes.field_111263_d).func_111128_a((double)this.getSpeedWithFactors(2.0F));
 
         if (this.motionX == 0.0D && this.motionZ == 0.0D)
         {
@@ -352,11 +357,11 @@ public class EntityBasicNPC extends EntityMob
             this.energy -= 0.001D;
         }
 
-        int var1 = 6 + this.rand.nextInt(4);
+        int restFor = 6 + this.rand.nextInt(4);
 
-        if (this.energy <= 0.1D && this.restSeconds <= var1)
+        if (this.energy <= 0.1D && this.restSeconds <= restFor)
         {
-            this.rest(this.restX, this.restY, this.restZ, var1);
+            this.rest(this.restX, this.restY, this.restZ, restFor);
         }
         else
         {
@@ -368,34 +373,34 @@ public class EntityBasicNPC extends EntityMob
 
         if (!this.worldObj.isRemote)
         {
-            this.moveSpeed = (float)((double)this.moveSpeed * this.energy);
+            this.func_110148_a(SharedMonsterAttributes.field_111263_d).func_111128_a(this.func_110148_a(SharedMonsterAttributes.field_111263_d).func_111125_b() * this.energy);
         }
 
         if (this.isCurious())
         {
-            List var2 = this.worldObj.getEntitiesWithinAABBExcludingEntity(this, this.boundingBox.expand(5.5D, 1.75D, 5.5D));
-            boolean var3 = false;
-            Iterator var4 = var2.iterator();
+            List entitiesAround = this.worldObj.getEntitiesWithinAABBExcludingEntity(this, this.boundingBox.expand(5.5D, 1.75D, 5.5D));
+            boolean foundPlayer = false;
+            Iterator i$ = entitiesAround.iterator();
 
-            while (var4.hasNext())
+            while (i$.hasNext())
             {
-                Entity var5 = (Entity)var4.next();
+                Entity entity = (Entity)i$.next();
 
-                if (var5 instanceof EntityPlayer)
+                if (entity instanceof EntityPlayer)
                 {
-                    var3 = true;
-                    this.followEntity(var5, 20.0F);
-                    this.faceEntity(var5, 5.5F, (float)this.getVerticalFaceSpeed());
+                    foundPlayer = true;
+                    this.followEntity(entity, 20.0F);
+                    this.faceEntity(entity, 5.5F, (float)this.getVerticalFaceSpeed());
                 }
             }
 
-            if (!var3)
+            if (!foundPlayer)
             {
                 this.entityToAttack = null;
             }
             else
             {
-                this.moveSpeed /= 1.5F;
+                this.func_110148_a(SharedMonsterAttributes.field_111263_d).func_111128_a(this.func_110148_a(SharedMonsterAttributes.field_111263_d).func_111125_b() / 1.5D);
             }
         }
 
@@ -413,11 +418,11 @@ public class EntityBasicNPC extends EntityMob
     /**
      * Basic mob attack. Default to touch of death in EntityCreature. Overridden by each mob to define their attack.
      */
-    protected void attackEntity(Entity var1, float var2)
+    protected void attackEntity(Entity entity, float f)
     {
         if (this.isAngry() && this.isCurious())
         {
-            super.attackEntity(var1, var2);
+            super.attackEntity(entity, f);
         }
     }
 
@@ -426,10 +431,7 @@ public class EntityBasicNPC extends EntityMob
         super.updateEntityActionState();
     }
 
-    /**
-     * Called when the entity is attacked.
-     */
-    public boolean attackEntityFrom(DamageSource var1, int var2)
+    public boolean attackEntityFrom(DamageSource source, int damage)
     {
         this.pleasure = (float)((double)this.pleasure - 0.7D);
         this.arousal = (float)((double)this.arousal + 0.3D);
@@ -442,12 +444,12 @@ public class EntityBasicNPC extends EntityMob
             this.fleeingTick = 60;
         }
 
-        return super.attackEntityFrom(var1, var2);
+        return super.attackEntityFrom(source, (float)damage);
     }
 
-    protected void followEntity(Entity var1, float var2)
+    protected void followEntity(Entity entity, float distance)
     {
-        this.entityToAttack = var1;
+        this.entityToAttack = entity;
     }
 
     /**
@@ -461,21 +463,16 @@ public class EntityBasicNPC extends EntityMob
     /**
      * (abstract) Protected helper method to write subclass entity data to NBT.
      */
-    public void writeEntityToNBT(NBTTagCompound var1)
+    public void writeEntityToNBT(NBTTagCompound nbttagcompound)
     {
-        super.writeEntityToNBT(var1);
+        super.writeEntityToNBT(nbttagcompound);
     }
 
     /**
      * (abstract) Protected helper method to read subclass entity data from NBT.
      */
-    public void readEntityFromNBT(NBTTagCompound var1)
+    public void readEntityFromNBT(NBTTagCompound nbttagcompound)
     {
-        super.readEntityFromNBT(var1);
-    }
-
-    public int getMaxHealth()
-    {
-        return 100;
+        super.readEntityFromNBT(nbttagcompound);
     }
 }

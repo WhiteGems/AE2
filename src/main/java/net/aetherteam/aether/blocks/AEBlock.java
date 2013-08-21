@@ -11,7 +11,7 @@ import net.minecraft.item.ItemBlock;
 public @interface AEBlock
 {
 
-Class itemBlock() default ItemBlock.class;
+Class <? extends ItemBlock > itemBlock() default ItemBlock.class;
 
 String name() default "";
 

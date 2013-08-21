@@ -3,6 +3,7 @@ package net.aetherteam.aether.entities;
 import net.aetherteam.aether.blocks.AetherBlocks;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityFlying;
+import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.monster.IMob;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.MathHelper;
@@ -28,16 +29,12 @@ public class EntityZephyr extends EntityFlying implements IMob
     public int prevAttackCounter = 0;
     public int attackCounter = 0;
 
-    public EntityZephyr(World var1)
+    public EntityZephyr(World world)
     {
-        super(var1);
-        this.texture = this.dir + "/mobs/zephyr/zephyr.png";
+        super(world);
+        this.func_110148_a(SharedMonsterAttributes.field_111267_a).func_111128_a(5.0D);
+        this.setEntityHealth(5.0F);
         this.setSize(4.0F, 4.0F);
-    }
-
-    public int getMaxHealth()
-    {
-        return 5;
     }
 
     protected void updateEntityActionState()
@@ -48,23 +45,23 @@ public class EntityZephyr extends EntityFlying implements IMob
         }
 
         this.prevAttackCounter = this.attackCounter;
-        double var1 = this.waypointX - this.posX;
-        double var3 = this.waypointY - this.posY;
-        double var5 = this.waypointZ - this.posZ;
-        double var7 = (double)MathHelper.sqrt_double(var1 * var1 + var3 * var3 + var5 * var5);
+        double d = this.waypointX - this.posX;
+        double d1 = this.waypointY - this.posY;
+        double d2 = this.waypointZ - this.posZ;
+        double d3 = (double)MathHelper.sqrt_double(d * d + d1 * d1 + d2 * d2);
 
-        if (var7 < 4.0D || var7 > 30.0D)
+        if (d3 < 4.0D || d3 > 30.0D)
         {
             this.waypointX = this.posX + (double)((this.rand.nextFloat() * 2.0F - 1.0F) * 16.0F);
             this.waypointY = this.posY + (double)(this.rand.nextFloat() * 2.0F * 16.0F);
             this.waypointZ = this.posZ + (double)((this.rand.nextFloat() * 2.0F - 1.0F) * 16.0F);
         }
 
-        if (this.isCourseTraversable(this.waypointX, this.waypointY, this.waypointZ, var7))
+        if (this.isCourseTraversable(this.waypointX, this.waypointY, this.waypointZ, d3))
         {
-            this.motionX += var1 / var7 * 0.1D;
-            this.motionY += var3 / var7 * 0.1D;
-            this.motionZ += var5 / var7 * 0.1D;
+            this.motionX += d / d3 * 0.1D;
+            this.motionY += d1 / d3 * 0.1D;
+            this.motionZ += d2 / d3 * 0.1D;
         }
         else
         {
@@ -79,18 +76,18 @@ public class EntityZephyr extends EntityFlying implements IMob
         }
     }
 
-    private boolean isCourseTraversable(double var1, double var3, double var5, double var7)
+    private boolean isCourseTraversable(double d, double d1, double d2, double d3)
     {
-        double var9 = (this.waypointX - this.posX) / var7;
-        double var11 = (this.waypointY - this.posY) / var7;
-        double var13 = (this.waypointZ - this.posZ) / var7;
-        AxisAlignedBB var15 = this.boundingBox.copy();
+        double d4 = (this.waypointX - this.posX) / d3;
+        double d5 = (this.waypointY - this.posY) / d3;
+        double d6 = (this.waypointZ - this.posZ) / d3;
+        AxisAlignedBB axisalignedbb = this.boundingBox.copy();
 
-        for (int var16 = 1; (double)var16 < var7; ++var16)
+        for (int i = 1; (double)i < d3; ++i)
         {
-            var15.offset(var9, var11, var13);
+            axisalignedbb.offset(d4, d5, d6);
 
-            if (this.worldObj.getCollidingBoundingBoxes(this, var15).size() > 0)
+            if (this.worldObj.getCollidingBoundingBoxes(this, axisalignedbb).size() > 0)
             {
                 return false;
             }
@@ -104,7 +101,7 @@ public class EntityZephyr extends EntityFlying implements IMob
      */
     protected String getLivingSound()
     {
-        return "aemob.zephyr.say";
+        return "aether:aemob.zephyr.say";
     }
 
     /**
@@ -112,7 +109,7 @@ public class EntityZephyr extends EntityFlying implements IMob
      */
     protected String getHurtSound()
     {
-        return "aemob.zephyr.say";
+        return "aether:aemob.zephyr.say";
     }
 
     /**
@@ -120,7 +117,7 @@ public class EntityZephyr extends EntityFlying implements IMob
      */
     protected String getDeathSound()
     {
-        return "aemob.zephyr.say";
+        return "aether:aemob.zephyr.say";
     }
 
     /**
@@ -141,16 +138,16 @@ public class EntityZephyr extends EntityFlying implements IMob
 
     private void checkForBeingStuck()
     {
-        long var1 = System.currentTimeMillis();
+        long curtime = System.currentTimeMillis();
 
-        if (var1 > this.checkTime + 3000L)
+        if (curtime > this.checkTime + 3000L)
         {
-            double var3 = this.posX - this.checkX;
-            double var5 = this.posY - this.checkY;
-            double var7 = this.posZ - this.checkZ;
-            double var9 = Math.sqrt(var3 * var3 + var5 * var5 + var7 * var7);
+            double diffx = this.posX - this.checkX;
+            double diffy = this.posY - this.checkY;
+            double diffz = this.posZ - this.checkZ;
+            double distanceTravelled = Math.sqrt(diffx * diffx + diffy * diffy + diffz * diffz);
 
-            if (var9 < 3.0D)
+            if (distanceTravelled < 3.0D)
             {
                 if (!this.isStuckWarning)
                 {
@@ -165,7 +162,7 @@ public class EntityZephyr extends EntityFlying implements IMob
             this.checkX = this.posX;
             this.checkY = this.posY;
             this.checkZ = this.posZ;
-            this.checkTime = var1;
+            this.checkTime = curtime;
         }
     }
 
@@ -174,10 +171,10 @@ public class EntityZephyr extends EntityFlying implements IMob
      */
     public boolean getCanSpawnHere()
     {
-        int var1 = MathHelper.floor_double(this.posX);
-        int var2 = MathHelper.floor_double(this.boundingBox.minY);
-        int var3 = MathHelper.floor_double(this.posZ);
-        return this.rand.nextInt(65) == 0 && this.worldObj.checkNoEntityCollision(this.boundingBox) && this.worldObj.getCollidingBoundingBoxes(this, this.boundingBox).size() == 0 && !this.worldObj.isAnyLiquid(this.boundingBox) && this.worldObj.getBlockId(var1, var2 - 1, var3) == AetherBlocks.AetherGrass.blockID && this.worldObj.getBlockId(var1, var2 - 1, var3) != AetherBlocks.Holystone.blockID && this.worldObj.difficultySetting > 0;
+        int i = MathHelper.floor_double(this.posX);
+        int j = MathHelper.floor_double(this.boundingBox.minY);
+        int k = MathHelper.floor_double(this.posZ);
+        return this.rand.nextInt(65) == 0 && this.worldObj.checkNoEntityCollision(this.boundingBox) && this.worldObj.getCollidingBoundingBoxes(this, this.boundingBox).size() == 0 && !this.worldObj.isAnyLiquid(this.boundingBox) && this.worldObj.getBlockId(i, j - 1, k) == AetherBlocks.AetherGrass.blockID && this.worldObj.getBlockId(i, j - 1, k) != AetherBlocks.Holystone.blockID && this.worldObj.difficultySetting > 0;
     }
 
     /**

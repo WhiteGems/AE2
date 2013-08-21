@@ -20,27 +20,27 @@ public class InventoryAether implements IInventory
     public ItemStack[] slots;
     public EntityPlayer player;
 
-    public InventoryAether(EntityPlayer var1)
+    public InventoryAether(EntityPlayer entityplayer)
     {
-        this.player = var1;
+        this.player = entityplayer;
         this.slots = new ItemStack[8];
     }
 
-    public boolean canInteractWith(EntityPlayer var1)
+    public boolean canInteractWith(EntityPlayer entityplayer)
     {
         return true;
     }
 
     public boolean isEmpty()
     {
-        ItemStack[] var1 = this.slots;
-        int var2 = var1.length;
+        ItemStack[] arr$ = this.slots;
+        int len$ = arr$.length;
 
-        for (int var3 = 0; var3 < var2; ++var3)
+        for (int i$ = 0; i$ < len$; ++i$)
         {
-            ItemStack var4 = var1[var3];
+            ItemStack stack = arr$[i$];
 
-            if (var4 != null)
+            if (stack != null)
             {
                 return false;
             }
@@ -51,17 +51,17 @@ public class InventoryAether implements IInventory
 
     public void closeChest() {}
 
-    public void damageArmor(int var1)
+    public void damageArmor(int i)
     {
-        for (int var2 = 0; var2 < this.slots.length; ++var2)
+        for (int j = 0; j < this.slots.length; ++j)
         {
-            if (this.slots[var2] != null && this.slots[var2].getItem() instanceof IAetherAccessory)
+            if (this.slots[j] != null && this.slots[j].getItem() instanceof IAetherAccessory)
             {
-                this.slots[var2].damageItem(var1, this.player);
+                this.slots[j].damageItem(i, this.player);
 
-                if (this.slots[var2].stackSize == 0)
+                if (this.slots[j].stackSize == 0)
                 {
-                    this.slots[var2] = null;
+                    this.slots[j] = null;
                 }
             }
         }
@@ -71,30 +71,30 @@ public class InventoryAether implements IInventory
      * Removes from an inventory slot (first arg) up to a specified number (second arg) of items and returns them in a
      * new stack.
      */
-    public ItemStack decrStackSize(int var1, int var2)
+    public ItemStack decrStackSize(int i, int j)
     {
-        if (this.slots[var1] != null)
+        if (this.slots[i] != null)
         {
-            ItemStack var3;
+            ItemStack itemstack1;
 
-            if (this.slots[var1].stackSize <= var2)
+            if (this.slots[i].stackSize <= j)
             {
-                var3 = this.slots[var1];
-                this.slots[var1] = null;
+                itemstack1 = this.slots[i];
+                this.slots[i] = null;
                 this.onInventoryChanged();
-                return var3;
+                return itemstack1;
             }
             else
             {
-                var3 = this.slots[var1].splitStack(var2);
+                itemstack1 = this.slots[i].splitStack(j);
 
-                if (this.slots[var1].stackSize == 0)
+                if (this.slots[i].stackSize == 0)
                 {
-                    this.slots[var1] = null;
+                    this.slots[i] = null;
                 }
 
                 this.onInventoryChanged();
-                return var3;
+                return itemstack1;
             }
         }
         else
@@ -105,12 +105,15 @@ public class InventoryAether implements IInventory
 
     public void dropAllItems()
     {
-        for (int var1 = 0; var1 < this.slots.length; ++var1)
+        if (!this.player.worldObj.getGameRules().getGameRuleBooleanValue("keepInventory"))
         {
-            if (this.slots[var1] != null)
+            for (int j = 0; j < this.slots.length; ++j)
             {
-                this.player.dropPlayerItemWithRandomChoice(this.slots[var1], true);
-                this.slots[var1] = null;
+                if (this.slots[j] != null)
+                {
+                    this.player.dropPlayerItemWithRandomChoice(this.slots[j], true);
+                    this.slots[j] = null;
+                }
             }
         }
 
@@ -145,9 +148,9 @@ public class InventoryAether implements IInventory
     /**
      * Returns the stack in slot i
      */
-    public ItemStack getStackInSlot(int var1)
+    public ItemStack getStackInSlot(int i)
     {
-        return this.slots[var1];
+        return this.slots[i];
     }
 
     /**
@@ -161,35 +164,35 @@ public class InventoryAether implements IInventory
 
     public int getTotalArmorValue()
     {
-        int var1 = 0;
-        int var2 = 0;
-        int var3 = 0;
-        ItemStack[] var4 = this.slots;
-        int var5 = var4.length;
+        int i = 0;
+        int j = 0;
+        int k = 0;
+        ItemStack[] arr$ = this.slots;
+        int len$ = arr$.length;
 
-        for (int var6 = 0; var6 < var5; ++var6)
+        for (int i$ = 0; i$ < len$; ++i$)
         {
-            ItemStack var7 = var4[var6];
+            ItemStack slot = arr$[i$];
 
-            if (var7 != null && var7.getItem() instanceof IAetherAccessory)
+            if (slot != null && slot.getItem() instanceof IAetherAccessory)
             {
-                int var8 = var7.getMaxDamage();
-                int var9 = var7.getItemDamageForDisplay();
-                int var10 = var8 - var9;
-                var2 += var10;
-                var3 += var8;
-                int var11 = ((ItemAccessory)var7.getItem()).damageReduceAmount;
-                var1 += var11;
+                int i1 = slot.getMaxDamage();
+                int j1 = slot.getItemDamageForDisplay();
+                int k1 = i1 - j1;
+                j += k1;
+                k += i1;
+                int l1 = ((ItemAccessory)slot.getItem()).damageReduceAmount;
+                i += l1;
             }
         }
 
-        if (var3 == 0)
+        if (k == 0)
         {
             return 0;
         }
         else
         {
-            return (var1 - 1) * var2 / var3 + 1;
+            return (i - 1) * j / k + 1;
         }
     }
 
@@ -214,70 +217,70 @@ public class InventoryAether implements IInventory
 
     public void openChest() {}
 
-    public void readFromNBT(NBTTagList var1)
+    public void readFromNBT(NBTTagList nbttaglist)
     {
         this.slots = new ItemStack[8];
 
-        for (int var2 = 0; var2 < var1.tagCount(); ++var2)
+        for (int i = 0; i < nbttaglist.tagCount(); ++i)
         {
-            NBTTagCompound var3 = (NBTTagCompound)var1.tagAt(var2);
-            int var4 = var3.getByte("Slot") & 255;
-            ItemStack var5 = ItemStack.loadItemStackFromNBT(var3);
+            NBTTagCompound nbttagcompound = (NBTTagCompound)nbttaglist.tagAt(i);
+            int j = nbttagcompound.getByte("Slot") & 255;
+            ItemStack itemstack = ItemStack.loadItemStackFromNBT(nbttagcompound);
 
-            if (var4 > 8 || !(var5.getItem() instanceof IAetherAccessory))
+            if (j > 8 || !(itemstack.getItem() instanceof IAetherAccessory))
             {
-                this.readOldFile(var1);
+                this.readOldFile(nbttaglist);
                 return;
             }
 
-            if (var5.getItem() != null && var4 < this.slots.length)
+            if (itemstack.getItem() != null && j < this.slots.length)
             {
-                this.slots[var4] = var5;
+                this.slots[j] = itemstack;
             }
         }
     }
 
-    public void readOldFile(NBTTagList var1)
+    public void readOldFile(NBTTagList nbttaglist)
     {
-        for (int var2 = 0; var2 < var1.tagCount(); ++var2)
+        for (int i = 0; i < nbttaglist.tagCount(); ++i)
         {
-            NBTTagCompound var3 = (NBTTagCompound)var1.tagAt(var2);
-            int var4 = var3.getByte("Slot") & 255;
-            ItemStack var5 = ItemStack.loadItemStackFromNBT(var3);
+            NBTTagCompound nbttagcompound = (NBTTagCompound)nbttaglist.tagAt(i);
+            int j = nbttagcompound.getByte("Slot") & 255;
+            ItemStack itemstack = ItemStack.loadItemStackFromNBT(nbttagcompound);
 
-            if (var5.getItem() != null && var4 >= 104 && var4 < 112)
+            if (itemstack.getItem() != null && j >= 104 && j < 112)
             {
-                this.slots[var4 - 104] = var5;
+                this.slots[j - 104] = itemstack;
             }
         }
     }
 
-    public NBTTagList writeToNBT(NBTTagList var1)
+    public NBTTagList writeToNBT(NBTTagList nbttaglist)
     {
-        for (int var2 = 0; var2 < this.slots.length; ++var2)
+        for (int j = 0; j < this.slots.length; ++j)
         {
-            if (this.slots[var2] != null)
+            if (this.slots[j] != null)
             {
-                NBTTagCompound var3 = new NBTTagCompound();
-                var3.setByte("Slot", (byte)var2);
-                this.slots[var2].writeToNBT(var3);
-                var1.appendTag(var3);
+                NBTTagCompound nbttagcompound1 = new NBTTagCompound();
+                nbttagcompound1.setByte("Slot", (byte)j);
+                this.slots[j].writeToNBT(nbttagcompound1);
+                nbttaglist.appendTag(nbttagcompound1);
             }
         }
 
-        return var1;
+        return nbttaglist;
     }
 
     /**
      * Sets the given item stack to the specified slot in the inventory (can be crafting or armor sections).
      */
-    public void setInventorySlotContents(int var1, ItemStack var2)
+    public void setInventorySlotContents(int i, ItemStack itemstack)
     {
-        this.slots[var1] = var2;
+        this.slots[i] = itemstack;
 
-        if (var2 != null && var2.stackSize > this.getInventoryStackLimit())
+        if (itemstack != null && itemstack.stackSize > this.getInventoryStackLimit())
         {
-            var2.stackSize = this.getInventoryStackLimit();
+            itemstack.stackSize = this.getInventoryStackLimit();
         }
 
         this.onInventoryChanged();
@@ -295,36 +298,36 @@ public class InventoryAether implements IInventory
     /**
      * Returns true if automation is allowed to insert the given stack (ignoring stack size) into the given slot.
      */
-    public boolean isStackValidForSlot(int var1, ItemStack var2)
+    public boolean isItemValidForSlot(int slotIndex, ItemStack itemstack)
     {
-        Slot var3 = (Slot)this.player.inventoryContainer.inventorySlots.get(var1);
+        Slot slot = (Slot)this.player.inventoryContainer.inventorySlots.get(slotIndex);
 
-        if (var3 != null && var3.getHasStack() && !(var3 instanceof SlotMoreArmor))
+        if (slot != null && slot.getHasStack() && !(slot instanceof SlotMoreArmor))
         {
-            int var4;
+            int type;
 
-            if (var2.getItem() instanceof ItemArmor && !((Slot)this.player.inventoryContainer.inventorySlots.get(5 + ((ItemArmor)var2.getItem()).armorType)).getHasStack())
+            if (itemstack.getItem() instanceof ItemArmor && !((Slot)this.player.inventoryContainer.inventorySlots.get(5 + ((ItemArmor)itemstack.getItem()).armorType)).getHasStack())
             {
-                var4 = 5 + ((ItemArmor)var2.getItem()).armorType;
+                type = 5 + ((ItemArmor)itemstack.getItem()).armorType;
             }
             else
             {
-                if (var2.getItem() instanceof IAetherAccessory && this.slots[((ItemAccessory)var2.getItem()).getSlotType()[0]] == null)
+                if (itemstack.getItem() instanceof IAetherAccessory && this.slots[((ItemAccessory)itemstack.getItem()).getSlotType()[0]] == null)
                 {
-                    var4 = ((ItemAccessory)var2.getItem()).getSlotType()[0];
-                    this.slots[var4] = var2;
-                    var3.putStack((ItemStack)null);
-                    var3.onSlotChanged();
+                    type = ((ItemAccessory)itemstack.getItem()).getSlotType()[0];
+                    this.slots[type] = itemstack;
+                    slot.putStack((ItemStack)null);
+                    slot.onSlotChanged();
                     this.onInventoryChanged();
                     return true;
                 }
 
-                if (var2.getItem() instanceof IAetherAccessory && this.slots[((ItemAccessory)var2.getItem()).getSlotType()[1]] == null)
+                if (itemstack.getItem() instanceof IAetherAccessory && this.slots[((ItemAccessory)itemstack.getItem()).getSlotType()[1]] == null)
                 {
-                    var4 = ((ItemAccessory)var2.getItem()).getSlotType()[1];
-                    this.slots[var4] = var2;
-                    var3.putStack((ItemStack)null);
-                    var3.onSlotChanged();
+                    type = ((ItemAccessory)itemstack.getItem()).getSlotType()[1];
+                    this.slots[type] = itemstack;
+                    slot.putStack((ItemStack)null);
+                    slot.onSlotChanged();
                     this.onInventoryChanged();
                     return true;
                 }

@@ -16,9 +16,9 @@ public class ContainerLore extends ContainerPlayer
     public List slotsToRemove = new ArrayList();
     public IInventory loreSlot;
 
-    public ContainerLore(InventoryPlayer var1, boolean var2, EntityPlayer var3)
+    public ContainerLore(InventoryPlayer inventoryplayer, boolean b, EntityPlayer player)
     {
-        super(var1, var2, var3);
+        super(inventoryplayer, b, player);
         Iterator var4 = this.inventorySlots.iterator();
 
         while (var4.hasNext())
@@ -27,8 +27,8 @@ public class ContainerLore extends ContainerPlayer
 
             if (var5 instanceof Slot)
             {
-                Slot var6 = (Slot)var5;
-                this.slotsToRemove.add(var6);
+                Slot slot = (Slot)var5;
+                this.slotsToRemove.add(slot);
             }
         }
 
@@ -55,71 +55,71 @@ public class ContainerLore extends ContainerPlayer
         this.onCraftMatrixChanged(this.craftMatrix);
     }
 
-    protected void retrySlotClick(int var1, int var2, boolean var3, EntityPlayer var4) {}
+    protected void retrySlotClick(int par1, int par2, boolean par3, EntityPlayer par4EntityPlayer) {}
 
     /**
-     * Callback for when the crafting gui is closed.
+     * Called when the container is closed.
      */
-    public void onCraftGuiClosed(EntityPlayer var1)
+    public void onContainerClosed(EntityPlayer entityplayer)
     {
-        super.onCraftGuiClosed(var1);
-        ItemStack var2 = this.loreSlot.getStackInSlotOnClosing(0);
+        super.onContainerClosed(entityplayer);
+        ItemStack itemstack = this.loreSlot.getStackInSlotOnClosing(0);
 
-        if (var2 != null)
+        if (itemstack != null)
         {
-            var1.dropPlayerItem(var2);
+            entityplayer.dropPlayerItem(itemstack);
         }
     }
 
-    public boolean canInteractWith(EntityPlayer var1)
+    public boolean canInteractWith(EntityPlayer entityplayer)
     {
         return true;
     }
 
-    public ItemStack getStackInSlot(int var1)
+    public ItemStack getStackInSlot(int i)
     {
-        ItemStack var2 = null;
-        Slot var3 = (Slot)this.inventorySlots.get(var1);
+        ItemStack itemstack = null;
+        Slot slot = (Slot)this.inventorySlots.get(i);
 
-        if (var3 != null && var3.getHasStack())
+        if (slot != null && slot.getHasStack())
         {
-            ItemStack var4 = var3.getStack();
-            var2 = var4.copy();
+            ItemStack itemstack1 = slot.getStack();
+            itemstack = itemstack1.copy();
 
-            if (var1 == 0)
+            if (i == 0)
             {
-                this.mergeItemStack(var4, 10, 46, true);
+                this.mergeItemStack(itemstack1, 10, 46, true);
             }
-            else if (var1 >= 10 && var1 < 37)
+            else if (i >= 10 && i < 37)
             {
-                this.mergeItemStack(var4, 37, 46, false);
+                this.mergeItemStack(itemstack1, 37, 46, false);
             }
-            else if (var1 >= 37 && var1 < 46)
+            else if (i >= 37 && i < 46)
             {
-                this.mergeItemStack(var4, 10, 37, false);
+                this.mergeItemStack(itemstack1, 10, 37, false);
             }
             else
             {
-                this.mergeItemStack(var4, 10, 46, false);
+                this.mergeItemStack(itemstack1, 10, 46, false);
             }
 
-            if (var4.stackSize == 0)
+            if (itemstack1.stackSize == 0)
             {
-                var3.putStack((ItemStack)null);
+                slot.putStack((ItemStack)null);
             }
             else
             {
-                var3.onSlotChanged();
+                slot.onSlotChanged();
             }
 
-            if (var4.stackSize == var2.stackSize)
+            if (itemstack1.stackSize == itemstack.stackSize)
             {
                 return null;
             }
 
-            var3.onSlotChange(var4, var2);
+            slot.onSlotChange(itemstack1, itemstack);
         }
 
-        return var2;
+        return itemstack;
     }
 }

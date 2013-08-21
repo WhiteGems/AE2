@@ -9,7 +9,6 @@ import net.aetherteam.aether.client.models.ModelCockatrice;
 import net.aetherteam.aether.client.models.ModelHostEye;
 import net.aetherteam.aether.client.models.ModelLabyrinthEye;
 import net.aetherteam.aether.client.models.ModelMimic;
-import net.aetherteam.aether.client.models.ModelMiniCloud;
 import net.aetherteam.aether.client.models.ModelMoa;
 import net.aetherteam.aether.client.models.ModelNewZephyr;
 import net.aetherteam.aether.client.models.ModelPhyg1;
@@ -67,10 +66,8 @@ import net.aetherteam.aether.entities.mounts.EntityMoa;
 import net.aetherteam.aether.entities.mounts.EntityPhyg;
 import net.aetherteam.aether.entities.mounts.EntitySwet;
 import net.aetherteam.aether.entities.npc.EntityBasicNPC;
-import net.aetherteam.aether.oldcode.EntityMiniCloud;
 import net.minecraft.client.model.ModelSlime;
 import net.minecraft.client.renderer.entity.RenderLightningBolt;
-import net.minecraft.client.renderer.entity.RenderLiving;
 
 public class AetherEntityRenderers
 {
@@ -98,7 +95,6 @@ public class AetherEntityRenderers
         RenderingRegistry.registerEntityRenderingHandler(EntityBattleSentry.class, new RenderBattleSentry(new ModelSlime(0), 0.2F));
         RenderingRegistry.registerEntityRenderingHandler(EntityLightningKnife.class, new RenderLightningKnife());
         RenderingRegistry.registerEntityRenderingHandler(EntityMimic.class, new RenderMimic(new ModelMimic(), 1.0F));
-        RenderingRegistry.registerEntityRenderingHandler(EntityMiniCloud.class, new RenderLiving(new ModelMiniCloud(0.0F, 20.0F), 0.35F));
         RenderingRegistry.registerEntityRenderingHandler(EntityTNTPresent.class, new RenderTNTPresent());
         RenderingRegistry.registerEntityRenderingHandler(EntityAetherLightning.class, new RenderLightningBolt());
         RenderingRegistry.registerEntityRenderingHandler(EntitySwet.class, new RenderSwet(new ModelSlime(16), new ModelSlime(0), 0.3F));

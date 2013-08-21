@@ -15,17 +15,17 @@ public class GuiAetherIngame extends Gui
     private Minecraft mc;
     private Random rand = new Random();
 
-    public GuiAetherIngame(Minecraft var1)
+    public GuiAetherIngame(Minecraft mc)
     {
-        this.mc = var1;
+        this.mc = mc;
     }
 
     @ForgeSubscribe(
         priority = EventPriority.NORMAL
     )
-    public void onRenderGui(RenderGameOverlayEvent var1)
+    public void onRenderGui(RenderGameOverlayEvent event)
     {
-        if (!var1.isCancelable() && var1.type == RenderGameOverlayEvent.ElementType.TEXT)
+        if (!event.isCancelable() && event.type == RenderGameOverlayEvent.ElementType.TEXT)
         {
             ClientNotificationHandler.updateNotifications();
             AetherOverlays.renderDungeonQueue(this.mc);
@@ -38,7 +38,6 @@ public class GuiAetherIngame extends Gui
             AetherOverlays.renderIronBubbles(this.mc, this.rand);
             AetherOverlays.renderCoinbar(this.mc);
             AetherOverlays.renderPartyHUD(this.mc);
-            this.mc.renderEngine.resetBoundTexture();
         }
     }
 }

@@ -14,6 +14,7 @@ import net.minecraft.item.EnumToolMaterial;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.potion.Potion;
+import net.minecraft.util.ResourceLocation;
 
 public class AetherItems
 {
@@ -497,13 +498,13 @@ public class AetherItems
         name = "Wyndberry"
     )
     public static Item Wyndberry;
-    public static HashMap spritesPath = new HashMap();
+    public static HashMap<String, String> spritesPath = new HashMap();
 
     public static void init()
     {
-        spritesPath.put("ROOT", "/net/aetherteam/aether/client/sprites/");
-        spritesPath.put("ARMOR", "/net/aetherteam/aether/client/sprites/armor/");
-        spritesPath.put("CAPES", "/net/aetherteam/aether/client/sprites/capes/");
+        spritesPath.put("ROOT", "textures/");
+        spritesPath.put("ARMOR", "textures/armor/");
+        spritesPath.put("CAPES", "textures/capes/");
         VictoryMedal = (new ItemAether(makeID("VictoryMedal", 17000))).setIconName("Victory Medal").setMaxStackSize(10).setCreativeTab(Aether.misc);
         Key = (new ItemAetherKey(makeID("Key", 17001))).setCreativeTab(Aether.misc);
         MoaEgg = (new ItemMoaEgg(makeID("MoaEgg", 17002))).setIconName("Moa Egg").setCreativeTab(Aether.misc);
@@ -544,57 +545,57 @@ public class AetherItems
         CloudParachute = (new ItemCloudParachute(makeID("CloudParachute", 17038), 0)).setIconName("Cloud Parachute").setCreativeTab(Aether.misc);
         GoldenCloudParachute = (new ItemCloudParachute(makeID("GoldenCloudParachute", 17039), 20)).setIconName("Golden Cloud Parachute").setCreativeTab(Aether.misc);
         ShardOfLife = (new ItemShardOfLife(makeID("ShardOfLife", 17041))).setIconName("Shard of Life").setCreativeTab(Aether.misc);
-        ValkyrieCape = (new ItemValkyrieCape(makeID("ValkyrieCape", 17042), 0, (String)spritesPath.get("CAPES") + "cape_valkyrie.png", 5)).setIconName("Valkyrie Cape").setCreativeTab(Aether.capes);
+        ValkyrieCape = (new ItemValkyrieCape(makeID("ValkyrieCape", 17042), 0, getResourceLocation("CAPES", "cape_valkyrie.png"), 5)).setIconName("Valkyrie Cape").setCreativeTab(Aether.capes);
         ValkyrieLance = (new ItemValkyrieLance(makeID("ValkyrieLance", 17043), EnumToolMaterial.EMERALD)).setIconName("Valkyrie Lance").setCreativeTab(Aether.weapons);
-        IronRing = (new ItemAccessory(makeID("IronRing", 17044), 0, (String)spritesPath.get("ARMOR") + "Accessories.png", 8)).setIconName("Iron Ring").setCreativeTab(Aether.accessories);
-        GoldenRing = (new ItemAccessory(makeID("GoldenRing", 17045), 0, (String)spritesPath.get("ARMOR") + "Accessories.png", 8)).setIconName("Golden Ring").setCreativeTab(Aether.accessories);
-        ZaniteRing = (new ItemAccessory(makeID("ZaniteRing", 17046), 0, (String)spritesPath.get("ARMOR") + "Accessories.png", 8)).setIconName("Zanite Ring").setCreativeTab(Aether.accessories);
-        IronPendant = (new ItemAccessory(makeID("IronPendant", 17047), 0, (String)spritesPath.get("ARMOR") + "Accessories.png", 4)).setIconName("Iron Pendant").setCreativeTab(Aether.accessories);
-        GoldenPendant = (new ItemAccessory(makeID("GoldenPendant", 17048), 0, (String)spritesPath.get("ARMOR") + "Accessories.png", 4)).setIconName("Golden Pendant").setCreativeTab(Aether.accessories);
-        ZanitePendant = (new ItemAccessory(makeID("ZanitePendant", 17049), 0, (String)spritesPath.get("ARMOR") + "Accessories.png", 4)).setIconName("Zanite Pendant").setCreativeTab(Aether.accessories);
-        SwetCape = (new ItemAccessory(makeID("SwetCape", 17051), 0, (String)spritesPath.get("CAPES") + "cape_swet.png", 5)).setIconName("Swet Cape").setCreativeTab(Aether.capes);
-        LeatherGloves = (new ItemAccessory(makeID("LeatherGloves", 17052), 0, (String)spritesPath.get("ARMOR") + "Leather.png", 10)).setIconName("Leather Gloves").setCreativeTab(Aether.armour);
-        IronGloves = (new ItemAccessory(makeID("IronGloves", 17053), 2, (String)spritesPath.get("ARMOR") + "Accessories.png", 10)).setIconName("Iron Gloves").setCreativeTab(Aether.armour);
-        GoldenGloves = (new ItemAccessory(makeID("GoldenGloves", 17054), 1, (String)spritesPath.get("ARMOR") + "Gold.png", 10)).setIconName("Golden Gloves").setCreativeTab(Aether.armour);
-        DiamondGloves = (new ItemAccessory(makeID("DiamondGloves", 17055), 3, (String)spritesPath.get("ARMOR") + "Diamond.png", 10)).setIconName("Diamond Gloves").setCreativeTab(Aether.armour);
-        ZaniteGloves = (new ItemAccessory(makeID("ZaniteGloves", 17056), 2, (String)spritesPath.get("ARMOR") + "Zanite.png", 10)).setIconName("Zanite Gloves").setCreativeTab(Aether.armour);
-        ZaniteHelmet = (new ItemColouredArmor(makeID("ZaniteHelmet", 17057), EnumArmorMaterial.IRON, Aether.proxy.addArmor("Zanite"), 0, 16777215, "Zanite")).setIconName("Zanite Helmet").setCreativeTab(Aether.armour);
-        ZaniteChestplate = (new ItemColouredArmor(makeID("ZaniteChestplate", 17058), EnumArmorMaterial.IRON, Aether.proxy.addArmor("Zanite"), 1, 16777215, "Zanite")).setIconName("Zanite Chestplate").setCreativeTab(Aether.armour);
-        ZaniteLeggings = (new ItemColouredArmor(makeID("ZaniteLeggings", 17059), EnumArmorMaterial.IRON, Aether.proxy.addArmor("Zanite"), 2, 16777215, "Zanite")).setIconName("Zanite Leggings").setCreativeTab(Aether.armour);
-        ZaniteBoots = (new ItemColouredArmor(makeID("ZaniteBoots", 17060), EnumArmorMaterial.IRON, Aether.proxy.addArmor("Zanite"), 3, 16777215, "Zanite")).setIconName("Zanite Boots").setCreativeTab(Aether.armour);
-        GravititeGloves = (new ItemAccessory(makeID("GravititeGloves", 17061), 3, (String)spritesPath.get("ARMOR") + "Gravitite.png", 10, 16777215, false)).setIconName("Gravitite Gloves").setCreativeTab(Aether.armour);
-        GravititeHelmet = (new ItemColouredArmor(makeID("GravititeHelmet", 17062), EnumArmorMaterial.DIAMOND, Aether.proxy.addArmor("Gravitite"), 0, 16777215, "Gravitite")).setIconName("Gravitite Helmet").setCreativeTab(Aether.armour);
-        GravititeChestplate = (new ItemColouredArmor(makeID("GravititeChestplate", 17063), EnumArmorMaterial.DIAMOND, Aether.proxy.addArmor("Gravitite"), 1, 16777215, "Gravitite")).setIconName("Gravitite Chestplate").setCreativeTab(Aether.armour);
-        GravititeLeggings = (new ItemColouredArmor(makeID("GravititeLeggings", 17064), EnumArmorMaterial.DIAMOND, Aether.proxy.addArmor("Gravitite"), 2, 16777215, "Gravitite")).setIconName("Gravitite Leggings").setCreativeTab(Aether.armour);
-        GravititeBoots = (new ItemColouredArmor(makeID("GravititeBoots", 17065), EnumArmorMaterial.DIAMOND, Aether.proxy.addArmor("Gravitite"), 3, 16777215, "Gravitite")).setIconName("Gravitite Boots").setCreativeTab(Aether.armour);
-        PhoenixGloves = (new ItemAccessory(makeID("PhoenixGloves", 17066), 3, (String)spritesPath.get("ARMOR") + "Phoenix.png", 10, 16777215, false)).setIconName("Phoenix Gloves").setCreativeTab(Aether.armour);
+        IronRing = (new ItemAccessory(makeID("IronRing", 17044), 0, getResourceLocation("ARMOR", "Accessories.png"), 8)).setIconName("Iron Ring").setCreativeTab(Aether.accessories);
+        GoldenRing = (new ItemAccessory(makeID("GoldenRing", 17045), 0, getResourceLocation("ARMOR", "Accessories.png"), 8)).setIconName("Golden Ring").setCreativeTab(Aether.accessories);
+        ZaniteRing = (new ItemAccessory(makeID("ZaniteRing", 17046), 0, getResourceLocation("ARMOR", "Accessories.png"), 8)).setIconName("Zanite Ring").setCreativeTab(Aether.accessories);
+        IronPendant = (new ItemAccessory(makeID("IronPendant", 17047), 0, getResourceLocation("ARMOR", "Accessories.png"), 4)).setIconName("Iron Pendant").setCreativeTab(Aether.accessories);
+        GoldenPendant = (new ItemAccessory(makeID("GoldenPendant", 17048), 0, getResourceLocation("ARMOR", "Accessories.png"), 4)).setIconName("Golden Pendant").setCreativeTab(Aether.accessories);
+        ZanitePendant = (new ItemAccessory(makeID("ZanitePendant", 17049), 0, getResourceLocation("ARMOR", "Accessories.png"), 4)).setIconName("Zanite Pendant").setCreativeTab(Aether.accessories);
+        SwetCape = (new ItemAccessory(makeID("SwetCape", 17051), 0, getResourceLocation("CAPES", "cape_swet.png"), 5)).setIconName("Swet Cape").setCreativeTab(Aether.capes);
+        LeatherGloves = (new ItemAccessory(makeID("LeatherGloves", 17052), 0, getResourceLocation("ARMOR", "Leather.png"), 10)).setIconName("Leather Gloves").setCreativeTab(Aether.armour);
+        IronGloves = (new ItemAccessory(makeID("IronGloves", 17053), 2, getResourceLocation("ARMOR", "Accessories.png"), 10)).setIconName("Iron Gloves").setCreativeTab(Aether.armour);
+        GoldenGloves = (new ItemAccessory(makeID("GoldenGloves", 17054), 1, getResourceLocation("ARMOR", "Gold.png"), 10)).setIconName("Golden Gloves").setCreativeTab(Aether.armour);
+        DiamondGloves = (new ItemAccessory(makeID("DiamondGloves", 17055), 3, getResourceLocation("ARMOR", "Diamond.png"), 10)).setIconName("Diamond Gloves").setCreativeTab(Aether.armour);
+        ZaniteGloves = (new ItemAccessory(makeID("ZaniteGloves", 17056), 2, getResourceLocation("ARMOR", "Zanite.png"), 10)).setIconName("Zanite Gloves").setCreativeTab(Aether.armour);
+        ZaniteHelmet = (new ItemAetherArmor(makeID("ZaniteHelmet", 17057), EnumArmorMaterial.IRON, Aether.proxy.addArmor("Zanite"), 0, "Zanite")).setIconName("Zanite Helmet").setCreativeTab(Aether.armour);
+        ZaniteChestplate = (new ItemAetherArmor(makeID("ZaniteChestplate", 17058), EnumArmorMaterial.IRON, Aether.proxy.addArmor("Zanite"), 1, "Zanite")).setIconName("Zanite Chestplate").setCreativeTab(Aether.armour);
+        ZaniteLeggings = (new ItemAetherArmor(makeID("ZaniteLeggings", 17059), EnumArmorMaterial.IRON, Aether.proxy.addArmor("Zanite"), 2, "Zanite")).setIconName("Zanite Leggings").setCreativeTab(Aether.armour);
+        ZaniteBoots = (new ItemAetherArmor(makeID("ZaniteBoots", 17060), EnumArmorMaterial.IRON, Aether.proxy.addArmor("Zanite"), 3, "Zanite")).setIconName("Zanite Boots").setCreativeTab(Aether.armour);
+        GravititeGloves = (new ItemAccessory(makeID("GravititeGloves", 17061), 3, getResourceLocation("ARMOR", "Gravitite.png"), 10, 16777215, false)).setIconName("Gravitite Gloves").setCreativeTab(Aether.armour);
+        GravititeHelmet = (new ItemAetherArmor(makeID("GravititeHelmet", 17062), EnumArmorMaterial.DIAMOND, Aether.proxy.addArmor("Gravitite"), 0, "Gravitite")).setIconName("Gravitite Helmet").setCreativeTab(Aether.armour);
+        GravititeChestplate = (new ItemAetherArmor(makeID("GravititeChestplate", 17063), EnumArmorMaterial.DIAMOND, Aether.proxy.addArmor("Gravitite"), 1, "Gravitite")).setIconName("Gravitite Chestplate").setCreativeTab(Aether.armour);
+        GravititeLeggings = (new ItemAetherArmor(makeID("GravititeLeggings", 17064), EnumArmorMaterial.DIAMOND, Aether.proxy.addArmor("Gravitite"), 2, "Gravitite")).setIconName("Gravitite Leggings").setCreativeTab(Aether.armour);
+        GravititeBoots = (new ItemAetherArmor(makeID("GravititeBoots", 17065), EnumArmorMaterial.DIAMOND, Aether.proxy.addArmor("Gravitite"), 3, "Gravitite")).setIconName("Gravitite Boots").setCreativeTab(Aether.armour);
+        PhoenixGloves = (new ItemAccessory(makeID("PhoenixGloves", 17066), 3, getResourceLocation("ARMOR", "Phoenix.png"), 10, 16777215, false)).setIconName("Phoenix Gloves").setCreativeTab(Aether.armour);
         PhoenixHelmet = (new ItemAetherArmor(makeID("PhoenixHelmet", 17067), EnumArmorMaterial.DIAMOND, Aether.proxy.addArmor("Phoenix"), 0, "Phoenix")).setIconName("Phoenix Helmet").setCreativeTab(Aether.armour);
         PhoenixChestplate = (new ItemAetherArmor(makeID("PhoenixChestplate", 17068), EnumArmorMaterial.DIAMOND, Aether.proxy.addArmor("Phoenix"), 1, "Phoenix")).setIconName("Phoenix Chestplate").setCreativeTab(Aether.armour);
         PhoenixLeggings = (new ItemAetherArmor(makeID("PhoenixLeggings", 17069), EnumArmorMaterial.DIAMOND, Aether.proxy.addArmor("Phoenix"), 2, "Phoenix")).setIconName("Phoenix Leggings").setCreativeTab(Aether.armour);
         PhoenixBoots = (new ItemAetherArmor(makeID("PhoenixBoots", 17070), EnumArmorMaterial.DIAMOND, Aether.proxy.addArmor("Phoenix"), 3, "Phoenix")).setIconName("Phoenix Boots").setCreativeTab(Aether.armour);
-        ObsidianGloves = (new ItemAccessory(makeID("ObsidianGloves", 17071), 4, (String)spritesPath.get("ARMOR") + "Obsidian.png", 10, 16777215, false)).setIconName("Obsidian Gloves").setCreativeTab(Aether.armour);
-        ObsidianHelmet = (new ItemColouredArmor(makeID("ObsidianHelmet", 17072), CommonProxy.OBSIDIAN, Aether.proxy.addArmor("Obsidian"), 0, 16777215, "Obsidian")).setIconName("Obsidian Helmet").setCreativeTab(Aether.armour);
-        ObsidianChestplate = (new ItemColouredArmor(makeID("ObsidianChestplate", 17073), CommonProxy.OBSIDIAN, Aether.proxy.addArmor("Obsidian"), 1, 16777215, "Obsidian")).setIconName("Obsidian Chestplate").setCreativeTab(Aether.armour);
-        ObsidianLeggings = (new ItemColouredArmor(makeID("ObsidianLeggings", 17074), CommonProxy.OBSIDIAN, Aether.proxy.addArmor("Obsidian"), 2, 16777215, "Obsidian")).setIconName("Obsidian Leggings").setCreativeTab(Aether.armour);
-        ObsidianBoots = (new ItemColouredArmor(makeID("ObsidianBoots", 17075), CommonProxy.OBSIDIAN, Aether.proxy.addArmor("Obsidian"), 3, 16777215, "Obsidian")).setIconName("Obsidian Boots").setCreativeTab(Aether.armour);
-        NeptuneGloves = (new ItemAccessory(makeID("NeptuneGloves", 17076), 3, (String)spritesPath.get("ARMOR") + "Neptune.png", 10, 16777215)).setIconName("Neptune Gloves").setCreativeTab(Aether.armour);
+        ObsidianGloves = (new ItemAccessory(makeID("ObsidianGloves", 17071), 4, getResourceLocation("ARMOR", "Obsidian.png"), 10, 16777215, false)).setIconName("Obsidian Gloves").setCreativeTab(Aether.armour);
+        ObsidianHelmet = (new ItemAetherArmor(makeID("ObsidianHelmet", 17072), CommonProxy.OBSIDIAN, Aether.proxy.addArmor("Obsidian"), 0, "Obsidian")).setIconName("Obsidian Helmet").setCreativeTab(Aether.armour);
+        ObsidianChestplate = (new ItemAetherArmor(makeID("ObsidianChestplate", 17073), CommonProxy.OBSIDIAN, Aether.proxy.addArmor("Obsidian"), 1, "Obsidian")).setIconName("Obsidian Chestplate").setCreativeTab(Aether.armour);
+        ObsidianLeggings = (new ItemAetherArmor(makeID("ObsidianLeggings", 17074), CommonProxy.OBSIDIAN, Aether.proxy.addArmor("Obsidian"), 2, "Obsidian")).setIconName("Obsidian Leggings").setCreativeTab(Aether.armour);
+        ObsidianBoots = (new ItemAetherArmor(makeID("ObsidianBoots", 17075), CommonProxy.OBSIDIAN, Aether.proxy.addArmor("Obsidian"), 3, "Obsidian")).setIconName("Obsidian Boots").setCreativeTab(Aether.armour);
+        NeptuneGloves = (new ItemAccessory(makeID("NeptuneGloves", 17076), 3, getResourceLocation("ARMOR", "Neptune.png"), 10, 16777215)).setIconName("Neptune Gloves").setCreativeTab(Aether.armour);
         NeptuneHelmet = (new ItemNeptuneArmor(makeID("NeptuneHelmet", 17077), EnumArmorMaterial.DIAMOND, Aether.proxy.addArmor("Neptune"), 0, 16777215, "Neptune")).setIconName("Neptune Helmet").setCreativeTab(Aether.armour);
         NeptuneChestplate = (new ItemNeptuneArmor(makeID("NeptuneChestplate", 17078), EnumArmorMaterial.DIAMOND, Aether.proxy.addArmor("Neptune"), 1, 16777215, "Neptune")).setIconName("Neptune Chestplate").setCreativeTab(Aether.armour);
         NeptuneLeggings = (new ItemNeptuneArmor(makeID("NeptuneLeggings", 17079), EnumArmorMaterial.DIAMOND, Aether.proxy.addArmor("Neptune"), 2, 16777215, "Neptune")).setIconName("Neptune Leggings").setCreativeTab(Aether.armour);
         NeptuneBoots = (new ItemNeptuneArmor(makeID("NeptuneBoots", 17080), EnumArmorMaterial.DIAMOND, Aether.proxy.addArmor("Neptune"), 3, 16777215, "Neptune")).setIconName("Neptune Boots").setCreativeTab(Aether.armour);
         RegenerationStone = (new ItemRegenerationStone(makeID("RegenerationStone", 17081), 0, 0, 7)).setIconName("Regeneration Stone").setCreativeTab(Aether.accessories);
         InvisibilityCloak = (new ItemInvisibilityCloak(makeID("InvisibilityCloak", 17082), 0, 0, 5)).setIconName("Invisibility Cloak").setCreativeTab(Aether.capes);
-        AgilityCape = (new ItemAgilityCape(makeID("AgilityCape", 17083), 0, (String)spritesPath.get("CAPES") + "cape_agility.png", 5)).setIconName("Agility Cape").setCreativeTab(Aether.capes);
-        WhiteCape = (new ItemAccessory(makeID("WhiteCape", 17084), 0, (String)spritesPath.get("CAPES") + "cape_white.png", 5)).setIconName("White Cape").setCreativeTab(Aether.capes);
-        RedCape = (new ItemAccessory(makeID("RedCape", 17085), 0, (String)spritesPath.get("CAPES") + "cape_red.png", 5)).setIconName("Red Cape").setCreativeTab(Aether.capes);
-        YellowCape = (new ItemAccessory(makeID("YellowCape", 17086), 0, (String)spritesPath.get("CAPES") + "cape_yellow.png", 5)).setIconName("Yellow Cape").setCreativeTab(Aether.capes);
-        BlueCape = (new ItemAccessory(makeID("BlueCape", 17087), 0, (String)spritesPath.get("CAPES") + "cape_blue.png", 5)).setIconName("Blue Cape").setCreativeTab(Aether.capes);
+        AgilityCape = (new ItemAgilityCape(makeID("AgilityCape", 17083), 0, getResourceLocation("CAPES", "cape_agility.png"), 5)).setIconName("Agility Cape").setCreativeTab(Aether.capes);
+        WhiteCape = (new ItemAccessory(makeID("WhiteCape", 17084), 0, getResourceLocation("CAPES", "cape_white.png"), 5)).setIconName("White Cape").setCreativeTab(Aether.capes);
+        RedCape = (new ItemAccessory(makeID("RedCape", 17085), 0, getResourceLocation("CAPES", "cape_red.png"), 5)).setIconName("Red Cape").setCreativeTab(Aether.capes);
+        YellowCape = (new ItemAccessory(makeID("YellowCape", 17086), 0, getResourceLocation("CAPES", "cape_yellow.png"), 5)).setIconName("Yellow Cape").setCreativeTab(Aether.capes);
+        BlueCape = (new ItemAccessory(makeID("BlueCape", 17087), 0, getResourceLocation("CAPES", "cape_blue.png"), 5)).setIconName("Blue Cape").setCreativeTab(Aether.capes);
         ValkyriePickaxe = (new ItemValkyriePickaxe(makeID("ValkyriePickaxe", 17088), EnumToolMaterial.EMERALD)).setIconName("Valkyrie Pickaxe").setCreativeTab(Aether.tools);
         ValkyrieAxe = (new ItemValkyrieAxe(makeID("ValkyrieAxe", 17089), EnumToolMaterial.EMERALD)).setIconName("Valkyrie Axe").setCreativeTab(Aether.tools);
         ValkyrieShovel = (new ItemValkyrieShovel(makeID("ValkyrieShovel", 17090), EnumToolMaterial.EMERALD)).setIconName("Valkyrie Shovel").setCreativeTab(Aether.tools);
         HealingStone = (new ItemHealingStone(makeID("HealingStone", 17091), 0, 1.2F, false)).setIconName("Healing Stone").setAlwaysEdible().setPotionEffect(Potion.regeneration.id, 30, 0, 1.0F).setCreativeTab(Aether.food);
-        IceRing = (new ItemIceAccessory(makeID("IceRing", 17092), 0, (String)spritesPath.get("ARMOR") + "Accessories.png", 8, 9823975)).setIconName("Ice Ring").setCreativeTab(Aether.accessories).setMaxDamage(6000);
-        IcePendant = (new ItemIceAccessory(makeID("IcePendant", 17093), 0, (String)spritesPath.get("ARMOR") + "Accessories.png", 4, 9823975)).setIconName("Ice Pendant").setCreativeTab(Aether.accessories).setMaxDamage(6000);
+        IceRing = (new ItemIceAccessory(makeID("IceRing", 17092), 0, getResourceLocation("ARMOR", "Accessories.png"), 8, 9823975)).setIconName("Ice Ring").setCreativeTab(Aether.accessories).setMaxDamage(6000);
+        IcePendant = (new ItemIceAccessory(makeID("IcePendant", 17093), 0, getResourceLocation("ARMOR", "Accessories.png"), 4, 9823975)).setIconName("Ice Pendant").setCreativeTab(Aether.accessories).setMaxDamage(6000);
         BlueBerry = (new ItemAetherFood(makeID("BlueBerry", 17094), 2, false)).setIconName("Blue Berry").setCreativeTab(Aether.food);
         GingerBreadMan = (new ItemAetherFood(makeID("GingerbreadMan", 17095), 2, false)).setIconName("Gingerbread Man").setCreativeTab(Aether.food);
         CandyCane = (new ItemAetherFood(makeID("CandyCane", 17096), 2, false)).setIconName("Candy Cane").setCreativeTab(Aether.food);
@@ -607,9 +608,9 @@ public class AetherItems
         ValkyrieChestplate = (new ItemAetherArmor(makeID("ValkyrieChestplate", 17103), EnumArmorMaterial.DIAMOND, Aether.proxy.addArmor("Valkyrie"), 1, "Valkyrie")).setIconName("Valkyrie Chestplate").setCreativeTab(Aether.armour);
         ValkyrieLeggings = (new ItemAetherArmor(makeID("ValkyrieLeggings", 17104), EnumArmorMaterial.DIAMOND, Aether.proxy.addArmor("Valkyrie"), 2, "Valkyrie")).setIconName("Valkyrie Leggings").setCreativeTab(Aether.armour);
         ValkyrieBoots = (new ItemAetherArmor(makeID("ValkyrieBoots", 17105), EnumArmorMaterial.DIAMOND, Aether.proxy.addArmor("Valkyrie"), 3, "Valkyrie")).setIconName("Valkyrie Boots").setCreativeTab(Aether.armour);
-        ValkyrieGloves = (new ItemAccessory(makeID("ValkyrieGloves", 17106), 3, (String)spritesPath.get("ARMOR") + "Valkyrie.png", 10, 16777215, false)).setIconName("Valkyrie Gloves").setCreativeTab(Aether.armour);
-        DexterityCape = (new ItemDexterityCape(makeID("DexterityCape", 17107), 0, (String)spritesPath.get("CAPES") + "cape_dexterity.png", 5)).setIconName("Dexterity Cape").setCreativeTab(Aether.capes);
-        SwettyPendant = (new ItemAccessory(makeID("SwettyPendant", 17108), 0, (String)spritesPath.get("ARMOR") + "Accessories.png", 4)).setIconName("Swetty Pendant").setCreativeTab(Aether.accessories);
+        ValkyrieGloves = (new ItemAccessory(makeID("ValkyrieGloves", 17106), 3, getResourceLocation("ARMOR", "Valkyrie.png"), 10, 16777215, false)).setIconName("Valkyrie Gloves").setCreativeTab(Aether.armour);
+        DexterityCape = (new ItemDexterityCape(makeID("DexterityCape", 17107), 0, getResourceLocation("CAPES", "cape_dexterity.png"), 5)).setIconName("Dexterity Cape").setCreativeTab(Aether.capes);
+        SwettyPendant = (new ItemAccessory(makeID("SwettyPendant", 17108), 0, getResourceLocation("ARMOR", "Accessories.png"), 4)).setIconName("Swetty Pendant").setCreativeTab(Aether.accessories);
         Deadmau5Ears = (new ItemAccessory(makeID("Deadmau5Ears", 17109), 0, 0, 7)).setIconName("Deadmau5 Ears").setCreativeTab(Aether.accessories);
         EnchantedBerry = (new ItemAetherFood(makeID("EnchantedBerry", 17110), 8, false)).setIconName("Enchanted Berry").setCreativeTab(Aether.food);
         Strawberry = (new ItemAetherFood(makeID("Strawberry", 17112), 8, false)).setIconName("Rainbow Strawberry").setCreativeTab(Aether.food);
@@ -653,28 +654,28 @@ public class AetherItems
         ItemContinuum.addBan(AetherBlocks.ColdFire.blockID);
     }
 
-    public static int makeID(String var0, int var1)
+    public static int makeID(String name, int def)
     {
-        return Aether.getConfig().getItem(var0, var1).getInt(var1);
+        return Aether.getConfig().getItem(name, def).getInt(def);
     }
 
     private static void registerItemNames()
     {
-        Field[] var0 = AetherItems.class.getDeclaredFields();
-        int var1 = var0.length;
+        Field[] moaNames = AetherItems.class.getDeclaredFields();
+        int i = moaNames.length;
 
-        for (int var2 = 0; var2 < var1; ++var2)
+        for (int i$ = 0; i$ < i; ++i$)
         {
-            Field var3 = var0[var2];
-            net.aetherteam.aether.interfaces.AEItem var4 = (net.aetherteam.aether.interfaces.AEItem)var3.getAnnotation(net.aetherteam.aether.interfaces.AEItem.class);
+            Field f = moaNames[i$];
+            net.aetherteam.aether.interfaces.AEItem ann = (net.aetherteam.aether.interfaces.AEItem)f.getAnnotation(net.aetherteam.aether.interfaces.AEItem.class);
 
-            if (var4 != null && Item.class.isAssignableFrom(var3.getType()))
+            if (ann != null && Item.class.isAssignableFrom(f.getType()))
             {
-                Item var5;
+                Item item;
 
                 try
                 {
-                    var5 = (Item)var3.get((Object)null);
+                    item = (Item)f.get((Object)null);
                 }
                 catch (IllegalAccessException var8)
                 {
@@ -682,29 +683,34 @@ public class AetherItems
                     continue;
                 }
 
-                String[] var6 = var4.names();
+                String[] names = ann.names();
 
-                if (var6.length != 0)
+                if (names.length != 0)
                 {
-                    for (int var7 = 0; var7 < var6.length; ++var7)
+                    for (int i1 = 0; i1 < names.length; ++i1)
                     {
-                        LanguageRegistry.addName(new ItemStack(var5, 1, var7), var6[var7]);
+                        LanguageRegistry.addName(new ItemStack(item, 1, i1), names[i1]);
                     }
                 }
                 else
                 {
-                    LanguageRegistry.addName(var5, var4.name());
+                    LanguageRegistry.addName(item, ann.name());
                 }
             }
         }
 
         String[] var9 = AetherMoaColour.getNames();
 
-        for (var1 = 0; var1 < AetherMoaColour.colours.size(); ++var1)
+        for (i = 0; i < AetherMoaColour.colours.size(); ++i)
         {
-            LanguageRegistry.addName(new ItemStack(MoaEgg, 1, var1), var9[var1] + " Moa Egg");
+            LanguageRegistry.addName(new ItemStack(MoaEgg, 1, i), var9[i] + " Moa Egg");
         }
 
         LanguageRegistry.addName(new ItemStack(SkyrootBucket, 1, Block.waterMoving.blockID), "Skyroot Water Bucket");
+    }
+
+    public static ResourceLocation getResourceLocation(String type, String name)
+    {
+        return new ResourceLocation("aether", (String)spritesPath.get(type) + name);
     }
 }

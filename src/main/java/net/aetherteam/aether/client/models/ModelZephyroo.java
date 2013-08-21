@@ -164,38 +164,38 @@ public class ModelZephyroo extends ModelBase
     /**
      * Sets the models various rotation angles then renders the model.
      */
-    public void render(Entity var1, float var2, float var3, float var4, float var5, float var6, float var7)
+    public void render(Entity entity, float f, float f1, float f2, float f3, float f4, float f5)
     {
-        super.render(var1, var2, var3, var4, var5, var6, var7);
-        this.setRotationAngles(var2, var3, var4, var5, var6, var7, var1);
-        this.LeftHand.render(var7);
-        this.LeftArm.render(var7);
-        this.LeftFoot.render(var7);
-        this.LeftLeg.render(var7);
-        this.LeftHip.render(var7);
-        this.LeftShoulder.render(var7);
-        this.TailBottom.render(var7);
-        this.Pouch.render(var7);
-        this.Snout.render(var7);
-        this.RightHip.render(var7);
-        this.RightLeg.render(var7);
-        this.RightFoot.render(var7);
-        this.RightShoulder.render(var7);
-        this.RightArm.render(var7);
-        this.RightHand.render(var7);
-        this.TailTop.render(var7);
-        this.EarLeft.render(var7);
-        this.Neck.render(var7);
-        this.EarRight.render(var7);
-        this.Head.render(var7);
-        this.Body.render(var7);
+        super.render(entity, f, f1, f2, f3, f4, f5);
+        this.setRotationAngles(f, f1, f2, f3, f4, f5, entity);
+        this.LeftHand.render(f5);
+        this.LeftArm.render(f5);
+        this.LeftFoot.render(f5);
+        this.LeftLeg.render(f5);
+        this.LeftHip.render(f5);
+        this.LeftShoulder.render(f5);
+        this.TailBottom.render(f5);
+        this.Pouch.render(f5);
+        this.Snout.render(f5);
+        this.RightHip.render(f5);
+        this.RightLeg.render(f5);
+        this.RightFoot.render(f5);
+        this.RightShoulder.render(f5);
+        this.RightArm.render(f5);
+        this.RightHand.render(f5);
+        this.TailTop.render(f5);
+        this.EarLeft.render(f5);
+        this.Neck.render(f5);
+        this.EarRight.render(f5);
+        this.Head.render(f5);
+        this.Body.render(f5);
     }
 
-    private void setRotation(ModelRenderer var1, float var2, float var3, float var4)
+    private void setRotation(ModelRenderer model, float x, float y, float z)
     {
-        var1.rotateAngleX = var2;
-        var1.rotateAngleY = var3;
-        var1.rotateAngleZ = var4;
+        model.rotateAngleX = x;
+        model.rotateAngleY = y;
+        model.rotateAngleZ = z;
     }
 
     /**
@@ -203,14 +203,14 @@ public class ModelZephyroo extends ModelBase
      * and legs, where par1 represents the time(so that arms and legs swing back and forth) and par2 represents how
      * "far" arms and legs can swing at most.
      */
-    public void setRotationAngles(float var1, float var2, float var3, float var4, float var5, float var6, Entity var7)
+    public void setRotationAngles(float f, float f1, float f2, float f3, float f4, float f5, Entity entity)
     {
-        super.setRotationAngles(var1, var2, var3, var4, var5, var6, var7);
+        super.setRotationAngles(f, f1, f2, f3, f4, f5, entity);
 
-        if (var7.motionX != 0.0D && var7.motionZ != 0.0D)
+        if (entity.motionX != 0.0D && entity.motionZ != 0.0D)
         {
-            this.RightLeg.rotateAngleX = (float)Math.cos((double)(((EntityZephyroo)var7).getTimeTilJump() * 0.5F));
-            this.LeftLeg.rotateAngleX = (float)Math.cos((double)(((EntityZephyroo)var7).getTimeTilJump() * 0.5F));
+            this.RightLeg.rotateAngleX = (float)Math.cos((double)(((EntityZephyroo)entity).getTimeTilJump() * 0.5F));
+            this.LeftLeg.rotateAngleX = (float)Math.cos((double)(((EntityZephyroo)entity).getTimeTilJump() * 0.5F));
             this.RightFoot.rotateAngleX = this.RightLeg.rotateAngleX + 0.25F;
             this.LeftFoot.rotateAngleX = this.RightLeg.rotateAngleX + 0.25F;
         }

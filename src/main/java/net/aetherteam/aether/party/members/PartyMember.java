@@ -2,47 +2,49 @@ package net.aetherteam.aether.party.members;
 
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import java.io.Serializable;
-import net.aetherteam.aether.Aether;
+import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 
 public class PartyMember implements Serializable
 {
     public String username;
-    public int skinIndex;
-    public String skinUrl;
+    private transient EntityPlayer player;
     private MemberType type;
     Side side;
 
-    public PartyMember(EntityPlayer var1)
+    public PartyMember(EntityPlayer player)
     {
         this.type = MemberType.MEMBER;
         this.side = FMLCommonHandler.instance().getEffectiveSide();
-        this.username = var1.username;
-
-        if (this.side.isClient())
-        {
-            this.skinIndex = Aether.proxy.getClient().renderEngine.getTextureForDownloadableImage(var1.skinUrl, "/mob/char.png");
-            this.skinUrl = var1.skinUrl;
-        }
+        this.username = player.username;
+        this.player = player;
     }
 
-    public PartyMember(String var1, String var2)
+    @SideOnly(Side.CLIENT)
+    public PartyMember(String username)
     {
         this.type = MemberType.MEMBER;
         this.side = FMLCommonHandler.instance().getEffectiveSide();
-        this.username = var1;
-
-        if (this.side.isClient())
-        {
-            this.skinIndex = Aether.proxy.getClient().renderEngine.getTextureForDownloadableImage(var2, "/mob/char.png");
-            this.skinUrl = var2;
-        }
+        this.username = username;
+        this.player = Minecraft.getMinecraft().theWorld.getPlayerEntityByName(username);
     }
 
-    public PartyMember promoteTo(MemberType var1)
+    @SideOnly(Side.CLIENT)
+    public EntityPlayer getPlayer()
     {
-        this.type = var1;
+        if (this.player == null)
+        {
+            this.player = Minecraft.getMinecraft().theWorld.getPlayerEntityByName(this.username);
+        }
+
+        return this.player;
+    }
+
+    public PartyMember promoteTo(MemberType type)
+    {
+        this.type = type;
         return this;
     }
 

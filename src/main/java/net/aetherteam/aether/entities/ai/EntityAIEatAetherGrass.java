@@ -12,10 +12,10 @@ public class EntityAIEatAetherGrass extends EntityAIBase
     private World theWorld;
     int eatGrassTick = 0;
 
-    public EntityAIEatAetherGrass(EntityLiving var1)
+    public EntityAIEatAetherGrass(EntityLiving par1EntityLiving)
     {
-        this.theEntity = var1;
-        this.theWorld = var1.worldObj;
+        this.theEntity = par1EntityLiving;
+        this.theWorld = par1EntityLiving.worldObj;
         this.setMutexBits(7);
     }
 
@@ -30,10 +30,10 @@ public class EntityAIEatAetherGrass extends EntityAIBase
         }
         else
         {
-            int var1 = MathHelper.floor_double(this.theEntity.posX);
-            int var2 = MathHelper.floor_double(this.theEntity.posY);
-            int var3 = MathHelper.floor_double(this.theEntity.posZ);
-            return this.theWorld.getBlockId(var1, var2, var3) == AetherBlocks.TallAetherGrass.blockID && this.theWorld.getBlockMetadata(var1, var2, var3) == 1 ? true : this.theWorld.getBlockId(var1, var2 - 1, var3) == AetherBlocks.AetherGrass.blockID;
+            int i = MathHelper.floor_double(this.theEntity.posX);
+            int j = MathHelper.floor_double(this.theEntity.posY);
+            int k = MathHelper.floor_double(this.theEntity.posZ);
+            return this.theWorld.getBlockId(i, j, k) == AetherBlocks.TallAetherGrass.blockID && this.theWorld.getBlockMetadata(i, j, k) == 1 ? true : this.theWorld.getBlockId(i, j - 1, k) == AetherBlocks.AetherGrass.blockID;
         }
     }
 
@@ -77,19 +77,19 @@ public class EntityAIEatAetherGrass extends EntityAIBase
 
         if (this.eatGrassTick == 4)
         {
-            int var1 = MathHelper.floor_double(this.theEntity.posX);
-            int var2 = MathHelper.floor_double(this.theEntity.posY);
-            int var3 = MathHelper.floor_double(this.theEntity.posZ);
+            int i = MathHelper.floor_double(this.theEntity.posX);
+            int j = MathHelper.floor_double(this.theEntity.posY);
+            int k = MathHelper.floor_double(this.theEntity.posZ);
 
-            if (this.theWorld.getBlockId(var1, var2, var3) == AetherBlocks.TallAetherGrass.blockID)
+            if (this.theWorld.getBlockId(i, j, k) == AetherBlocks.TallAetherGrass.blockID)
             {
-                this.theWorld.destroyBlock(var1, var2, var3, false);
+                this.theWorld.destroyBlock(i, j, k, false);
                 this.theEntity.eatGrassBonus();
             }
-            else if (this.theWorld.getBlockId(var1, var2 - 1, var3) == AetherBlocks.AetherGrass.blockID)
+            else if (this.theWorld.getBlockId(i, j - 1, k) == AetherBlocks.AetherGrass.blockID)
             {
-                this.theWorld.playAuxSFX(2001, var1, var2 - 1, var3, AetherBlocks.AetherGrass.blockID);
-                this.theWorld.setBlock(var1, var2 - 1, var3, AetherBlocks.AetherDirt.blockID, 0, 2);
+                this.theWorld.playAuxSFX(2001, i, j - 1, k, AetherBlocks.AetherGrass.blockID);
+                this.theWorld.setBlock(i, j - 1, k, AetherBlocks.AetherDirt.blockID, 0, 2);
                 this.theEntity.eatGrassBonus();
             }
         }

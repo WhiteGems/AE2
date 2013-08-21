@@ -3,27 +3,29 @@ package net.aetherteam.aether.client.gui;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.inventory.ContainerChest;
 import net.minecraft.inventory.IInventory;
+import net.minecraft.util.ResourceLocation;
 import org.lwjgl.opengl.GL11;
 
 public class GuiTreasureChest extends GuiContainer
 {
+    private static final ResourceLocation TEXTURE_CONTAINER = new ResourceLocation("textures/gui/container/generic_54.png");
     private IInventory upperChestInventory;
     private IInventory lowerChestInventory;
     private int inventoryRows = 0;
     private String name;
 
-    public GuiTreasureChest(IInventory var1, IInventory var2, int var3)
+    public GuiTreasureChest(IInventory iinventory, IInventory iinventory1, int meta)
     {
-        super(new ContainerChest(var1, var2));
-        this.upperChestInventory = var1;
-        this.lowerChestInventory = var2;
+        super(new ContainerChest(iinventory, iinventory1));
+        this.upperChestInventory = iinventory;
+        this.lowerChestInventory = iinventory1;
         this.allowUserInput = false;
-        short var4 = 222;
-        int var5 = var4 - 108;
-        this.inventoryRows = var2.getSizeInventory() / 9;
-        this.ySize = var5 + this.inventoryRows * 18;
+        short c = 222;
+        int i = c - 108;
+        this.inventoryRows = iinventory1.getSizeInventory() / 9;
+        this.ySize = i + this.inventoryRows * 18;
 
-        switch (var3)
+        switch (meta)
         {
             case 1:
                 this.name = "Bronze Treasure Chest";
@@ -51,13 +53,13 @@ public class GuiTreasureChest extends GuiContainer
     /**
      * Draw the background layer for the GuiContainer (everything behind the items)
      */
-    protected void drawGuiContainerBackgroundLayer(float var1, int var2, int var3)
+    protected void drawGuiContainerBackgroundLayer(float f, int i1, int i2)
     {
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-        this.mc.renderEngine.bindTexture("/gui/container.png");
-        int var4 = (this.width - this.xSize) / 2;
-        int var5 = (this.height - this.ySize) / 2;
-        this.drawTexturedModalRect(var4, var5, 0, 0, this.xSize, this.inventoryRows * 18 + 17);
-        this.drawTexturedModalRect(var4, var5 + this.inventoryRows * 18 + 17, 0, 126, this.xSize, 96);
+        this.mc.renderEngine.func_110577_a(TEXTURE_CONTAINER);
+        int j = (this.width - this.xSize) / 2;
+        int k = (this.height - this.ySize) / 2;
+        this.drawTexturedModalRect(j, k, 0, 0, this.xSize, this.inventoryRows * 18 + 17);
+        this.drawTexturedModalRect(j, k + this.inventoryRows * 18 + 17, 0, 126, this.xSize, 96);
     }
 }

@@ -16,78 +16,78 @@ public class SyncDonatorList
     boolean server = false;
     String MyRSA;
 
-    public void initialVerification(Minecraft var1)
+    public void initialVerification(Minecraft mc)
     {
-        String var2 = var1.session.username;
-        this.MyRSA = Aether.getInstance().getMyKey(var2.toLowerCase());
+        String Username = mc.func_110432_I().func_111285_a();
+        this.MyRSA = Aether.getInstance().getMyKey(Username.toLowerCase());
 
         if (this.MyRSA != null)
         {
             Aether.getInstance();
-            Aether.syncDonatorList.addMe(var2.toLowerCase(), this.MyRSA);
+            Aether.syncDonatorList.addMe(Username.toLowerCase(), this.MyRSA);
         }
     }
 
-    public void addMe(String var1, String var2)
+    public void addMe(String username, String myRSA)
     {
         if (!this.server)
         {
-            this.meName = var1.toLowerCase();
+            this.meName = username.toLowerCase();
 
-            if (var2 != null)
+            if (myRSA != null)
             {
-                this.meDonator = new Donator(var1.toLowerCase(), var2);
+                this.meDonator = new Donator(username.toLowerCase(), myRSA);
                 this.addDonator(this.meName.toLowerCase(), this.meDonator);
             }
         }
     }
 
-    public boolean isDonator(String var1)
+    public boolean isDonator(String name)
     {
-        return this.DonatorList.containsKey(var1.toLowerCase());
+        return this.DonatorList.containsKey(name.toLowerCase());
     }
 
-    public Donator getDonator(String var1)
+    public Donator getDonator(String name)
     {
-        return (Donator)this.DonatorList.get(var1.toLowerCase());
+        return (Donator)this.DonatorList.get(name.toLowerCase());
     }
 
-    public void addDonator(String var1, Donator var2)
+    public void addDonator(String name, Donator donator)
     {
-        if (Aether.instance.isLegit(var1.toLowerCase(), var2.getRSA()))
+        if (Aether.instance.isLegit(name.toLowerCase(), donator.getRSA()))
         {
-            this.DonatorList.put(var1.toLowerCase(), var2);
+            this.DonatorList.put(name.toLowerCase(), donator);
         }
 
         if (this.server)
         {
-            this.sendDonatorToAll(var1.toLowerCase(), var2);
+            this.sendDonatorToAll(name.toLowerCase(), donator);
         }
     }
 
-    public void sendDonatorToAll(String var1, Donator var2)
+    public void sendDonatorToAll(String name, Donator donator)
     {
-        PacketDispatcher.sendPacketToAllPlayers(AetherPacketHandler.sendDonatorChange(var1.toLowerCase(), var2));
+        PacketDispatcher.sendPacketToAllPlayers(AetherPacketHandler.sendDonatorChange(name.toLowerCase(), donator));
     }
 
-    public void sendChoiceToAll(String var1, DonatorChoice var2, boolean var3)
+    public void sendChoiceToAll(String donator, DonatorChoice choice, boolean adding)
     {
-        PacketDispatcher.sendPacketToServer(AetherPacketHandler.sendDonatorChoice(var1.toLowerCase(), var2, var3, (byte)0));
+        PacketDispatcher.sendPacketToServer(AetherPacketHandler.sendDonatorChoice(donator.toLowerCase(), choice, adding, (byte)0));
     }
 
-    public void sendTypeRemoveToAll(String var1, EnumChoiceType var2)
+    public void sendTypeRemoveToAll(String donator, EnumChoiceType type)
     {
-        PacketDispatcher.sendPacketToServer(AetherPacketHandler.sendDonatorTypeRemoval(var1.toLowerCase(), var2, (byte)0));
+        PacketDispatcher.sendPacketToServer(AetherPacketHandler.sendDonatorTypeRemoval(donator.toLowerCase(), type, (byte)0));
     }
 
-    void sendAllToOne(Player var1)
+    void sendAllToOne(Player player)
     {
-        Iterator var2 = this.DonatorList.values().iterator();
+        Iterator i = this.DonatorList.values().iterator();
 
-        while (var2.hasNext())
+        while (i.hasNext())
         {
-            String var3 = (String)var2.next();
-            PacketDispatcher.sendPacketToPlayer(AetherPacketHandler.sendDonatorChange(var3, (Donator)this.DonatorList.get(var3.toLowerCase())), var1);
+            String name = (String)i.next();
+            PacketDispatcher.sendPacketToPlayer(AetherPacketHandler.sendDonatorChange(name, (Donator)this.DonatorList.get(name.toLowerCase())), player);
         }
     }
 }

@@ -95,28 +95,28 @@ public class ModelAerwhale extends ModelBase
     /**
      * Sets the models various rotation angles then renders the model.
      */
-    public void render(Entity var1, float var2, float var3, float var4, float var5, float var6, float var7)
+    public void render(Entity entity, float f, float f1, float f2, float f3, float f4, float f5)
     {
-        super.render(var1, var2, var3, var4, var5, var6, var7);
-        this.setRotationAngles(var2, var3, var4, var5, var6, var7, var1);
-        this.FrontBody.render(var7);
-        this.RightFin.render(var7);
-        this.BottomPartHead.render(var7);
-        this.LeftFin.render(var7);
-        this.BottomPartMiddlebody.render(var7);
-        this.Head.render(var7);
-        this.MiddleFin.render(var7);
-        this.BackfinRight.render(var7);
-        this.BackBody.render(var7);
-        this.BackfinLeft.render(var7);
-        this.Middlebody.render(var7);
+        super.render(entity, f, f1, f2, f3, f4, f5);
+        this.setRotationAngles(f, f1, f2, f3, f4, f5, entity);
+        this.FrontBody.render(f5);
+        this.RightFin.render(f5);
+        this.BottomPartHead.render(f5);
+        this.LeftFin.render(f5);
+        this.BottomPartMiddlebody.render(f5);
+        this.Head.render(f5);
+        this.MiddleFin.render(f5);
+        this.BackfinRight.render(f5);
+        this.BackBody.render(f5);
+        this.BackfinLeft.render(f5);
+        this.Middlebody.render(f5);
     }
 
-    private void setRotation(ModelRenderer var1, float var2, float var3, float var4)
+    private void setRotation(ModelRenderer model, float x, float y, float z)
     {
-        var1.rotateAngleX = var2;
-        var1.rotateAngleY = var3;
-        var1.rotateAngleZ = var4;
+        model.rotateAngleX = x;
+        model.rotateAngleY = y;
+        model.rotateAngleZ = z;
     }
 
     /**
@@ -124,8 +124,8 @@ public class ModelAerwhale extends ModelBase
      * and legs, where par1 represents the time(so that arms and legs swing back and forth) and par2 represents how
      * "far" arms and legs can swing at most.
      */
-    public void setRotationAngles(float var1, float var2, float var3, float var4, float var5, float var6, Entity var7)
+    public void setRotationAngles(float f, float f1, float f2, float f3, float f4, float f5, Entity entity)
     {
-        super.setRotationAngles(var1, var2, var3, var4, var5, var6, var7);
+        super.setRotationAngles(f, f1, f2, f3, f4, f5, entity);
     }
 }

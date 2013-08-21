@@ -7,14 +7,15 @@ public class BlockAether extends Block implements IAetherBlock
 {
     private boolean isDungeonBlock = false;
 
-    protected BlockAether(int var1, Material var2)
+    protected BlockAether(int id, Material material)
     {
-        super(var1, var2);
+        super(id, material);
     }
 
-    public Block setIconName(String var1)
+    public Block setIconName(String name)
     {
-        return this.setUnlocalizedName("Aether:" + var1);
+        this.field_111026_f = "aether:" + name;
+        return this.setUnlocalizedName("aether:" + name);
     }
 
     public boolean isDungeonBlock()
@@ -22,9 +23,9 @@ public class BlockAether extends Block implements IAetherBlock
         return this.isDungeonBlock;
     }
 
-    public BlockAether setDungeonBlock(boolean var1)
+    public BlockAether setDungeonBlock(boolean isDungeonBlock)
     {
-        this.isDungeonBlock = var1;
+        this.isDungeonBlock = isDungeonBlock;
         return this;
     }
 }

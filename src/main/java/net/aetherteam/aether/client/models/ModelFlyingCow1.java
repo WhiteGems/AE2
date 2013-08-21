@@ -43,26 +43,26 @@ public class ModelFlyingCow1 extends ModelQuadruped
     /**
      * Sets the models various rotation angles then renders the model.
      */
-    public void render(Entity var1, float var2, float var3, float var4, float var5, float var6, float var7)
+    public void render(Entity e, float f, float f1, float f2, float f3, float f4, float f5)
     {
-        super.render(var1, var2, var3, var4, var5, var6, var7);
+        super.render(e, f, f1, f2, f3, f4, f5);
 
         if (this.isChild)
         {
-            float var8 = 2.0F;
+            float f6 = 2.0F;
             GL11.glPushMatrix();
             GL11.glPopMatrix();
-            GL11.glScalef(1.0F / var8, 1.0F / var8, 1.0F / var8);
-            GL11.glTranslatef(0.0F, 24.0F * var7, 0.0F);
-            this.horn1.render(var7);
-            this.horn2.render(var7);
-            this.udders.render(var7);
+            GL11.glScalef(1.0F / f6, 1.0F / f6, 1.0F / f6);
+            GL11.glTranslatef(0.0F, 24.0F * f5, 0.0F);
+            this.horn1.render(f5);
+            this.horn2.render(f5);
+            this.udders.render(f5);
         }
         else
         {
-            this.horn1.render(var7);
-            this.horn2.render(var7);
-            this.udders.render(var7);
+            this.horn1.render(f5);
+            this.horn2.render(f5);
+            this.udders.render(f5);
         }
     }
 
@@ -71,9 +71,9 @@ public class ModelFlyingCow1 extends ModelQuadruped
      * and legs, where par1 represents the time(so that arms and legs swing back and forth) and par2 represents how
      * "far" arms and legs can swing at most.
      */
-    public void setRotationAngles(float var1, float var2, float var3, float var4, float var5, float var6, Entity var7)
+    public void setRotationAngles(float f, float f1, float f2, float f3, float f4, float f5, Entity entity)
     {
-        super.setRotationAngles(var1, var2, var3, var4, var5, var6, var7);
+        super.setRotationAngles(f, f1, f2, f3, f4, f5, entity);
         this.horn1.rotateAngleY = this.head.rotateAngleY;
         this.horn1.rotateAngleX = this.head.rotateAngleX;
         this.horn2.rotateAngleY = this.head.rotateAngleY;

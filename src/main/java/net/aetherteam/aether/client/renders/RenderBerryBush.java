@@ -10,51 +10,51 @@ import org.lwjgl.opengl.GL11;
 
 public class RenderBerryBush implements ISimpleBlockRenderingHandler
 {
-    public void renderInventoryBlock(Block var1, int var2, int var3, RenderBlocks var4)
+    public void renderInventoryBlock(Block block, int metadata, int modelID, RenderBlocks renderer)
     {
-        if (var3 == this.getRenderId())
+        if (modelID == this.getRenderId())
         {
-            Tessellator var5 = Tessellator.instance;
-            var5.startDrawingQuads();
-            var5.setNormal(0.0F, -1.0F, 0.0F);
-            var4.drawCrossedSquares(var1, var2, -0.5D, -0.5D, -0.5D, 1.0F);
-            var5.draw();
-            var1.setBlockBoundsForItemRender();
+            Tessellator tessellator = Tessellator.instance;
+            tessellator.startDrawingQuads();
+            tessellator.setNormal(0.0F, -1.0F, 0.0F);
+            renderer.drawCrossedSquares(block, metadata, -0.5D, -0.5D, -0.5D, 1.0F);
+            tessellator.draw();
+            block.setBlockBoundsForItemRender();
             GL11.glTranslatef(-0.5F, -0.5F, -0.5F);
-            var5.startDrawingQuads();
-            var5.setNormal(0.0F, -1.0F, 0.0F);
-            var4.renderFaceYNeg(var1, 0.0D, 0.0D, 0.0D, var1.getIcon(0, var2));
-            var5.draw();
-            var5.startDrawingQuads();
-            var5.setNormal(0.0F, 1.0F, 0.0F);
-            var4.renderFaceYPos(var1, 0.0D, 0.0D, 0.0D, var1.getIcon(1, var2));
-            var5.draw();
-            var5.startDrawingQuads();
-            var5.setNormal(0.0F, 0.0F, -1.0F);
-            var4.renderFaceZPos(var1, 0.0D, 0.0D, 0.0D, var1.getIcon(2, var2));
-            var5.draw();
-            var5.startDrawingQuads();
-            var5.setNormal(0.0F, 0.0F, 1.0F);
-            var4.renderFaceZNeg(var1, 0.0D, 0.0D, 0.0D, var1.getIcon(3, var2));
-            var5.draw();
-            var5.startDrawingQuads();
-            var5.setNormal(-1.0F, 0.0F, 0.0F);
-            var4.renderFaceXPos(var1, 0.0D, 0.0D, 0.0D, var1.getIcon(4, var2));
-            var5.draw();
-            var5.startDrawingQuads();
-            var5.setNormal(1.0F, 0.0F, 0.0F);
-            var4.renderFaceXNeg(var1, 0.0D, 0.0D, 0.0D, var1.getIcon(5, var2));
-            var5.draw();
+            tessellator.startDrawingQuads();
+            tessellator.setNormal(0.0F, -1.0F, 0.0F);
+            renderer.renderFaceYNeg(block, 0.0D, 0.0D, 0.0D, block.getIcon(0, metadata));
+            tessellator.draw();
+            tessellator.startDrawingQuads();
+            tessellator.setNormal(0.0F, 1.0F, 0.0F);
+            renderer.renderFaceYPos(block, 0.0D, 0.0D, 0.0D, block.getIcon(1, metadata));
+            tessellator.draw();
+            tessellator.startDrawingQuads();
+            tessellator.setNormal(0.0F, 0.0F, -1.0F);
+            renderer.renderFaceZPos(block, 0.0D, 0.0D, 0.0D, block.getIcon(2, metadata));
+            tessellator.draw();
+            tessellator.startDrawingQuads();
+            tessellator.setNormal(0.0F, 0.0F, 1.0F);
+            renderer.renderFaceZNeg(block, 0.0D, 0.0D, 0.0D, block.getIcon(3, metadata));
+            tessellator.draw();
+            tessellator.startDrawingQuads();
+            tessellator.setNormal(-1.0F, 0.0F, 0.0F);
+            renderer.renderFaceXPos(block, 0.0D, 0.0D, 0.0D, block.getIcon(4, metadata));
+            tessellator.draw();
+            tessellator.startDrawingQuads();
+            tessellator.setNormal(1.0F, 0.0F, 0.0F);
+            renderer.renderFaceXNeg(block, 0.0D, 0.0D, 0.0D, block.getIcon(5, metadata));
+            tessellator.draw();
             GL11.glTranslatef(0.5F, 0.5F, 0.5F);
         }
     }
 
-    public boolean renderWorldBlock(IBlockAccess var1, int var2, int var3, int var4, Block var5, int var6, RenderBlocks var7)
+    public boolean renderWorldBlock(IBlockAccess world, int x, int y, int z, Block block, int modelID, RenderBlocks renderer)
     {
-        if (var6 == this.getRenderId())
+        if (modelID == this.getRenderId())
         {
-            var7.renderCrossedSquares(var5, var2, var3, var4);
-            var7.renderStandardBlock(var5, var2, var3, var4);
+            renderer.renderCrossedSquares(block, x, y, z);
+            renderer.renderStandardBlock(block, x, y, z);
             return true;
         }
         else

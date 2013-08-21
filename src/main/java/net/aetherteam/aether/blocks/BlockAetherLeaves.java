@@ -29,38 +29,38 @@ public class BlockAetherLeaves extends BlockLeaves implements IAetherBlock
     private Icon opaqueIcon;
     private int itemDropped;
 
-    protected BlockAetherLeaves(int var1, int var2)
+    protected BlockAetherLeaves(int blockID, int droppedID)
     {
-        super(var1);
+        super(blockID);
         this.itemDropped = AetherBlocks.GreenSkyrootSaplingID;
         this.setTickRandomly(true);
         this.setHardness(0.2F);
         this.setLightOpacity(1);
         this.setStepSound(Block.soundGrassFootstep);
 
-        if (var2 != 0)
+        if (droppedID != 0)
         {
-            this.itemDropped = var2;
+            this.itemDropped = droppedID;
         }
     }
 
-    protected BlockAetherLeaves(int var1)
+    protected BlockAetherLeaves(int blockID)
     {
-        this(var1, 0);
+        this(blockID, 0);
     }
 
     /**
      * Determines the damage on the item the block drops. Used in cloth and wood.
      */
-    public int damageDropped(int var1)
+    public int damageDropped(int i)
     {
-        return var1 & 3;
+        return i & 3;
     }
 
     /**
      * Returns the color this block should be rendered. Used by leaves.
      */
-    public int getRenderColor(int var1)
+    public int getRenderColor(int i)
     {
         return 16777215;
     }
@@ -69,88 +69,88 @@ public class BlockAetherLeaves extends BlockLeaves implements IAetherBlock
      * Called when the player destroys a block with an item that can harvest it. (i, j, k) are the coordinates of the
      * block and l is the block's subtype/damage.
      */
-    public void harvestBlock(World var1, EntityPlayer var2, int var3, int var4, int var5, int var6)
+    public void harvestBlock(World world, EntityPlayer entityplayer, int i, int j, int k, int l)
     {
-        if (!var1.isRemote && var2.getCurrentEquippedItem() != null && var2.getCurrentEquippedItem().itemID == Item.shears.itemID)
+        if (!world.isRemote && entityplayer.getCurrentEquippedItem() != null && entityplayer.getCurrentEquippedItem().itemID == Item.shears.itemID)
         {
-            var2.addStat(StatList.mineBlockStatArray[this.blockID], 1);
-            this.dropBlockAsItem_do(var1, var3, var4, var5, new ItemStack(this.blockID, 1, var6 & 3));
+            entityplayer.addStat(StatList.mineBlockStatArray[this.blockID], 1);
+            this.dropBlockAsItem_do(world, i, j, k, new ItemStack(this.blockID, 1, l & 3));
         }
         else
         {
-            super.harvestBlock(var1, var2, var3, var4, var5, var6);
+            super.harvestBlock(world, entityplayer, i, j, k, l);
         }
     }
 
     /**
      * Returns the ID of the items to drop on destruction.
      */
-    public int idDropped(int var1, Random var2, int var3)
+    public int idDropped(int i, Random random, int j)
     {
-        return this.blockID == AetherBlocks.GoldenOakLeaves.blockID ? (var2.nextInt(10) == 0 ? Item.appleGold.itemID : AetherBlocks.GoldenOakSapling.blockID) : (this.blockID == AetherBlocks.GreenSkyrootLeaves.blockID ? (var2.nextInt(6) == 0 ? AetherBlocks.BlockOrangeTree.blockID : AetherBlocks.GreenSkyrootSapling.blockID) : this.itemDropped);
+        return this.blockID == AetherBlocks.GoldenOakLeaves.blockID ? (random.nextInt(10) == 0 ? Item.appleGold.itemID : AetherBlocks.GoldenOakSapling.blockID) : (this.blockID == AetherBlocks.GreenSkyrootLeaves.blockID ? (random.nextInt(6) == 0 ? AetherBlocks.BlockOrangeTree.blockID : AetherBlocks.GreenSkyrootSapling.blockID) : this.itemDropped);
     }
 
-    private boolean isMyTrunkMeta(int var1)
+    private boolean isMyTrunkMeta(int meta)
     {
-        return this.blockID == AetherBlocks.GoldenOakLeaves.blockID ? var1 >= 2 : var1 <= 1;
+        return this.blockID == AetherBlocks.GoldenOakLeaves.blockID ? meta >= 2 : meta <= 1;
     }
 
-    private boolean nearTrunk(World var1, int var2, int var3, int var4)
+    private boolean nearTrunk(World world, int px, int py, int pz)
     {
-        Loc var5 = new Loc(var2, var3, var4);
-        LinkedList var6 = new LinkedList();
-        ArrayList var7 = new ArrayList();
-        var6.offer(new Loc(var2, var3, var4));
-        int var8 = this.blockID;
+        Loc startLoc = new Loc(px, py, pz);
+        LinkedList toCheck = new LinkedList();
+        ArrayList checked = new ArrayList();
+        toCheck.offer(new Loc(px, py, pz));
+        int bLeaves = this.blockID;
 
-        while (!var6.isEmpty())
+        while (!toCheck.isEmpty())
         {
-            Loc var9 = (Loc)var6.poll();
+            Loc curLoc = (Loc)toCheck.poll();
 
-            if (!var7.contains(var9))
+            if (!checked.contains(curLoc))
             {
-                if (var9.distSimple(var5) <= 6)
+                if (curLoc.distSimple(startLoc) <= 6)
                 {
-                    int var10 = var9.getBlock(var1);
-                    var9.getMeta(var1);
+                    int block = curLoc.getBlock(world);
+                    curLoc.getMeta(world);
 
-                    if (var10 == AetherBlocks.AetherLog.blockID)
+                    if (block == AetherBlocks.AetherLog.blockID)
                     {
                         return true;
                     }
 
-                    if (var10 == var8)
+                    if (block == bLeaves)
                     {
-                        var6.addAll(Arrays.asList(var9.adjacent()));
+                        toCheck.addAll(Arrays.asList(curLoc.adjacent()));
                     }
                 }
 
-                var7.add(var9);
+                checked.add(curLoc);
             }
         }
 
         return false;
     }
 
-    public void onBlockRemoval(World var1, int var2, int var3, int var4)
+    public void onBlockRemoval(World world, int i, int j, int k)
     {
-        byte var5 = 1;
-        int var6 = var5 + 1;
+        byte l = 1;
+        int i1 = l + 1;
 
-        if (var1.checkChunksExist(var2 - var6, var3 - var6, var4 - var6, var2 + var6, var3 + var6, var4 + var6))
+        if (world.checkChunksExist(i - i1, j - i1, k - i1, i + i1, j + i1, k + i1))
         {
-            for (int var7 = -var5; var7 <= var5; ++var7)
+            for (int j1 = -l; j1 <= l; ++j1)
             {
-                for (int var8 = -var5; var8 <= var5; ++var8)
+                for (int k1 = -l; k1 <= l; ++k1)
                 {
-                    for (int var9 = -var5; var9 <= var5; ++var9)
+                    for (int l1 = -l; l1 <= l; ++l1)
                     {
-                        int var10 = var1.getBlockId(var2 + var7, var3 + var8, var4 + var9);
+                        int i2 = world.getBlockId(i + j1, j + k1, k + l1);
 
-                        if (var10 == this.blockID)
+                        if (i2 == this.blockID)
                         {
-                            int var11 = var1.getBlockMetadata(var2 + var7, var3 + var8, var4 + var9);
-                            var1.setBlockMetadataWithNotify(var2 + var7, var3 + var8, var4 + var9, var11 | 8, 4);
+                            int j2 = world.getBlockMetadata(i + j1, j + k1, k + l1);
+                            world.setBlockMetadataWithNotify(i + j1, j + k1, k + l1, j2 | 8, 4);
                         }
                     }
                 }
@@ -164,10 +164,10 @@ public class BlockAetherLeaves extends BlockLeaves implements IAetherBlock
      * When this method is called, your block should register all the icons it needs with the given IconRegister. This
      * is the only chance you get to register icons.
      */
-    public void registerIcons(IconRegister var1)
+    public void registerIcons(IconRegister par1IconRegister)
     {
-        this.normalIcon = var1.registerIcon(this.getUnlocalizedName2());
-        this.opaqueIcon = var1.registerIcon(this.getUnlocalizedName2() + "_Opaque");
+        this.normalIcon = par1IconRegister.registerIcon(this.getUnlocalizedName().substring(5));
+        this.opaqueIcon = par1IconRegister.registerIcon(this.getUnlocalizedName().substring(5) + "_Opaque");
     }
 
     @SideOnly(Side.CLIENT)
@@ -175,7 +175,7 @@ public class BlockAetherLeaves extends BlockLeaves implements IAetherBlock
     /**
      * From the specified side and block metadata retrieves the blocks texture. Args: side, metadata
      */
-    public Icon getIcon(int var1, int var2)
+    public Icon getIcon(int par1, int par2)
     {
         this.setGraphicsLevel(Minecraft.getMinecraft().gameSettings.fancyGraphics);
         return this.graphicsLevel ? this.normalIcon : this.opaqueIcon;
@@ -193,7 +193,7 @@ public class BlockAetherLeaves extends BlockLeaves implements IAetherBlock
      * Returns a integer with hex for 0xrrggbb with this color multiplied against the blocks color. Note only called
      * when first determining what to render.
      */
-    public int colorMultiplier(IBlockAccess var1, int var2, int var3, int var4)
+    public int colorMultiplier(IBlockAccess par1IBlockAccess, int par2, int par3, int par4)
     {
         return 16777215;
     }
@@ -201,9 +201,9 @@ public class BlockAetherLeaves extends BlockLeaves implements IAetherBlock
     /**
      * Returns the quantity of items to drop on block destruction.
      */
-    public int quantityDropped(Random var1)
+    public int quantityDropped(Random random)
     {
-        return this.blockID == AetherBlocks.GoldenOakLeaves.blockID ? (var1.nextInt(10) == 0 ? 1 : 0) : (var1.nextInt(5) == 0 ? 1 : 0);
+        return this.blockID == AetherBlocks.GoldenOakLeaves.blockID ? (random.nextInt(10) == 0 ? 1 : 0) : (random.nextInt(5) == 0 ? 1 : 0);
     }
 
     @SideOnly(Side.CLIENT)
@@ -211,44 +211,44 @@ public class BlockAetherLeaves extends BlockLeaves implements IAetherBlock
     /**
      * A randomly called display update to be able to add particles or other items for display
      */
-    public void randomDisplayTick(World var1, int var2, int var3, int var4, Random var5)
+    public void randomDisplayTick(World world, int i, int j, int k, Random random)
     {
-        super.randomDisplayTick(var1, var2, var3, var4, var5);
+        super.randomDisplayTick(world, i, j, k, random);
 
-        if (this.blockID == AetherBlocks.GoldenOakLeaves.blockID && Minecraft.getMinecraft().gameSettings.particleSetting != 2 && var1.isRemote)
+        if (this.blockID == AetherBlocks.GoldenOakLeaves.blockID && Minecraft.getMinecraft().gameSettings.particleSetting != 2 && world.isRemote)
         {
-            for (int var6 = 0; var6 < 4; ++var6)
+            for (int l = 0; l < 4; ++l)
             {
-                double var7 = (double)var2 + ((double)var5.nextFloat() - 0.5D) * 10.0D;
-                double var9 = (double)var3 + ((double)var5.nextFloat() - 0.5D) * 10.0D;
-                double var11 = (double)var4 + ((double)var5.nextFloat() - 0.5D) * 10.0D;
-                double var13 = 0.0D;
-                double var15 = 0.0D;
-                double var17 = 0.0D;
-                var13 = ((double)var5.nextFloat() - 0.5D) * 0.5D;
-                var15 = ((double)var5.nextFloat() - 0.5D) * 0.5D;
-                var17 = ((double)var5.nextFloat() - 0.5D) * 0.5D;
-                EntityGoldenFX var19 = new EntityGoldenFX(var1, var7, var9, var11, var13, var15, var17, false);
-                FMLClientHandler.instance().getClient().effectRenderer.addEffect(var19);
+                double d = (double)i + ((double)random.nextFloat() - 0.5D) * 10.0D;
+                double d1 = (double)j + ((double)random.nextFloat() - 0.5D) * 10.0D;
+                double d2 = (double)k + ((double)random.nextFloat() - 0.5D) * 10.0D;
+                double d3 = 0.0D;
+                double d4 = 0.0D;
+                double d5 = 0.0D;
+                d3 = ((double)random.nextFloat() - 0.5D) * 0.5D;
+                d4 = ((double)random.nextFloat() - 0.5D) * 0.5D;
+                d5 = ((double)random.nextFloat() - 0.5D) * 0.5D;
+                EntityGoldenFX obj = new EntityGoldenFX(world, d, d1, d2, d3, d4, d5, false);
+                FMLClientHandler.instance().getClient().effectRenderer.addEffect(obj);
             }
         }
     }
 
-    private void removeLeaves(World var1, int var2, int var3, int var4)
+    private void removeLeaves(World world, int px, int py, int pz)
     {
-        var1.setBlock(var2, var3, var4, 0);
+        world.setBlock(px, py, pz, 0);
     }
 
     /**
      * Ticks the block if it's been scheduled
      */
-    public void updateTick(World var1, int var2, int var3, int var4, Random var5)
+    public void updateTick(World world, int i, int j, int k, Random rand)
     {
-        if (!var1.isRemote && AetherBlocks.GoldenOakSaplingID != this.blockID)
+        if (!world.isRemote && AetherBlocks.GoldenOakSaplingID != this.blockID)
         {
-            if (!this.nearTrunk(var1, var2, var3, var4))
+            if (!this.nearTrunk(world, i, j, k))
             {
-                this.removeLeaves(var1, var2, var3, var4);
+                this.removeLeaves(world, i, j, k);
             }
         }
     }
@@ -258,13 +258,14 @@ public class BlockAetherLeaves extends BlockLeaves implements IAetherBlock
     /**
      * returns a list of blocks with the same ID, but different meta (eg: wood returns 4 blocks)
      */
-    public void getSubBlocks(int var1, CreativeTabs var2, List var3)
+    public void getSubBlocks(int par1, CreativeTabs par2CreativeTabs, List par3List)
     {
-        var3.add(new ItemStack(var1, 1, 0));
+        par3List.add(new ItemStack(par1, 1, 0));
     }
 
-    public Block setIconName(String var1)
+    public Block setIconName(String name)
     {
-        return this.setUnlocalizedName("Aether:" + var1);
+        this.field_111026_f = "aether:" + name;
+        return this.setUnlocalizedName("aether:" + name);
     }
 }

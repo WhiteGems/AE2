@@ -10,14 +10,15 @@ import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.GuiTextField;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.ResourceLocation;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.GL11;
 
 public class GuiEditPartyName extends GuiScreen
 {
+    private static final ResourceLocation TEXTURE_DIALOGUE = new ResourceLocation("aether", "textures/gui/dialogue.png");
     private GuiTextField dialogueInput;
     private String name;
-    private int dialogueTexture;
     private int xParty;
     private int yParty;
     private int wParty;
@@ -28,18 +29,17 @@ public class GuiEditPartyName extends GuiScreen
     private GuiScreen parent;
     private EntityPlayer player;
 
-    public GuiEditPartyName(EntityPlayer var1, GuiScreen var2)
+    public GuiEditPartyName(EntityPlayer player, GuiScreen parent)
     {
-        this(new PartyData(), var1, var2);
+        this(new PartyData(), player, parent);
     }
 
-    public GuiEditPartyName(PartyData var1, EntityPlayer var2, GuiScreen var3)
+    public GuiEditPartyName(PartyData pm, EntityPlayer player, GuiScreen parent)
     {
         this.name = "Aether Party";
-        this.parent = var3;
-        this.player = var2;
+        this.parent = parent;
+        this.player = player;
         this.mc = FMLClientHandler.instance().getClient();
-        this.dialogueTexture = this.mc.renderEngine.getTexture("/net/aetherteam/aether/client/sprites/gui/dialogue.png");
         this.wParty = 256;
         this.hParty = 256;
         this.updateScreen();
@@ -64,46 +64,46 @@ public class GuiEditPartyName extends GuiScreen
     /**
      * Fired when a key is typed. This is the equivalent of KeyListener.keyTyped(KeyEvent e).
      */
-    protected void keyTyped(char var1, int var2)
+    protected void keyTyped(char charTyped, int keyTyped)
     {
         if (this.dialogueInput.isFocused())
         {
-            this.dialogueInput.textboxKeyTyped(var1, var2);
+            this.dialogueInput.textboxKeyTyped(charTyped, keyTyped);
         }
-        else if (var2 == Minecraft.getMinecraft().gameSettings.keyBindInventory.keyCode)
+        else if (keyTyped == Minecraft.getMinecraft().gameSettings.keyBindInventory.keyCode)
         {
             this.mc.displayGuiScreen((GuiScreen)null);
             this.mc.setIngameFocus();
         }
 
-        super.keyTyped(var1, var2);
+        super.keyTyped(charTyped, keyTyped);
     }
 
     /**
      * Called when the mouse is clicked.
      */
-    protected void mouseClicked(int var1, int var2, int var3)
+    protected void mouseClicked(int par1, int par2, int par3)
     {
-        this.dialogueInput.mouseClicked(var1, var2, var3);
-        super.mouseClicked(var1, var2, var3);
+        this.dialogueInput.mouseClicked(par1, par2, par3);
+        super.mouseClicked(par1, par2, par3);
     }
 
     /**
      * Fired when a control is clicked. This is the equivalent of ActionListener.actionPerformed(ActionEvent e).
      */
-    protected void actionPerformed(GuiButton var1)
+    protected void actionPerformed(GuiButton button)
     {
-        switch (var1.id)
+        switch (button.id)
         {
             case 0:
-                Party var2 = PartyController.instance().getParty(this.player);
-                boolean var3 = PartyController.instance().isLeader(this.player);
+                Party party = PartyController.instance().getParty(this.player);
+                boolean isLeader = PartyController.instance().isLeader(this.player);
 
-                if (var3 && var2 != null)
+                if (isLeader && party != null)
                 {
-                    String var4 = var2.getName();
-                    boolean var5 = PartyController.instance().changePartyName(var2, this.dialogueInput.getText(), true);
-                    this.mc.displayGuiScreen(new GuiDialogueBox(this.parent, "Party name was changed to \'" + this.dialogueInput.getText() + "\'!", "That party name is already taken. Sorry :(", var5));
+                    String partyName = party.getName();
+                    boolean nameChanged = PartyController.instance().changePartyName(party, this.dialogueInput.getText(), true);
+                    this.mc.displayGuiScreen(new GuiDialogueBox(this.parent, "Party name was changed to \'" + this.dialogueInput.getText() + "\'!", "That party name is already taken. Sorry :(", nameChanged));
                 }
 
                 break;
@@ -124,30 +124,30 @@ public class GuiEditPartyName extends GuiScreen
     /**
      * Draws the screen and all the components in it.
      */
-    public void drawScreen(int var1, int var2, float var3)
+    public void drawScreen(int x, int y, float partialTick)
     {
         this.drawDefaultBackground();
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-        int var4 = this.xParty - 70;
-        int var5 = this.yParty - 84;
-        ScaledResolution var6 = new ScaledResolution(this.mc.gameSettings, this.mc.displayWidth, this.mc.displayHeight);
-        boolean var7 = false;
-        byte var8 = 100;
-        boolean var9 = true;
-        boolean var10 = true;
+        int centerX = this.xParty - 70;
+        int centerY = this.yParty - 84;
+        ScaledResolution sr = new ScaledResolution(this.mc.gameSettings, this.mc.displayWidth, this.mc.displayHeight);
+        boolean totalHeight = false;
+        byte slotW = 100;
+        boolean slotH = true;
+        boolean gutter = true;
         GL11.glEnable(GL11.GL_SCISSOR_TEST);
-        GL11.glScissor((var4 + 14) * var6.getScaleFactor(), (var5 + 35) * var6.getScaleFactor(), var8 * var6.getScaleFactor(), 103 * var6.getScaleFactor());
+        GL11.glScissor((centerX + 14) * sr.getScaleFactor(), (centerY + 35) * sr.getScaleFactor(), slotW * sr.getScaleFactor(), 103 * sr.getScaleFactor());
         GL11.glPushMatrix();
-        var7 = false;
+        totalHeight = false;
         GL11.glPopMatrix();
         GL11.glDisable(GL11.GL_SCISSOR_TEST);
         this.drawGradientRect(0, 0, this.width, this.height, -1728053248, -1728053248);
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-        GL11.glBindTexture(GL11.GL_TEXTURE_2D, this.dialogueTexture);
-        this.drawTexturedModalRect(var4 - 30, var5 + 71, 0, 0, 201, this.hParty - 201);
+        this.mc.renderEngine.func_110577_a(TEXTURE_DIALOGUE);
+        this.drawTexturedModalRect(centerX - 30, centerY + 71, 0, 0, 201, this.hParty - 201);
         this.dialogueInput.drawTextBox();
-        this.fontRenderer.drawString("Change Party Name", (int)(((float)var4 + (float)this.height) / 0.75F), (int)(((float)var5 + 12.0F) / 0.75F), -10066330);
-        super.drawScreen(var1, var2, var3);
+        this.fontRenderer.drawString("Change Party Name", (int)(((float)centerX + (float)this.height) / 0.75F), (int)(((float)centerY + 12.0F) / 0.75F), -10066330);
+        super.drawScreen(x, y, partialTick);
     }
 
     /**
@@ -162,10 +162,10 @@ public class GuiEditPartyName extends GuiScreen
             this.dialogueInput.updateCursorCounter();
         }
 
-        ScaledResolution var1 = new ScaledResolution(this.mc.gameSettings, this.mc.displayWidth, this.mc.displayHeight);
-        int var2 = var1.getScaledWidth();
-        int var3 = var1.getScaledHeight();
-        this.xParty = var2 / 2;
-        this.yParty = var3 / 2;
+        ScaledResolution scaledresolution = new ScaledResolution(this.mc.gameSettings, this.mc.displayWidth, this.mc.displayHeight);
+        int width = scaledresolution.getScaledWidth();
+        int height = scaledresolution.getScaledHeight();
+        this.xParty = width / 2;
+        this.yParty = height / 2;
     }
 }

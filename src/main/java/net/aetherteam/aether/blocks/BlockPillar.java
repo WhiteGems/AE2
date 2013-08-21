@@ -14,9 +14,9 @@ public class BlockPillar extends BlockAether implements IAetherBlock
     public static Icon sprSide;
     public static Icon sprTopSide;
 
-    protected BlockPillar(int var1)
+    protected BlockPillar(int i)
     {
-        super(var1, Material.rock);
+        super(i, Material.rock);
         this.setHardness(0.5F);
         this.setStepSound(Block.soundStoneFootstep);
     }
@@ -24,43 +24,42 @@ public class BlockPillar extends BlockAether implements IAetherBlock
     /**
      * From the specified side and block metadata retrieves the blocks texture. Args: side, metadata
      */
-    public Icon getIcon(int var1, int var2)
+    public Icon getIcon(int i, int j)
     {
-        return var1 != 0 && var1 != 1 ? (var2 == 0 ? sprSide : sprTopSide) : sprTop;
+        return i != 0 && i != 1 ? (j == 0 ? sprSide : sprTopSide) : sprTop;
     }
 
     /**
      * Determines the damage on the item the block drops. Used in cloth and wood.
      */
-    public int damageDropped(int var1)
+    public int damageDropped(int i)
     {
-        return var1;
+        return i;
     }
 
-    public Block setIconName(String var1)
+    public Block setIconName(String name)
     {
-        return this.setUnlocalizedName("Aether:" + var1);
+        return this.setUnlocalizedName("aether:" + name);
     }
 
     /**
      * returns a list of blocks with the same ID, but different meta (eg: wood returns 4 blocks)
      */
-    public void getSubBlocks(int var1, CreativeTabs var2, List var3)
+    public void getSubBlocks(int par1, CreativeTabs par2CreativeTabs, List itemList)
     {
-        var3.add(new ItemStack(this, 1, 0));
-        var3.add(new ItemStack(this, 1, 1));
-        var3.add(new ItemStack(this, 1, 2));
+        itemList.add(new ItemStack(this, 1, 0));
+        itemList.add(new ItemStack(this, 1, 1));
+        itemList.add(new ItemStack(this, 1, 2));
     }
 
     /**
      * When this method is called, your block should register all the icons it needs with the given IconRegister. This
      * is the only chance you get to register icons.
      */
-    public void registerIcons(IconRegister var1)
+    public void registerIcons(IconRegister par1IconRegister)
     {
-        sprTop = var1.registerIcon("Aether:Pillar Top");
-        sprSide = var1.registerIcon("Aether:Pillar Side");
-        sprTopSide = var1.registerIcon("Aether:Pillar Top Side");
-        super.registerIcons(var1);
+        sprTop = par1IconRegister.registerIcon("aether:Pillar Top");
+        sprSide = par1IconRegister.registerIcon("aether:Pillar Side");
+        sprTopSide = par1IconRegister.registerIcon("aether:Pillar Top Side");
     }
 }

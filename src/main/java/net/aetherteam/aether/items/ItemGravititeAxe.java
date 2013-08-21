@@ -17,68 +17,69 @@ public class ItemGravititeAxe extends ItemAxe
 {
     private static Random random = new Random();
 
-    protected ItemGravititeAxe(int var1, EnumToolMaterial var2)
+    protected ItemGravititeAxe(int i, EnumToolMaterial enumtoolmaterial)
     {
-        super(var1, var2);
+        super(i, enumtoolmaterial);
     }
 
-    public Item setIconName(String var1)
+    public Item setIconName(String name)
     {
-        return this.setUnlocalizedName("Aether:" + var1);
+        this.field_111218_cA = "aether:" + name;
+        return this.setUnlocalizedName("aether:" + name);
     }
 
     /**
      * Called whenever this item is equipped and the right mouse button is pressed. Args: itemStack, world, entityPlayer
      */
-    public ItemStack onItemRightClick(ItemStack var1, World var2, EntityPlayer var3)
+    public ItemStack onItemRightClick(ItemStack itemstack, World world, EntityPlayer entityplayer)
     {
-        float var4 = var3.rotationPitch;
-        float var5 = var3.rotationYaw;
-        double var6 = var3.posX;
-        double var8 = var3.posY + 1.62D - (double)var3.yOffset;
-        double var10 = var3.posZ;
-        Vec3 var12 = Vec3.createVectorHelper(var6, var8, var10);
-        float var13 = MathHelper.cos(-var5 * 0.01745329F - (float)Math.PI);
-        float var14 = MathHelper.sin(-var5 * 0.01745329F - (float)Math.PI);
-        float var15 = -MathHelper.cos(-var4 * 0.01745329F);
-        float var16 = MathHelper.sin(-var4 * 0.01745329F);
-        float var17 = var14 * var15;
-        float var19 = var13 * var15;
-        double var20 = 5.0D;
-        Vec3 var22 = var12.addVector((double)var17 * var20, (double)var16 * var20, (double)var19 * var20);
-        MovingObjectPosition var23 = var2.rayTraceBlocks_do(var12, var22, false);
+        float f1 = entityplayer.rotationPitch;
+        float f2 = entityplayer.rotationYaw;
+        double d = entityplayer.posX;
+        double d1 = entityplayer.posY + 1.62D - (double)entityplayer.yOffset;
+        double d2 = entityplayer.posZ;
+        Vec3 vec3d = Vec3.createVectorHelper(d, d1, d2);
+        float f3 = MathHelper.cos(-f2 * 0.01745329F - (float)Math.PI);
+        float f4 = MathHelper.sin(-f2 * 0.01745329F - (float)Math.PI);
+        float f5 = -MathHelper.cos(-f1 * 0.01745329F);
+        float f6 = MathHelper.sin(-f1 * 0.01745329F);
+        float f7 = f4 * f5;
+        float f9 = f3 * f5;
+        double d3 = 5.0D;
+        Vec3 vec3d1 = vec3d.addVector((double)f7 * d3, (double)f6 * d3, (double)f9 * d3);
+        MovingObjectPosition movingobjectposition = world.clip(vec3d, vec3d1);
 
-        if (var23 == null)
+        if (movingobjectposition == null)
         {
-            return var1;
+            return itemstack;
         }
         else
         {
-            if (var23.typeOfHit == EnumMovingObjectType.TILE)
+            if (movingobjectposition.typeOfHit == EnumMovingObjectType.TILE)
             {
-                int var24 = var23.blockX;
-                int var25 = var23.blockY;
-                int var26 = var23.blockZ;
-                int var27 = var2.getBlockId(var24, var25, var26);
-                int var28 = var2.getBlockMetadata(var24, var25, var26);
+                int i = movingobjectposition.blockX;
+                int j = movingobjectposition.blockY;
+                int k = movingobjectposition.blockZ;
+                int blockID = world.getBlockId(i, j, k);
+                int metadata = world.getBlockMetadata(i, j, k);
 
-                for (int var29 = 0; var29 < blocksEffectiveAgainst.length; ++var29)
+                for (int n = 0; n < blocksEffectiveAgainst.length; ++n)
                 {
-                    if (var27 == blocksEffectiveAgainst[var29].blockID)
+                    if (blockID == blocksEffectiveAgainst[n].blockID)
                     {
-                        EntityFloatingBlock var30 = new EntityFloatingBlock(var2, (double)((float)var24 + 0.5F), (double)((float)var25 + 0.5F), (double)((float)var26 + 0.5F), var27, var28);
+                        EntityFloatingBlock floating = new EntityFloatingBlock(world, (double)((float)i + 0.5F), (double)((float)j + 0.5F), (double)((float)k + 0.5F), blockID, metadata);
 
-                        if (!var2.isRemote)
+                        if (!world.isRemote)
                         {
-                            var2.spawnEntityInWorld(var30);
+                            world.spawnEntityInWorld(floating);
                         }
 
-                        var1.damageItem(4, var3);
+                        itemstack.damageItem(4, entityplayer);
                     }
                 }
             }
 
-            return var1;
+            return itemstack;
         }
     }
 }

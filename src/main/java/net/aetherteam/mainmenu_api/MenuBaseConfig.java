@@ -5,14 +5,12 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.PrintStream;
 import java.util.Properties;
 import net.minecraft.client.Minecraft;
 
 public class MenuBaseConfig
 {
     private static Minecraft mc = Minecraft.getMinecraft();
-
     private static final Properties menuProps = new Properties();
     public static String selectedMenuName;
     public static boolean loopMusic;
@@ -28,19 +26,18 @@ public class MenuBaseConfig
     public static double playerPosY;
     public static double playerPosZ;
     public static int ticks;
-    private static File config = new File(Minecraft.getMinecraftDir(), "MenuAPI.properties");
+    private static File config = new File(Minecraft.getMinecraft().mcDataDir, "MenuAPI.properties");
 
     public static void loadConfig()
     {
-        Minecraft.getMinecraft();
-        System.out.println(Minecraft.getMinecraftDir());
+        System.out.println(Minecraft.getMinecraft().mcDataDir);
 
         if (config.exists())
+        {
             try
             {
-                Minecraft.getMinecraft();
-                FileInputStream in = new FileInputStream(Minecraft.getMinecraftDir() + "/MenuAPI.properties");
-                menuProps.load(in);
+                FileInputStream e = new FileInputStream(Minecraft.getMinecraft().mcDataDir + "/MenuAPI.properties");
+                menuProps.load(e);
 
                 if (menuProps.size() <= 0)
                 {
@@ -60,14 +57,15 @@ public class MenuBaseConfig
                     hasStartedMusic = menuProps.getProperty("hasStartedMusic") != null ? menuProps.getProperty("hasStartedMusic").equals("true") : false;
                 }
             }
-            catch (FileNotFoundException e)
+            catch (FileNotFoundException var1)
             {
-                e.printStackTrace();
+                var1.printStackTrace();
             }
-            catch (IOException e)
+            catch (IOException var2)
             {
-                e.printStackTrace();
+                var2.printStackTrace();
             }
+        }
         else
         {
             resetConfig();
@@ -87,41 +85,40 @@ public class MenuBaseConfig
             menuProps.setProperty("musicSet", "false");
             menuProps.setProperty("hasPlayedMusic", "false");
             menuProps.setProperty("hasStartedMusic", "false");
-            Minecraft.getMinecraft();
-            menuProps.store(new FileOutputStream(Minecraft.getMinecraftDir() + "/MenuAPI.properties"), null);
-            Minecraft.getMinecraft();
-            FileInputStream in = new FileInputStream(Minecraft.getMinecraftDir() + "/MenuAPI.properties");
-            menuProps.load(in);
+            menuProps.store(new FileOutputStream(Minecraft.getMinecraft().mcDataDir + "/MenuAPI.properties"), (String)null);
+            FileInputStream e = new FileInputStream(Minecraft.getMinecraft().mcDataDir + "/MenuAPI.properties");
+            menuProps.load(e);
         }
-        catch (FileNotFoundException e)
+        catch (FileNotFoundException var1)
         {
-            e.printStackTrace();
+            var1.printStackTrace();
         }
-        catch (IOException e)
+        catch (IOException var2)
         {
-            e.printStackTrace();
+            var2.printStackTrace();
         }
     }
 
     public static void wipeConfig()
     {
         if (config.exists())
+        {
             try
             {
                 menuProps.setProperty("selectedMenu", "");
-                Minecraft.getMinecraft();
-                menuProps.store(new FileOutputStream(Minecraft.getMinecraftDir() + "/MenuAPI.properties"), null);
-                FileInputStream in = new FileInputStream("MenuAPI.properties");
-                menuProps.load(in);
+                menuProps.store(new FileOutputStream(Minecraft.getMinecraft().mcDataDir + "/MenuAPI.properties"), (String)null);
+                FileInputStream e = new FileInputStream("MenuAPI.properties");
+                menuProps.load(e);
             }
-            catch (FileNotFoundException e)
+            catch (FileNotFoundException var1)
             {
-                e.printStackTrace();
+                var1.printStackTrace();
             }
-            catch (IOException e)
+            catch (IOException var2)
             {
-                e.printStackTrace();
+                var2.printStackTrace();
             }
+        }
     }
 
     public static void setProperty(String name, String value)
@@ -129,24 +126,17 @@ public class MenuBaseConfig
         try
         {
             menuProps.setProperty(name, value);
-            Minecraft.getMinecraft();
-            menuProps.store(new FileOutputStream(Minecraft.getMinecraftDir() + "/MenuAPI.properties"), null);
-            FileInputStream in = new FileInputStream("MenuAPI.properties");
-            menuProps.load(in);
+            menuProps.store(new FileOutputStream(Minecraft.getMinecraft().mcDataDir + "/MenuAPI.properties"), (String)null);
+            FileInputStream e = new FileInputStream("MenuAPI.properties");
+            menuProps.load(e);
         }
-        catch (FileNotFoundException e)
+        catch (FileNotFoundException var3)
         {
-            e.printStackTrace();
+            var3.printStackTrace();
         }
-        catch (IOException e)
+        catch (IOException var4)
         {
-            e.printStackTrace();
+            var4.printStackTrace();
         }
-    }
-
-    static
-    {
-        Minecraft.getMinecraft();
     }
 }
-

@@ -67,24 +67,24 @@ public class ModelSentryGolemBoss extends ModelBase
     /**
      * Sets the models various rotation angles then renders the model.
      */
-    public void render(Entity var1, float var2, float var3, float var4, float var5, float var6, float var7)
+    public void render(Entity entity, float f, float f1, float f2, float f3, float f4, float f5)
     {
-        super.render(var1, var2, var3, var4, var5, var6, var7);
-        this.setRotationAngles(var2, var3, var4, var5, var6, var7, var1);
-        this.body.render(var7);
-        this.head.render(var7);
-        this.bottom.render(var7);
-        this.rightforearm.render(var7);
-        this.leftarm.render(var7);
-        this.rightarm.render(var7);
-        this.leftforearm.render(var7);
+        super.render(entity, f, f1, f2, f3, f4, f5);
+        this.setRotationAngles(f, f1, f2, f3, f4, f5, entity);
+        this.body.render(f5);
+        this.head.render(f5);
+        this.bottom.render(f5);
+        this.rightforearm.render(f5);
+        this.leftarm.render(f5);
+        this.rightarm.render(f5);
+        this.leftforearm.render(f5);
     }
 
-    private void setRotation(ModelRenderer var1, float var2, float var3, float var4)
+    private void setRotation(ModelRenderer model, float x, float y, float z)
     {
-        var1.rotateAngleX = var2;
-        var1.rotateAngleY = var3;
-        var1.rotateAngleZ = var4;
+        model.rotateAngleX = x;
+        model.rotateAngleY = y;
+        model.rotateAngleZ = z;
     }
 
     /**
@@ -92,20 +92,16 @@ public class ModelSentryGolemBoss extends ModelBase
      * and legs, where par1 represents the time(so that arms and legs swing back and forth) and par2 represents how
      * "far" arms and legs can swing at most.
      */
-    public void setRotationAngles(float var1, float var2, float var3, float var4, float var5, float var6, Entity var7)
+    public void setRotationAngles(float f, float f1, float f2, float f3, float f4, float f5, Entity entity)
     {
-        super.setRotationAngles(var1, var2, var3, var4, var5, var6, var7);
-        this.leftforearm.rotateAngleX = this.leftarm.rotateAngleX + var2;
-        this.rightforearm.rotateAngleX = this.rightarm.rotateAngleX + var2;
+        super.setRotationAngles(f, f1, f2, f3, f4, f5, entity);
+        this.leftforearm.rotateAngleX = this.leftarm.rotateAngleX + f1;
+        this.rightforearm.rotateAngleX = this.rightarm.rotateAngleX + f1;
     }
 
-    /**
-     * Used for easily adding entity-dependent animations. The second and third float params here are the same second
-     * and third as in the setRotationAngles method.
-     */
-    public void setLivingAnimations(EntityLiving var1, float var2, float var3, float var4)
+    public void setLivingAnimations(EntityLiving par1EntityLiving, float par2, float par3, float par4)
     {
-        EntitySentryGuardian var5 = (EntitySentryGuardian)var1;
+        EntitySentryGuardian var5 = (EntitySentryGuardian)par1EntityLiving;
         int var6 = var5.getAttackTimer();
 
         if (var6 != 0)
@@ -115,8 +111,8 @@ public class ModelSentryGolemBoss extends ModelBase
         }
     }
 
-    private float func_78172_a(float var1, float var2)
+    private float func_78172_a(float par1, float par2)
     {
-        return (Math.abs(var1 % var2 - var2 * 0.5F) - var2 * 0.25F) / (var2 * 0.25F);
+        return (Math.abs(par1 % par2 - par2 * 0.5F) - par2 * 0.25F) / (par2 * 0.25F);
     }
 }

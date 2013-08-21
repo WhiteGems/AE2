@@ -26,33 +26,33 @@ public class ModelFlyingCow2 extends ModelBase
     /**
      * Sets the models various rotation angles then renders the model.
      */
-    public void render(Entity var1, float var2, float var3, float var4, float var5, float var6, float var7)
+    public void render(Entity e, float f, float f1, float f2, float f3, float f4, float f5)
     {
         GL11.glPushMatrix();
-        GL11.glTranslatef(0.0F, -10.0F * var7, 0.0F);
-        float var8 = -((float)Math.acos((double)flyingcow.wingFold));
-        float var9 = 32.0F * flyingcow.wingFold / 4.0F;
-        float var10 = -32.0F * (float)Math.sqrt((double)(1.0F - flyingcow.wingFold * flyingcow.wingFold)) / 4.0F;
-        float var11 = 0.0F;
-        float var12 = var9 * (float)Math.cos((double)flyingcow.wingAngle) - var10 * (float)Math.sin((double)flyingcow.wingAngle);
-        float var13 = var9 * (float)Math.sin((double)flyingcow.wingAngle) + var10 * (float)Math.cos((double)flyingcow.wingAngle);
-        this.leftWingInner.setRotationPoint(4.0F + var12, var13 + 12.0F, var11);
-        this.rightWingInner.setRotationPoint(-4.0F - var12, var13 + 12.0F, var11);
-        var9 *= 3.0F;
-        var12 = var9 * (float)Math.cos((double)flyingcow.wingAngle) - var10 * (float)Math.sin((double)flyingcow.wingAngle);
-        var13 = var9 * (float)Math.sin((double)flyingcow.wingAngle) + var10 * (float)Math.cos((double)flyingcow.wingAngle);
-        this.leftWingOuter.setRotationPoint(4.0F + var12, var13 + 12.0F, var11);
-        this.rightWingOuter.setRotationPoint(-4.0F - var12, var13 + 12.0F, var11);
-        this.leftWingInner.rotateAngleZ = flyingcow.wingAngle + var8 + ((float)Math.PI / 2F);
-        this.leftWingOuter.rotateAngleZ = flyingcow.wingAngle - var8 + ((float)Math.PI / 2F);
-        this.rightWingInner.rotateAngleZ = -(flyingcow.wingAngle + var8 - ((float)Math.PI / 2F));
-        this.rightWingOuter.rotateAngleZ = -(flyingcow.wingAngle - var8 + ((float)Math.PI / 2F));
-        this.leftWingOuter.render(var7);
-        this.leftWingInner.render(var7);
-        this.rightWingOuter.render(var7);
-        this.rightWingInner.render(var7);
+        GL11.glTranslatef(0.0F, -10.0F * f5, 0.0F);
+        float wingBend = -((float)Math.acos((double)flyingcow.wingFold));
+        float x = 32.0F * flyingcow.wingFold / 4.0F;
+        float y = -32.0F * (float)Math.sqrt((double)(1.0F - flyingcow.wingFold * flyingcow.wingFold)) / 4.0F;
+        float z = 0.0F;
+        float x2 = x * (float)Math.cos((double)flyingcow.wingAngle) - y * (float)Math.sin((double)flyingcow.wingAngle);
+        float y2 = x * (float)Math.sin((double)flyingcow.wingAngle) + y * (float)Math.cos((double)flyingcow.wingAngle);
+        this.leftWingInner.setRotationPoint(4.0F + x2, y2 + 12.0F, z);
+        this.rightWingInner.setRotationPoint(-4.0F - x2, y2 + 12.0F, z);
+        x *= 3.0F;
+        x2 = x * (float)Math.cos((double)flyingcow.wingAngle) - y * (float)Math.sin((double)flyingcow.wingAngle);
+        y2 = x * (float)Math.sin((double)flyingcow.wingAngle) + y * (float)Math.cos((double)flyingcow.wingAngle);
+        this.leftWingOuter.setRotationPoint(4.0F + x2, y2 + 12.0F, z);
+        this.rightWingOuter.setRotationPoint(-4.0F - x2, y2 + 12.0F, z);
+        this.leftWingInner.rotateAngleZ = flyingcow.wingAngle + wingBend + ((float)Math.PI / 2F);
+        this.leftWingOuter.rotateAngleZ = flyingcow.wingAngle - wingBend + ((float)Math.PI / 2F);
+        this.rightWingInner.rotateAngleZ = -(flyingcow.wingAngle + wingBend - ((float)Math.PI / 2F));
+        this.rightWingOuter.rotateAngleZ = -(flyingcow.wingAngle - wingBend + ((float)Math.PI / 2F));
+        this.leftWingOuter.render(f5);
+        this.leftWingInner.render(f5);
+        this.rightWingOuter.render(f5);
+        this.rightWingInner.render(f5);
         GL11.glPopMatrix();
     }
 
-    public void setRotationAngles(float var1, float var2, float var3, float var4, float var5, float var6) {}
+    public void setRotationAngles(float f, float f1, float f2, float f3, float f4, float f5) {}
 }

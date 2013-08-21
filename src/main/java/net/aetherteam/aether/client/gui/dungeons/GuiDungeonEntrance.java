@@ -14,12 +14,12 @@ import net.minecraft.client.gui.GuiTextField;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.MathHelper;
+import net.minecraft.util.ResourceLocation;
 import org.lwjgl.opengl.GL11;
 
 public class GuiDungeonEntrance extends GuiScreen
 {
-    private int backgroundTexture;
-    private int easterTexture;
+    private static final ResourceLocation TEXTURE_PARTY_MAIN = new ResourceLocation("aether", "textures/gui/partyMain.png");
     private int xParty;
     private int yParty;
     private int wParty;
@@ -33,17 +33,15 @@ public class GuiDungeonEntrance extends GuiScreen
     private GuiScreen parent;
     private TileEntityEntranceController controller;
 
-    public GuiDungeonEntrance(EntityPlayer var1, GuiScreen var2, TileEntityEntranceController var3)
+    public GuiDungeonEntrance(EntityPlayer player, GuiScreen parent, TileEntityEntranceController controller)
     {
-        this.parent = var2;
-        this.player = var1;
+        this.parent = parent;
+        this.player = player;
         this.mc = FMLClientHandler.instance().getClient();
-        this.backgroundTexture = this.mc.renderEngine.getTexture("/net/aetherteam/aether/client/sprites/gui/partyMain.png");
-        this.easterTexture = this.mc.renderEngine.getTexture("/net/aetherteam/aether/client/sprites/gui/partyMain.png");
         this.wParty = 256;
         this.hParty = 256;
         this.updateScreen();
-        this.controller = var3;
+        this.controller = controller;
     }
 
     /**
@@ -53,9 +51,9 @@ public class GuiDungeonEntrance extends GuiScreen
     {
         this.updateScreen();
         this.buttonList.clear();
-        List var1 = this.mc.thePlayer.sendQueue.playerInfoList;
+        List playerList = this.mc.thePlayer.sendQueue.playerInfoList;
 
-        if (var1.size() > 1 || var1.size() == 0)
+        if (playerList.size() > 1 || playerList.size() == 0)
         {
             this.buttonList.add(new GuiButton(0, this.xParty - 60, this.yParty + 8 - 28, 120, 20, "Enter"));
             this.buttonList.add(new GuiButton(1, this.xParty - 60, this.yParty + 8 - 28, 120, 20, "Leave"));
@@ -65,21 +63,21 @@ public class GuiDungeonEntrance extends GuiScreen
     /**
      * Fired when a control is clicked. This is the equivalent of ActionListener.actionPerformed(ActionEvent e).
      */
-    protected void actionPerformed(GuiButton var1)
+    protected void actionPerformed(GuiButton button)
     {
-        Party var2 = PartyController.instance().getParty(this.player);
+        Party party = PartyController.instance().getParty(this.player);
 
-        switch (var1.id)
+        switch (button.id)
         {
             case 0:
                 if (this.controller != null && this.controller.getDungeon() != null && !this.controller.getDungeon().hasQueuedParty())
                 {
-                    if (var2 != null)
+                    if (party != null)
                     {
-                        int var3 = MathHelper.floor_double((double)this.controller.xCoord);
-                        int var4 = MathHelper.floor_double((double)this.controller.yCoord);
-                        int var5 = MathHelper.floor_double((double)this.controller.zCoord);
-                        DungeonHandler.instance().queueParty(this.controller.getDungeon(), var2, var3, var4, var5, true);
+                        int x = MathHelper.floor_double((double)this.controller.xCoord);
+                        int y = MathHelper.floor_double((double)this.controller.yCoord);
+                        int z = MathHelper.floor_double((double)this.controller.zCoord);
+                        DungeonHandler.instance().queueParty(this.controller.getDungeon(), party, x, y, z, true);
                         this.mc.displayGuiScreen((GuiScreen)null);
                     }
                     else
@@ -91,7 +89,7 @@ public class GuiDungeonEntrance extends GuiScreen
                 break;
 
             case 1:
-                if (var2 != null && this.controller != null && this.controller.getDungeon() != null && this.controller.getDungeon().hasMember(PartyController.instance().getMember(this.player)))
+                if (party != null && this.controller != null && this.controller.getDungeon() != null && this.controller.getDungeon().hasMember(PartyController.instance().getMember(this.player)))
                 {
                     DungeonHandler.instance().disbandMember(this.controller.getDungeon(), PartyController.instance().getMember(this.player), true);
                 }
@@ -108,9 +106,9 @@ public class GuiDungeonEntrance extends GuiScreen
         return false;
     }
 
-    private boolean isQueuedParty(Party var1)
+    private boolean isQueuedParty(Party party)
     {
-        return var1 != null && this.controller != null && this.controller.getDungeon() != null && this.controller.getDungeon().isActive() && this.controller.getDungeon().isQueuedParty(var1);
+        return party != null && this.controller != null && this.controller.getDungeon() != null && this.controller.getDungeon().isActive() && this.controller.getDungeon().isQueuedParty(party);
     }
 
     private boolean hasQueuedParty()
@@ -121,11 +119,11 @@ public class GuiDungeonEntrance extends GuiScreen
     /**
      * Fired when a key is typed. This is the equivalent of KeyListener.keyTyped(KeyEvent e).
      */
-    protected void keyTyped(char var1, int var2)
+    protected void keyTyped(char charTyped, int keyTyped)
     {
-        super.keyTyped(var1, var2);
+        super.keyTyped(charTyped, keyTyped);
 
-        if (var2 == Minecraft.getMinecraft().gameSettings.keyBindInventory.keyCode)
+        if (keyTyped == Minecraft.getMinecraft().gameSettings.keyBindInventory.keyCode)
         {
             this.mc.displayGuiScreen((GuiScreen)null);
             this.mc.setIngameFocus();
@@ -135,60 +133,58 @@ public class GuiDungeonEntrance extends GuiScreen
     /**
      * Draws the screen and all the components in it.
      */
-    public void drawScreen(int var1, int var2, float var3)
+    public void drawScreen(int x, int y, float partialTick)
     {
         this.buttonList.clear();
         this.drawDefaultBackground();
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-        GL11.glBindTexture(GL11.GL_TEXTURE_2D, this.backgroundTexture);
-        int var4 = this.xParty - 70;
-        int var5 = this.yParty - 84;
+        this.mc.renderEngine.func_110577_a(TEXTURE_PARTY_MAIN);
+        int centerX = this.xParty - 70;
+        int centerY = this.yParty - 84;
         new ScaledResolution(this.mc.gameSettings, this.mc.displayWidth, this.mc.displayHeight);
-        this.drawTexturedModalRect(var4, var5, 0, 0, 141, this.hParty);
-        Party var7 = PartyController.instance().getParty(this.player);
-        boolean var8 = PartyController.instance().isLeader(this.player);
-        GuiButton var9 = new GuiButton(0, this.xParty - 59, this.yParty + 55, 55, 20, var7 != null && var7.getSize() > 1 ? "Send" : "Enter");
-        GuiButton var10 = new GuiButton(1, this.xParty + 6 - (this.hasQueuedParty() ? 32 : 0), this.yParty + 55, 55, 20, "Leave");
+        this.drawTexturedModalRect(centerX, centerY, 0, 0, 141, this.hParty);
+        Party party = PartyController.instance().getParty(this.player);
+        boolean isLeader = PartyController.instance().isLeader(this.player);
+        GuiButton sendButton = new GuiButton(0, this.xParty - 59, this.yParty + 55, 55, 20, party != null && party.getSize() > 1 ? "Send" : "Enter");
+        GuiButton leaveButton = new GuiButton(1, this.xParty + 6 - (this.hasQueuedParty() ? 32 : 0), this.yParty + 55, 55, 20, "Leave");
 
         if (this.controller.getDungeon() != null && !this.controller.getDungeon().isActive() && this.controller != null)
         {
-            this.buttonList.add(var9);
+            this.buttonList.add(sendButton);
 
-            if (var7 != null && (this.controller.getDungeon().isQueuedParty(var7) || this.controller.getDungeon().hasAnyConqueredDungeon(var7.getMembers()) || !var8))
+            if (party != null && (this.controller.getDungeon().isQueuedParty(party) || this.controller.getDungeon().hasAnyConqueredDungeon(party.getMembers()) || !isLeader))
             {
-                var9.enabled = false;
+                sendButton.enabled = false;
             }
         }
 
-        this.buttonList.add(var10);
-        this.mc.renderEngine.resetBoundTexture();
+        this.buttonList.add(leaveButton);
         this.partyNameField = new GuiTextField(this.fontRenderer, this.xParty - 63, this.yParty - 58, 125, 107);
         this.partyNameField.setFocused(false);
         this.partyNameField.setMaxStringLength(5000);
         this.partyNameField.drawTextBox();
-        this.drawString(this.fontRenderer, "\u00a7f\u00a7n\u00a7lWARNING!", var4 + 46, var5 + 10, 15658734);
+        this.drawString(this.fontRenderer, "\u00a7f\u00a7n\u00a7lWARNING!", centerX + 46, centerY + 10, 15658734);
 
         if (this.controller != null && this.controller.hasDungeon())
         {
-            int var14;
+            int len$;
 
-            if ((var7 != null || var8) && (!var8 || var7.getSize() > 1 || var7 == null || this.controller.getDungeon().hasAnyConqueredDungeon(var7.getMembers()) || this.controller.getDungeon().hasQueuedParty()))
+            if ((party != null || isLeader) && (!isLeader || party.getSize() > 1 || party == null || this.controller.getDungeon().hasAnyConqueredDungeon(party.getMembers()) || this.controller.getDungeon().hasQueuedParty()))
             {
-                this.mc.renderEngine.resetBoundTexture();
                 ArrayList var18 = new ArrayList();
 
-                if (var7 != null)
+                if (party != null)
                 {
-                    var18 = var7.getMembers();
+                    var18 = party.getMembers();
                 }
 
-                if (this.controller.getDungeon().hasQueuedParty() && (!this.controller.getDungeon().isQueuedParty(var7) || this.controller.getDungeon().isQueuedParty(var7) && !this.controller.getDungeon().hasMember(PartyController.instance().getMember(this.player))))
+                if (this.controller.getDungeon().hasQueuedParty() && (!this.controller.getDungeon().isQueuedParty(party) || this.controller.getDungeon().isQueuedParty(party) && !this.controller.getDungeon().hasMember(PartyController.instance().getMember(this.player))))
                 {
                     this.description = new String[6];
                     this.description[0] = "Sorry, but at this time";
                     this.description[1] = "the dungeon is occupied";
 
-                    if (this.controller.getDungeon().isQueuedParty(var7) && !this.controller.getDungeon().hasMember(PartyController.instance().getMember(this.player)))
+                    if (this.controller.getDungeon().isQueuedParty(party) && !this.controller.getDungeon().hasMember(PartyController.instance().getMember(this.player)))
                     {
                         this.description[2] = "by your party.";
                     }
@@ -201,7 +197,7 @@ public class GuiDungeonEntrance extends GuiScreen
                     this.description[4] = "Please come back at";
                     this.description[5] = "a later time.";
                 }
-                else if (this.controller.getDungeon().isQueuedParty(var7) && this.controller.getDungeon().hasMember(PartyController.instance().getMember(this.player)))
+                else if (this.controller.getDungeon().isQueuedParty(party) && this.controller.getDungeon().hasMember(PartyController.instance().getMember(this.player)))
                 {
                     if (this.controller.getDungeon().isActive())
                     {
@@ -239,7 +235,7 @@ public class GuiDungeonEntrance extends GuiScreen
                     this.description[6] = "Please search for";
                     this.description[7] = "another one.";
                 }
-                else if (var8)
+                else if (isLeader)
                 {
                     this.description = new String[7];
                     this.description[0] = "Would you like to";
@@ -265,19 +261,18 @@ public class GuiDungeonEntrance extends GuiScreen
 
                 int var17 = 0;
                 String[] var19 = this.description;
-                var14 = var19.length;
+                len$ = var19.length;
 
-                for (int var20 = 0; var20 < var14; ++var20)
+                for (int var20 = 0; var20 < len$; ++var20)
                 {
-                    String var16 = var19[var20];
-                    this.drawString(this.fontRenderer, var16, var4 + 70 - this.fontRenderer.getStringWidth(var16) / 2, var5 + (var8 ? 30 : 40) + var17 * 10, 15658734);
+                    String string = var19[var20];
+                    this.drawString(this.fontRenderer, string, centerX + 70 - this.fontRenderer.getStringWidth(string) / 2, centerY + (isLeader ? 30 : 40) + var17 * 10, 15658734);
                     ++var17;
                 }
             }
             else
             {
-                GL11.glBindTexture(GL11.GL_TEXTURE_2D, this.backgroundTexture);
-                this.mc.renderEngine.resetBoundTexture();
+                this.mc.renderEngine.func_110577_a(TEXTURE_PARTY_MAIN);
                 this.description = new String[10];
                 this.description[0] = "You are attempting the";
                 this.description[1] = "Slider\'s Labyrinth on";
@@ -289,20 +284,20 @@ public class GuiDungeonEntrance extends GuiScreen
                 this.description[7] = "";
                 this.description[8] = "Are you prepared to";
                 this.description[9] = "enter these depths?";
-                int var11 = 0;
-                String[] var12 = this.description;
-                int var13 = var12.length;
+                int members = 0;
+                String[] count = this.description;
+                int arr$ = count.length;
 
-                for (var14 = 0; var14 < var13; ++var14)
+                for (len$ = 0; len$ < arr$; ++len$)
                 {
-                    String var15 = var12[var14];
-                    this.drawString(this.fontRenderer, var15, var4 + 70 - this.fontRenderer.getStringWidth(var15) / 2, var5 + 30 + var11 * 10, 15658734);
-                    ++var11;
+                    String i$ = count[len$];
+                    this.drawString(this.fontRenderer, i$, centerX + 70 - this.fontRenderer.getStringWidth(i$) / 2, centerY + 30 + members * 10, 15658734);
+                    ++members;
                 }
             }
         }
 
-        super.drawScreen(var1, var2, var3);
+        super.drawScreen(x, y, partialTick);
     }
 
     /**
@@ -311,10 +306,10 @@ public class GuiDungeonEntrance extends GuiScreen
     public void updateScreen()
     {
         super.updateScreen();
-        ScaledResolution var1 = new ScaledResolution(this.mc.gameSettings, this.mc.displayWidth, this.mc.displayHeight);
-        int var2 = var1.getScaledWidth();
-        int var3 = var1.getScaledHeight();
-        this.xParty = var2 / 2;
-        this.yParty = var3 / 2;
+        ScaledResolution scaledresolution = new ScaledResolution(this.mc.gameSettings, this.mc.displayWidth, this.mc.displayHeight);
+        int width = scaledresolution.getScaledWidth();
+        int height = scaledresolution.getScaledHeight();
+        this.xParty = width / 2;
+        this.yParty = height / 2;
     }
 }

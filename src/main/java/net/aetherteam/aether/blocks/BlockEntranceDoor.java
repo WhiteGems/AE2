@@ -13,7 +13,7 @@ import net.aetherteam.aether.tile_entities.TileEntityEntranceController;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Icon;
@@ -23,17 +23,17 @@ import net.minecraft.world.World;
 public class BlockEntranceDoor extends BlockAether implements IAetherBlock
 {
     private Random rand = new Random();
-    private HashMap icons = new HashMap();
+    private HashMap<String, Icon> icons = new HashMap();
     public static final String[] names = new String[] {"Dungeon Entrance", "Dungeon Entrance Lock"};
 
-    protected BlockEntranceDoor(int var1)
+    protected BlockEntranceDoor(int blockID)
     {
-        super(var1, Material.wood);
+        super(blockID, Material.wood);
         this.setHardness(-1.0F);
         this.setResistance(1000000.0F);
     }
 
-    public boolean removeBlockByPlayer(World var1, EntityPlayer var2, int var3, int var4, int var5)
+    public boolean removeBlockByPlayer(World world, EntityPlayer player, int x, int y, int z)
     {
         return false;
     }
@@ -41,49 +41,49 @@ public class BlockEntranceDoor extends BlockAether implements IAetherBlock
     /**
      * returns a list of blocks with the same ID, but different meta (eg: wood returns 4 blocks)
      */
-    public void getSubBlocks(int var1, CreativeTabs var2, List var3) {}
+    public void getSubBlocks(int par1, CreativeTabs par2CreativeTabs, List par3List) {}
 
     /**
      * Called whenever the block is added into the world. Args: world, x, y, z
      */
-    public void onBlockAdded(World var1, int var2, int var3, int var4)
+    public void onBlockAdded(World world, int i, int j, int k)
     {
-        Dungeon var5 = DungeonHandler.instance().getInstanceAt(MathHelper.floor_double((double)var2), MathHelper.floor_double((double)var3), MathHelper.floor_double((double)var4));
+        Dungeon dungeon = DungeonHandler.instance().getInstanceAt(MathHelper.floor_double((double)i), MathHelper.floor_double((double)j), MathHelper.floor_double((double)k));
 
-        if (var5 != null)
+        if (dungeon != null)
         {
-            super.onBlockAdded(var1, var2, var3, var4);
+            super.onBlockAdded(world, i, j, k);
         }
         else
         {
-            var1.setBlock(var2, var3, var4, 0);
+            world.setBlock(i, j, k, 0);
         }
     }
 
     /**
      * Called when the block is placed in the world.
      */
-    public void onBlockPlacedBy(World var1, int var2, int var3, int var4, EntityLiving var5, ItemStack var6)
+    public void onBlockPlacedBy(World world, int i, int j, int k, EntityLivingBase entity, ItemStack stack)
     {
-        var1.setBlock(var2, var3, var4, 0);
+        world.setBlock(i, j, k, 0);
     }
 
     /**
      * Determines the damage on the item the block drops. Used in cloth and wood.
      */
-    public int damageDropped(int var1)
+    public int damageDropped(int i)
     {
-        return var1;
+        return i;
     }
 
     /**
      * From the specified side and block metadata retrieves the blocks texture. Args: side, metadata
      */
-    public Icon getIcon(int var1, int var2)
+    public Icon getIcon(int i, int meta)
     {
-        ItemStack var3 = new ItemStack(AetherBlocks.DungeonEntrance, 1, var2);
-        String var4 = var3.getItem().getItemDisplayName(var3);
-        return (Icon)this.icons.get(var4);
+        ItemStack stack = new ItemStack(AetherBlocks.DungeonEntrance, 1, meta);
+        String name = stack.getItem().getItemDisplayName(stack);
+        return (Icon)this.icons.get(name);
     }
 
     @SideOnly(Side.CLIENT)
@@ -92,33 +92,33 @@ public class BlockEntranceDoor extends BlockAether implements IAetherBlock
      * When this method is called, your block should register all the icons it needs with the given IconRegister. This
      * is the only chance you get to register icons.
      */
-    public void registerIcons(IconRegister var1)
+    public void registerIcons(IconRegister par1IconRegister)
     {
-        for (int var2 = 0; var2 < names.length; ++var2)
+        for (int i = 0; i < names.length; ++i)
         {
-            this.icons.put(names[var2], var1.registerIcon("Aether:" + names[var2]));
+            this.icons.put(names[i], par1IconRegister.registerIcon("aether:" + names[i]));
         }
     }
 
     /**
      * Called upon block activation (right click on the block.)
      */
-    public boolean onBlockActivated(World var1, int var2, int var3, int var4, EntityPlayer var5, int var6, float var7, float var8, float var9)
+    public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer entityplayer, int par6, float par7, float par8, float par9)
     {
-        for (int var10 = var2 - 3; var10 <= var2 + 3; ++var10)
+        for (int l = x - 3; l <= x + 3; ++l)
         {
-            for (int var11 = var3 - 3; var11 <= var3 + 3; ++var11)
+            for (int i1 = y - 3; i1 <= y + 3; ++i1)
             {
-                for (int var12 = var4 - 3; var12 <= var4 + 3; ++var12)
+                for (int j1 = z - 3; j1 <= z + 3; ++j1)
                 {
-                    if (var1.getBlockId(var10, var11, var12) == AetherBlocks.DungeonEntranceController.blockID)
+                    if (world.getBlockId(l, i1, j1) == AetherBlocks.DungeonEntranceController.blockID)
                     {
-                        TileEntityEntranceController var13 = (TileEntityEntranceController)var1.getBlockTileEntity(var10, var11, var12);
+                        TileEntityEntranceController controller = (TileEntityEntranceController)world.getBlockTileEntity(l, i1, j1);
 
-                        if (var13 != null && var13.hasDungeon() && var13.getDungeon() != null)
+                        if (controller != null && controller.hasDungeon() && controller.getDungeon() != null)
                         {
-                            int var14 = AetherGuiHandler.entranceID;
-                            var5.openGui(Aether.instance, var14, var1, var13.xCoord, var13.yCoord, var13.zCoord);
+                            int guiID = AetherGuiHandler.entranceID;
+                            entityplayer.openGui(Aether.instance, guiID, world, controller.xCoord, controller.yCoord, controller.zCoord);
                             return true;
                         }
 

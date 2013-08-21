@@ -13,9 +13,9 @@ import net.minecraftforge.common.ForgeDirection;
 
 public class BlockAmbrosiumTorch extends BlockAether implements IAetherBlock
 {
-    protected BlockAmbrosiumTorch(int var1)
+    protected BlockAmbrosiumTorch(int blockID)
     {
-        super(var1, Material.circuits);
+        super(blockID, Material.circuits);
         this.setTickRandomly(true);
         this.setLightValue(0.9375F);
         this.setStepSound(Block.soundWoodFootstep);
@@ -25,7 +25,7 @@ public class BlockAmbrosiumTorch extends BlockAether implements IAetherBlock
      * Returns a bounding box from the pool of bounding boxes (this means this box can change after the pool has been
      * cleared to be reused)
      */
-    public AxisAlignedBB getCollisionBoundingBoxFromPool(World var1, int var2, int var3, int var4)
+    public AxisAlignedBB getCollisionBoundingBoxFromPool(World par1World, int par2, int par3, int par4)
     {
         return null;
     }
@@ -55,152 +55,152 @@ public class BlockAmbrosiumTorch extends BlockAether implements IAetherBlock
         return 2;
     }
 
-    private boolean canPlaceTorchOn(World var1, int var2, int var3, int var4)
+    private boolean canPlaceTorchOn(World par1World, int par2, int par3, int par4)
     {
-        if (var1.doesBlockHaveSolidTopSurface(var2, var3, var4))
+        if (par1World.doesBlockHaveSolidTopSurface(par2, par3, par4))
         {
             return true;
         }
         else
         {
-            int var5 = var1.getBlockId(var2, var3, var4);
-            return Block.blocksList[var5] != null && Block.blocksList[var5].canPlaceTorchOnTop(var1, var2, var3, var4);
+            int l = par1World.getBlockId(par2, par3, par4);
+            return Block.blocksList[l] != null && Block.blocksList[l].canPlaceTorchOnTop(par1World, par2, par3, par4);
         }
     }
 
     /**
      * Checks to see if its valid to put this block at the specified coordinates. Args: world, x, y, z
      */
-    public boolean canPlaceBlockAt(World var1, int var2, int var3, int var4)
+    public boolean canPlaceBlockAt(World par1World, int par2, int par3, int par4)
     {
-        return var1.isBlockSolidOnSide(var2 - 1, var3, var4, ForgeDirection.EAST, true) || var1.isBlockSolidOnSide(var2 + 1, var3, var4, ForgeDirection.WEST, true) || var1.isBlockSolidOnSide(var2, var3, var4 - 1, ForgeDirection.SOUTH, true) || var1.isBlockSolidOnSide(var2, var3, var4 + 1, ForgeDirection.NORTH, true) || this.canPlaceTorchOn(var1, var2, var3 - 1, var4);
+        return par1World.isBlockSolidOnSide(par2 - 1, par3, par4, ForgeDirection.EAST, true) || par1World.isBlockSolidOnSide(par2 + 1, par3, par4, ForgeDirection.WEST, true) || par1World.isBlockSolidOnSide(par2, par3, par4 - 1, ForgeDirection.SOUTH, true) || par1World.isBlockSolidOnSide(par2, par3, par4 + 1, ForgeDirection.NORTH, true) || this.canPlaceTorchOn(par1World, par2, par3 - 1, par4);
     }
 
     /**
      * Called when a block is placed using its ItemBlock. Args: World, X, Y, Z, side, hitX, hitY, hitZ, block metadata
      */
-    public int onBlockPlaced(World var1, int var2, int var3, int var4, int var5, float var6, float var7, float var8, int var9)
+    public int onBlockPlaced(World par1World, int par2, int par3, int par4, int par5, float par6, float par7, float par8, int par9)
     {
-        int var10 = var9;
+        int j1 = par9;
 
-        if (var5 == 1 && this.canPlaceTorchOn(var1, var2, var3 - 1, var4))
+        if (par5 == 1 && this.canPlaceTorchOn(par1World, par2, par3 - 1, par4))
         {
-            var10 = 5;
+            j1 = 5;
         }
 
-        if (var5 == 2 && var1.isBlockSolidOnSide(var2, var3, var4 + 1, ForgeDirection.NORTH, true))
+        if (par5 == 2 && par1World.isBlockSolidOnSide(par2, par3, par4 + 1, ForgeDirection.NORTH, true))
         {
-            var10 = 4;
+            j1 = 4;
         }
 
-        if (var5 == 3 && var1.isBlockSolidOnSide(var2, var3, var4 - 1, ForgeDirection.SOUTH, true))
+        if (par5 == 3 && par1World.isBlockSolidOnSide(par2, par3, par4 - 1, ForgeDirection.SOUTH, true))
         {
-            var10 = 3;
+            j1 = 3;
         }
 
-        if (var5 == 4 && var1.isBlockSolidOnSide(var2 + 1, var3, var4, ForgeDirection.WEST, true))
+        if (par5 == 4 && par1World.isBlockSolidOnSide(par2 + 1, par3, par4, ForgeDirection.WEST, true))
         {
-            var10 = 2;
+            j1 = 2;
         }
 
-        if (var5 == 5 && var1.isBlockSolidOnSide(var2 - 1, var3, var4, ForgeDirection.EAST, true))
+        if (par5 == 5 && par1World.isBlockSolidOnSide(par2 - 1, par3, par4, ForgeDirection.EAST, true))
         {
-            var10 = 1;
+            j1 = 1;
         }
 
-        return var10;
+        return j1;
     }
 
     /**
      * Ticks the block if it's been scheduled
      */
-    public void updateTick(World var1, int var2, int var3, int var4, Random var5)
+    public void updateTick(World par1World, int par2, int par3, int par4, Random par5Random)
     {
-        super.updateTick(var1, var2, var3, var4, var5);
+        super.updateTick(par1World, par2, par3, par4, par5Random);
 
-        if (var1.getBlockMetadata(var2, var3, var4) == 0)
+        if (par1World.getBlockMetadata(par2, par3, par4) == 0)
         {
-            this.onBlockAdded(var1, var2, var3, var4);
+            this.onBlockAdded(par1World, par2, par3, par4);
         }
     }
 
     /**
      * Called whenever the block is added into the world. Args: world, x, y, z
      */
-    public void onBlockAdded(World var1, int var2, int var3, int var4)
+    public void onBlockAdded(World par1World, int par2, int par3, int par4)
     {
-        if (var1.getBlockMetadata(var2, var3, var4) == 0)
+        if (par1World.getBlockMetadata(par2, par3, par4) == 0)
         {
-            if (var1.isBlockSolidOnSide(var2 - 1, var3, var4, ForgeDirection.EAST, true))
+            if (par1World.isBlockSolidOnSide(par2 - 1, par3, par4, ForgeDirection.EAST, true))
             {
-                var1.setBlockMetadataWithNotify(var2, var3, var4, 1, 2);
+                par1World.setBlockMetadataWithNotify(par2, par3, par4, 1, 2);
             }
-            else if (var1.isBlockSolidOnSide(var2 + 1, var3, var4, ForgeDirection.WEST, true))
+            else if (par1World.isBlockSolidOnSide(par2 + 1, par3, par4, ForgeDirection.WEST, true))
             {
-                var1.setBlockMetadataWithNotify(var2, var3, var4, 2, 2);
+                par1World.setBlockMetadataWithNotify(par2, par3, par4, 2, 2);
             }
-            else if (var1.isBlockSolidOnSide(var2, var3, var4 - 1, ForgeDirection.SOUTH, true))
+            else if (par1World.isBlockSolidOnSide(par2, par3, par4 - 1, ForgeDirection.SOUTH, true))
             {
-                var1.setBlockMetadataWithNotify(var2, var3, var4, 3, 2);
+                par1World.setBlockMetadataWithNotify(par2, par3, par4, 3, 2);
             }
-            else if (var1.isBlockSolidOnSide(var2, var3, var4 + 1, ForgeDirection.NORTH, true))
+            else if (par1World.isBlockSolidOnSide(par2, par3, par4 + 1, ForgeDirection.NORTH, true))
             {
-                var1.setBlockMetadataWithNotify(var2, var3, var4, 4, 2);
+                par1World.setBlockMetadataWithNotify(par2, par3, par4, 4, 2);
             }
-            else if (this.canPlaceTorchOn(var1, var2, var3 - 1, var4))
+            else if (this.canPlaceTorchOn(par1World, par2, par3 - 1, par4))
             {
-                var1.setBlockMetadataWithNotify(var2, var3, var4, 5, 2);
+                par1World.setBlockMetadataWithNotify(par2, par3, par4, 5, 2);
             }
         }
 
-        this.dropTorchIfCantStay(var1, var2, var3, var4);
+        this.dropTorchIfCantStay(par1World, par2, par3, par4);
     }
 
     /**
      * Lets the block know when one of its neighbor changes. Doesn't know which neighbor changed (coordinates passed are
      * their own) Args: x, y, z, neighbor blockID
      */
-    public void onNeighborBlockChange(World var1, int var2, int var3, int var4, int var5)
+    public void onNeighborBlockChange(World par1World, int par2, int par3, int par4, int par5)
     {
-        this.func_94397_d(var1, var2, var3, var4, var5);
+        this.func_94397_d(par1World, par2, par3, par4, par5);
     }
 
-    protected boolean func_94397_d(World var1, int var2, int var3, int var4, int var5)
+    protected boolean func_94397_d(World par1World, int par2, int par3, int par4, int par5)
     {
-        if (this.dropTorchIfCantStay(var1, var2, var3, var4))
+        if (this.dropTorchIfCantStay(par1World, par2, par3, par4))
         {
-            int var6 = var1.getBlockMetadata(var2, var3, var4);
-            boolean var7 = false;
+            int i1 = par1World.getBlockMetadata(par2, par3, par4);
+            boolean flag = false;
 
-            if (!var1.isBlockSolidOnSide(var2 - 1, var3, var4, ForgeDirection.EAST, true) && var6 == 1)
+            if (!par1World.isBlockSolidOnSide(par2 - 1, par3, par4, ForgeDirection.EAST, true) && i1 == 1)
             {
-                var7 = true;
+                flag = true;
             }
 
-            if (!var1.isBlockSolidOnSide(var2 + 1, var3, var4, ForgeDirection.WEST, true) && var6 == 2)
+            if (!par1World.isBlockSolidOnSide(par2 + 1, par3, par4, ForgeDirection.WEST, true) && i1 == 2)
             {
-                var7 = true;
+                flag = true;
             }
 
-            if (!var1.isBlockSolidOnSide(var2, var3, var4 - 1, ForgeDirection.SOUTH, true) && var6 == 3)
+            if (!par1World.isBlockSolidOnSide(par2, par3, par4 - 1, ForgeDirection.SOUTH, true) && i1 == 3)
             {
-                var7 = true;
+                flag = true;
             }
 
-            if (!var1.isBlockSolidOnSide(var2, var3, var4 + 1, ForgeDirection.NORTH, true) && var6 == 4)
+            if (!par1World.isBlockSolidOnSide(par2, par3, par4 + 1, ForgeDirection.NORTH, true) && i1 == 4)
             {
-                var7 = true;
+                flag = true;
             }
 
-            if (!this.canPlaceTorchOn(var1, var2, var3 - 1, var4) && var6 == 5)
+            if (!this.canPlaceTorchOn(par1World, par2, par3 - 1, par4) && i1 == 5)
             {
-                var7 = true;
+                flag = true;
             }
 
-            if (var7)
+            if (flag)
             {
-                this.dropBlockAsItem(var1, var2, var3, var4, var1.getBlockMetadata(var2, var3, var4), 0);
-                var1.setBlockToAir(var2, var3, var4);
+                this.dropBlockAsItem(par1World, par2, par3, par4, par1World.getBlockMetadata(par2, par3, par4), 0);
+                par1World.setBlockToAir(par2, par3, par4);
                 return true;
             }
             else
@@ -214,14 +214,14 @@ public class BlockAmbrosiumTorch extends BlockAether implements IAetherBlock
         }
     }
 
-    protected boolean dropTorchIfCantStay(World var1, int var2, int var3, int var4)
+    protected boolean dropTorchIfCantStay(World par1World, int par2, int par3, int par4)
     {
-        if (!this.canPlaceBlockAt(var1, var2, var3, var4))
+        if (!this.canPlaceBlockAt(par1World, par2, par3, par4))
         {
-            if (var1.getBlockId(var2, var3, var4) == this.blockID)
+            if (par1World.getBlockId(par2, par3, par4) == this.blockID)
             {
-                this.dropBlockAsItem(var1, var2, var3, var4, var1.getBlockMetadata(var2, var3, var4), 0);
-                var1.setBlockToAir(var2, var3, var4);
+                this.dropBlockAsItem(par1World, par2, par3, par4, par1World.getBlockMetadata(par2, par3, par4), 0);
+                par1World.setBlockToAir(par2, par3, par4);
             }
 
             return false;
@@ -236,34 +236,34 @@ public class BlockAmbrosiumTorch extends BlockAether implements IAetherBlock
      * Ray traces through the blocks collision from start vector to end vector returning a ray trace hit. Args: world,
      * x, y, z, startVec, endVec
      */
-    public MovingObjectPosition collisionRayTrace(World var1, int var2, int var3, int var4, Vec3 var5, Vec3 var6)
+    public MovingObjectPosition collisionRayTrace(World par1World, int par2, int par3, int par4, Vec3 par5Vec3, Vec3 par6Vec3)
     {
-        int var7 = var1.getBlockMetadata(var2, var3, var4) & 7;
-        float var8 = 0.15F;
+        int l = par1World.getBlockMetadata(par2, par3, par4) & 7;
+        float f = 0.15F;
 
-        if (var7 == 1)
+        if (l == 1)
         {
-            this.setBlockBounds(0.0F, 0.2F, 0.5F - var8, var8 * 2.0F, 0.8F, 0.5F + var8);
+            this.setBlockBounds(0.0F, 0.2F, 0.5F - f, f * 2.0F, 0.8F, 0.5F + f);
         }
-        else if (var7 == 2)
+        else if (l == 2)
         {
-            this.setBlockBounds(1.0F - var8 * 2.0F, 0.2F, 0.5F - var8, 1.0F, 0.8F, 0.5F + var8);
+            this.setBlockBounds(1.0F - f * 2.0F, 0.2F, 0.5F - f, 1.0F, 0.8F, 0.5F + f);
         }
-        else if (var7 == 3)
+        else if (l == 3)
         {
-            this.setBlockBounds(0.5F - var8, 0.2F, 0.0F, 0.5F + var8, 0.8F, var8 * 2.0F);
+            this.setBlockBounds(0.5F - f, 0.2F, 0.0F, 0.5F + f, 0.8F, f * 2.0F);
         }
-        else if (var7 == 4)
+        else if (l == 4)
         {
-            this.setBlockBounds(0.5F - var8, 0.2F, 1.0F - var8 * 2.0F, 0.5F + var8, 0.8F, 1.0F);
+            this.setBlockBounds(0.5F - f, 0.2F, 1.0F - f * 2.0F, 0.5F + f, 0.8F, 1.0F);
         }
         else
         {
-            var8 = 0.1F;
-            this.setBlockBounds(0.5F - var8, 0.0F, 0.5F - var8, 0.5F + var8, 0.6F, 0.5F + var8);
+            f = 0.1F;
+            this.setBlockBounds(0.5F - f, 0.0F, 0.5F - f, 0.5F + f, 0.6F, 0.5F + f);
         }
 
-        return super.collisionRayTrace(var1, var2, var3, var4, var5, var6);
+        return super.collisionRayTrace(par1World, par2, par3, par4, par5Vec3, par6Vec3);
     }
 
     @SideOnly(Side.CLIENT)
@@ -271,39 +271,39 @@ public class BlockAmbrosiumTorch extends BlockAether implements IAetherBlock
     /**
      * A randomly called display update to be able to add particles or other items for display
      */
-    public void randomDisplayTick(World var1, int var2, int var3, int var4, Random var5)
+    public void randomDisplayTick(World par1World, int par2, int par3, int par4, Random par5Random)
     {
-        int var6 = var1.getBlockMetadata(var2, var3, var4);
-        double var7 = (double)((float)var2 + 0.5F);
-        double var9 = (double)((float)var3 + 0.7F);
-        double var11 = (double)((float)var4 + 0.5F);
-        double var13 = 0.2199999988079071D;
-        double var15 = 0.27000001072883606D;
+        int l = par1World.getBlockMetadata(par2, par3, par4);
+        double d0 = (double)((float)par2 + 0.5F);
+        double d1 = (double)((float)par3 + 0.7F);
+        double d2 = (double)((float)par4 + 0.5F);
+        double d3 = 0.2199999988079071D;
+        double d4 = 0.27000001072883606D;
 
-        if (var6 == 1)
+        if (l == 1)
         {
-            var1.spawnParticle("smoke", var7 - var15, var9 + var13, var11, 0.0D, 0.0D, 0.0D);
-            var1.spawnParticle("flame", var7 - var15, var9 + var13, var11, 0.0D, 0.0D, 0.0D);
+            par1World.spawnParticle("smoke", d0 - d4, d1 + d3, d2, 0.0D, 0.0D, 0.0D);
+            par1World.spawnParticle("flame", d0 - d4, d1 + d3, d2, 0.0D, 0.0D, 0.0D);
         }
-        else if (var6 == 2)
+        else if (l == 2)
         {
-            var1.spawnParticle("smoke", var7 + var15, var9 + var13, var11, 0.0D, 0.0D, 0.0D);
-            var1.spawnParticle("flame", var7 + var15, var9 + var13, var11, 0.0D, 0.0D, 0.0D);
+            par1World.spawnParticle("smoke", d0 + d4, d1 + d3, d2, 0.0D, 0.0D, 0.0D);
+            par1World.spawnParticle("flame", d0 + d4, d1 + d3, d2, 0.0D, 0.0D, 0.0D);
         }
-        else if (var6 == 3)
+        else if (l == 3)
         {
-            var1.spawnParticle("smoke", var7, var9 + var13, var11 - var15, 0.0D, 0.0D, 0.0D);
-            var1.spawnParticle("flame", var7, var9 + var13, var11 - var15, 0.0D, 0.0D, 0.0D);
+            par1World.spawnParticle("smoke", d0, d1 + d3, d2 - d4, 0.0D, 0.0D, 0.0D);
+            par1World.spawnParticle("flame", d0, d1 + d3, d2 - d4, 0.0D, 0.0D, 0.0D);
         }
-        else if (var6 == 4)
+        else if (l == 4)
         {
-            var1.spawnParticle("smoke", var7, var9 + var13, var11 + var15, 0.0D, 0.0D, 0.0D);
-            var1.spawnParticle("flame", var7, var9 + var13, var11 + var15, 0.0D, 0.0D, 0.0D);
+            par1World.spawnParticle("smoke", d0, d1 + d3, d2 + d4, 0.0D, 0.0D, 0.0D);
+            par1World.spawnParticle("flame", d0, d1 + d3, d2 + d4, 0.0D, 0.0D, 0.0D);
         }
         else
         {
-            var1.spawnParticle("smoke", var7, var9, var11, 0.0D, 0.0D, 0.0D);
-            var1.spawnParticle("flame", var7, var9, var11, 0.0D, 0.0D, 0.0D);
+            par1World.spawnParticle("smoke", d0, d1, d2, 0.0D, 0.0D, 0.0D);
+            par1World.spawnParticle("flame", d0, d1, d2, 0.0D, 0.0D, 0.0D);
         }
     }
 }

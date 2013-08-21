@@ -94,35 +94,35 @@ public class ModelSliderMimicHost extends ModelBase
     /**
      * Sets the models various rotation angles then renders the model.
      */
-    public void render(Entity var1, float var2, float var3, float var4, float var5, float var6, float var7)
+    public void render(Entity entity, float f, float f1, float f2, float f3, float f4, float f5)
     {
-        super.render(var1, var2, var3, var4, var5, var6, var7);
-        this.setRotationAngles(var2, var3, var4, var5, var6, var7, var1);
+        super.render(entity, f, f1, f2, f3, f4, f5);
+        this.setRotationAngles(f, f1, f2, f3, f4, f5, entity);
 
-        if (var1 instanceof EntitySliderHostMimic && !((EntitySliderHostMimic)var1).isAwake())
+        if (entity instanceof EntitySliderHostMimic && !((EntitySliderHostMimic)entity).isAwake())
         {
-            this.fakeBody.render(var7);
+            this.fakeBody.render(f5);
         }
         else
         {
-            this.body3.render(var7);
-            this.frontLeftLeg.render(var7);
-            this.frontRightLeg.render(var7);
-            this.backLeftLeg.render(var7);
-            this.backRightLeg.render(var7);
-            this.body.render(var7);
-            this.body2.render(var7);
-            this.body5.render(var7);
-            this.body4.render(var7);
-            this.body6.render(var7);
+            this.body3.render(f5);
+            this.frontLeftLeg.render(f5);
+            this.frontRightLeg.render(f5);
+            this.backLeftLeg.render(f5);
+            this.backRightLeg.render(f5);
+            this.body.render(f5);
+            this.body2.render(f5);
+            this.body5.render(f5);
+            this.body4.render(f5);
+            this.body6.render(f5);
         }
     }
 
-    private void setRotation(ModelRenderer var1, float var2, float var3, float var4)
+    private void setRotation(ModelRenderer model, float x, float y, float z)
     {
-        var1.rotateAngleX = var2;
-        var1.rotateAngleY = var3;
-        var1.rotateAngleZ = var4;
+        model.rotateAngleX = x;
+        model.rotateAngleY = y;
+        model.rotateAngleZ = z;
     }
 
     /**
@@ -130,15 +130,15 @@ public class ModelSliderMimicHost extends ModelBase
      * and legs, where par1 represents the time(so that arms and legs swing back and forth) and par2 represents how
      * "far" arms and legs can swing at most.
      */
-    public void setRotationAngles(float var1, float var2, float var3, float var4, float var5, float var6, Entity var7)
+    public void setRotationAngles(float f, float f1, float f2, float f3, float f4, float f5, Entity entity)
     {
-        super.setRotationAngles(var1, var2, var3, var4, var5, var6, var7);
-        this.frontRightLeg.rotateAngleX = MathHelper.cos(var1 * 0.6662F) * 1.4F * var2;
-        this.frontLeftLeg.rotateAngleX = MathHelper.cos(var1 * 0.6662F + (float)Math.PI) * 1.4F * var2;
+        super.setRotationAngles(f, f1, f2, f3, f4, f5, entity);
+        this.frontRightLeg.rotateAngleX = MathHelper.cos(f * 0.6662F) * 1.4F * f1;
+        this.frontLeftLeg.rotateAngleX = MathHelper.cos(f * 0.6662F + (float)Math.PI) * 1.4F * f1;
         this.frontRightLeg.rotateAngleY = 0.0F;
         this.frontLeftLeg.rotateAngleY = 0.0F;
-        this.backRightLeg.rotateAngleX = MathHelper.cos(var1 * 0.6662F) * 1.4F * var2;
-        this.backLeftLeg.rotateAngleX = MathHelper.cos(var1 * 0.6662F + (float)Math.PI) * 1.4F * var2;
+        this.backRightLeg.rotateAngleX = MathHelper.cos(f * 0.6662F) * 1.4F * f1;
+        this.backLeftLeg.rotateAngleX = MathHelper.cos(f * 0.6662F + (float)Math.PI) * 1.4F * f1;
         this.backRightLeg.rotateAngleY = 0.0F;
         this.backLeftLeg.rotateAngleY = 0.0F;
     }

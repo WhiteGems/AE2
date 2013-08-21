@@ -9,7 +9,6 @@ import net.aetherteam.aether.Aether;
 import net.aetherteam.aether.dungeons.Dungeon;
 import net.aetherteam.aether.dungeons.DungeonHandler;
 import net.aetherteam.aether.party.members.PartyMember;
-import net.minecraft.client.audio.SoundManager;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
@@ -27,18 +26,18 @@ public class TileEntityEntranceController extends TileEntity
     public int chatTime;
     private int dungeonID = -1;
 
-    public void chatItUp(EntityPlayer var1, String var2)
+    public void chatItUp(EntityPlayer player, String s)
     {
         if (this.chatTime <= 0)
         {
-            Aether.proxy.displayMessage(var1, var2);
+            Aether.proxy.displayMessage(player, s);
             this.chatTime = 100;
         }
     }
 
-    public void setDungeonID(int var1)
+    public void setDungeonID(int id)
     {
-        this.dungeonID = var1;
+        this.dungeonID = id;
     }
 
     public Dungeon getDungeon()
@@ -48,21 +47,7 @@ public class TileEntityEntranceController extends TileEntity
 
     public boolean isSoundOn()
     {
-        boolean var1;
-
-        if (this.isClient() && Aether.proxy.getClient().sndManager != null)
-        {
-            SoundManager var10000 = Aether.proxy.getClient().sndManager;
-
-            if (SoundManager.sndSystem != null)
-            {
-                var1 = true;
-                return var1;
-            }
-        }
-
-        var1 = false;
-        return var1;
+        return this.isClient() && Aether.proxy.getClient().sndManager != null && Aether.proxy.getClient().sndManager.sndSystem != null;
     }
 
     public boolean isClient()
@@ -72,92 +57,76 @@ public class TileEntityEntranceController extends TileEntity
 
     public boolean isMusicPlaying()
     {
-        SoundManager var10000 = Aether.proxy.getClient().sndManager;
-        boolean var1;
-
-        if (SoundManager.sndSystem != null)
-        {
-            var10000 = Aether.proxy.getClient().sndManager;
-
-            if (SoundManager.sndSystem.playing("streaming"))
-            {
-                var1 = true;
-                return var1;
-            }
-        }
-
-        var1 = false;
-        return var1;
+        return Aether.proxy.getClient().sndManager.sndSystem != null && Aether.proxy.getClient().sndManager.sndSystem.playing("streaming");
     }
 
     public void turnMusicOff()
     {
         if (this.isSoundOn())
         {
-            SoundManager var10000 = Aether.proxy.getClient().sndManager;
-            SoundManager.sndSystem.stop("streaming");
+            Aether.proxy.getClient().sndManager.sndSystem.stop("streaming");
         }
     }
 
-    public void playMusicFile(String var1)
+    public void playMusicFile(String fileName)
     {
         if (this.isSoundOn())
         {
             float var10002 = (float)this.xCoord;
             float var10003 = (float)this.yCoord;
-            Aether.proxy.getClient().sndManager.playStreaming(var1, var10002, var10003, (float)this.zCoord);
+            Aether.proxy.getClient().sndManager.playStreaming(fileName, var10002, var10003, (float)this.zCoord);
         }
     }
 
-    public void teleportMembersFromParty(ArrayList var1, boolean var2)
+    public void teleportMembersFromParty(ArrayList<PartyMember> members, boolean out)
     {
-        Side var3 = FMLCommonHandler.instance().getEffectiveSide();
+        Side side = FMLCommonHandler.instance().getEffectiveSide();
 
-        if (var3.isServer())
+        if (side.isServer())
         {
-            MinecraftServer var4 = FMLCommonHandler.instance().getMinecraftServerInstance();
-            ServerConfigurationManager var5 = var4.getConfigurationManager();
+            MinecraftServer server = FMLCommonHandler.instance().getMinecraftServerInstance();
+            ServerConfigurationManager configManager = server.getConfigurationManager();
 
-            for (int var6 = 0; var6 < var5.playerEntityList.size(); ++var6)
+            for (int playerAmount = 0; playerAmount < configManager.playerEntityList.size(); ++playerAmount)
             {
-                Object var7 = var5.playerEntityList.get(var6);
-                Iterator var8 = var1.iterator();
+                Object player = configManager.playerEntityList.get(playerAmount);
+                Iterator i$ = members.iterator();
 
-                while (var8.hasNext())
+                while (i$.hasNext())
                 {
-                    PartyMember var9 = (PartyMember)var8.next();
+                    PartyMember member = (PartyMember)i$.next();
 
-                    if (var7 instanceof EntityPlayerMP && ((EntityPlayerMP)var7).username.equalsIgnoreCase(var9.username))
+                    if (player instanceof EntityPlayerMP && ((EntityPlayerMP)player).username.equalsIgnoreCase(member.username))
                     {
-                        ((EntityPlayerMP)var7).setPositionAndUpdate((double)((float)((double)this.xCoord + 0.5D)), (double)((float)((double)this.yCoord + 1.0D)), (double)((float)((double)this.zCoord + 0.5D + (var2 ? 3.0D : 0.0D))));
+                        ((EntityPlayerMP)player).setPositionAndUpdate((double)((float)((double)this.xCoord + 0.5D)), (double)((float)((double)this.yCoord + 1.0D)), (double)((float)((double)this.zCoord + 0.5D + (out ? 3.0D : 0.0D))));
                     }
                 }
             }
         }
 
-        if (!var2)
+        if (!out)
         {
-            this.worldObj.playSoundEffect((double)this.xCoord, (double)this.yCoord, (double)this.zCoord, "aeboss.slider.awake", 1.0F, 1.0F / (this.rand.nextFloat() * 0.2F + 0.9F));
-            this.worldObj.playSoundEffect((double)this.xCoord, (double)this.yCoord, (double)this.zCoord, "aeboss.slider.unlock", 1.0F, 1.0F / (this.rand.nextFloat() * 0.2F + 0.9F));
+            this.worldObj.playSoundEffect((double)this.xCoord, (double)this.yCoord, (double)this.zCoord, "aether:aeboss.slider.awake", 1.0F, 1.0F / (this.rand.nextFloat() * 0.2F + 0.9F));
+            this.worldObj.playSoundEffect((double)this.xCoord, (double)this.yCoord, (double)this.zCoord, "aether:aeboss.slider.unlock", 1.0F, 1.0F / (this.rand.nextFloat() * 0.2F + 0.9F));
         }
     }
 
     /**
      * Reads a tile entity from NBT.
      */
-    public void readFromNBT(NBTTagCompound var1)
+    public void readFromNBT(NBTTagCompound nbttagcompound)
     {
-        super.readFromNBT(var1);
-        this.dungeonID = var1.getInteger("dungeonId");
+        super.readFromNBT(nbttagcompound);
+        this.dungeonID = nbttagcompound.getInteger("dungeonId");
     }
 
     /**
      * Writes a tile entity to NBT.
      */
-    public void writeToNBT(NBTTagCompound var1)
+    public void writeToNBT(NBTTagCompound nbttagcompound)
     {
-        super.writeToNBT(var1);
-        var1.setInteger("dungeonId", this.dungeonID);
+        super.writeToNBT(nbttagcompound);
+        nbttagcompound.setInteger("dungeonId", this.dungeonID);
     }
 
     /**
@@ -173,11 +142,11 @@ public class TileEntityEntranceController extends TileEntity
 
         if (this.dungeonID == -1)
         {
-            Dungeon var1 = DungeonHandler.instance().getInstanceAt(MathHelper.floor_double((double)this.xCoord), MathHelper.floor_double((double)this.yCoord), MathHelper.floor_double((double)this.zCoord));
+            Dungeon dungeon = DungeonHandler.instance().getInstanceAt(MathHelper.floor_double((double)this.xCoord), MathHelper.floor_double((double)this.yCoord), MathHelper.floor_double((double)this.zCoord));
 
-            if (var1 != null)
+            if (dungeon != null)
             {
-                this.dungeonID = var1.getID();
+                this.dungeonID = dungeon.getID();
 
                 if (!this.worldObj.isRemote)
                 {
@@ -187,14 +156,14 @@ public class TileEntityEntranceController extends TileEntity
         }
     }
 
-    public boolean isUseableByPlayer(EntityPlayer var1)
+    public boolean isUseableByPlayer(EntityPlayer par1EntityPlayer)
     {
-        return this.worldObj.getBlockTileEntity(this.xCoord, this.yCoord, this.zCoord) != this ? false : var1.getDistanceSq((double)this.xCoord + 0.5D, (double)this.yCoord + 0.5D, (double)this.zCoord + 0.5D) <= 64.0D;
+        return this.worldObj.getBlockTileEntity(this.xCoord, this.yCoord, this.zCoord) != this ? false : par1EntityPlayer.getDistanceSq((double)this.xCoord + 0.5D, (double)this.yCoord + 0.5D, (double)this.zCoord + 0.5D) <= 64.0D;
     }
 
-    public void onDataPacket(INetworkManager var1, Packet132TileEntityData var2)
+    public void onDataPacket(INetworkManager net, Packet132TileEntityData pkt)
     {
-        this.readFromNBT(var2.customParam1);
+        this.readFromNBT(pkt.customParam1);
     }
 
     /**
@@ -207,19 +176,19 @@ public class TileEntityEntranceController extends TileEntity
         return new Packet132TileEntityData(this.xCoord, this.yCoord, this.zCoord, 1, var1);
     }
 
-    private void sendToAllInOurWorld(Packet var1)
+    private void sendToAllInOurWorld(Packet pkt)
     {
-        ServerConfigurationManager var2 = FMLCommonHandler.instance().getMinecraftServerInstance().getConfigurationManager();
-        Iterator var3 = var2.playerEntityList.iterator();
+        ServerConfigurationManager scm = FMLCommonHandler.instance().getMinecraftServerInstance().getConfigurationManager();
+        Iterator i$ = scm.playerEntityList.iterator();
 
-        while (var3.hasNext())
+        while (i$.hasNext())
         {
-            Object var4 = var3.next();
-            EntityPlayerMP var5 = (EntityPlayerMP)var4;
+            Object obj = i$.next();
+            EntityPlayerMP player = (EntityPlayerMP)obj;
 
-            if (var5.worldObj == this.worldObj)
+            if (player.worldObj == this.worldObj)
             {
-                var5.playerNetServerHandler.sendPacketToPlayer(var1);
+                player.playerNetServerHandler.sendPacketToPlayer(pkt);
             }
         }
     }

@@ -6,7 +6,8 @@ import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.util.ResourceLocation;
 import org.lwjgl.opengl.GL11;
 
 public class RenderCloudParachute extends Render
@@ -19,27 +20,27 @@ public class RenderCloudParachute extends Render
         renderBlocks = new RenderBlocks();
     }
 
-    public void renderCloud(EntityCloudParachute var1, double var2, double var4, double var6, float var8, float var9)
+    public void renderCloud(EntityCloudParachute entitycloud, double d, double d1, double d2, float f, float f1)
     {
         GL11.glPushMatrix();
 
-        if (var1.getRidingHandler().isBeingRidden())
+        if (entitycloud.getRidingHandler().isBeingRidden())
         {
-            EntityLiving var10 = var1.getRidingHandler().getRider();
-            var2 = var10.lastTickPosX + (var10.posX - var10.lastTickPosX) * (double)var9;
-            var4 = var10.lastTickPosY - 1.68D + (var10.posY - var10.lastTickPosY) * (double)var9;
-            var6 = var10.lastTickPosZ + (var10.posZ - var10.lastTickPosZ) * (double)var9;
-            var2 -= RenderManager.renderPosX;
-            var4 -= RenderManager.renderPosY;
-            var6 -= RenderManager.renderPosZ;
-            var8 = (float)((double)var10.prevRotationYaw + (double)(var10.rotationYaw - var10.prevRotationYaw) * var2);
+            EntityLivingBase entity = entitycloud.getRidingHandler().getRider();
+            d = entity.lastTickPosX + (entity.posX - entity.lastTickPosX) * (double)f1;
+            d1 = entity.lastTickPosY - 1.68D + (entity.posY - entity.lastTickPosY) * (double)f1;
+            d2 = entity.lastTickPosZ + (entity.posZ - entity.lastTickPosZ) * (double)f1;
+            d -= RenderManager.renderPosX;
+            d1 -= RenderManager.renderPosY;
+            d2 -= RenderManager.renderPosZ;
+            f = (float)((double)entity.prevRotationYaw + (double)(entity.rotationYaw - entity.prevRotationYaw) * d);
         }
 
-        GL11.glTranslatef((float)var2, (float)var4, (float)var6);
-        GL11.glRotatef(180.0F - var8, 0.0F, 1.0F, 0.0F);
-        this.loadTexture("/net/aetherteam/aether/client/sprites/aetherBlocks.png");
+        GL11.glTranslatef((float)d, (float)d1, (float)d2);
+        GL11.glRotatef(180.0F - f, 0.0F, 1.0F, 0.0F);
+        this.func_110777_b(entitycloud);
         GL11.glEnable(GL11.GL_LIGHTING);
-        renderBlocks.renderBlockAsItem(AetherBlocks.Aercloud, var1.getColor() ? 2 : 0, var1.getBrightness(var9));
+        renderBlocks.renderBlockAsItem(AetherBlocks.Aercloud, entitycloud.getColor() ? 2 : 0, entitycloud.getBrightness(f1));
         GL11.glPopMatrix();
     }
 
@@ -49,8 +50,13 @@ public class RenderCloudParachute extends Render
      * (Render<T extends Entity) and this method has signature public void doRender(T entity, double d, double d1,
      * double d2, float f, float f1). But JAD is pre 1.5 so doesn't do that.
      */
-    public void doRender(Entity var1, double var2, double var4, double var6, float var8, float var9)
+    public void doRender(Entity entity, double d, double d1, double d2, float f, float f1)
     {
-        this.renderCloud((EntityCloudParachute)var1, var2, var4, var6, var8, var9);
+        this.renderCloud((EntityCloudParachute)entity, d, d1, d2, f, f1);
+    }
+
+    protected ResourceLocation func_110775_a(Entity entity)
+    {
+        return null;
     }
 }

@@ -41,7 +41,7 @@ import java.security.spec.X509EncodedKeySpec;
 import java.util.ArrayList;
 import net.aetherteam.aether.achievements.AetherAchievements;
 import net.aetherteam.aether.blocks.AetherBlocks;
-import net.aetherteam.aether.client.PlayerBaseAetherClient;
+import net.aetherteam.aether.client.PlayerAetherClient;
 import net.aetherteam.aether.commands.CommandClearInventoryAether;
 import net.aetherteam.aether.commands.CommandTeleport;
 import net.aetherteam.aether.creative_tabs.AetherAccessoryTab;
@@ -130,8 +130,8 @@ public class Aether
         serverSide = "net.aetherteam.aether.CommonProxy"
     )
     public static CommonProxy proxy;
-    public static ArrayList developers = new ArrayList();
-    public static ArrayList helper = new ArrayList();
+    public static ArrayList<String> developers = new ArrayList();
+    public static ArrayList<String> helper = new ArrayList();
 
     public static Configuration getConfig()
     {
@@ -149,14 +149,14 @@ public class Aether
     }
 
     @Mod.Init
-    public void load(FMLInitializationEvent var1)
+    public void load(FMLInitializationEvent event)
     {
-        X509EncodedKeySpec var2 = new X509EncodedKeySpec(Base58.decode(PubKey));
+        X509EncodedKeySpec publicKeySpec = new X509EncodedKeySpec(Base58.decode(PubKey));
 
         try
         {
-            KeyFactory var3 = KeyFactory.getInstance("RSA");
-            publicKey = var3.generatePublic(var2);
+            KeyFactory e = KeyFactory.getInstance("RSA");
+            publicKey = e.generatePublic(publicKeySpec);
         }
         catch (NoSuchAlgorithmException var4)
         {
@@ -171,7 +171,6 @@ public class Aether
         DimensionManager.registerDimension(3, 3);
         proxy.loadSounds();
         proxy.registerRenderers();
-        proxy.registerMainMenu();
         proxy.registerPlayerAPI();
         config.load();
         AetherEntities.init(this);
@@ -192,187 +191,186 @@ public class Aether
     }
 
     @Mod.PreInit
-    public void preInit(FMLPreInitializationEvent var1)
+    public void preInit(FMLPreInitializationEvent event)
     {
         AetherRanks.addAllRanks();
         proxy.registerRenderPAPI();
         proxy.registerSounds();
-        config = new Configuration(var1.getSuggestedConfigurationFile());
+        config = new Configuration(event.getSuggestedConfigurationFile());
         proxy.registerTickHandler();
         GameRegistry.registerPlayerTracker(new AetherPlayerTracker());
         new ArrayList();
     }
 
     @Mod.ServerStarting
-    public void serverStarting(FMLServerStartingEvent var1)
+    public void serverStarting(FMLServerStartingEvent event)
     {
-        var1.registerServerCommand(new CommandClearInventoryAether());
-        var1.registerServerCommand(new CommandTeleport());
+        event.registerServerCommand(new CommandClearInventoryAether());
+        event.registerServerCommand(new CommandTeleport());
         TickRegistry.registerTickHandler(new ServerTickHandler(), Side.SERVER);
     }
 
     @Mod.ServerStarted
-    public void serverStarted(FMLServerStartedEvent var1)
+    public void serverStarted(FMLServerStartedEvent event)
     {
-        SerialDataHandler var2 = new SerialDataHandler("dungeons.dat");
-        ArrayList var3 = var2.deserializeObjects();
-        MinecraftServer var4 = FMLCommonHandler.instance().getMinecraftServerInstance();
-        ServerConfigurationManager var5 = var4.getConfigurationManager();
+        SerialDataHandler dungeonDataHandler = new SerialDataHandler("dungeons.dat");
+        ArrayList dungeonObjects = dungeonDataHandler.deserializeObjects();
+        MinecraftServer server = FMLCommonHandler.instance().getMinecraftServerInstance();
+        ServerConfigurationManager configManager = server.getConfigurationManager();
 
-        if (var5.playerEntityList.size() <= 1)
+        if (configManager.playerEntityList.size() <= 1)
         {
-            SerialDataHandler var6 = new SerialDataHandler("parties.dat");
-            ArrayList var7 = var6.deserializeObjects();
+            SerialDataHandler partyDataHandler = new SerialDataHandler("parties.dat");
+            ArrayList partyObjects = partyDataHandler.deserializeObjects();
 
-            if (var7 != null)
+            if (partyObjects != null)
             {
-                PartyController.instance().setParties(var7);
+                PartyController.instance().setParties(partyObjects);
             }
         }
 
-        if (var3 != null)
+        if (dungeonObjects != null)
         {
-            DungeonHandler.instance().loadInstances(var3);
+            DungeonHandler.instance().loadInstances(dungeonObjects);
         }
     }
 
     @Mod.ServerStopping
-    public void serverStopping(FMLServerStoppingEvent var1)
+    public void serverStopping(FMLServerStoppingEvent event)
     {
-        SerialDataHandler var2 = new SerialDataHandler("dungeons.dat");
-        ArrayList var3 = DungeonHandler.instance().getInstances();
-        MinecraftServer var4 = FMLCommonHandler.instance().getMinecraftServerInstance();
-        ServerConfigurationManager var5 = var4.getConfigurationManager();
+        SerialDataHandler dungeonDataHandler = new SerialDataHandler("dungeons.dat");
+        ArrayList dungeonObjects = DungeonHandler.instance().getInstances();
+        MinecraftServer server = FMLCommonHandler.instance().getMinecraftServerInstance();
+        ServerConfigurationManager configManager = server.getConfigurationManager();
 
-        if (var5.playerEntityList.size() <= 1)
+        if (configManager.playerEntityList.size() <= 1)
         {
-            SerialDataHandler var6 = new SerialDataHandler("parties.dat");
-            ArrayList var7 = PartyController.instance().getParties();
-            var6.serializeObjects(var7);
+            SerialDataHandler partyDataHandler = new SerialDataHandler("parties.dat");
+            ArrayList partyObjects = PartyController.instance().getParties();
+            partyDataHandler.serializeObjects(partyObjects);
         }
 
-        var2.serializeObjects(var3);
+        dungeonDataHandler.serializeObjects(dungeonObjects);
     }
 
-    public static void teleportPlayerToAether(EntityPlayerMP var0, boolean var1)
+    public static void teleportPlayerToAether(EntityPlayerMP player, boolean aboveWorld)
     {
-        getServerPlayer(var0);
-        PlayerBaseAetherServer.keepInventory = true;
-        TeleporterAether var2;
-        ServerConfigurationManager var3;
+        getServerPlayer(player);
+        PlayerAetherServer.keepInventory = true;
+        TeleporterAether aetherTeleporter;
+        ServerConfigurationManager scm;
 
-        if (var0.dimension == 0)
+        if (player.dimension == 0)
         {
-            var2 = new TeleporterAether(MinecraftServer.getServer().worldServerForDimension(3));
-            var3 = MinecraftServer.getServer().getConfigurationManager();
-            var3.transferPlayerToDimension(var0, 3, var2);
+            aetherTeleporter = new TeleporterAether(MinecraftServer.getServer().worldServerForDimension(3));
+            scm = MinecraftServer.getServer().getConfigurationManager();
+            scm.transferPlayerToDimension(player, 3, aetherTeleporter);
         }
-        else if (var0.dimension == 3 && !var1)
+        else if (player.dimension == 3 && !aboveWorld)
         {
-            var2 = new TeleporterAether(MinecraftServer.getServer().worldServerForDimension(0));
-            var3 = MinecraftServer.getServer().getConfigurationManager();
-            var3.transferPlayerToDimension(var0, 0, var2);
+            aetherTeleporter = new TeleporterAether(MinecraftServer.getServer().worldServerForDimension(0));
+            scm = MinecraftServer.getServer().getConfigurationManager();
+            scm.transferPlayerToDimension(player, 0, aetherTeleporter);
         }
-        else if (var0.dimension == 3 && var1)
+        else if (player.dimension == 3 && aboveWorld)
         {
-            double var8 = var0.posX;
-            double var4 = var0.posZ;
-            TeleporterAether var6 = new TeleporterAether(MinecraftServer.getServer().worldServerForDimension(0), false);
-            ServerConfigurationManager var7 = MinecraftServer.getServer().getConfigurationManager();
-            var7.transferPlayerToDimension(var0, 0, var6);
-            var0.setPositionAndUpdate(var8, 256.0D, var4);
+            double aetherTeleporter2 = player.posX;
+            double posZ = player.posZ;
+            TeleporterAether aetherTeleporter1 = new TeleporterAether(MinecraftServer.getServer().worldServerForDimension(0), false);
+            ServerConfigurationManager scm1 = MinecraftServer.getServer().getConfigurationManager();
+            scm1.transferPlayerToDimension(player, 0, aetherTeleporter1);
+            player.setPositionAndUpdate(aetherTeleporter2, 256.0D, posZ);
         }
         else
         {
-            var2 = new TeleporterAether(MinecraftServer.getServer().worldServerForDimension(3));
-            var3 = MinecraftServer.getServer().getConfigurationManager();
-            var3.transferPlayerToDimension(var0, 3, var2);
+            aetherTeleporter = new TeleporterAether(MinecraftServer.getServer().worldServerForDimension(3));
+            scm = MinecraftServer.getServer().getConfigurationManager();
+            scm.transferPlayerToDimension(player, 3, aetherTeleporter);
         }
 
-        var0.timeUntilPortal = var0.getPortalCooldown();
+        player.timeUntilPortal = player.getPortalCooldown();
     }
 
-    public static void teleportEntityToAether(Entity var0)
+    public static void teleportEntityToAether(Entity entity)
     {
-        if (!var0.worldObj.isRemote && !var0.isDead)
+        if (!entity.worldObj.isRemote && !entity.isDead)
         {
-            boolean var1 = false;
-            int var2 = var0.dimension;
-            byte var8;
+            boolean newDim = false;
+            int j = entity.dimension;
+            byte newDim1;
 
-            if (var2 == 0)
+            if (j == 0)
             {
-                var8 = 3;
+                newDim1 = 3;
             }
-            else if (var2 == 3)
+            else if (j == 3)
             {
-                var8 = 0;
+                newDim1 = 0;
             }
             else
             {
-                var8 = 3;
+                newDim1 = 3;
             }
 
-            var0.worldObj.theProfiler.startSection("changeDimension");
-            MinecraftServer var3 = MinecraftServer.getServer();
-            WorldServer var4 = var3.worldServerForDimension(var2);
-            WorldServer var5 = var3.worldServerForDimension(var8);
-            TeleporterAether var6 = new TeleporterAether(MinecraftServer.getServer().worldServerForDimension(var8));
-            var0.dimension = var8;
-            var0.worldObj.removeEntity(var0);
-            var0.isDead = false;
-            var0.worldObj.theProfiler.startSection("reposition");
-            var3.getConfigurationManager().transferEntityToWorld(var0, var2, var4, var5, var6);
-            var0.worldObj.theProfiler.endStartSection("reloading");
-            Entity var7 = EntityList.createEntityByName(EntityList.getEntityString(var0), var5);
+            entity.worldObj.theProfiler.startSection("changeDimension");
+            MinecraftServer minecraftserver = MinecraftServer.getServer();
+            WorldServer worldserver = minecraftserver.worldServerForDimension(j);
+            WorldServer worldserver1 = minecraftserver.worldServerForDimension(newDim1);
+            TeleporterAether aetherTeleporter = new TeleporterAether(MinecraftServer.getServer().worldServerForDimension(newDim1));
+            entity.dimension = newDim1;
+            entity.worldObj.removeEntity(entity);
+            entity.isDead = false;
+            entity.worldObj.theProfiler.startSection("reposition");
+            minecraftserver.getConfigurationManager().transferEntityToWorld(entity, j, worldserver, worldserver1, aetherTeleporter);
+            entity.worldObj.theProfiler.endStartSection("reloading");
+            Entity entity1 = EntityList.createEntityByName(EntityList.getEntityString(entity), worldserver1);
 
-            if (var7 != null)
+            if (entity1 != null)
             {
-                var7.copyDataFrom(var0, true);
-                var7.timeUntilPortal = var0.getPortalCooldown();
-                var5.spawnEntityInWorld(var7);
+                entity1.copyDataFrom(entity, true);
+                entity1.timeUntilPortal = entity.getPortalCooldown();
+                worldserver1.spawnEntityInWorld(entity1);
             }
 
-            var0.isDead = true;
-            var0.worldObj.theProfiler.endSection();
-            var4.resetUpdateEntityTick();
-            var5.resetUpdateEntityTick();
-            var0.worldObj.theProfiler.endSection();
+            entity.isDead = true;
+            entity.worldObj.theProfiler.endSection();
+            worldserver.resetUpdateEntityTick();
+            worldserver1.resetUpdateEntityTick();
+            entity.worldObj.theProfiler.endSection();
         }
     }
 
-    public static void giveAchievement(Achievement var0, EntityPlayer var1)
+    public static void giveAchievement(Achievement achievement, EntityPlayer player)
     {
-        Minecraft var2 = proxy.getClient();
-        boolean var3 = var1.worldObj.isRemote;
+        Minecraft mc = proxy.getClient();
+        boolean isRemote = player.worldObj.isRemote;
 
-        if (!var3 && var2 != null)
+        if (!isRemote && mc != null)
         {
-            if (var2.statFileWriter.canUnlockAchievement(var0) && !var2.statFileWriter.hasAchievementUnlocked(var0))
+            if (mc.statFileWriter.canUnlockAchievement(achievement) && !mc.statFileWriter.hasAchievementUnlocked(achievement))
             {
                 ;
             }
         }
     }
 
-    public String getMyKey(String var1)
+    public String getMyKey(String name)
     {
-        Minecraft.getMinecraft();
-        File var2 = new File(Minecraft.getMinecraftDir(), var1.toLowerCase() + ".key");
+        File Me = new File(Minecraft.getMinecraft().mcDataDir, name.toLowerCase() + ".key");
 
-        if (var2.exists())
+        if (Me.exists())
         {
             try
             {
-                BufferedReader var3 = new BufferedReader(new FileReader(var2));
-                String var4 = var3.readLine();
-                System.out.print("Key !! :" + var4);
+                BufferedReader url = new BufferedReader(new FileReader(Me));
+                String e = url.readLine();
+                System.out.print("Key !! :" + e);
                 System.out.println("Reading name...");
 
-                if (!var4.equalsIgnoreCase("false") && this.isLegit(var1.toLowerCase(), var4))
+                if (!e.equalsIgnoreCase("false") && this.isLegit(name.toLowerCase(), e))
                 {
                     System.out.println("Read name is correct.");
-                    return var4;
+                    return e;
                 }
             }
             catch (IOException var8)
@@ -383,31 +381,31 @@ public class Aether
 
         try
         {
-            URL var9 = new URL("http://www.aethermod.net/signature.php?name=" + var1.toLowerCase());
-            BufferedReader var10 = new BufferedReader(new InputStreamReader(var9.openStream()));
-            String var5;
+            URL url1 = new URL("http://www.aethermod.net/signature.php?name=" + name.toLowerCase());
+            BufferedReader e1 = new BufferedReader(new InputStreamReader(url1.openStream()));
+            String str;
 
-            if ((var5 = var10.readLine()) != null && var1 != null)
+            if ((str = e1.readLine()) != null && name != null)
             {
-                var10.close();
-                System.out.println(var5);
-                System.out.println(this.isLegit(var1.toLowerCase(), var5));
+                e1.close();
+                System.out.println(str);
+                System.out.println(this.isLegit(name.toLowerCase(), str));
 
-                if (var5.equalsIgnoreCase("false"))
+                if (str.equalsIgnoreCase("false"))
                 {
                     return null;
                 }
 
-                if (this.isLegit(var1.toLowerCase(), var5))
+                if (this.isLegit(name.toLowerCase(), str))
                 {
                     System.out.println("Downloaded name is legit, should save now.");
-                    return var5;
+                    return str;
                 }
 
                 System.out.println("Downloaded name is not legit, weird!");
             }
 
-            var10.close();
+            e1.close();
         }
         catch (MalformedURLException var6)
         {
@@ -421,33 +419,33 @@ public class Aether
         return null;
     }
 
-    public String getKey(String var1)
+    public String getKey(String name)
     {
         try
         {
-            URL var2 = new URL("http://www.aethermod.net/signature.php?name=" + var1.toLowerCase());
-            BufferedReader var3 = new BufferedReader(new InputStreamReader(var2.openStream()));
-            String var4;
+            URL url = new URL("http://www.aethermod.net/signature.php?name=" + name.toLowerCase());
+            BufferedReader e = new BufferedReader(new InputStreamReader(url.openStream()));
+            String str;
 
-            if ((var4 = var3.readLine()) != null)
+            if ((str = e.readLine()) != null)
             {
-                var3.close();
+                e.close();
 
-                if (var4.equalsIgnoreCase("false"))
+                if (str.equalsIgnoreCase("false"))
                 {
                     return null;
                 }
 
-                if (this.isLegit(var1.toLowerCase(), var4))
+                if (this.isLegit(name.toLowerCase(), str))
                 {
                     System.out.println("Downloaded name is legit, should save now.");
-                    return var4;
+                    return str;
                 }
 
                 System.out.println("Downloaded name is not legit, weird!");
             }
 
-            var3.close();
+            e.close();
         }
         catch (MalformedURLException var5)
         {
@@ -461,16 +459,16 @@ public class Aether
         return null;
     }
 
-    public boolean isLegit(String var1, String var2)
+    public boolean isLegit(String username, String proof)
     {
-        if (var2 != null && var1 != null)
+        if (proof != null && username != null)
         {
             try
             {
-                Signature var3 = Signature.getInstance("MD5WithRSA");
-                var3.initVerify(publicKey);
-                var3.update(var1.toLowerCase().getBytes("UTF8"));
-                return Base58.decode(var2) != null ? var3.verify(Base58.decode(var2)) : false;
+                Signature sig = Signature.getInstance("MD5WithRSA");
+                sig.initVerify(publicKey);
+                sig.update(username.toLowerCase().getBytes("UTF8"));
+                return Base58.decode(proof) != null ? sig.verify(Base58.decode(proof)) : false;
             }
             catch (NoSuchAlgorithmException var5)
             {
@@ -497,17 +495,17 @@ public class Aether
         }
     }
 
-    public static AetherCommonPlayerHandler getPlayerBase(EntityPlayer var0)
+    public static AetherCommonPlayerHandler getPlayerBase(EntityPlayer entity)
     {
-        return proxy.getPlayerHandler(var0);
+        return proxy.getPlayerHandler(entity);
     }
 
-    public static PlayerBaseAetherServer getServerPlayer(EntityPlayer var0)
+    public static PlayerAetherServer getServerPlayer(EntityPlayer player)
     {
-        if (var0 instanceof EntityPlayerMP)
+        if (player instanceof EntityPlayerMP)
         {
-            PlayerCoreServer var1 = (PlayerCoreServer)var0;
-            return (PlayerBaseAetherServer)var1.getPlayerCoreObject(PlayerBaseAetherServer.class);
+            PlayerCoreServer playerCoreServer = (PlayerCoreServer)player;
+            return (PlayerAetherServer)playerCoreServer.getPlayerCoreObject(PlayerAetherServer.class);
         }
         else
         {
@@ -516,12 +514,12 @@ public class Aether
     }
 
     @SideOnly(Side.CLIENT)
-    public static PlayerBaseAetherClient getClientPlayer(EntityPlayer var0)
+    public static PlayerAetherClient getClientPlayer(EntityPlayer player)
     {
-        if (var0 instanceof EntityPlayerSP)
+        if (player instanceof EntityPlayerSP)
         {
-            PlayerCoreClient var1 = (PlayerCoreClient)var0;
-            return (PlayerBaseAetherClient)var1.getPlayerCoreObject(PlayerBaseAetherClient.class);
+            PlayerCoreClient playerCoreClient = (PlayerCoreClient)player;
+            return (PlayerAetherClient)playerCoreClient.getPlayerCoreObject(PlayerAetherClient.class);
         }
         else
         {
@@ -529,6 +527,12 @@ public class Aether
         }
     }
 
+    public static boolean isGamePaused()
+    {
+        Minecraft mc = Minecraft.getMinecraft();
+        return mc.isSingleplayer() && mc.currentScreen != null && mc.currentScreen.doesGuiPauseGame() && !mc.getIntegratedServer().getPublic();
+    }
+
     @Mod.PostInit
-    public void postInit(FMLPostInitializationEvent var1) {}
+    public void postInit(FMLPostInitializationEvent event) {}
 }

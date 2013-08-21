@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 public class RegisteredPackets
 {
-    private static ArrayList packets = new ArrayList();
+    private static ArrayList<AetherPacket> packets = new ArrayList();
     public static final AetherPacket riding = new PacketRiding(0);
     public static final AetherPacket accessoryChange = new PacketAccessoryChange(1);
     public static final AetherPacket heartChange = new PacketHeartChange(2);
@@ -34,12 +34,12 @@ public class RegisteredPackets
     public static final AetherPacket dungeonQueueCheck = new PacketDungeonQueueCheck(26);
     public static final AetherPacket parachute = new PacketParachute(27);
 
-    public static void registerPacket(AetherPacket var0)
+    public static void registerPacket(AetherPacket packet)
     {
-        packets.add(var0);
+        packets.add(packet);
     }
 
-    public static ArrayList getPackets()
+    public static ArrayList<AetherPacket> getPackets()
     {
         return packets;
     }

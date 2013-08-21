@@ -1,64 +1,56 @@
 package net.aetherteam.aether.items;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-import net.aetherteam.aether.PlayerBaseAetherServer;
-import net.aetherteam.aether.client.PlayerBaseAetherClient;
+import net.aetherteam.aether.PlayerAetherServer;
+import net.aetherteam.aether.client.PlayerAetherClient;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.Item;
+import net.minecraft.util.ResourceLocation;
 
 public class ItemAgilityCape extends ItemAccessory
 {
-    public ItemAgilityCape(int var1, int var2, int var3, int var4)
+    public ItemAgilityCape(int i, int j, int k, int l)
     {
-        super(var1, var2, var3, var4, 16777215);
+        super(i, j, k, l, 16777215);
     }
 
-    public Item setIconName(String var1)
+    public ItemAgilityCape(int i, int j, ResourceLocation path, int l)
     {
-        return this.setUnlocalizedName("Aether:" + var1);
+        super(i, j, 0, l);
+        this.texture = path;
     }
 
-    public ItemAgilityCape(int var1, int var2, String var3, int var4)
+    public ItemAgilityCape(int i, int j, ResourceLocation path, int l, int m)
     {
-        super(var1, var2, 0, var4);
-        this.texture = var3;
+        super(i, j, 0, l, m);
+        this.texture = path;
     }
 
-    public ItemAgilityCape(int var1, int var2, String var3, int var4, int var5)
+    public ItemAgilityCape(int i, int j, ResourceLocation path, int l, int m, boolean flag)
     {
-        super(var1, var2, 0, var4, var5);
-        this.texture = var3;
+        super(i, j, path, l, m);
+        this.colouriseRender = flag;
     }
 
-    public ItemAgilityCape(int var1, int var2, String var3, int var4, int var5, boolean var6)
+    public void activateServerPassive(EntityPlayer player, PlayerAetherServer playerBase)
     {
-        super(var1, var2, var3, var4, var5);
-        this.colouriseRender = var6;
-    }
-
-    public void activateServerPassive(EntityPlayer var1, PlayerBaseAetherServer var2)
-    {
-        if (var2.wearingAccessory(this.itemID))
+        if (playerBase.wearingAccessory(this.itemID))
         {
-            var1.stepHeight = 1.0F;
+            player.stepHeight = 1.0F;
         }
         else
         {
-            var1.stepHeight = var2.prevStepHeight;
+            player.stepHeight = playerBase.prevStepHeight;
         }
     }
 
-    @SideOnly(Side.CLIENT)
-    public void activateClientPassive(EntityPlayer var1, PlayerBaseAetherClient var2)
+    public void activateClientPassive(EntityPlayer player, PlayerAetherClient playerBase)
     {
-        if (var2.wearingAccessory(this.itemID))
+        if (playerBase.wearingAccessory(this.itemID))
         {
-            var1.stepHeight = 1.0F;
+            player.stepHeight = 1.0F;
         }
         else
         {
-            var1.stepHeight = var2.prevStepHeight;
+            player.stepHeight = playerBase.prevStepHeight;
         }
     }
 }

@@ -9,34 +9,34 @@ public class AetherOptions
     private static boolean showNotifications = true;
     private static boolean slideCoinbar = true;
 
-    public static void setMinimalPartyHUD(boolean var0)
+    public static void setMinimalPartyHUD(boolean option)
     {
-        minimalPartyHUD = var0;
+        minimalPartyHUD = option;
     }
 
-    public static void setRenderHead(boolean var0)
+    public static void setRenderHead(boolean option)
     {
-        renderMemberHead = var0;
+        renderMemberHead = option;
     }
 
-    public static void setShowPartyHUD(boolean var0)
+    public static void setShowPartyHUD(boolean option)
     {
-        showPartyHUD = var0;
+        showPartyHUD = option;
     }
 
-    public static void setShowPartyName(boolean var0)
+    public static void setShowPartyName(boolean option)
     {
-        showPartyName = var0;
+        showPartyName = option;
     }
 
-    public static void setShowNotifications(boolean var0)
+    public static void setShowNotifications(boolean option)
     {
-        showNotifications = var0;
+        showNotifications = option;
     }
 
-    public static void setSlideCoinbar(boolean var0)
+    public static void setSlideCoinbar(boolean option)
     {
-        slideCoinbar = var0;
+        slideCoinbar = option;
     }
 
     public static boolean getRenderHead()

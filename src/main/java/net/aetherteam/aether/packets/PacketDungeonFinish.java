@@ -18,37 +18,37 @@ import net.minecraft.network.packet.Packet250CustomPayload;
 
 public class PacketDungeonFinish extends AetherPacket
 {
-    public PacketDungeonFinish(int var1)
+    public PacketDungeonFinish(int packetID)
     {
-        super(var1);
+        super(packetID);
     }
 
-    public void onPacketReceived(Packet250CustomPayload var1, Player var2)
+    public void onPacketReceived(Packet250CustomPayload packet, Player player)
     {
-        DataInputStream var3 = new DataInputStream(new ByteArrayInputStream(var1.data));
-        new BufferedReader(new InputStreamReader(var3));
+        DataInputStream dat = new DataInputStream(new ByteArrayInputStream(packet.data));
+        new BufferedReader(new InputStreamReader(dat));
 
         try
         {
-            byte var5 = var3.readByte();
-            int var6 = var3.readInt();
-            String var7 = var3.readUTF();
-            int var8 = var3.readInt();
-            int var9 = var3.readInt();
-            int var10 = var3.readInt();
-            Side var11 = FMLCommonHandler.instance().getEffectiveSide();
+            byte ex = dat.readByte();
+            int dungeonID = dat.readInt();
+            String partyName = dat.readUTF();
+            int tileX = dat.readInt();
+            int tileY = dat.readInt();
+            int tileZ = dat.readInt();
+            Side side = FMLCommonHandler.instance().getEffectiveSide();
 
-            if (var11.isClient())
+            if (side.isClient())
             {
-                Party var12 = PartyController.instance().getParty(var7);
-                Dungeon var13 = DungeonHandler.instance().getDungeon(var6);
-                PartyMember var14 = PartyController.instance().getMember((EntityPlayer)var2);
-                EntityPlayer var15 = (EntityPlayer)var2;
-                TileEntityEntranceController var16 = (TileEntityEntranceController)var15.worldObj.getBlockTileEntity(var8, var9, var10);
+                Party party = PartyController.instance().getParty(partyName);
+                Dungeon dungeon = DungeonHandler.instance().getDungeon(dungeonID);
+                PartyMember potentialLeader = PartyController.instance().getMember((EntityPlayer)player);
+                EntityPlayer entityPlayer = (EntityPlayer)player;
+                TileEntityEntranceController controller = (TileEntityEntranceController)entityPlayer.worldObj.getBlockTileEntity(tileX, tileY, tileZ);
 
-                if (var12 != null && var13 != null && var16 != null)
+                if (party != null && dungeon != null && controller != null)
                 {
-                    DungeonHandler.instance().finishDungeon(var13, var12, var16, false);
+                    DungeonHandler.instance().finishDungeon(dungeon, party, controller, false);
                 }
             }
         }

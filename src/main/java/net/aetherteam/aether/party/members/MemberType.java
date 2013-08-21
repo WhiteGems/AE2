@@ -12,12 +12,12 @@ public enum MemberType implements Serializable
     private boolean canRecruit;
     private boolean canPromote;
 
-    private MemberType(boolean var3, boolean var4, boolean var5, boolean var6)
+    private MemberType(boolean canKick, boolean canBan, boolean canRecruit, boolean canPromote)
     {
-        this.canKick = var3;
-        this.canBan = var4;
-        this.canRecruit = var5;
-        this.canPromote = var6;
+        this.canKick = canKick;
+        this.canBan = canBan;
+        this.canRecruit = canRecruit;
+        this.canPromote = canPromote;
     }
 
     public boolean canKick()
@@ -40,18 +40,18 @@ public enum MemberType implements Serializable
         return this.canPromote;
     }
 
-    public static MemberType getTypeFromString(String var0)
+    public static MemberType getTypeFromString(String name)
     {
-        MemberType[] var1 = values();
-        int var2 = var1.length;
+        MemberType[] arr$ = values();
+        int len$ = arr$.length;
 
-        for (int var3 = 0; var3 < var2; ++var3)
+        for (int i$ = 0; i$ < len$; ++i$)
         {
-            MemberType var4 = var1[var3];
+            MemberType type = arr$[i$];
 
-            if (var4.name().equalsIgnoreCase(var0))
+            if (type.name().equalsIgnoreCase(name))
             {
-                return var4;
+                return type;
             }
         }
 

@@ -42,100 +42,100 @@ public class StructureBronzeDungeonStart
         }
     }
 
-    public StructureBronzeDungeonStart(World var1, Random var2, int var3, int var4)
+    public StructureBronzeDungeonStart(World world, Random random, int par3, int par4)
     {
-        this.X = (var3 << 4) + 2;
-        this.Z = (var4 << 4) + 2;
-        ComponentDungeonBronzeBoss var5 = new ComponentDungeonBronzeBoss(0, (StructureComponent)null, this, var2, (var3 << 4) + 2, (var4 << 4) + 2);
+        this.X = (par3 << 4) + 2;
+        this.Z = (par4 << 4) + 2;
+        ComponentDungeonBronzeBoss var5 = new ComponentDungeonBronzeBoss(0, (StructureComponent)null, this, random, (par3 << 4) + 2, (par4 << 4) + 2);
         this.components.add(var5);
-        var5.buildComponent(this.components, var2);
+        var5.buildComponent(this.components, random);
 
-        for (int var7 = 1; var7 < 8; ++var7)
+        for (int numb = 1; numb < 8; ++numb)
         {
-            List var8 = (List)this.components.clone();
-            Iterator var9 = var8.iterator();
+            List list = (List)this.components.clone();
+            Iterator var2 = list.iterator();
 
             do
             {
-                StructureComponent var6 = (StructureComponent)var9.next();
+                StructureComponent var3 = (StructureComponent)var2.next();
 
-                if (var6.getComponentType() == var7)
+                if (var3.getComponentType() == numb)
                 {
-                    var6.buildComponent(var6, this.components, var2);
+                    var3.buildComponent(var3, this.components, random);
                 }
             }
-            while (var9.hasNext());
+            while (var2.hasNext());
         }
 
         this.updateBoundingBox();
 
-        if (!var1.isRemote)
+        if (!world.isRemote)
         {
             this.dungeonInstance = new Dungeon(DungeonType.BRONZE, this.X, this.Z, this);
             DungeonHandler.instance().addInstance(this.dungeonInstance);
         }
     }
 
-    public void generateStructure(World var1, Random var2, StructureBoundingBox var3, double[] var4)
+    public void generateStructure(World par1World, Random par2Random, StructureBoundingBox structureBoundingBox, double[] dirtDepth)
     {
-        this.GenDirtForChunk(var1, var3.minX, var3.minZ, var4, var2);
-        Iterator var5 = this.components.iterator();
+        this.GenDirtForChunk(par1World, structureBoundingBox.minX, structureBoundingBox.minZ, dirtDepth, par2Random);
+        Iterator var4 = this.components.iterator();
 
-        while (var5.hasNext())
+        while (var4.hasNext())
         {
-            StructureComponent var6 = (StructureComponent)var5.next();
+            StructureComponent var5 = (StructureComponent)var4.next();
 
-            if (var6.getBoundingBox().intersectsWith(var3) && !var6.addComponentParts(var1, var2, var3))
+            if (var5.getBoundingBox().intersectsWith(structureBoundingBox) && !var5.addComponentParts(par1World, par2Random, structureBoundingBox))
             {
-                var5.remove();
+                var4.remove();
             }
         }
     }
 
-    float getInterPolated(float var1, float var2, float var3, int var4, int var5, int var6)
+    float getInterPolated(float h00, float h01, float h10, int h11, int x, int y)
     {
-        var5 = var5 < 0 ? var5 + 16 : var5;
-        var6 = var6 < 0 ? var6 + 16 : var6;
-        float var7 = (float)var5 / 16.0F;
-        float var8 = (float)var6 / 16.0F;
-        return var1 * (1.0F - var7) * (1.0F - var8) + var3 * var7 * (1.0F - var8) + var2 * var8 * (1.0F - var7) + (float)var4 * var7 * var8;
+        x = x < 0 ? x + 16 : x;
+        y = y < 0 ? y + 16 : y;
+        float i = (float)x / 16.0F;
+        float j = (float)y / 16.0F;
+        return h00 * (1.0F - i) * (1.0F - j) + h10 * i * (1.0F - j) + h01 * j * (1.0F - i) + (float)h11 * i * j;
     }
 
-    public void GenDirtForChunk(World var1, int var2, int var3, double[] var4, Random var5)
+    public void GenDirtForChunk(World worldObj, int x, int z, double[] dirtDepth, Random random)
     {
-        int var6 = findhighest(this.components, var2 - 16, var3 - 16, var2 + 16, var3 + 16);
-        int var7 = findhighest(this.components, var2, var3 - 16, var2 + 32, var3 + 16);
-        int var8 = findhighest(this.components, var2 - 16, var3, var2 + 16, var3 + 32);
-        int var9 = findhighest(this.components, var2, var3, var2 + 32, var3 + 32);
-        int var10 = this.findlowest(this.components, var2 - 16, var3 - 16, var2 + 16, var3 + 16);
-        int var11 = this.findlowest(this.components, var2, var3 - 16, var2 + 32, var3 + 16);
-        int var12 = this.findlowest(this.components, var2 - 16, var3, var2 + 16, var3 + 32);
-        int var13 = this.findlowest(this.components, var2, var3, var2 + 32, var3 + 32);
+        int h00 = findhighest(this.components, x - 16, z - 16, x + 16, z + 16);
+        int h10 = findhighest(this.components, x, z - 16, x + 32, z + 16);
+        int h01 = findhighest(this.components, x - 16, z, x + 16, z + 32);
+        int h11 = findhighest(this.components, x, z, x + 32, z + 32);
+        int l00 = this.findlowest(this.components, x - 16, z - 16, x + 16, z + 16);
+        int l10 = this.findlowest(this.components, x, z - 16, x + 32, z + 16);
+        int l01 = this.findlowest(this.components, x - 16, z, x + 16, z + 32);
+        int l11 = this.findlowest(this.components, x, z, x + 32, z + 32);
 
-        for (int var14 = var2; var14 < var2 + 16; ++var14)
+        for (int i = x; i < x + 16; ++i)
         {
-            for (int var15 = var3; var15 < var3 + 16; ++var15)
+            for (int k = z; k < z + 16; ++k)
             {
-                int var16 = (int)this.getInterPolated((float)var6, (float)var8, (float)var7, var9, var14 - var2, var15 - var3);
-                int var17 = (int)this.getInterPolated((float)var10, (float)var12, (float)var11, var13, var14 - var2, var15 - var3);
+                int low = (int)this.getInterPolated((float)h00, (float)h01, (float)h10, h11, i - x, k - z);
+                int other = (int)this.getInterPolated((float)l00, (float)l01, (float)l10, l11, i - x, k - z);
 
-                if (var16 > var17)
+                if (low > other)
                 {
-                    var1.setBlock(var14, var16 + 1, var15, AetherBlocks.AetherGrass.blockID, 0, 2);
-                    int var18 = 0;
-                    int var19 = (int)(var4[var14 - var2 + (var15 - var3) * 16] / 3.0D + 3.0D + var5.nextDouble() * 0.25D);
+                    worldObj.setBlock(i, low + 1, k, AetherBlocks.AetherGrass.blockID, 0, 2);
+                    int counter = 0;
+                    int dirtdeaptha = (int)(dirtDepth[i - x + (k - z) * 16] / 3.0D + 3.0D + random.nextDouble() * 0.25D);
 
-                    for (int var20 = var16; var20 > var17; --var20)
+                    for (int j = low; j > other; --j)
                     {
-                        ++var18;
+                        ++counter;
 
-                        if (var18 < var19)
+                        if (counter < dirtdeaptha)
                         {
-                            var1.setBlock(var14, var20, var15, AetherBlocks.AetherDirt.blockID, 0, 2);
+                            worldObj.setBlock(i, j, k, AetherBlocks.AetherDirt.blockID, 0, 2);
                         }
                         else
                         {
-                            var1.setBlock(var14, var20, var15, AetherBlocks.Holystone.blockID, 0, 2);
+                            worldObj.setBlock(i, j, k, AetherBlocks.Holystone.blockID, 0, 2);
                         }
                     }
                 }
@@ -143,41 +143,41 @@ public class StructureBronzeDungeonStart
         }
     }
 
-    private int findlowest(LinkedList var1, int var2, int var3, int var4, int var5)
+    private int findlowest(LinkedList components, int i, int j, int k, int l)
     {
-        StructureBoundingBox var6 = new StructureBoundingBox(var2, 0, var3, var4, 128, var5);
-        Iterator var7 = var1.iterator();
-        int var9 = 40;
+        StructureBoundingBox par1StructureBoundingBox = new StructureBoundingBox(i, 0, j, k, 128, l);
+        Iterator var2 = components.iterator();
+        int max = 40;
 
-        while (var7.hasNext())
+        while (var2.hasNext())
         {
-            StructureComponent var8 = (StructureComponent)var7.next();
+            StructureComponent var3 = (StructureComponent)var2.next();
 
-            if (var8.getBoundingBox() != null && var8.getBoundingBox().intersectsWith(var6) && !(var8 instanceof ComponentDungeonBronzeEntrance))
+            if (var3.getBoundingBox() != null && var3.getBoundingBox().intersectsWith(par1StructureBoundingBox) && !(var3 instanceof ComponentDungeonBronzeEntrance))
             {
-                var9 = var8.getBoundingBox().minY > var9 ? var9 : var8.getBoundingBox().minY;
+                max = var3.getBoundingBox().minY > max ? max : var3.getBoundingBox().minY;
             }
         }
 
-        return var9;
+        return max;
     }
 
-    public static int findhighest(List var0, int var1, int var2, int var3, int var4)
+    public static int findhighest(List par0List, int x, int y, int x1, int y1)
     {
-        StructureBoundingBox var5 = new StructureBoundingBox(var1, 0, var2, var3, 128, var4);
-        Iterator var6 = var0.iterator();
-        int var8 = 30;
+        StructureBoundingBox par1StructureBoundingBox = new StructureBoundingBox(x, 0, y, x1, 128, y1);
+        Iterator var2 = par0List.iterator();
+        int max = 30;
 
-        while (var6.hasNext())
+        while (var2.hasNext())
         {
-            StructureComponent var7 = (StructureComponent)var6.next();
+            StructureComponent var3 = (StructureComponent)var2.next();
 
-            if (var7.getBoundingBox() != null && var7.getBoundingBox().intersectsWith(var5) && !(var7 instanceof ComponentDungeonBronzeEntrance))
+            if (var3.getBoundingBox() != null && var3.getBoundingBox().intersectsWith(par1StructureBoundingBox) && !(var3 instanceof ComponentDungeonBronzeEntrance))
             {
-                var8 = var7.getBoundingBox().maxY < var8 ? var8 : var7.getBoundingBox().maxY;
+                max = var3.getBoundingBox().maxY < max ? max : var3.getBoundingBox().maxY;
             }
         }
 
-        return var8;
+        return max;
     }
 }

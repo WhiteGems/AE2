@@ -29,12 +29,12 @@ public class AetherEnchantments
         addEnchantment(new ItemStack(AetherItems.GravititeAxe, 1), new ItemStack(AetherItems.GravititeAxe, 1), 4, true);
         addEnchantment(new ItemStack(AetherItems.Dart, 1, 0), new ItemStack(AetherItems.Dart, 1, 2), 6);
         addEnchantment(new ItemStack(AetherItems.SkyrootBucket, 1, 2), new ItemStack(AetherItems.SkyrootBucket, 1, 3), 2, true);
-        int var0 = 2256;
+        int discId = 2256;
 
-        for (Item var1 = Item.itemsList[var0]; var1 != null && var1.getUnlocalizedName().equals("item.record"); var1 = Item.itemsList[var0])
+        for (Item item = Item.itemsList[discId]; item != null && item.getUnlocalizedName().equals("item.record"); item = Item.itemsList[discId])
         {
-            addEnchantment(new ItemStack(var1, 1), new ItemStack(AetherItems.AetherMusicDisk, 1), 4, true);
-            ++var0;
+            addEnchantment(new ItemStack(item, 1), new ItemStack(AetherItems.AetherMusicDisk, 1), 4, true);
+            ++discId;
         }
 
         addEnchantment(new ItemStack(Item.helmetLeather, 1), new ItemStack(Item.helmetLeather, 1), 1, true);
@@ -103,13 +103,13 @@ public class AetherEnchantments
         addEnchantment(new ItemStack(AetherItems.Wyndberry, 1, 0), new ItemStack(AetherItems.Strawberry, 1, 0), 4, true);
     }
 
-    public static void addEnchantment(ItemStack var0, ItemStack var1, int var2)
+    public static void addEnchantment(ItemStack from, ItemStack to, int i)
     {
-        TileEntityAltar.addEnchantment(var0, var1, var2);
+        TileEntityAltar.addEnchantment(from, to, i);
     }
 
-    public static void addEnchantment(ItemStack var0, ItemStack var1, int var2, boolean var3)
+    public static void addEnchantment(ItemStack from, ItemStack to, int i, boolean limit)
     {
-        TileEntityAltar.addEnchantment(var0, var1, var2, var3);
+        TileEntityAltar.addEnchantment(from, to, i, limit);
     }
 }

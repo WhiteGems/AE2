@@ -3,34 +3,35 @@ package net.aetherteam.aether.items;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
+import net.minecraft.util.ResourceLocation;
 
 public class ItemInvisibilityCloak extends ItemAccessory
 {
-    public ItemInvisibilityCloak(int var1, int var2, int var3, int var4)
+    public ItemInvisibilityCloak(int i, int j, int k, int l)
     {
-        super(var1, var2, var3, var4, 16777215);
+        super(i, j, k, l, 16777215);
     }
 
-    public ItemInvisibilityCloak(int var1, int var2, String var3, int var4)
+    public ItemInvisibilityCloak(int i, int j, ResourceLocation path, int l)
     {
-        super(var1, var2, 0, var4);
-        this.texture = var3;
+        super(i, j, 0, l);
+        this.texture = path;
     }
 
-    public ItemInvisibilityCloak(int var1, int var2, String var3, int var4, int var5)
+    public ItemInvisibilityCloak(int i, int j, ResourceLocation path, int l, int m)
     {
-        super(var1, var2, 0, var4, var5);
-        this.texture = var3;
+        super(i, j, 0, l, m);
+        this.texture = path;
     }
 
-    public ItemInvisibilityCloak(int var1, int var2, String var3, int var4, int var5, boolean var6)
+    public ItemInvisibilityCloak(int i, int j, ResourceLocation path, int l, int m, boolean flag)
     {
-        super(var1, var2, var3, var4, var5);
-        this.colouriseRender = var6;
+        super(i, j, path, l, m);
+        this.colouriseRender = flag;
     }
 
-    public void activatePassive(EntityPlayer var1)
+    public void activatePassive(EntityPlayer player)
     {
-        var1.addPotionEffect(new PotionEffect(Potion.invisibility.id, 10, 0));
+        player.addPotionEffect(new PotionEffect(Potion.invisibility.id, 10, 0));
     }
 }

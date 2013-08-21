@@ -2,7 +2,7 @@ package net.aetherteam.aether.entities;
 
 import net.aetherteam.aether.items.AetherItems;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemStack;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
@@ -10,22 +10,21 @@ import net.minecraft.world.World;
 
 public class EntityDartPoison extends EntityDartGolden
 {
-    public EntityLiving victim;
     public int poisonTime;
 
-    public EntityDartPoison(World var1)
+    public EntityDartPoison(World world)
     {
-        super(var1);
+        super(world);
     }
 
-    public EntityDartPoison(World var1, double var2, double var4, double var6)
+    public EntityDartPoison(World world, double x, double y, double z)
     {
-        super(var1, var2, var4, var6);
+        super(world, x, y, z);
     }
 
-    public EntityDartPoison(World var1, EntityLiving var2)
+    public EntityDartPoison(World world, EntityLivingBase ent)
     {
-        super(var1, var2);
+        super(world, ent);
     }
 
     public void entityInit()
@@ -35,18 +34,18 @@ public class EntityDartPoison extends EntityDartGolden
         this.dmg = 1;
     }
 
-    public boolean onHitTarget(Entity var1)
+    public boolean onHitTarget(Entity entity)
     {
-        super.onHitTarget(var1);
+        super.onHitTarget(entity);
 
-        if (var1 instanceof EntityLiving)
+        if (entity instanceof EntityLivingBase)
         {
-            EntityLiving var2 = (EntityLiving)var1;
+            EntityLivingBase ent = (EntityLivingBase)entity;
 
             if (!this.worldObj.isRemote)
             {
-                var2.addPotionEffect(new PotionEffect(Potion.poison.id, 200, 0));
-                var2.addPotionEffect(new PotionEffect(Potion.confusion.id, 200, 3));
+                ent.addPotionEffect(new PotionEffect(Potion.poison.id, 200, 0));
+                ent.addPotionEffect(new PotionEffect(Potion.confusion.id, 200, 3));
                 this.setDead();
             }
         }

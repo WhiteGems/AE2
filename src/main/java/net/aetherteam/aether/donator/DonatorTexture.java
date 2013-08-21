@@ -1,17 +1,19 @@
 package net.aetherteam.aether.donator;
 
+import net.minecraft.util.ResourceLocation;
+
 public class DonatorTexture
 {
     public int imageWidth;
     public int imageHeight;
-    public String onlineURL;
-    public String localURL;
+    public ResourceLocation onlineURL;
+    public ResourceLocation localURL;
 
-    public DonatorTexture(String var1, String var2, int var3, int var4)
+    public DonatorTexture(String local, String url, int width, int height)
     {
-        this.localURL = var1;
-        this.onlineURL = var2;
-        this.imageWidth = var3;
-        this.imageHeight = var4;
+        this.localURL = new ResourceLocation(local);
+        this.onlineURL = new ResourceLocation(url);
+        this.imageWidth = width;
+        this.imageHeight = height;
     }
 }

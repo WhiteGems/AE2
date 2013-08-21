@@ -4,9 +4,9 @@ import net.aetherteam.aether.entities.EntityCloudParachute;
 
 public class RidingHandlerParachute extends RidingHandler
 {
-    public RidingHandlerParachute(EntityCloudParachute var1)
+    public RidingHandlerParachute(EntityCloudParachute entityParachute)
     {
-        super(var1);
+        super(entityParachute);
     }
 
     public void update()

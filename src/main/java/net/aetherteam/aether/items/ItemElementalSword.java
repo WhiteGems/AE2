@@ -7,6 +7,7 @@ import net.aetherteam.aether.enums.AetherEnumElement;
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.monster.EntityPigZombie;
 import net.minecraft.entity.monster.EntitySkeleton;
 import net.minecraft.entity.monster.EntityZombie;
@@ -18,39 +19,40 @@ import net.minecraft.item.ItemSword;
 
 public class ItemElementalSword extends ItemSword
 {
-    public static ArrayList undead = new ArrayList();
+    public static ArrayList < Class <? extends EntityLiving >> undead = new ArrayList();
     private int weaponDamage;
     private int holyDamage;
     private AetherEnumElement element;
     private int colour;
 
-    public ItemElementalSword(int var1, AetherEnumElement var2)
+    public ItemElementalSword(int i, AetherEnumElement element)
     {
-        super(var1, EnumToolMaterial.EMERALD);
+        super(i, EnumToolMaterial.EMERALD);
         this.maxStackSize = 1;
         this.setMaxDamage(502);
         this.weaponDamage = 4;
         this.holyDamage = 20;
-        this.element = var2;
+        this.element = element;
     }
 
-    public Item setIconName(String var1)
+    public Item setIconName(String name)
     {
-        return this.setUnlocalizedName("Aether:" + var1);
+        this.field_111218_cA = "aether:" + name;
+        return this.setUnlocalizedName("aether:" + name);
     }
 
     /**
      * Returns the strength of the stack against a given block. 1.0F base, (Quality+1)*2 if correct blocktype, 1.5F if
      * sword
      */
-    public float getStrVsBlock(ItemStack var1, Block var2)
+    public float getStrVsBlock(ItemStack itemstack, Block block)
     {
         return 1.5F;
     }
 
-    public boolean onBlockDestroyed(ItemStack var1, int var2, int var3, int var4, int var5, EntityLiving var6)
+    public boolean onBlockDestroyed(ItemStack itemstack, int i, int j, int k, int l, EntityLiving entityliving)
     {
-        var1.damageItem(2, var6);
+        itemstack.damageItem(2, entityliving);
         return true;
     }
 
@@ -58,36 +60,33 @@ public class ItemElementalSword extends ItemSword
      * Current implementations of this method in child classes do not use the entry argument beside ev. They just raise
      * the damage on the stack.
      */
-    public boolean hitEntity(ItemStack var1, EntityLiving var2, EntityLiving var3)
+    public boolean hitEntity(ItemStack itemstack, EntityLivingBase entityliving, EntityLivingBase entityliving1)
     {
         if (this.element == AetherEnumElement.Fire)
         {
-            var2.setFire(30);
+            entityliving.setFire(30);
         }
-        else if (this.element == AetherEnumElement.Lightning && !var2.worldObj.isRemote)
+        else if (this.element == AetherEnumElement.Lightning && !entityliving.worldObj.isRemote)
         {
-            var2.worldObj.addWeatherEffect(new EntityAetherLightning(var2.worldObj, (double)((int)var2.posX), (double)((int)var2.posY), (double)((int)var2.posZ), (EntityPlayer)var3));
+            entityliving.worldObj.addWeatherEffect(new EntityAetherLightning(entityliving.worldObj, (double)((int)entityliving.posX), (double)((int)entityliving.posY), (double)((int)entityliving.posZ), (EntityPlayer)entityliving1));
         }
 
-        var1.damageItem(1, var3);
+        itemstack.damageItem(1, entityliving1);
         return true;
     }
 
-    /**
-     * Returns the damage against a given entity.
-     */
-    public int getDamageVsEntity(Entity var1)
+    public int getDamageVsEntity(Entity entity)
     {
-        if (this.element == AetherEnumElement.Holy && var1 instanceof EntityLiving)
+        if (this.element == AetherEnumElement.Holy && entity instanceof EntityLiving)
         {
-            EntityLiving var2 = (EntityLiving)var1;
-            Iterator var3 = undead.iterator();
+            EntityLiving living = (EntityLiving)entity;
+            Iterator i$ = undead.iterator();
 
-            while (var3.hasNext())
+            while (i$.hasNext())
             {
-                Class var4 = (Class)var3.next();
+                Class cls = (Class)i$.next();
 
-                if (var2.getClass().isAssignableFrom(var4))
+                if (living.getClass().isAssignableFrom(cls))
                 {
                     return this.holyDamage;
                 }

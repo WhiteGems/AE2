@@ -29,20 +29,20 @@ public class ModelCarrionSprout extends ModelBase
         this.textureHeight = 64;
         this.petal = new ModelRenderer[petals];
 
-        for (int var1 = 0; var1 < petals; ++var1)
+        for (int i = 0; i < petals; ++i)
         {
-            this.petal[var1] = new ModelRenderer(this, 43, 49);
+            this.petal[i] = new ModelRenderer(this, 43, 49);
 
-            if (var1 % 2 == 0)
+            if (i % 2 == 0)
             {
-                this.petal[var1] = new ModelRenderer(this, 43, 49);
-                this.petal[var1].addBox(-2.8F, -1.0F, -10.8F, 6, 0, 9);
-                this.petal[var1].setRotationPoint(0.0F, 1.0F, 0.0F);
+                this.petal[i] = new ModelRenderer(this, 43, 49);
+                this.petal[i].addBox(-2.8F, -1.0F, -10.8F, 6, 0, 9);
+                this.petal[i].setRotationPoint(0.0F, 1.0F, 0.0F);
             }
             else
             {
-                this.petal[var1].addBox(-2.8F, -1.0F, -11.8F, 6, 0, 9);
-                this.petal[var1].setRotationPoint(0.0F, 1.0F, 0.0F);
+                this.petal[i].addBox(-2.8F, -1.0F, -11.8F, 6, 0, 9);
+                this.petal[i].setRotationPoint(0.0F, 1.0F, 0.0F);
             }
         }
 
@@ -84,33 +84,33 @@ public class ModelCarrionSprout extends ModelBase
     /**
      * Sets the models various rotation angles then renders the model.
      */
-    public void render(Entity var1, float var2, float var3, float var4, float var5, float var6, float var7)
+    public void render(Entity entity, float f, float f1, float f2, float f3, float f4, float f5)
     {
-        super.render(var1, var2, var3, var4, var5, var6, var7);
-        this.setRotationAngles(var2, var3, var4, var5, var6, var7, var1);
+        super.render(entity, f, f1, f2, f3, f4, f5);
+        this.setRotationAngles(f, f1, f2, f3, f4, f5, entity);
 
-        for (int var8 = 0; var8 < petals; ++var8)
+        for (int i = 0; i < petals; ++i)
         {
-            this.petal[var8].render(var7);
+            this.petal[i].render(f5);
         }
 
-        this.TopStem.render(var7);
-        this.BottomStem.render(var7);
-        this.HeadRoof.render(var7);
-        this.Teeth.render(var7);
-        this.Jaw.render(var7);
-        this.Head.render(var7);
+        this.TopStem.render(f5);
+        this.BottomStem.render(f5);
+        this.HeadRoof.render(f5);
+        this.Teeth.render(f5);
+        this.Jaw.render(f5);
+        this.Head.render(f5);
         GL11.glPushMatrix();
         GL11.glTranslatef(0.0F, 0.3F, 0.0F);
-        this.BottomStem.render(var7);
+        this.BottomStem.render(f5);
         GL11.glPopMatrix();
     }
 
-    private void setRotation(ModelRenderer var1, float var2, float var3, float var4)
+    private void setRotation(ModelRenderer model, float x, float y, float z)
     {
-        var1.rotateAngleX = var2;
-        var1.rotateAngleY = var3;
-        var1.rotateAngleZ = var4;
+        model.rotateAngleX = x;
+        model.rotateAngleY = y;
+        model.rotateAngleZ = z;
     }
 
     /**
@@ -118,28 +118,28 @@ public class ModelCarrionSprout extends ModelBase
      * and legs, where par1 represents the time(so that arms and legs swing back and forth) and par2 represents how
      * "far" arms and legs can swing at most.
      */
-    public void setRotationAngles(float var1, float var2, float var3, float var4, float var5, float var6, Entity var7)
+    public void setRotationAngles(float f, float f1, float f2, float f3, float f4, float f5, Entity entity)
     {
-        super.setRotationAngles(var1, var2, var3, var4, var5, var6, var7);
-        float var8 = this.sinage2;
-        float var9 = 21.0F;
+        super.setRotationAngles(f, f1, f2, f3, f4, f5, entity);
+        float boff = this.sinage2;
+        float yOffset = 21.0F;
 
-        for (int var10 = 0; var10 < petals; ++var10)
+        for (int i = 0; i < petals; ++i)
         {
-            this.petal[var10].rotateAngleX = var10 % 2 == 0 ? -0.25F : -0.4125F;
-            this.petal[var10].rotateAngleX += this.sinage;
-            this.petal[var10].rotateAngleY = 17.0F;
-            this.petal[var10].rotateAngleY += this.pie / (float)petals * (float)var10;
-            this.petal[var10].rotationPointY = var8 + var9;
+            this.petal[i].rotateAngleX = i % 2 == 0 ? -0.25F : -0.4125F;
+            this.petal[i].rotateAngleX += this.sinage;
+            this.petal[i].rotateAngleY = 17.0F;
+            this.petal[i].rotateAngleY += this.pie / (float)petals * (float)i;
+            this.petal[i].rotationPointY = boff + yOffset;
         }
 
         this.Jaw.rotateAngleX = 0.08F;
         this.Jaw.rotateAngleX += this.sinage;
-        this.Head.rotationPointY = var8 + var9 + this.sinage * 2.0F;
-        this.Jaw.rotationPointY = var8 + 8.0F + this.sinage * 2.0F;
-        this.BottomStem.rotationPointY = var8 + 15.0F + this.sinage * 2.0F;
-        this.TopStem.rotationPointY = var8 + 10.0F + this.sinage * 2.0F;
-        this.HeadRoof.rotationPointY = var8 + this.sinage * 2.0F;
-        this.Teeth.rotationPointY = var8 + 4.5F + this.sinage * 2.0F;
+        this.Head.rotationPointY = boff + yOffset + this.sinage * 2.0F;
+        this.Jaw.rotationPointY = boff + 8.0F + this.sinage * 2.0F;
+        this.BottomStem.rotationPointY = boff + 15.0F + this.sinage * 2.0F;
+        this.TopStem.rotationPointY = boff + 10.0F + this.sinage * 2.0F;
+        this.HeadRoof.rotationPointY = boff + this.sinage * 2.0F;
+        this.Teeth.rotationPointY = boff + 4.5F + this.sinage * 2.0F;
     }
 }

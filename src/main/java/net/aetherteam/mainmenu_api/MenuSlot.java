@@ -18,51 +18,49 @@ public class MenuSlot extends Gui
     protected boolean field_82253_i;
     public boolean selected = false;
 
-    public MenuSlot(MenuBase var1, int var2, int var3, int var4, int var5, int var6)
+    public MenuSlot(MenuBase menu, int id, int x, int y, int width, int height)
     {
-        this.width = var5;
-        this.height = var6;
+        this.width = width;
+        this.height = height;
         this.enabled = true;
         this.drawButton = true;
-        this.id = var2;
-        this.xPosition = var3;
-        this.yPosition = var4;
-        this.menu = var1;
+        this.id = id;
+        this.xPosition = x;
+        this.yPosition = y;
+        this.menu = menu;
     }
 
-    public void drawMenuSlot(Minecraft var1, int var2, int var3)
+    public void drawMenuSlot(Minecraft mc, int xPosition, int yPosition)
     {
-        this.xPosition = var2;
-        this.yPosition = var3;
-        this.drawGradientRect(var2, var3, var2 + this.width, var3 + this.height, this.selected ? -10439830 : -13421773, this.selected ? -11563178 : -11184811);
-        int var4 = var1.renderEngine.getTexture(this.menu.getIconPath());
+        this.xPosition = xPosition;
+        this.yPosition = yPosition;
+        this.drawGradientRect(xPosition, yPosition, xPosition + this.width, yPosition + this.height, this.selected ? -10439830 : -13421773, this.selected ? -11563178 : -11184811);
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-        GL11.glBindTexture(GL11.GL_TEXTURE_2D, var4);
+        mc.renderEngine.func_110577_a(this.menu.getIconPath());
         GL11.glEnable(GL11.GL_TEXTURE_2D);
-        float var5 = 0.0F;
-        float var6 = 0.0F;
-        float var7 = 1.0F;
-        float var8 = 1.0F;
+        float u = 0.0F;
+        float v = 0.0F;
+        float u1 = 1.0F;
+        float v1 = 1.0F;
         GL11.glBegin(GL11.GL_QUADS);
-        GL11.glTexCoord2f(var5, var6);
-        GL11.glVertex2f((float)(var2 + 2), (float)(var3 + 2));
-        GL11.glTexCoord2f(var5, var8);
-        GL11.glVertex2f((float)(var2 + 2), (float)(var3 + 18));
-        GL11.glTexCoord2f(var7, var8);
-        GL11.glVertex2f((float)(var2 + 18), (float)(var3 + 18));
-        GL11.glTexCoord2f(var7, var6);
-        GL11.glVertex2f((float)(var2 + 18), (float)(var3 + 2));
+        GL11.glTexCoord2f(u, v);
+        GL11.glVertex2f((float)(xPosition + 2), (float)(yPosition + 2));
+        GL11.glTexCoord2f(u, v1);
+        GL11.glVertex2f((float)(xPosition + 2), (float)(yPosition + 18));
+        GL11.glTexCoord2f(u1, v1);
+        GL11.glVertex2f((float)(xPosition + 18), (float)(yPosition + 18));
+        GL11.glTexCoord2f(u1, v);
+        GL11.glVertex2f((float)(xPosition + 18), (float)(yPosition + 2));
         GL11.glEnd();
-        var1.renderEngine.resetBoundTexture();
-        var1.fontRenderer.drawStringWithShadow(this.menu.getName(), var2 + this.height, var3 + 2, 15066597);
+        mc.fontRenderer.drawStringWithShadow(this.menu.getName(), xPosition + this.height, yPosition + 2, 15066597);
         GL11.glPushMatrix();
         GL11.glScalef(0.75F, 0.75F, 1.0F);
-        var1.fontRenderer.drawString(this.menu.getVersion(), (int)(((float)var2 + (float)this.height) / 0.75F), (int)(((float)var3 + 12.0F) / 0.75F), 15066597);
+        mc.fontRenderer.drawString(this.menu.getVersion(), (int)(((float)xPosition + (float)this.height) / 0.75F), (int)(((float)yPosition + 12.0F) / 0.75F), 15066597);
         GL11.glPopMatrix();
     }
 
-    public boolean mousePressed(Minecraft var1, int var2, int var3)
+    public boolean mousePressed(Minecraft par1Minecraft, int par2, int par3)
     {
-        return this.enabled && this.drawButton && var2 >= this.xPosition && var3 >= this.yPosition && var2 < this.xPosition + this.width && var3 < this.yPosition + this.height;
+        return this.enabled && this.drawButton && par2 >= this.xPosition && par3 >= this.yPosition && par2 < this.xPosition + this.width && par3 < this.yPosition + this.height;
     }
 }

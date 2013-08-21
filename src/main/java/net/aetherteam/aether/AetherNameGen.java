@@ -13,25 +13,25 @@ public class AetherNameGen
 
     public static String gen()
     {
-        Random var0 = new Random();
-        String var1 = name1[var0.nextInt(name1.length)];
-        int var2 = 2 + var0.nextInt(2);
+        Random rand = new Random();
+        String name = name1[rand.nextInt(name1.length)];
+        int middle = 2 + rand.nextInt(2);
 
-        for (int var3 = 0; var3 < var2; ++var3)
+        for (int i = 0; i < middle; ++i)
         {
-            var1 = var1 + name2[var0.nextInt(name2.length)];
+            name = name + name2[rand.nextInt(name2.length)];
         }
 
-        return var1 + name3[var0.nextInt(name3.length)];
+        return name + name3[rand.nextInt(name3.length)];
     }
 
     public static String valkGen()
     {
-        Random var0 = new Random();
-        String var1 = "";
-        var1 = var1 + valkNamePrefix[var0.nextInt(valkNamePrefix.length)];
-        var1 = var1 + valkNameMiddix[var0.nextInt(valkNameMiddix.length)];
-        var1 = var1 + valkNameSuffix[var0.nextInt(valkNameSuffix.length)];
-        return var1;
+        Random rand = new Random();
+        String result = "";
+        result = result + valkNamePrefix[rand.nextInt(valkNamePrefix.length)];
+        result = result + valkNameMiddix[rand.nextInt(valkNameMiddix.length)];
+        result = result + valkNameSuffix[rand.nextInt(valkNameSuffix.length)];
+        return result;
     }
 }

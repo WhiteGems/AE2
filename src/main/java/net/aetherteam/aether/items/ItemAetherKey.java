@@ -21,9 +21,9 @@ public class ItemAetherKey extends ItemAether
     @SideOnly(Side.CLIENT)
     private Icon[] keyIcons;
 
-    protected ItemAetherKey(int var1)
+    protected ItemAetherKey(int itemID)
     {
-        super(var1);
+        super(itemID);
         this.setHasSubtypes(true);
         this.maxStackSize = 1;
     }
@@ -33,22 +33,22 @@ public class ItemAetherKey extends ItemAether
     /**
      * returns a list of items with the same ID, but different meta (eg: dye returns 16 items)
      */
-    public void getSubItems(int var1, CreativeTabs var2, List var3)
+    public void getSubItems(int par1, CreativeTabs par2CreativeTabs, List par3List)
     {
         for (int var4 = 0; var4 < 6; ++var4)
         {
-            var3.add(new ItemStack(var1, 1, var4));
+            par3List.add(new ItemStack(par1, 1, var4));
         }
     }
 
     @SideOnly(Side.CLIENT)
-    public void registerIcons(IconRegister var1)
+    public void registerIcons(IconRegister par1IconRegister)
     {
         this.keyIcons = new Icon[keyNames.length];
 
-        for (int var2 = 0; var2 < keyNames.length; ++var2)
+        for (int i = 0; i < keyNames.length; ++i)
         {
-            this.keyIcons[var2] = var1.registerIcon("Aether:" + keyNames[var2]);
+            this.keyIcons[i] = par1IconRegister.registerIcon("aether:" + keyNames[i]);
         }
     }
 
@@ -57,18 +57,18 @@ public class ItemAetherKey extends ItemAether
     /**
      * Gets an icon index based on an item's damage value
      */
-    public Icon getIconFromDamage(int var1)
+    public Icon getIconFromDamage(int damage)
     {
-        return this.keyIcons[var1];
+        return this.keyIcons[damage];
     }
 
     /**
      * Returns the unlocalized name of this item. This version accepts an ItemStack so different stacks can have
      * different names based on their damage or NBT.
      */
-    public String getUnlocalizedName(ItemStack var1)
+    public String getUnlocalizedName(ItemStack par1ItemStack)
     {
-        int var2 = MathHelper.clamp_int(var1.getItemDamage(), 0, 5);
-        return "Aether:" + keyNames[var2];
+        int var2 = MathHelper.clamp_int(par1ItemStack.getItemDamage(), 0, 5);
+        return "aether:" + keyNames[var2];
     }
 }

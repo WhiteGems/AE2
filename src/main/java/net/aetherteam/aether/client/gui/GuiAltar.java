@@ -10,10 +10,10 @@ public class GuiAltar extends GuiContainer
 {
     private TileEntityAltar altarInventory;
 
-    public GuiAltar(InventoryPlayer var1, TileEntityAltar var2)
+    public GuiAltar(InventoryPlayer inventoryplayer, TileEntityAltar tileentityaltar)
     {
-        super(new ContainerAltar(var1, var2));
-        this.altarInventory = var2;
+        super(new ContainerAltar(inventoryplayer, tileentityaltar));
+        this.altarInventory = tileentityaltar;
     }
 
     protected void drawGuiContainerForegroundLayer()
@@ -25,22 +25,21 @@ public class GuiAltar extends GuiContainer
     /**
      * Draw the background layer for the GuiContainer (everything behind the items)
      */
-    protected void drawGuiContainerBackgroundLayer(float var1, int var2, int var3)
+    protected void drawGuiContainerBackgroundLayer(float f, int ia, int ib)
     {
-        int var4 = this.mc.renderEngine.getTexture("/net/aetherteam/aether/client/sprites/gui/enchanter.png");
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-        int var5 = (this.width - this.xSize) / 2;
-        int var6 = (this.height - this.ySize) / 2;
-        this.drawTexturedModalRect(var5, var6, 0, 0, this.xSize, this.ySize);
-        int var7;
+        int j = (this.width - this.xSize) / 2;
+        int k = (this.height - this.ySize) / 2;
+        this.drawTexturedModalRect(j, k, 0, 0, this.xSize, this.ySize);
+        int i1;
 
         if (this.altarInventory.isBurning())
         {
-            var7 = this.altarInventory.getBurnTimeRemainingScaled(12);
-            this.drawTexturedModalRect(var5 + 57, var6 + 47 - var7, 176, 12 - var7, 14, var7 + 2);
+            i1 = this.altarInventory.getBurnTimeRemainingScaled(12);
+            this.drawTexturedModalRect(j + 57, k + 47 - i1, 176, 12 - i1, 14, i1 + 2);
         }
 
-        var7 = this.altarInventory.getCookProgressScaled(24);
-        this.drawTexturedModalRect(var5 + 79, var6 + 35, 176, 14, var7 + 1, 16);
+        i1 = this.altarInventory.getCookProgressScaled(24);
+        this.drawTexturedModalRect(j + 79, k + 35, 176, 14, i1 + 1, 16);
     }
 }

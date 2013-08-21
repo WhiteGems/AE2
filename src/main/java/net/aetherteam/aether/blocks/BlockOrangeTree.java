@@ -23,50 +23,50 @@ public class BlockOrangeTree extends BlockAetherFlower implements IAetherBlock
     private Icon bottomIcon;
     private Icon topIcon;
 
-    public BlockOrangeTree(int var1)
+    public BlockOrangeTree(int blockID)
     {
-        super(var1);
+        super(blockID);
         this.setHardness(0.2F);
     }
 
     /**
      * Ticks the block if it's been scheduled
      */
-    public void updateTick(World var1, int var2, int var3, int var4, Random var5)
+    public void updateTick(World world, int x, int y, int z, Random random)
     {
-        super.updateTick(var1, var2, var3, var4, var5);
-        this.checkTreeChange(var1, var2, var3, var4);
-        int var6 = this.randomGrowthInt(var1, var2, var3, var4, var5, 5);
-        int var7 = var1.getBlockMetadata(var2, var3, var4);
+        super.updateTick(world, x, y, z, random);
+        this.checkTreeChange(world, x, y, z);
+        int randomGrowth = this.randomGrowthInt(world, x, y, z, random, 5);
+        int meta = world.getBlockMetadata(x, y, z);
 
-        if (var6 == 0)
+        if (randomGrowth == 0)
         {
-            switch (var7)
+            switch (meta)
             {
                 case 0:
-                    var1.setBlock(var2, var3, var4, this.blockID, 1, 2);
+                    world.setBlock(x, y, z, this.blockID, 1, 2);
                     break;
 
                 case 1:
-                    var1.setBlock(var2, var3, var4, this.blockID, 3, 2);
-                    var1.setBlock(var2, var3 + 1, var4, this.blockID, 2, 2);
+                    world.setBlock(x, y, z, this.blockID, 3, 2);
+                    world.setBlock(x, y + 1, z, this.blockID, 2, 2);
                     break;
 
                 case 2:
-                    var1.setBlock(var2, var3 - 1, var4, this.blockID, 3, 2);
-                    var1.setBlock(var2, var3, var4, this.blockID, 4, 2);
+                    world.setBlock(x, y - 1, z, this.blockID, 3, 2);
+                    world.setBlock(x, y, z, this.blockID, 4, 2);
                     break;
 
                 case 3:
-                    if (var1.getBlockMetadata(var2, var3 + 1, var4) == 4)
+                    if (world.getBlockMetadata(x, y + 1, z) == 4)
                     {
-                        var1.setBlock(var2, var3, var4, this.blockID, 5, 2);
-                        var1.setBlock(var2, var3 + 1, var4, this.blockID, 6, 2);
+                        world.setBlock(x, y, z, this.blockID, 5, 2);
+                        world.setBlock(x, y + 1, z, this.blockID, 6, 2);
                     }
                     else
                     {
-                        var1.setBlock(var2, var3, var4, this.blockID, 3, 2);
-                        var1.setBlock(var2, var3 + 1, var4, this.blockID, 4, 2);
+                        world.setBlock(x, y, z, this.blockID, 3, 2);
+                        world.setBlock(x, y + 1, z, this.blockID, 4, 2);
                     }
 
                 case 4:
@@ -79,9 +79,9 @@ public class BlockOrangeTree extends BlockAetherFlower implements IAetherBlock
     /**
      * From the specified side and block metadata retrieves the blocks texture. Args: side, metadata
      */
-    public Icon getIcon(int var1, int var2)
+    public Icon getIcon(int i, int meta)
     {
-        switch (var2)
+        switch (meta)
         {
             case 0:
                 return this.stageOne;
@@ -112,7 +112,7 @@ public class BlockOrangeTree extends BlockAetherFlower implements IAetherBlock
     /**
      * Returns the ID of the items to drop on destruction.
      */
-    public int idDropped(int var1, Random var2, int var3)
+    public int idDropped(int par1, Random random, int par3)
     {
         return 0;
     }
@@ -120,19 +120,19 @@ public class BlockOrangeTree extends BlockAetherFlower implements IAetherBlock
     /**
      * Can this block stay at this position.  Similar to canPlaceBlockAt except gets checked often with plants.
      */
-    public boolean canBlockStay(World var1, int var2, int var3, int var4)
+    public boolean canBlockStay(World world, int x, int y, int z)
     {
-        int var5 = var1.getBlockMetadata(var2, var3, var4);
-        Block var6 = blocksList[var1.getBlockId(var2, var3 - 1, var4)];
+        int treeMeta = world.getBlockMetadata(x, y, z);
+        Block soil = blocksList[world.getBlockId(x, y - 1, z)];
 
-        if (var1.getFullBlockLightValue(var2, var3, var4) >= 8 || var1.canBlockSeeTheSky(var2, var3, var4) && var6 != null)
+        if (world.getFullBlockLightValue(x, y, z) >= 8 || world.canBlockSeeTheSky(x, y, z) && soil != null)
         {
-            if ((var5 <= 1 || var5 == 3 || var5 == 5) && (var6 == AetherBlocks.AetherDirt || var6 == AetherBlocks.AetherGrass))
+            if ((treeMeta <= 1 || treeMeta == 3 || treeMeta == 5) && (soil == AetherBlocks.AetherDirt || soil == AetherBlocks.AetherGrass))
             {
                 return true;
             }
 
-            if ((var5 == 2 || var5 == 4 || var5 == 6) && var1.getBlockId(var2, var3 - 1, var4) == this.blockID)
+            if ((treeMeta == 2 || treeMeta == 4 || treeMeta == 6) && world.getBlockId(x, y - 1, z) == this.blockID)
             {
                 return true;
             }
@@ -145,101 +145,101 @@ public class BlockOrangeTree extends BlockAetherFlower implements IAetherBlock
      * Called when the player destroys a block with an item that can harvest it. (i, j, k) are the coordinates of the
      * block and l is the block's subtype/damage.
      */
-    public void harvestBlock(World var1, EntityPlayer var2, int var3, int var4, int var5, int var6)
+    public void harvestBlock(World world, EntityPlayer entityplayer, int x, int y, int z, int meta)
     {
-        if (var6 == 6 && var1.getBlockId(var3, var4 - 1, var5) == this.blockID)
+        if (meta == 6 && world.getBlockId(x, y - 1, z) == this.blockID)
         {
-            var1.setBlock(var3, var4, var5, this.blockID, 4, 2);
-            var1.setBlock(var3, var4 - 1, var5, this.blockID, 3, 2);
+            world.setBlock(x, y, z, this.blockID, 4, 2);
+            world.setBlock(x, y - 1, z, this.blockID, 3, 2);
         }
 
-        if (var6 == 5 && var1.getBlockId(var3, var4 + 1, var5) == this.blockID)
+        if (meta == 5 && world.getBlockId(x, y + 1, z) == this.blockID)
         {
-            var1.setBlock(var3, var4 + 1, var5, this.blockID, 4, 2);
-            var1.setBlock(var3, var4, var5, this.blockID, 3, 2);
+            world.setBlock(x, y + 1, z, this.blockID, 4, 2);
+            world.setBlock(x, y, z, this.blockID, 3, 2);
         }
 
-        if (var6 == 4 && var1.getBlockId(var3, var4 - 1, var5) == this.blockID)
+        if (meta == 4 && world.getBlockId(x, y - 1, z) == this.blockID)
         {
-            var1.setBlock(var3, var4, var5, 0);
-            var1.setBlock(var3, var4 - 1, var5, 0);
+            world.setBlock(x, y, z, 0);
+            world.setBlock(x, y - 1, z, 0);
         }
 
-        if (var6 == 3 && var1.getBlockId(var3, var4 + 1, var5) == this.blockID)
+        if (meta == 3 && world.getBlockId(x, y + 1, z) == this.blockID)
         {
-            var1.setBlock(var3, var4 + 1, var5, 0);
-            var1.setBlock(var3, var4, var5, 0);
+            world.setBlock(x, y + 1, z, 0);
+            world.setBlock(x, y, z, 0);
         }
 
-        byte var7;
-        byte var8;
+        byte min;
+        byte max;
 
-        if ((var1.getBlockId(var3, var4 - 1, var5) != AetherBlocks.AetherGrass.blockID || var1.getBlockMetadata(var3, var4 - 1, var5) != 1) && (var1.getBlockId(var3, var4 - 2, var5) != AetherBlocks.AetherGrass.blockID || var1.getBlockMetadata(var3, var4 - 2, var5) != 1))
+        if ((world.getBlockId(x, y - 1, z) != AetherBlocks.AetherGrass.blockID || world.getBlockMetadata(x, y - 1, z) != 1) && (world.getBlockId(x, y - 2, z) != AetherBlocks.AetherGrass.blockID || world.getBlockMetadata(x, y - 2, z) != 1))
         {
-            if ((var1.getBlockId(var3, var4 - 1, var5) != AetherBlocks.AetherGrass.blockID || var1.getBlockMetadata(var3, var4 - 1, var5) != 2) && (var1.getBlockId(var3, var4 - 2, var5) != AetherBlocks.AetherGrass.blockID || var1.getBlockMetadata(var3, var4 - 2, var5) != 2))
+            if ((world.getBlockId(x, y - 1, z) != AetherBlocks.AetherGrass.blockID || world.getBlockMetadata(x, y - 1, z) != 2) && (world.getBlockId(x, y - 2, z) != AetherBlocks.AetherGrass.blockID || world.getBlockMetadata(x, y - 2, z) != 2))
             {
-                var7 = 0;
-                var8 = 2;
+                min = 0;
+                max = 2;
             }
             else
             {
-                var7 = 3;
-                var8 = 6;
+                min = 3;
+                max = 6;
             }
         }
         else
         {
-            var7 = 1;
-            var8 = 3;
+            min = 1;
+            max = 3;
         }
 
-        int var9 = MathHelper.clamp_int(var1.rand.nextInt(), var8, var7) + 1;
-        var2.addStat(StatList.mineBlockStatArray[this.blockID], 1);
-        var2.addExhaustion(0.025F);
-        ItemStack var10;
+        int randomNum = MathHelper.clamp_int(world.rand.nextInt(), max, min) + 1;
+        entityplayer.addStat(StatList.mineBlockStatArray[this.blockID], 1);
+        entityplayer.addExhaustion(0.025F);
+        ItemStack stack;
 
-        if (var9 != 0 && var6 >= 5)
+        if (randomNum != 0 && meta >= 5)
         {
-            var10 = new ItemStack(AetherItems.Orange.itemID, var9, 0);
-            this.dropBlockAsItem_do(var1, var3, var4, var5, var10);
+            stack = new ItemStack(AetherItems.Orange.itemID, randomNum, 0);
+            this.dropBlockAsItem_do(world, x, y, z, stack);
         }
-        else if (var6 < 5)
+        else if (meta < 5)
         {
-            var10 = new ItemStack(this, 1, 0);
-            this.dropBlockAsItem_do(var1, var3, var4, var5, var10);
+            stack = new ItemStack(this, 1, 0);
+            this.dropBlockAsItem_do(world, x, y, z, stack);
         }
     }
 
     /**
      * Called right before the block is destroyed by a player.  Args: world, x, y, z, metaData
      */
-    public void onBlockDestroyedByPlayer(World var1, int var2, int var3, int var4, int var5)
+    public void onBlockDestroyedByPlayer(World world, int x, int y, int z, int meta)
     {
-        if (var5 == 6 && var1.getBlockId(var2, var3 - 1, var4) == this.blockID)
+        if (meta == 6 && world.getBlockId(x, y - 1, z) == this.blockID)
         {
-            var1.setBlock(var2, var3, var4, this.blockID, 4, 2);
-            var1.setBlock(var2, var3 - 1, var4, this.blockID, 3, 2);
+            world.setBlock(x, y, z, this.blockID, 4, 2);
+            world.setBlock(x, y - 1, z, this.blockID, 3, 2);
         }
 
-        if (var5 == 5 && var1.getBlockId(var2, var3 + 1, var4) == this.blockID)
+        if (meta == 5 && world.getBlockId(x, y + 1, z) == this.blockID)
         {
-            var1.setBlock(var2, var3 + 1, var4, this.blockID, 4, 2);
-            var1.setBlock(var2, var3, var4, this.blockID, 3, 2);
+            world.setBlock(x, y + 1, z, this.blockID, 4, 2);
+            world.setBlock(x, y, z, this.blockID, 3, 2);
         }
 
-        if (var5 == 4 && var1.getBlockId(var2, var3 - 1, var4) == this.blockID)
+        if (meta == 4 && world.getBlockId(x, y - 1, z) == this.blockID)
         {
-            var1.setBlock(var2, var3, var4, 0);
-            var1.setBlock(var2, var3 - 1, var4, 0);
+            world.setBlock(x, y, z, 0);
+            world.setBlock(x, y - 1, z, 0);
         }
 
-        if (var5 == 3 && var1.getBlockId(var2, var3 + 1, var4) == this.blockID)
+        if (meta == 3 && world.getBlockId(x, y + 1, z) == this.blockID)
         {
-            var1.setBlock(var2, var3 + 1, var4, 0);
-            var1.setBlock(var2, var3, var4, 0);
+            world.setBlock(x, y + 1, z, 0);
+            world.setBlock(x, y, z, 0);
         }
 
-        super.onBlockDestroyedByPlayer(var1, var2, var3, var4, var5);
+        super.onBlockDestroyedByPlayer(world, x, y, z, meta);
     }
 
     @SideOnly(Side.CLIENT)
@@ -248,61 +248,60 @@ public class BlockOrangeTree extends BlockAetherFlower implements IAetherBlock
      * When this method is called, your block should register all the icons it needs with the given IconRegister. This
      * is the only chance you get to register icons.
      */
-    public void registerIcons(IconRegister var1)
+    public void registerIcons(IconRegister par1IconRegister)
     {
-        this.bottomIcon = var1.registerIcon("Aether:Orange Fruit Tree Bottom");
-        this.topIcon = var1.registerIcon("Aether:Orange Fruit Tree Top");
-        this.bottomNaked = var1.registerIcon("Aether:Orange Fruit Tree Bottom Naked");
-        this.topNaked = var1.registerIcon("Aether:Orange Fruit Tree Top Naked");
-        this.stageOne = var1.registerIcon("Aether:Orange Tree Stage One");
-        this.stageTwo = var1.registerIcon("Aether:Orange Tree Stage Two");
-        this.stageThree = var1.registerIcon("Aether:Orange Tree Top Stage Three");
-        super.registerIcons(var1);
+        this.bottomIcon = par1IconRegister.registerIcon("aether:Orange Fruit Tree Bottom");
+        this.topIcon = par1IconRegister.registerIcon("aether:Orange Fruit Tree Top");
+        this.bottomNaked = par1IconRegister.registerIcon("aether:Orange Fruit Tree Bottom Naked");
+        this.topNaked = par1IconRegister.registerIcon("aether:Orange Fruit Tree Top Naked");
+        this.stageOne = par1IconRegister.registerIcon("aether:Orange Tree Stage One");
+        this.stageTwo = par1IconRegister.registerIcon("aether:Orange Tree Stage Two");
+        this.stageThree = par1IconRegister.registerIcon("aether:Orange Tree Top Stage Three");
     }
 
-    public int randomGrowthInt(World var1, int var2, int var3, int var4, Random var5, int var6)
+    public int randomGrowthInt(World world, int x, int y, int z, Random random, int randomint)
     {
-        return (var1.getBlockId(var2, var3 - 2, var4) != AetherBlocks.AetherGrass.blockID || var1.getBlockMetadata(var2, var3 - 2, var4) != 2) && (var1.getBlockId(var2, var3 - 1, var4) != AetherBlocks.AetherGrass.blockID || var1.getBlockMetadata(var2, var3 - 1, var4) != 2) ? var5.nextInt(var6) : var5.nextInt(var6 / 2);
+        return (world.getBlockId(x, y - 2, z) != AetherBlocks.AetherGrass.blockID || world.getBlockMetadata(x, y - 2, z) != 2) && (world.getBlockId(x, y - 1, z) != AetherBlocks.AetherGrass.blockID || world.getBlockMetadata(x, y - 1, z) != 2) ? random.nextInt(randomint) : random.nextInt(randomint / 2);
     }
 
-    protected final void checkTreeChange(World var1, int var2, int var3, int var4)
+    protected final void checkTreeChange(World world, int x, int y, int z)
     {
-        if (!this.canBlockStay(var1, var2, var3, var4))
+        if (!this.canBlockStay(world, x, y, z))
         {
-            int var5 = var1.getBlockMetadata(var2, var3, var4);
-            var1.setBlock(var2, var3, var4, 0);
+            int treeMeta = world.getBlockMetadata(x, y, z);
+            world.setBlock(x, y, z, 0);
 
-            if (var5 == 0)
+            if (treeMeta == 0)
             {
-                ItemStack var6 = new ItemStack(AetherBlocks.BlockOrangeTree.blockID, 1, 0);
-                this.dropBlockAsItem_do(var1, var2, var3, var4, var6);
+                ItemStack min = new ItemStack(AetherBlocks.BlockOrangeTree.blockID, 1, 0);
+                this.dropBlockAsItem_do(world, x, y, z, min);
             }
             else
             {
-                byte var7;
-                byte var10;
+                byte max;
+                byte min1;
 
-                if (var1.getBlockId(var2, var3 - 1, var4) == AetherBlocks.AetherGrass.blockID && var1.getBlockMetadata(var2, var3 - 1, var4) == 1)
+                if (world.getBlockId(x, y - 1, z) == AetherBlocks.AetherGrass.blockID && world.getBlockMetadata(x, y - 1, z) == 1)
                 {
-                    var10 = 1;
-                    var7 = 3;
+                    min1 = 1;
+                    max = 3;
                 }
                 else
                 {
-                    var10 = 0;
-                    var7 = 2;
+                    min1 = 0;
+                    max = 2;
                 }
 
-                int var8 = MathHelper.clamp_int(var1.rand.nextInt(), var7, var10) + 1;
+                int randomNum = MathHelper.clamp_int(world.rand.nextInt(), max, min1) + 1;
 
-                if (var8 != 0)
+                if (randomNum != 0)
                 {
-                    ItemStack var9 = new ItemStack(AetherItems.Orange.itemID, var8, 0);
-                    this.dropBlockAsItem_do(var1, var2, var3, var4, var9);
+                    ItemStack stack = new ItemStack(AetherItems.Orange.itemID, randomNum, 0);
+                    this.dropBlockAsItem_do(world, x, y, z, stack);
                 }
             }
 
-            var1.setBlock(var2, var3, var4, 0);
+            world.setBlock(x, y, z, 0);
         }
     }
 }

@@ -1,7 +1,7 @@
 package net.aetherteam.aether.items;
 
 import net.aetherteam.aether.Aether;
-import net.aetherteam.aether.PlayerBaseAetherServer;
+import net.aetherteam.aether.PlayerAetherServer;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -9,9 +9,9 @@ import net.minecraft.world.World;
 
 public class ItemPiggieBank extends ItemAccessory
 {
-    protected ItemPiggieBank(int var1, int var2, int var3, int var4)
+    protected ItemPiggieBank(int par1, int par2, int par3, int par4)
     {
-        super(var1, var2, var3, var4);
+        super(par1, par2, par3, par4);
         this.setMaxStackSize(1);
     }
 
@@ -19,32 +19,32 @@ public class ItemPiggieBank extends ItemAccessory
      * Callback for item usage. If the item does something special on right clicking, he will have one of those. Return
      * True if something happen and false if it don't. This is for ITEMS, not BLOCKS
      */
-    public boolean onItemUse(ItemStack var1, EntityPlayer var2, World var3, int var4, int var5, int var6, int var7, float var8, float var9, float var10)
+    public boolean onItemUse(ItemStack par1ItemStack, EntityPlayer par2EntityPlayer, World par3World, int par4, int par5, int par6, int par7, float par8, float par9, float par10)
     {
-        PlayerBaseAetherServer var11 = Aether.getServerPlayer(var2);
-        NBTTagCompound var12 = new NBTTagCompound();
+        PlayerAetherServer player = Aether.getServerPlayer(par2EntityPlayer);
+        NBTTagCompound nbt = new NBTTagCompound();
 
-        if (!var1.hasTagCompound())
+        if (!par1ItemStack.hasTagCompound())
         {
-            var1.setTagCompound(var12);
+            par1ItemStack.setTagCompound(nbt);
             return false;
         }
         else
         {
-            int var13 = var1.getTagCompound().getInteger("Coins");
+            int coins = par1ItemStack.getTagCompound().getInteger("Coins");
 
-            if (var2.isSneaking() && var11 != null)
+            if (par2EntityPlayer.isSneaking() && player != null)
             {
-                if (var11.getCoins() > 0)
+                if (player.getCoins() > 0)
                 {
-                    var11.setCoinAmount(var11.getCoins() - 1);
-                    var1.getTagCompound().setInteger("Coins", var13 + 1);
+                    player.setCoinAmount(player.getCoins() - 1);
+                    par1ItemStack.getTagCompound().setInteger("Coins", coins + 1);
                 }
             }
-            else if (var13 > 0 && var11 != null)
+            else if (coins > 0 && player != null)
             {
-                var11.setCoinAmount(var11.getCoins() + 1);
-                var1.getTagCompound().setInteger("Coins", var13 - 1);
+                player.setCoinAmount(player.getCoins() + 1);
+                par1ItemStack.getTagCompound().setInteger("Coins", coins - 1);
             }
 
             return true;

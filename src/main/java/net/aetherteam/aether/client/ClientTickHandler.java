@@ -21,47 +21,47 @@ public class ClientTickHandler implements ITickHandler
         return null;
     }
 
-    public void tickEnd(EnumSet var1, Object ... var2)
+    public void tickEnd(EnumSet<TickType> type, Object ... tickData)
     {
-        if (var1.equals(EnumSet.of(TickType.CLIENT)))
+        if (type.equals(EnumSet.of(TickType.CLIENT)))
         {
-            Minecraft var3 = Minecraft.getMinecraft();
+            Minecraft mc = Minecraft.getMinecraft();
 
             if (Minecraft.getMinecraft().getIntegratedServer() != null)
             {
                 ;
             }
 
-            GuiScreen var4 = var3.currentScreen;
+            GuiScreen guiscreen = mc.currentScreen;
 
-            if (var4 instanceof GuiInventory)
+            if (guiscreen instanceof GuiInventory)
             {
-                Minecraft.getMinecraft().displayGuiScreen(new GuiInventoryAether(var3.thePlayer));
+                Minecraft.getMinecraft().displayGuiScreen(new GuiInventoryAether(mc.thePlayer));
             }
 
-            if (var4 instanceof GuiContainerCreative)
+            if (guiscreen instanceof GuiContainerCreative)
             {
-                Minecraft.getMinecraft().displayGuiScreen(new GuiAetherContainerCreative(var3.thePlayer));
+                Minecraft.getMinecraft().displayGuiScreen(new GuiAetherContainerCreative(mc.thePlayer));
             }
 
             MountSystem.processDirections();
-            Dungeon var6;
+            Dungeon dungeon;
 
-            for (Iterator var5 = DungeonHandler.instance().getInstances().iterator(); var5.hasNext(); var6 = (Dungeon)var5.next())
+            for (Iterator i$ = DungeonHandler.instance().getInstances().iterator(); i$.hasNext(); dungeon = (Dungeon)i$.next())
             {
                 ;
             }
         }
     }
 
-    public EnumSet ticks()
+    public EnumSet<TickType> ticks()
     {
         return EnumSet.of(TickType.CLIENT);
     }
 
-    public void tickStart(EnumSet var1, Object ... var2)
+    public void tickStart(EnumSet<TickType> type, Object ... tickData)
     {
-        if (var1.equals(EnumSet.of(TickType.CLIENT)))
+        if (type.equals(EnumSet.of(TickType.CLIENT)))
         {
             ;
         }

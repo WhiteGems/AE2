@@ -20,21 +20,21 @@ public class EntityKey extends Entity
     public float hoverStart;
     private Dungeon dungeon;
 
-    public EntityKey(World var1, double var2, double var4, double var6)
+    public EntityKey(World par1World, double par2, double par4, double par6)
     {
-        super(var1);
+        super(par1World);
         this.age = 0;
         this.health = 5;
         this.hoverStart = (float)(Math.random() * Math.PI * 2.0D);
         this.setSize(0.25F, 0.25F);
         this.yOffset = this.height / 2.0F;
-        this.setPosition(var2, var4, var6);
+        this.setPosition(par2, par4, par6);
         this.rotationYaw = 0.0F;
     }
 
-    public EntityKey(World var1, double var2, double var4, double var6, ItemStack var8)
+    public EntityKey(World par1World, double par2, double par4, double par6, ItemStack par8ItemStack)
     {
-        this(var1, var2, var4, var6);
+        this(par1World, par2, par4, par6);
     }
 
     /**
@@ -46,9 +46,9 @@ public class EntityKey extends Entity
         return false;
     }
 
-    public EntityKey(World var1)
+    public EntityKey(World par1World)
     {
-        super(var1);
+        super(par1World);
         this.age = 0;
         this.health = 5;
         this.hoverStart = (float)(Math.random() * Math.PI * 2.0D);
@@ -95,12 +95,9 @@ public class EntityKey extends Entity
      * Will deal the specified amount of damage to the entity if the entity isn't immune to fire damage. Args:
      * amountDamage
      */
-    protected void dealFireDamage(int var1) {}
+    protected void dealFireDamage(int par1) {}
 
-    /**
-     * Called when the entity is attacked.
-     */
-    public boolean attackEntityFrom(DamageSource var1, int var2)
+    public boolean attackEntityFrom(DamageSource par1DamageSource, int par2)
     {
         return false;
     }
@@ -108,29 +105,29 @@ public class EntityKey extends Entity
     /**
      * (abstract) Protected helper method to write subclass entity data to NBT.
      */
-    public void writeEntityToNBT(NBTTagCompound var1)
+    public void writeEntityToNBT(NBTTagCompound par1NBTTagCompound)
     {
-        var1.setShort("Health", (short)((byte)this.health));
-        var1.setShort("Age", (short)this.age);
+        par1NBTTagCompound.setShort("Health", (short)((byte)this.health));
+        par1NBTTagCompound.setShort("Age", (short)this.age);
     }
 
     /**
      * (abstract) Protected helper method to read subclass entity data from NBT.
      */
-    public void readEntityFromNBT(NBTTagCompound var1)
+    public void readEntityFromNBT(NBTTagCompound par1NBTTagCompound)
     {
         this.setDead();
-        this.health = var1.getShort("Health") & 255;
-        this.age = var1.getShort("Age");
-        this.setKeyName(var1.getString("KeyName"));
+        this.health = par1NBTTagCompound.getShort("Health") & 255;
+        this.age = par1NBTTagCompound.getShort("Age");
+        this.setKeyName(par1NBTTagCompound.getString("KeyName"));
     }
 
     /**
      * Called by a player entity when they collide with an entity
      */
-    public void onCollideWithPlayer(EntityPlayer var1)
+    public void onCollideWithPlayer(EntityPlayer par1EntityPlayer)
     {
-        DungeonHandler.instance().getDungeon(PartyController.instance().getParty(var1)).addKey(new DungeonKey(EnumKeyType.getEnumFromItem(this)));
+        DungeonHandler.instance().getDungeon(PartyController.instance().getParty(par1EntityPlayer)).addKey(new DungeonKey(EnumKeyType.getEnumFromItem(this)));
     }
 
     /**
@@ -144,11 +141,11 @@ public class EntityKey extends Entity
     /**
      * Teleports the entity to another dimension. Params: Dimension number to teleport to
      */
-    public void travelToDimension(int var1) {}
+    public void travelToDimension(int par1) {}
 
-    public void setKeyName(String var1)
+    public void setKeyName(String keyName)
     {
-        this.getDataWatcher().updateObject(10, var1);
+        this.getDataWatcher().updateObject(10, keyName);
         this.getDataWatcher().setObjectWatched(10);
     }
 
@@ -157,9 +154,9 @@ public class EntityKey extends Entity
         return this.getDataWatcher().getWatchableObjectString(10);
     }
 
-    public void setDungeon(Dungeon var1)
+    public void setDungeon(Dungeon dungeon)
     {
-        this.dungeon = var1;
+        this.dungeon = dungeon;
     }
 
     public Dungeon getDungeon()

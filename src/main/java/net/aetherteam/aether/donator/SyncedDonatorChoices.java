@@ -16,14 +16,12 @@ public class SyncedDonatorChoices
     private static String fileName;
     private static String directory;
     private static File config;
-    public static HashMap choices = new HashMap();
+    public static HashMap<String, String> choices = new HashMap();
 
     public static void loadConfig()
     {
-        fileName = mc.session.username + ".properties";
-        StringBuilder var10000 = new StringBuilder();
-        Minecraft var10001 = mc;
-        directory = var10000.append(Minecraft.getMinecraftDir()).append("/aether/donators/").toString();
+        fileName = mc.func_110432_I().func_111285_a() + ".properties";
+        directory = mc.mcDataDir + "/aether/donators/";
         config = new File(directory, fileName);
         config.mkdir();
 
@@ -31,8 +29,8 @@ public class SyncedDonatorChoices
         {
             try
             {
-                FileInputStream var0 = new FileInputStream(directory + fileName);
-                props.load(var0);
+                FileInputStream e = new FileInputStream(directory + fileName);
+                props.load(e);
 
                 if (props.size() <= 0)
                 {
@@ -40,10 +38,10 @@ public class SyncedDonatorChoices
                     return;
                 }
 
-                for (int var1 = 0; String.valueOf(props.getProperty("choice" + var1)) != null; ++var1)
+                for (int count = 0; String.valueOf(props.getProperty("choice" + count)) != null; ++count)
                 {
-                    String var2 = String.valueOf(props.getProperty("choice" + var1));
-                    choices.put(var2, "choice" + var1);
+                    String name = String.valueOf(props.getProperty("choice" + count));
+                    choices.put(name, "choice" + count);
                 }
             }
             catch (FileNotFoundException var3)
@@ -67,8 +65,8 @@ public class SyncedDonatorChoices
         {
             props.clear();
             props.store(new FileOutputStream(directory + fileName), (String)null);
-            FileInputStream var0 = new FileInputStream(directory + fileName);
-            props.load(var0);
+            FileInputStream e = new FileInputStream(directory + fileName);
+            props.load(e);
         }
         catch (FileNotFoundException var1)
         {
@@ -80,14 +78,14 @@ public class SyncedDonatorChoices
         }
     }
 
-    public static void removeProperty(String var0)
+    public static void removeProperty(String name)
     {
         try
         {
-            props.remove(var0);
+            props.remove(name);
             props.store(new FileOutputStream(directory + fileName), (String)null);
-            FileInputStream var1 = new FileInputStream(fileName);
-            props.load(var1);
+            FileInputStream e = new FileInputStream(fileName);
+            props.load(e);
         }
         catch (FileNotFoundException var2)
         {
@@ -99,14 +97,14 @@ public class SyncedDonatorChoices
         }
     }
 
-    public static void setProperty(String var0, String var1)
+    public static void setProperty(String name, String value)
     {
         try
         {
-            props.setProperty(var0, var1);
+            props.setProperty(name, value);
             props.store(new FileOutputStream(directory + fileName), (String)null);
-            FileInputStream var2 = new FileInputStream(fileName);
-            props.load(var2);
+            FileInputStream e = new FileInputStream(fileName);
+            props.load(e);
         }
         catch (FileNotFoundException var3)
         {

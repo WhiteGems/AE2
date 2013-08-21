@@ -19,27 +19,29 @@ public class EntityFakeItem extends EntityItem
      */
     public int age;
     public int delayBeforeCanPickup;
+
+    /** The health of this EntityItem. (For example, damage for tools) */
     private int health;
 
     /** The EntityItem's random initial float height. */
     public float hoverStart;
 
-    public EntityFakeItem(World var1, double var2, double var4, double var6)
+    public EntityFakeItem(World par1World, double par2, double par4, double par6)
     {
-        super(var1);
+        super(par1World);
         this.age = 0;
         this.health = 5;
         this.hoverStart = (float)(Math.random() * Math.PI * 2.0D);
         this.setSize(0.25F, 0.25F);
         this.yOffset = this.height / 2.0F;
-        this.setPosition(var2, var4, var6);
+        this.setPosition(par2, par4, par6);
         this.rotationYaw = 0.0F;
     }
 
-    public EntityFakeItem(World var1, double var2, double var4, double var6, ItemStack var8)
+    public EntityFakeItem(World par1World, double par2, double par4, double par6, ItemStack par8ItemStack)
     {
-        this(var1, var2, var4, var6);
-        this.setEntityItemStack(var8);
+        this(par1World, par2, par4, par6);
+        this.setEntityItemStack(par8ItemStack);
     }
 
     /**
@@ -51,9 +53,9 @@ public class EntityFakeItem extends EntityItem
         return false;
     }
 
-    public EntityFakeItem(World var1)
+    public EntityFakeItem(World par1World)
     {
-        super(var1);
+        super(par1World);
         this.age = 0;
         this.health = 5;
         this.hoverStart = (float)(Math.random() * Math.PI * 2.0D);
@@ -76,66 +78,69 @@ public class EntityFakeItem extends EntityItem
         this.prevPosZ = this.posZ;
         this.noClip = true;
         ++this.age;
-        ItemStack var1 = this.getDataWatcher().getWatchableObjectItemStack(10);
+        ItemStack item = this.getDataWatcher().getWatchableObjectItemStack(10);
 
-        if (var1 != null && var1.stackSize <= 0)
+        if (item != null && item.stackSize <= 0)
         {
             this.setDead();
         }
     }
 
+    /**
+     * Looks for other itemstacks nearby and tries to stack them together
+     */
     private void searchForOtherItemsNearby()
     {
-        Iterator var1 = this.worldObj.getEntitiesWithinAABB(EntityFakeItem.class, this.boundingBox.expand(0.5D, 0.0D, 0.5D)).iterator();
+        Iterator iterator = this.worldObj.getEntitiesWithinAABB(EntityFakeItem.class, this.boundingBox.expand(0.5D, 0.0D, 0.5D)).iterator();
 
-        while (var1.hasNext())
+        while (iterator.hasNext())
         {
-            EntityFakeItem var2 = (EntityFakeItem)var1.next();
-            this.combineItems(var2);
+            EntityFakeItem entityitem = (EntityFakeItem)iterator.next();
+            this.combineItems(entityitem);
         }
     }
 
-    public boolean combineItems(EntityFakeItem var1)
+    public boolean combineItems(EntityFakeItem par1EntityItem)
     {
-        if (var1 == this)
+        if (par1EntityItem == this)
         {
             return false;
         }
-        else if (var1.isEntityAlive() && this.isEntityAlive())
+        else if (par1EntityItem.isEntityAlive() && this.isEntityAlive())
         {
-            ItemStack var2 = this.getEntityItem();
-            ItemStack var3 = var1.getEntityItem();
+            ItemStack itemstack = this.getEntityItem();
+            ItemStack itemstack1 = par1EntityItem.getEntityItem();
 
-            if (var3.getItem() != var2.getItem())
+            if (itemstack1.getItem() != itemstack.getItem())
             {
                 return false;
             }
-            else if (var3.hasTagCompound() ^ var2.hasTagCompound())
+            else if (itemstack1.hasTagCompound() ^ itemstack.hasTagCompound())
             {
                 return false;
             }
-            else if (var3.hasTagCompound() && !var3.getTagCompound().equals(var2.getTagCompound()))
+            else if (itemstack1.hasTagCompound() && !itemstack1.getTagCompound().equals(itemstack.getTagCompound()))
             {
                 return false;
             }
-            else if (var3.getItem().getHasSubtypes() && var3.getItemDamage() != var2.getItemDamage())
+            else if (itemstack1.getItem().getHasSubtypes() && itemstack1.getItemDamage() != itemstack.getItemDamage())
             {
                 return false;
             }
-            else if (var3.stackSize < var2.stackSize)
+            else if (itemstack1.stackSize < itemstack.stackSize)
             {
-                return var1.combineItems(this);
+                return par1EntityItem.combineItems(this);
             }
-            else if (var3.stackSize + var2.stackSize > var3.getMaxStackSize())
+            else if (itemstack1.stackSize + itemstack.stackSize > itemstack1.getMaxStackSize())
             {
                 return false;
             }
             else
             {
-                var3.stackSize += var2.stackSize;
-                var1.delayBeforeCanPickup = Math.max(var1.delayBeforeCanPickup, this.delayBeforeCanPickup);
-                var1.age = Math.min(var1.age, this.age);
-                var1.setEntityItemStack(var3);
+                itemstack1.stackSize += itemstack.stackSize;
+                par1EntityItem.delayBeforeCanPickup = Math.max(par1EntityItem.delayBeforeCanPickup, this.delayBeforeCanPickup);
+                par1EntityItem.age = Math.min(par1EntityItem.age, this.age);
+                par1EntityItem.setEntityItemStack(itemstack1);
                 this.setDead();
                 return true;
             }
@@ -167,28 +172,25 @@ public class EntityFakeItem extends EntityItem
      * Will deal the specified amount of damage to the entity if the entity isn't immune to fire damage. Args:
      * amountDamage
      */
-    protected void dealFireDamage(int var1)
+    protected void dealFireDamage(int par1)
     {
-        this.attackEntityFrom(DamageSource.inFire, var1);
+        this.attackEntityFrom(DamageSource.inFire, par1);
     }
 
-    /**
-     * Called when the entity is attacked.
-     */
-    public boolean attackEntityFrom(DamageSource var1, int var2)
+    public boolean attackEntityFrom(DamageSource par1DamageSource, int par2)
     {
         if (this.isEntityInvulnerable())
         {
             return false;
         }
-        else if (this.getEntityItem() != null && this.getEntityItem().itemID == Item.netherStar.itemID && var1.isExplosion())
+        else if (this.getEntityItem() != null && this.getEntityItem().itemID == Item.netherStar.itemID && par1DamageSource.isExplosion())
         {
             return false;
         }
         else
         {
             this.setBeenAttacked();
-            this.health -= var2;
+            this.health -= par2;
 
             if (this.health <= 0)
             {
@@ -202,30 +204,30 @@ public class EntityFakeItem extends EntityItem
     /**
      * (abstract) Protected helper method to write subclass entity data to NBT.
      */
-    public void writeEntityToNBT(NBTTagCompound var1)
+    public void writeEntityToNBT(NBTTagCompound par1NBTTagCompound)
     {
-        var1.setShort("Health", (short)((byte)this.health));
-        var1.setShort("Age", (short)this.age);
+        par1NBTTagCompound.setShort("Health", (short)((byte)this.health));
+        par1NBTTagCompound.setShort("Age", (short)this.age);
 
         if (this.getEntityItem() != null)
         {
-            var1.setCompoundTag("Item", this.getEntityItem().writeToNBT(new NBTTagCompound()));
+            par1NBTTagCompound.setCompoundTag("Item", this.getEntityItem().writeToNBT(new NBTTagCompound()));
         }
     }
 
     /**
      * (abstract) Protected helper method to read subclass entity data from NBT.
      */
-    public void readEntityFromNBT(NBTTagCompound var1)
+    public void readEntityFromNBT(NBTTagCompound par1NBTTagCompound)
     {
         this.setDead();
-        this.health = var1.getShort("Health") & 255;
-        this.age = var1.getShort("Age");
-        NBTTagCompound var2 = var1.getCompoundTag("Item");
-        this.setEntityItemStack(ItemStack.loadItemStackFromNBT(var2));
-        ItemStack var3 = this.getDataWatcher().getWatchableObjectItemStack(10);
+        this.health = par1NBTTagCompound.getShort("Health") & 255;
+        this.age = par1NBTTagCompound.getShort("Age");
+        NBTTagCompound nbttagcompound1 = par1NBTTagCompound.getCompoundTag("Item");
+        this.setEntityItemStack(ItemStack.loadItemStackFromNBT(nbttagcompound1));
+        ItemStack item = this.getDataWatcher().getWatchableObjectItemStack(10);
 
-        if (var3 == null || var3.stackSize <= 0)
+        if (item == null || item.stackSize <= 0)
         {
             this.setDead();
         }
@@ -234,7 +236,7 @@ public class EntityFakeItem extends EntityItem
     /**
      * Called by a player entity when they collide with an entity
      */
-    public void onCollideWithPlayer(EntityPlayer var1) {}
+    public void onCollideWithPlayer(EntityPlayer par1EntityPlayer) {}
 
     /**
      * Gets the username of the entity.
@@ -255,9 +257,9 @@ public class EntityFakeItem extends EntityItem
     /**
      * Teleports the entity to another dimension. Params: Dimension number to teleport to
      */
-    public void travelToDimension(int var1)
+    public void travelToDimension(int par1)
     {
-        super.travelToDimension(var1);
+        super.travelToDimension(par1);
 
         if (!this.worldObj.isRemote)
         {
@@ -271,9 +273,9 @@ public class EntityFakeItem extends EntityItem
      */
     public ItemStack getEntityItem()
     {
-        ItemStack var1 = this.getDataWatcher().getWatchableObjectItemStack(10);
+        ItemStack itemstack = this.getDataWatcher().getWatchableObjectItemStack(10);
 
-        if (var1 == null)
+        if (itemstack == null)
         {
             if (this.worldObj != null)
             {
@@ -284,16 +286,16 @@ public class EntityFakeItem extends EntityItem
         }
         else
         {
-            return var1;
+            return itemstack;
         }
     }
 
     /**
      * Sets the ItemStack for this entity
      */
-    public void setEntityItemStack(ItemStack var1)
+    public void setEntityItemStack(ItemStack par1ItemStack)
     {
-        this.getDataWatcher().updateObject(10, var1);
+        this.getDataWatcher().updateObject(10, par1ItemStack);
         this.getDataWatcher().setObjectWatched(10);
     }
 }

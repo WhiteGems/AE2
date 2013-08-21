@@ -14,19 +14,19 @@ public class SlotAetherCreativeInventory extends Slot
     private final Slot theSlot;
     final GuiAetherContainerCreative theCreativeInventory;
 
-    public SlotAetherCreativeInventory(GuiAetherContainerCreative var1, Slot var2, int var3)
+    public SlotAetherCreativeInventory(GuiAetherContainerCreative par1GuiContainerCreative, Slot par2Slot, int par3)
     {
-        super(var2.inventory, var3, 0, 0);
-        this.theCreativeInventory = var1;
-        this.theSlot = var2;
+        super(par2Slot.inventory, par3, 0, 0);
+        this.theCreativeInventory = par1GuiContainerCreative;
+        this.theSlot = par2Slot;
     }
 
     /**
      * Check if the stack is a valid item for this slot. Always true beside for the armor slots.
      */
-    public boolean isItemValid(ItemStack var1)
+    public boolean isItemValid(ItemStack par1ItemStack)
     {
-        return this.theSlot.isItemValid(var1);
+        return this.theSlot.isItemValid(par1ItemStack);
     }
 
     /**
@@ -48,9 +48,9 @@ public class SlotAetherCreativeInventory extends Slot
     /**
      * Helper method to put a stack in the slot.
      */
-    public void putStack(ItemStack var1)
+    public void putStack(ItemStack par1ItemStack)
     {
-        this.theSlot.putStack(var1);
+        this.theSlot.putStack(par1ItemStack);
     }
 
     /**
@@ -82,21 +82,21 @@ public class SlotAetherCreativeInventory extends Slot
      * Decrease the size of the stack in slot (first int arg) by the amount of the second int arg. Returns the new
      * stack.
      */
-    public ItemStack decrStackSize(int var1)
+    public ItemStack decrStackSize(int par1)
     {
-        return this.theSlot.decrStackSize(var1);
+        return this.theSlot.decrStackSize(par1);
     }
 
     /**
      * returns true if this slot is in par2 of par1
      */
-    public boolean isSlotInInventory(IInventory var1, int var2)
+    public boolean isSlotInInventory(IInventory par1IInventory, int par2)
     {
-        return this.theSlot.isSlotInInventory(var1, var2);
+        return this.theSlot.isSlotInInventory(par1IInventory, par2);
     }
 
-    public static Slot func_75240_a(SlotAetherCreativeInventory var0)
+    public static Slot func_75240_a(SlotAetherCreativeInventory par0SlotCreativeInventory)
     {
-        return var0.theSlot;
+        return par0SlotCreativeInventory.theSlot;
     }
 }

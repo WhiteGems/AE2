@@ -4,20 +4,19 @@ import net.aetherteam.aether.entities.EntityAechorPlant;
 import net.aetherteam.aether.entities.EntityCockatrice;
 import net.aetherteam.aether.entities.EntitySentry;
 import net.aetherteam.aether.entities.bosses.EntitySlider;
-import net.aetherteam.aether.oldcode.EntityFireMonster;
-import net.aetherteam.aether.oldcode.EntityFiroBall;
-import net.aetherteam.aether.oldcode.EntityHomeShot;
-import net.aetherteam.aether.oldcode.EntityMiniCloud;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.ResourceLocation;
 import org.lwjgl.opengl.GL11;
 
 public class AetherPoison
 {
+    private static final ResourceLocation TEXTURE_POISONVIGNETTE = new ResourceLocation("aether", "textures/poison/poisonvignette.png");
+    private static final ResourceLocation TEXTURE_CUREVIGNETTE = new ResourceLocation("aether", "textures/poison/curevignette.png");
     public static long clock;
     public static final float poisonRed = 1.0F;
     public static final float poisonBlue = 1.0F;
@@ -38,27 +37,27 @@ public class AetherPoison
     public static double motDFac = 0.1D;
     private static int mod;
 
-    public static boolean canPoison(Entity var0)
+    public static boolean canPoison(Entity entity)
     {
-        return !(var0 instanceof EntitySlider) && !(var0 instanceof EntitySentry) && !(var0 instanceof EntityMiniCloud) && !(var0 instanceof EntityFireMonster) && !(var0 instanceof EntityAechorPlant) && !(var0 instanceof EntityFiroBall) && !(var0 instanceof EntityCockatrice) && !(var0 instanceof EntityHomeShot);
+        return !(entity instanceof EntitySlider) && !(entity instanceof EntitySentry) && !(entity instanceof EntityAechorPlant) && !(entity instanceof EntityCockatrice);
     }
 
-    public static void distractEntity(Entity var0)
+    public static void distractEntity(Entity entity)
     {
-        double var1 = var0.worldObj.rand.nextGaussian();
-        double var3 = motDFac * var1;
-        motD = motTaper * var3 + (1.0D - motTaper) * motD;
-        var0.motionX += motD;
-        var0.motionZ += motD;
-        double var5 = rotDFac * var1;
-        rotD = rotTaper * var5 + (1.0D - rotTaper) * rotD;
-        var0.rotationYaw = (float)((double)var0.rotationYaw + rotD);
-        var0.rotationPitch = (float)((double)var0.rotationPitch + rotD);
+        double gauss = entity.worldObj.rand.nextGaussian();
+        double newMotD = motDFac * gauss;
+        motD = motTaper * newMotD + (1.0D - motTaper) * motD;
+        entity.motionX += motD;
+        entity.motionZ += motD;
+        double newRotD = rotDFac * gauss;
+        rotD = rotTaper * newRotD + (1.0D - rotTaper) * rotD;
+        entity.rotationYaw = (float)((double)entity.rotationYaw + rotD);
+        entity.rotationPitch = (float)((double)entity.rotationPitch + rotD);
     }
 
-    public static void poisonTick(EntityPlayer var0)
+    public static void poisonTick(EntityPlayer player)
     {
-        if (var0 != null && (var0.isDead || var0.getHealth() <= 0))
+        if (player != null && (player.isDead || player.func_110143_aJ() <= 0.0F))
         {
             poisonTime = 0;
         }
@@ -68,20 +67,20 @@ public class AetherPoison
         }
         else if (poisonTime != 0)
         {
-            long var1 = var0.worldObj.getWorldTime();
+            long time = player.worldObj.getWorldTime();
             mod = poisonTime % 50;
 
-            if (clock != var1)
+            if (clock != time)
             {
-                distractEntity(var0);
+                distractEntity(player);
 
-                if (!var0.worldObj.isRemote && mod == 0)
+                if (!player.worldObj.isRemote && mod == 0)
                 {
-                    var0.attackEntityFrom(DamageSource.generic, 1);
+                    player.attackEntityFrom(DamageSource.generic, 1.0F);
                 }
 
                 --poisonTime;
-                clock = var1;
+                clock = time;
             }
         }
     }
@@ -99,7 +98,7 @@ public class AetherPoison
         }
     }
 
-    public static boolean curePoison(int var0)
+    public static boolean curePoison(int i)
     {
         if (poisonTime == -500)
         {
@@ -107,26 +106,26 @@ public class AetherPoison
         }
         else
         {
-            poisonTime = -500 - var0;
+            poisonTime = -500 - i;
             return true;
         }
     }
 
-    public static float getPoisonAlpha(float var0)
+    public static float getPoisonAlpha(float f)
     {
-        return var0 * var0 / 5.0F + 0.4F;
+        return f * f / 5.0F + 0.4F;
     }
 
-    public static float getCureAlpha(float var0)
+    public static float getCureAlpha(float f)
     {
-        return var0 * var0 / 10.0F + 0.4F;
+        return f * f / 10.0F + 0.4F;
     }
 
     public static void displayCureEffect()
     {
         if (poisonTime < 0)
         {
-            flashColor("%blur%/net/aetherteam/aether/client/sprites/poison/curevignette.png", getCureAlpha(-((float)mod) / 100.0F), Aether.proxy.getClient());
+            flashColor(TEXTURE_CUREVIGNETTE, getCureAlpha(-((float)mod) / 100.0F), Aether.proxy.getClient());
         }
     }
 
@@ -134,32 +133,32 @@ public class AetherPoison
     {
         if (poisonTime > 0)
         {
-            flashColor("%blur%/net/aetherteam/aether/client/sprites/poison/poisonvignette.png", getPoisonAlpha((float)mod / 50.0F), Aether.proxy.getClient());
+            flashColor(TEXTURE_POISONVIGNETTE, getPoisonAlpha((float)mod / 50.0F), Aether.proxy.getClient());
         }
     }
 
-    public static void flashColor(String var0, float var1, Minecraft var2)
+    public static void flashColor(ResourceLocation texture, float a, Minecraft mc)
     {
-        ScaledResolution var3 = new ScaledResolution(var2.gameSettings, var2.displayWidth, var2.displayHeight);
-        int var4 = var3.getScaledWidth();
-        int var5 = var3.getScaledHeight();
+        ScaledResolution scaledresolution = new ScaledResolution(mc.gameSettings, mc.displayWidth, mc.displayHeight);
+        int width = scaledresolution.getScaledWidth();
+        int height = scaledresolution.getScaledHeight();
         GL11.glEnable(GL11.GL_BLEND);
         GL11.glDisable(GL11.GL_DEPTH_TEST);
         GL11.glDepthMask(false);
         GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
-        GL11.glColor4f(1.0F, 1.0F, 1.0F, var1);
+        GL11.glColor4f(1.0F, 1.0F, 1.0F, a);
         GL11.glDisable(GL11.GL_ALPHA_TEST);
-        GL11.glBindTexture(GL11.GL_TEXTURE_2D, var2.renderEngine.getTexture(var0));
-        Tessellator var6 = Tessellator.instance;
-        var6.startDrawingQuads();
-        var6.addVertexWithUV(0.0D, (double)var5, -90.0D, 0.0D, 1.0D);
-        var6.addVertexWithUV((double)var4, (double)var5, -90.0D, 1.0D, 1.0D);
-        var6.addVertexWithUV((double)var4, 0.0D, -90.0D, 1.0D, 0.0D);
-        var6.addVertexWithUV(0.0D, 0.0D, -90.0D, 0.0D, 0.0D);
-        var6.draw();
+        mc.renderEngine.func_110577_a(texture);
+        Tessellator tessellator = Tessellator.instance;
+        tessellator.startDrawingQuads();
+        tessellator.addVertexWithUV(0.0D, (double)height, -90.0D, 0.0D, 1.0D);
+        tessellator.addVertexWithUV((double)width, (double)height, -90.0D, 1.0D, 1.0D);
+        tessellator.addVertexWithUV((double)width, 0.0D, -90.0D, 1.0D, 0.0D);
+        tessellator.addVertexWithUV(0.0D, 0.0D, -90.0D, 0.0D, 0.0D);
+        tessellator.draw();
         GL11.glDepthMask(true);
         GL11.glEnable(GL11.GL_DEPTH_TEST);
         GL11.glEnable(GL11.GL_ALPHA_TEST);
-        GL11.glColor4f(1.0F, 1.0F, 1.0F, var1);
+        GL11.glColor4f(1.0F, 1.0F, 1.0F, a);
     }
 }

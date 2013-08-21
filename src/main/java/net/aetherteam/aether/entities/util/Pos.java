@@ -6,10 +6,10 @@ public class Pos
     public int y;
     public int z;
 
-    public Pos(int var1, int var2, int var3)
+    public Pos(int posX, int posY, int posZ)
     {
-        this.x = var1;
-        this.y = var2;
-        this.z = var3;
+        this.x = posX;
+        this.y = posY;
+        this.z = posZ;
     }
 }

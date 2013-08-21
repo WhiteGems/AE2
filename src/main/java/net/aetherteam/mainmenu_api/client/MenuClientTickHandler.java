@@ -26,26 +26,26 @@ public class MenuClientTickHandler implements ITickHandler
         return null;
     }
 
-    public void tickEnd(EnumSet var1, Object ... var2)
+    public void tickEnd(EnumSet<TickType> type, Object ... tickData)
     {
-        if (var1.equals(EnumSet.of(TickType.CLIENT)))
+        if (type.equals(EnumSet.of(TickType.CLIENT)))
         {
-            GuiScreen var3 = Minecraft.getMinecraft().currentScreen;
-            MenuBaseMinecraft var4 = new MenuBaseMinecraft();
+            GuiScreen guiscreen = Minecraft.getMinecraft().currentScreen;
+            MenuBaseMinecraft minecraftMenu = new MenuBaseMinecraft();
 
-            if (var3 instanceof GuiMainMenu && var3.getClass() != var4.getClass())
+            if (guiscreen instanceof GuiMainMenu && guiscreen.getClass() != minecraftMenu.getClass())
             {
                 Minecraft.getMinecraft().displayGuiScreen(new MenuBaseLoaderWithSlider());
             }
         }
     }
 
-    public EnumSet ticks()
+    public EnumSet<TickType> ticks()
     {
         return EnumSet.of(TickType.CLIENT);
     }
 
-    public void tickStart(EnumSet var1, Object ... var2)
+    public void tickStart(EnumSet<TickType> type, Object ... tickData)
     {
         if (Minecraft.getMinecraft().isIntegratedServerRunning())
         {
@@ -58,22 +58,11 @@ public class MenuClientTickHandler implements ITickHandler
                 MenuBaseConfig.playerPosZ = Minecraft.getMinecraft().thePlayer.posZ;
             }
 
-            if (MenuBaseConfig.endMusic)
+            if (MenuBaseConfig.endMusic && this.soundManager.sndSystem != null && this.soundManager.sndSystem.playing("BgMusic") && MenuBaseConfig.ticks < 10)
             {
-                SoundManager var10000 = this.soundManager;
-
-                if (SoundManager.sndSystem != null)
-                {
-                    var10000 = this.soundManager;
-
-                    if (SoundManager.sndSystem.playing("streaming") && MenuBaseConfig.ticks < 10)
-                    {
-                        MenuBaseConfig.endMusic = false;
-                        System.out.println("Stopping rogue music.");
-                        var10000 = this.soundManager;
-                        SoundManager.sndSystem.stop("streaming");
-                    }
-                }
+                MenuBaseConfig.endMusic = false;
+                System.out.println("Stopping rogue music.");
+                this.soundManager.sndSystem.stop("BgMusic");
             }
         }
     }

@@ -7,13 +7,13 @@ import net.minecraft.world.chunk.IChunkProvider;
 
 public class AetherWorldType extends WorldType
 {
-    public AetherWorldType(int var1, String var2)
+    public AetherWorldType(int par1, String par2Str)
     {
-        super(var1, var2, 0);
+        super(par1, par2Str, 0);
         this.biomesForWorldType[0] = new BiomeGenAether();
     }
 
-    public double getHorizon(World var1)
+    public double getHorizon(World world)
     {
         return 0.0D;
     }
@@ -41,13 +41,13 @@ public class AetherWorldType extends WorldType
         return "Aether";
     }
 
-    public WorldChunkManager getChunkManager(World var1)
+    public WorldChunkManager getChunkManager(World world)
     {
         return new WorldChunkManagerAether(0.5D);
     }
 
-    public IChunkProvider getChunkGenerator(World var1, String var2)
+    public IChunkProvider getChunkGenerator(World world, String generatorOptions)
     {
-        return new ChunkProviderAether(var1, var1.getSeed());
+        return new ChunkProviderAether(world, world.getSeed());
     }
 }

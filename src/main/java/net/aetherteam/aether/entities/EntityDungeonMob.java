@@ -9,6 +9,7 @@ import net.aetherteam.aether.dungeons.DungeonHandler;
 import net.aetherteam.aether.party.Party;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityCreature;
+import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
@@ -22,14 +23,11 @@ public class EntityDungeonMob extends EntityCreature implements IMob
     Random random = new Random();
     protected int attackStrength = 2;
 
-    public EntityDungeonMob(World var1)
+    public EntityDungeonMob(World world)
     {
-        super(var1);
-    }
-
-    public int getMaxHealth()
-    {
-        return 20;
+        super(world);
+        this.func_110148_a(SharedMonsterAttributes.field_111267_a).func_111128_a(20.0D);
+        this.setEntityHealth(20.0F);
     }
 
     /**
@@ -38,20 +36,20 @@ public class EntityDungeonMob extends EntityCreature implements IMob
      */
     public void onLivingUpdate()
     {
-        float var1 = this.getBrightness(1.0F);
-        Side var2 = FMLCommonHandler.instance().getEffectiveSide();
+        float f = this.getBrightness(1.0F);
+        Side side = FMLCommonHandler.instance().getEffectiveSide();
 
-        if (var2.isServer())
+        if (side.isServer())
         {
-            Dungeon var3 = DungeonHandler.instance().getInstanceAt(MathHelper.floor_double(this.posX), MathHelper.floor_double(this.posY), MathHelper.floor_double(this.posZ));
+            Dungeon dungeon = DungeonHandler.instance().getInstanceAt(MathHelper.floor_double(this.posX), MathHelper.floor_double(this.posY), MathHelper.floor_double(this.posZ));
 
-            if (var3 != null && !var3.isActive())
+            if (dungeon != null && !dungeon.isActive())
             {
                 this.setDead();
             }
         }
 
-        if (var1 > 0.5F)
+        if (f > 0.5F)
         {
             this.entityAge += 2;
         }
@@ -73,43 +71,40 @@ public class EntityDungeonMob extends EntityCreature implements IMob
      */
     protected Entity findPlayerToAttack()
     {
-        EntityPlayer var1 = this.worldObj.getClosestPlayerToEntity(this, 16.0D);
-        return var1 != null && this.canEntityBeSeen(var1) && !var1.capabilities.isCreativeMode ? var1 : null;
+        EntityPlayer entityplayer = this.worldObj.getClosestPlayerToEntity(this, 16.0D);
+        return entityplayer != null && this.canEntityBeSeen(entityplayer) && !entityplayer.capabilities.isCreativeMode ? entityplayer : null;
     }
 
-    /**
-     * Called when the entity is attacked.
-     */
-    public boolean attackEntityFrom(DamageSource var1, int var2)
+    public boolean attackEntityFrom(DamageSource src, int damage)
     {
-        Dungeon var3 = DungeonHandler.instance().getInstanceAt(MathHelper.floor_double(this.posX), MathHelper.floor_double(this.posY), MathHelper.floor_double(this.posZ));
+        Dungeon dungeon = DungeonHandler.instance().getInstanceAt(MathHelper.floor_double(this.posX), MathHelper.floor_double(this.posY), MathHelper.floor_double(this.posZ));
 
-        if (var3 != null && var3.hasQueuedParty())
+        if (dungeon != null && dungeon.hasQueuedParty())
         {
-            Party var8 = var3.getQueuedParty();
-            int var5 = var3.getQueuedMembers().size() + 1;
-            float var6 = (float)(var5 - 1) * 0.075F;
-            int var7 = MathHelper.clamp_int((int)((float)var2 - (float)var2 * var6), 1, var2);
-            return super.attackEntityFrom(var1, var7);
+            Party entity1 = dungeon.getQueuedParty();
+            int players = dungeon.getQueuedMembers().size() + 1;
+            float damageFactor = (float)(players - 1) * 0.075F;
+            int newDamage = MathHelper.clamp_int((int)((float)damage - (float)damage * damageFactor), 1, damage);
+            return super.attackEntityFrom(src, (float)newDamage);
         }
-        else if (!super.attackEntityFrom(var1, var2))
+        else if (!super.attackEntityFrom(src, (float)damage))
         {
             return false;
         }
         else
         {
-            Entity var4 = var1.getEntity();
+            Entity entity = src.getEntity();
 
-            if (var4 != null)
+            if (entity != null)
             {
-                if (this.riddenByEntity == var4 || this.ridingEntity == var4)
+                if (this.riddenByEntity == entity || this.ridingEntity == entity)
                 {
                     return true;
                 }
 
-                if (var4 != this)
+                if (entity != this)
                 {
-                    this.entityToAttack = var4;
+                    this.entityToAttack = entity;
                 }
             }
 
@@ -120,12 +115,12 @@ public class EntityDungeonMob extends EntityCreature implements IMob
     /**
      * Basic mob attack. Default to touch of death in EntityCreature. Overridden by each mob to define their attack.
      */
-    protected void attackEntity(Entity var1, float var2)
+    protected void attackEntity(Entity entity, float f)
     {
-        if (this.attackTime <= 0 && var2 < 2.0F && var1.boundingBox.maxY > this.boundingBox.minY && var1.boundingBox.minY < this.boundingBox.maxY)
+        if (this.attackTime <= 0 && f < 2.0F && entity.boundingBox.maxY > this.boundingBox.minY && entity.boundingBox.minY < this.boundingBox.maxY)
         {
             this.attackTime = 20;
-            var1.attackEntityFrom(DamageSource.causeMobDamage(this), this.attackStrength);
+            entity.attackEntityFrom(DamageSource.causeMobDamage(this), (float)this.attackStrength);
         }
     }
 
@@ -133,25 +128,25 @@ public class EntityDungeonMob extends EntityCreature implements IMob
      * Takes a coordinate in and returns a weight to determine how likely this creature will try to path to the block.
      * Args: x, y, z
      */
-    public float getBlockPathWeight(int var1, int var2, int var3)
+    public float getBlockPathWeight(int i, int j, int k)
     {
-        return 0.5F - this.worldObj.getLightBrightness(var1, var2, var3);
+        return 0.5F - this.worldObj.getLightBrightness(i, j, k);
     }
 
     /**
      * (abstract) Protected helper method to write subclass entity data to NBT.
      */
-    public void writeEntityToNBT(NBTTagCompound var1)
+    public void writeEntityToNBT(NBTTagCompound nbttagcompound)
     {
-        super.writeEntityToNBT(var1);
+        super.writeEntityToNBT(nbttagcompound);
     }
 
     /**
      * (abstract) Protected helper method to read subclass entity data from NBT.
      */
-    public void readEntityFromNBT(NBTTagCompound var1)
+    public void readEntityFromNBT(NBTTagCompound nbttagcompound)
     {
-        super.readEntityFromNBT(var1);
+        super.readEntityFromNBT(nbttagcompound);
     }
 
     /**
@@ -159,27 +154,27 @@ public class EntityDungeonMob extends EntityCreature implements IMob
      */
     public boolean getCanSpawnHere()
     {
-        int var1 = MathHelper.floor_double(this.posX);
-        int var2 = MathHelper.floor_double(this.boundingBox.minY);
-        int var3 = MathHelper.floor_double(this.posZ);
+        int i = MathHelper.floor_double(this.posX);
+        int j = MathHelper.floor_double(this.boundingBox.minY);
+        int k = MathHelper.floor_double(this.posZ);
 
-        if (this.worldObj.getSavedLightValue(EnumSkyBlock.Sky, var1, var2, var3) > this.rand.nextInt(32))
+        if (this.worldObj.getSavedLightValue(EnumSkyBlock.Sky, i, j, k) > this.rand.nextInt(32))
         {
             return false;
         }
         else
         {
-            int var4 = this.worldObj.getBlockLightValue(var1, var2, var3);
+            int l = this.worldObj.getBlockLightValue(i, j, k);
 
             if (this.worldObj.isThundering())
             {
-                int var5 = this.worldObj.skylightSubtracted;
+                int i1 = this.worldObj.skylightSubtracted;
                 this.worldObj.skylightSubtracted = 10;
-                var4 = this.worldObj.getBlockLightValue(var1, var2, var3);
-                this.worldObj.skylightSubtracted = var5;
+                l = this.worldObj.getBlockLightValue(i, j, k);
+                this.worldObj.skylightSubtracted = i1;
             }
 
-            return var4 <= this.rand.nextInt(8) && super.getCanSpawnHere();
+            return l <= this.rand.nextInt(8) && super.getCanSpawnHere();
         }
     }
 
@@ -190,7 +185,7 @@ public class EntityDungeonMob extends EntityCreature implements IMob
     {
         if (this.deathTime == 18 && !this.worldObj.isRemote && (this.recentlyHit > 0 || this.isPlayer()) && !this.isChild())
         {
-            for (int var1 = 0; var1 < this.random.nextInt(4); ++var1)
+            for (int amount = 0; amount < this.random.nextInt(4); ++amount)
             {
                 this.worldObj.spawnEntityInWorld(new EntityAetherCoin(this.worldObj, this.posX, this.posY, this.posZ, 1));
             }

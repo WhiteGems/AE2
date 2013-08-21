@@ -23,9 +23,9 @@ public class ItemDartShooter extends ItemAether
     @SideOnly(Side.CLIENT)
     private Icon[] icons;
 
-    public ItemDartShooter(int var1)
+    public ItemDartShooter(int i)
     {
-        super(var1);
+        super(i);
         this.setHasSubtypes(true);
         this.maxStackSize = 1;
     }
@@ -41,55 +41,55 @@ public class ItemDartShooter extends ItemAether
     /**
      * returns a list of items with the same ID, but different meta (eg: dye returns 16 items)
      */
-    public void getSubItems(int var1, CreativeTabs var2, List var3)
+    public void getSubItems(int par1, CreativeTabs par2CreativeTabs, List par3List)
     {
         for (int var4 = 0; var4 < 4; ++var4)
         {
-            var3.add(new ItemStack(var1, 1, var4));
+            par3List.add(new ItemStack(par1, 1, var4));
         }
     }
 
-    private int consumeItem(EntityPlayer var1, int var2, int var3)
+    private int consumeItem(EntityPlayer player, int itemID, int maxDamage)
     {
-        InventoryPlayer var4 = var1.inventory;
+        InventoryPlayer inv = player.inventory;
 
-        for (int var5 = 0; var5 < var4.getSizeInventory(); ++var5)
+        for (int i = 0; i < inv.getSizeInventory(); ++i)
         {
-            ItemStack var6 = var4.getStackInSlot(var5);
+            ItemStack stack = inv.getStackInSlot(i);
 
-            if (var6 != null)
+            if (stack != null)
             {
-                int var7 = var6.getItemDamage();
+                int damage = stack.getItemDamage();
 
-                if (var3 != 3 && var6.itemID == var2 && var6.getItemDamage() == var3)
+                if (maxDamage != 3 && stack.itemID == itemID && stack.getItemDamage() == maxDamage)
                 {
-                    if (!var1.capabilities.isCreativeMode)
+                    if (!player.capabilities.isCreativeMode)
                     {
-                        --var6.stackSize;
+                        --stack.stackSize;
                     }
 
-                    if (var6.stackSize == 0)
+                    if (stack.stackSize == 0)
                     {
-                        var6 = null;
+                        stack = null;
                     }
 
-                    var4.setInventorySlotContents(var5, var6);
-                    return var7;
+                    inv.setInventorySlotContents(i, stack);
+                    return damage;
                 }
 
-                if (var3 == 3 && var6.itemID == var2)
+                if (maxDamage == 3 && stack.itemID == itemID)
                 {
-                    if (!var1.capabilities.isCreativeMode)
+                    if (!player.capabilities.isCreativeMode)
                     {
-                        --var6.stackSize;
+                        --stack.stackSize;
                     }
 
-                    if (var6.stackSize == 0)
+                    if (stack.stackSize == 0)
                     {
-                        var6 = null;
+                        stack = null;
                     }
 
-                    var4.setInventorySlotContents(var5, var6);
+                    inv.setInventorySlotContents(i, stack);
                     return 3;
                 }
             }
@@ -101,87 +101,87 @@ public class ItemDartShooter extends ItemAether
     /**
      * Gets an icon index based on an item's damage value
      */
-    public Icon getIconFromDamage(int var1)
+    public Icon getIconFromDamage(int damage)
     {
-        return this.icons[var1];
+        return this.icons[damage];
     }
 
     /**
      * Returns the unlocalized name of this item. This version accepts an ItemStack so different stacks can have
      * different names based on their damage or NBT.
      */
-    public String getUnlocalizedName(ItemStack var1)
+    public String getUnlocalizedName(ItemStack par1ItemStack)
     {
-        int var2 = MathHelper.clamp_int(var1.getItemDamage(), 0, 3);
-        return "Aether:" + names[var2];
+        int var2 = MathHelper.clamp_int(par1ItemStack.getItemDamage(), 0, 3);
+        return "aether:" + names[var2];
     }
 
     @SideOnly(Side.CLIENT)
-    public void registerIcons(IconRegister var1)
+    public void registerIcons(IconRegister par1IconRegister)
     {
         this.icons = new Icon[names.length];
 
-        for (int var2 = 0; var2 < names.length; ++var2)
+        for (int i = 0; i < names.length; ++i)
         {
-            this.icons[var2] = var1.registerIcon("Aether:" + names[var2]);
+            this.icons[i] = par1IconRegister.registerIcon("aether:" + names[i]);
         }
     }
 
     /**
      * Called whenever this item is equipped and the right mouse button is pressed. Args: itemStack, world, entityPlayer
      */
-    public ItemStack onItemRightClick(ItemStack var1, World var2, EntityPlayer var3)
+    public ItemStack onItemRightClick(ItemStack itemstack, World world, EntityPlayer entityplayer)
     {
-        int var4;
+        int consume;
 
-        if (!var3.capabilities.isCreativeMode)
+        if (!entityplayer.capabilities.isCreativeMode)
         {
-            var4 = this.consumeItem(var3, AetherItems.Dart.itemID, var1.getItemDamage());
+            consume = this.consumeItem(entityplayer, AetherItems.Dart.itemID, itemstack.getItemDamage());
         }
         else
         {
-            var4 = var1.getItemDamage();
+            consume = itemstack.getItemDamage();
         }
 
-        if (var4 != -1)
+        if (consume != -1)
         {
-            var2.playSoundAtEntity(var3, "aemisc.shootDart", 1.0F, 1.0F / (itemRand.nextFloat() * 0.4F + 0.2F));
-            Object var5 = null;
+            world.playSoundAtEntity(entityplayer, "aether:aemisc.shootDart", 1.0F, 1.0F / (itemRand.nextFloat() * 0.4F + 0.2F));
+            Object dart = null;
 
-            if (var4 == 1)
+            if (consume == 1)
             {
-                var5 = new EntityDartPoison(var2, var3);
+                dart = new EntityDartPoison(world, entityplayer);
             }
-            else if (var4 == 2)
+            else if (consume == 2)
             {
-                var5 = new EntityDartEnchanted(var2, var3);
+                dart = new EntityDartEnchanted(world, entityplayer);
             }
-            else if (var4 == 0)
+            else if (consume == 0)
             {
-                var5 = new EntityDartGolden(var2, var3);
+                dart = new EntityDartGolden(world, entityplayer);
             }
-            else if (var4 == 3)
+            else if (consume == 3)
             {
-                var5 = new EntityDartPhoenix(var2, var3, new ItemStack(AetherItems.Dart.itemID, 1, var4));
-                var2.playSoundAtEntity(var3, "mob.ghast.fireball", 1.0F, 1.0F / (itemRand.nextFloat() * 0.4F + 0.4F));
+                dart = new EntityDartPhoenix(world, entityplayer, new ItemStack(AetherItems.Dart.itemID, 1, consume));
+                world.playSoundAtEntity(entityplayer, "mob.ghast.fireball", 1.0F, 1.0F / (itemRand.nextFloat() * 0.4F + 0.4F));
             }
 
-            if (!var2.isRemote)
+            if (!world.isRemote)
             {
-                var2.spawnEntityInWorld((Entity)var5);
+                world.spawnEntityInWorld((Entity)dart);
 
-                if (!var3.capabilities.isCreativeMode)
+                if (!entityplayer.capabilities.isCreativeMode)
                 {
-                    ((EntityDartGolden)var5).canBePickedUp = 1;
+                    ((EntityDartGolden)dart).canBePickedUp = 1;
                 }
 
-                if (var3.capabilities.isCreativeMode)
+                if (entityplayer.capabilities.isCreativeMode)
                 {
-                    ((EntityDartGolden)var5).canBePickedUp = 2;
+                    ((EntityDartGolden)dart).canBePickedUp = 2;
                 }
             }
         }
 
-        return var1;
+        return itemstack;
     }
 }

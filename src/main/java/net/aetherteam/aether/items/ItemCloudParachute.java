@@ -8,32 +8,33 @@ import net.minecraft.world.World;
 
 public class ItemCloudParachute extends ItemAether
 {
-    public ItemCloudParachute(int var1, int var2)
+    public ItemCloudParachute(int i, int damage)
     {
-        super(var1);
+        super(i);
         this.maxStackSize = 1;
-        this.setMaxDamage(var2);
+        this.setMaxDamage(damage);
     }
 
-    public Item setIconName(String var1)
+    public Item setIconName(String name)
     {
-        return this.setUnlocalizedName("Aether:" + var1);
+        this.field_111218_cA = "aether:" + name;
+        return this.setUnlocalizedName("aether:" + name);
     }
 
     /**
      * Called whenever this item is equipped and the right mouse button is pressed. Args: itemStack, world, entityPlayer
      */
-    public ItemStack onItemRightClick(ItemStack var1, World var2, EntityPlayer var3)
+    public ItemStack onItemRightClick(ItemStack itemstack, World world, EntityPlayer entityplayer)
     {
-        if (Aether.getServerPlayer(var3) == null)
+        if (Aether.getServerPlayer(entityplayer) == null)
         {
-            return var1;
+            return itemstack;
         }
         else
         {
-            Aether.getServerPlayer(var3).setParachuting(true, this.getParachuteType());
-            --var1.stackSize;
-            return var1;
+            Aether.getServerPlayer(entityplayer).setParachuting(true, this.getParachuteType());
+            --itemstack.stackSize;
+            return itemstack;
         }
     }
 

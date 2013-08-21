@@ -1,7 +1,12 @@
 package net.aetherteam.playercore_api.asm;
 
-import cpw.mods.fml.relauncher.IClassTransformer;
+import java.io.IOException;
+import java.util.Iterator;
 import java.util.ListIterator;
+import java.util.logging.Logger;
+import net.aetherteam.playercore_api.PlayerCoreLoadingPlugin;
+import net.minecraft.launchwrapper.IClassTransformer;
+import net.minecraft.launchwrapper.LaunchClassLoader;
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.ClassWriter;
 import org.objectweb.asm.tree.AbstractInsnNode;
@@ -13,106 +18,127 @@ import org.objectweb.asm.tree.TypeInsnNode;
 public class PlayerCoreTransformer implements IClassTransformer
 {
     private static final String MCP_RENDERMANAGER = "net.minecraft.client.renderer.entity.RenderManager";
-    private static final String OBF_RENDERMANAGER = "bgy";
+    private static final String OBF_RENDERMANAGER = "bgi";
     private static final String MCP_PLAYERCONTROLLERMP = "net.minecraft.client.multiplayer.PlayerControllerMP";
-    private static final String OBF_PLAYERCONTROLLERMP = "bdr";
+    private static final String OBF_PLAYERCONTROLLERMP = "bcz";
     private static final String MCP_SCM = "net.minecraft.server.management.ServerConfigurationManager";
-    private static final String OBF_SCM = "gu";
+    private static final String OBF_SCM = "hm";
+    private static final String MCP_ENTITYPLAYERSP = "net.minecraft.client.entity.EntityClientPlayerMP";
+    private static final String OBF_ENTITYPLAYERSP = "bdf";
+    private static final String MCP_ENTITYPLAYERMP = "net.minecraft.entity.player.EntityPlayerMP";
+    private static final String OBF_ENTITYPLAYERMP = "ju";
+    private static final String MCP_RENDERPLAYER = "net.minecraft.client.renderer.entity.RenderPlayer";
+    private static final String OBF_RENDERPLAYER = "bhg";
     private static final String PLAYERCORE_CLIENT = "net.aetherteam.playercore_api.cores.PlayerCoreClient";
     private static final String PLAYERCORE_SERVER = "net.aetherteam.playercore_api.cores.PlayerCoreServer";
     private static final String PLAYERCORE_RENDER = "net.aetherteam.playercore_api.cores.PlayerCoreRender";
-    private static final boolean DEBUG_MODE = false;
+    private static boolean checkedObfuscation;
+    private static boolean isObfuscated;
 
-    public byte[] transform(String var1, String var2, byte[] var3)
+    public byte[] transform(String name, String transformedName, byte[] bytes)
     {
-        ClassReader var4;
-        ClassNode var5;
-        MethodNode var6;
-        TypeInsnNode var7;
-        MethodInsnNode var8;
-        ClassWriter var9;
-
-        if (!var1.equals("net.minecraft.client.renderer.entity.RenderManager") && !var1.equals("bgy"))
+        if (!checkedObfuscation)
         {
-            if (!var1.equals("net.minecraft.server.management.ServerConfigurationManager") && !var1.equals("gu"))
+            LaunchClassLoader classReader = (LaunchClassLoader)PlayerCoreLoadingPlugin.class.getClassLoader();
+
+            try
             {
-                if (!var1.equals("net.minecraft.client.multiplayer.PlayerControllerMP") && !var1.equals("bdr"))
+                isObfuscated = classReader.getClassBytes("net.minecraft.world.World") == null;
+            }
+            catch (IOException var7)
+            {
+                ;
+            }
+
+            checkedObfuscation = true;
+        }
+
+        ClassNode classNode;
+        ClassWriter cw;
+        ClassReader classReader1;
+
+        if (!name.equals("net.minecraft.client.renderer.entity.RenderManager") && !name.equals("bgi"))
+        {
+            if (!name.equals("net.minecraft.server.management.ServerConfigurationManager") && !name.equals("hm"))
+            {
+                if (!name.equals("net.minecraft.client.multiplayer.PlayerControllerMP") && !name.equals("bcz"))
                 {
-                    return var3;
+                    return bytes;
                 }
                 else
                 {
-                    var4 = new ClassReader(var3);
-                    var5 = new ClassNode();
-                    var4.accept(var5, 0);
-                    var6 = (MethodNode)var5.methods.get(17);
-                    var7 = (TypeInsnNode)var6.instructions.get(2);
-                    var7.desc = "net.aetherteam.playercore_api.cores.PlayerCoreClient".replace(".", "/");
-                    var8 = (MethodInsnNode)var6.instructions.get(12);
-                    var8.owner = "net.aetherteam.playercore_api.cores.PlayerCoreClient".replace(".", "/");
-                    var9 = new ClassWriter(3);
-                    var5.accept(var9);
-                    return var9.toByteArray();
+                    classReader1 = new ClassReader(bytes);
+                    classNode = new ClassNode();
+                    classReader1.accept(classNode, 0);
+                    this.replaceInstance(classNode, isObfuscated ? "bdf" : "net.minecraft.client.entity.EntityClientPlayerMP", "net.aetherteam.playercore_api.cores.PlayerCoreClient");
+                    cw = new ClassWriter(3);
+                    classNode.accept(cw);
+                    return cw.toByteArray();
                 }
             }
             else
             {
-                var4 = new ClassReader(var3);
-                var5 = new ClassNode();
-                var4.accept(var5, 0);
-                var6 = (MethodNode)var5.methods.get(12);
-                System.out.println("analysing methodNodeCreatePlayer, name: " + var6.name + ", desc: " + var6.desc);
-                this.analyse(var6);
-                var7 = (TypeInsnNode)var6.instructions.get(101);
-                var7.desc = "net.aetherteam.playercore_api.cores.PlayerCoreServer".replace(".", "/");
-                var8 = (MethodInsnNode)var6.instructions.get(112);
-                var8.owner = "net.aetherteam.playercore_api.cores.PlayerCoreServer".replace(".", "/");
-                MethodNode var13 = (MethodNode)var5.methods.get(13);
-                System.out.println("analysing methodNodeRespawnPlayer, name: " + var13.name + ", desc: " + var13.desc);
-                this.analyse(var13);
-                TypeInsnNode var10 = (TypeInsnNode)var13.instructions.get(117);
-                var10.desc = "net.aetherteam.playercore_api.cores.PlayerCoreServer".replace(".", "/");
-                MethodInsnNode var11 = (MethodInsnNode)var13.instructions.get(130);
-                var11.owner = "net.aetherteam.playercore_api.cores.PlayerCoreServer".replace(".", "/");
-                ClassWriter var12 = new ClassWriter(0);
-                var5.accept(var12);
-                return var12.toByteArray();
+                classReader1 = new ClassReader(bytes);
+                classNode = new ClassNode();
+                classReader1.accept(classNode, 0);
+                this.replaceInstance(classNode, isObfuscated ? "ju" : "net.minecraft.entity.player.EntityPlayerMP", "net.aetherteam.playercore_api.cores.PlayerCoreServer");
+                cw = new ClassWriter(0);
+                classNode.accept(cw);
+                return cw.toByteArray();
             }
         }
         else
         {
-            var4 = new ClassReader(var3);
-            var5 = new ClassNode();
-            var4.accept(var5, 0);
-            var6 = (MethodNode)var5.methods.get(0);
-            var7 = (TypeInsnNode)var6.instructions.get(253);
-            var7.desc = "net.aetherteam.playercore_api.cores.PlayerCoreRender".replace(".", "/");
-            var8 = (MethodInsnNode)var6.instructions.get(255);
-            var8.owner = "net.aetherteam.playercore_api.cores.PlayerCoreRender".replace(".", "/");
-            var9 = new ClassWriter(3);
-            var5.accept(var9);
-            return var9.toByteArray();
+            classReader1 = new ClassReader(bytes);
+            classNode = new ClassNode();
+            classReader1.accept(classNode, 0);
+            this.replaceInstance(classNode, isObfuscated ? "bhg" : "net.minecraft.client.renderer.entity.RenderPlayer", "net.aetherteam.playercore_api.cores.PlayerCoreRender");
+            cw = new ClassWriter(3);
+            classNode.accept(cw);
+            return cw.toByteArray();
         }
     }
 
-    public void analyse(MethodNode var1)
+    public void replaceInstance(ClassNode classNode, String oldInstance, String newInstance)
     {
-        ListIterator var2 = var1.instructions.iterator();
+        Logger logger = Logger.getLogger("PlayerCoreTransformer");
+        System.out.println("class: " + classNode.name);
+        System.out.println("replacing " + oldInstance + " with " + newInstance);
+        oldInstance = oldInstance.replace(".", "/");
+        newInstance = newInstance.replace(".", "/");
+        Iterator i$ = classNode.methods.iterator();
 
-        for (int var3 = 0; var2.hasNext(); ++var3)
+        while (i$.hasNext())
         {
-            AbstractInsnNode var4 = (AbstractInsnNode)var2.next();
+            MethodNode methodNode = (MethodNode)i$.next();
+            ListIterator iter = methodNode.instructions.iterator();
+            TypeInsnNode previousTypeInsnNode = null;
 
-            if (var4 instanceof TypeInsnNode)
+            while (iter.hasNext())
             {
-                TypeInsnNode var5 = (TypeInsnNode)var4;
-                System.out.println(var3 + ": TypeInsnNode, desc: " + var5.desc);
-            }
+                AbstractInsnNode node = (AbstractInsnNode)iter.next();
 
-            if (var4 instanceof MethodInsnNode)
-            {
-                MethodInsnNode var6 = (MethodInsnNode)var4;
-                System.out.println(var3 + ": MethodInsnNode, owner: " + var6.owner);
+                if (node instanceof TypeInsnNode)
+                {
+                    TypeInsnNode mn = (TypeInsnNode)node;
+
+                    if (mn.desc.equals(oldInstance))
+                    {
+                        previousTypeInsnNode = mn;
+                    }
+                }
+
+                if (node instanceof MethodInsnNode)
+                {
+                    MethodInsnNode mn1 = (MethodInsnNode)node;
+
+                    if (mn1.owner.equals(oldInstance) && mn1.name.equals("<init>"))
+                    {
+                        mn1.owner = newInstance;
+                        previousTypeInsnNode.desc = newInstance;
+                        System.out.println("found injection point: method: " + methodNode.name + " typeinsn: " + methodNode.instructions.indexOf(previousTypeInsnNode) + " methodinsn: " + methodNode.instructions.indexOf(mn1));
+                    }
+                }
             }
         }
     }

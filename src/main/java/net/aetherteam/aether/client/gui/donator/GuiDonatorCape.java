@@ -16,13 +16,16 @@ import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.ResourceLocation;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
 
 public class GuiDonatorCape extends GuiScreen
 {
+    private static final ResourceLocation TEXTURE_CHOICE_MENU = new ResourceLocation("aether", "textures/gui/choiceMenu.png");
+    private static final ResourceLocation TEXTURE_CHOICE_MENU_2 = new ResourceLocation("aether", "textures/gui/choiceMenu2.png");
+    private ResourceLocation backgroundTexture;
     private final PartyData pm;
-    private int backgroundTexture;
     private int xParty;
     private int yParty;
     private int wParty;
@@ -37,35 +40,34 @@ public class GuiDonatorCape extends GuiScreen
     Donator donator;
     static int capeIndex = 0;
 
-    public GuiDonatorCape(EntityPlayer var1, GuiScreen var2)
+    public GuiDonatorCape(EntityPlayer player, GuiScreen parent)
     {
-        this(new PartyData(), var1, var2);
+        this(new PartyData(), player, parent);
     }
 
     /**
      * Fired when a key is typed. This is the equivalent of KeyListener.keyTyped(KeyEvent e).
      */
-    protected void keyTyped(char var1, int var2)
+    protected void keyTyped(char charTyped, int keyTyped)
     {
-        super.keyTyped(var1, var2);
+        super.keyTyped(charTyped, keyTyped);
 
-        if (var2 == Minecraft.getMinecraft().gameSettings.keyBindInventory.keyCode)
+        if (keyTyped == Minecraft.getMinecraft().gameSettings.keyBindInventory.keyCode)
         {
             this.mc.displayGuiScreen((GuiScreen)null);
             this.mc.setIngameFocus();
         }
     }
 
-    public GuiDonatorCape(PartyData var1, EntityPlayer var2, GuiScreen var3)
+    public GuiDonatorCape(PartyData pm, EntityPlayer player, GuiScreen parent)
     {
         this.dif = 0.0025F;
-        this.parent = var3;
-        this.player = var2;
+        this.parent = parent;
+        this.player = player;
         Aether.getInstance();
-        this.donator = Aether.syncDonatorList.getDonator(var2.username);
+        this.donator = Aether.syncDonatorList.getDonator(player.username);
         this.mc = FMLClientHandler.instance().getClient();
-        this.pm = var1;
-        this.backgroundTexture = this.mc.renderEngine.getTexture("/net/aetherteam/aether/client/sprites/gui/choiceMenu.png");
+        this.pm = pm;
         this.wParty = 256;
         this.hParty = 256;
         this.updateScreen();
@@ -82,9 +84,9 @@ public class GuiDonatorCape extends GuiScreen
     /**
      * Fired when a control is clicked. This is the equivalent of ActionListener.actionPerformed(ActionEvent e).
      */
-    protected void actionPerformed(GuiButton var1)
+    protected void actionPerformed(GuiButton btn)
     {
-        switch (var1.id)
+        switch (btn.id)
         {
             case 0:
                 this.mc.displayGuiScreen(this.parent);
@@ -123,52 +125,51 @@ public class GuiDonatorCape extends GuiScreen
     /**
      * Draws the screen and all the components in it.
      */
-    public void drawScreen(int var1, int var2, float var3)
+    public void drawScreen(int x, int y, float partialTick)
     {
         this.buttonList.clear();
         this.drawDefaultBackground();
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-        GL11.glBindTexture(GL11.GL_TEXTURE_2D, this.backgroundTexture);
-        int var4 = this.xParty - 97;
-        int var5 = this.yParty - 56;
-        ScaledResolution var6 = new ScaledResolution(this.mc.gameSettings, this.mc.displayWidth, this.mc.displayHeight);
-        this.drawTexturedModalRect(var4, var5, 0, 0, 194, this.hParty);
+        this.mc.renderEngine.func_110577_a(this.backgroundTexture);
+        int centerX = this.xParty - 97;
+        int centerY = this.yParty - 56;
+        ScaledResolution sr = new ScaledResolution(this.mc.gameSettings, this.mc.displayWidth, this.mc.displayHeight);
+        this.drawTexturedModalRect(centerX, centerY, 0, 0, 194, this.hParty);
         this.buttonList.add(new GuiButton(0, this.xParty + 10, this.yParty + 27, 80, 20, "Back"));
-        GuiButton var7 = null;
-        Object var8 = null;
-        boolean var9 = this.donator.containsChoiceType(EnumChoiceType.CAPE);
+        GuiButton typeButton = null;
+        Object overrideButton = null;
+        boolean hasChoice = this.donator.containsChoiceType(EnumChoiceType.CAPE);
 
         if (this.donator != null)
         {
-            DonatorChoice var10 = null;
+            DonatorChoice header = null;
 
-            if (var9)
+            if (hasChoice)
             {
-                this.backgroundTexture = this.mc.renderEngine.getTexture("/net/aetherteam/aether/client/sprites/gui/choiceMenu.png");
-                var10 = this.donator.getChoiceFromType(EnumChoiceType.CAPE);
+                this.backgroundTexture = TEXTURE_CHOICE_MENU;
+                header = this.donator.getChoiceFromType(EnumChoiceType.CAPE);
             }
             else
             {
-                this.backgroundTexture = this.mc.renderEngine.getTexture("/net/aetherteam/aether/client/sprites/gui/choiceMenu2.png");
+                this.backgroundTexture = TEXTURE_CHOICE_MENU_2;
             }
 
-            var7 = new GuiButton(1, this.xParty + 10, this.yParty - 35, 80, 20, var10 != null ? var10.name : "Off");
+            typeButton = new GuiButton(1, this.xParty + 10, this.yParty - 35, 80, 20, header != null ? header.name : "Off");
         }
 
         if (this.donator == null)
         {
-            var7.enabled = false;
+            typeButton.enabled = false;
         }
 
-        this.buttonList.add(var7);
-        super.drawScreen(var1, var2, var3);
-        this.mc.renderEngine.resetBoundTexture();
-        String var11 = "Donator Cape";
-        this.drawString(this.fontRenderer, var11, var6.getScaledWidth() / 2 - this.fontRenderer.getStringWidth(var11) / 2 + 49, var5 + 10, 15658734);
+        this.buttonList.add(typeButton);
+        super.drawScreen(x, y, partialTick);
+        String header1 = "Donator Cape";
+        this.drawString(this.fontRenderer, header1, sr.getScaledWidth() / 2 - this.fontRenderer.getStringWidth(header1) / 2 + 49, centerY + 10, 15658734);
         this.drawPlayerOnGui(this.mc, this.xParty - 40, this.yParty + 35, 30, 1.0F, 1.0F, this.donator != null && this.donator.containsChoiceType(EnumChoiceType.CAPE));
     }
 
-    public void drawPlayerOnGui(Minecraft var1, int var2, int var3, int var4, float var5, float var6, boolean var7)
+    public void drawPlayerOnGui(Minecraft par0Minecraft, int par1, int par2, int par3, float par4, float par5, boolean lighting)
     {
         if ((double)this.rotationY > 2.5D)
         {
@@ -182,32 +183,32 @@ public class GuiDonatorCape extends GuiScreen
         this.rotationY += this.dif;
         GL11.glEnable(GL11.GL_COLOR_MATERIAL);
         GL11.glPushMatrix();
-        GL11.glTranslatef((float)var2, (float)var3, 50.0F);
-        GL11.glScalef((float)(-var4), (float)var4, 50.5F);
+        GL11.glTranslatef((float)par1, (float)par2, 50.0F);
+        GL11.glScalef((float)(-par3), (float)par3, 50.5F);
         GL11.glRotatef(180.0F, this.rotationY, 0.0F, 1.0F);
-        float var8 = var1.thePlayer.renderYawOffset;
-        float var9 = var1.thePlayer.rotationYaw;
-        float var10 = var1.thePlayer.rotationPitch;
+        float f2 = par0Minecraft.thePlayer.renderYawOffset;
+        float f3 = par0Minecraft.thePlayer.rotationYaw;
+        float f4 = par0Minecraft.thePlayer.rotationPitch;
         GL11.glRotatef(135.0F, 0.0F, 1.0F, 0.0F);
         RenderHelper.enableStandardItemLighting();
         GL11.glRotatef(-135.0F, 0.0F, 1.0F, 0.0F);
-        GL11.glRotatef(-((float)Math.atan((double)(var6 / 40.0F))) * 20.0F, 1.0F, 0.0F, 0.0F);
-        var1.thePlayer.renderYawOffset = (float)Math.atan((double)(var5 / 40.0F)) * 20.0F;
-        var1.thePlayer.rotationYaw = (float)Math.atan((double)(var5 / 40.0F)) * 40.0F;
-        var1.thePlayer.rotationPitch = -((float)Math.atan((double)(var6 / 40.0F))) * 20.0F;
-        var1.thePlayer.rotationYawHead = var1.thePlayer.rotationYaw;
-        GL11.glTranslatef(0.0F, var1.thePlayer.yOffset, 0.0F);
+        GL11.glRotatef(-((float)Math.atan((double)(par5 / 40.0F))) * 20.0F, 1.0F, 0.0F, 0.0F);
+        par0Minecraft.thePlayer.renderYawOffset = (float)Math.atan((double)(par4 / 40.0F)) * 20.0F;
+        par0Minecraft.thePlayer.rotationYaw = (float)Math.atan((double)(par4 / 40.0F)) * 40.0F;
+        par0Minecraft.thePlayer.rotationPitch = -((float)Math.atan((double)(par5 / 40.0F))) * 20.0F;
+        par0Minecraft.thePlayer.rotationYawHead = par0Minecraft.thePlayer.rotationYaw;
+        GL11.glTranslatef(0.0F, par0Minecraft.thePlayer.yOffset, 0.0F);
         RenderManager.instance.playerViewY = 180.0F;
 
-        if (!var7)
+        if (!lighting)
         {
             GL11.glColor4f(0.35F, 0.35F, 0.35F, 1.0F);
         }
 
-        RenderManager.instance.renderEntityWithPosYaw(var1.thePlayer, 0.0D, 0.0D, 0.0D, 0.0F, 1.0F);
-        var1.thePlayer.renderYawOffset = var8;
-        var1.thePlayer.rotationYaw = var9;
-        var1.thePlayer.rotationPitch = var10;
+        RenderManager.instance.renderEntityWithPosYaw(par0Minecraft.thePlayer, 0.0D, 0.0D, 0.0D, 0.0F, 1.0F);
+        par0Minecraft.thePlayer.renderYawOffset = f2;
+        par0Minecraft.thePlayer.rotationYaw = f3;
+        par0Minecraft.thePlayer.rotationPitch = f4;
         GL11.glPopMatrix();
         RenderHelper.disableStandardItemLighting();
         GL11.glDisable(GL12.GL_RESCALE_NORMAL);
@@ -216,7 +217,7 @@ public class GuiDonatorCape extends GuiScreen
         OpenGlHelper.setActiveTexture(OpenGlHelper.defaultTexUnit);
     }
 
-    public void renderMoa(Entity var1, Minecraft var2, int var3, int var4, int var5, float var6, float var7, boolean var8)
+    public void renderMoa(Entity entity, Minecraft mc, int x, int y, int scale, float par4, float par5, boolean lighting)
     {
         if ((double)this.rotationY > 2.5D)
         {
@@ -230,24 +231,24 @@ public class GuiDonatorCape extends GuiScreen
         this.rotationY += this.dif;
         GL11.glEnable(GL11.GL_COLOR_MATERIAL);
         GL11.glPushMatrix();
-        GL11.glTranslatef((float)var3, (float)var4, 100.0F);
-        GL11.glScalef((float)(-var5), (float)var5, (float)var5);
+        GL11.glTranslatef((float)x, (float)y, 100.0F);
+        GL11.glScalef((float)(-scale), (float)scale, (float)scale);
         GL11.glRotatef(180.0F, this.rotationY, 0.0F, 1.0F);
         RenderHelper.enableStandardItemLighting();
 
-        if (var1 instanceof EntityLiving)
+        if (entity instanceof EntityLiving)
         {
-            ((EntityLiving)var1).rotationYawHead = 0.0F;
+            ((EntityLiving)entity).rotationYawHead = 0.0F;
         }
 
         RenderManager.instance.playerViewY = 180.0F;
 
-        if (!var8)
+        if (!lighting)
         {
             ;
         }
 
-        RenderManager.instance.renderEntityWithPosYaw(var1, 0.0D, 0.0D, 0.0D, 0.0F, 660.0F);
+        RenderManager.instance.renderEntityWithPosYaw(entity, 0.0D, 0.0D, 0.0D, 0.0F, 660.0F);
         GL11.glPopMatrix();
         RenderHelper.disableStandardItemLighting();
         GL11.glDisable(GL12.GL_RESCALE_NORMAL);
@@ -262,10 +263,10 @@ public class GuiDonatorCape extends GuiScreen
     public void updateScreen()
     {
         super.updateScreen();
-        ScaledResolution var1 = new ScaledResolution(this.mc.gameSettings, this.mc.displayWidth, this.mc.displayHeight);
-        int var2 = var1.getScaledWidth();
-        int var3 = var1.getScaledHeight();
-        this.xParty = var2 / 2;
-        this.yParty = var3 / 2;
+        ScaledResolution scaledresolution = new ScaledResolution(this.mc.gameSettings, this.mc.displayWidth, this.mc.displayHeight);
+        int width = scaledresolution.getScaledWidth();
+        int height = scaledresolution.getScaledHeight();
+        this.xParty = width / 2;
+        this.yParty = height / 2;
     }
 }

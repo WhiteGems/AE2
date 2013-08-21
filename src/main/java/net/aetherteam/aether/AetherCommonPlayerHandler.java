@@ -4,9 +4,8 @@ import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.network.PacketDispatcher;
 import cpw.mods.fml.common.network.Player;
 import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import java.util.Random;
-import net.aetherteam.aether.client.PlayerBaseAetherClient;
+import net.aetherteam.aether.client.PlayerAetherClient;
 import net.aetherteam.aether.entities.mounts_old.RidingHandler;
 import net.aetherteam.aether.interfaces.IAetherBoss;
 import net.aetherteam.aether.packets.AetherPacketHandler;
@@ -44,7 +43,7 @@ public class AetherCommonPlayerHandler
     private double dungeonPosZ;
     private boolean isParachuting;
 
-    public AetherCommonPlayerHandler(EntityPlayer var1)
+    public AetherCommonPlayerHandler(EntityPlayer Player)
     {
         this.timeUntilPortal = 0;
         this.inPortal = false;
@@ -52,19 +51,18 @@ public class AetherCommonPlayerHandler
         this.dungeonPosX = 0.0D;
         this.dungeonPosY = 0.0D;
         this.dungeonPosZ = 0.0D;
-        this.player = var1;
+        this.player = Player;
         this.worldObj = this.player.worldObj;
     }
 
-    @SideOnly(Side.CLIENT)
-    public AetherCommonPlayerHandler(PlayerBaseAetherClient var1)
+    public AetherCommonPlayerHandler(PlayerAetherClient playerBaseAetherClient)
     {
-        this(var1.getPlayer());
+        this(playerBaseAetherClient.getPlayer());
     }
 
-    public AetherCommonPlayerHandler(PlayerBaseAetherServer var1)
+    public AetherCommonPlayerHandler(PlayerAetherServer playerBaseAether)
     {
-        this(var1.getPlayer());
+        this(playerBaseAether.getPlayer());
     }
 
     public void afterOnUpdate()
@@ -74,14 +72,14 @@ public class AetherCommonPlayerHandler
 
         if (!this.worldObj.isRemote && this.worldObj instanceof WorldServer)
         {
-            MinecraftServer var3 = ((WorldServer)this.worldObj).getMinecraftServer();
-            int var2 = this.player.getMaxInPortalTime();
+            MinecraftServer bossMob = ((WorldServer)this.worldObj).getMinecraftServer();
+            int i = this.player.getMaxInPortalTime();
 
             if (this.inPortal)
             {
-                if (this.player.ridingEntity == null && this.timeInPortal++ >= (float)var2)
+                if (this.player.ridingEntity == null && this.timeInPortal++ >= (float)i)
                 {
-                    this.timeInPortal = (float)var2;
+                    this.timeInPortal = (float)i;
                     this.player.timeUntilPortal = this.player.getPortalCooldown();
                     Aether.teleportPlayerToAether((EntityPlayerMP)this.player, false);
                 }
@@ -146,35 +144,35 @@ public class AetherCommonPlayerHandler
         return this.riddenBy != null ? this.riddenBy.jump(this, this.player) : true;
     }
 
-    public void rideEntity(Entity var1, RidingHandler var2)
+    public void rideEntity(Entity animal, RidingHandler ridingHandler)
     {
-        this.riddenBy = var2;
+        this.riddenBy = ridingHandler;
 
-        if (var1 == null)
+        if (animal == null)
         {
             this.riddenBy = null;
         }
 
-        Side var3 = FMLCommonHandler.instance().getEffectiveSide();
+        Side side = FMLCommonHandler.instance().getEffectiveSide();
 
-        if (var3.isServer())
+        if (side.isServer())
         {
-            EntityPlayerMP var4 = (EntityPlayerMP)this.player;
-            PacketDispatcher.sendPacketToPlayer(AetherPacketHandler.sendRidingPacket(var1), (Player)var4);
+            EntityPlayerMP playerr = (EntityPlayerMP)this.player;
+            PacketDispatcher.sendPacketToPlayer(AetherPacketHandler.sendRidingPacket(animal), (Player)playerr);
         }
-        else if (var3.isClient())
+        else if (side.isClient())
         {
-            EntityClientPlayerMP var5 = (EntityClientPlayerMP)this.player;
+            EntityClientPlayerMP playerr1 = (EntityClientPlayerMP)this.player;
         }
     }
 
-    public void setCurrentBoss(IAetherBoss var1)
+    public void setCurrentBoss(IAetherBoss boss)
     {
-        this.currentBoss = var1;
-        PartyMember var2 = PartyController.instance().getMember(this.player.username);
-        Party var3 = PartyController.instance().getParty(var2);
+        this.currentBoss = boss;
+        PartyMember member = PartyController.instance().getMember(this.player.username);
+        Party party = PartyController.instance().getParty(member);
 
-        if (var3 != null)
+        if (party != null)
         {
             ;
         }
@@ -185,9 +183,9 @@ public class AetherCommonPlayerHandler
         return this.isParachuting;
     }
 
-    public void setParachuting(boolean var1)
+    public void setParachuting(boolean b)
     {
-        this.isParachuting = var1;
+        this.isParachuting = b;
     }
 
     public IAetherBoss getCurrentBoss()

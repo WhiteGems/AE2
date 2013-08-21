@@ -9,13 +9,14 @@ public class ItemSkyrootPickaxe extends ItemPickaxe
 {
     private static Random random = new Random();
 
-    protected ItemSkyrootPickaxe(int var1, EnumToolMaterial var2)
+    protected ItemSkyrootPickaxe(int i, EnumToolMaterial enumtoolmaterial)
     {
-        super(var1, var2);
+        super(i, enumtoolmaterial);
     }
 
-    public Item setIconName(String var1)
+    public Item setIconName(String name)
     {
-        return this.setUnlocalizedName("Aether:" + var1);
+        this.field_111218_cA = "aether:" + name;
+        return this.setUnlocalizedName("aether:" + name);
     }
 }

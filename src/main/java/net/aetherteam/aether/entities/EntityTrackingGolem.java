@@ -3,7 +3,9 @@ package net.aetherteam.aether.entities;
 import net.aetherteam.aether.AetherNameGen;
 import net.aetherteam.aether.interfaces.IAetherMob;
 import net.aetherteam.aether.party.Party;
-import net.minecraft.entity.EntityLiving;
+import net.aetherteam.playercore_api.cores.IPlayerCoreCommon;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.potion.Potion;
@@ -19,20 +21,13 @@ public class EntityTrackingGolem extends EntityDungeonMob implements IAetherMob
     private static final int MIDDLE = 1;
     private static final int END = 2;
 
-    public EntityTrackingGolem(World var1)
+    public EntityTrackingGolem(World world)
     {
-        super(var1);
+        super(world);
         this.setSize(1.0F, 2.0F);
-        this.moveSpeed = 1.2F;
-
-        if (!this.getSeenEnemy())
-        {
-            this.texture = "/net/aetherteam/aether/client/sprites/mobs/sentrygolem/sentryGolem.png";
-        }
-        else
-        {
-            this.texture = "/net/aetherteam/aether/client/sprites/mobs/sentrygolem/sentryGolem_red.png";
-        }
+        this.func_110148_a(SharedMonsterAttributes.field_111263_d).func_111128_a(1.2000000476837158D);
+        this.func_110148_a(SharedMonsterAttributes.field_111267_a).func_111128_a(20.0D);
+        this.setEntityHealth(20.0F);
     }
 
     public void entityInit()
@@ -46,11 +41,11 @@ public class EntityTrackingGolem extends EntityDungeonMob implements IAetherMob
         return this.dataWatcher.getWatchableObjectByte(16) == 1;
     }
 
-    public void setSeenEnemy(boolean var1)
+    public void setSeenEnemy(boolean seen)
     {
-        if (var1)
+        if (seen)
         {
-            this.worldObj.playSoundAtEntity(this, "aemob.sentryGolem.seenEnemy", 5.0F, this.rand.nextFloat() * 0.4F + 0.8F);
+            this.worldObj.playSoundAtEntity(this, "aether:aemob.sentryGolem.seenEnemy", 5.0F, this.rand.nextFloat() * 0.4F + 0.8F);
             this.dataWatcher.updateObject(16, Byte.valueOf((byte)1));
         }
         else
@@ -64,7 +59,7 @@ public class EntityTrackingGolem extends EntityDungeonMob implements IAetherMob
      */
     protected String getLivingSound()
     {
-        return "aemob.sentryGolem.say";
+        return "aether:aemob.sentryGolem.say";
     }
 
     /**
@@ -72,7 +67,7 @@ public class EntityTrackingGolem extends EntityDungeonMob implements IAetherMob
      */
     protected String getHurtSound()
     {
-        return "aemob.sentryGolem.say";
+        return "aether:aemob.sentryGolem.say";
     }
 
     /**
@@ -80,13 +75,13 @@ public class EntityTrackingGolem extends EntityDungeonMob implements IAetherMob
      */
     protected String getDeathSound()
     {
-        return "aemob.sentryGolem.death";
+        return "aether:aemob.sentryGolem.death";
     }
 
     /**
      * Plays step sound at given x, y, z for the entity
      */
-    protected void playStepSound(int var1, int var2, int var3, int var4)
+    protected void playStepSound(int par1, int par2, int par3, int par4)
     {
         this.worldObj.playSoundAtEntity(this, "mob.cow.step", 0.15F, 1.0F);
     }
@@ -97,17 +92,16 @@ public class EntityTrackingGolem extends EntityDungeonMob implements IAetherMob
     public void onUpdate()
     {
         super.onUpdate();
-        EntityPlayer var1 = this.worldObj.getClosestPlayerToEntity(this, 8.0D);
+        EntityPlayer entityplayer = this.worldObj.getClosestPlayerToEntity(this, 8.0D);
 
-        if (this.entityToAttack == null && var1 != null && this.canEntityBeSeen(var1) && !var1.isDead && !var1.capabilities.isCreativeMode)
+        if (this.entityToAttack == null && entityplayer != null && this.canEntityBeSeen(entityplayer) && !entityplayer.isDead && !entityplayer.capabilities.isCreativeMode)
         {
-            this.entityToAttack = var1;
-            var1.faceEntity(this, 3.5F, (float)var1.getVerticalFaceSpeed());
+            this.entityToAttack = entityplayer;
         }
 
-        if (this.entityToAttack != null && this.entityToAttack instanceof EntityLiving && this.canEntityBeSeen(this.entityToAttack) && !this.entityToAttack.isDead)
+        if (this.entityToAttack != null && this.entityToAttack instanceof EntityLivingBase && this.canEntityBeSeen(this.entityToAttack) && !this.entityToAttack.isDead)
         {
-            ((EntityLiving)this.entityToAttack).faceEntity(this, 3.5F, (float)((EntityLiving)this.entityToAttack).getVerticalFaceSpeed());
+            ((IPlayerCoreCommon)this.entityToAttack).faceEntity(this, 3.5F, 40.0F);
             this.faceEntity(this.entityToAttack, 10.0F, 10.0F);
 
             if (!this.getSeenEnemy())
@@ -117,23 +111,14 @@ public class EntityTrackingGolem extends EntityDungeonMob implements IAetherMob
 
             if (!this.worldObj.isRemote)
             {
-                ((EntityLiving)this.entityToAttack).addPotionEffect(new PotionEffect(Potion.moveSlowdown.id, 10, 3));
-                ((EntityLiving)this.entityToAttack).addPotionEffect(new PotionEffect(Potion.confusion.id, 100, 3));
+                ((EntityLivingBase)this.entityToAttack).addPotionEffect(new PotionEffect(Potion.moveSlowdown.id, 10, 3));
+                ((EntityLivingBase)this.entityToAttack).addPotionEffect(new PotionEffect(Potion.confusion.id, 100, 3));
             }
         }
         else
         {
             this.entityToAttack = null;
             this.setSeenEnemy(false);
-        }
-
-        if (!this.getSeenEnemy())
-        {
-            this.texture = "/net/aetherteam/aether/client/sprites/mobs/sentrygolem/sentryGolem.png";
-        }
-        else
-        {
-            this.texture = "/net/aetherteam/aether/client/sprites/mobs/sentrygolem/sentryGolem_red.png";
         }
     }
 
@@ -142,40 +127,27 @@ public class EntityTrackingGolem extends EntityDungeonMob implements IAetherMob
      */
     public boolean getCanSpawnHere()
     {
-        int var1 = MathHelper.floor_double(this.posX);
-        int var2 = MathHelper.floor_double(this.boundingBox.minY);
-        int var3 = MathHelper.floor_double(this.posZ);
-        return this.rand.nextInt(25) == 0 && this.getBlockPathWeight(var1, var2, var3) >= 0.0F && this.worldObj.checkNoEntityCollision(this.boundingBox) && this.worldObj.getCollidingBoundingBoxes(this, this.boundingBox).size() == 0 && !this.worldObj.isAnyLiquid(this.boundingBox) && this.worldObj.difficultySetting > 0;
+        int i = MathHelper.floor_double(this.posX);
+        int j = MathHelper.floor_double(this.boundingBox.minY);
+        int k = MathHelper.floor_double(this.posZ);
+        return this.rand.nextInt(25) == 0 && this.getBlockPathWeight(i, j, k) >= 0.0F && this.worldObj.checkNoEntityCollision(this.boundingBox) && this.worldObj.getCollidingBoundingBoxes(this, this.boundingBox).size() == 0 && !this.worldObj.isAnyLiquid(this.boundingBox) && this.worldObj.difficultySetting > 0;
     }
 
     /**
      * (abstract) Protected helper method to write subclass entity data to NBT.
      */
-    public void writeEntityToNBT(NBTTagCompound var1)
+    public void writeEntityToNBT(NBTTagCompound nbttagcompound)
     {
-        super.writeEntityToNBT(var1);
-        var1.setBoolean("seen", this.getSeenEnemy());
+        super.writeEntityToNBT(nbttagcompound);
+        nbttagcompound.setBoolean("seen", this.getSeenEnemy());
     }
 
     /**
      * (abstract) Protected helper method to read subclass entity data from NBT.
      */
-    public void readEntityFromNBT(NBTTagCompound var1)
+    public void readEntityFromNBT(NBTTagCompound nbttagcompound)
     {
-        super.readEntityFromNBT(var1);
-        this.setSeenEnemy(var1.getBoolean("seen"));
-    }
-
-    /**
-     * Returns the texture's file path as a String.
-     */
-    public String getTexture()
-    {
-        return !this.getSeenEnemy() ? (this.texture = "/net/aetherteam/aether/client/sprites/mobs/sentrygolem/sentryGolem.png") : (this.texture = "/net/aetherteam/aether/client/sprites/mobs/sentrygolem/sentryGolem_red.png");
-    }
-
-    public int getMaxHealth()
-    {
-        return 20;
+        super.readEntityFromNBT(nbttagcompound);
+        this.setSeenEnemy(nbttagcompound.getBoolean("seen"));
     }
 }

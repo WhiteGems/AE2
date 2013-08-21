@@ -10,6 +10,4 @@ public class MenuCommonProxy
     {
         return null;
     }
-
-    public void registerSounds() {}
 }

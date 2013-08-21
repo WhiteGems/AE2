@@ -4,19 +4,21 @@ import net.aetherteam.aether.interfaces.IAetherMob;
 import net.aetherteam.aether.items.AetherItems;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityAgeable;
+import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.world.World;
 
 public class EntityCarrionSprout extends EntityAetherAnimal implements IAetherMob
 {
     public float sinage;
 
-    public EntityCarrionSprout(World var1)
+    public EntityCarrionSprout(World world)
     {
-        super(var1);
+        super(world);
         this.setSize(1.0F, 1.25F);
+        this.func_110148_a(SharedMonsterAttributes.field_111267_a).func_111128_a(10.0D);
+        this.setEntityHealth(10.0F);
         this.jumpMovementFactor = 0.0F;
-        this.moveSpeed = 0.0F;
-        this.texture = this.dir + "/mobs/carrionsprout/sprout.png";
+        this.func_110148_a(SharedMonsterAttributes.field_111263_d).func_111128_a(0.0D);
         this.sinage = this.rand.nextFloat() * 6.0F;
     }
 
@@ -42,66 +44,51 @@ public class EntityCarrionSprout extends EntityAetherAnimal implements IAetherMo
     {
         super.onLivingUpdate();
 
-        if (this.health <= 0)
-        {
-            if (this.health <= 0)
-            {
-                return;
-            }
-        }
-        else
+        if (this.func_110143_aJ() > 0.0F)
         {
             ++this.entityAge;
             this.despawnEntity();
-        }
 
-        if (this.hurtTime > 0)
-        {
-            this.sinage += 0.9F;
-        }
-        else
-        {
-            this.sinage += 0.15F;
-        }
+            if (this.hurtTime > 0)
+            {
+                this.sinage += 0.9F;
+            }
+            else
+            {
+                this.sinage += 0.15F;
+            }
 
-        if (this.sinage > ((float)Math.PI * 2F))
-        {
-            this.sinage -= ((float)Math.PI * 2F);
-        }
+            if (this.sinage > ((float)Math.PI * 2F))
+            {
+                this.sinage -= ((float)Math.PI * 2F);
+            }
 
-        if (!this.isDead && !this.isCollided)
-        {
-            this.motionX = this.motionZ = 0.0D;
+            if (!this.isDead && !this.isCollided)
+            {
+                this.motionX = this.motionZ = 0.0D;
+            }
         }
     }
 
     /**
      * Adds to the current velocity of the entity. Args: x, y, z
      */
-    public void addVelocity(double var1, double var3, double var5) {}
+    public void addVelocity(double d, double d1, double d2) {}
 
-    /**
-     * knocks back this entity
-     */
-    public void knockBack(Entity var1, int var2, double var3, double var5) {}
+    public void knockBack(Entity entity, int i, double d, double d1) {}
 
     /**
      * Applies a velocity to each of the entities pushing them away from each other. Args: entity
      */
-    public void applyEntityCollision(Entity var1)
+    public void applyEntityCollision(Entity entity)
     {
-        if (var1 instanceof EntityCarrionSprout)
+        if (entity instanceof EntityCarrionSprout)
         {
-            super.applyEntityCollision(var1);
+            super.applyEntityCollision(entity);
         }
     }
 
-    public int getMaxHealth()
-    {
-        return 10;
-    }
-
-    public EntityAgeable createChild(EntityAgeable var1)
+    public EntityAgeable createChild(EntityAgeable entityageable)
     {
         return null;
     }

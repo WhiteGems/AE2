@@ -9,13 +9,13 @@ import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.ResourceLocation;
 import org.lwjgl.opengl.GL11;
 
 public class GuiMenu extends GuiScreen
 {
+    private static final ResourceLocation TEXTURE_PARTY_MAIN = new ResourceLocation("aether", "textures/gui/partyMain.png");
     private final PartyData pm;
-    private int backgroundTexture;
-    private int easterTexture;
     private int xParty;
     private int yParty;
     private int wParty;
@@ -26,19 +26,17 @@ public class GuiMenu extends GuiScreen
     private EntityPlayer player;
     private GuiScreen parent;
 
-    public GuiMenu(EntityPlayer var1, GuiScreen var2)
+    public GuiMenu(EntityPlayer player, GuiScreen parent)
     {
-        this(new PartyData(), var1, var2);
+        this(new PartyData(), player, parent);
     }
 
-    public GuiMenu(PartyData var1, EntityPlayer var2, GuiScreen var3)
+    public GuiMenu(PartyData pm, EntityPlayer player, GuiScreen parent)
     {
-        this.parent = var3;
-        this.player = var2;
+        this.parent = parent;
+        this.player = player;
         this.mc = FMLClientHandler.instance().getClient();
-        this.pm = var1;
-        this.backgroundTexture = this.mc.renderEngine.getTexture("/net/aetherteam/aether/client/sprites/gui/partyMain.png");
-        this.easterTexture = this.mc.renderEngine.getTexture("/net/aetherteam/aether/client/sprites/gui/partyMain.png");
+        this.pm = pm;
         this.wParty = 256;
         this.hParty = 256;
         this.updateScreen();
@@ -47,11 +45,11 @@ public class GuiMenu extends GuiScreen
     /**
      * Fired when a key is typed. This is the equivalent of KeyListener.keyTyped(KeyEvent e).
      */
-    protected void keyTyped(char var1, int var2)
+    protected void keyTyped(char charTyped, int keyTyped)
     {
-        super.keyTyped(var1, var2);
+        super.keyTyped(charTyped, keyTyped);
 
-        if (var2 == Minecraft.getMinecraft().gameSettings.keyBindInventory.keyCode)
+        if (keyTyped == Minecraft.getMinecraft().gameSettings.keyBindInventory.keyCode)
         {
             this.mc.displayGuiScreen((GuiScreen)null);
             this.mc.setIngameFocus();
@@ -71,9 +69,9 @@ public class GuiMenu extends GuiScreen
     /**
      * Fired when a control is clicked. This is the equivalent of ActionListener.actionPerformed(ActionEvent e).
      */
-    protected void actionPerformed(GuiButton var1)
+    protected void actionPerformed(GuiButton button)
     {
-        switch (var1.id)
+        switch (button.id)
         {
             case 0:
                 this.mc.displayGuiScreen(this.parent);
@@ -110,19 +108,19 @@ public class GuiMenu extends GuiScreen
     /**
      * Draws the screen and all the components in it.
      */
-    public void drawScreen(int var1, int var2, float var3)
+    public void drawScreen(int x, int y, float partialTick)
     {
         this.buttonList.clear();
         this.drawDefaultBackground();
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-        GL11.glBindTexture(GL11.GL_TEXTURE_2D, this.backgroundTexture);
-        int var4 = this.xParty - 70;
-        int var5 = this.yParty - 84;
+        this.mc.renderEngine.func_110577_a(TEXTURE_PARTY_MAIN);
+        int centerX = this.xParty - 70;
+        int centerY = this.yParty - 84;
         new ScaledResolution(this.mc.gameSettings, this.mc.displayWidth, this.mc.displayHeight);
-        this.drawTexturedModalRect(var4, var5, 0, 0, 141, this.hParty);
-        List var7 = this.mc.thePlayer.sendQueue.playerInfoList;
+        this.drawTexturedModalRect(centerX, centerY, 0, 0, 141, this.hParty);
+        List playerList = this.mc.thePlayer.sendQueue.playerInfoList;
 
-        if (var7.size() > 1 || var7.size() == 0)
+        if (playerList.size() > 1 || playerList.size() == 0)
         {
             this.buttonList.add(new GuiButton(5, this.xParty - 60, this.yParty - 36 - 28, 120, 20, "Party"));
             this.buttonList.add(new GuiButton(1, this.xParty - 60, this.yParty - 14 - 28, 120, 20, "Notifications"));
@@ -133,24 +131,21 @@ public class GuiMenu extends GuiScreen
         }
 
         this.buttonList.add(new GuiButton(0, this.xParty - 60, this.yParty + 81 - 28, 120, 20, "Back"));
-        this.mc.renderEngine.resetBoundTexture();
 
-        if (var7.size() <= 1 && var7.size() != 0)
+        if (playerList.size() <= 1 && playerList.size() != 0)
         {
-            GL11.glBindTexture(GL11.GL_TEXTURE_2D, this.backgroundTexture);
-            this.drawTexturedModalRect(var4 + 13, var5 + 40, 141, 131, 115, 125);
-            this.mc.renderEngine.resetBoundTexture();
-            this.drawString(this.fontRenderer, "\u00a7lForever Alone :(", var4 + 20, var5 + 100, 16750199);
-            this.drawString(this.fontRenderer, "\u00a7l(Single Player)", var4 + 25, var5 + 112, 16750199);
+            this.mc.renderEngine.func_110577_a(TEXTURE_PARTY_MAIN);
+            this.drawTexturedModalRect(centerX + 13, centerY + 40, 141, 131, 115, 125);
+            this.drawString(this.fontRenderer, "\u00a7lForever Alone :(", centerX + 20, centerY + 100, 16750199);
+            this.drawString(this.fontRenderer, "\u00a7l(Single Player)", centerX + 25, centerY + 112, 16750199);
             this.buttonList.add(new GuiButton(2, this.xParty - 60, this.yParty - 40 - 35, 120, 20, "Options"));
         }
         else
         {
-            this.mc.renderEngine.resetBoundTexture();
-            this.drawString(this.fontRenderer, "Social Menu", var4 + 40, var5 + 5, 16777215);
+            this.drawString(this.fontRenderer, "Social Menu", centerX + 40, centerY + 5, 16777215);
         }
 
-        super.drawScreen(var1, var2, var3);
+        super.drawScreen(x, y, partialTick);
     }
 
     /**
@@ -159,10 +154,10 @@ public class GuiMenu extends GuiScreen
     public void updateScreen()
     {
         super.updateScreen();
-        ScaledResolution var1 = new ScaledResolution(this.mc.gameSettings, this.mc.displayWidth, this.mc.displayHeight);
-        int var2 = var1.getScaledWidth();
-        int var3 = var1.getScaledHeight();
-        this.xParty = var2 / 2;
-        this.yParty = var3 / 2;
+        ScaledResolution scaledresolution = new ScaledResolution(this.mc.gameSettings, this.mc.displayWidth, this.mc.displayHeight);
+        int width = scaledresolution.getScaledWidth();
+        int height = scaledresolution.getScaledHeight();
+        this.xParty = width / 2;
+        this.yParty = height / 2;
     }
 }

@@ -11,39 +11,39 @@ public class ComponentDungeonStair extends ComponentDungeonBronzeRoom
 {
     private int sectionCount;
 
-    public ComponentDungeonStair(int var1, StructureComponent var2, StructureBronzeDungeonStart var3, Random var4, StructureBoundingBox var5, int var6)
+    public ComponentDungeonStair(int par1, StructureComponent previousStructor, StructureBronzeDungeonStart Whole, Random par2Random, StructureBoundingBox structureBoundingBox, int direction)
     {
-        super(var1, var2, var3, var4);
-        this.boundingBox = var5;
-        int var7 = this.boundingBox.maxY - this.boundingBox.minY;
+        super(par1, previousStructor, Whole, par2Random);
+        this.boundingBox = structureBoundingBox;
+        int floornumb = this.boundingBox.maxY - this.boundingBox.minY;
 
-        for (int var8 = 0; var8 < var7; var8 += 5)
+        for (int floors = 0; floors < floornumb; floors += 5)
         {
-            this.entrances.add(new StructureBoundingBox(this.boundingBox.minX + 1, this.boundingBox.minY + 1 + var8, this.boundingBox.minZ - 2, this.boundingBox.maxX - 1, this.boundingBox.minY + 3 + var8, this.boundingBox.minZ));
-            this.entrances.add(new StructureBoundingBox(this.boundingBox.minX + 1, this.boundingBox.minY + 1 + var8, this.boundingBox.maxZ, this.boundingBox.maxX - 1, this.boundingBox.minY + 3 + var8, this.boundingBox.maxZ + 2));
-            this.entrances.add(new StructureBoundingBox(this.boundingBox.minX - 2, this.boundingBox.minY + 1 + var8, this.boundingBox.minZ + 1, this.boundingBox.minX, this.boundingBox.minY + 3 + var8, this.boundingBox.maxZ - 1));
-            this.entrances.add(new StructureBoundingBox(this.boundingBox.maxX, this.boundingBox.minY + 1 + var8, this.boundingBox.minZ + 1, this.boundingBox.maxX + 2, this.boundingBox.minY + 3 + var8, this.boundingBox.maxZ - 1));
+            this.entrances.add(new StructureBoundingBox(this.boundingBox.minX + 1, this.boundingBox.minY + 1 + floors, this.boundingBox.minZ - 2, this.boundingBox.maxX - 1, this.boundingBox.minY + 3 + floors, this.boundingBox.minZ));
+            this.entrances.add(new StructureBoundingBox(this.boundingBox.minX + 1, this.boundingBox.minY + 1 + floors, this.boundingBox.maxZ, this.boundingBox.maxX - 1, this.boundingBox.minY + 3 + floors, this.boundingBox.maxZ + 2));
+            this.entrances.add(new StructureBoundingBox(this.boundingBox.minX - 2, this.boundingBox.minY + 1 + floors, this.boundingBox.minZ + 1, this.boundingBox.minX, this.boundingBox.minY + 3 + floors, this.boundingBox.maxZ - 1));
+            this.entrances.add(new StructureBoundingBox(this.boundingBox.maxX, this.boundingBox.minY + 1 + floors, this.boundingBox.minZ + 1, this.boundingBox.maxX + 2, this.boundingBox.minY + 3 + floors, this.boundingBox.maxZ - 1));
         }
     }
 
-    public void buildComponent(List var1, Random var2)
+    public void buildComponent(List par2List, Random par3Random)
     {
-        int var3 = this.boundingBox.maxY - this.boundingBox.minY;
+        int floornumb = this.boundingBox.maxY - this.boundingBox.minY;
 
-        for (int var4 = 1; var4 < 3; ++var4)
+        for (int offset = 1; offset < 3; ++offset)
         {
-            for (int var5 = 0; var5 < var3; var5 += 5)
+            for (int floors = 0; floors < floornumb; floors += 5)
             {
-                this.addStructor(var1, var2, this.boundingBox.minX + var4, this.boundingBox.minY + var3 + 1, this.boundingBox.maxZ + 1, 0, this.componentType);
-                this.addStructor(var1, var2, this.boundingBox.minX - 1, this.boundingBox.minY + var3 + 1, this.boundingBox.minZ + var4, 1, this.componentType);
-                this.addStructor(var1, var2, this.boundingBox.minX + var4, this.boundingBox.minY + var3 + 1, this.boundingBox.minZ - 1, 2, this.componentType);
-                this.addStructor(var1, var2, this.boundingBox.maxX + 1, this.boundingBox.minY + var3 + 1, this.boundingBox.minZ + var4, 3, this.componentType);
+                this.addStructor(par2List, par3Random, this.boundingBox.minX + offset, this.boundingBox.minY + floornumb + 1, this.boundingBox.maxZ + 1, 0, this.componentType);
+                this.addStructor(par2List, par3Random, this.boundingBox.minX - 1, this.boundingBox.minY + floornumb + 1, this.boundingBox.minZ + offset, 1, this.componentType);
+                this.addStructor(par2List, par3Random, this.boundingBox.minX + offset, this.boundingBox.minY + floornumb + 1, this.boundingBox.minZ - 1, 2, this.componentType);
+                this.addStructor(par2List, par3Random, this.boundingBox.maxX + 1, this.boundingBox.minY + floornumb + 1, this.boundingBox.minZ + offset, 3, this.componentType);
             }
 
-            this.addStructor(var1, var2, this.boundingBox.minX + var4, this.boundingBox.minY + 5, this.boundingBox.maxZ + 1, 0, this.componentType);
-            this.addStructor(var1, var2, this.boundingBox.minX - 1, this.boundingBox.minY + 5, this.boundingBox.minZ + var4, 1, this.componentType);
-            this.addStructor(var1, var2, this.boundingBox.minX + var4, this.boundingBox.minY + 5, this.boundingBox.minZ - 1, 2, this.componentType);
-            this.addStructor(var1, var2, this.boundingBox.maxX + 1, this.boundingBox.minY + 5, this.boundingBox.minZ + var4, 3, this.componentType);
+            this.addStructor(par2List, par3Random, this.boundingBox.minX + offset, this.boundingBox.minY + 5, this.boundingBox.maxZ + 1, 0, this.componentType);
+            this.addStructor(par2List, par3Random, this.boundingBox.minX - 1, this.boundingBox.minY + 5, this.boundingBox.minZ + offset, 1, this.componentType);
+            this.addStructor(par2List, par3Random, this.boundingBox.minX + offset, this.boundingBox.minY + 5, this.boundingBox.minZ - 1, 2, this.componentType);
+            this.addStructor(par2List, par3Random, this.boundingBox.maxX + 1, this.boundingBox.minY + 5, this.boundingBox.minZ + offset, 3, this.componentType);
         }
     }
 
@@ -51,92 +51,92 @@ public class ComponentDungeonStair extends ComponentDungeonBronzeRoom
      * second Part of Structure generating, this for example places Spiderwebs, Mob Spawners, it closes Mineshafts at
      * the end, it adds Fences...
      */
-    public boolean addComponentParts(World var1, Random var2, StructureBoundingBox var3)
+    public boolean addComponentParts(World par1World, Random par2Random, StructureBoundingBox par3StructureBoundingBox)
     {
-        this.fillWithBlocks(var1, var3, this.boundingBox.minX, this.boundingBox.minY, this.boundingBox.minZ, this.boundingBox.maxX, this.boundingBox.maxY, this.boundingBox.maxZ, AetherBlocks.LockedDungeonStone.blockID, 0, false);
-        this.fillWithBlocks(var1, var3, this.boundingBox.minX + 1, this.boundingBox.minY + 1, this.boundingBox.minZ + 1, this.boundingBox.maxX - 1, this.boundingBox.maxY - 1, this.boundingBox.maxZ - 1, 0, 0, false);
-        int var4 = (this.boundingBox.maxY - this.boundingBox.minY) / 5;
+        this.fillWithBlocks(par1World, par3StructureBoundingBox, this.boundingBox.minX, this.boundingBox.minY, this.boundingBox.minZ, this.boundingBox.maxX, this.boundingBox.maxY, this.boundingBox.maxZ, AetherBlocks.LockedDungeonStone.blockID, 0, false);
+        this.fillWithBlocks(par1World, par3StructureBoundingBox, this.boundingBox.minX + 1, this.boundingBox.minY + 1, this.boundingBox.minZ + 1, this.boundingBox.maxX - 1, this.boundingBox.maxY - 1, this.boundingBox.maxZ - 1, 0, 0, false);
+        int floornumb = (this.boundingBox.maxY - this.boundingBox.minY) / 5;
 
-        for (int var5 = 1; var5 < var4; ++var5)
+        for (int floors = 1; floors < floornumb; ++floors)
         {
-            this.fillWithBlocks(var1, var3, this.boundingBox.minX, this.boundingBox.minY + 5 * var5, this.boundingBox.minZ, this.boundingBox.maxX, this.boundingBox.minY + 5 * var5, this.boundingBox.maxZ, AetherBlocks.LockedDungeonStone.blockID, 0, false);
-            this.fillWithBlocks(var1, var3, this.boundingBox.minX + 2, this.boundingBox.minY + 5 * var5, this.boundingBox.minZ + 2, this.boundingBox.maxX - 2, this.boundingBox.minY + 5 * var5, this.boundingBox.maxZ - 2, 0, 0, false);
-            int var6 = 5 * var5 - 5;
-            this.placeBlockAtCurrentPosition(var1, AetherBlocks.LockedDungeonStone.blockID, 0, this.boundingBox.minX + 2, this.boundingBox.minY + 1 + var6, this.boundingBox.minZ + 2, var3);
-            this.placeBlockAtCurrentPosition(var1, AetherBlocks.LockedDungeonStone.blockID, 0, this.boundingBox.minX + 3, this.boundingBox.minY + 1 + var6, this.boundingBox.minZ + 2, var3);
-            this.placeBlockAtCurrentPosition(var1, AetherBlocks.LockedDungeonStone.blockID, 0, this.boundingBox.minX + 2, this.boundingBox.minY + 1 + var6, this.boundingBox.minZ + 3, var3);
-            this.placeBlockAtCurrentPosition(var1, AetherBlocks.LockedDungeonStone.blockID, 0, this.boundingBox.minX + 2, this.boundingBox.minY + 2 + var6, this.boundingBox.minZ + 4, var3);
-            this.placeBlockAtCurrentPosition(var1, AetherBlocks.LockedDungeonStone.blockID, 0, this.boundingBox.minX + 2, this.boundingBox.minY + 2 + var6, this.boundingBox.minZ + 5, var3);
-            this.placeBlockAtCurrentPosition(var1, AetherBlocks.LockedDungeonStone.blockID, 0, this.boundingBox.minX + 3, this.boundingBox.minY + 2 + var6, this.boundingBox.minZ + 5, var3);
-            this.placeBlockAtCurrentPosition(var1, AetherBlocks.LockedDungeonStone.blockID, 0, this.boundingBox.minX + 4, this.boundingBox.minY + 3 + var6, this.boundingBox.minZ + 5, var3);
-            this.placeBlockAtCurrentPosition(var1, AetherBlocks.LockedDungeonStone.blockID, 0, this.boundingBox.minX + 5, this.boundingBox.minY + 3 + var6, this.boundingBox.minZ + 5, var3);
-            this.placeBlockAtCurrentPosition(var1, AetherBlocks.LockedDungeonStone.blockID, 0, this.boundingBox.minX + 5, this.boundingBox.minY + 3 + var6, this.boundingBox.minZ + 4, var3);
-            this.placeBlockAtCurrentPosition(var1, AetherBlocks.LockedDungeonStone.blockID, 0, this.boundingBox.minX + 5, this.boundingBox.minY + 4 + var6, this.boundingBox.minZ + 2, var3);
-            this.placeBlockAtCurrentPosition(var1, AetherBlocks.LockedDungeonStone.blockID, 0, this.boundingBox.minX + 5, this.boundingBox.minY + 4 + var6, this.boundingBox.minZ + 3, var3);
-            this.placeBlockAtCurrentPosition(var1, AetherBlocks.LockedDungeonStone.blockID, 0, this.boundingBox.minX + 4, this.boundingBox.minY + 4 + var6, this.boundingBox.minZ + 2, var3);
-            this.placeBlockAtCurrentPosition(var1, AetherBlocks.LockedDungeonStone.blockID, 0, this.boundingBox.minX + 2, this.boundingBox.minY + 5 + var6, this.boundingBox.minZ + 2, var3);
-            this.placeBlockAtCurrentPosition(var1, AetherBlocks.LockedDungeonStone.blockID, 0, this.boundingBox.minX + 3, this.boundingBox.minY + 5 + var6, this.boundingBox.minZ + 2, var3);
-            this.placeBlockAtCurrentPosition(var1, AetherBlocks.LockedDungeonStone.blockID, 0, this.boundingBox.minX + 2, this.boundingBox.minY + 5 + var6, this.boundingBox.minZ + 3, var3);
+            this.fillWithBlocks(par1World, par3StructureBoundingBox, this.boundingBox.minX, this.boundingBox.minY + 5 * floors, this.boundingBox.minZ, this.boundingBox.maxX, this.boundingBox.minY + 5 * floors, this.boundingBox.maxZ, AetherBlocks.LockedDungeonStone.blockID, 0, false);
+            this.fillWithBlocks(par1World, par3StructureBoundingBox, this.boundingBox.minX + 2, this.boundingBox.minY + 5 * floors, this.boundingBox.minZ + 2, this.boundingBox.maxX - 2, this.boundingBox.minY + 5 * floors, this.boundingBox.maxZ - 2, 0, 0, false);
+            int offset = 5 * floors - 5;
+            this.placeBlockAtCurrentPosition(par1World, AetherBlocks.LockedDungeonStone.blockID, 0, this.boundingBox.minX + 2, this.boundingBox.minY + 1 + offset, this.boundingBox.minZ + 2, par3StructureBoundingBox);
+            this.placeBlockAtCurrentPosition(par1World, AetherBlocks.LockedDungeonStone.blockID, 0, this.boundingBox.minX + 3, this.boundingBox.minY + 1 + offset, this.boundingBox.minZ + 2, par3StructureBoundingBox);
+            this.placeBlockAtCurrentPosition(par1World, AetherBlocks.LockedDungeonStone.blockID, 0, this.boundingBox.minX + 2, this.boundingBox.minY + 1 + offset, this.boundingBox.minZ + 3, par3StructureBoundingBox);
+            this.placeBlockAtCurrentPosition(par1World, AetherBlocks.LockedDungeonStone.blockID, 0, this.boundingBox.minX + 2, this.boundingBox.minY + 2 + offset, this.boundingBox.minZ + 4, par3StructureBoundingBox);
+            this.placeBlockAtCurrentPosition(par1World, AetherBlocks.LockedDungeonStone.blockID, 0, this.boundingBox.minX + 2, this.boundingBox.minY + 2 + offset, this.boundingBox.minZ + 5, par3StructureBoundingBox);
+            this.placeBlockAtCurrentPosition(par1World, AetherBlocks.LockedDungeonStone.blockID, 0, this.boundingBox.minX + 3, this.boundingBox.minY + 2 + offset, this.boundingBox.minZ + 5, par3StructureBoundingBox);
+            this.placeBlockAtCurrentPosition(par1World, AetherBlocks.LockedDungeonStone.blockID, 0, this.boundingBox.minX + 4, this.boundingBox.minY + 3 + offset, this.boundingBox.minZ + 5, par3StructureBoundingBox);
+            this.placeBlockAtCurrentPosition(par1World, AetherBlocks.LockedDungeonStone.blockID, 0, this.boundingBox.minX + 5, this.boundingBox.minY + 3 + offset, this.boundingBox.minZ + 5, par3StructureBoundingBox);
+            this.placeBlockAtCurrentPosition(par1World, AetherBlocks.LockedDungeonStone.blockID, 0, this.boundingBox.minX + 5, this.boundingBox.minY + 3 + offset, this.boundingBox.minZ + 4, par3StructureBoundingBox);
+            this.placeBlockAtCurrentPosition(par1World, AetherBlocks.LockedDungeonStone.blockID, 0, this.boundingBox.minX + 5, this.boundingBox.minY + 4 + offset, this.boundingBox.minZ + 2, par3StructureBoundingBox);
+            this.placeBlockAtCurrentPosition(par1World, AetherBlocks.LockedDungeonStone.blockID, 0, this.boundingBox.minX + 5, this.boundingBox.minY + 4 + offset, this.boundingBox.minZ + 3, par3StructureBoundingBox);
+            this.placeBlockAtCurrentPosition(par1World, AetherBlocks.LockedDungeonStone.blockID, 0, this.boundingBox.minX + 4, this.boundingBox.minY + 4 + offset, this.boundingBox.minZ + 2, par3StructureBoundingBox);
+            this.placeBlockAtCurrentPosition(par1World, AetherBlocks.LockedDungeonStone.blockID, 0, this.boundingBox.minX + 2, this.boundingBox.minY + 5 + offset, this.boundingBox.minZ + 2, par3StructureBoundingBox);
+            this.placeBlockAtCurrentPosition(par1World, AetherBlocks.LockedDungeonStone.blockID, 0, this.boundingBox.minX + 3, this.boundingBox.minY + 5 + offset, this.boundingBox.minZ + 2, par3StructureBoundingBox);
+            this.placeBlockAtCurrentPosition(par1World, AetherBlocks.LockedDungeonStone.blockID, 0, this.boundingBox.minX + 2, this.boundingBox.minY + 5 + offset, this.boundingBox.minZ + 3, par3StructureBoundingBox);
         }
 
-        this.fillWithBlocks(var1, var3, this.boundingBox.minX + 3, this.boundingBox.minY + 1, this.boundingBox.minZ + 3, this.boundingBox.maxX - 3, this.boundingBox.maxY - 2, this.boundingBox.maxZ - 3, AetherBlocks.LockedDungeonStone.blockID, 0, false);
-        this.cutHolesForEntrances(var1, var2, var3);
+        this.fillWithBlocks(par1World, par3StructureBoundingBox, this.boundingBox.minX + 3, this.boundingBox.minY + 1, this.boundingBox.minZ + 3, this.boundingBox.maxX - 3, this.boundingBox.maxY - 2, this.boundingBox.maxZ - 3, AetherBlocks.LockedDungeonStone.blockID, 0, false);
+        this.cutHolesForEntrances(par1World, par2Random, par3StructureBoundingBox);
         return true;
     }
 
-    public static StructureBoundingBox findValidPlacement(List var0, Random var1, int var2, int var3, int var4, int var5)
+    public static StructureBoundingBox findValidPlacement(List components, Random random, int i, int j, int k, int direction)
     {
-        byte var6 = 7;
-        byte var7 = 7;
-        int var8 = 10;
+        byte roomX = 7;
+        byte roomZ = 7;
+        int roomY = 10;
 
-        if (var1.nextInt(5) == 0)
+        if (random.nextInt(5) == 0)
         {
-            var8 += 5;
+            roomY += 5;
         }
 
-        if (var1.nextInt(5) == 0)
+        if (random.nextInt(5) == 0)
         {
-            var8 += 5;
+            roomY += 5;
         }
 
-        StructureBoundingBox var9;
+        StructureBoundingBox var6;
 
-        if (var1.nextInt(8) != 0)
+        if (random.nextInt(8) != 0)
         {
-            var9 = new StructureBoundingBox(var2, var3, var4, var2, var3 + var8, var4);
+            var6 = new StructureBoundingBox(i, j, k, i, j + roomY, k);
         }
         else
         {
-            var9 = new StructureBoundingBox(var2, var3 - var8 + 4, var4, var2, var3 + 4, var4);
+            var6 = new StructureBoundingBox(i, j - roomY + 4, k, i, j + 4, k);
         }
 
-        switch (var5)
+        switch (direction)
         {
             case 0:
-                var9.minX = var2 - 1;
-                var9.maxX = var2 + var6 - 1;
-                var9.maxZ = var4 + var7;
+                var6.minX = i - 1;
+                var6.maxX = i + roomX - 1;
+                var6.maxZ = k + roomZ;
                 break;
 
             case 1:
-                var9.minX = var2 - var6;
-                var9.minZ = var4 - 1;
-                var9.maxZ = var4 + var7 - 1;
+                var6.minX = i - roomX;
+                var6.minZ = k - 1;
+                var6.maxZ = k + roomZ - 1;
                 break;
 
             case 2:
-                var9.minX = var2 - 1;
-                var9.maxX = var2 + var6 - 1;
-                var9.minZ = var4 - var7;
+                var6.minX = i - 1;
+                var6.maxX = i + roomX - 1;
+                var6.minZ = k - roomZ;
                 break;
 
             case 3:
-                var9.maxX = var2 + var6;
-                var9.minZ = var4 - 1;
-                var9.maxZ = var4 + var7 - 1;
+                var6.maxX = i + roomX;
+                var6.minZ = k - 1;
+                var6.maxZ = k + roomZ - 1;
         }
 
-        return StructureComponent.findIntersecting(var0, var9) != null ? null : var9;
+        return StructureComponent.findIntersecting(components, var6) != null ? null : var6;
     }
 }

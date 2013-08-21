@@ -30,21 +30,21 @@ public class ModelAltar2 extends ModelBase
         this.setRotation(this.Scroll, 0.0F, 0.0F, -0.1047198F);
     }
 
-    public void renderAll(float var1)
+    public void renderAll(float f5)
     {
-        this.UpperBottomBase.render(var1);
-        this.Scroll.render(var1);
+        this.UpperBottomBase.render(f5);
+        this.Scroll.render(f5);
     }
 
-    private void setRotation(ModelRenderer var1, float var2, float var3, float var4)
+    private void setRotation(ModelRenderer model, float x, float y, float z)
     {
-        var1.rotateAngleX = var2;
-        var1.rotateAngleY = var3;
-        var1.rotateAngleZ = var4;
+        model.rotateAngleX = x;
+        model.rotateAngleY = y;
+        model.rotateAngleZ = z;
     }
 
-    private void setRotationPointWithOffset(ModelRenderer var1, float var2, float var3, float var4)
+    private void setRotationPointWithOffset(ModelRenderer renderer, float x, float y, float z)
     {
-        var1.setRotationPoint(var2 + this.offsetX, var3 + this.offsetY, var4 + this.offsetZ);
+        renderer.setRotationPoint(x + this.offsetX, y + this.offsetY, z + this.offsetZ);
     }
 }

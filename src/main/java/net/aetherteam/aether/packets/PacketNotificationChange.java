@@ -23,102 +23,102 @@ import net.minecraft.server.management.ServerConfigurationManager;
 
 public class PacketNotificationChange extends AetherPacket
 {
-    public PacketNotificationChange(int var1)
+    public PacketNotificationChange(int packetID)
     {
-        super(var1);
+        super(packetID);
     }
 
-    public void onPacketReceived(Packet250CustomPayload var1, Player var2)
+    public void onPacketReceived(Packet250CustomPayload packet, Player player)
     {
-        DataInputStream var3 = new DataInputStream(new ByteArrayInputStream(var1.data));
-        new BufferedReader(new InputStreamReader(var3));
+        DataInputStream dat = new DataInputStream(new ByteArrayInputStream(packet.data));
+        new BufferedReader(new InputStreamReader(dat));
 
         try
         {
-            byte var5 = var3.readByte();
-            boolean var6 = var3.readBoolean();
-            String var7 = var3.readUTF();
-            String var8 = var3.readUTF();
-            String var9 = var3.readUTF();
-            String var10 = var3.readUTF();
-            NotificationType var11 = NotificationType.getTypeFromString(var7);
-            EntityPlayer var12 = (EntityPlayer)var2;
-            Side var13 = FMLCommonHandler.instance().getEffectiveSide();
+            byte ex = dat.readByte();
+            boolean adding = dat.readBoolean();
+            String notificationType = dat.readUTF();
+            String headerText = dat.readUTF();
+            String sendingPlayer = dat.readUTF();
+            String receivingPlayer = dat.readUTF();
+            NotificationType type = NotificationType.getTypeFromString(notificationType);
+            EntityPlayer realSendingPlayer = (EntityPlayer)player;
+            Side side = FMLCommonHandler.instance().getEffectiveSide();
 
-            if (var13.isClient())
+            if (side.isClient())
             {
-                Notification var14 = new Notification(var11, "Notification Received!", var9, var10);
+                Notification server = new Notification(type, "Notification Received!", sendingPlayer, receivingPlayer);
 
-                if (!NotificationHandler.instance().hasReceivedFromBefore(var9, var11) && var6)
+                if (!NotificationHandler.instance().hasReceivedFromBefore(sendingPlayer, type) && adding)
                 {
-                    NotificationHandler.instance().receiveNotification(var14);
+                    NotificationHandler.instance().receiveNotification(server);
                 }
-                else if (!var6)
+                else if (!adding)
                 {
-                    NotificationHandler.instance().removeSentNotification(var14, false);
+                    NotificationHandler.instance().removeSentNotification(server, false);
                 }
             }
             else
             {
-                MinecraftServer var22 = FMLCommonHandler.instance().getMinecraftServerInstance();
-                ServerConfigurationManager var15 = var22.getConfigurationManager();
-                ArrayList var16 = new ArrayList();
-                Iterator var17 = var15.playerEntityList.iterator();
+                MinecraftServer server1 = FMLCommonHandler.instance().getMinecraftServerInstance();
+                ServerConfigurationManager configManager = server1.getConfigurationManager();
+                ArrayList playerList = new ArrayList();
+                Iterator realReceivingPlayer = configManager.playerEntityList.iterator();
 
-                while (var17.hasNext())
+                while (realReceivingPlayer.hasNext())
                 {
-                    Object var18 = var17.next();
+                    Object recruiter = realReceivingPlayer.next();
 
-                    if (var18 instanceof EntityPlayer)
+                    if (recruiter instanceof EntityPlayer)
                     {
-                        var16.add((EntityPlayer)var18);
+                        playerList.add((EntityPlayer)recruiter);
                     }
                 }
 
-                EntityPlayer var23 = null;
-                Iterator var26 = var16.iterator();
+                EntityPlayer realReceivingPlayer1 = null;
+                Iterator recruiter2 = playerList.iterator();
 
-                while (var26.hasNext())
+                while (recruiter2.hasNext())
                 {
-                    EntityPlayer var19 = (EntityPlayer)var26.next();
+                    EntityPlayer party = (EntityPlayer)recruiter2.next();
 
-                    if (var19.username.toLowerCase().equalsIgnoreCase(var6 ? var10 : var9))
+                    if (party.username.toLowerCase().equalsIgnoreCase(adding ? receivingPlayer : sendingPlayer))
                     {
-                        var23 = var19;
+                        realReceivingPlayer1 = party;
                     }
                 }
 
-                PartyMember var25 = PartyController.instance().getMember(var12);
-                Party var24 = PartyController.instance().getParty(var25);
+                PartyMember recruiter1 = PartyController.instance().getMember(realSendingPlayer);
+                Party party1 = PartyController.instance().getParty(recruiter1);
                 System.out.println("Trying!");
 
-                if (var24 != null && var25 != null)
+                if (party1 != null && recruiter1 != null)
                 {
-                    System.out.println("Party: " + var24);
-                    System.out.println("Recruiter: " + var25.username);
+                    System.out.println("Party: " + party1);
+                    System.out.println("Recruiter: " + recruiter1.username);
                 }
 
-                Notification var20;
+                Notification notification;
 
-                if (!NotificationHandler.instance().hasSentToBefore(var10, var11, var9) && var12.username.toLowerCase().equalsIgnoreCase(var9) && var23 != null)
+                if (!NotificationHandler.instance().hasSentToBefore(receivingPlayer, type, sendingPlayer) && realSendingPlayer.username.toLowerCase().equalsIgnoreCase(sendingPlayer) && realReceivingPlayer1 != null)
                 {
                     System.out.println("Validated!");
 
-                    if (var24 != null && !var24.isLeader(var25))
+                    if (party1 != null && !party1.isLeader(recruiter1))
                     {
                         System.out.println("Oops! :(");
                         return;
                     }
 
-                    var20 = new Notification(var11, "Notification Received!", var9, var10);
-                    NotificationHandler.instance().receiveNotification(var20);
-                    PacketDispatcher.sendPacketToPlayer(AetherPacketHandler.sendNotificationChange(var20, var6), (Player)var23);
+                    notification = new Notification(type, "Notification Received!", sendingPlayer, receivingPlayer);
+                    NotificationHandler.instance().receiveNotification(notification);
+                    PacketDispatcher.sendPacketToPlayer(AetherPacketHandler.sendNotificationChange(notification, adding), (Player)realReceivingPlayer1);
                 }
-                else if (!var6)
+                else if (!adding)
                 {
-                    var20 = new Notification(var11, "Notification Received!", var9, var10);
-                    NotificationHandler.instance().removeSentNotification(var20, false);
-                    PacketDispatcher.sendPacketToPlayer(AetherPacketHandler.sendNotificationChange(var20, var6), (Player)var23);
+                    notification = new Notification(type, "Notification Received!", sendingPlayer, receivingPlayer);
+                    NotificationHandler.instance().removeSentNotification(notification, false);
+                    PacketDispatcher.sendPacketToPlayer(AetherPacketHandler.sendNotificationChange(notification, adding), (Player)realReceivingPlayer1);
                 }
             }
         }

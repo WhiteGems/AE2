@@ -7,31 +7,26 @@ import net.minecraft.world.World;
 
 public class ItemShardOfLife extends ItemAether
 {
-    public ItemShardOfLife(int var1)
+    public ItemShardOfLife(int i)
     {
-        super(var1);
+        super(i);
         this.maxStackSize = 1;
     }
 
     /**
      * Called whenever this item is equipped and the right mouse button is pressed. Args: itemStack, world, entityPlayer
      */
-    public ItemStack onItemRightClick(ItemStack var1, World var2, EntityPlayer var3)
+    public ItemStack onItemRightClick(ItemStack itemstack, World world, EntityPlayer player)
     {
-        if (Aether.getServerPlayer(var3) == null)
+        if (Aether.getServerPlayer(player) == null)
         {
-            return var1;
-        }
-        else if (Aether.getServerPlayer(var3).maxHealth >= 40)
-        {
-            Aether.proxy.displayMessage(var3, "You cannot add anymore hearts.");
-            return var1;
+            return itemstack;
         }
         else
         {
-            Aether.getServerPlayer(var3).increaseMaxHP(2);
-            --var1.stackSize;
-            return var1;
+            Aether.getServerPlayer(player).increaseMaxHP(2);
+            --itemstack.stackSize;
+            return itemstack;
         }
     }
 }

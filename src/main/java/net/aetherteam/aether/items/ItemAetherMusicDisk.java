@@ -11,11 +11,11 @@ public class ItemAetherMusicDisk extends ItemRecord
     public String artistName;
     public String songName;
 
-    protected ItemAetherMusicDisk(int var1, String var2, String var3, String var4)
+    protected ItemAetherMusicDisk(int itemID, String s, String artist, String song)
     {
-        super(var1, var2);
-        this.artistName = var3;
-        this.songName = var4;
+        super(itemID, s);
+        this.artistName = artist;
+        this.songName = song;
     }
 
     /**
@@ -26,14 +26,15 @@ public class ItemAetherMusicDisk extends ItemRecord
         return this.artistName + " - " + this.songName;
     }
 
-    public Item setIconName(String var1)
+    public Item setIconName(String name)
     {
-        return this.setUnlocalizedName("Aether:" + var1);
+        this.field_111218_cA = "aether:" + name;
+        return this.setUnlocalizedName("aether:" + name);
     }
 
     @SideOnly(Side.CLIENT)
-    public void registerIcons(IconRegister var1)
+    public void registerIcons(IconRegister par1IconRegister)
     {
-        this.itemIcon = var1.registerIcon(this.getUnlocalizedName().replace("item.", ""));
+        this.itemIcon = par1IconRegister.registerIcon(this.getUnlocalizedName().replace("item.", ""));
     }
 }

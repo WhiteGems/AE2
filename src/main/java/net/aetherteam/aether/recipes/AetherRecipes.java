@@ -104,11 +104,11 @@ public class AetherRecipes
         GameRegistry.addRecipe(new ItemStack(AetherItems.PurpleCloudParachute, 1), new Object[] {"XXX", "XSX", "S S", 'X', new ItemStack(AetherBlocks.Aercloud, 1, 5), 'S', Item.silk});
         GameRegistry.addRecipe(new ItemStack(AetherItems.GreenCloudParachute, 1), new Object[] {"XXX", "XSX", "S S", 'X', new ItemStack(AetherBlocks.Aercloud, 1, 3), 'S', Item.silk});
 
-        for (int var0 = 0; var0 <= Item.itemsList[Item.shears.itemID].getMaxDamage(); ++var0)
+        for (int i = 0; i <= Item.itemsList[Item.shears.itemID].getMaxDamage(); ++i)
         {
-            for (int var1 = 0; var1 <= 15; ++var1)
+            for (int j = 0; j <= 15; ++j)
             {
-                GameRegistry.addShapelessRecipe(new ItemStack(Item.silk, 4), new Object[] {new ItemStack(Block.cloth, 1, var1), new ItemStack(Item.shears, 1, var0)});
+                GameRegistry.addShapelessRecipe(new ItemStack(Item.silk, 4), new Object[] {new ItemStack(Block.cloth, 1, j), new ItemStack(Item.shears, 1, i)});
             }
         }
     }

@@ -13,46 +13,46 @@ import net.minecraft.network.packet.Packet250CustomPayload;
 
 public class PacketParachute extends AetherPacket
 {
-    public PacketParachute(int var1)
+    public PacketParachute(int packetID)
     {
-        super(var1);
+        super(packetID);
     }
 
-    public void onPacketReceived(Packet250CustomPayload var1, Player var2)
+    public void onPacketReceived(Packet250CustomPayload packet, Player player)
     {
-        DataInputStream var3 = new DataInputStream(new ByteArrayInputStream(var1.data));
-        new BufferedReader(new InputStreamReader(var3));
+        DataInputStream dat = new DataInputStream(new ByteArrayInputStream(packet.data));
+        new BufferedReader(new InputStreamReader(dat));
 
         try
         {
-            byte var5 = var3.readByte();
-            boolean var6 = var3.readBoolean();
-            boolean var7 = var3.readBoolean();
-            short var8 = var3.readShort();
-            boolean var9 = var3.readBoolean();
-            int var10 = var3.readInt();
-            Side var11 = FMLCommonHandler.instance().getEffectiveSide();
-            HashMap var12 = Aether.proxy.getClientParachuting();
-            HashMap var13 = Aether.proxy.getClientParachuteType();
+            byte ex = dat.readByte();
+            boolean clearFirst = dat.readBoolean();
+            boolean adding = dat.readBoolean();
+            short length = dat.readShort();
+            boolean parachuting = dat.readBoolean();
+            int parachuteType = dat.readInt();
+            Side side = FMLCommonHandler.instance().getEffectiveSide();
+            HashMap playerParachuting = Aether.proxy.getClientParachuting();
+            HashMap playerParachutingType = Aether.proxy.getClientParachuteType();
 
-            if (var6)
+            if (clearFirst)
             {
-                var12.clear();
+                playerParachuting.clear();
             }
 
-            for (int var14 = 0; var14 < var8; ++var14)
+            for (int i = 0; i < length; ++i)
             {
-                String var15 = var3.readUTF();
+                String username = dat.readUTF();
 
-                if (var7)
+                if (adding)
                 {
-                    var12.put(var15, Boolean.valueOf(var9));
-                    var13.put(var15, Integer.valueOf(var10));
+                    playerParachuting.put(username, Boolean.valueOf(parachuting));
+                    playerParachutingType.put(username, Integer.valueOf(parachuteType));
                 }
                 else
                 {
-                    var12.remove(var15);
-                    var13.remove(var15);
+                    playerParachuting.remove(username);
+                    playerParachutingType.remove(username);
                 }
             }
         }

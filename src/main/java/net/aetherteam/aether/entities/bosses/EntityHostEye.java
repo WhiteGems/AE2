@@ -8,6 +8,8 @@ import net.aetherteam.aether.interfaces.IAetherMob;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityCreature;
 import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.DamageSource;
@@ -15,12 +17,11 @@ import net.minecraft.world.World;
 
 public class EntityHostEye extends EntityMiniBoss implements IAetherMob
 {
-    public String dir;
     public int moveTimer;
     public int dennis;
     public int rennis;
     public int chatTime;
-    public Entity target;
+    public EntityLivingBase target;
     public boolean gotMovement;
     public boolean crushed;
     public float speedy;
@@ -28,15 +29,14 @@ public class EntityHostEye extends EntityMiniBoss implements IAetherMob
     public int direction;
     public EntitySliderHostMimic host;
 
-    public EntityHostEye(World var1)
+    public EntityHostEye(World world)
     {
-        super(var1);
-        this.dir = "/net/aetherteam/aether/client/sprites";
+        super(world);
         this.setSize(0.4F, 0.4F);
-        this.health = this.getHealth();
+        this.func_110148_a(SharedMonsterAttributes.field_111267_a).func_111128_a(10.0D);
+        this.setEntityHealth(10.0F);
         this.dennis = 1;
         this.jumpMovementFactor = 0.0F;
-        this.texture = this.dir + "/mobs/host/hosteye.png";
 
         if (this.target == null)
         {
@@ -44,17 +44,17 @@ public class EntityHostEye extends EntityMiniBoss implements IAetherMob
         }
     }
 
-    public EntityHostEye(World var1, double var2, double var4, double var6, float var8, float var9)
+    public EntityHostEye(World world, double x, double y, double z, float yaw, float pitch)
     {
-        this(var1);
-        this.setPositionAndRotation(var2, var4, var6, var8, var9);
+        this(world);
+        this.setPositionAndRotation(x, y, z, yaw, pitch);
     }
 
-    public EntityHostEye(World var1, double var2, double var4, double var6, float var8, float var9, EntitySliderHostMimic var10, EntityLiving var11)
+    public EntityHostEye(World world, double x, double y, double z, float yaw, float pitch, EntitySliderHostMimic host, EntityLivingBase target)
     {
-        this(var1, var2, var4, var6, var8, var9);
-        this.host = var10;
-        this.target = var11;
+        this(world, x, y, z, yaw, pitch);
+        this.host = host;
+        this.target = target;
     }
 
     public void entityInit()
@@ -66,12 +66,12 @@ public class EntityHostEye extends EntityMiniBoss implements IAetherMob
      * Takes in the distance the entity has fallen this tick and whether its on the ground to update the fall distance
      * and deal fall damage if landing on the ground.  Args: distanceFallenThisTick, onGround
      */
-    protected void updateFallState(double var1, boolean var3) {}
+    protected void updateFallState(double par1, boolean par3) {}
 
     /**
      * Called when the mob is falling. Calculates and applies fall damage.
      */
-    protected void fall(float var1) {}
+    protected void fall(float par1) {}
 
     /**
      * Determines if an entity can be despawned, used on idle far away entities
@@ -108,25 +108,25 @@ public class EntityHostEye extends EntityMiniBoss implements IAetherMob
     /**
      * (abstract) Protected helper method to write subclass entity data to NBT.
      */
-    public void writeEntityToNBT(NBTTagCompound var1)
+    public void writeEntityToNBT(NBTTagCompound nbttagcompound)
     {
-        super.writeEntityToNBT(var1);
-        var1.setFloat("Speedy", this.speedy);
-        var1.setShort("MoveTimer", (short)this.moveTimer);
-        var1.setShort("Direction", (short)this.direction);
-        var1.setBoolean("GotMovement", this.gotMovement);
+        super.writeEntityToNBT(nbttagcompound);
+        nbttagcompound.setFloat("Speedy", this.speedy);
+        nbttagcompound.setShort("MoveTimer", (short)this.moveTimer);
+        nbttagcompound.setShort("Direction", (short)this.direction);
+        nbttagcompound.setBoolean("GotMovement", this.gotMovement);
     }
 
     /**
      * (abstract) Protected helper method to read subclass entity data from NBT.
      */
-    public void readEntityFromNBT(NBTTagCompound var1)
+    public void readEntityFromNBT(NBTTagCompound nbttagcompound)
     {
-        super.readEntityFromNBT(var1);
-        this.speedy = var1.getFloat("Speedy");
-        this.moveTimer = var1.getShort("MoveTimer");
-        this.direction = var1.getShort("Direction");
-        this.gotMovement = var1.getBoolean("GotMovement");
+        super.readEntityFromNBT(nbttagcompound);
+        this.speedy = nbttagcompound.getFloat("Speedy");
+        this.moveTimer = nbttagcompound.getShort("MoveTimer");
+        this.direction = nbttagcompound.getShort("Direction");
+        this.gotMovement = nbttagcompound.getBoolean("GotMovement");
     }
 
     /**
@@ -140,9 +140,9 @@ public class EntityHostEye extends EntityMiniBoss implements IAetherMob
 
         if (this.target != null && this.target instanceof EntityLiving)
         {
-            EntityLiving var1 = (EntityLiving)this.target;
+            EntityLiving a = (EntityLiving)this.target;
 
-            if (var1.getHealth() <= 0 || !this.canEntityBeSeen(var1))
+            if (a.func_110143_aJ() <= 0.0F || !this.canEntityBeSeen(a))
             {
                 this.target = null;
                 this.stop();
@@ -196,22 +196,22 @@ public class EntityHostEye extends EntityMiniBoss implements IAetherMob
             else
             {
                 this.fallDistance = 0.0F;
-                double var3;
-                double var5;
-                double var7;
+                double b;
+                double c;
+                double a1;
 
                 if (this.gotMovement)
                 {
                     if (this.isCollided)
                     {
-                        var7 = this.posX - 0.5D;
-                        var3 = this.boundingBox.minY + 0.75D;
-                        var5 = this.posZ - 0.5D;
+                        a1 = this.posX - 0.5D;
+                        b = this.boundingBox.minY + 0.75D;
+                        c = this.posZ - 0.5D;
 
                         if (this.crushed)
                         {
                             this.worldObj.playSoundEffect(this.posX, this.posY, this.posZ, "random.explode", 3.0F, (0.625F + (this.worldObj.rand.nextFloat() - this.worldObj.rand.nextFloat()) * 0.2F) * 0.7F);
-                            this.worldObj.playSoundAtEntity(this, "aeboss.slider.collide", 2.5F, 1.0F / (this.rand.nextFloat() * 0.2F + 0.9F));
+                            this.worldObj.playSoundAtEntity(this, "aether:aeboss.slider.collide", 2.5F, 1.0F / (this.rand.nextFloat() * 0.2F + 0.9F));
                         }
 
                         this.stop();
@@ -302,11 +302,11 @@ public class EntityHostEye extends EntityMiniBoss implements IAetherMob
                     }
                     else
                     {
-                        var7 = Math.abs(this.posX - this.target.posX);
-                        var3 = Math.abs(this.boundingBox.minY - this.target.boundingBox.minY);
-                        var5 = Math.abs(this.posZ - this.target.posZ);
+                        a1 = Math.abs(this.posX - this.target.posX);
+                        b = Math.abs(this.boundingBox.minY - this.target.boundingBox.minY);
+                        c = Math.abs(this.posZ - this.target.posZ);
 
-                        if (var7 > var5)
+                        if (a1 > c)
                         {
                             this.direction = 2;
 
@@ -325,7 +325,7 @@ public class EntityHostEye extends EntityMiniBoss implements IAetherMob
                             }
                         }
 
-                        if (var3 > var7 && var3 > var5 || var3 > 0.25D && this.rand.nextInt(5) == 0)
+                        if (b > a1 && b > c || b > 0.25D && this.rand.nextInt(5) == 0)
                         {
                             this.direction = 0;
 
@@ -361,27 +361,27 @@ public class EntityHostEye extends EntityMiniBoss implements IAetherMob
     /**
      * Applies a velocity to each of the entities pushing them away from each other. Args: entity
      */
-    public void applyEntityCollision(Entity var1)
+    public void applyEntityCollision(Entity entity)
     {
         if (this.gotMovement)
         {
-            if (var1 instanceof EntitySentry || var1 instanceof EntityTrackingGolem || var1 instanceof EntitySliderHostMimic || var1 instanceof EntitySentryGuardian || var1 instanceof EntitySentryGolem || var1 instanceof EntityBattleSentry)
+            if (entity instanceof EntitySentry || entity instanceof EntityTrackingGolem || entity instanceof EntitySliderHostMimic || entity instanceof EntitySentryGuardian || entity instanceof EntitySentryGolem || entity instanceof EntityBattleSentry)
             {
                 return;
             }
 
-            boolean var2 = var1.attackEntityFrom(DamageSource.causeMobDamage(this.host), 6);
+            boolean flag = entity.attackEntityFrom(DamageSource.causeMobDamage(this.host), 6.0F);
 
-            if (var2 && var1 instanceof EntityLiving)
+            if (flag && entity instanceof EntityLiving)
             {
-                this.worldObj.playSoundAtEntity(this, "aeboss.slider.collide", 2.5F, 1.0F / (this.rand.nextFloat() * 0.2F + 0.9F));
+                this.worldObj.playSoundAtEntity(this, "aether:aeboss.slider.collide", 2.5F, 1.0F / (this.rand.nextFloat() * 0.2F + 0.9F));
 
-                if (var1 instanceof EntityCreature || var1 instanceof EntityPlayer)
+                if (entity instanceof EntityCreature || entity instanceof EntityPlayer)
                 {
-                    EntityLiving var3 = (EntityLiving)var1;
-                    var3.motionY += 0.35D;
-                    var3.motionX *= 2.0D;
-                    var3.motionZ *= 2.0D;
+                    EntityLiving ek = (EntityLiving)entity;
+                    ek.motionY += 0.35D;
+                    ek.motionX *= 2.0D;
+                    ek.motionZ *= 2.0D;
                 }
 
                 this.stop();
@@ -409,7 +409,7 @@ public class EntityHostEye extends EntityMiniBoss implements IAetherMob
     /**
      * Called when the entity is attacked.
      */
-    public boolean attackEntityFrom(DamageSource var1, int var2)
+    public boolean attackEntityFrom(DamageSource source, float damage)
     {
         return false;
     }
@@ -417,26 +417,18 @@ public class EntityHostEye extends EntityMiniBoss implements IAetherMob
     /**
      * Adds to the current velocity of the entity. Args: x, y, z
      */
-    public void addVelocity(double var1, double var3, double var5) {}
+    public void addVelocity(double d, double d1, double d2) {}
 
-    /**
-     * knocks back this entity
-     */
-    public void knockBack(Entity var1, int var2, double var3, double var5) {}
+    public void knockBack(Entity entity, int i, double d, double d1) {}
 
-    public void addSquirrelButts(int var1, int var2, int var3)
+    public void addSquirrelButts(int x, int y, int z)
     {
         if (this.worldObj.isRemote)
         {
-            double var4 = (double)var1 + 0.5D + (double)(this.rand.nextFloat() - this.rand.nextFloat()) * 0.375D;
-            double var6 = (double)var2 + 0.5D + (double)(this.rand.nextFloat() - this.rand.nextFloat()) * 0.375D;
-            double var8 = (double)var3 + 0.5D + (double)(this.rand.nextFloat() - this.rand.nextFloat()) * 0.375D;
-            this.worldObj.spawnParticle("explode", var4, var6, var8, 0.0D, 0.0D, 0.0D);
+            double a = (double)x + 0.5D + (double)(this.rand.nextFloat() - this.rand.nextFloat()) * 0.375D;
+            double b = (double)y + 0.5D + (double)(this.rand.nextFloat() - this.rand.nextFloat()) * 0.375D;
+            double c = (double)z + 0.5D + (double)(this.rand.nextFloat() - this.rand.nextFloat()) * 0.375D;
+            this.worldObj.spawnParticle("explode", a, b, c, 0.0D, 0.0D, 0.0D);
         }
-    }
-
-    public int getMaxHealth()
-    {
-        return 10;
     }
 }

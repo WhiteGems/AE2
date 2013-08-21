@@ -12,7 +12,7 @@ public class JukeboxPlayer
 {
     public SoundManager soundManager;
     private int musicInterval;
-    public List jukeboxMusic;
+    public List<String> jukeboxMusic;
     public boolean defaultMusic;
     public String musicFileName;
     public boolean playingJukebox;
@@ -27,12 +27,11 @@ public class JukeboxPlayer
 
     public void process()
     {
-        Minecraft.getMinecraft();
-        File streaming = new File(Minecraft.getMinecraftDir() + "/resources/streaming/");
+        File streaming = new File(Minecraft.getMinecraft().mcDataDir + "/resources/streaming/");
 
         if (streaming.exists())
         {
-            this.jukeboxMusic = listMusic(streaming, false);
+            this.jukeboxMusic = this.listMusic(streaming, false);
         }
     }
 
@@ -90,17 +89,17 @@ public class JukeboxPlayer
         this.playMenuMusic();
     }
 
-    public int getIndexFromName(String var1)
+    public int getIndexFromName(String musicName)
     {
         this.process();
 
         if (this.jukeboxMusic != null)
         {
-            for (int var2 = 0; var2 < this.jukeboxMusic.size(); ++var2)
+            for (int count = 0; count < this.jukeboxMusic.size(); ++count)
             {
-                if (((String)this.jukeboxMusic.get(var2)).equalsIgnoreCase(var1))
+                if (((String)this.jukeboxMusic.get(count)).equalsIgnoreCase(musicName))
                 {
-                    return var2;
+                    return count;
                 }
             }
         }
@@ -108,35 +107,35 @@ public class JukeboxPlayer
         return JukeboxData.musicIndex;
     }
 
-    public List listMusic(File var1, boolean var2)
+    public List<String> listMusic(File folder, boolean extension)
     {
-        if (var1.exists())
+        if (folder.exists())
         {
-            ArrayList var3 = new ArrayList();
-            File[] var4 = var1.listFiles();
-            int var5 = var4.length;
+            ArrayList files = new ArrayList();
+            File[] arr$ = folder.listFiles();
+            int len$ = arr$.length;
 
-            for (int var6 = 0; var6 < var5; ++var6)
+            for (int i$ = 0; i$ < len$; ++i$)
             {
-                File var7 = var4[var6];
+                File fileEntry = arr$[i$];
 
-                if (var7.isDirectory())
+                if (fileEntry.isDirectory())
                 {
-                    this.listMusic(var7, var2);
+                    this.listMusic(fileEntry, extension);
                 }
                 else
                 {
-                    String var8 = var7.getName();
-                    String var9 = var7.getName().replaceFirst("[.][^.]+$", "");
+                    String nameExtension = fileEntry.getName();
+                    String nameNoExtension = fileEntry.getName().replaceFirst("[.][^.]+$", "");
 
-                    if (!var3.contains(var2 ? var8 : var9))
+                    if (!files.contains(extension ? nameExtension : nameNoExtension))
                     {
-                        var3.add(var2 ? var8 : var9);
+                        files.add(extension ? nameExtension : nameNoExtension);
                     }
                 }
             }
 
-            return var3;
+            return files;
         }
         else
         {
@@ -166,8 +165,8 @@ public class JukeboxPlayer
 
     public String getCurrentSongName()
     {
-        String var1 = this.getCurrentSong();
-        return var1.isEmpty() ? "" : var1.substring(0, 1).toUpperCase() + var1.substring(1);
+        String name = this.getCurrentSong();
+        return name.isEmpty() ? "" : name.substring(0, 1).toUpperCase() + name.substring(1);
     }
 
     private String getCurrentSong()
@@ -177,30 +176,14 @@ public class JukeboxPlayer
 
     public boolean isMusicPlaying()
     {
-        SoundManager var10000 = this.soundManager;
-        boolean var1;
-
-        if (SoundManager.sndSystem != null)
-        {
-            var10000 = this.soundManager;
-
-            if (SoundManager.sndSystem.playing("streaming"))
-            {
-                var1 = true;
-                return var1;
-            }
-        }
-
-        var1 = false;
-        return var1;
+        return this.soundManager.sndSystem != null && this.soundManager.sndSystem.playing("streaming");
     }
 
     public void muteMusic()
     {
         if (this.isSoundOn())
         {
-            SoundManager var10000 = this.soundManager;
-            SoundManager.sndSystem.stop("streaming");
+            this.soundManager.sndSystem.stop("streaming");
         }
     }
 
@@ -225,14 +208,14 @@ public class JukeboxPlayer
         JukeboxData.setProperty("loopMusic", String.valueOf(JukeboxData.loopMusic));
     }
 
-    private void playMusicFile(String var1)
+    private void playMusicFile(String musicFile)
     {
         if (!JukeboxData.muteMusic && this.isSoundOn() && !this.isMusicPlaying())
         {
-            float var2 = (float)JukeboxData.playerPosX;
-            float var3 = (float)JukeboxData.playerPosY;
-            float var4 = (float)JukeboxData.playerPosZ;
-            this.soundManager.playStreaming(var1, var2 != 0.0F ? var2 : 0.0F, var3 != 0.0F ? var3 : 0.0F, var4 != 0.0F ? var4 : 0.0F);
+            float x = (float)JukeboxData.playerPosX;
+            float y = (float)JukeboxData.playerPosY;
+            float z = (float)JukeboxData.playerPosZ;
+            this.soundManager.playStreaming(musicFile, x != 0.0F ? x : 0.0F, y != 0.0F ? y : 0.0F, z != 0.0F ? z : 0.0F);
         }
     }
 
@@ -241,29 +224,15 @@ public class JukeboxPlayer
         return this.musicFileName;
     }
 
-    public JukeboxPlayer setMusicFileName(String var1)
+    public JukeboxPlayer setMusicFileName(String name)
     {
-        this.musicFileName = var1;
+        this.musicFileName = name;
         return this;
     }
 
     public boolean isSoundOn()
     {
-        boolean var1;
-
-        if (this.soundManager != null)
-        {
-            SoundManager var10000 = this.soundManager;
-
-            if (SoundManager.sndSystem != null)
-            {
-                var1 = true;
-                return var1;
-            }
-        }
-
-        var1 = false;
-        return var1;
+        return this.soundManager != null && this.soundManager.sndSystem != null;
     }
 
     public void playMenuMusic()

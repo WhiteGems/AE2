@@ -21,34 +21,34 @@ public class EntityColdLightningBolt extends EntityWeatherEffect
     private int boltLivingTime;
     DamageSource damageSource;
 
-    public EntityColdLightningBolt(World var1, double var2, double var4, double var6)
+    public EntityColdLightningBolt(World par1World, double par2, double par4, double par6)
     {
-        super(var1);
-        this.setLocationAndAngles(var2, var4, var6, 0.0F, 0.0F);
+        super(par1World);
+        this.setLocationAndAngles(par2, par4, par6, 0.0F, 0.0F);
         this.lightningState = 2;
         this.boltVertex = this.rand.nextLong();
         this.boltLivingTime = this.rand.nextInt(3) + 1;
 
-        if (!var1.isRemote && var1.difficultySetting >= 2 && var1.doChunksNearChunkExist(MathHelper.floor_double(var2), MathHelper.floor_double(var4), MathHelper.floor_double(var6), 10))
+        if (!par1World.isRemote && par1World.difficultySetting >= 2 && par1World.doChunksNearChunkExist(MathHelper.floor_double(par2), MathHelper.floor_double(par4), MathHelper.floor_double(par6), 10))
         {
-            int var8 = MathHelper.floor_double(var2);
-            int var9 = MathHelper.floor_double(var4);
-            int var10 = MathHelper.floor_double(var6);
+            int i = MathHelper.floor_double(par2);
+            int j = MathHelper.floor_double(par4);
+            int k = MathHelper.floor_double(par6);
 
-            if (var1.getBlockId(var8, var9, var10) == 0 && AetherBlocks.ColdFire.canPlaceBlockAt(var1, var8, var9, var10))
+            if (par1World.getBlockId(i, j, k) == 0 && AetherBlocks.ColdFire.canPlaceBlockAt(par1World, i, j, k))
             {
-                var1.setBlock(var8, var9, var10, AetherBlocks.ColdFire.blockID);
+                par1World.setBlock(i, j, k, AetherBlocks.ColdFire.blockID);
             }
 
-            for (var8 = 0; var8 < 4; ++var8)
+            for (i = 0; i < 4; ++i)
             {
-                var9 = MathHelper.floor_double(var2) + this.rand.nextInt(3) - 1;
-                var10 = MathHelper.floor_double(var4) + this.rand.nextInt(3) - 1;
-                int var11 = MathHelper.floor_double(var6) + this.rand.nextInt(3) - 1;
+                j = MathHelper.floor_double(par2) + this.rand.nextInt(3) - 1;
+                k = MathHelper.floor_double(par4) + this.rand.nextInt(3) - 1;
+                int l = MathHelper.floor_double(par6) + this.rand.nextInt(3) - 1;
 
-                if (var1.getBlockId(var9, var10, var11) == 0 && AetherBlocks.ColdFire.canPlaceBlockAt(var1, var9, var10, var11))
+                if (par1World.getBlockId(j, k, l) == 0 && AetherBlocks.ColdFire.canPlaceBlockAt(par1World, j, k, l))
                 {
-                    var1.setBlock(var9, var10, var11, AetherBlocks.ColdFire.blockID);
+                    par1World.setBlock(j, k, l, AetherBlocks.ColdFire.blockID);
                 }
             }
         }
@@ -83,13 +83,13 @@ public class EntityColdLightningBolt extends EntityWeatherEffect
 
                 if (!this.worldObj.isRemote && this.worldObj.doChunksNearChunkExist(MathHelper.floor_double(this.posX), MathHelper.floor_double(this.posY), MathHelper.floor_double(this.posZ), 10))
                 {
-                    int var1 = MathHelper.floor_double(this.posX);
-                    int var2 = MathHelper.floor_double(this.posY);
-                    int var3 = MathHelper.floor_double(this.posZ);
+                    int d0 = MathHelper.floor_double(this.posX);
+                    int j = MathHelper.floor_double(this.posY);
+                    int list = MathHelper.floor_double(this.posZ);
 
-                    if (this.worldObj.getBlockId(var1, var2, var3) == 0 && AetherBlocks.ColdFire.canPlaceBlockAt(this.worldObj, var1, var2, var3))
+                    if (this.worldObj.getBlockId(d0, j, list) == 0 && AetherBlocks.ColdFire.canPlaceBlockAt(this.worldObj, d0, j, list))
                     {
-                        this.worldObj.setBlock(var1, var2, var3, AetherBlocks.ColdFire.blockID);
+                        this.worldObj.setBlock(d0, j, list, AetherBlocks.ColdFire.blockID);
                     }
                 }
             }
@@ -106,14 +106,14 @@ public class EntityColdLightningBolt extends EntityWeatherEffect
                 double var6 = 3.0D;
                 List var7 = this.worldObj.getEntitiesWithinAABBExcludingEntity(this, AxisAlignedBB.getAABBPool().getAABB(this.posX - var6, this.posY - var6, this.posZ - var6, this.posX + var6, this.posY + 6.0D + var6, this.posZ + var6));
 
-                for (int var4 = 0; var4 < var7.size(); ++var4)
+                for (int l = 0; l < var7.size(); ++l)
                 {
-                    Entity var5 = (Entity)var7.get(var4);
-                    this.damageSource = (new CustomDamageSource(" has been struck with frost bite", var5, (Entity)null)).setDeathMessage(" has been struck with frost bite");
+                    Entity entity = (Entity)var7.get(l);
+                    this.damageSource = (new CustomDamageSource(" has been struck with frost bite", entity, (Entity)null)).setDeathMessage(" has been struck with frost bite");
 
-                    if (!(var5 instanceof EntityTempest) && !(var5 instanceof EntityItem))
+                    if (!(entity instanceof EntityTempest) && !(entity instanceof EntityItem))
                     {
-                        var5.attackEntityFrom(this.damageSource, 6);
+                        entity.attackEntityFrom(this.damageSource, 6.0F);
                     }
                 }
             }
@@ -125,19 +125,19 @@ public class EntityColdLightningBolt extends EntityWeatherEffect
     /**
      * (abstract) Protected helper method to read subclass entity data from NBT.
      */
-    protected void readEntityFromNBT(NBTTagCompound var1) {}
+    protected void readEntityFromNBT(NBTTagCompound par1NBTTagCompound) {}
 
     /**
      * (abstract) Protected helper method to write subclass entity data to NBT.
      */
-    protected void writeEntityToNBT(NBTTagCompound var1) {}
+    protected void writeEntityToNBT(NBTTagCompound par1NBTTagCompound) {}
 
     @SideOnly(Side.CLIENT)
 
     /**
      * Checks using a Vec3d to determine if this entity is within range of that vector to be rendered. Args: vec3D
      */
-    public boolean isInRangeToRenderVec3D(Vec3 var1)
+    public boolean isInRangeToRenderVec3D(Vec3 par1Vec3)
     {
         return this.lightningState >= 0;
     }

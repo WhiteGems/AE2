@@ -13,9 +13,9 @@ public class BlockQuicksoilGlass extends BlockBreakable implements IAetherBlock
 {
     private String iconName;
 
-    public BlockQuicksoilGlass(int var1)
+    public BlockQuicksoilGlass(int blockID)
     {
-        super(var1, "sup", Material.glass, false);
+        super(blockID, "sup", Material.glass, false);
         this.slipperiness = 1.1F;
         this.setLightValue(0.7375F);
         this.setHardness(0.2F);
@@ -34,7 +34,7 @@ public class BlockQuicksoilGlass extends BlockBreakable implements IAetherBlock
     /**
      * Returns the quantity of items to drop on block destruction.
      */
-    public int quantityDropped(Random var1)
+    public int quantityDropped(Random random)
     {
         return 0;
     }
@@ -43,15 +43,15 @@ public class BlockQuicksoilGlass extends BlockBreakable implements IAetherBlock
      * Returns true if the given side of this block type should be rendered, if the adjacent block is at the given
      * coordinates.  Args: blockAccess, x, y, z, side
      */
-    public boolean shouldSideBeRendered(IBlockAccess var1, int var2, int var3, int var4, int var5)
+    public boolean shouldSideBeRendered(IBlockAccess iblockaccess, int i, int j, int k, int l)
     {
-        return super.shouldSideBeRendered(var1, var2, var3, var4, 1 - var5);
+        return super.shouldSideBeRendered(iblockaccess, i, j, k, 1 - l);
     }
 
-    public Block setIconName(String var1)
+    public Block setIconName(String name)
     {
-        this.iconName = "Aether:" + var1;
-        return this.setUnlocalizedName("Aether:" + var1);
+        this.iconName = "aether:" + name;
+        return this.setUnlocalizedName("aether:" + name);
     }
 
     @SideOnly(Side.CLIENT)
@@ -60,8 +60,8 @@ public class BlockQuicksoilGlass extends BlockBreakable implements IAetherBlock
      * When this method is called, your block should register all the icons it needs with the given IconRegister. This
      * is the only chance you get to register icons.
      */
-    public void registerIcons(IconRegister var1)
+    public void registerIcons(IconRegister par1IconRegister)
     {
-        this.blockIcon = var1.registerIcon(this.iconName);
+        this.blockIcon = par1IconRegister.registerIcon(this.iconName);
     }
 }

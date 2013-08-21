@@ -7,7 +7,7 @@ public enum AetherRanks
     DEVELOPER("Aether II Developer", Aether.developers, 2342342),
     HELPER("Aether II Helper", Aether.helper, 2344),
     DEFAULT("", new ArrayList(), 0);
-    private ArrayList members = new ArrayList();
+    private ArrayList<String> members = new ArrayList();
     private int descriptionColor;
     private String description;
 
@@ -30,11 +30,11 @@ public enum AetherRanks
         Aether.helper.add("themattabase");
     }
 
-    private AetherRanks(String var3, ArrayList var4, int var5)
+    private AetherRanks(String description, ArrayList members, int descriptionColor)
     {
-        this.members = var4;
-        this.description = var3;
-        this.descriptionColor = var5;
+        this.members = members;
+        this.description = description;
+        this.descriptionColor = descriptionColor;
     }
 
     public int getDescriptionColor()
@@ -47,20 +47,20 @@ public enum AetherRanks
         return this.description;
     }
 
-    public static AetherRanks getRankFromMember(String var0)
+    public static AetherRanks getRankFromMember(String member)
     {
-        for (int var1 = 0; var1 < values().length; ++var1)
+        for (int i = 0; i < values().length; ++i)
         {
-            if (values()[var1].getMembers().contains(var0.toLowerCase()))
+            if (values()[i].getMembers().contains(member.toLowerCase()))
             {
-                return values()[var1];
+                return values()[i];
             }
         }
 
         return DEFAULT;
     }
 
-    public ArrayList getMembers()
+    public ArrayList<String> getMembers()
     {
         return this.members;
     }

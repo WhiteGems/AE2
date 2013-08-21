@@ -15,9 +15,9 @@ public class RidingHandlerFlyingCow extends RidingHandler
 {
     protected EntityLiving animal;
 
-    public RidingHandlerFlyingCow(EntityFlyingCow var1)
+    public RidingHandlerFlyingCow(EntityFlyingCow flyingCow)
     {
-        super(var1);
+        super(flyingCow);
         this.animal = (EntityLiving)this.mount;
     }
 
@@ -48,14 +48,14 @@ public class RidingHandlerFlyingCow extends RidingHandler
     {
         this.rider.stepHeight = 0.5F;
         this.animal.tasks.addTask(0, new EntityAISwimming(this.animal));
-        this.animal.tasks.addTask(1, new EntityAIPanic((EntityCreature)this.animal, 0.38F));
-        this.animal.tasks.addTask(2, new EntityAIWander((EntityCreature)this.animal, 0.3F));
+        this.animal.tasks.addTask(1, new EntityAIPanic((EntityCreature)this.animal, 0.3799999952316284D));
+        this.animal.tasks.addTask(2, new EntityAIWander((EntityCreature)this.animal, 0.30000001192092896D));
         this.animal.tasks.addTask(4, new EntityAIWatchClosest(this.animal, EntityPlayer.class, 6.0F));
         this.animal.tasks.addTask(5, new EntityAILookIdle(this.animal));
         super.onUnMount();
     }
 
-    public boolean jump(AetherCommonPlayerHandler var1, EntityPlayer var2)
+    public boolean jump(AetherCommonPlayerHandler aetherCommonPlayerHandler, EntityPlayer player)
     {
         if (this.isBeingRidden())
         {

@@ -13,22 +13,22 @@ import net.minecraft.server.MinecraftServer;
 
 public class AetherConnectionHandler implements IConnectionHandler
 {
-    public void playerLoggedIn(Player var1, NetHandler var2, INetworkManager var3) {}
+    public void playerLoggedIn(Player player, NetHandler netHandler, INetworkManager manager) {}
 
-    public String connectionReceived(NetLoginHandler var1, INetworkManager var2)
+    public String connectionReceived(NetLoginHandler netHandler, INetworkManager manager)
     {
         return null;
     }
 
-    public void connectionOpened(NetHandler var1, String var2, int var3, INetworkManager var4) {}
+    public void connectionOpened(NetHandler netClientHandler, String server, int port, INetworkManager manager) {}
 
-    public void connectionClosed(INetworkManager var1) {}
+    public void connectionClosed(INetworkManager manager) {}
 
-    public void clientLoggedIn(NetHandler var1, INetworkManager var2, Packet1Login var3)
+    public void clientLoggedIn(NetHandler clientHandler, INetworkManager manager, Packet1Login login)
     {
         NotificationHandler.instance().clearNotifications();
         DungeonHandler.instance().loadInstances(new ArrayList());
     }
 
-    public void connectionOpened(NetHandler var1, MinecraftServer var2, INetworkManager var3) {}
+    public void connectionOpened(NetHandler netClientHandler, MinecraftServer server, INetworkManager manager) {}
 }

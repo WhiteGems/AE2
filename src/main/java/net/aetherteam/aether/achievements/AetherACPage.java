@@ -6,12 +6,12 @@ import net.minecraftforge.common.AchievementPage;
 
 public class AetherACPage extends AchievementPage
 {
-    public AetherACPage(Achievement ... var1)
+    public AetherACPage(Achievement ... pages)
     {
-        super("Aether", var1);
+        super("Aether", pages);
     }
 
-    public int bgGetSprite(Random var1, int var2, int var3)
+    public int bgGetSprite(Random random, int i, int j)
     {
         return 0;
     }

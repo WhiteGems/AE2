@@ -15,34 +15,34 @@ public abstract class AetherPacket
 {
     public byte packetID;
 
-    public AetherPacket(int var1)
+    public AetherPacket(int packetID)
     {
-        this.packetID = Byte.valueOf((byte)var1).byteValue();
+        this.packetID = Byte.valueOf((byte)packetID).byteValue();
         RegisteredPackets.registerPacket(this);
     }
 
     public abstract void onPacketReceived(Packet250CustomPayload var1, Player var2);
 
-    public void sendPacketToAllExcept(Packet var1, Player var2)
+    public void sendPacketToAllExcept(Packet packet, Player player)
     {
-        Side var3 = FMLCommonHandler.instance().getEffectiveSide();
+        Side side = FMLCommonHandler.instance().getEffectiveSide();
 
-        if (var3.isServer())
+        if (side.isServer())
         {
-            MinecraftServer var4 = FMLCommonHandler.instance().getMinecraftServerInstance();
+            MinecraftServer server = FMLCommonHandler.instance().getMinecraftServerInstance();
 
-            if (var4 != null)
+            if (server != null)
             {
-                ServerConfigurationManager var5 = var4.getConfigurationManager();
-                Iterator var6 = var5.playerEntityList.iterator();
+                ServerConfigurationManager configManager = server.getConfigurationManager();
+                Iterator i$ = configManager.playerEntityList.iterator();
 
-                while (var6.hasNext())
+                while (i$.hasNext())
                 {
-                    Object var7 = var6.next();
+                    Object playerObj = i$.next();
 
-                    if (var7 instanceof EntityPlayer && (Player)var7 != var2)
+                    if (playerObj instanceof EntityPlayer && (Player)playerObj != player)
                     {
-                        PacketDispatcher.sendPacketToPlayer(var1, (Player)var7);
+                        PacketDispatcher.sendPacketToPlayer(packet, (Player)playerObj);
                     }
                 }
             }

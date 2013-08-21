@@ -9,8 +9,8 @@ import net.aetherteam.aether.donator.choices.ValkyrieMoaChoice;
 
 public class DonatorChoices
 {
-    public ArrayList capeChoices = new ArrayList();
-    public ArrayList moaChoices = new ArrayList();
+    public ArrayList<DonatorChoice> capeChoices = new ArrayList();
+    public ArrayList<DonatorChoice> moaChoices = new ArrayList();
 
     public DonatorChoices()
     {

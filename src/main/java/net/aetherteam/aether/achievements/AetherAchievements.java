@@ -8,15 +8,15 @@ public class AetherAchievements
 
     public static void init() {}
 
-    private static void addAchievementDetails(String var0, String var1, String var2) {}
+    private static void addAchievementDetails(String achievement, String name, String desc) {}
 
-    private static void addAchievementName(String var0, String var1)
+    private static void addAchievementName(String achievement, String name)
     {
-        LanguageRegistry.instance().addStringLocalization("achievement." + var0, "en_US", var1);
+        LanguageRegistry.instance().addStringLocalization("achievement." + achievement, "en_US", name);
     }
 
-    private static void addAchievementDesc(String var0, String var1)
+    private static void addAchievementDesc(String achievement, String desc)
     {
-        LanguageRegistry.instance().addStringLocalization("achievement." + var0 + ".desc", "en_US", var1);
+        LanguageRegistry.instance().addStringLocalization("achievement." + achievement + ".desc", "en_US", desc);
     }
 }

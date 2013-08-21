@@ -29,30 +29,30 @@ public class EntityZephyrSnowball extends Entity implements IThrowableEntity
     public double accelerationY;
     public double accelerationZ;
 
-    public EntityZephyrSnowball(World var1)
+    public EntityZephyrSnowball(World world)
     {
-        super(var1);
+        super(world);
         this.setSize(1.0F, 1.0F);
     }
 
     protected void entityInit() {}
 
-    public EntityZephyrSnowball(World var1, EntityLiving var2, double var3, double var5, double var7)
+    public EntityZephyrSnowball(World world, EntityLiving entityliving, double d, double d1, double d2)
     {
-        super(var1);
-        this.shootingEntity = var2;
+        super(world);
+        this.shootingEntity = entityliving;
         this.setSize(0.5F, 0.5F);
-        this.setLocationAndAngles(var2.posX, var2.posY, var2.posZ, var2.rotationYaw, var2.rotationPitch);
+        this.setLocationAndAngles(entityliving.posX, entityliving.posY, entityliving.posZ, entityliving.rotationYaw, entityliving.rotationPitch);
         this.setPositionAndRotation(this.posX, this.posY, this.posZ, this.rotationYaw, this.rotationPitch);
         this.yOffset = 0.0F;
         this.motionX = this.motionY = this.motionZ = 0.0D;
-        var3 += this.rand.nextGaussian() * 0.4D;
-        var5 += this.rand.nextGaussian() * 0.4D;
-        var7 += this.rand.nextGaussian() * 0.4D;
-        double var9 = (double)MathHelper.sqrt_double(var3 * var3 + var5 * var5 + var7 * var7);
-        this.accelerationX = var3 / var9 * 0.08000000000000002D;
-        this.accelerationY = var5 / var9 * 0.08000000000000002D;
-        this.accelerationZ = var7 / var9 * 0.08000000000000002D;
+        d += this.rand.nextGaussian() * 0.4D;
+        d1 += this.rand.nextGaussian() * 0.4D;
+        d2 += this.rand.nextGaussian() * 0.4D;
+        double d3 = (double)MathHelper.sqrt_double(d * d + d1 * d1 + d2 * d2);
+        this.accelerationX = d / d3 * 0.08000000000000002D;
+        this.accelerationY = d1 / d3 * 0.08000000000000002D;
+        this.accelerationZ = d2 / d3 * 0.08000000000000002D;
     }
 
     /**
@@ -79,9 +79,9 @@ public class EntityZephyrSnowball extends Entity implements IThrowableEntity
 
         if (this.inGround)
         {
-            int var1 = this.worldObj.getBlockId(this.xTile, this.yTile, this.zTile);
+            int vec3d = this.worldObj.getBlockId(this.xTile, this.yTile, this.zTile);
 
-            if (var1 == this.inTile)
+            if (vec3d == this.inTile)
             {
                 ++this.ticksAlive;
                 return;
@@ -100,65 +100,65 @@ public class EntityZephyrSnowball extends Entity implements IThrowableEntity
         }
 
         Vec3 var15 = Vec3.createVectorHelper(this.posX, this.posY, this.posZ);
-        Vec3 var2 = Vec3.createVectorHelper(this.posX + this.motionX, this.posY + this.motionY, this.posZ + this.motionZ);
-        MovingObjectPosition var3 = this.worldObj.rayTraceBlocks(var15, var2);
+        Vec3 vec3d1 = Vec3.createVectorHelper(this.posX + this.motionX, this.posY + this.motionY, this.posZ + this.motionZ);
+        MovingObjectPosition movingobjectposition = this.worldObj.clip(var15, vec3d1);
         var15 = Vec3.createVectorHelper(this.posX, this.posY, this.posZ);
-        var2 = Vec3.createVectorHelper(this.posX + this.motionX, this.posY + this.motionY, this.posZ + this.motionZ);
+        vec3d1 = Vec3.createVectorHelper(this.posX + this.motionX, this.posY + this.motionY, this.posZ + this.motionZ);
 
-        if (var3 != null)
+        if (movingobjectposition != null)
         {
-            var2 = Vec3.createVectorHelper(var3.hitVec.xCoord, var3.hitVec.yCoord, var3.hitVec.zCoord);
+            vec3d1 = Vec3.createVectorHelper(movingobjectposition.hitVec.xCoord, movingobjectposition.hitVec.yCoord, movingobjectposition.hitVec.zCoord);
         }
 
-        Entity var4 = null;
-        List var5 = this.worldObj.getEntitiesWithinAABBExcludingEntity(this, this.boundingBox.addCoord(this.motionX, this.motionY, this.motionZ).expand(1.0D, 1.0D, 1.0D));
-        double var6 = 0.0D;
+        Entity entity = null;
+        List list = this.worldObj.getEntitiesWithinAABBExcludingEntity(this, this.boundingBox.addCoord(this.motionX, this.motionY, this.motionZ).expand(1.0D, 1.0D, 1.0D));
+        double d = 0.0D;
 
-        for (int var8 = 0; var8 < var5.size(); ++var8)
+        for (int f = 0; f < list.size(); ++f)
         {
-            Entity var9 = (Entity)var5.get(var8);
+            Entity f1 = (Entity)list.get(f);
 
-            if (var9.canBeCollidedWith() && (var9 != this.shootingEntity || this.ticksInAir >= 25))
+            if (f1.canBeCollidedWith() && (f1 != this.shootingEntity || this.ticksInAir >= 25))
             {
-                float var10 = 0.3F;
-                AxisAlignedBB var11 = var9.boundingBox.expand((double)var10, (double)var10, (double)var10);
-                MovingObjectPosition var12 = var11.calculateIntercept(var15, var2);
+                float k = 0.3F;
+                AxisAlignedBB f3 = f1.boundingBox.expand((double)k, (double)k, (double)k);
+                MovingObjectPosition movingobjectposition1 = f3.calculateIntercept(var15, vec3d1);
 
-                if (var12 != null)
+                if (movingobjectposition1 != null)
                 {
-                    double var13 = var15.distanceTo(var12.hitVec);
+                    double d1 = var15.distanceTo(movingobjectposition1.hitVec);
 
-                    if (var13 < var6 || var6 == 0.0D)
+                    if (d1 < d || d == 0.0D)
                     {
-                        var4 = var9;
-                        var6 = var13;
+                        entity = f1;
+                        d = d1;
                     }
                 }
             }
         }
 
-        if (var4 != null)
+        if (entity != null)
         {
-            var3 = new MovingObjectPosition(var4);
+            movingobjectposition = new MovingObjectPosition(entity);
         }
 
-        if (var3 != null)
+        if (movingobjectposition != null)
         {
-            if (var3.entityHit != null && var3.entityHit != this.shootingEntity)
+            if (movingobjectposition.entityHit != null && movingobjectposition.entityHit != this.shootingEntity)
             {
-                if (var3.entityHit instanceof EntityPlayer && ((EntityPlayer)var3.entityHit).inventory.armorInventory[0] != null && ((EntityPlayer)var3.entityHit).inventory.armorInventory[0].itemID == AetherItems.SentryBoots.itemID)
+                if (movingobjectposition.entityHit instanceof EntityPlayer && ((EntityPlayer)movingobjectposition.entityHit).inventory.armorInventory[0] != null && ((EntityPlayer)movingobjectposition.entityHit).inventory.armorInventory[0].itemID == AetherItems.SentryBoots.itemID)
                 {
                     this.setDead();
                 }
-                else if (var3.entityHit instanceof EntityPlayer && ((EntityPlayer)var3.entityHit).capabilities.isCreativeMode)
+                else if (movingobjectposition.entityHit instanceof EntityPlayer && ((EntityPlayer)movingobjectposition.entityHit).capabilities.isCreativeMode)
                 {
                     this.setDead();
                 }
-                else if (var3.entityHit != null && !(var3.entityHit instanceof EntityNewZephyr) && !(var3.entityHit instanceof EntityTempest))
+                else if (movingobjectposition.entityHit != null && !(movingobjectposition.entityHit instanceof EntityNewZephyr) && !(movingobjectposition.entityHit instanceof EntityTempest))
                 {
-                    var3.entityHit.motionX += this.motionX;
-                    var3.entityHit.motionY += 0.5D;
-                    var3.entityHit.motionZ += this.motionZ;
+                    movingobjectposition.entityHit.motionX += this.motionX;
+                    movingobjectposition.entityHit.motionY += 0.5D;
+                    movingobjectposition.entityHit.motionZ += this.motionZ;
                 }
             }
 
@@ -222,27 +222,27 @@ public class EntityZephyrSnowball extends Entity implements IThrowableEntity
     /**
      * (abstract) Protected helper method to write subclass entity data to NBT.
      */
-    public void writeEntityToNBT(NBTTagCompound var1)
+    public void writeEntityToNBT(NBTTagCompound nbttagcompound)
     {
-        var1.setShort("xTile", (short)this.xTile);
-        var1.setShort("yTile", (short)this.yTile);
-        var1.setShort("zTile", (short)this.zTile);
-        var1.setByte("inTile", (byte)this.inTile);
-        var1.setByte("shake", (byte)this.field_9406_a);
-        var1.setByte("inGround", (byte)(this.inGround ? 1 : 0));
+        nbttagcompound.setShort("xTile", (short)this.xTile);
+        nbttagcompound.setShort("yTile", (short)this.yTile);
+        nbttagcompound.setShort("zTile", (short)this.zTile);
+        nbttagcompound.setByte("inTile", (byte)this.inTile);
+        nbttagcompound.setByte("shake", (byte)this.field_9406_a);
+        nbttagcompound.setByte("inGround", (byte)(this.inGround ? 1 : 0));
     }
 
     /**
      * (abstract) Protected helper method to read subclass entity data from NBT.
      */
-    public void readEntityFromNBT(NBTTagCompound var1)
+    public void readEntityFromNBT(NBTTagCompound nbttagcompound)
     {
-        this.xTile = var1.getShort("xTile");
-        this.yTile = var1.getShort("yTile");
-        this.zTile = var1.getShort("zTile");
-        this.inTile = var1.getByte("inTile") & 255;
-        this.field_9406_a = var1.getByte("shake") & 255;
-        this.inGround = var1.getByte("inGround") == 1;
+        this.xTile = nbttagcompound.getShort("xTile");
+        this.yTile = nbttagcompound.getShort("yTile");
+        this.zTile = nbttagcompound.getShort("zTile");
+        this.inTile = nbttagcompound.getByte("inTile") & 255;
+        this.field_9406_a = nbttagcompound.getByte("shake") & 255;
+        this.inGround = nbttagcompound.getByte("inGround") == 1;
     }
 
     public float getCollisionBorderSize()
@@ -253,35 +253,35 @@ public class EntityZephyrSnowball extends Entity implements IThrowableEntity
     /**
      * Called when the entity is attacked.
      */
-    public boolean attackEntityFrom(DamageSource var1, int var2)
+    public boolean attackEntityFrom(DamageSource damagesource, float i)
     {
         this.setBeenAttacked();
 
-        if (var1.getEntity() == null)
+        if (damagesource.getEntity() == null)
         {
             return false;
         }
         else
         {
-            Vec3 var3 = var1.getEntity().getLookVec();
+            Vec3 vec3d = damagesource.getEntity().getLookVec();
 
-            if (var3 != null)
+            if (vec3d != null)
             {
-                this.motionX = var3.xCoord;
-                this.motionY = var3.yCoord;
-                this.motionZ = var3.zCoord;
+                this.motionX = vec3d.xCoord;
+                this.motionY = vec3d.yCoord;
+                this.motionZ = vec3d.zCoord;
                 this.accelerationX = this.motionX * 0.1D;
                 this.accelerationY = this.motionY * 0.1D;
                 this.accelerationZ = this.motionZ * 0.1D;
 
-                for (int var4 = 0; var4 < 10; ++var4)
+                for (int j = 0; j < 10; ++j)
                 {
-                    double var5 = this.rand.nextGaussian() * 0.02D;
-                    double var7 = this.rand.nextGaussian() * 0.02D;
-                    double var9 = this.rand.nextGaussian() * 0.02D;
-                    double var11 = 5.0D;
-                    this.shootingEntity.worldObj.spawnParticle("flame", this.shootingEntity.posX + (double)(this.rand.nextFloat() * this.shootingEntity.width * 2.0F) - (double)this.shootingEntity.width - var5 * var11, this.shootingEntity.posY + (double)(this.rand.nextFloat() * (this.shootingEntity.height - 0.6F)) - var7 * var11, this.shootingEntity.posZ + (double)(this.rand.nextFloat() * this.shootingEntity.width * 2.0F) - (double)this.shootingEntity.width - var9 * var11, var5, var7, var9);
-                    this.shootingEntity.worldObj.spawnParticle("largeexplode", this.shootingEntity.posX + (double)(this.rand.nextFloat() * this.shootingEntity.width * 2.0F) - (double)this.shootingEntity.width - var5 * var11, this.shootingEntity.posY + (double)(this.rand.nextFloat() * (this.shootingEntity.height - 0.6F)) - var7 * var11, this.shootingEntity.posZ + (double)(this.rand.nextFloat() * this.shootingEntity.width * 2.0F) - (double)this.shootingEntity.width - var9 * var11, var5, var7, var9);
+                    double d = this.rand.nextGaussian() * 0.02D;
+                    double d1 = this.rand.nextGaussian() * 0.02D;
+                    double d2 = this.rand.nextGaussian() * 0.02D;
+                    double d3 = 5.0D;
+                    this.shootingEntity.worldObj.spawnParticle("flame", this.shootingEntity.posX + (double)(this.rand.nextFloat() * this.shootingEntity.width * 2.0F) - (double)this.shootingEntity.width - d * d3, this.shootingEntity.posY + (double)(this.rand.nextFloat() * (this.shootingEntity.height - 0.6F)) - d1 * d3, this.shootingEntity.posZ + (double)(this.rand.nextFloat() * this.shootingEntity.width * 2.0F) - (double)this.shootingEntity.width - d2 * d3, d, d1, d2);
+                    this.shootingEntity.worldObj.spawnParticle("largeexplode", this.shootingEntity.posX + (double)(this.rand.nextFloat() * this.shootingEntity.width * 2.0F) - (double)this.shootingEntity.width - d * d3, this.shootingEntity.posY + (double)(this.rand.nextFloat() * (this.shootingEntity.height - 0.6F)) - d1 * d3, this.shootingEntity.posZ + (double)(this.rand.nextFloat() * this.shootingEntity.width * 2.0F) - (double)this.shootingEntity.width - d2 * d3, d, d1, d2);
                 }
             }
 
@@ -299,5 +299,5 @@ public class EntityZephyrSnowball extends Entity implements IThrowableEntity
         return null;
     }
 
-    public void setThrower(Entity var1) {}
+    public void setThrower(Entity entity) {}
 }

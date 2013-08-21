@@ -21,20 +21,18 @@ public class ItemValkyrieShovel extends ItemSpade
     private int weaponDamage = 1;
     private static Random random = new Random();
 
-    public ItemValkyrieShovel(int var1, EnumToolMaterial var2)
+    public ItemValkyrieShovel(int i, EnumToolMaterial enumtoolmaterial)
     {
-        super(var1, var2);
+        super(i, enumtoolmaterial);
     }
 
-    public Item setIconName(String var1)
+    public Item setIconName(String name)
     {
-        return this.setUnlocalizedName("Aether:" + var1);
+        this.field_111218_cA = "aether:" + name;
+        return this.setUnlocalizedName("aether:" + name);
     }
 
-    /**
-     * Returns the damage against a given entity.
-     */
-    public int getDamageVsEntity(Entity var1)
+    public int getDamageVsEntity(Entity entity)
     {
         return 0;
     }
@@ -42,16 +40,12 @@ public class ItemValkyrieShovel extends ItemSpade
     /**
      * returns the action that specifies what animation to play when the items is being used
      */
-    public EnumAction getItemUseAction(ItemStack var1)
+    public EnumAction getItemUseAction(ItemStack par1ItemStack)
     {
         return EnumAction.none;
     }
 
-    /**
-     * Current implementations of this method in child classes do not use the entry argument beside ev. They just raise
-     * the damage on the stack.
-     */
-    public boolean hitEntity(ItemStack var1, EntityLiving var2, EntityLiving var3)
+    public boolean hitEntity(ItemStack itemstack, EntityLiving entityliving, EntityLiving entityliving1)
     {
         return false;
     }
@@ -60,62 +54,62 @@ public class ItemValkyrieShovel extends ItemSpade
      * Called each tick as long the item is on a player inventory. Uses by maps to check if is on a player hand and
      * update it's contents.
      */
-    public void onUpdate(ItemStack var1, World var2, Entity var3, int var4, boolean var5)
+    public void onUpdate(ItemStack itemstack, World world, Entity entity, int i, boolean flag)
     {
-        if (var5)
+        if (flag)
         {
-            if (var3 instanceof EntityPlayer)
+            if (entity instanceof EntityPlayer)
             {
-                EntityPlayer var6 = (EntityPlayer)var3;
+                EntityPlayer player = (EntityPlayer)entity;
 
-                if (var6.swingProgressInt == -1)
+                if (player.swingProgress == -1.0F)
                 {
-                    Vec3 var7 = var6.getLookVec();
-                    double var8 = 8.0D;
-                    AxisAlignedBB var10 = var6.boundingBox.expand(var8, var8, var8);
-                    List var11 = var2.getEntitiesWithinAABB(Entity.class, var10);
-                    Entity var12 = null;
-                    double var13 = 0.0D;
-                    Iterator var15 = var11.iterator();
+                    Vec3 look = player.getLookVec();
+                    double dist = 8.0D;
+                    AxisAlignedBB aabb = player.boundingBox.expand(dist, dist, dist);
+                    List list = world.getEntitiesWithinAABB(Entity.class, aabb);
+                    Entity found = null;
+                    double foundLen = 0.0D;
+                    Iterator i$ = list.iterator();
 
-                    while (var15.hasNext())
+                    while (i$.hasNext())
                     {
-                        Object var16 = var15.next();
+                        Object o = i$.next();
 
-                        if (var16 != var6)
+                        if (o != player)
                         {
-                            Entity var17 = (Entity)var16;
+                            Entity ent = (Entity)o;
 
-                            if (var17.canBeCollidedWith())
+                            if (ent.canBeCollidedWith())
                             {
-                                Vec3 var18 = Vec3.createVectorHelper(var17.posX - var6.posX, var17.boundingBox.minY + (double)(var17.height / 2.0F) - var6.posY - (double)var6.getEyeHeight(), var17.posZ - var6.posZ);
-                                double var19 = var18.lengthVector();
+                                Vec3 vec = Vec3.createVectorHelper(ent.posX - player.posX, ent.boundingBox.minY + (double)(ent.height / 2.0F) - player.posY - (double)player.getEyeHeight(), ent.posZ - player.posZ);
+                                double len = vec.lengthVector();
 
-                                if (var19 <= var8)
+                                if (len <= dist)
                                 {
-                                    var18 = var18.normalize();
-                                    double var21 = var7.dotProduct(var18);
+                                    vec = vec.normalize();
+                                    double dot = look.dotProduct(vec);
 
-                                    if (var21 >= 1.0D - 0.125D / var19 && var6.canEntityBeSeen(var17) && (var13 == 0.0D || var19 < var13))
+                                    if (dot >= 1.0D - 0.125D / len && player.canEntityBeSeen(ent) && (foundLen == 0.0D || len < foundLen))
                                     {
-                                        var12 = var17;
-                                        var13 = var19;
+                                        found = ent;
+                                        foundLen = len;
                                     }
                                 }
                             }
                         }
                     }
 
-                    if (var12 == null)
+                    if (found == null)
                     {
                         return;
                     }
 
-                    var12.attackEntityFrom(DamageSource.causePlayerDamage(var6), this.weaponDamage);
+                    found.attackEntityFrom(DamageSource.causePlayerDamage(player), (float)this.weaponDamage);
 
-                    if (var12 instanceof EntityLiving)
+                    if (found instanceof EntityLiving)
                     {
-                        var1.damageItem(1, (EntityLiving)var12);
+                        itemstack.damageItem(1, (EntityLiving)found);
                     }
                 }
             }

@@ -8,21 +8,21 @@ import net.minecraft.world.World;
 
 public class EntityRewardItem extends EntityItem
 {
-    public EntityRewardItem(World var1, double var2, double var4, double var6, String var8)
+    public EntityRewardItem(World par1World, double par2, double par4, double par6, String playerName)
     {
-        super(var1);
-        this.setPlayerName(var8);
+        super(par1World);
+        this.setPlayerName(playerName);
     }
 
-    public EntityRewardItem(World var1, double var2, double var4, double var6, ItemStack var8, String var9)
+    public EntityRewardItem(World par1World, double par2, double par4, double par6, ItemStack par8ItemStack, String playerName)
     {
-        super(var1, var2, var4, var6, var8);
-        this.setPlayerName(var9);
+        super(par1World, par2, par4, par6, par8ItemStack);
+        this.setPlayerName(playerName);
     }
 
-    public EntityRewardItem(World var1)
+    public EntityRewardItem(World par1World)
     {
-        super(var1);
+        super(par1World);
     }
 
     protected void entityInit()
@@ -31,9 +31,9 @@ public class EntityRewardItem extends EntityItem
         this.dataWatcher.addObject(16, String.valueOf(""));
     }
 
-    public void setPlayerName(String var1)
+    public void setPlayerName(String playerName)
     {
-        this.dataWatcher.updateObject(16, var1);
+        this.dataWatcher.updateObject(16, playerName);
     }
 
     public String getPlayerName()
@@ -41,9 +41,12 @@ public class EntityRewardItem extends EntityItem
         return this.dataWatcher.getWatchableObjectString(16);
     }
 
+    /**
+     * Looks for other itemstacks nearby and tries to stack them together
+     */
     private void searchForOtherItemsNearby() {}
 
-    public boolean combineItems(EntityRewardItem var1)
+    public boolean combineItems(EntityRewardItem par1EntityItem)
     {
         return false;
     }
@@ -51,29 +54,29 @@ public class EntityRewardItem extends EntityItem
     /**
      * (abstract) Protected helper method to write subclass entity data to NBT.
      */
-    public void writeEntityToNBT(NBTTagCompound var1)
+    public void writeEntityToNBT(NBTTagCompound tag)
     {
-        super.writeEntityToNBT(var1);
-        var1.setString("PlayerName", this.getPlayerName());
+        super.writeEntityToNBT(tag);
+        tag.setString("PlayerName", this.getPlayerName());
     }
 
     /**
      * (abstract) Protected helper method to read subclass entity data from NBT.
      */
-    public void readEntityFromNBT(NBTTagCompound var1)
+    public void readEntityFromNBT(NBTTagCompound tag)
     {
-        super.readEntityFromNBT(var1);
-        this.setPlayerName(var1.getString("PlayerName"));
+        super.readEntityFromNBT(tag);
+        this.setPlayerName(tag.getString("PlayerName"));
     }
 
     /**
      * Called by a player entity when they collide with an entity
      */
-    public void onCollideWithPlayer(EntityPlayer var1)
+    public void onCollideWithPlayer(EntityPlayer par1EntityPlayer)
     {
-        if (!this.worldObj.isRemote && this.getPlayerName() != null && var1.username.equalsIgnoreCase(this.getPlayerName()))
+        if (!this.worldObj.isRemote && this.getPlayerName() != null && par1EntityPlayer.username.equalsIgnoreCase(this.getPlayerName()))
         {
-            super.onCollideWithPlayer(var1);
+            super.onCollideWithPlayer(par1EntityPlayer);
         }
     }
 }

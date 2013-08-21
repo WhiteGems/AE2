@@ -13,8 +13,8 @@ public class ValkyrieMoaChoice extends MoaChoice
         super("Valkyrie Moa", EnumChoiceType.MOA, new DonatorTexture("saddle_Valkyrie.png", "Valkyrie.png", 256, 128));
     }
 
-    public void spawnParticleEffects(Random var1, EntityPlayer var2)
+    public void spawnParticleEffects(Random random, EntityPlayer player)
     {
-        Aether.proxy.spawnDonatorMoaParticles(var2, var1);
+        Aether.proxy.spawnDonatorMoaParticles(player, random);
     }
 }

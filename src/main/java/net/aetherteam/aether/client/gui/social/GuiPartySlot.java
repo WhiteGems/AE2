@@ -21,36 +21,35 @@ public class GuiPartySlot extends Gui
     private static final int LEADER_TEXT_COLOR = 26367;
     public Party party;
 
-    public GuiPartySlot(Party var1, int var2, int var3, int var4, int var5, int var6)
+    public GuiPartySlot(Party party, int id, int x, int y, int width, int height)
     {
-        this.width = var5;
-        this.height = var6;
+        this.width = width;
+        this.height = height;
         this.enabled = true;
         this.drawButton = true;
-        this.id = var2;
-        this.xPosition = var3;
-        this.yPosition = var4;
-        this.party = var1;
+        this.id = id;
+        this.xPosition = x;
+        this.yPosition = y;
+        this.party = party;
     }
 
-    public void drawPartySlot(int var1, int var2, int var3, int var4)
+    public void drawPartySlot(int x, int y, int width, int height)
     {
-        this.xPosition = var1;
-        this.yPosition = var2;
-        this.drawGradientRect(this.xPosition, this.yPosition, this.xPosition + var3, this.yPosition + var4, this.selected ? -10439830 : -13421773, this.selected ? -11563178 : -11184811);
-        Minecraft var5 = Minecraft.getMinecraft();
-        FontRenderer var6 = var5.fontRenderer;
-        var5.renderEngine.resetBoundTexture();
-        var6.drawStringWithShadow(this.party.getName(), var1 + var4 - 19, var2 + 2, 15066597);
+        this.xPosition = x;
+        this.yPosition = y;
+        this.drawGradientRect(this.xPosition, this.yPosition, this.xPosition + width, this.yPosition + height, this.selected ? -10439830 : -13421773, this.selected ? -11563178 : -11184811);
+        Minecraft mc = Minecraft.getMinecraft();
+        FontRenderer fontRenderer = mc.fontRenderer;
+        fontRenderer.drawStringWithShadow(this.party.getName(), x + height - 19, y + 2, 15066597);
         GL11.glPushMatrix();
         GL11.glScalef(0.75F, 0.75F, 1.0F);
-        var6.drawString(this.party.getLeader().username, (int)(((float)var1 + (float)var4) / 0.75F - 22.0F + (float)(this.party.getType().name().length() * 6)), (int)(((float)var2 + 12.0F) / 0.75F), 26367);
-        var6.drawString(this.party.getType().name(), (int)(((float)var1 + (float)var4) / 0.75F) - 25, (int)(((float)var2 + 12.0F) / 0.75F), this.party.getType().getDisplayColor());
+        fontRenderer.drawString(this.party.getLeader().username, (int)(((float)x + (float)height) / 0.75F - 22.0F + (float)(this.party.getType().name().length() * 6)), (int)(((float)y + 12.0F) / 0.75F), 26367);
+        fontRenderer.drawString(this.party.getType().name(), (int)(((float)x + (float)height) / 0.75F) - 25, (int)(((float)y + 12.0F) / 0.75F), this.party.getType().getDisplayColor());
         GL11.glPopMatrix();
     }
 
-    public boolean mousePressed(Minecraft var1, int var2, int var3)
+    public boolean mousePressed(Minecraft par1Minecraft, int par2, int par3)
     {
-        return this.enabled && this.drawButton && var2 >= this.xPosition && var3 >= this.yPosition && var2 < this.xPosition + this.width && var3 < this.yPosition + this.height;
+        return this.enabled && this.drawButton && par2 >= this.xPosition && par3 >= this.yPosition && par2 < this.xPosition + this.width && par3 < this.yPosition + this.height;
     }
 }

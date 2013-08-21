@@ -20,50 +20,50 @@ public class TileEntityTreasureChest extends TileEntityChest
     /**
      * Reads a tile entity from NBT.
      */
-    public void readFromNBT(NBTTagCompound var1)
+    public void readFromNBT(NBTTagCompound par1nbtTagCompound)
     {
-        super.readFromNBT(var1);
-        this.locked = var1.getBoolean("locked");
-        this.kind = var1.getInteger("kind");
+        super.readFromNBT(par1nbtTagCompound);
+        this.locked = par1nbtTagCompound.getBoolean("locked");
+        this.kind = par1nbtTagCompound.getInteger("kind");
     }
 
     /**
      * Writes a tile entity to NBT.
      */
-    public void writeToNBT(NBTTagCompound var1)
+    public void writeToNBT(NBTTagCompound par1nbtTagCompound)
     {
-        super.writeToNBT(var1);
-        var1.setBoolean("locked", this.locked);
-        var1.setInteger("kind", this.kind);
+        super.writeToNBT(par1nbtTagCompound);
+        par1nbtTagCompound.setBoolean("locked", this.locked);
+        par1nbtTagCompound.setInteger("kind", this.kind);
     }
 
-    public void unlock(int var1)
+    public void unlock(int kind)
     {
-        this.kind = var1;
-        Random var2 = new Random();
-        int var3;
+        this.kind = kind;
+        Random random = new Random();
+        int p;
 
-        if (var1 == 0)
+        if (kind == 0)
         {
-            for (var3 = 0; var3 < 5 + var2.nextInt(1); ++var3)
+            for (p = 0; p < 5 + random.nextInt(1); ++p)
             {
-                this.setInventorySlotContents(var2.nextInt(this.getSizeInventory()), AetherLoot.BRONZE.getRandomItem(var2));
+                this.setInventorySlotContents(random.nextInt(this.getSizeInventory()), AetherLoot.BRONZE.getRandomItem(random));
             }
         }
 
-        if (var1 == 1)
+        if (kind == 1)
         {
-            for (var3 = 0; var3 < 5 + var2.nextInt(1); ++var3)
+            for (p = 0; p < 5 + random.nextInt(1); ++p)
             {
-                this.setInventorySlotContents(var2.nextInt(this.getSizeInventory()), AetherLoot.SILVER.getRandomItem(var2));
+                this.setInventorySlotContents(random.nextInt(this.getSizeInventory()), AetherLoot.SILVER.getRandomItem(random));
             }
         }
 
-        if (var1 == 2)
+        if (kind == 2)
         {
-            for (var3 = 0; var3 < 5 + var2.nextInt(1); ++var3)
+            for (p = 0; p < 5 + random.nextInt(1); ++p)
             {
-                this.setInventorySlotContents(var2.nextInt(this.getSizeInventory()), AetherLoot.GOLD.getRandomItem(var2));
+                this.setInventorySlotContents(random.nextInt(this.getSizeInventory()), AetherLoot.GOLD.getRandomItem(random));
             }
         }
 
@@ -75,9 +75,9 @@ public class TileEntityTreasureChest extends TileEntityChest
         }
     }
 
-    public void onDataPacket(INetworkManager var1, Packet132TileEntityData var2)
+    public void onDataPacket(INetworkManager net, Packet132TileEntityData pkt)
     {
-        this.readFromNBT(var2.customParam1);
+        this.readFromNBT(pkt.customParam1);
     }
 
     /**
@@ -90,19 +90,19 @@ public class TileEntityTreasureChest extends TileEntityChest
         return new Packet132TileEntityData(this.xCoord, this.yCoord, this.zCoord, 1, var1);
     }
 
-    private void sendToAllInOurWorld(Packet var1)
+    private void sendToAllInOurWorld(Packet pkt)
     {
-        ServerConfigurationManager var2 = FMLCommonHandler.instance().getMinecraftServerInstance().getConfigurationManager();
-        Iterator var3 = var2.playerEntityList.iterator();
+        ServerConfigurationManager scm = FMLCommonHandler.instance().getMinecraftServerInstance().getConfigurationManager();
+        Iterator i$ = scm.playerEntityList.iterator();
 
-        while (var3.hasNext())
+        while (i$.hasNext())
         {
-            Object var4 = var3.next();
-            EntityPlayerMP var5 = (EntityPlayerMP)var4;
+            Object obj = i$.next();
+            EntityPlayerMP player = (EntityPlayerMP)obj;
 
-            if (var5.worldObj == this.worldObj)
+            if (player.worldObj == this.worldObj)
             {
-                var5.playerNetServerHandler.sendPacketToPlayer(var1);
+                player.playerNetServerHandler.sendPacketToPlayer(pkt);
             }
         }
     }

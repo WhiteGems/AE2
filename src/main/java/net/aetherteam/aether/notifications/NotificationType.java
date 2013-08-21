@@ -17,32 +17,32 @@ public enum NotificationType
     public NotificationContents typeContents;
     public NotificationAction action;
 
-    private NotificationType(String var3, NotificationAction var4)
+    private NotificationType(String typeName, NotificationAction action)
     {
-        this.typeName = var3;
-        this.action = var4;
+        this.typeName = typeName;
+        this.action = action;
         this.typeContents = new GenericContents();
     }
 
-    private NotificationType(String var3, NotificationAction var4, NotificationContents var5)
+    private NotificationType(String typeName, NotificationAction action, NotificationContents typeContents)
     {
-        this.typeName = var3;
-        this.action = var4;
-        this.typeContents = var5;
+        this.typeName = typeName;
+        this.action = action;
+        this.typeContents = typeContents;
     }
 
-    public static NotificationType getTypeFromString(String var0)
+    public static NotificationType getTypeFromString(String name)
     {
-        NotificationType[] var1 = values();
-        int var2 = var1.length;
+        NotificationType[] arr$ = values();
+        int len$ = arr$.length;
 
-        for (int var3 = 0; var3 < var2; ++var3)
+        for (int i$ = 0; i$ < len$; ++i$)
         {
-            NotificationType var4 = var1[var3];
+            NotificationType type = arr$[i$];
 
-            if (var4.name().equalsIgnoreCase(var0))
+            if (type.name().equalsIgnoreCase(name))
             {
-                return var4;
+                return type;
             }
         }
 

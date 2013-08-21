@@ -13,9 +13,9 @@ import net.minecraft.world.World;
 
 public class BlockAmbrosiumOre extends BlockAether implements IAetherBlock
 {
-    public BlockAmbrosiumOre(int var1)
+    public BlockAmbrosiumOre(int blockID)
     {
-        super(var1, Material.rock);
+        super(blockID, Material.rock);
         this.setHardness(3.0F);
         this.setResistance(5.0F);
         this.setStepSound(Block.soundStoneFootstep);
@@ -25,45 +25,45 @@ public class BlockAmbrosiumOre extends BlockAether implements IAetherBlock
      * Called when the player destroys a block with an item that can harvest it. (i, j, k) are the coordinates of the
      * block and l is the block's subtype/damage.
      */
-    public void harvestBlock(World var1, EntityPlayer var2, int var3, int var4, int var5, int var6)
+    public void harvestBlock(World world, EntityPlayer entityplayer, int x, int y, int z, int meta)
     {
-        var2.addStat(StatList.mineBlockStatArray[this.blockID], 1);
-        var2.addExhaustion(0.025F);
-        int var7 = EnchantmentHelper.getFortuneModifier(var2) != 0 ? EnchantmentHelper.getFortuneModifier(var2) : 1;
+        entityplayer.addStat(StatList.mineBlockStatArray[this.blockID], 1);
+        entityplayer.addExhaustion(0.025F);
+        int i1 = EnchantmentHelper.getFortuneModifier(entityplayer) != 0 ? EnchantmentHelper.getFortuneModifier(entityplayer) : 1;
 
-        if (!var1.isRemote)
+        if (!world.isRemote)
         {
-            ItemStack var8;
+            ItemStack stack;
 
-            if (this.canSilkHarvest(var1, var2, var3, var4, var5, var6) && EnchantmentHelper.getSilkTouchModifier(var2))
+            if (this.canSilkHarvest(world, entityplayer, x, y, z, meta) && EnchantmentHelper.getSilkTouchModifier(entityplayer))
             {
-                var8 = this.createStackedBlock(var6);
+                stack = this.createStackedBlock(meta);
 
-                if (var8 != null)
+                if (stack != null)
                 {
-                    this.dropBlockAsItem_do(var1, var3, var4, var5, var8);
+                    this.dropBlockAsItem_do(world, x, y, z, stack);
                 }
             }
-            else if (var6 == 0 && var2.getCurrentEquippedItem() != null && var2.getCurrentEquippedItem().itemID == AetherItems.SkyrootPickaxe.itemID)
+            else if (meta == 0 && entityplayer.getCurrentEquippedItem() != null && entityplayer.getCurrentEquippedItem().itemID == AetherItems.SkyrootPickaxe.itemID)
             {
-                var8 = new ItemStack(AetherItems.AmbrosiumShard.itemID, MathHelper.clamp_int((new Random()).nextInt(var7 * 5), 1, var7 * 5 + 1), 0);
-                var2.addStat(StatList.mineBlockStatArray[this.blockID], 1);
-                this.dropBlockAsItem_do(var1, var3, var4, var5, var8);
+                stack = new ItemStack(AetherItems.AmbrosiumShard.itemID, MathHelper.clamp_int((new Random()).nextInt(i1 * 5), 1, i1 * 5 + 1), 0);
+                entityplayer.addStat(StatList.mineBlockStatArray[this.blockID], 1);
+                this.dropBlockAsItem_do(world, x, y, z, stack);
             }
             else
             {
-                var8 = new ItemStack(AetherItems.AmbrosiumShard.itemID, MathHelper.clamp_int((new Random()).nextInt(var7), 1, var7 + 1), 0);
-                this.dropBlockAsItem_do(var1, var3, var4, var5, var8);
+                stack = new ItemStack(AetherItems.AmbrosiumShard.itemID, MathHelper.clamp_int((new Random()).nextInt(i1), 1, i1 + 1), 0);
+                this.dropBlockAsItem_do(world, x, y, z, stack);
             }
 
-            this.dropXpOnBlockBreak(var1, var3, var4, var5, 2);
+            this.dropXpOnBlockBreak(world, x, y, z, 2);
         }
     }
 
     /**
      * Returns the ID of the items to drop on destruction.
      */
-    public int idDropped(int var1, Random var2, int var3)
+    public int idDropped(int i, Random random, int k)
     {
         return AetherItems.AmbrosiumShard.itemID;
     }

@@ -5,38 +5,40 @@ import java.lang.reflect.InvocationTargetException;
 import net.aetherteam.playercore_api.PlayerCoreAPI;
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemInWorldManager;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.FoodStats;
+import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 
-public class PlayerCoreServer extends EntityPlayerMP
+public class PlayerCoreServer extends EntityPlayerMP implements IPlayerCoreCommon
 {
     protected PlayerCoreServer nextPlayerCore;
     protected PlayerCoreServer player;
     private boolean shouldCallSuper;
 
-    public PlayerCoreServer(MinecraftServer var1, World var2, String var3, ItemInWorldManager var4)
+    public PlayerCoreServer(MinecraftServer par1MinecraftServer, World par2World, String par3Str, ItemInWorldManager par4ItemInWorldManager)
     {
-        this(var1, var2, var3, var4, 0, (PlayerCoreServer)null);
+        this(par1MinecraftServer, par2World, par3Str, par4ItemInWorldManager, 0, (PlayerCoreServer)null);
     }
 
-    public PlayerCoreServer(MinecraftServer var1, World var2, String var3, ItemInWorldManager var4, int var5, PlayerCoreServer var6)
+    public PlayerCoreServer(MinecraftServer par1MinecraftServer, World par2World, String par3Str, ItemInWorldManager par4ItemInWorldManager, int playerCoreIndex, PlayerCoreServer entityPlayerMP)
     {
-        super(var1, var2, var3, new ItemInWorldManager(var2));
-        this.player = var6 == null ? this : var6;
+        super(par1MinecraftServer, par2World, par3Str, new ItemInWorldManager(par2World));
+        this.player = entityPlayerMP == null ? this : entityPlayerMP;
 
-        if (var5 < PlayerCoreAPI.playerCoreServerList.size())
+        if (playerCoreIndex < PlayerCoreAPI.playerCoreServerList.size())
         {
-            Class var7 = (Class)PlayerCoreAPI.playerCoreServerList.get(var5);
+            Class nextPlayerCoreClass = (Class)PlayerCoreAPI.playerCoreServerList.get(playerCoreIndex);
 
             try
             {
-                Constructor var8 = var7.getConstructor(new Class[] {MinecraftServer.class, World.class, String.class, ItemInWorldManager.class, Integer.TYPE, PlayerCoreServer.class});
-                this.nextPlayerCore = (PlayerCoreServer)var8.newInstance(new Object[] {var1, var2, var3, var4, Integer.valueOf(var5 + 1), this.player});
+                Constructor constructor = nextPlayerCoreClass.getConstructor(new Class[] {MinecraftServer.class, World.class, String.class, ItemInWorldManager.class, Integer.TYPE, PlayerCoreServer.class});
+                this.nextPlayerCore = (PlayerCoreServer)constructor.newInstance(new Object[] {par1MinecraftServer, par2World, par3Str, par4ItemInWorldManager, Integer.valueOf(playerCoreIndex + 1), this.player});
             }
             catch (SecurityException var10)
             {
@@ -69,9 +71,9 @@ public class PlayerCoreServer extends EntityPlayerMP
         }
     }
 
-    public PlayerCoreServer getPlayerCoreObject(Class var1)
+    public PlayerCoreServer getPlayerCoreObject(Class clazz)
     {
-        return this.getClass() == var1 ? this : (this.nextPlayerCore == this.player ? null : this.nextPlayerCore.getPlayerCoreObject(var1));
+        return this.getClass() == clazz ? this : (this.nextPlayerCore == this.player ? null : this.nextPlayerCore.getPlayerCoreObject(clazz));
     }
 
     private boolean shouldCallSuper()
@@ -122,45 +124,45 @@ public class PlayerCoreServer extends EntityPlayerMP
     /**
      * (abstract) Protected helper method to write subclass entity data to NBT.
      */
-    public void writeEntityToNBT(NBTTagCompound var1)
+    public void writeEntityToNBT(NBTTagCompound tag)
     {
         if (!this.shouldCallSuper())
         {
-            this.nextPlayerCore.writeEntityToNBT(var1);
+            this.nextPlayerCore.writeEntityToNBT(tag);
         }
         else
         {
-            super.writeEntityToNBT(var1);
+            super.writeEntityToNBT(tag);
         }
     }
 
     /**
      * (abstract) Protected helper method to read subclass entity data from NBT.
      */
-    public void readEntityFromNBT(NBTTagCompound var1)
+    public void readEntityFromNBT(NBTTagCompound tag)
     {
         if (!this.shouldCallSuper())
         {
-            this.nextPlayerCore.readEntityFromNBT(var1);
+            this.nextPlayerCore.readEntityFromNBT(tag);
         }
         else
         {
-            super.readEntityFromNBT(var1);
+            super.readEntityFromNBT(tag);
         }
     }
 
     /**
      * Called when the mob's health reaches 0.
      */
-    public void onDeath(DamageSource var1)
+    public void onDeath(DamageSource source)
     {
         if (!this.shouldCallSuper())
         {
-            this.nextPlayerCore.onDeath(var1);
+            this.nextPlayerCore.onDeath(source);
         }
         else
         {
-            super.onDeath(var1);
+            super.onDeath(source);
         }
     }
 
@@ -182,31 +184,22 @@ public class PlayerCoreServer extends EntityPlayerMP
     /**
      * Heal living entity (param: amount of half-hearts)
      */
-    public void heal(int var1)
+    public void heal(float i)
     {
         if (!this.shouldCallSuper())
         {
-            this.nextPlayerCore.heal(var1);
+            this.nextPlayerCore.heal(i);
         }
         else
         {
-            super.heal(var1);
+            super.heal(i);
         }
-    }
-
-    /**
-     * This method returns a value to be applied directly to entity speed, this factor is less than 1 when a slowdown
-     * potion effect is applied, more than 1 when a haste potion effect is applied and 2 for fleeing entities.
-     */
-    public float getSpeedModifier()
-    {
-        return !this.shouldCallSuper() ? this.nextPlayerCore.getSpeedModifier() : super.getSpeedModifier();
     }
 
     /**
      * Called when the entity is attacked.
      */
-    public boolean attackEntityFrom(DamageSource var1, int var2)
+    public boolean attackEntityFrom(DamageSource var1, float var2)
     {
         return !this.shouldCallSuper() ? this.nextPlayerCore.attackEntityFrom(var1, var2) : super.attackEntityFrom(var1, var2);
     }
@@ -215,22 +208,22 @@ public class PlayerCoreServer extends EntityPlayerMP
      * Attacks for the player the targeted entity with the currently equipped item.  The equipped item has hitEntity
      * called on it. Args: targetEntity
      */
-    public void attackTargetEntityWithCurrentItem(Entity var1)
+    public void attackTargetEntityWithCurrentItem(Entity ent)
     {
         if (!this.shouldCallSuper())
         {
-            this.nextPlayerCore.attackTargetEntityWithCurrentItem(var1);
+            this.nextPlayerCore.attackTargetEntityWithCurrentItem(ent);
         }
         else
         {
-            super.attackTargetEntityWithCurrentItem(var1);
+            super.attackTargetEntityWithCurrentItem(ent);
         }
     }
 
     /**
      * knocks back this entity
      */
-    public void knockBack(Entity var1, int var2, double var3, double var5)
+    public void knockBack(Entity var1, float var2, double var3, double var5)
     {
         if (!this.shouldCallSuper())
         {
@@ -245,9 +238,9 @@ public class PlayerCoreServer extends EntityPlayerMP
     /**
      * Returns how strong the player is against the specified block at this moment
      */
-    public float getCurrentPlayerStrVsBlock(Block var1, boolean var2)
+    public float getCurrentPlayerStrVsBlock(Block block, boolean flag)
     {
-        return !this.shouldCallSuper() ? this.nextPlayerCore.getCurrentPlayerStrVsBlock(var1, var2) : super.getCurrentPlayerStrVsBlock(var1, var2);
+        return !this.shouldCallSuper() ? this.nextPlayerCore.getCurrentPlayerStrVsBlock(block, flag) : super.getCurrentPlayerStrVsBlock(block, flag);
     }
 
     /**
@@ -260,16 +253,32 @@ public class PlayerCoreServer extends EntityPlayerMP
     }
 
     /**
-     * Enable or disable a entity flag, see getEntityFlag to read the know flags.
+     * Returns if this entity is in water and will end up adding the waters velocity to the entity
      */
-    public void setFlag(int var1, boolean var2)
+    public boolean handleWaterMovement()
     {
-        super.setFlag(var1, var2);
+        return !this.shouldCallSuper() ? this.nextPlayerCore.handleWaterMovement() : super.handleWaterMovement();
     }
 
-    public void setFoodStats(FoodStats var1)
+    /**
+     * Whether or not the current entity is in lava
+     */
+    public boolean handleLavaMovement()
     {
-        this.foodStats = var1;
+        return !this.shouldCallSuper() ? this.nextPlayerCore.handleLavaMovement() : super.handleLavaMovement();
+    }
+
+    /**
+     * Enable or disable a entity flag, see getEntityFlag to read the know flags.
+     */
+    public void setFlag(int par1, boolean par2)
+    {
+        super.setFlag(par1, par2);
+    }
+
+    public void setFoodStats(FoodStats foodStats)
+    {
+        this.foodStats = foodStats;
     }
 
     public float getMoveForward()
@@ -282,8 +291,58 @@ public class PlayerCoreServer extends EntityPlayerMP
         return this.moveStrafing;
     }
 
-    public void setMoveStrafing(float var1)
+    public void setMoveForward(float moveFoward)
     {
-        this.moveStrafing = var1;
+        this.moveForward = moveFoward;
+    }
+
+    public void setMoveStrafing(float moveStrafing)
+    {
+        this.moveStrafing = moveStrafing;
+    }
+
+    public boolean isJumping()
+    {
+        return this.player.isJumping;
+    }
+
+    public float updateRotation(float par1, float par2, float par3)
+    {
+        float f3 = MathHelper.wrapAngleTo180_float(par2 - par1);
+
+        if (f3 > par3)
+        {
+            f3 = par3;
+        }
+
+        if (f3 < -par3)
+        {
+            f3 = -par3;
+        }
+
+        return par1 + f3;
+    }
+
+    public void faceEntity(Entity par1Entity, float par2, float par3)
+    {
+        double d0 = par1Entity.posX - this.posX;
+        double d1 = par1Entity.posZ - this.posZ;
+        double d2;
+
+        if (par1Entity instanceof EntityLivingBase)
+        {
+            EntityLivingBase d3 = (EntityLivingBase)par1Entity;
+            d2 = d3.posY + (double)d3.getEyeHeight() - (this.posY + (double)this.getEyeHeight());
+        }
+        else
+        {
+            d2 = (par1Entity.boundingBox.minY + par1Entity.boundingBox.maxY) / 2.0D - (this.posY + (double)this.getEyeHeight());
+        }
+
+        double d31 = (double)MathHelper.sqrt_double(d0 * d0 + d1 * d1);
+        float f2 = (float)(Math.atan2(d1, d0) * 180.0D / Math.PI) - 90.0F;
+        float f3 = (float)(-(Math.atan2(d2, d31) * 180.0D / Math.PI));
+        this.rotationPitch = this.updateRotation(this.rotationPitch, f3, par3);
+        this.rotationYaw = this.updateRotation(this.rotationYaw, f2, par2);
     }
 }

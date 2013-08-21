@@ -14,25 +14,25 @@ public class EntityProjectileSentry extends EntityThrowable
     public float renderYawOffset;
     public static int texfxindex = 94;
 
-    public EntityProjectileSentry(World var1)
+    public EntityProjectileSentry(World world)
     {
-        super(var1);
+        super(world);
         this.setSize(2.0F, 2.0F);
     }
 
-    public EntityProjectileSentry(World var1, double var2, double var4, double var6)
+    public EntityProjectileSentry(World world, double x, double y, double z)
     {
-        super(var1, var2, var4, var6);
+        super(world, x, y, z);
     }
 
-    public EntityProjectileSentry(World var1, double var2, double var4, double var6, EntityLiving var8)
+    public EntityProjectileSentry(World world, double x, double y, double z, EntityLiving thrower)
     {
-        super(var1, var2, var4, var6);
+        super(world, x, y, z);
     }
 
-    public EntityProjectileSentry(World var1, EntityLiving var2)
+    public EntityProjectileSentry(World world, EntityLiving ent)
     {
-        super(var1, var2);
+        super(world, ent);
     }
 
     /**
@@ -46,9 +46,9 @@ public class EntityProjectileSentry extends EntityThrowable
 
             if (var1.entityHit instanceof EntityPlayer)
             {
-                EntityPlayer var2 = (EntityPlayer)var1.entityHit;
+                EntityPlayer player = (EntityPlayer)var1.entityHit;
 
-                if (var2.isBlocking() && var2.getItemInUseDuration() < 30)
+                if (player.isBlocking() && player.getItemInUseDuration() < 30)
                 {
                     this.motionX = -this.motionX;
                     this.motionY = -this.motionY;
@@ -64,7 +64,7 @@ public class EntityProjectileSentry extends EntityThrowable
                 var1.entityHit.addVelocity(0.0D, 1.0D, 0.0D);
                 var1.entityHit.addVelocity(0.0D, 0.0D, 1.0D);
                 var1.entityHit.velocityChanged = true;
-                var1.entityHit.attackEntityFrom(DamageSource.generic.setExplosion(), MathHelper.clamp_int(this.rand.nextInt(4), 1, 4));
+                var1.entityHit.attackEntityFrom(DamageSource.generic.setExplosion(), (float)MathHelper.clamp_int(this.rand.nextInt(4), 1, 4));
             }
 
             this.setDead();

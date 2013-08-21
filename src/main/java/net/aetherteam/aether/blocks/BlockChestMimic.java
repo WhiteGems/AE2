@@ -11,9 +11,9 @@ import net.minecraft.world.World;
 
 public class BlockChestMimic extends BlockSkyrootChest implements IAetherBlock
 {
-    protected BlockChestMimic(int var1)
+    protected BlockChestMimic(int i)
     {
-        super(var1, 0);
+        super(i, 0);
         this.setHardness(2.0F);
         this.setStepSound(Block.soundWoodFootstep);
     }
@@ -21,14 +21,14 @@ public class BlockChestMimic extends BlockSkyrootChest implements IAetherBlock
     /**
      * Called upon block activation (right click on the block.)
      */
-    public boolean onBlockActivated(World var1, int var2, int var3, int var4, EntityPlayer var5, int var6, float var7, float var8, float var9)
+    public boolean onBlockActivated(World world, int i, int j, int k, EntityPlayer entityplayer, int par6, float par7, float par8, float par9)
     {
-        if (!var1.isRemote)
+        if (!world.isRemote)
         {
-            var1.setBlock(var2, var3, var4, 0);
-            EntityMimic var10 = new EntityMimic(var1);
-            var10.setPosition((double)var2 + 0.5D, (double)var3 + 1.5D, (double)var4 + 0.5D);
-            var1.spawnEntityInWorld(var10);
+            world.setBlock(i, j, k, 0);
+            EntityMimic mimic = new EntityMimic(world);
+            mimic.setPosition((double)i + 0.5D, (double)j + 1.5D, (double)k + 0.5D);
+            world.spawnEntityInWorld(mimic);
         }
 
         return true;
@@ -37,73 +37,73 @@ public class BlockChestMimic extends BlockSkyrootChest implements IAetherBlock
     /**
      * Checks to see if its valid to put this block at the specified coordinates. Args: world, x, y, z
      */
-    public boolean canPlaceBlockAt(World var1, int var2, int var3, int var4)
+    public boolean canPlaceBlockAt(World world, int i, int j, int k)
     {
-        int var5 = 0;
+        int l = 0;
 
-        if (var1.getBlockId(var2 - 1, var3, var4) == this.blockID)
+        if (world.getBlockId(i - 1, j, k) == this.blockID)
         {
-            ++var5;
+            ++l;
         }
 
-        if (var1.getBlockId(var2 + 1, var3, var4) == this.blockID)
+        if (world.getBlockId(i + 1, j, k) == this.blockID)
         {
-            ++var5;
+            ++l;
         }
 
-        if (var1.getBlockId(var2, var3, var4 - 1) == this.blockID)
+        if (world.getBlockId(i, j, k - 1) == this.blockID)
         {
-            ++var5;
+            ++l;
         }
 
-        if (var1.getBlockId(var2, var3, var4 + 1) == this.blockID)
+        if (world.getBlockId(i, j, k + 1) == this.blockID)
         {
-            ++var5;
+            ++l;
         }
 
-        return var5 > 1 ? false : (this.isThereANeighborChest(var1, var2 - 1, var3, var4) ? false : (this.isThereANeighborChest(var1, var2 + 1, var3, var4) ? false : (this.isThereANeighborChest(var1, var2, var3, var4 - 1) ? false : !this.isThereANeighborChest(var1, var2, var3, var4 + 1))));
+        return l > 1 ? false : (this.isThereANeighborChest(world, i - 1, j, k) ? false : (this.isThereANeighborChest(world, i + 1, j, k) ? false : (this.isThereANeighborChest(world, i, j, k - 1) ? false : !this.isThereANeighborChest(world, i, j, k + 1))));
     }
 
     /**
      * When this method is called, your block should register all the icons it needs with the given IconRegister. This
      * is the only chance you get to register icons.
      */
-    public void registerIcons(IconRegister var1)
+    public void registerIcons(IconRegister par1IconRegister)
     {
-        this.blockIcon = var1.registerIcon("Aether:Skyroot Plank");
+        this.blockIcon = par1IconRegister.registerIcon("aether:Skyroot Plank");
     }
 
     /**
      * Retrieves the block texture to use based on the display side. Args: iBlockAccess, x, y, z, side
      */
-    public Icon getBlockTexture(IBlockAccess var1, int var2, int var3, int var4, int var5)
+    public Icon getBlockTexture(IBlockAccess iblockaccess, int i, int j, int k, int l)
     {
         return this.blockIcon;
     }
 
-    private boolean isThereANeighborChest(World var1, int var2, int var3, int var4)
+    private boolean isThereANeighborChest(World world, int i, int j, int k)
     {
-        return var1.getBlockId(var2, var3, var4) != this.blockID ? false : (var1.getBlockId(var2 - 1, var3, var4) == this.blockID ? true : (var1.getBlockId(var2 + 1, var3, var4) == this.blockID ? true : (var1.getBlockId(var2, var3, var4 - 1) == this.blockID ? true : var1.getBlockId(var2, var3, var4 + 1) == this.blockID)));
+        return world.getBlockId(i, j, k) != this.blockID ? false : (world.getBlockId(i - 1, j, k) == this.blockID ? true : (world.getBlockId(i + 1, j, k) == this.blockID ? true : (world.getBlockId(i, j, k - 1) == this.blockID ? true : world.getBlockId(i, j, k + 1) == this.blockID)));
     }
 
     /**
      * Called right before the block is destroyed by a player.  Args: world, x, y, z, metaData
      */
-    public void onBlockDestroyedByPlayer(World var1, int var2, int var3, int var4, int var5)
+    public void onBlockDestroyedByPlayer(World world, int i, int j, int k, int par5)
     {
-        if (!var1.isRemote)
+        if (!world.isRemote)
         {
-            var1.setBlock(var2, var3, var4, 0);
-            EntityMimic var6 = new EntityMimic(var1);
-            var6.setPosition((double)var2 + 0.5D, (double)var3 + 1.5D, (double)var4 + 0.5D);
-            var1.spawnEntityInWorld(var6);
+            world.setBlock(i, j, k, 0);
+            EntityMimic mimic = new EntityMimic(world);
+            mimic.setPosition((double)i + 0.5D, (double)j + 1.5D, (double)k + 0.5D);
+            world.spawnEntityInWorld(mimic);
         }
     }
 
     /**
      * Returns the quantity of items to drop on block destruction.
      */
-    public int quantityDropped(Random var1)
+    public int quantityDropped(Random random)
     {
         return 0;
     }

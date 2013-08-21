@@ -7,26 +7,26 @@ import net.aetherteam.aether.party.members.PartyMember;
 
 public class DungeonRequestContents extends NotificationContents
 {
-    public String getTitle(Notification var1)
+    public String getTitle(Notification notification)
     {
-        return "\u00a7r\u00a7n" + var1.getTypeName() + "\u00a7r - " + "\u00a7r\u00a7ofrom " + var1.getSenderName();
+        return "\u00a7r\u00a7n" + notification.getTypeName() + "\u00a7r - " + "\u00a7r\u00a7ofrom " + notification.getSenderName();
     }
 
-    public String getDescription(Notification var1)
+    public String getDescription(Notification notification)
     {
-        PartyMember var2 = PartyController.instance().getMember(var1.getSenderName());
-        Party var3 = PartyController.instance().getParty(var2);
-        String var4 = null;
+        PartyMember recruiter = PartyController.instance().getMember(notification.getSenderName());
+        Party party = PartyController.instance().getParty(recruiter);
+        String description = null;
 
-        if (var3 != null)
+        if (party != null)
         {
-            var4 = "Would you like to raid a dungeon with us?" + " My party is called " + '\"' + var3.getName() + '\"' + ". WARNING: Dungeons can be a very dangerous place, resulting in the loss of precious items.";
+            description = "Would you like to raid a dungeon with us?" + " My party is called " + '\"' + party.getName() + '\"' + ". WARNING: Dungeons can be a very dangerous place, resulting in the loss of precious items.";
         }
         else
         {
-            var4 = "Sorry, but I am no longer in a party. You can deny this dungeon raid request.";
+            description = "Sorry, but I am no longer in a party. You can deny this dungeon raid request.";
         }
 
-        return var4;
+        return description;
     }
 }

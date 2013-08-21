@@ -10,16 +10,16 @@ public class EntityGoldenFX extends EntityPortalFX
     private double portalPosZ;
     private boolean rising;
 
-    public EntityGoldenFX(World var1, double var2, double var4, double var6, double var8, double var10, double var12, boolean var14)
+    public EntityGoldenFX(World world, double d, double d1, double d2, double d3, double d4, double d5, boolean rise)
     {
-        super(var1, var2, var4, var6, var8, var10, var12);
+        super(world, d, d1, d2, d3, d4, d5);
         this.particleBlue = 0.0F;
         this.particleRed = 0.976F;
         this.particleGreen = 0.74509805F;
-        this.portalPosX = this.posX = var2;
-        this.portalPosY = this.posY = var4;
-        this.portalPosZ = this.posZ = var6;
-        this.rising = var14;
+        this.portalPosX = this.posX = d;
+        this.portalPosY = this.posY = d1;
+        this.portalPosZ = this.posZ = d2;
+        this.rising = rise;
     }
 
     /**

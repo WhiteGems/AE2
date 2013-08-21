@@ -15,10 +15,8 @@ import net.minecraft.network.INetworkManager;
 import net.minecraft.network.packet.Packet;
 import net.minecraft.network.packet.Packet132TileEntityData;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraftforge.common.ForgeDirection;
-import net.minecraftforge.common.ISidedInventory;
 
-public class TileEntityIncubator extends TileEntity implements IInventory, ISidedInventory
+public class TileEntityIncubator extends TileEntity implements IInventory
 {
     private ItemStack[] IncubatorItemStacks = new ItemStack[2];
     public int torchPower;
@@ -37,37 +35,37 @@ public class TileEntityIncubator extends TileEntity implements IInventory, ISide
     /**
      * Returns the stack in slot i
      */
-    public ItemStack getStackInSlot(int var1)
+    public ItemStack getStackInSlot(int i)
     {
-        return this.IncubatorItemStacks[var1];
+        return this.IncubatorItemStacks[i];
     }
 
     /**
      * Removes from an inventory slot (first arg) up to a specified number (second arg) of items and returns them in a
      * new stack.
      */
-    public ItemStack decrStackSize(int var1, int var2)
+    public ItemStack decrStackSize(int i, int j)
     {
-        if (this.IncubatorItemStacks[var1] != null)
+        if (this.IncubatorItemStacks[i] != null)
         {
-            ItemStack var3;
+            ItemStack itemstack1;
 
-            if (this.IncubatorItemStacks[var1].stackSize <= var2)
+            if (this.IncubatorItemStacks[i].stackSize <= j)
             {
-                var3 = this.IncubatorItemStacks[var1];
-                this.IncubatorItemStacks[var1] = null;
-                return var3;
+                itemstack1 = this.IncubatorItemStacks[i];
+                this.IncubatorItemStacks[i] = null;
+                return itemstack1;
             }
             else
             {
-                var3 = this.IncubatorItemStacks[var1].splitStack(var2);
+                itemstack1 = this.IncubatorItemStacks[i].splitStack(j);
 
-                if (this.IncubatorItemStacks[var1].stackSize == 0)
+                if (this.IncubatorItemStacks[i].stackSize == 0)
                 {
-                    this.IncubatorItemStacks[var1] = null;
+                    this.IncubatorItemStacks[i] = null;
                 }
 
-                return var3;
+                return itemstack1;
             }
         }
         else
@@ -80,12 +78,12 @@ public class TileEntityIncubator extends TileEntity implements IInventory, ISide
      * When some containers are closed they call this on each slot, then drop whatever it returns as an EntityItem -
      * like when you close a workbench GUI.
      */
-    public ItemStack getStackInSlotOnClosing(int var1)
+    public ItemStack getStackInSlotOnClosing(int par1)
     {
-        if (this.IncubatorItemStacks[var1] != null)
+        if (this.IncubatorItemStacks[par1] != null)
         {
-            ItemStack var2 = this.IncubatorItemStacks[var1];
-            this.IncubatorItemStacks[var1] = null;
+            ItemStack var2 = this.IncubatorItemStacks[par1];
+            this.IncubatorItemStacks[par1] = null;
             return var2;
         }
         else
@@ -97,13 +95,13 @@ public class TileEntityIncubator extends TileEntity implements IInventory, ISide
     /**
      * Sets the given item stack to the specified slot in the inventory (can be crafting or armor sections).
      */
-    public void setInventorySlotContents(int var1, ItemStack var2)
+    public void setInventorySlotContents(int i, ItemStack itemstack)
     {
-        this.IncubatorItemStacks[var1] = var2;
+        this.IncubatorItemStacks[i] = itemstack;
 
-        if (var2 != null && var2.stackSize > this.getInventoryStackLimit())
+        if (itemstack != null && itemstack.stackSize > this.getInventoryStackLimit())
         {
-            var2.stackSize = this.getInventoryStackLimit();
+            itemstack.stackSize = this.getInventoryStackLimit();
         }
     }
 
@@ -118,24 +116,24 @@ public class TileEntityIncubator extends TileEntity implements IInventory, ISide
     /**
      * Reads a tile entity from NBT.
      */
-    public void readFromNBT(NBTTagCompound var1)
+    public void readFromNBT(NBTTagCompound nbttagcompound)
     {
-        super.readFromNBT(var1);
-        NBTTagList var2 = var1.getTagList("Items");
+        super.readFromNBT(nbttagcompound);
+        NBTTagList nbttaglist = nbttagcompound.getTagList("Items");
         this.IncubatorItemStacks = new ItemStack[this.getSizeInventory()];
 
-        for (int var3 = 0; var3 < var2.tagCount(); ++var3)
+        for (int i = 0; i < nbttaglist.tagCount(); ++i)
         {
-            NBTTagCompound var4 = (NBTTagCompound)var2.tagAt(var3);
-            byte var5 = var4.getByte("Slot");
+            NBTTagCompound nbttagcompound1 = (NBTTagCompound)nbttaglist.tagAt(i);
+            byte byte0 = nbttagcompound1.getByte("Slot");
 
-            if (var5 >= 0 && var5 < this.IncubatorItemStacks.length)
+            if (byte0 >= 0 && byte0 < this.IncubatorItemStacks.length)
             {
-                this.IncubatorItemStacks[var5] = ItemStack.loadItemStackFromNBT(var4);
+                this.IncubatorItemStacks[byte0] = ItemStack.loadItemStackFromNBT(nbttagcompound1);
             }
         }
 
-        this.progress = var1.getShort("BurnTime");
+        this.progress = nbttagcompound.getShort("BurnTime");
     }
 
     public void openChest() {}
@@ -145,24 +143,24 @@ public class TileEntityIncubator extends TileEntity implements IInventory, ISide
     /**
      * Writes a tile entity to NBT.
      */
-    public void writeToNBT(NBTTagCompound var1)
+    public void writeToNBT(NBTTagCompound nbttagcompound)
     {
-        super.writeToNBT(var1);
-        var1.setShort("BurnTime", (short)this.progress);
-        NBTTagList var2 = new NBTTagList();
+        super.writeToNBT(nbttagcompound);
+        nbttagcompound.setShort("BurnTime", (short)this.progress);
+        NBTTagList nbttaglist = new NBTTagList();
 
-        for (int var3 = 0; var3 < this.IncubatorItemStacks.length; ++var3)
+        for (int i = 0; i < this.IncubatorItemStacks.length; ++i)
         {
-            if (this.IncubatorItemStacks[var3] != null)
+            if (this.IncubatorItemStacks[i] != null)
             {
-                NBTTagCompound var4 = new NBTTagCompound();
-                var4.setByte("Slot", (byte)var3);
-                this.IncubatorItemStacks[var3].writeToNBT(var4);
-                var2.appendTag(var4);
+                NBTTagCompound nbttagcompound1 = new NBTTagCompound();
+                nbttagcompound1.setByte("Slot", (byte)i);
+                this.IncubatorItemStacks[i].writeToNBT(nbttagcompound1);
+                nbttaglist.appendTag(nbttagcompound1);
             }
         }
 
-        var1.setTag("Items", var2);
+        nbttagcompound.setTag("Items", nbttaglist);
     }
 
     /**
@@ -175,15 +173,15 @@ public class TileEntityIncubator extends TileEntity implements IInventory, ISide
     }
 
     @SideOnly(Side.CLIENT)
-    public int getCookProgressScaled(int var1)
+    public int getCookProgressScaled(int i)
     {
-        return this.progress * var1 / this.ticksRequired;
+        return this.progress * i / this.ticksRequired;
     }
 
     @SideOnly(Side.CLIENT)
-    public int getBurnTimeRemainingScaled(int var1)
+    public int getBurnTimeRemainingScaled(int i)
     {
-        return this.torchPower * var1 / 500;
+        return this.torchPower * i / 500;
     }
 
     public boolean isBurning()
@@ -216,9 +214,9 @@ public class TileEntityIncubator extends TileEntity implements IInventory, ISide
         {
             if (this.IncubatorItemStacks[1] != null && !this.worldObj.isRemote)
             {
-                EntityMoa var1 = new EntityMoa(this.worldObj, true, false, false, AetherMoaColour.getColour(this.IncubatorItemStacks[1].getItemDamage()), this.playerUsing);
-                var1.setPosition((double)this.xCoord + 0.5D, (double)this.yCoord + 1.5D, (double)this.zCoord + 0.5D);
-                this.worldObj.spawnEntityInWorld(var1);
+                EntityMoa moa = new EntityMoa(this.worldObj, true, false, false, AetherMoaColour.getColour(this.IncubatorItemStacks[1].getItemDamage()), this.playerUsing);
+                moa.setPosition((double)this.xCoord + 0.5D, (double)this.yCoord + 1.5D, (double)this.zCoord + 0.5D);
+                this.worldObj.spawnEntityInWorld(moa);
             }
 
             if (!this.worldObj.isRemote)
@@ -243,25 +241,15 @@ public class TileEntityIncubator extends TileEntity implements IInventory, ISide
     /**
      * Do not make give this method the name canInteractWith because it clashes with Container
      */
-    public boolean isUseableByPlayer(EntityPlayer var1)
+    public boolean isUseableByPlayer(EntityPlayer par1EntityPlayer)
     {
-        this.playerUsing = var1;
-        return this.worldObj.getBlockTileEntity(this.xCoord, this.yCoord, this.zCoord) != this ? false : var1.getDistanceSq((double)this.xCoord + 0.5D, (double)this.yCoord + 0.5D, (double)this.zCoord + 0.5D) <= 64.0D;
+        this.playerUsing = par1EntityPlayer;
+        return this.worldObj.getBlockTileEntity(this.xCoord, this.yCoord, this.zCoord) != this ? false : par1EntityPlayer.getDistanceSq((double)this.xCoord + 0.5D, (double)this.yCoord + 0.5D, (double)this.zCoord + 0.5D) <= 64.0D;
     }
 
-    public int getStartInventorySide(ForgeDirection var1)
+    public void onDataPacket(INetworkManager net, Packet132TileEntityData pkt)
     {
-        return var1 == ForgeDirection.DOWN ? 1 : (var1 == ForgeDirection.UP ? 0 : 2);
-    }
-
-    public int getSizeInventorySide(ForgeDirection var1)
-    {
-        return 1;
-    }
-
-    public void onDataPacket(INetworkManager var1, Packet132TileEntityData var2)
-    {
-        this.readFromNBT(var2.customParam1);
+        this.readFromNBT(pkt.customParam1);
     }
 
     /**
@@ -286,7 +274,7 @@ public class TileEntityIncubator extends TileEntity implements IInventory, ISide
     /**
      * Returns true if automation is allowed to insert the given stack (ignoring stack size) into the given slot.
      */
-    public boolean isStackValidForSlot(int var1, ItemStack var2)
+    public boolean isItemValidForSlot(int i, ItemStack itemstack)
     {
         return false;
     }

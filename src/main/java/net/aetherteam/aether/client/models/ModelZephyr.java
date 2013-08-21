@@ -99,27 +99,27 @@ public class ModelZephyr extends ModelBase
     /**
      * Sets the models various rotation angles then renders the model.
      */
-    public void render(Entity var1, float var2, float var3, float var4, float var5, float var6, float var7)
+    public void render(Entity entity, float f, float f1, float f2, float f3, float f4, float f5)
     {
-        super.render(var1, var2, var3, var4, var5, var6, var7);
-        this.setRotationAngles(var2, var3, var4, var5, var6, var7, var1);
-        this.LeftFace.render(var7);
-        this.BodyRightSide2.render(var7);
-        this.Mouth.render(var7);
-        this.CloudButt.render(var7);
-        this.RightFace.render(var7);
-        this.BodyLeftSide1.render(var7);
-        this.BodyLeftSide2.render(var7);
-        this.Body.render(var7);
-        this.BodyRightSide1.render(var7);
-        this.Tail1.render(var7);
+        super.render(entity, f, f1, f2, f3, f4, f5);
+        this.setRotationAngles(f, f1, f2, f3, f4, f5, entity);
+        this.LeftFace.render(f5);
+        this.BodyRightSide2.render(f5);
+        this.Mouth.render(f5);
+        this.CloudButt.render(f5);
+        this.RightFace.render(f5);
+        this.BodyLeftSide1.render(f5);
+        this.BodyLeftSide2.render(f5);
+        this.Body.render(f5);
+        this.BodyRightSide1.render(f5);
+        this.Tail1.render(f5);
     }
 
-    private void setRotation(ModelRenderer var1, float var2, float var3, float var4)
+    private void setRotation(ModelRenderer model, float x, float y, float z)
     {
-        var1.rotateAngleX = var2;
-        var1.rotateAngleY = var3;
-        var1.rotateAngleZ = var4;
+        model.rotateAngleX = x;
+        model.rotateAngleY = y;
+        model.rotateAngleZ = z;
     }
 
     /**
@@ -127,29 +127,29 @@ public class ModelZephyr extends ModelBase
      * and legs, where par1 represents the time(so that arms and legs swing back and forth) and par2 represents how
      * "far" arms and legs can swing at most.
      */
-    public void setRotationAngles(float var1, float var2, float var3, float var4, float var5, float var6, Entity var7)
+    public void setRotationAngles(float f, float f1, float f2, float f3, float f4, float f5, Entity entity)
     {
-        super.setRotationAngles(var1, var2, var3, var4, var5, var6, var7);
-        float var8 = (float)(Math.sin((double)(var1 * 20.0F) / (180D / Math.PI)) * (double)var2 * 0.5D);
-        float var9 = (float)Math.PI;
-        float var10 = var9 / 2.0F;
-        float var11 = var9 * 3.0F / 11.0F;
-        this.LeftFace.rotationPointY = var8 + 8.0F;
-        this.LeftFace.rotationPointX = var8 * 0.5F;
-        this.BodyLeftSide1.rotationPointY = 8.0F - var8 * 0.5F;
-        this.BodyLeftSide2.rotationPointY = 9.0F + var8 * 0.5F;
-        this.RightFace.rotationPointY = 8.0F - var8;
-        this.RightFace.rotationPointX = -var8 * 0.5F;
-        this.BodyRightSide1.rotationPointY = 8.0F - var8 * 0.5F;
-        this.BodyRightSide2.rotationPointY = 9.0F + var8 * 0.5F;
-        this.Tail1.rotationPointX = (float)(Math.sin((double)(var1 * 20.0F) / (180D / Math.PI)) * (double)var2 * 0.75D);
-        this.Tail1.rotateAngleY = (float)Math.pow(0.9900000095367432D, -4.0D) * 1.0F * var9 / 4.0F * MathHelper.cos(-0.055F * var1 + var10);
-        this.Tail1.rotationPointY = 8.0F - var8;
-        this.Tail2.rotationPointX = (float)Math.pow(0.9900000095367432D, 1.0D) * 1.0F * var9 / 4.0F * MathHelper.cos(-0.055F * var1 + var10);
-        this.Tail2.rotationPointY = var8 * 1.25F;
+        super.setRotationAngles(f, f1, f2, f3, f4, f5, entity);
+        float vertMotion = (float)(Math.sin((double)(f * 20.0F) / (180D / Math.PI)) * (double)f1 * 0.5D);
+        float PI = (float)Math.PI;
+        float initialOffset = PI / 2.0F;
+        float offset = PI * 3.0F / 11.0F;
+        this.LeftFace.rotationPointY = vertMotion + 8.0F;
+        this.LeftFace.rotationPointX = vertMotion * 0.5F;
+        this.BodyLeftSide1.rotationPointY = 8.0F - vertMotion * 0.5F;
+        this.BodyLeftSide2.rotationPointY = 9.0F + vertMotion * 0.5F;
+        this.RightFace.rotationPointY = 8.0F - vertMotion;
+        this.RightFace.rotationPointX = -vertMotion * 0.5F;
+        this.BodyRightSide1.rotationPointY = 8.0F - vertMotion * 0.5F;
+        this.BodyRightSide2.rotationPointY = 9.0F + vertMotion * 0.5F;
+        this.Tail1.rotationPointX = (float)(Math.sin((double)(f * 20.0F) / (180D / Math.PI)) * (double)f1 * 0.75D);
+        this.Tail1.rotateAngleY = (float)Math.pow(0.9900000095367432D, -4.0D) * 1.0F * PI / 4.0F * MathHelper.cos(-0.055F * f + initialOffset);
+        this.Tail1.rotationPointY = 8.0F - vertMotion;
+        this.Tail2.rotationPointX = (float)Math.pow(0.9900000095367432D, 1.0D) * 1.0F * PI / 4.0F * MathHelper.cos(-0.055F * f + initialOffset);
+        this.Tail2.rotationPointY = vertMotion * 1.25F;
         this.Tail2.rotateAngleY = this.Tail1.rotateAngleY + 0.25F;
-        this.Tail3.rotationPointX = (float)Math.pow(0.9900000095367432D, 2.0D) * 1.0F * var9 / 4.0F * MathHelper.cos(-0.055F * var1 + var10);
-        this.Tail3.rotationPointY = -var8;
+        this.Tail3.rotationPointX = (float)Math.pow(0.9900000095367432D, 2.0D) * 1.0F * PI / 4.0F * MathHelper.cos(-0.055F * f + initialOffset);
+        this.Tail3.rotationPointY = -vertMotion;
         this.Tail3.rotateAngleY = this.Tail2.rotateAngleY + 0.35F;
     }
 }

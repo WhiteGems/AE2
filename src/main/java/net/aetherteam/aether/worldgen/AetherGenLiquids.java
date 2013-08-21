@@ -10,73 +10,73 @@ public class AetherGenLiquids extends WorldGenerator
 {
     private int liquidBlockId;
 
-    public AetherGenLiquids(int var1)
+    public AetherGenLiquids(int i)
     {
-        this.liquidBlockId = var1;
+        this.liquidBlockId = i;
     }
 
-    public boolean generate(World var1, Random var2, int var3, int var4, int var5)
+    public boolean generate(World world, Random random, int i, int j, int k)
     {
-        if (var1.getBlockId(var3, var4 + 1, var5) == AetherBlocks.Holystone.blockID && var1.getBlockMetadata(var3, var4 + 1, var5) < 2)
+        if (world.getBlockId(i, j + 1, k) == AetherBlocks.Holystone.blockID && world.getBlockMetadata(i, j + 1, k) < 2)
         {
-            if (var1.getBlockId(var3, var4 - 1, var5) == AetherBlocks.Holystone.blockID && var1.getBlockMetadata(var3, var4 - 1, var5) < 2)
+            if (world.getBlockId(i, j - 1, k) == AetherBlocks.Holystone.blockID && world.getBlockMetadata(i, j - 1, k) < 2)
             {
-                if (var1.getBlockId(var3, var4, var5) != 0 && (var1.getBlockId(var3, var4, var5) != AetherBlocks.Holystone.blockID || var1.getBlockMetadata(var3, var4, var5) >= 2))
+                if (world.getBlockId(i, j, k) != 0 && (world.getBlockId(i, j, k) != AetherBlocks.Holystone.blockID || world.getBlockMetadata(i, j, k) >= 2))
                 {
                     return false;
                 }
                 else
                 {
-                    int var6 = 0;
+                    int l = 0;
 
-                    if (var1.getBlockId(var3 - 1, var4, var5) == AetherBlocks.Holystone.blockID || var1.getBlockMetadata(var3 - 1, var4, var5) >= 2)
+                    if (world.getBlockId(i - 1, j, k) == AetherBlocks.Holystone.blockID || world.getBlockMetadata(i - 1, j, k) >= 2)
                     {
-                        ++var6;
+                        ++l;
                     }
 
-                    if (var1.getBlockId(var3 + 1, var4, var5) == AetherBlocks.Holystone.blockID || var1.getBlockMetadata(var3 + 1, var4, var5) >= 2)
+                    if (world.getBlockId(i + 1, j, k) == AetherBlocks.Holystone.blockID || world.getBlockMetadata(i + 1, j, k) >= 2)
                     {
-                        ++var6;
+                        ++l;
                     }
 
-                    if (var1.getBlockId(var3, var4, var5 - 1) == AetherBlocks.Holystone.blockID || var1.getBlockMetadata(var3, var4, var5 - 1) >= 2)
+                    if (world.getBlockId(i, j, k - 1) == AetherBlocks.Holystone.blockID || world.getBlockMetadata(i, j, k - 1) >= 2)
                     {
-                        ++var6;
+                        ++l;
                     }
 
-                    if (var1.getBlockId(var3, var4, var5 + 1) == AetherBlocks.Holystone.blockID || var1.getBlockMetadata(var3, var4, var5 + 1) >= 2)
+                    if (world.getBlockId(i, j, k + 1) == AetherBlocks.Holystone.blockID || world.getBlockMetadata(i, j, k + 1) >= 2)
                     {
-                        ++var6;
+                        ++l;
                     }
 
-                    int var7 = 0;
+                    int i1 = 0;
 
-                    if (var1.isAirBlock(var3 - 1, var4, var5))
+                    if (world.isAirBlock(i - 1, j, k))
                     {
-                        ++var7;
+                        ++i1;
                     }
 
-                    if (var1.isAirBlock(var3 + 1, var4, var5))
+                    if (world.isAirBlock(i + 1, j, k))
                     {
-                        ++var7;
+                        ++i1;
                     }
 
-                    if (var1.isAirBlock(var3, var4, var5 - 1))
+                    if (world.isAirBlock(i, j, k - 1))
                     {
-                        ++var7;
+                        ++i1;
                     }
 
-                    if (var1.isAirBlock(var3, var4, var5 + 1))
+                    if (world.isAirBlock(i, j, k + 1))
                     {
-                        ++var7;
+                        ++i1;
                     }
 
-                    if (var6 == 3 && var7 == 1)
+                    if (l == 3 && i1 == 1)
                     {
-                        var1.setBlock(var3, var4, var5, this.liquidBlockId);
-                        var1.scheduledUpdatesAreImmediate = true;
-                        Block.blocksList[this.liquidBlockId].updateTick(var1, var3, var4, var5, var2);
-                        var1.scheduledUpdatesAreImmediate = false;
+                        world.setBlock(i, j, k, this.liquidBlockId);
+                        world.scheduledUpdatesAreImmediate = true;
+                        Block.blocksList[this.liquidBlockId].updateTick(world, i, j, k, random);
+                        world.scheduledUpdatesAreImmediate = false;
                     }
 
                     return true;

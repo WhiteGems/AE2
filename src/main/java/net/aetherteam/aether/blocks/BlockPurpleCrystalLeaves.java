@@ -26,21 +26,22 @@ import net.minecraft.world.World;
 
 public class BlockPurpleCrystalLeaves extends BlockLeaves implements IAetherBlock
 {
-    private HashMap icons = new HashMap();
+    private HashMap<String, Icon> icons = new HashMap();
     public static final String[] names = new String[] {"Purple Crystal Leaves", "Purple Fruit Leaves"};
 
-    public BlockPurpleCrystalLeaves(int var1)
+    public BlockPurpleCrystalLeaves(int blockID)
     {
-        super(var1);
+        super(blockID);
         this.setTickRandomly(true);
         this.setHardness(0.2F);
         this.setLightOpacity(1);
         this.setStepSound(Block.soundGrassFootstep);
     }
 
-    public Block setIconName(String var1)
+    public Block setIconName(String name)
     {
-        return this.setUnlocalizedName("Aether:" + var1);
+        this.field_111026_f = "aether:" + name;
+        return this.setUnlocalizedName("aether:" + name);
     }
 
     @SideOnly(Side.CLIENT)
@@ -49,19 +50,19 @@ public class BlockPurpleCrystalLeaves extends BlockLeaves implements IAetherBloc
      * When this method is called, your block should register all the icons it needs with the given IconRegister. This
      * is the only chance you get to register icons.
      */
-    public void registerIcons(IconRegister var1)
+    public void registerIcons(IconRegister iconRegister)
     {
-        for (int var2 = 0; var2 < names.length; ++var2)
+        for (int i = 0; i < names.length; ++i)
         {
-            this.icons.put(names[var2], var1.registerIcon("Aether:" + names[var2]));
-            this.icons.put(names[var2] + "_Opaque", var1.registerIcon("Aether:" + names[var2] + "_Opaque"));
+            this.icons.put(names[i], iconRegister.registerIcon("aether:" + names[i]));
+            this.icons.put(names[i] + "_Opaque", iconRegister.registerIcon("aether:" + names[i] + "_Opaque"));
         }
     }
 
     /**
      * Returns the color this block should be rendered. Used by leaves.
      */
-    public int getRenderColor(int var1)
+    public int getRenderColor(int i)
     {
         return 16777215;
     }
@@ -71,12 +72,12 @@ public class BlockPurpleCrystalLeaves extends BlockLeaves implements IAetherBloc
     /**
      * From the specified side and block metadata retrieves the blocks texture. Args: side, metadata
      */
-    public Icon getIcon(int var1, int var2)
+    public Icon getIcon(int side, int meta)
     {
         this.setGraphicsLevel(Minecraft.getMinecraft().gameSettings.fancyGraphics);
-        ItemStack var3 = new ItemStack(AetherBlocks.PurpleCrystalLeaves, 1, var2);
-        String var4 = var3.getItem().getItemDisplayName(var3);
-        return (Icon)this.icons.get(this.graphicsLevel ? var4 : var4 + "_Opaque");
+        ItemStack stack = new ItemStack(AetherBlocks.PurpleCrystalLeaves, 1, meta);
+        String name = stack.getItem().getItemDisplayName(stack);
+        return (Icon)this.icons.get(this.graphicsLevel ? name : name + "_Opaque");
     }
 
     @SideOnly(Side.CLIENT)
@@ -91,7 +92,7 @@ public class BlockPurpleCrystalLeaves extends BlockLeaves implements IAetherBloc
      * Returns a integer with hex for 0xrrggbb with this color multiplied against the blocks color. Note only called
      * when first determining what to render.
      */
-    public int colorMultiplier(IBlockAccess var1, int var2, int var3, int var4)
+    public int colorMultiplier(IBlockAccess par1IBlockAccess, int par2, int par3, int par4)
     {
         return 16777215;
     }
@@ -99,58 +100,58 @@ public class BlockPurpleCrystalLeaves extends BlockLeaves implements IAetherBloc
     /**
      * returns a list of blocks with the same ID, but different meta (eg: wood returns 4 blocks)
      */
-    public void getSubBlocks(int var1, CreativeTabs var2, List var3)
+    public void getSubBlocks(int par1, CreativeTabs par2CreativeTabs, List par3List)
     {
-        var3.add(new ItemStack(var1, 1, 0));
-        var3.add(new ItemStack(var1, 1, 1));
+        par3List.add(new ItemStack(par1, 1, 0));
+        par3List.add(new ItemStack(par1, 1, 1));
     }
 
     /**
      * Called when the player destroys a block with an item that can harvest it. (i, j, k) are the coordinates of the
      * block and l is the block's subtype/damage.
      */
-    public void harvestBlock(World var1, EntityPlayer var2, int var3, int var4, int var5, int var6)
+    public void harvestBlock(World world, EntityPlayer entityplayer, int x, int y, int z, int meta)
     {
-        var2.addStat(StatList.mineBlockStatArray[this.blockID], 1);
+        entityplayer.addStat(StatList.mineBlockStatArray[this.blockID], 1);
 
-        if (var6 >= 1)
+        if (meta >= 1)
         {
-            ItemStack var7 = new ItemStack(AetherItems.WhiteApple.itemID, 1, 0);
-            this.dropBlockAsItem_do(var1, var3, var4, var5, var7);
+            ItemStack stack = new ItemStack(AetherItems.WhiteApple.itemID, 1, 0);
+            this.dropBlockAsItem_do(world, x, y, z, stack);
         }
     }
 
-    private boolean nearTrunk(World var1, int var2, int var3, int var4)
+    private boolean nearTrunk(World world, int px, int py, int pz)
     {
-        Loc var5 = new Loc(var2, var3, var4);
-        LinkedList var6 = new LinkedList();
-        ArrayList var7 = new ArrayList();
-        var6.offer(new Loc(var2, var3, var4));
-        int var8 = this.blockID;
+        Loc startLoc = new Loc(px, py, pz);
+        LinkedList toCheck = new LinkedList();
+        ArrayList checked = new ArrayList();
+        toCheck.offer(new Loc(px, py, pz));
+        int bLeaves = this.blockID;
 
-        while (!var6.isEmpty())
+        while (!toCheck.isEmpty())
         {
-            Loc var9 = (Loc)var6.poll();
+            Loc curLoc = (Loc)toCheck.poll();
 
-            if (!var7.contains(var9))
+            if (!checked.contains(curLoc))
             {
-                if (var9.distSimple(var5) <= 4)
+                if (curLoc.distSimple(startLoc) <= 4)
                 {
-                    int var10 = var9.getBlock(var1);
-                    var9.getMeta(var1);
+                    int block = curLoc.getBlock(world);
+                    curLoc.getMeta(world);
 
-                    if (var10 == AetherBlocks.AetherLog.blockID)
+                    if (block == AetherBlocks.AetherLog.blockID)
                     {
                         return true;
                     }
 
-                    if (var10 == var8)
+                    if (block == bLeaves)
                     {
-                        var6.addAll(Arrays.asList(var9.adjacent()));
+                        toCheck.addAll(Arrays.asList(curLoc.adjacent()));
                     }
                 }
 
-                var7.add(var9);
+                checked.add(curLoc);
             }
         }
 
@@ -160,7 +161,7 @@ public class BlockPurpleCrystalLeaves extends BlockLeaves implements IAetherBloc
     /**
      * Returns the quantity of items to drop on block destruction.
      */
-    public int quantityDropped(Random var1)
+    public int quantityDropped(Random random)
     {
         return 0;
     }
@@ -170,42 +171,42 @@ public class BlockPurpleCrystalLeaves extends BlockLeaves implements IAetherBloc
     /**
      * A randomly called display update to be able to add particles or other items for display
      */
-    public void randomDisplayTick(World var1, int var2, int var3, int var4, Random var5)
+    public void randomDisplayTick(World world, int i, int j, int k, Random random)
     {
-        super.randomDisplayTick(var1, var2, var3, var4, var5);
+        super.randomDisplayTick(world, i, j, k, random);
 
-        if (var5.nextInt(10) == 0 && Minecraft.getMinecraft().gameSettings.particleSetting != 2 && var1.isRemote)
+        if (random.nextInt(10) == 0 && Minecraft.getMinecraft().gameSettings.particleSetting != 2 && world.isRemote)
         {
-            for (int var6 = 0; var6 < 15; ++var6)
+            for (int l = 0; l < 15; ++l)
             {
-                double var7 = (double)var2 + ((double)var5.nextFloat() - 0.5D) * 6.0D;
-                double var9 = (double)var3 + ((double)var5.nextFloat() - 0.5D) * 6.0D;
-                double var11 = (double)var4 + ((double)var5.nextFloat() - 0.5D) * 6.0D;
-                double var13 = 0.0D;
-                double var15 = 0.0D;
-                double var17 = 0.0D;
-                var13 = ((double)var5.nextFloat() - 0.5D) * 0.5D;
-                var15 = ((double)var5.nextFloat() - 0.5D) * 0.5D;
-                var17 = ((double)var5.nextFloat() - 0.5D) * 0.5D;
-                EntityPurpleFX var19 = new EntityPurpleFX(var1, var7, var9, var11, var13, var15, var17);
-                FMLClientHandler.instance().getClient().effectRenderer.addEffect(var19);
+                double d = (double)i + ((double)random.nextFloat() - 0.5D) * 6.0D;
+                double d1 = (double)j + ((double)random.nextFloat() - 0.5D) * 6.0D;
+                double d2 = (double)k + ((double)random.nextFloat() - 0.5D) * 6.0D;
+                double d3 = 0.0D;
+                double d4 = 0.0D;
+                double d5 = 0.0D;
+                d3 = ((double)random.nextFloat() - 0.5D) * 0.5D;
+                d4 = ((double)random.nextFloat() - 0.5D) * 0.5D;
+                d5 = ((double)random.nextFloat() - 0.5D) * 0.5D;
+                EntityPurpleFX obj = new EntityPurpleFX(world, d, d1, d2, d3, d4, d5);
+                FMLClientHandler.instance().getClient().effectRenderer.addEffect(obj);
             }
         }
     }
 
-    private void removeLeaves(World var1, int var2, int var3, int var4)
+    private void removeLeaves(World world, int px, int py, int pz)
     {
-        var1.setBlock(var2, var3, var4, 0);
+        world.setBlock(px, py, pz, 0);
     }
 
     /**
      * Ticks the block if it's been scheduled
      */
-    public void updateTick(World var1, int var2, int var3, int var4, Random var5)
+    public void updateTick(World world, int i, int j, int k, Random rand)
     {
-        if (!this.nearTrunk(var1, var2, var3, var4))
+        if (!this.nearTrunk(world, i, j, k))
         {
-            this.removeLeaves(var1, var2, var3, var4);
+            this.removeLeaves(world, i, j, k);
         }
     }
 }

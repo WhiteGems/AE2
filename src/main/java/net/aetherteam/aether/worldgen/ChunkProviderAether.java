@@ -49,10 +49,10 @@ public class ChunkProviderAether implements IChunkProvider
     public static int gumCount;
     public static int placementFlagType = 2;
 
-    public ChunkProviderAether(World var1, long var2)
+    public ChunkProviderAether(World world, long l)
     {
-        this.worldObj = var1;
-        this.random = new Random(var2);
+        this.worldObj = world;
+        this.random = new Random(l);
         this.noiseGenerator1 = new NoiseGeneratorOctaves(this.random, 16);
         this.noiseGenerator2 = new NoiseGeneratorOctaves(this.random, 16);
         this.noiseGenerator3 = new NoiseGeneratorOctaves(this.random, 8);
@@ -74,7 +74,7 @@ public class ChunkProviderAether implements IChunkProvider
     /**
      * Checks to see if a chunk exists at x, y
      */
-    public boolean chunkExists(int var1, int var2)
+    public boolean chunkExists(int i, int j)
     {
         return true;
     }
@@ -87,142 +87,142 @@ public class ChunkProviderAether implements IChunkProvider
         return null;
     }
 
-    public void func_28071_a(int var1, int var2, byte[] var3)
+    public void func_28071_a(int i, int j, byte[] abyte0)
     {
-        byte var4 = 2;
-        int var5 = var4 + 1;
-        byte var6 = 33;
-        int var7 = var4 + 1;
-        this.field_28080_q = this.func_28073_a(this.field_28080_q, var1 * var4, 0, var2 * var4, var5, var6, var7);
+        byte byte0 = 2;
+        int k = byte0 + 1;
+        byte byte1 = 33;
+        int l = byte0 + 1;
+        this.field_28080_q = this.func_28073_a(this.field_28080_q, i * byte0, 0, j * byte0, k, byte1, l);
 
-        for (int var8 = 0; var8 < var4; ++var8)
+        for (int i1 = 0; i1 < byte0; ++i1)
         {
-            for (int var9 = 0; var9 < var4; ++var9)
+            for (int j1 = 0; j1 < byte0; ++j1)
             {
-                for (int var10 = 0; var10 < 32; ++var10)
+                for (int k1 = 0; k1 < 32; ++k1)
                 {
-                    double var11 = 0.25D;
-                    double var13 = this.field_28080_q[((var8 + 0) * var7 + var9 + 0) * var6 + var10 + 0];
-                    double var15 = this.field_28080_q[((var8 + 0) * var7 + var9 + 1) * var6 + var10 + 0];
-                    double var17 = this.field_28080_q[((var8 + 1) * var7 + var9 + 0) * var6 + var10 + 0];
-                    double var19 = this.field_28080_q[((var8 + 1) * var7 + var9 + 1) * var6 + var10 + 0];
-                    double var21 = (this.field_28080_q[((var8 + 0) * var7 + var9 + 0) * var6 + var10 + 1] - var13) * var11;
-                    double var23 = (this.field_28080_q[((var8 + 0) * var7 + var9 + 1) * var6 + var10 + 1] - var15) * var11;
-                    double var25 = (this.field_28080_q[((var8 + 1) * var7 + var9 + 0) * var6 + var10 + 1] - var17) * var11;
-                    double var27 = (this.field_28080_q[((var8 + 1) * var7 + var9 + 1) * var6 + var10 + 1] - var19) * var11;
+                    double d = 0.25D;
+                    double d1 = this.field_28080_q[((i1 + 0) * l + j1 + 0) * byte1 + k1 + 0];
+                    double d2 = this.field_28080_q[((i1 + 0) * l + j1 + 1) * byte1 + k1 + 0];
+                    double d3 = this.field_28080_q[((i1 + 1) * l + j1 + 0) * byte1 + k1 + 0];
+                    double d4 = this.field_28080_q[((i1 + 1) * l + j1 + 1) * byte1 + k1 + 0];
+                    double d5 = (this.field_28080_q[((i1 + 0) * l + j1 + 0) * byte1 + k1 + 1] - d1) * d;
+                    double d6 = (this.field_28080_q[((i1 + 0) * l + j1 + 1) * byte1 + k1 + 1] - d2) * d;
+                    double d7 = (this.field_28080_q[((i1 + 1) * l + j1 + 0) * byte1 + k1 + 1] - d3) * d;
+                    double d8 = (this.field_28080_q[((i1 + 1) * l + j1 + 1) * byte1 + k1 + 1] - d4) * d;
 
-                    for (int var29 = 0; var29 < 4; ++var29)
+                    for (int l1 = 0; l1 < 4; ++l1)
                     {
-                        double var30 = 0.125D;
-                        double var32 = var13;
-                        double var34 = var15;
-                        double var36 = (var17 - var13) * var30;
-                        double var38 = (var19 - var15) * var30;
+                        double d9 = 0.125D;
+                        double d10 = d1;
+                        double d11 = d2;
+                        double d12 = (d3 - d1) * d9;
+                        double d13 = (d4 - d2) * d9;
 
-                        for (int var40 = 0; var40 < 8; ++var40)
+                        for (int i2 = 0; i2 < 8; ++i2)
                         {
-                            int var41 = var40 + var8 * 8 << 11 | 0 + var9 * 8 << 7 | var10 * 4 + var29;
-                            short var42 = 128;
-                            double var43 = 0.125D;
-                            double var45 = var32;
-                            double var47 = (var34 - var32) * var43;
+                            int j2 = i2 + i1 * 8 << 11 | 0 + j1 * 8 << 7 | k1 * 4 + l1;
+                            short c = 128;
+                            double d14 = 0.125D;
+                            double d15 = d10;
+                            double d16 = (d11 - d10) * d14;
 
-                            for (int var49 = 0; var49 < 8; ++var49)
+                            for (int k2 = 0; k2 < 8; ++k2)
                             {
-                                int var50 = 0;
+                                int l2 = 0;
 
-                                if (var45 > 0.0D)
+                                if (d15 > 0.0D)
                                 {
-                                    var50 = AetherBlocks.Holystone.blockID;
+                                    l2 = AetherBlocks.Holystone.blockID;
                                 }
 
-                                var3[var41] = (byte)var50;
-                                var41 += var42;
-                                var45 += var47;
+                                abyte0[j2] = (byte)l2;
+                                j2 += c;
+                                d15 += d16;
                             }
 
-                            var32 += var36;
-                            var34 += var38;
+                            d10 += d12;
+                            d11 += d13;
                         }
 
-                        var13 += var21;
-                        var15 += var23;
-                        var17 += var25;
-                        var19 += var27;
+                        d1 += d5;
+                        d2 += d6;
+                        d3 += d7;
+                        d4 += d8;
                     }
                 }
             }
         }
     }
 
-    public void func_28072_a(int var1, int var2, byte[] var3)
+    public void func_28072_a(int i, int j, byte[] abyte0)
     {
-        double var4 = 0.03125D;
-        this.field_28079_r = this.noiseGenerator4.generateNoiseOctaves(this.field_28079_r, var1 * 16, var2 * 16, 0, 16, 16, 1, var4, var4, 1.0D);
-        this.field_28078_s = this.noiseGenerator4.generateNoiseOctaves(this.field_28078_s, var1 * 16, 109, var2 * 16, 16, 1, 16, var4, 1.0D, var4);
-        this.field_28077_t = this.noiseGenerator5.generateNoiseOctaves(this.field_28077_t, var1 * 16, var2 * 16, 0, 16, 16, 1, var4 * 2.0D, var4 * 2.0D, var4 * 2.0D);
+        double d = 0.03125D;
+        this.field_28079_r = this.noiseGenerator4.generateNoiseOctaves(this.field_28079_r, i * 16, j * 16, 0, 16, 16, 1, d, d, 1.0D);
+        this.field_28078_s = this.noiseGenerator4.generateNoiseOctaves(this.field_28078_s, i * 16, 109, j * 16, 16, 1, 16, d, 1.0D, d);
+        this.field_28077_t = this.noiseGenerator5.generateNoiseOctaves(this.field_28077_t, i * 16, j * 16, 0, 16, 16, 1, d * 2.0D, d * 2.0D, d * 2.0D);
 
-        for (int var6 = 0; var6 < 16; ++var6)
+        for (int k = 0; k < 16; ++k)
         {
-            for (int var7 = 0; var7 < 16; ++var7)
+            for (int l = 0; l < 16; ++l)
             {
-                int var8 = (int)(this.field_28077_t[var6 + var7 * 16] / 3.0D + 3.0D + this.random.nextDouble() * 0.25D);
-                int var9 = -1;
+                int i1 = (int)(this.field_28077_t[k + l * 16] / 3.0D + 3.0D + this.random.nextDouble() * 0.25D);
+                int j1 = -1;
                 this.topAetherBlock = (byte)AetherBlocks.AetherGrass.blockID;
                 this.fillerAetherBlock = (byte)AetherBlocks.AetherDirt.blockID;
-                byte var10 = this.topAetherBlock;
-                byte var11 = this.fillerAetherBlock;
-                byte var12 = (byte)AetherBlocks.Holystone.blockID;
+                byte byte0 = this.topAetherBlock;
+                byte byte1 = this.fillerAetherBlock;
+                byte stone = (byte)AetherBlocks.Holystone.blockID;
 
-                if (var10 < 0)
+                if (byte0 < 0)
                 {
-                    var10 = (byte)(var10 + 0);
+                    byte0 = (byte)(byte0 + 0);
                 }
 
-                if (var11 < 0)
+                if (byte1 < 0)
                 {
-                    var11 = (byte)(var11 + 0);
+                    byte1 = (byte)(byte1 + 0);
                 }
 
-                if (var12 < 0)
+                if (stone < 0)
                 {
-                    var12 = (byte)(var12 + 0);
+                    stone = (byte)(stone + 0);
                 }
 
-                for (int var13 = 127; var13 >= 0; --var13)
+                for (int k1 = 127; k1 >= 0; --k1)
                 {
-                    int var14 = (var7 * 16 + var6) * 128 + var13;
-                    byte var15 = var3[var14];
+                    int l1 = (l * 16 + k) * 128 + k1;
+                    byte byte2 = abyte0[l1];
 
-                    if (var15 == 0)
+                    if (byte2 == 0)
                     {
-                        var9 = -1;
+                        j1 = -1;
                     }
-                    else if (var15 == var12)
+                    else if (byte2 == stone)
                     {
-                        if (var9 == -1)
+                        if (j1 == -1)
                         {
-                            if (var8 <= 0)
+                            if (i1 <= 0)
                             {
-                                var10 = 0;
-                                var11 = var12;
+                                byte0 = 0;
+                                byte1 = stone;
                             }
 
-                            var9 = var8;
+                            j1 = i1;
 
-                            if (var13 >= 0)
+                            if (k1 >= 0)
                             {
-                                var3[var14] = var10;
+                                abyte0[l1] = byte0;
                             }
                             else
                             {
-                                var3[var14] = var11;
+                                abyte0[l1] = byte1;
                             }
                         }
-                        else if (var9 > 0)
+                        else if (j1 > 0)
                         {
-                            --var9;
-                            var3[var14] = var11;
+                            --j1;
+                            abyte0[l1] = byte1;
                         }
                     }
                 }
@@ -230,126 +230,126 @@ public class ChunkProviderAether implements IChunkProvider
         }
     }
 
-    private double[] func_28073_a(double[] var1, int var2, int var3, int var4, int var5, int var6, int var7)
+    private double[] func_28073_a(double[] ad, int i, int j, int k, int l, int i1, int j1)
     {
-        if (var1 == null)
+        if (ad == null)
         {
-            var1 = new double[var5 * var6 * var7];
+            ad = new double[l * i1 * j1];
         }
 
-        double var8 = 684.412D;
-        double var10 = 684.412D;
-        this.field_28090_g = this.noiseGenerator6.generateNoiseOctaves(this.field_28090_g, var2, var4, var5, var7, 1.121D, 1.121D, 0.5D);
-        this.field_28089_h = this.noiseGenerator7.generateNoiseOctaves(this.field_28089_h, var2, var4, var5, var7, 200.0D, 200.0D, 0.5D);
-        var8 *= 2.0D;
-        this.field_28093_d = this.noiseGenerator3.generateNoiseOctaves(this.field_28093_d, var2, var3, var4, var5, var6, var7, var8 / 80.0D, var10 / 160.0D, var8 / 80.0D);
-        this.field_28092_e = this.noiseGenerator1.generateNoiseOctaves(this.field_28092_e, var2, var3, var4, var5, var6, var7, var8, var10, var8);
-        this.field_28091_f = this.noiseGenerator2.generateNoiseOctaves(this.field_28091_f, var2, var3, var4, var5, var6, var7, var8, var10, var8);
-        int var12 = 0;
-        int var13 = 0;
-        int var14 = 16 / var5;
+        double d = 684.412D;
+        double d1 = 684.412D;
+        this.field_28090_g = this.noiseGenerator6.generateNoiseOctaves(this.field_28090_g, i, k, l, j1, 1.121D, 1.121D, 0.5D);
+        this.field_28089_h = this.noiseGenerator7.generateNoiseOctaves(this.field_28089_h, i, k, l, j1, 200.0D, 200.0D, 0.5D);
+        d *= 2.0D;
+        this.field_28093_d = this.noiseGenerator3.generateNoiseOctaves(this.field_28093_d, i, j, k, l, i1, j1, d / 80.0D, d1 / 160.0D, d / 80.0D);
+        this.field_28092_e = this.noiseGenerator1.generateNoiseOctaves(this.field_28092_e, i, j, k, l, i1, j1, d, d1, d);
+        this.field_28091_f = this.noiseGenerator2.generateNoiseOctaves(this.field_28091_f, i, j, k, l, i1, j1, d, d1, d);
+        int k1 = 0;
+        int l1 = 0;
+        int i2 = 16 / l;
 
-        for (int var15 = 0; var15 < var5; ++var15)
+        for (int j2 = 0; j2 < l; ++j2)
         {
-            int var16 = var15 * var14 + var14 / 2;
+            int k2 = j2 * i2 + i2 / 2;
 
-            for (int var17 = 0; var17 < var7; ++var17)
+            for (int l2 = 0; l2 < j1; ++l2)
             {
-                int var18 = var17 * var14 + var14 / 2;
-                double var19 = 1.0D;
-                var19 *= var19;
-                var19 *= var19;
-                var19 = 1.0D - var19;
-                double var21 = (this.field_28090_g[var13] + 256.0D) / 512.0D;
-                var21 *= var19;
+                int i3 = l2 * i2 + i2 / 2;
+                double d4 = 1.0D;
+                d4 *= d4;
+                d4 *= d4;
+                d4 = 1.0D - d4;
+                double d5 = (this.field_28090_g[l1] + 256.0D) / 512.0D;
+                d5 *= d4;
 
-                if (var21 > 1.0D)
+                if (d5 > 1.0D)
                 {
-                    var21 = 1.0D;
+                    d5 = 1.0D;
                 }
 
-                double var23 = this.field_28089_h[var13] / 8000.0D;
+                double d6 = this.field_28089_h[l1] / 8000.0D;
 
-                if (var23 < 0.0D)
+                if (d6 < 0.0D)
                 {
-                    var23 = -var23 * 0.3D;
+                    d6 = -d6 * 0.3D;
                 }
 
-                var23 = var23 * 3.0D - 2.0D;
+                d6 = d6 * 3.0D - 2.0D;
 
-                if (var23 > 1.0D)
+                if (d6 > 1.0D)
                 {
-                    var23 = 1.0D;
+                    d6 = 1.0D;
                 }
 
-                var23 /= 8.0D;
-                var23 = 0.0D;
+                d6 /= 8.0D;
+                d6 = 0.0D;
 
-                if (var21 < 0.0D)
+                if (d5 < 0.0D)
                 {
-                    var21 = 0.0D;
+                    d5 = 0.0D;
                 }
 
-                var21 += 0.5D;
-                var23 = var23 * (double)var6 / 16.0D;
-                ++var13;
-                double var25 = (double)var6 / 2.0D;
+                d5 += 0.5D;
+                d6 = d6 * (double)i1 / 16.0D;
+                ++l1;
+                double d7 = (double)i1 / 2.0D;
 
-                for (int var27 = 0; var27 < var6; ++var27)
+                for (int j3 = 0; j3 < i1; ++j3)
                 {
-                    double var28 = 0.0D;
-                    double var30 = ((double)var27 - var25) * 8.0D / var21;
+                    double d8 = 0.0D;
+                    double d9 = ((double)j3 - d7) * 8.0D / d5;
 
-                    if (var30 < 0.0D)
+                    if (d9 < 0.0D)
                     {
-                        var30 *= -1.0D;
+                        d9 *= -1.0D;
                     }
 
-                    double var32 = this.field_28092_e[var12] / 512.0D;
-                    double var34 = this.field_28091_f[var12] / 512.0D;
-                    double var36 = (this.field_28093_d[var12] / 10.0D + 1.0D) / 2.0D;
+                    double d10 = this.field_28092_e[k1] / 512.0D;
+                    double d11 = this.field_28091_f[k1] / 512.0D;
+                    double d12 = (this.field_28093_d[k1] / 10.0D + 1.0D) / 2.0D;
 
-                    if (var36 < 0.0D)
+                    if (d12 < 0.0D)
                     {
-                        var28 = var32;
+                        d8 = d10;
                     }
-                    else if (var36 > 1.0D)
+                    else if (d12 > 1.0D)
                     {
-                        var28 = var34;
+                        d8 = d11;
                     }
                     else
                     {
-                        var28 = var32 + (var34 - var32) * var36;
+                        d8 = d10 + (d11 - d10) * d12;
                     }
 
-                    var28 -= 8.0D;
-                    byte var38 = 32;
-                    double var39;
+                    d8 -= 8.0D;
+                    byte k3 = 32;
+                    double d14;
 
-                    if (var27 > var6 - var38)
+                    if (j3 > i1 - k3)
                     {
-                        var39 = (double)((float)(var27 - (var6 - var38)) / ((float)var38 - 1.0F));
-                        var28 = var28 * (1.0D - var39) + -30.0D * var39;
+                        d14 = (double)((float)(j3 - (i1 - k3)) / ((float)k3 - 1.0F));
+                        d8 = d8 * (1.0D - d14) + -30.0D * d14;
                     }
 
-                    var38 = 8;
+                    k3 = 8;
 
-                    if (var27 < var38)
+                    if (j3 < k3)
                     {
-                        var39 = (double)((float)(var38 - var27) / ((float)var38 - 1.0F));
-                        var28 = var28 * (1.0D - var39) + -30.0D * var39;
+                        d14 = (double)((float)(k3 - j3) / ((float)k3 - 1.0F));
+                        d8 = d8 * (1.0D - d14) + -30.0D * d14;
                     }
 
-                    var1[var12] = var28;
-                    ++var12;
+                    ad[k1] = d8;
+                    ++k1;
                 }
             }
         }
 
-        return var1;
+        return ad;
     }
 
-    public void recreateStructures(int var1, int var2) {}
+    public void recreateStructures(int i, int j) {}
 
     public int getLoadedChunkCount()
     {
@@ -359,19 +359,19 @@ public class ChunkProviderAether implements IChunkProvider
     /**
      * Returns a list of creatures of the specified type that can spawn at the given location.
      */
-    public List getPossibleCreatures(EnumCreatureType var1, int var2, int var3, int var4)
+    public List getPossibleCreatures(EnumCreatureType enumcreaturetype, int i, int j, int k)
     {
-        WorldChunkManager var5 = this.worldObj.getWorldChunkManager();
-        BiomeGenBase var6 = var5.getBiomeGenAt(var2 >> 4, var4 >> 4);
-        return var6 == null ? null : var6.getSpawnableList(var1);
+        WorldChunkManager worldchunkmanager = this.worldObj.getWorldChunkManager();
+        BiomeGenBase biomegenbase = worldchunkmanager.getBiomeGenAt(i >> 4, k >> 4);
+        return biomegenbase == null ? null : biomegenbase.getSpawnableList(enumcreaturetype);
     }
 
     /**
      * loads or generates the chunk at the chunk location specified
      */
-    public Chunk loadChunk(int var1, int var2)
+    public Chunk loadChunk(int i, int j)
     {
-        return this.provideChunk(var1, var2);
+        return this.provideChunk(i, j);
     }
 
     /**
@@ -385,180 +385,180 @@ public class ChunkProviderAether implements IChunkProvider
     /**
      * Populates chunk with ores etc etc
      */
-    public void populate(IChunkProvider var1, int var2, int var3)
+    public void populate(IChunkProvider ichunkprovider, int i, int j)
     {
-        int var4 = var2 * 16;
-        int var5 = var3 * 16;
-        int var6;
-        int var7;
-        int var8;
+        int k = i * 16;
+        int l = j * 16;
+        int d;
+        int y;
+        int biomegenbase;
 
         if (this.random.nextInt(50) == 0)
         {
-            var6 = var4 + this.random.nextInt(4);
-            var7 = this.random.nextInt(32);
-            var8 = var5 + this.random.nextInt(4);
-            (new AetherGenClouds(AetherBlocks.Aercloud.blockID, 6, 4, false, bronzeDungeon)).generate(this.worldObj, this.random, var6, var7, var8);
+            d = k + this.random.nextInt(4);
+            y = this.random.nextInt(32);
+            biomegenbase = l + this.random.nextInt(4);
+            (new AetherGenClouds(AetherBlocks.Aercloud.blockID, 6, 4, false, bronzeDungeon)).generate(this.worldObj, this.random, d, y, biomegenbase);
         }
 
         if (this.random.nextInt(50) == 0)
         {
-            var6 = var4 + this.random.nextInt(4);
-            var7 = this.random.nextInt(32);
-            var8 = var5 + this.random.nextInt(4);
-            (new AetherGenClouds(AetherBlocks.Aercloud.blockID, 5, 4, false, bronzeDungeon)).generate(this.worldObj, this.random, var6, var7, var8);
+            d = k + this.random.nextInt(4);
+            y = this.random.nextInt(32);
+            biomegenbase = l + this.random.nextInt(4);
+            (new AetherGenClouds(AetherBlocks.Aercloud.blockID, 5, 4, false, bronzeDungeon)).generate(this.worldObj, this.random, d, y, biomegenbase);
         }
 
         if (this.random.nextInt(50) == 0)
         {
-            var6 = var4 + this.random.nextInt(4);
-            var7 = this.random.nextInt(32);
-            var8 = var5 + this.random.nextInt(4);
-            (new AetherGenClouds(AetherBlocks.Aercloud.blockID, 4, 4, false, bronzeDungeon)).generate(this.worldObj, this.random, var6, var7, var8);
+            d = k + this.random.nextInt(4);
+            y = this.random.nextInt(32);
+            biomegenbase = l + this.random.nextInt(4);
+            (new AetherGenClouds(AetherBlocks.Aercloud.blockID, 4, 4, false, bronzeDungeon)).generate(this.worldObj, this.random, d, y, biomegenbase);
         }
 
         if (this.random.nextInt(50) == 0)
         {
-            var6 = var4 + this.random.nextInt(4);
-            var7 = this.random.nextInt(32);
-            var8 = var5 + this.random.nextInt(4);
-            (new AetherGenClouds(AetherBlocks.Aercloud.blockID, 3, 4, false, bronzeDungeon)).generate(this.worldObj, this.random, var6, var7, var8);
+            d = k + this.random.nextInt(4);
+            y = this.random.nextInt(32);
+            biomegenbase = l + this.random.nextInt(4);
+            (new AetherGenClouds(AetherBlocks.Aercloud.blockID, 3, 4, false, bronzeDungeon)).generate(this.worldObj, this.random, d, y, biomegenbase);
         }
 
         if (this.random.nextInt(13) == 0)
         {
-            var6 = var4 + this.random.nextInt(16);
-            var7 = this.random.nextInt(65) + 32;
-            var8 = var5 + this.random.nextInt(16);
-            (new AetherGenClouds(AetherBlocks.Aercloud.blockID, 3, 8, false, bronzeDungeon)).generate(this.worldObj, this.random, var6, var7, var8);
+            d = k + this.random.nextInt(16);
+            y = this.random.nextInt(65) + 32;
+            biomegenbase = l + this.random.nextInt(16);
+            (new AetherGenClouds(AetherBlocks.Aercloud.blockID, 3, 8, false, bronzeDungeon)).generate(this.worldObj, this.random, d, y, biomegenbase);
         }
 
         if (this.random.nextInt(50) == 0)
         {
-            var6 = var4 + this.random.nextInt(16);
-            var7 = this.random.nextInt(32) + 96;
-            var8 = var5 + this.random.nextInt(16);
-            (new AetherGenClouds(AetherBlocks.Aercloud.blockID, 2, 4, false, bronzeDungeon)).generate(this.worldObj, this.random, var6, var7, var8);
+            d = k + this.random.nextInt(16);
+            y = this.random.nextInt(32) + 96;
+            biomegenbase = l + this.random.nextInt(16);
+            (new AetherGenClouds(AetherBlocks.Aercloud.blockID, 2, 4, false, bronzeDungeon)).generate(this.worldObj, this.random, d, y, biomegenbase);
         }
 
         if (this.random.nextInt(13) == 0)
         {
-            var6 = var4 + this.random.nextInt(16);
-            var7 = this.random.nextInt(65) + 32;
-            var8 = var5 + this.random.nextInt(16);
-            (new AetherGenClouds(AetherBlocks.Aercloud.blockID, 1, 8, false, bronzeDungeon)).generate(this.worldObj, this.random, var6, var7, var8);
+            d = k + this.random.nextInt(16);
+            y = this.random.nextInt(65) + 32;
+            biomegenbase = l + this.random.nextInt(16);
+            (new AetherGenClouds(AetherBlocks.Aercloud.blockID, 1, 8, false, bronzeDungeon)).generate(this.worldObj, this.random, d, y, biomegenbase);
         }
 
         if (this.random.nextInt(7) == 0)
         {
-            var6 = var4 + this.random.nextInt(16);
-            var7 = this.random.nextInt(65) + 32;
-            var8 = var5 + this.random.nextInt(16);
-            (new AetherGenClouds(AetherBlocks.Aercloud.blockID, 0, 16, false, bronzeDungeon)).generate(this.worldObj, this.random, var6, var7, var8);
+            d = k + this.random.nextInt(16);
+            y = this.random.nextInt(65) + 32;
+            biomegenbase = l + this.random.nextInt(16);
+            (new AetherGenClouds(AetherBlocks.Aercloud.blockID, 0, 16, false, bronzeDungeon)).generate(this.worldObj, this.random, d, y, biomegenbase);
         }
 
         if (this.random.nextInt(25) == 0)
         {
-            var6 = var4 + this.random.nextInt(16);
-            var7 = this.random.nextInt(32);
-            var8 = var5 + this.random.nextInt(16);
-            (new AetherGenClouds(AetherBlocks.Aercloud.blockID, 0, 64, true, bronzeDungeon)).generate(this.worldObj, this.random, var6, var7, var8);
+            d = k + this.random.nextInt(16);
+            y = this.random.nextInt(32);
+            biomegenbase = l + this.random.nextInt(16);
+            (new AetherGenClouds(AetherBlocks.Aercloud.blockID, 0, 64, true, bronzeDungeon)).generate(this.worldObj, this.random, d, y, biomegenbase);
         }
 
         double var19 = 0.03125D;
-        this.field_28077_t = this.noiseGenerator5.generateNoiseOctaves(this.field_28077_t, var2, var3, 0, 16, 16, 1, var19, var19, var19);
-        bronzeDungeon.generateStructuresInChunk(this.worldObj, this.random, var2, var3, this.field_28077_t);
+        this.field_28077_t = this.noiseGenerator5.generateNoiseOctaves(this.field_28077_t, i, j, 0, 16, 16, 1, var19, var19, var19);
+        bronzeDungeon.generateStructuresInChunk(this.worldObj, this.random, i, j, this.field_28077_t);
         BiomeGenBase var20 = Aether.biome;
         BlockSand.fallInstantly = true;
         this.random.setSeed(this.worldObj.getSeed());
-        long var9 = this.random.nextLong() / 2L * 2L + 1L;
-        long var11 = this.random.nextLong() / 2L * 2L + 1L;
-        this.random.setSeed((long)var2 * var9 + (long)var3 * var11 ^ this.worldObj.getSeed());
+        long l1 = this.random.nextLong() / 2L * 2L + 1L;
+        long l2 = this.random.nextLong() / 2L * 2L + 1L;
+        this.random.setSeed((long)i * l1 + (long)j * l2 ^ this.worldObj.getSeed());
         var19 = 0.125D;
-        int var13;
-        int var14;
-        int var15;
-        int var16;
+        int numberofgrassgen;
+        int numberoftreegen;
+        int k17;
+        int j20;
 
-        for (var13 = 0; var13 < 20; ++var13)
+        for (numberofgrassgen = 0; numberofgrassgen < 20; ++numberofgrassgen)
         {
-            var14 = var4 + this.random.nextInt(16);
-            var15 = this.random.nextInt(128);
-            var16 = var5 + this.random.nextInt(16);
-            (new AetherGenMinable(AetherBlocks.AetherDirt.blockID, 32)).generate(this.worldObj, this.random, var14, var15, var16);
+            numberoftreegen = k + this.random.nextInt(16);
+            k17 = this.random.nextInt(128);
+            j20 = l + this.random.nextInt(16);
+            (new AetherGenMinable(AetherBlocks.AetherDirt.blockID, 32)).generate(this.worldObj, this.random, numberoftreegen, k17, j20);
         }
 
-        for (var13 = 0; var13 < 6; ++var13)
+        for (numberofgrassgen = 0; numberofgrassgen < 6; ++numberofgrassgen)
         {
-            var14 = var4 + this.random.nextInt(16) + 8;
-            var15 = this.random.nextInt(128);
-            var16 = var5 + this.random.nextInt(16) + 8;
-            (new AetherGenFlowers(AetherBlocks.WhiteFlower.blockID, 64)).generate(this.worldObj, this.random, var14, var15, var16);
+            numberoftreegen = k + this.random.nextInt(16) + 8;
+            k17 = this.random.nextInt(128);
+            j20 = l + this.random.nextInt(16) + 8;
+            (new AetherGenFlowers(AetherBlocks.WhiteFlower.blockID, 64)).generate(this.worldObj, this.random, numberoftreegen, k17, j20);
         }
 
-        for (var13 = 0; var13 < 6; ++var13)
+        for (numberofgrassgen = 0; numberofgrassgen < 6; ++numberofgrassgen)
         {
             if (this.random.nextInt(2) == 0)
             {
-                var14 = var4 + this.random.nextInt(16) + 8;
-                var15 = this.random.nextInt(128);
-                var16 = var5 + this.random.nextInt(16) + 8;
-                (new AetherGenFlowers(AetherBlocks.PurpleFlower.blockID, 64)).generate(this.worldObj, this.random, var14, var15, var16);
+                numberoftreegen = k + this.random.nextInt(16) + 8;
+                k17 = this.random.nextInt(128);
+                j20 = l + this.random.nextInt(16) + 8;
+                (new AetherGenFlowers(AetherBlocks.PurpleFlower.blockID, 64)).generate(this.worldObj, this.random, numberoftreegen, k17, j20);
             }
         }
 
-        for (var13 = 0; var13 < 10; ++var13)
+        for (numberofgrassgen = 0; numberofgrassgen < 10; ++numberofgrassgen)
         {
-            int var10000 = var4 + this.random.nextInt(16);
-            var15 = this.random.nextInt(128);
-            var16 = var5 + this.random.nextInt(16);
-            (new AetherGenMinable(AetherBlocks.Icestone.blockID, 10)).generate(this.worldObj, this.random, var2, var15, var16);
+            int var10000 = k + this.random.nextInt(16);
+            k17 = this.random.nextInt(128);
+            j20 = l + this.random.nextInt(16);
+            (new AetherGenMinable(AetherBlocks.Icestone.blockID, 10)).generate(this.worldObj, this.random, i, k17, j20);
         }
 
-        for (var13 = 0; var13 < 20; ++var13)
+        for (numberofgrassgen = 0; numberofgrassgen < 20; ++numberofgrassgen)
         {
-            var14 = var4 + this.random.nextInt(16);
-            var15 = this.random.nextInt(128);
-            var16 = var5 + this.random.nextInt(16);
-            (new AetherGenMinable(AetherBlocks.AmbrosiumOre.blockID, 16)).generate(this.worldObj, this.random, var14, var15, var16);
+            numberoftreegen = k + this.random.nextInt(16);
+            k17 = this.random.nextInt(128);
+            j20 = l + this.random.nextInt(16);
+            (new AetherGenMinable(AetherBlocks.AmbrosiumOre.blockID, 16)).generate(this.worldObj, this.random, numberoftreegen, k17, j20);
         }
 
-        for (var13 = 0; var13 < 15; ++var13)
+        for (numberofgrassgen = 0; numberofgrassgen < 15; ++numberofgrassgen)
         {
-            var14 = var4 + this.random.nextInt(16);
-            var15 = this.random.nextInt(64);
-            var16 = var5 + this.random.nextInt(16);
-            (new AetherGenMinable(AetherBlocks.ZaniteOre.blockID, 8)).generate(this.worldObj, this.random, var14, var15, var16);
+            numberoftreegen = k + this.random.nextInt(16);
+            k17 = this.random.nextInt(64);
+            j20 = l + this.random.nextInt(16);
+            (new AetherGenMinable(AetherBlocks.ZaniteOre.blockID, 8)).generate(this.worldObj, this.random, numberoftreegen, k17, j20);
         }
 
-        for (var13 = 0; var13 < 6; ++var13)
+        for (numberofgrassgen = 0; numberofgrassgen < 6; ++numberofgrassgen)
         {
-            var14 = var4 + this.random.nextInt(16);
-            var15 = this.random.nextInt(32);
-            var16 = var5 + this.random.nextInt(16);
-            (new AetherGenMinable(AetherBlocks.GravititeOre.blockID, 4)).generate(this.worldObj, this.random, var14, var15, var16);
+            numberoftreegen = k + this.random.nextInt(16);
+            k17 = this.random.nextInt(32);
+            j20 = l + this.random.nextInt(16);
+            (new AetherGenMinable(AetherBlocks.GravititeOre.blockID, 4)).generate(this.worldObj, this.random, numberoftreegen, k17, j20);
         }
 
-        for (var13 = 0; var13 < 4; ++var13)
+        for (numberofgrassgen = 0; numberofgrassgen < 4; ++numberofgrassgen)
         {
-            var14 = var4 + this.random.nextInt(16);
-            var15 = this.random.nextInt(128);
-            var16 = var5 + this.random.nextInt(16);
-            (new AetherGenMinable(AetherBlocks.ContinuumOre.blockID, 4)).generate(this.worldObj, this.random, var14, var15, var16);
+            numberoftreegen = k + this.random.nextInt(16);
+            k17 = this.random.nextInt(128);
+            j20 = l + this.random.nextInt(16);
+            (new AetherGenMinable(AetherBlocks.ContinuumOre.blockID, 4)).generate(this.worldObj, this.random, numberoftreegen, k17, j20);
         }
 
         if (this.random.nextInt(5) == 0)
         {
-            for (var13 = var4; var13 < var4 + 16; ++var13)
+            for (numberofgrassgen = k; numberofgrassgen < k + 16; ++numberofgrassgen)
             {
-                for (var14 = var5; var14 < var5 + 16; ++var14)
+                for (numberoftreegen = l; numberoftreegen < l + 16; ++numberoftreegen)
                 {
-                    for (var15 = 0; var15 < 48; ++var15)
+                    for (k17 = 0; k17 < 48; ++k17)
                     {
-                        if (this.worldObj.getBlockId(var13, var15, var14) == 0 && this.worldObj.getBlockId(var13, var15 + 1, var14) == AetherBlocks.AetherGrass.blockID && this.worldObj.getBlockId(var13, var15 + 2, var14) == 0)
+                        if (this.worldObj.getBlockId(numberofgrassgen, k17, numberoftreegen) == 0 && this.worldObj.getBlockId(numberofgrassgen, k17 + 1, numberoftreegen) == AetherBlocks.AetherGrass.blockID && this.worldObj.getBlockId(numberofgrassgen, k17 + 2, numberoftreegen) == 0)
                         {
-                            (new AetherGenQuicksoil(AetherBlocks.Quicksoil.blockID)).generate(this.worldObj, this.random, var13, var15, var14);
-                            var15 = 128;
+                            (new AetherGenQuicksoil(AetherBlocks.Quicksoil.blockID)).generate(this.worldObj, this.random, numberofgrassgen, k17, numberoftreegen);
+                            k17 = 128;
                         }
                     }
                 }
@@ -568,84 +568,84 @@ public class ChunkProviderAether implements IChunkProvider
         var19 = 0.5D;
         byte var22 = 4;
         byte var21 = 3;
-        int var17;
-        WorldGenerator var18;
+        int l21;
+        WorldGenerator l22;
 
-        for (var15 = 0; var15 < var21; ++var15)
+        for (k17 = 0; k17 < var21; ++k17)
         {
-            var16 = var4 + this.random.nextInt(16) + 8;
-            var17 = var5 + this.random.nextInt(16) + 8;
-            var18 = var20.getRandomWorldGenForTrees(this.random);
-            var18.setScale(1.0D, 1.0D, 1.0D);
-            var18.generate(this.worldObj, this.random, var16, this.worldObj.getHeightValue(var16, var17), var17);
+            j20 = k + this.random.nextInt(16) + 8;
+            l21 = l + this.random.nextInt(16) + 8;
+            l22 = var20.getRandomWorldGenForTrees(this.random);
+            l22.setScale(1.0D, 1.0D, 1.0D);
+            l22.generate(this.worldObj, this.random, j20, this.worldObj.getHeightValue(j20, l21), l21);
         }
 
-        for (var15 = 0; var15 < var22; ++var15)
+        for (k17 = 0; k17 < var22; ++k17)
         {
-            var16 = var4 + this.random.nextInt(16) + 8;
-            var17 = var5 + this.random.nextInt(16) + 8;
-            var18 = var20.getRandomWorldGenForGrass(this.random);
-            var18.setScale(1.0D, 1.0D, 1.0D);
-            var18.generate(this.worldObj, this.random, var16, this.worldObj.getHeightValue(var16, var17), var17);
+            j20 = k + this.random.nextInt(16) + 8;
+            l21 = l + this.random.nextInt(16) + 8;
+            l22 = var20.getRandomWorldGenForGrass(this.random);
+            l22.setScale(1.0D, 1.0D, 1.0D);
+            l22.generate(this.worldObj, this.random, j20, this.worldObj.getHeightValue(j20, l21), l21);
         }
 
         int var23;
 
-        for (var15 = 0; var15 < 2; ++var15)
+        for (k17 = 0; k17 < 2; ++k17)
         {
-            var16 = var4 + this.random.nextInt(16) + 8;
-            var17 = this.random.nextInt(128);
-            var23 = var5 + this.random.nextInt(16) + 8;
-            (new AetherGenFlowers(AetherBlocks.BerryBush.blockID, 32)).generate(this.worldObj, this.random, var16, var17, var23);
+            j20 = k + this.random.nextInt(16) + 8;
+            l21 = this.random.nextInt(128);
+            var23 = l + this.random.nextInt(16) + 8;
+            (new AetherGenFlowers(AetherBlocks.BerryBush.blockID, 32)).generate(this.worldObj, this.random, j20, l21, var23);
         }
 
-        for (var15 = 0; var15 < 2; ++var15)
+        for (k17 = 0; k17 < 2; ++k17)
         {
-            var16 = var4 + this.random.nextInt(16) + 8;
-            var17 = this.random.nextInt(128);
-            var23 = var5 + this.random.nextInt(16) + 8;
-            (new AetherGenOrangeFruit(16)).generate(this.worldObj, this.random, var16, var17, var23);
+            j20 = k + this.random.nextInt(16) + 8;
+            l21 = this.random.nextInt(128);
+            var23 = l + this.random.nextInt(16) + 8;
+            (new AetherGenOrangeFruit(16)).generate(this.worldObj, this.random, j20, l21, var23);
         }
 
-        for (var15 = 0; var15 < 50; ++var15)
+        for (k17 = 0; k17 < 50; ++k17)
         {
-            var16 = var4 + this.random.nextInt(16) + 8;
-            var17 = this.random.nextInt(this.random.nextInt(120) + 8);
-            var23 = var5 + this.random.nextInt(16) + 8;
-            (new AetherGenLiquids(Block.waterMoving.blockID)).generate(this.worldObj, this.random, var16, var17, var23);
+            j20 = k + this.random.nextInt(16) + 8;
+            l21 = this.random.nextInt(this.random.nextInt(120) + 8);
+            var23 = l + this.random.nextInt(16) + 8;
+            (new AetherGenLiquids(Block.waterMoving.blockID)).generate(this.worldObj, this.random, j20, l21, var23);
         }
 
-        SpawnerAnimals.performWorldGenSpawning(this.worldObj, var20, var4 + 8, var5 + 8, 16, 16, this.random);
+        SpawnerAnimals.performWorldGenSpawning(this.worldObj, var20, k + 8, l + 8, 16, 16, this.random);
         BlockSand.fallInstantly = false;
     }
 
-    public Chunk prepareChunk(int var1, int var2)
+    public Chunk prepareChunk(int i, int j)
     {
-        return this.provideChunk(var1, var2);
+        return this.provideChunk(i, j);
     }
 
     /**
      * Will return back a chunk, if it doesn't exist and its not a MP client it will generates all the blocks for the
      * specified chunk from the map seed and chunk seed
      */
-    public Chunk provideChunk(int var1, int var2)
+    public Chunk provideChunk(int i, int j)
     {
-        this.random.setSeed((long)var1 * 341873128712L + (long)var2 * 132897987541L);
-        byte[] var3 = new byte[32768];
-        this.func_28071_a(var1, var2, var3);
-        this.func_28072_a(var1, var2, var3);
-        this.mapGenCaves.generate(this, this.worldObj, var1, var2, var3);
-        bronzeDungeon.generate(this, this.worldObj, var1, var2, var3);
-        Chunk var4 = new Chunk(this.worldObj, var3, var1, var2);
-        var4.generateSkylightMap();
-        return var4;
+        this.random.setSeed((long)i * 341873128712L + (long)j * 132897987541L);
+        byte[] abyte0 = new byte[32768];
+        this.func_28071_a(i, j, abyte0);
+        this.func_28072_a(i, j, abyte0);
+        this.mapGenCaves.generate(this, this.worldObj, i, j, abyte0);
+        bronzeDungeon.generate(this, this.worldObj, i, j, abyte0);
+        Chunk chunk = new Chunk(this.worldObj, abyte0, i, j);
+        chunk.generateSkylightMap();
+        return chunk;
     }
 
     /**
      * Two modes of operation: if passed true, save all Chunks in one go.  If passed false, save up to two chunks.
      * Return true if all chunks have been saved.
      */
-    public boolean saveChunks(boolean var1, IProgressUpdate var2)
+    public boolean saveChunks(boolean flag, IProgressUpdate iprogressupdate)
     {
         return true;
     }

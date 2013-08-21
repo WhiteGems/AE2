@@ -12,13 +12,13 @@ import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.ResourceLocation;
 import org.lwjgl.opengl.GL11;
 
 public class GuiPartyEdit extends GuiScreen
 {
+    private static final ResourceLocation TEXTURE_PARTYMAIN = new ResourceLocation("aether", "textures/gui/partyMain.png");
     private final PartyData pm;
-    private int backgroundTexture;
-    private int easterTexture;
     private int xParty;
     private int yParty;
     private int wParty;
@@ -26,50 +26,50 @@ public class GuiPartyEdit extends GuiScreen
 
     /** Reference to the Minecraft object. */
     Minecraft mc;
-    private ArrayList partyType;
+    private ArrayList<String> partyType;
     private int typeIndex;
     private EntityPlayer player;
     private GuiButton typeButton;
     private String newPartyName;
     private GuiScreen parent;
 
-    public GuiPartyEdit(EntityPlayer var1, GuiScreen var2)
+    public GuiPartyEdit(EntityPlayer player, GuiScreen parent)
     {
-        this(new PartyData(), var1, var2);
+        this(new PartyData(), player, parent);
     }
 
     /**
      * Fired when a key is typed. This is the equivalent of KeyListener.keyTyped(KeyEvent e).
      */
-    protected void keyTyped(char var1, int var2)
+    protected void keyTyped(char charTyped, int keyTyped)
     {
-        super.keyTyped(var1, var2);
+        super.keyTyped(charTyped, keyTyped);
 
-        if (var2 == Minecraft.getMinecraft().gameSettings.keyBindInventory.keyCode)
+        if (keyTyped == Minecraft.getMinecraft().gameSettings.keyBindInventory.keyCode)
         {
             this.mc.displayGuiScreen((GuiScreen)null);
             this.mc.setIngameFocus();
         }
     }
 
-    public GuiPartyEdit(PartyData var1, EntityPlayer var2, GuiScreen var3)
+    public GuiPartyEdit(PartyData pm, EntityPlayer player, GuiScreen parent)
     {
         this.partyType = new ArrayList();
         this.typeIndex = 0;
-        this.parent = var3;
-        String var4 = PartyController.instance().getParty(var2).getType().name();
+        this.parent = parent;
+        String name = PartyController.instance().getParty(player).getType().name();
 
-        if (var4 == "Open")
+        if (name == "Open")
         {
             this.typeIndex = 0;
         }
 
-        if (var4 == "Closed")
+        if (name == "Closed")
         {
             this.typeIndex = 1;
         }
 
-        if (var4 == "Private")
+        if (name == "Private")
         {
             this.typeIndex = 2;
         }
@@ -77,20 +77,18 @@ public class GuiPartyEdit extends GuiScreen
         this.partyType.add("Open");
         this.partyType.add("Closed");
         this.partyType.add("Private");
-        this.player = var2;
+        this.player = player;
         this.mc = FMLClientHandler.instance().getClient();
-        this.pm = var1;
-        this.backgroundTexture = this.mc.renderEngine.getTexture("/net/aetherteam/aether/client/sprites/gui/partyMain.png");
-        this.easterTexture = this.mc.renderEngine.getTexture("/net/aetherteam/aether/client/sprites/gui/partyMain.png");
+        this.pm = pm;
         this.wParty = 256;
         this.hParty = 256;
-        ArrayList var5 = PartyController.instance().getParties();
+        ArrayList partyList = PartyController.instance().getParties();
 
-        for (int var6 = 0; var6 < var5.size(); ++var6)
+        for (int i = 0; i < partyList.size(); ++i)
         {
-            if (((Party)var5.get(var6)).getLeader().username.equals(var2.username))
+            if (((Party)partyList.get(i)).getLeader().username.equals(player.username))
             {
-                this.newPartyName = ((Party)var5.get(var6)).getName();
+                this.newPartyName = ((Party)partyList.get(i)).getName();
             }
         }
 
@@ -104,9 +102,9 @@ public class GuiPartyEdit extends GuiScreen
     {
         this.updateScreen();
         this.buttonList.clear();
-        Party var1 = PartyController.instance().getParty(this.player);
+        Party party = PartyController.instance().getParty(this.player);
 
-        if (var1 != null)
+        if (party != null)
         {
             this.typeButton = new GuiButton(4, this.xParty - 60, this.yParty + 30 - 28, 120, 20, "Type: " + PartyController.instance().getParty(this.player).getType().name());
         }
@@ -117,11 +115,11 @@ public class GuiPartyEdit extends GuiScreen
         this.buttonList.add(new GuiButton(2, this.xParty - 60, this.yParty - 14 - 28, 120, 20, "Manage Permissions"));
         this.buttonList.add(new GuiButton(1, this.xParty - 60, this.yParty + 8 - 28, 120, 20, "Manage Members"));
         this.buttonList.add(new GuiButton(0, this.xParty - 60, this.yParty + 81 - 28, 120, 20, "Back"));
-        ArrayList var2 = new ArrayList();
+        ArrayList partyList = new ArrayList();
 
-        for (int var3 = 0; var3 < var2.size(); ++var3)
+        for (int i = 0; i < partyList.size(); ++i)
         {
-            if (((Party)var2.get(var3)).getLeader().username == this.player.username)
+            if (((Party)partyList.get(i)).getLeader().username == this.player.username)
             {
                 ((GuiButton)this.buttonList.get(1)).enabled = false;
             }
@@ -131,9 +129,9 @@ public class GuiPartyEdit extends GuiScreen
     /**
      * Fired when a control is clicked. This is the equivalent of ActionListener.actionPerformed(ActionEvent e).
      */
-    protected void actionPerformed(GuiButton var1)
+    protected void actionPerformed(GuiButton btn)
     {
-        switch (var1.id)
+        switch (btn.id)
         {
             case 0:
                 this.mc.displayGuiScreen(this.parent);
@@ -174,7 +172,7 @@ public class GuiPartyEdit extends GuiScreen
     /**
      * Draws the screen and all the components in it.
      */
-    public void drawScreen(int var1, int var2, float var3)
+    public void drawScreen(int x, int y, float partialTick)
     {
         this.drawDefaultBackground();
         this.buttonList.clear();
@@ -183,28 +181,27 @@ public class GuiPartyEdit extends GuiScreen
         this.buttonList.add(new GuiButton(3, this.xParty - 60, this.yParty - 36 - 28, 120, 20, "Change Name"));
         this.buttonList.add(new GuiButton(1, this.xParty - 60, this.yParty - 14 - 28, 120, 20, "Manage Members"));
         this.buttonList.add(new GuiButton(0, this.xParty - 60, this.yParty + 81 - 28, 120, 20, "Back"));
-        ArrayList var4 = PartyController.instance().getParties();
-        int var5;
+        ArrayList partyList = PartyController.instance().getParties();
+        int centerX;
 
-        for (var5 = 0; var5 < var4.size(); ++var5)
+        for (centerX = 0; centerX < partyList.size(); ++centerX)
         {
-            if (((Party)var4.get(var5)).getLeader().username.equals(this.player.username) && ((Party)var4.get(var5)).getType().name() != this.partyType.get(this.typeIndex) && ((Party)var4.get(var5)).getName() == this.newPartyName)
+            if (((Party)partyList.get(centerX)).getLeader().username.equals(this.player.username) && ((Party)partyList.get(centerX)).getType().name() != this.partyType.get(this.typeIndex) && ((Party)partyList.get(centerX)).getName() == this.newPartyName)
             {
                 ;
             }
         }
 
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-        GL11.glBindTexture(GL11.GL_TEXTURE_2D, this.backgroundTexture);
-        var5 = this.xParty - 70;
-        int var6 = this.yParty - 84;
+        this.mc.renderEngine.func_110577_a(TEXTURE_PARTYMAIN);
+        centerX = this.xParty - 70;
+        int centerY = this.yParty - 84;
         new ScaledResolution(this.mc.gameSettings, this.mc.displayWidth, this.mc.displayHeight);
-        this.drawTexturedModalRect(var5, var6, 0, 0, 141, this.hParty);
-        GL11.glBindTexture(GL11.GL_TEXTURE_2D, this.backgroundTexture);
-        this.mc.renderEngine.resetBoundTexture();
-        String var8 = "Manage Party";
-        this.drawString(this.fontRenderer, var8, var5 + 69 - this.fontRenderer.getStringWidth(var8) / 2, var6 + 5, 16777215);
-        super.drawScreen(var1, var2, var3);
+        this.drawTexturedModalRect(centerX, centerY, 0, 0, 141, this.hParty);
+        this.mc.renderEngine.func_110577_a(TEXTURE_PARTYMAIN);
+        String name = "Manage Party";
+        this.drawString(this.fontRenderer, name, centerX + 69 - this.fontRenderer.getStringWidth(name) / 2, centerY + 5, 16777215);
+        super.drawScreen(x, y, partialTick);
     }
 
     /**
@@ -213,10 +210,10 @@ public class GuiPartyEdit extends GuiScreen
     public void updateScreen()
     {
         super.updateScreen();
-        ScaledResolution var1 = new ScaledResolution(this.mc.gameSettings, this.mc.displayWidth, this.mc.displayHeight);
-        int var2 = var1.getScaledWidth();
-        int var3 = var1.getScaledHeight();
-        this.xParty = var2 / 2;
-        this.yParty = var3 / 2;
+        ScaledResolution scaledresolution = new ScaledResolution(this.mc.gameSettings, this.mc.displayWidth, this.mc.displayHeight);
+        int width = scaledresolution.getScaledWidth();
+        int height = scaledresolution.getScaledHeight();
+        this.xParty = width / 2;
+        this.yParty = height / 2;
     }
 }

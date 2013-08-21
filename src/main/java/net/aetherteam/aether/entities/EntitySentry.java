@@ -5,6 +5,8 @@ import net.aetherteam.aether.entities.bosses.EntitySentryGuardian;
 import net.aetherteam.aether.entities.bosses.EntitySlider;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
@@ -23,56 +25,52 @@ public class EntitySentry extends EntityDungeonMob
     public float field_100021_a;
     public float field_100020_b;
     private int jcount;
-    public int size;
+    public int size = 2;
     public int counter;
     public int lostyou;
     private EntitySentryGuardian parent;
 
-    public EntitySentry(World var1)
+    public EntitySentry(World world)
     {
-        super(var1);
-        this.texture = this.dir + "/mobs/sentry/sentry.png";
-        this.size = 2;
+        super(world);
         this.yOffset = 0.0F;
-        this.moveSpeed = 1.0F;
+        this.func_110148_a(SharedMonsterAttributes.field_111263_d).func_111128_a(1.0D);
         this.field_100021_a = 1.0F;
         this.field_100020_b = 1.0F;
         this.jcount = this.rand.nextInt(20) + 10;
         this.func_100019_e(this.size);
-        this.worldObj = var1;
+        this.worldObj = world;
     }
 
-    public EntitySentry(World var1, double var2, double var4, double var6)
+    public EntitySentry(World world, double x, double y, double z)
     {
-        super(var1);
-        this.texture = this.dir + "/mobs/sentry/sentry.png";
-        this.size = 2;
+        super(world);
         this.yOffset = 0.0F;
-        this.moveSpeed = 1.0F;
+        this.func_110148_a(SharedMonsterAttributes.field_111263_d).func_111128_a(1.0D);
         this.field_100021_a = 1.0F;
         this.field_100020_b = 1.0F;
         this.jcount = this.rand.nextInt(20) + 10;
         this.func_100019_e(this.size);
-        this.setPosition(var2, var4, var6);
-        this.worldObj = var1;
+        this.setPosition(x, y, z);
+        this.worldObj = world;
     }
 
     /**
      * Called when the mob's health reaches 0.
      */
-    public void onDeath(DamageSource var1)
+    public void onDeath(DamageSource source)
     {
         if (this.parent != null)
         {
             this.parent.failedYou();
         }
 
-        super.onDeath(var1);
+        super.onDeath(source);
     }
 
-    public void func_100019_e(int var1)
+    public void func_100019_e(int i)
     {
-        this.setEntityHealth(10);
+        this.setEntityHealth(10.0F);
         this.width = 0.85F;
         this.height = 0.85F;
         this.setPosition(this.posX, this.posY, this.posZ);
@@ -81,25 +79,25 @@ public class EntitySentry extends EntityDungeonMob
     /**
      * (abstract) Protected helper method to write subclass entity data to NBT.
      */
-    public void writeEntityToNBT(NBTTagCompound var1)
+    public void writeEntityToNBT(NBTTagCompound nbttagcompound)
     {
-        super.writeEntityToNBT(var1);
-        var1.setInteger("Size", this.size - 1);
-        var1.setInteger("LostYou", this.lostyou);
-        var1.setInteger("Counter", this.counter);
-        var1.setBoolean("Awake", this.getAwake());
+        super.writeEntityToNBT(nbttagcompound);
+        nbttagcompound.setInteger("Size", this.size - 1);
+        nbttagcompound.setInteger("LostYou", this.lostyou);
+        nbttagcompound.setInteger("Counter", this.counter);
+        nbttagcompound.setBoolean("Awake", this.getAwake());
     }
 
     /**
      * (abstract) Protected helper method to read subclass entity data from NBT.
      */
-    public void readEntityFromNBT(NBTTagCompound var1)
+    public void readEntityFromNBT(NBTTagCompound nbttagcompound)
     {
-        super.readEntityFromNBT(var1);
-        this.size = var1.getInteger("Size") + 1;
-        this.lostyou = var1.getInteger("LostYou");
-        this.counter = var1.getInteger("Counter");
-        this.setAwake(var1.getBoolean("Awake"));
+        super.readEntityFromNBT(nbttagcompound);
+        this.size = nbttagcompound.getInteger("Size") + 1;
+        this.lostyou = nbttagcompound.getInteger("LostYou");
+        this.counter = nbttagcompound.getInteger("Counter");
+        this.setAwake(nbttagcompound.getBoolean("Awake"));
     }
 
     /**
@@ -107,14 +105,14 @@ public class EntitySentry extends EntityDungeonMob
      */
     public void onUpdate()
     {
-        boolean var1 = this.onGround;
+        boolean flag = this.onGround;
         super.onUpdate();
 
-        if (this.onGround && !var1)
+        if (this.onGround && !flag)
         {
             this.worldObj.playSoundAtEntity(this, "mob.slime.small", this.getSoundVolume(), ((this.rand.nextFloat() - this.rand.nextFloat()) * 0.2F + 1.0F) / 0.8F);
         }
-        else if (!this.onGround && var1 && this.entityToAttack != null)
+        else if (!this.onGround && flag && this.entityToAttack != null)
         {
             this.motionX *= 3.0D;
             this.motionZ *= 3.0D;
@@ -128,47 +126,43 @@ public class EntitySentry extends EntityDungeonMob
         if (this.shouldExplode && !this.worldObj.isRemote)
         {
             this.worldObj.createExplosion(this, this.posX, this.posY, this.posZ, 0.1F, false);
-            this.setEntityHealth(0);
+            this.setEntityHealth(0.0F);
             this.setDead();
         }
     }
 
-    /**
-     * Called when the entity is attacked.
-     */
-    public boolean attackEntityFrom(DamageSource var1, int var2)
+    public boolean attackEntityFrom(DamageSource ds, int i)
     {
-        boolean var3 = super.attackEntityFrom(var1, var2);
+        boolean flag = super.attackEntityFrom(ds, i);
 
-        if (var3 && var1.getEntity() instanceof EntityLiving)
+        if (flag && ds.getEntity() instanceof EntityLiving)
         {
             this.setAwake(true);
             this.lostyou = 0;
-            this.entityToAttack = var1.getEntity();
-            this.texture = this.dir + "/mobs/sentry/sentry_lit.png";
+            this.entityToAttack = ds.getEntity();
         }
 
-        return var3;
+        return flag;
     }
 
-    public void setArrowHeading(double var1, double var3, double var5, float var7, float var8)
+    public void setArrowHeading(double d, double d1, double d2, float f, float f1)
     {
-        float var9 = MathHelper.sqrt_double(var1 * var1 + var3 * var3 + var5 * var5);
-        var1 /= (double)var9;
-        var3 /= (double)var9;
-        var5 /= (double)var9;
-        var1 += this.rand.nextGaussian() * 0.007499999832361937D * (double)var8;
-        var3 += this.rand.nextGaussian() * 0.007499999832361937D * (double)var8;
-        var5 += this.rand.nextGaussian() * 0.007499999832361937D * (double)var8;
-        var1 *= (double)var7;
-        var3 *= (double)var7;
-        var5 *= (double)var7;
-        this.motionX = var1;
-        this.motionY = var3;
-        this.motionZ = var5;
-        float var10 = MathHelper.sqrt_double(var1 * var1 + var5 * var5);
-        this.prevRotationYaw = this.rotationYaw = (float)(Math.atan2(var1, var5) * 180.0D / Math.PI);
-        this.prevRotationPitch = this.rotationPitch = (float)(Math.atan2(var3, (double)var10) * 180.0D / Math.PI);
+        float f2 = MathHelper.sqrt_double(d * d + d1 * d1 + d2 * d2);
+        d /= (double)f2;
+        d1 /= (double)f2;
+        d2 /= (double)f2;
+        d += this.rand.nextGaussian() * 0.007499999832361937D * (double)f1;
+        d1 += this.rand.nextGaussian() * 0.007499999832361937D * (double)f1;
+        d2 += this.rand.nextGaussian() * 0.007499999832361937D * (double)f1;
+        d *= (double)f;
+        d1 *= (double)f;
+        d2 *= (double)f;
+        this.motionX = d;
+        this.motionY = d1;
+        this.motionZ = d2;
+        float f3 = MathHelper.sqrt_double(d * d + d2 * d2);
+        this.prevRotationYaw = this.rotationYaw = (float)(Math.atan2(d, d2) * 180.0D / Math.PI);
+        this.prevRotationPitch = this.rotationPitch = (float)(Math.atan2(d1, (double)f3) * 180.0D / Math.PI);
     }
 
     public void shutdown()
@@ -176,7 +170,6 @@ public class EntitySentry extends EntityDungeonMob
         this.counter = -64;
         this.setAwake(false);
         this.entityToAttack = null;
-        this.texture = this.dir + "/mobs/sentry/sentry.png";
         this.setPathToEntity((PathEntity)null);
         this.moveStrafing = 0.0F;
         this.moveForward = 0.0F;
@@ -188,47 +181,47 @@ public class EntitySentry extends EntityDungeonMob
     /**
      * Applies a velocity to each of the entities pushing them away from each other. Args: entity
      */
-    public void applyEntityCollision(Entity var1)
+    public void applyEntityCollision(Entity entity)
     {
-        if (!this.worldObj.isRemote && !this.isDead && this.entityToAttack != null && var1 != null && this.entityToAttack == var1)
+        if (!this.worldObj.isRemote && !this.isDead && this.entityToAttack != null && entity != null && this.entityToAttack == entity)
         {
-            if (var1 instanceof EntityPlayer && !((EntityPlayer)var1).capabilities.isCreativeMode)
+            if (entity instanceof EntityPlayer && !((EntityPlayer)entity).capabilities.isCreativeMode)
             {
                 ;
             }
 
-            if (var1 instanceof EntitySlider)
+            if (entity instanceof EntitySlider)
             {
                 return;
             }
 
             this.shouldExplode = true;
-            var1.attackEntityFrom(DamageSource.causeMobDamage(this), 2);
+            entity.attackEntityFrom(DamageSource.causeMobDamage(this), 2.0F);
 
-            if (var1 instanceof EntityLiving)
+            if (entity instanceof EntityLivingBase)
             {
-                EntityLiving var2 = (EntityLiving)var1;
-                double var3 = var2.posX - this.posX;
-                double var5;
+                EntityLivingBase f = (EntityLivingBase)entity;
+                double i = f.posX - this.posX;
+                double d2;
 
-                for (var5 = var2.posZ - this.posZ; var3 * var3 + var5 * var5 < 1.0E-4D; var5 = (Math.random() - Math.random()) * 0.01D)
+                for (d2 = f.posZ - this.posZ; i * i + d2 * d2 < 1.0E-4D; d2 = (Math.random() - Math.random()) * 0.01D)
                 {
-                    var3 = (Math.random() - Math.random()) * 0.01D;
+                    i = (Math.random() - Math.random()) * 0.01D;
                 }
 
-                if (var1 instanceof EntityPlayerMP)
+                if (entity instanceof EntityPlayerMP)
                 {
-                    var2.knockBack(this, 5, -var3, -var5);
-                    var2.addVelocity(4.0D, 0.0D, 0.0D);
-                    var2.addVelocity(0.0D, 4.0D, 0.0D);
-                    var2.addVelocity(0.0D, 0.0D, 4.0D);
+                    f.knockBack(this, 5.0F, -i, -d2);
+                    f.addVelocity(4.0D, 0.0D, 0.0D);
+                    f.addVelocity(0.0D, 4.0D, 0.0D);
+                    f.addVelocity(0.0D, 0.0D, 4.0D);
                 }
                 else
                 {
-                    var2.knockBack(this, 5, -var3, -var5);
-                    var2.addVelocity(4.0D, 0.0D, 0.0D);
-                    var2.addVelocity(0.0D, 4.0D, 0.0D);
-                    var2.addVelocity(0.0D, 0.0D, 4.0D);
+                    f.knockBack(this, 5.0F, -i, -d2);
+                    f.addVelocity(4.0D, 0.0D, 0.0D);
+                    f.addVelocity(0.0D, 4.0D, 0.0D);
+                    f.addVelocity(0.0D, 0.0D, 4.0D);
                 }
             }
 
@@ -236,28 +229,27 @@ public class EntitySentry extends EntityDungeonMob
 
             for (int var12 = 0; var12 < 40; ++var12)
             {
-                double var4 = (double)((float)this.posX + this.rand.nextFloat() * 0.25F);
-                double var6 = (double)((float)this.posY + 0.5F);
-                double var8 = (double)((float)this.posZ + this.rand.nextFloat() * 0.25F);
-                float var10 = this.rand.nextFloat() * 360.0F;
-                this.worldObj.spawnParticle("explode", var4, var6, var8, -Math.sin((double)(var11 * var10)) * 0.75D, 0.125D, Math.cos((double)(var11 * var10)) * 0.75D);
+                double d1 = (double)((float)this.posX + this.rand.nextFloat() * 0.25F);
+                double d3 = (double)((float)this.posY + 0.5F);
+                double d4 = (double)((float)this.posZ + this.rand.nextFloat() * 0.25F);
+                float f1 = this.rand.nextFloat() * 360.0F;
+                this.worldObj.spawnParticle("explode", d1, d3, d4, -Math.sin((double)(var11 * f1)) * 0.75D, 0.125D, Math.cos((double)(var11 * f1)) * 0.75D);
             }
         }
     }
 
     protected void updateEntityActionState()
     {
-        EntityPlayer var1 = this.worldObj.getClosestPlayerToEntity(this, 8.0D);
+        EntityPlayer entityplayer = this.worldObj.getClosestPlayerToEntity(this, 8.0D);
 
         if (!this.getAwake() && this.counter >= 8)
         {
-            if (var1 != null && this.canEntityBeSeen(var1) && !var1.capabilities.isCreativeMode)
+            if (entityplayer != null && this.canEntityBeSeen(entityplayer) && !entityplayer.capabilities.isCreativeMode)
             {
-                this.faceEntity(var1, 10.0F, 10.0F);
-                this.entityToAttack = var1;
+                this.faceEntity(entityplayer, 10.0F, 10.0F);
+                this.entityToAttack = entityplayer;
                 this.setAwake(true);
                 this.lostyou = 0;
-                this.texture = this.dir + "/mobs/sentry/sentry_lit.png";
             }
 
             this.counter = 0;
@@ -266,9 +258,9 @@ public class EntitySentry extends EntityDungeonMob
         {
             if (this.entityToAttack == null)
             {
-                if (var1 != null && this.canEntityBeSeen(var1))
+                if (entityplayer != null && this.canEntityBeSeen(entityplayer))
                 {
-                    this.entityToAttack = var1;
+                    this.entityToAttack = entityplayer;
                     this.setAwake(true);
                     this.lostyou = 0;
                 }
@@ -387,9 +379,9 @@ public class EntitySentry extends EntityDungeonMob
         return (this.dataWatcher.getWatchableObjectByte(16) & 1) != 0;
     }
 
-    public void setAwake(boolean var1)
+    public void setAwake(boolean awake)
     {
-        if (var1)
+        if (awake)
         {
             this.dataWatcher.updateObject(16, Byte.valueOf((byte)1));
         }
@@ -399,8 +391,8 @@ public class EntitySentry extends EntityDungeonMob
         }
     }
 
-    public void setParent(EntitySentryGuardian var1)
+    public void setParent(EntitySentryGuardian entitySentryGuardian)
     {
-        this.parent = var1;
+        this.parent = entitySentryGuardian;
     }
 }

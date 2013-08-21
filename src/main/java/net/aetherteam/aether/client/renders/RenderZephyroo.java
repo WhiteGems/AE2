@@ -3,27 +3,36 @@ package net.aetherteam.aether.client.renders;
 import net.aetherteam.aether.entities.EntityZephyroo;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.renderer.entity.RenderLiving;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
+import net.minecraft.util.ResourceLocation;
 
 public class RenderZephyroo extends RenderLiving
 {
-    public RenderZephyroo(ModelBase var1, float var2)
+    public static final ResourceLocation TEXTURE = new ResourceLocation("aether", "textures/mobs/Zephyroo.png");
+
+    public RenderZephyroo(ModelBase par1ModelBase, float par2)
     {
-        super(var1, var2);
+        super(par1ModelBase, par2);
     }
 
-    public void doRenderLiving(EntityLiving var1, double var2, double var4, double var6, float var8, float var9)
+    public void doRenderLiving(EntityLiving par1EntityLiving, double par2, double par4, double par6, float par8, float par9)
     {
-        super.doRenderLiving(var1, var2, var4, var6, var8, var9);
+        super.doRenderLiving(par1EntityLiving, par2, par4, par6, par8, par9);
 
-        if (var1 instanceof EntityZephyroo)
+        if (par1EntityLiving instanceof EntityZephyroo)
         {
-            EntityZephyroo var10 = (EntityZephyroo)var1;
+            EntityZephyroo roo = (EntityZephyroo)par1EntityLiving;
 
-            if (var10.isLovingClash())
+            if (roo.isLovingClash())
             {
-                this.func_96449_a(var1, var2, var4, var6, "pls lov me clashy <3", var9, 1.0D);
+                this.func_96449_a(par1EntityLiving, par2, par4, par6, "pls lov me clashy <3", par9, 1.0D);
             }
         }
+    }
+
+    protected ResourceLocation func_110775_a(Entity entity)
+    {
+        return TEXTURE;
     }
 }

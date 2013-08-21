@@ -16,21 +16,21 @@ import net.minecraft.client.gui.GuiPlayerInfo;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.StringUtils;
+import net.minecraft.util.ResourceLocation;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;
 
 public class GuiRequestPlayer extends GuiScreen
 {
+    private static final ResourceLocation TEXTURE_DIALOGUE = new ResourceLocation("aether", "textures/gui/dialogue.png");
+    private static final ResourceLocation TEXTURE_PARTY = new ResourceLocation("aether", "textures/gui/party.png");
     protected static final String ONLINE_TEXT = "ONLINE";
     protected static final String OFFLINE_TEXT = "OFFLINE";
     private static final int ONLINE_TEXT_COLOR = 6750054;
     private static final int OFFLINE_TEXT_COLOR = 16711680;
     private GuiYSlider sbar;
     private float sbarVal = 0.0F;
-    private int backgroundTexture;
-    private int dialogueTexture;
     private int xMember;
     private int yMember;
     private int wMember;
@@ -39,7 +39,7 @@ public class GuiRequestPlayer extends GuiScreen
     /** Reference to the Minecraft object. */
     Minecraft mc;
     private int totalHeight;
-    private ArrayList playerSlots = new ArrayList();
+    private ArrayList<GuiPlayerRequestSlot> playerSlots = new ArrayList();
     private GuiPlayerRequestSlot selectedPlayerSlot;
     private boolean slotsCreated = false;
     private boolean slotIsSelected = false;
@@ -47,13 +47,11 @@ public class GuiRequestPlayer extends GuiScreen
     private EntityPlayer player;
     private GuiButton kickButton;
 
-    public GuiRequestPlayer(EntityPlayer var1, GuiScreen var2)
+    public GuiRequestPlayer(EntityPlayer player, GuiScreen parent)
     {
-        this.player = var1;
-        this.parent = var2;
+        this.player = player;
+        this.parent = parent;
         this.mc = FMLClientHandler.instance().getClient();
-        this.backgroundTexture = this.mc.renderEngine.getTexture("/net/aetherteam/aether/client/sprites/gui/party.png");
-        this.dialogueTexture = this.mc.renderEngine.getTexture("/net/aetherteam/aether/client/sprites/gui/dialogue.png");
         this.wMember = 256;
         this.hMember = 256;
         this.updateScreen();
@@ -82,11 +80,11 @@ public class GuiRequestPlayer extends GuiScreen
     /**
      * Fired when a key is typed. This is the equivalent of KeyListener.keyTyped(KeyEvent e).
      */
-    protected void keyTyped(char var1, int var2)
+    protected void keyTyped(char charTyped, int keyTyped)
     {
-        super.keyTyped(var1, var2);
+        super.keyTyped(charTyped, keyTyped);
 
-        if (var2 == Minecraft.getMinecraft().gameSettings.keyBindInventory.keyCode)
+        if (keyTyped == Minecraft.getMinecraft().gameSettings.keyBindInventory.keyCode)
         {
             this.mc.displayGuiScreen((GuiScreen)null);
             this.mc.setIngameFocus();
@@ -96,43 +94,43 @@ public class GuiRequestPlayer extends GuiScreen
     /**
      * Called when the mouse is clicked.
      */
-    protected void mouseClicked(int var1, int var2, int var3)
+    protected void mouseClicked(int par1, int par2, int par3)
     {
-        if (var3 == 0)
+        if (par3 == 0)
         {
             if (this.totalHeight > 103)
             {
-                this.sbar.mousePressed(this.mc, var1, var2);
+                this.sbar.mousePressed(this.mc, par1, par2);
             }
 
-            for (int var4 = 0; var4 < this.playerSlots.size(); ++var4)
+            for (int l = 0; l < this.playerSlots.size(); ++l)
             {
-                int var5 = (int)((float)var2 + this.sbar.sliderValue * (float)(this.totalHeight - 103));
-                GuiPlayerRequestSlot var6 = (GuiPlayerRequestSlot)this.playerSlots.get(var4);
+                int y = (int)((float)par2 + this.sbar.sliderValue * (float)(this.totalHeight - 103));
+                GuiPlayerRequestSlot playerSlot = (GuiPlayerRequestSlot)this.playerSlots.get(l);
 
-                if (var6.mousePressed(this.mc, var1, var5) && var2 < this.yMember + 50)
+                if (playerSlot.mousePressed(this.mc, par1, y) && par2 < this.yMember + 50)
                 {
-                    boolean var7 = false;
+                    boolean pending = false;
 
-                    if (var6 != null)
+                    if (playerSlot != null)
                     {
-                        var7 = NotificationHandler.instance().hasSentToBefore(var6.username, NotificationType.PARTY_REQUEST, this.player.username);
+                        pending = NotificationHandler.instance().hasSentToBefore(playerSlot.entityPlayer.username, NotificationType.PARTY_REQUEST, this.player.username);
                     }
 
-                    if (!var7 && !PartyController.instance().inParty(var6.username))
+                    if (!pending && !PartyController.instance().inParty(playerSlot.entityPlayer.username))
                     {
-                        var6.selected = true;
+                        playerSlot.selected = true;
                         this.slotIsSelected = true;
-                        this.selectedPlayerSlot = var6;
+                        this.selectedPlayerSlot = playerSlot;
                         this.mc.sndManager.playSoundFX("random.click", 1.0F, 1.0F);
 
-                        for (int var8 = 0; var8 < this.playerSlots.size(); ++var8)
+                        for (int rr = 0; rr < this.playerSlots.size(); ++rr)
                         {
-                            GuiPlayerRequestSlot var9 = (GuiPlayerRequestSlot)this.playerSlots.get(var8);
+                            GuiPlayerRequestSlot playerSlot2 = (GuiPlayerRequestSlot)this.playerSlots.get(rr);
 
-                            if (var9 != var6)
+                            if (playerSlot2 != playerSlot)
                             {
-                                var9.selected = false;
+                                playerSlot2.selected = false;
                             }
                         }
 
@@ -150,34 +148,34 @@ public class GuiRequestPlayer extends GuiScreen
                     return;
                 }
 
-                var6.selected = false;
+                playerSlot.selected = false;
                 this.slotIsSelected = false;
             }
         }
 
-        super.mouseClicked(var1, var2, var3);
+        super.mouseClicked(par1, par2, par3);
     }
 
     /**
      * Called when the mouse is moved or a mouse button is released.  Signature: (mouseX, mouseY, which) which==-1 is
      * mouseMove, which==0 or which==1 is mouseUp
      */
-    protected void mouseMovedOrUp(int var1, int var2, int var3)
+    protected void mouseMovedOrUp(int par1, int par2, int par3)
     {
-        if (var3 == 0)
+        if (par3 == 0)
         {
-            this.sbar.mouseReleased(var1, var2);
+            this.sbar.mouseReleased(par1, par2);
         }
 
-        super.mouseMovedOrUp(var1, var2, var3);
+        super.mouseMovedOrUp(par1, par2, par3);
     }
 
     /**
      * Fired when a control is clicked. This is the equivalent of ActionListener.actionPerformed(ActionEvent e).
      */
-    protected void actionPerformed(GuiButton var1)
+    protected void actionPerformed(GuiButton btn)
     {
-        switch (var1.id)
+        switch (btn.id)
         {
             case 0:
                 this.mc.displayGuiScreen(this.parent);
@@ -186,10 +184,10 @@ public class GuiRequestPlayer extends GuiScreen
             case 1:
                 if (this.selectedPlayerSlot != null)
                 {
-                    Party var2 = PartyController.instance().getParty(this.player);
-                    PartyMember var3 = PartyController.instance().getMember(this.player);
-                    PartyController.instance().requestPlayer(var2, var3, this.selectedPlayerSlot.username, true);
-                    NotificationHandler.instance().sendNotification(new Notification(NotificationType.PARTY_REQUEST, this.player.username, this.selectedPlayerSlot.username));
+                    Party party = PartyController.instance().getParty(this.player);
+                    PartyMember member = PartyController.instance().getMember(this.player);
+                    PartyController.instance().requestPlayer(party, member, this.selectedPlayerSlot.entityPlayer.username, true);
+                    NotificationHandler.instance().sendNotification(new Notification(NotificationType.PARTY_REQUEST, this.player.username, this.selectedPlayerSlot.entityPlayer.username));
                 }
         }
     }
@@ -205,12 +203,12 @@ public class GuiRequestPlayer extends GuiScreen
     /**
      * Draws the screen and all the components in it.
      */
-    public void drawScreen(int var1, int var2, float var3)
+    public void drawScreen(int x, int y, float partialTick)
     {
         this.buttonList.clear();
-        List var4 = this.mc.thePlayer.sendQueue.playerInfoList;
+        List playerList = this.mc.thePlayer.sendQueue.playerInfoList;
 
-        if (var4.size() != this.playerSlots.size())
+        if (playerList.size() != this.playerSlots.size())
         {
             this.playerSlots.clear();
             this.slotsCreated = false;
@@ -218,9 +216,9 @@ public class GuiRequestPlayer extends GuiScreen
 
         this.drawDefaultBackground();
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-        GL11.glBindTexture(GL11.GL_TEXTURE_2D, this.backgroundTexture);
-        int var5 = Mouse.getDWheel();
-        this.sbar.sliderValue -= (float)var5 / 1000.0F;
+        this.mc.renderEngine.func_110577_a(TEXTURE_PARTY);
+        int dmsy = Mouse.getDWheel();
+        this.sbar.sliderValue -= (float)dmsy / 1000.0F;
 
         if (this.sbar.sliderValue > 1.0F)
         {
@@ -232,46 +230,45 @@ public class GuiRequestPlayer extends GuiScreen
             this.sbar.sliderValue = 0.0F;
         }
 
-        int var6 = this.xMember - 70;
-        int var7 = this.yMember - 84;
-        ScaledResolution var8 = new ScaledResolution(this.mc.gameSettings, this.mc.displayWidth, this.mc.displayHeight);
-        this.drawTexturedModalRect(var6, var7, 0, 0, 141, this.hMember);
+        int centerX = this.xMember - 70;
+        int centerY = this.yMember - 84;
+        ScaledResolution sr = new ScaledResolution(this.mc.gameSettings, this.mc.displayWidth, this.mc.displayHeight);
+        this.drawTexturedModalRect(centerX, centerY, 0, 0, 141, this.hMember);
         this.totalHeight = 0;
-        byte var9 = 100;
-        byte var10 = 20;
-        byte var11 = 2;
+        byte slotW = 100;
+        byte slotH = 20;
+        byte gutter = 2;
         GL11.glEnable(GL11.GL_SCISSOR_TEST);
-        GL11.glScissor((var6 + 14) * var8.getScaleFactor(), (var7 + 35) * var8.getScaleFactor(), var9 * var8.getScaleFactor(), 103 * var8.getScaleFactor());
+        GL11.glScissor((centerX + 14) * sr.getScaleFactor(), (centerY + 35) * sr.getScaleFactor(), slotW * sr.getScaleFactor(), 103 * sr.getScaleFactor());
         GL11.glPushMatrix();
-        this.totalHeight = var4.size() * (var10 + var11);
-        float var12 = -this.sbar.sliderValue * (float)(this.totalHeight - 105);
+        this.totalHeight = playerList.size() * (slotH + gutter);
+        float sVal = -this.sbar.sliderValue * (float)(this.totalHeight - 105);
 
         if (this.totalHeight > 103)
         {
-            GL11.glTranslatef(0.0F, var12, 0.0F);
+            GL11.glTranslatef(0.0F, sVal, 0.0F);
         }
 
         this.totalHeight = 0;
-        int var13;
+        int kickName;
 
         if (!this.slotsCreated)
         {
-            for (var13 = 0; var13 < var4.size(); ++var13)
+            for (kickName = 0; kickName < playerList.size(); ++kickName)
             {
-                GuiPlayerInfo var14 = (GuiPlayerInfo)var4.get(var13);
-                String var15 = var14.name;
-                String var16 = "http://skins.minecraft.net/MinecraftSkins/" + StringUtils.stripControlCodes(var15) + ".png";
-                this.playerSlots.add(new GuiPlayerRequestSlot(var15, var16, this.playerSlots.size(), var6 + 15, var7 + this.totalHeight + 30, var9, var10));
-                this.totalHeight += var10 + var11;
+                GuiPlayerInfo pending = (GuiPlayerInfo)playerList.get(kickName);
+                String name = pending.name;
+                this.playerSlots.add(new GuiPlayerRequestSlot(this.mc.theWorld.getPlayerEntityByName(name), this.playerSlots.size(), centerX + 15, centerY + this.totalHeight + 30, slotW, slotH));
+                this.totalHeight += slotH + gutter;
             }
 
             this.slotsCreated = true;
         }
 
-        for (var13 = 0; var13 < this.playerSlots.size(); ++var13)
+        for (kickName = 0; kickName < this.playerSlots.size(); ++kickName)
         {
-            ((GuiPlayerRequestSlot)this.playerSlots.get(var13)).drawPlayerSlot(var6 + 15, var7 + this.totalHeight + 30, var9, var10);
-            this.totalHeight += var10 + var11;
+            ((GuiPlayerRequestSlot)this.playerSlots.get(kickName)).drawPlayerSlot(centerX + 15, centerY + this.totalHeight + 30, slotW, slotH);
+            this.totalHeight += slotH + gutter;
         }
 
         GL11.glPopMatrix();
@@ -279,20 +276,20 @@ public class GuiRequestPlayer extends GuiScreen
 
         if (this.totalHeight > 103)
         {
-            this.sbar.drawButton(this.mc, var1, var2);
+            this.sbar.drawButton(this.mc, x, y);
         }
 
-        this.drawString(this.fontRenderer, "Player List", var6 + 40, var7 + 10, 16777215);
-        String var17 = "Request";
-        this.kickButton = new GuiButton(1, this.xMember + 3, this.yMember + 85 - 28, 58, 20, var17);
-        boolean var18 = false;
+        this.drawString(this.fontRenderer, "Player List", centerX + 40, centerY + 10, 16777215);
+        String var16 = "Request";
+        this.kickButton = new GuiButton(1, this.xMember + 3, this.yMember + 85 - 28, 58, 20, var16);
+        boolean var17 = false;
 
         if (this.selectedPlayerSlot != null)
         {
-            var18 = NotificationHandler.instance().hasSentToBefore(this.selectedPlayerSlot.username, NotificationType.PARTY_REQUEST, this.player.username);
+            var17 = NotificationHandler.instance().hasSentToBefore(this.selectedPlayerSlot.entityPlayer.username, NotificationType.PARTY_REQUEST, this.player.username);
         }
 
-        if (this.selectedPlayerSlot != null && this.slotIsSelected && (!PartyController.instance().inParty(this.selectedPlayerSlot.username) || this.playerSlots.size() == 1) && !var18)
+        if (this.selectedPlayerSlot != null && this.slotIsSelected && (!PartyController.instance().inParty(this.selectedPlayerSlot.entityPlayer.username) || this.playerSlots.size() == 1) && !var17)
         {
             this.kickButton.enabled = true;
         }
@@ -303,7 +300,7 @@ public class GuiRequestPlayer extends GuiScreen
 
         this.buttonList.add(new GuiButton(0, this.xMember - 60, this.yMember + 85 - 28, 58, 20, "Back"));
         this.buttonList.add(this.kickButton);
-        super.drawScreen(var1, var2, var3);
+        super.drawScreen(x, y, partialTick);
     }
 
     /**
@@ -312,10 +309,10 @@ public class GuiRequestPlayer extends GuiScreen
     public void updateScreen()
     {
         super.updateScreen();
-        ScaledResolution var1 = new ScaledResolution(this.mc.gameSettings, this.mc.displayWidth, this.mc.displayHeight);
-        int var2 = var1.getScaledWidth();
-        int var3 = var1.getScaledHeight();
-        this.xMember = var2 / 2;
-        this.yMember = var3 / 2;
+        ScaledResolution scaledresolution = new ScaledResolution(this.mc.gameSettings, this.mc.displayWidth, this.mc.displayHeight);
+        int width = scaledresolution.getScaledWidth();
+        int height = scaledresolution.getScaledHeight();
+        this.xMember = width / 2;
+        this.yMember = height / 2;
     }
 }

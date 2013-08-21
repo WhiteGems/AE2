@@ -11,44 +11,44 @@ public class ComponentDungeonBronzeEntrance extends ComponentDungeonBronzeRoom
 {
     int thedirection;
 
-    public ComponentDungeonBronzeEntrance(int var1, StructureComponent var2, StructureBronzeDungeonStart var3, Random var4, StructureBoundingBox var5, int var6)
+    public ComponentDungeonBronzeEntrance(int par1, StructureComponent previousStructor, StructureBronzeDungeonStart Whole, Random par2Random, StructureBoundingBox structureBoundingBox, int direction)
     {
-        super(var1, var2, var3, var4, var5, var6);
-        this.thedirection = var6;
+        super(par1, previousStructor, Whole, par2Random, structureBoundingBox, direction);
+        this.thedirection = direction;
     }
 
-    public static StructureBoundingBox findValidPlacement(List var0, Random var1, int var2, int var3, int var4, int var5)
+    public static StructureBoundingBox findValidPlacement(List par0List, Random par1Random, int par2, int par3, int par4, int par5)
     {
-        StructureBoundingBox var6 = new StructureBoundingBox(var2, var3, var4, var2, var3 + 4, var4);
+        StructureBoundingBox var6 = new StructureBoundingBox(par2, par3, par4, par2, par3 + 4, par4);
         int var7;
 
         for (var7 = 16; var7 > 0; --var7)
         {
             int var8 = var7 * 5;
 
-            switch (var5)
+            switch (par5)
             {
                 case 0:
-                    var6.maxX = var2 + 4;
-                    var6.maxZ = var4 + (var8 - 1);
+                    var6.maxX = par2 + 4;
+                    var6.maxZ = par4 + (var8 - 1);
                     break;
 
                 case 1:
-                    var6.minX = var2 - (var8 - 1);
-                    var6.maxZ = var4 + 4;
+                    var6.minX = par2 - (var8 - 1);
+                    var6.maxZ = par4 + 4;
                     break;
 
                 case 2:
-                    var6.maxX = var2 + 4;
-                    var6.minZ = var4 - (var8 - 1);
+                    var6.maxX = par2 + 4;
+                    var6.minZ = par4 - (var8 - 1);
                     break;
 
                 case 3:
-                    var6.maxX = var2 + (var8 - 1);
-                    var6.maxZ = var4 + 4;
+                    var6.maxX = par2 + (var8 - 1);
+                    var6.maxZ = par4 + 4;
             }
 
-            if (StructureComponent.findIntersecting(var0, var6) == null)
+            if (StructureComponent.findIntersecting(par0List, var6) == null)
             {
                 break;
             }
@@ -61,52 +61,52 @@ public class ComponentDungeonBronzeEntrance extends ComponentDungeonBronzeRoom
      * second Part of Structure generating, this for example places Spiderwebs, Mob Spawners, it closes Mineshafts at
      * the end, it adds Fences...
      */
-    public boolean addComponentParts(World var1, Random var2, StructureBoundingBox var3)
+    public boolean addComponentParts(World par1World, Random par2Random, StructureBoundingBox par3StructureBoundingBox)
     {
-        boolean var4 = false;
-        boolean var5 = false;
-        boolean var6 = false;
-        boolean var7 = false;
+        boolean i = false;
+        boolean k = false;
+        boolean i2 = false;
+        boolean k2 = false;
 
         switch (this.thedirection)
         {
             case 0:
-                var5 = true;
+                k = true;
                 break;
 
             case 1:
-                var6 = true;
+                i2 = true;
                 break;
 
             case 2:
-                var7 = true;
+                k2 = true;
                 break;
 
             case 3:
-                var4 = true;
+                i = true;
         }
 
         byte var11 = 0;
-        byte var12 = 0;
-        byte var13 = 0;
-        byte var14 = 0;
+        byte var121 = 0;
+        byte var131 = 0;
+        byte var141 = 0;
 
-        for (int var8 = this.boundingBox.minX; var8 <= this.boundingBox.maxX; ++var8)
+        for (int var12 = this.boundingBox.minX; var12 <= this.boundingBox.maxX; ++var12)
         {
-            for (int var9 = this.boundingBox.minY; var9 <= this.boundingBox.maxY; ++var9)
+            for (int var13 = this.boundingBox.minY; var13 <= this.boundingBox.maxY; ++var13)
             {
-                for (int var10 = this.boundingBox.minZ; var10 <= this.boundingBox.maxZ; ++var10)
+                for (int var14 = this.boundingBox.minZ; var14 <= this.boundingBox.maxZ; ++var14)
                 {
-                    if (this.getBlockIdAtCurrentPosition(var1, var9, var8, var10, var3) != 0)
+                    if (this.getBlockIdAtCurrentPosition(par1World, var13, var12, var14, par3StructureBoundingBox) != 0)
                     {
-                        this.placeBlockAtCurrentPosition(var1, AetherBlocks.LockedDungeonStone.blockID, 0, var9, var8, var10, var3);
+                        this.placeBlockAtCurrentPosition(par1World, AetherBlocks.LockedDungeonStone.blockID, 0, var13, var12, var14, par3StructureBoundingBox);
                     }
                 }
             }
         }
 
-        this.fillWithBlocks(var1, var3, this.boundingBox.minX + 1 + var13, this.boundingBox.minY + 1, this.boundingBox.minZ + 1 + var14, this.boundingBox.maxX - 1 + var11, this.boundingBox.maxY - 1, this.boundingBox.maxZ - 1 + var12, 0, 0, false);
-        this.cutHolesForEntrances(var1, var2, var3);
+        this.fillWithBlocks(par1World, par3StructureBoundingBox, this.boundingBox.minX + 1 + var131, this.boundingBox.minY + 1, this.boundingBox.minZ + 1 + var141, this.boundingBox.maxX - 1 + var11, this.boundingBox.maxY - 1, this.boundingBox.maxZ - 1 + var121, 0, 0, false);
+        this.cutHolesForEntrances(par1World, par2Random, par3StructureBoundingBox);
         return true;
     }
 }

@@ -14,47 +14,47 @@ import net.minecraft.network.packet.Packet250CustomPayload;
 
 public class PacketAccessoryChange extends AetherPacket
 {
-    public PacketAccessoryChange(int var1)
+    public PacketAccessoryChange(int packetID)
     {
-        super(var1);
+        super(packetID);
     }
 
-    public void onPacketReceived(Packet250CustomPayload var1, Player var2)
+    public void onPacketReceived(Packet250CustomPayload packet, Player player)
     {
-        DataInputStream var3 = new DataInputStream(new ByteArrayInputStream(var1.data));
+        DataInputStream dat = new DataInputStream(new ByteArrayInputStream(packet.data));
 
         try
         {
-            byte var4 = var3.readByte();
-            NBTTagList var5 = (NBTTagList)NBTTagList.readNamedTag(var3);
-            boolean var6 = var3.readBoolean();
-            boolean var7 = var3.readBoolean();
-            short var8 = var3.readShort();
-            byte var9 = var3.readByte();
+            byte ex = dat.readByte();
+            NBTTagList nbttaglist = (NBTTagList)NBTTagList.readNamedTag(dat);
+            boolean clearFirst = dat.readBoolean();
+            boolean adding = dat.readBoolean();
+            short length = dat.readShort();
+            byte proxy = dat.readByte();
 
-            if (var9 == 1)
+            if (proxy == 1)
             {
-                HashMap var10 = Aether.proxy.getClientInventories();
+                HashMap set = Aether.proxy.getClientInventories();
 
-                if (var6)
+                if (clearFirst)
                 {
-                    var10.clear();
+                    set.clear();
                 }
 
-                InventoryAether var11 = new InventoryAether((EntityPlayer)var2);
-                var11.readFromNBT(var5);
+                InventoryAether i = new InventoryAether((EntityPlayer)player);
+                i.readFromNBT(nbttaglist);
 
-                for (int var12 = 0; var12 < var8; ++var12)
+                for (int username = 0; username < length; ++username)
                 {
-                    String var13 = var3.readUTF();
+                    String username1 = dat.readUTF();
 
-                    if (var7)
+                    if (adding)
                     {
-                        var10.put(var13, var11);
+                        set.put(username1, i);
                     }
                     else
                     {
-                        var10.remove(var13);
+                        set.remove(username1);
                     }
                 }
             }
@@ -62,13 +62,13 @@ public class PacketAccessoryChange extends AetherPacket
             {
                 HashSet var16 = new HashSet();
 
-                for (int var15 = 0; var15 < var8; ++var15)
+                for (int var15 = 0; var15 < length; ++var15)
                 {
-                    String var17 = var3.readUTF();
+                    String var17 = dat.readUTF();
                     var16.add(var17);
                 }
 
-                PacketDispatcher.sendPacketToAllPlayers(AetherPacketHandler.sendAccessoryChange(var5, var6, var7, var16, (byte)1));
+                PacketDispatcher.sendPacketToAllPlayers(AetherPacketHandler.sendAccessoryChange(nbttaglist, clearFirst, adding, var16, (byte)1));
             }
         }
         catch (Exception var14)

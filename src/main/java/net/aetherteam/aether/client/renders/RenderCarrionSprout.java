@@ -4,50 +4,53 @@ import net.aetherteam.aether.client.models.ModelCarrionSprout;
 import net.aetherteam.aether.entities.EntityAechorPlant;
 import net.aetherteam.aether.entities.EntityCarrionSprout;
 import net.minecraft.client.renderer.entity.RenderLiving;
-import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.util.ResourceLocation;
 import org.lwjgl.opengl.GL11;
 
 public class RenderCarrionSprout extends RenderLiving
 {
+    public static final ResourceLocation TEXTURE = new ResourceLocation("aether", "textures/mobs/carrionsprout/sprout.png");
     public ModelCarrionSprout plantModel;
 
-    public RenderCarrionSprout(ModelCarrionSprout var1, float var2)
+    public RenderCarrionSprout(ModelCarrionSprout model, float f)
     {
-        super(var1, var2);
-        this.setRenderPassModel(var1);
-        this.plantModel = var1;
+        super(model, f);
+        this.setRenderPassModel(model);
+        this.plantModel = model;
     }
 
     /**
      * Allows the render to do any OpenGL state modifications necessary before the model is rendered. Args:
      * entityLiving, partialTickTime
      */
-    protected void preRenderCallback(EntityLiving var1, float var2)
+    protected void preRenderCallback(EntityLivingBase entityliving, float f)
     {
-        EntityCarrionSprout var3 = (EntityCarrionSprout)var1;
-        float var4 = (float)Math.sin((double)var3.sinage);
-        float var5;
+        EntityCarrionSprout sprout = (EntityCarrionSprout)entityliving;
+        float f1 = (float)Math.sin((double)sprout.sinage);
+        float f3;
 
-        if (var3.hurtTime > 0)
+        if (sprout.hurtTime > 0)
         {
-            var4 *= 0.45F;
-            var4 -= 0.125F;
-            var5 = 1.75F + (float)Math.sin((double)(var3.sinage + 2.0F)) * 1.5F;
+            f1 *= 0.45F;
+            f1 -= 0.125F;
+            f3 = 1.75F + (float)Math.sin((double)(sprout.sinage + 2.0F)) * 1.5F;
         }
         else
         {
-            var4 *= 0.25F;
-            var5 = 1.75F + (float)Math.sin((double)(var3.sinage + 2.0F)) * 1.5F;
+            f1 *= 0.25F;
+            f3 = 1.75F + (float)Math.sin((double)(sprout.sinage + 2.0F)) * 1.5F;
         }
 
-        this.plantModel.sinage = var4;
-        this.plantModel.sinage2 = var5;
+        this.plantModel.sinage = f1;
+        this.plantModel.sinage2 = f3;
         this.shadowSize = 0.25F;
     }
 
-    protected int a(EntityAechorPlant var1, int var2, float var3)
+    protected int a(EntityAechorPlant entityaechorplant, int i, float f)
     {
-        if (var2 != 0)
+        if (i != 0)
         {
             return -1;
         }
@@ -59,5 +62,10 @@ public class RenderCarrionSprout extends RenderLiving
             GL11.glColor4f(1.0F, 1.0F, 1.0F, 0.325F);
             return 1;
         }
+    }
+
+    protected ResourceLocation func_110775_a(Entity entity)
+    {
+        return TEXTURE;
     }
 }

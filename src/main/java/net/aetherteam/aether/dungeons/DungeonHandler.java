@@ -21,85 +21,85 @@ import net.aetherteam.aether.worldgen.StructureBoundingBoxSerial;
 
 public class DungeonHandler
 {
-    private HashMap instances = new HashMap();
+    private HashMap<Integer, Dungeon> instances = new HashMap();
     private static DungeonHandler clientHandler = new DungeonHandler();
     private static DungeonHandler serverHandler = new DungeonHandler();
 
     public static DungeonHandler instance()
     {
-        Side var0 = FMLCommonHandler.instance().getEffectiveSide();
-        return var0.isClient() ? clientHandler : serverHandler;
+        Side side = FMLCommonHandler.instance().getEffectiveSide();
+        return side.isClient() ? clientHandler : serverHandler;
     }
 
-    public void addInstance(Dungeon var1)
+    public void addInstance(Dungeon newDungeon)
     {
-        Side var2 = FMLCommonHandler.instance().getEffectiveSide();
+        Side side = FMLCommonHandler.instance().getEffectiveSide();
 
-        if (var2.isServer())
+        if (side.isServer())
         {
-            PacketDispatcher.sendPacketToAllPlayers(AetherPacketHandler.sendDungeonChange(true, var1));
+            PacketDispatcher.sendPacketToAllPlayers(AetherPacketHandler.sendDungeonChange(true, newDungeon));
         }
 
-        System.out.println("Adding a dungeon! X: (" + var1.centerX + ") Z: (" + var1.centerZ + ") Object: (" + var1 + ")");
+        System.out.println("Adding a dungeon! X: (" + newDungeon.centerX + ") Z: (" + newDungeon.centerZ + ") Object: (" + newDungeon + ")");
         System.out.println("Current Dungeons: " + this.instances);
-        this.instances.put(Integer.valueOf(this.instances.size()), var1);
+        this.instances.put(Integer.valueOf(this.instances.size()), newDungeon);
         instance().saveDungeons();
     }
 
-    public void removeInstance(Dungeon var1)
+    public void removeInstance(Dungeon existingDungeon)
     {
-        this.instances.remove(var1);
-        Side var2 = FMLCommonHandler.instance().getEffectiveSide();
+        this.instances.remove(existingDungeon);
+        Side side = FMLCommonHandler.instance().getEffectiveSide();
 
-        if (var2.isServer())
+        if (side.isServer())
         {
-            PacketDispatcher.sendPacketToAllPlayers(AetherPacketHandler.sendDungeonChange(false, var1));
+            PacketDispatcher.sendPacketToAllPlayers(AetherPacketHandler.sendDungeonChange(false, existingDungeon));
         }
 
         instance().saveDungeons();
     }
 
-    public int getDungeonID(Dungeon var1)
+    public int getDungeonID(Dungeon dungeon)
     {
-        int var2 = 0;
+        int id = 0;
 
-        for (Iterator var3 = this.instances.values().iterator(); var3.hasNext(); ++var2)
+        for (Iterator i$ = this.instances.values().iterator(); i$.hasNext(); ++id)
         {
-            Dungeon var4 = (Dungeon)var3.next();
+            Dungeon instance = (Dungeon)i$.next();
 
-            if (var4 == var1)
+            if (instance == dungeon)
             {
-                return var2;
+                return id;
             }
         }
 
         return -1;
     }
 
-    public Dungeon getDungeon(int var1)
+    public Dungeon getDungeon(int id)
     {
-        return (Dungeon)this.instances.get(Integer.valueOf(var1));
+        return (Dungeon)this.instances.get(Integer.valueOf(id));
     }
 
-    public Dungeon getInstanceAt(int var1, int var2, int var3)
+    public Dungeon getInstanceAt(int x, int y, int z)
     {
-        Iterator var4 = this.instances.values().iterator();
+        Iterator i$ = this.instances.values().iterator();
 
-        while (var4.hasNext())
+        while (i$.hasNext())
         {
-            Dungeon var5 = (Dungeon)var4.next();
+            Dungeon instance = (Dungeon)i$.next();
 
-            if (var5.boundingBox.intersectsWith(var1, var3, var1, var3))
+            if (instance.boundingBox.intersectsWith(x, z, x, z))
             {
-                Iterator var6 = var5.boundingBoxes.iterator();
+                Iterator i$1 = instance.boundingBoxes.iterator();
 
-                while (var6.hasNext())
+                while (i$1.hasNext())
                 {
-                    StructureBoundingBoxSerial var7 = (StructureBoundingBoxSerial)var6.next();
+                    StructureBoundingBoxSerial box = (StructureBoundingBoxSerial)i$1.next();
 
-                    if (var7.isVecInside(var1, var2, var3))
+                    if (box.isVecInside(x, y, z))
                     {
-                        return var5;
+                        return instance;
                     }
                 }
             }
@@ -108,159 +108,159 @@ public class DungeonHandler
         return null;
     }
 
-    public void queueParty(Dungeon var1, Party var2, int var3, int var4, int var5, boolean var6)
+    public void queueParty(Dungeon dungeon, Party party, int controlX, int controlY, int controlZ, boolean sendPackets)
     {
-        Side var7 = FMLCommonHandler.instance().getEffectiveSide();
+        Side side = FMLCommonHandler.instance().getEffectiveSide();
 
-        if (var2 != null && var1 != null && !var1.hasQueuedParty())
+        if (party != null && dungeon != null && !dungeon.hasQueuedParty())
         {
-            var1.queueParty(var2, var3, var4, var5);
-            this.queueMember(var1, var2.getLeader(), true);
+            dungeon.queueParty(party, controlX, controlY, controlZ);
+            this.queueMember(dungeon, party.getLeader(), true);
 
-            if (var6 && var7.isClient())
+            if (sendPackets && side.isClient())
             {
-                Iterator var8 = var2.getMembers().iterator();
+                Iterator i$ = party.getMembers().iterator();
 
-                while (var8.hasNext())
+                while (i$.hasNext())
                 {
-                    PartyMember var9 = (PartyMember)var8.next();
+                    PartyMember member = (PartyMember)i$.next();
 
-                    if (!var2.isLeader(var9))
+                    if (!party.isLeader(member))
                     {
-                        NotificationHandler.instance().sendNotification(new Notification(NotificationType.DUNGEON, var2.getLeader().username, var9.username));
+                        NotificationHandler.instance().sendNotification(new Notification(NotificationType.DUNGEON, party.getLeader().username, member.username));
                     }
                 }
 
-                PacketDispatcher.sendPacketToServer(AetherPacketHandler.sendDungeonQueueChange(true, var1, var3, var4, var5, var2));
+                PacketDispatcher.sendPacketToServer(AetherPacketHandler.sendDungeonQueueChange(true, dungeon, controlX, controlY, controlZ, party));
             }
         }
     }
 
-    public void queueMember(Dungeon var1, PartyMember var2, boolean var3)
+    public void queueMember(Dungeon dungeon, PartyMember queuedMember, boolean sendPackets)
     {
-        Party var4 = PartyController.instance().getParty(var2);
-        Side var5 = FMLCommonHandler.instance().getEffectiveSide();
+        Party party = PartyController.instance().getParty(queuedMember);
+        Side side = FMLCommonHandler.instance().getEffectiveSide();
 
-        if (var4 != null && var1 != null && var1.isQueuedParty(var4))
+        if (party != null && dungeon != null && dungeon.isQueuedParty(party))
         {
-            var1.queueMember(var4, var2);
+            dungeon.queueMember(party, queuedMember);
 
-            if (var5.isClient() && var1.getAmountQueued() == var4.getMembers().size())
+            if (side.isClient() && dungeon.getAmountQueued() == party.getMembers().size())
             {
                 ;
             }
 
-            if (var3 && var5.isClient())
+            if (sendPackets && side.isClient())
             {
-                PacketDispatcher.sendPacketToServer(AetherPacketHandler.sendDungeonMemberQueue(var1, var2));
+                PacketDispatcher.sendPacketToServer(AetherPacketHandler.sendDungeonMemberQueue(dungeon, queuedMember));
             }
         }
     }
 
-    public void checkForQueue(Dungeon var1)
+    public void checkForQueue(Dungeon dungeon)
     {
-        Side var2 = FMLCommonHandler.instance().getEffectiveSide();
+        Side side = FMLCommonHandler.instance().getEffectiveSide();
 
-        if (var1 != null && !var1.hasStarted())
+        if (dungeon != null && !dungeon.hasStarted())
         {
-            var1.checkForQueue();
+            dungeon.checkForQueue();
         }
     }
 
-    public void disbandQueue(Dungeon var1, Party var2, int var3, int var4, int var5, PartyMember var6, boolean var7)
+    public void disbandQueue(Dungeon dungeon, Party party, int tileX, int tileY, int tileZ, PartyMember disbandMember, boolean sendPackets)
     {
-        Side var8 = FMLCommonHandler.instance().getEffectiveSide();
+        Side side = FMLCommonHandler.instance().getEffectiveSide();
 
-        if (var2 != null && var1 != null && var1.isQueuedParty(var2))
+        if (party != null && dungeon != null && dungeon.isQueuedParty(party))
         {
-            var1.disbandQueue(var2);
+            dungeon.disbandQueue(party);
 
-            if (var8.isClient())
+            if (side.isClient())
             {
-                ClientNotificationHandler.createGeneric("Dungeon Queue Failed!", "By " + var6.username, "");
+                ClientNotificationHandler.createGeneric("Dungeon Queue Failed!", "By " + disbandMember.username, "");
 
-                if (var7)
+                if (sendPackets)
                 {
-                    PacketDispatcher.sendPacketToServer(AetherPacketHandler.sendDungeonQueueChange(false, var1, var3, var4, var5, var2));
+                    PacketDispatcher.sendPacketToServer(AetherPacketHandler.sendDungeonQueueChange(false, dungeon, tileX, tileY, tileZ, party));
                 }
             }
         }
     }
 
-    public void disbandMember(Dungeon var1, PartyMember var2, boolean var3)
+    public void disbandMember(Dungeon dungeon, PartyMember member, boolean sendPackets)
     {
-        Side var4 = FMLCommonHandler.instance().getEffectiveSide();
-        System.out.println(var4 + ": is the side we\'re on.");
+        Side side = FMLCommonHandler.instance().getEffectiveSide();
+        System.out.println(side + ": is the side we\'re on.");
 
-        if (var2 != null && var1 != null && var1.isQueuedParty(PartyController.instance().getParty(var2)))
+        if (member != null && dungeon != null && dungeon.isQueuedParty(PartyController.instance().getParty(member)))
         {
-            System.out.println(var4 + ": is where we kill shit.");
-            var1.disbandMember(var2);
+            System.out.println(side + ": is where we kill shit.");
+            dungeon.disbandMember(member);
 
-            if (var4.isClient() && PartyController.instance().getParty(PartyController.instance().getMember(ClientNotificationHandler.clientUsername())).getName().equalsIgnoreCase(PartyController.instance().getParty(var2).getName()))
+            if (side.isClient() && PartyController.instance().getParty(PartyController.instance().getMember(ClientNotificationHandler.clientUsername())).getName().equalsIgnoreCase(PartyController.instance().getParty(member).getName()))
             {
-                ClientNotificationHandler.createGeneric("Member Left Dungeon!", var2.username, "");
+                ClientNotificationHandler.createGeneric("Member Left Dungeon!", member.username, "");
             }
 
-            if (var3 && var4.isClient())
+            if (sendPackets && side.isClient())
             {
-                PacketDispatcher.sendPacketToServer(AetherPacketHandler.sendDungeonDisbandMember(var1, var2));
-            }
-        }
-    }
-
-    public void finishDungeon(Dungeon var1, Party var2, TileEntityEntranceController var3, boolean var4)
-    {
-        Side var5 = FMLCommonHandler.instance().getEffectiveSide();
-
-        if (var2 != null && var1 != null && var1.hasQueuedParty() && var3 != null)
-        {
-            var1.finishDungeon(var2);
-
-            if (var4 && var5.isClient())
-            {
-                PacketDispatcher.sendPacketToAllPlayers(AetherPacketHandler.sendDungeonFinish(var1, var3, var2));
+                PacketDispatcher.sendPacketToServer(AetherPacketHandler.sendDungeonDisbandMember(dungeon, member));
             }
         }
     }
 
-    public void startTimer(Dungeon var1, Party var2, int var3)
+    public void finishDungeon(Dungeon dungeon, Party party, TileEntityEntranceController controller, boolean sendPackets)
     {
-        if (var2 != null && var1 != null && var1.hasQueuedParty())
-        {
-            var1.startTimer(var3);
-        }
-    }
+        Side side = FMLCommonHandler.instance().getEffectiveSide();
 
-    public void addKey(Dungeon var1, Party var2, DungeonKey var3)
-    {
-        if (var2 != null && var1 != null && var1.hasQueuedParty())
+        if (party != null && dungeon != null && dungeon.hasQueuedParty() && controller != null)
         {
-            var1.addKey(var3);
-        }
-    }
+            dungeon.finishDungeon(party);
 
-    public void removeKey(Dungeon var1, Party var2, DungeonKey var3)
-    {
-        if (var2 != null && var1 != null && var1.hasQueuedParty())
-        {
-            var1.removeKey(var3);
-        }
-    }
-
-    public Dungeon getDungeon(Party var1)
-    {
-        if (var1 != null)
-        {
-            Iterator var2 = this.instances.values().iterator();
-
-            while (var2.hasNext())
+            if (sendPackets && side.isClient())
             {
-                Dungeon var3 = (Dungeon)var2.next();
+                PacketDispatcher.sendPacketToAllPlayers(AetherPacketHandler.sendDungeonFinish(dungeon, controller, party));
+            }
+        }
+    }
 
-                if (var3.hasQueuedParty() && var3.getQueuedParty().getName().equalsIgnoreCase(var1.getName()))
+    public void startTimer(Dungeon dungeon, Party party, int timerLength)
+    {
+        if (party != null && dungeon != null && dungeon.hasQueuedParty())
+        {
+            dungeon.startTimer(timerLength);
+        }
+    }
+
+    public void addKey(Dungeon dungeon, Party party, DungeonKey key)
+    {
+        if (party != null && dungeon != null && dungeon.hasQueuedParty())
+        {
+            dungeon.addKey(key);
+        }
+    }
+
+    public void removeKey(Dungeon dungeon, Party party, DungeonKey key)
+    {
+        if (party != null && dungeon != null && dungeon.hasQueuedParty())
+        {
+            dungeon.removeKey(key);
+        }
+    }
+
+    public Dungeon getDungeon(Party party)
+    {
+        if (party != null)
+        {
+            Iterator i$ = this.instances.values().iterator();
+
+            while (i$.hasNext())
+            {
+                Dungeon dungeon = (Dungeon)i$.next();
+
+                if (dungeon.hasQueuedParty() && dungeon.getQueuedParty().getName().equalsIgnoreCase(party.getName()))
                 {
-                    return var3;
+                    return dungeon;
                 }
             }
         }
@@ -268,17 +268,17 @@ public class DungeonHandler
         return null;
     }
 
-    public boolean isInDungeon(Party var1)
+    public boolean isInDungeon(Party party)
     {
-        if (var1 != null)
+        if (party != null)
         {
-            Iterator var2 = this.instances.values().iterator();
+            Iterator i$ = this.instances.values().iterator();
 
-            while (var2.hasNext())
+            while (i$.hasNext())
             {
-                Dungeon var3 = (Dungeon)var2.next();
+                Dungeon dungeon = (Dungeon)i$.next();
 
-                if (var3.isQueuedParty(var1))
+                if (dungeon.isQueuedParty(party))
                 {
                     return true;
                 }
@@ -288,45 +288,45 @@ public class DungeonHandler
         return false;
     }
 
-    public ArrayList getInstances()
+    public ArrayList<Dungeon> getInstances()
     {
-        ArrayList var1 = new ArrayList();
-        Iterator var2 = this.instances.values().iterator();
+        ArrayList dungeons = new ArrayList();
+        Iterator it = this.instances.values().iterator();
 
-        while (var2.hasNext())
+        while (it.hasNext())
         {
-            Object var3 = var2.next();
+            Object nextObject = it.next();
 
-            if (var3 instanceof Dungeon)
+            if (nextObject instanceof Dungeon)
             {
-                Dungeon var4 = (Dungeon)var3;
-                var1.add(var4);
+                Dungeon dungeon = (Dungeon)nextObject;
+                dungeons.add(dungeon);
             }
         }
 
-        return var1;
+        return dungeons;
     }
 
-    public void loadInstances(ArrayList var1)
+    public void loadInstances(ArrayList<Dungeon> loadedInstances)
     {
-        Iterator var2 = var1.iterator();
+        Iterator i$ = loadedInstances.iterator();
 
-        while (var2.hasNext())
+        while (i$.hasNext())
         {
-            Dungeon var3 = (Dungeon)var2.next();
-            this.addInstance(var3);
+            Dungeon dungeon = (Dungeon)i$.next();
+            this.addInstance(dungeon);
         }
     }
 
     public void saveDungeons()
     {
-        Side var1 = FMLCommonHandler.instance().getEffectiveSide();
+        Side side = FMLCommonHandler.instance().getEffectiveSide();
 
-        if (var1.isServer())
+        if (side.isServer())
         {
-            SerialDataHandler var2 = new SerialDataHandler("dungeons.dat");
-            ArrayList var3 = this.getInstances();
-            var2.serializeObjects(var3);
+            SerialDataHandler dungeonDataHandler = new SerialDataHandler("dungeons.dat");
+            ArrayList dungeonObjects = this.getInstances();
+            dungeonDataHandler.serializeObjects(dungeonObjects);
         }
     }
 }

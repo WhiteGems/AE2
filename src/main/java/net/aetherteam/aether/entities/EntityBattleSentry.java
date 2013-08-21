@@ -1,7 +1,9 @@
 package net.aetherteam.aether.entities;
 
 import net.aetherteam.aether.blocks.AetherBlocks;
+import net.aetherteam.playercore_api.cores.IPlayerCoreCommon;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.DamageSource;
@@ -9,53 +11,47 @@ import net.minecraft.world.World;
 
 public class EntityBattleSentry extends EntityDungeonMob
 {
-    public String dir = "/net/aetherteam/aether/client/sprites";
-
     /** Reference to the World object. */
     private World worldObj;
     private int timeTilHide;
     public float field_100021_a;
     public float field_100020_b;
     private int jcount;
-    public int size;
+    public int size = 2;
     public int counter;
     public int lostyou;
 
-    public EntityBattleSentry(World var1)
+    public EntityBattleSentry(World world)
     {
-        super(var1);
-        this.texture = this.dir + "/mobs/sentryMelee/sentryMelee.png";
-        this.size = 2;
+        super(world);
         this.yOffset = 0.0F;
-        this.moveSpeed = 1.0F;
+        this.func_110148_a(SharedMonsterAttributes.field_111263_d).func_111128_a(1.0D);
         this.field_100021_a = 1.0F;
         this.field_100020_b = 1.0F;
         this.jcount = this.rand.nextInt(20) + 10;
         this.func_100019_e(this.size);
-        this.worldObj = var1;
+        this.worldObj = world;
         this.timeTilHide = 0;
     }
 
-    public EntityBattleSentry(World var1, double var2, double var4, double var6)
+    public EntityBattleSentry(World world, double x, double y, double z)
     {
-        super(var1);
-        this.texture = this.dir + "/mobs/sentryMelee/sentryMelee.png";
-        this.size = 2;
+        super(world);
         this.yOffset = 0.0F;
-        this.moveSpeed = 1.0F;
+        this.func_110148_a(SharedMonsterAttributes.field_111263_d).func_111128_a(1.0D);
         this.field_100021_a = 1.0F;
         this.field_100020_b = 1.0F;
         this.jcount = this.rand.nextInt(20) + 10;
         this.func_100019_e(this.size);
         this.rotationYaw = (float)this.rand.nextInt(4) * ((float)Math.PI / 2F);
-        this.setPosition(var2, var4, var6);
-        this.worldObj = var1;
+        this.setPosition(x, y, z);
+        this.worldObj = world;
         this.timeTilHide = 0;
     }
 
-    public void func_100019_e(int var1)
+    public void func_100019_e(int i)
     {
-        this.setEntityHealth(10);
+        this.setEntityHealth(10.0F);
         this.width = 0.85F;
         this.height = 0.85F;
         this.setPosition(this.posX, this.posY, this.posZ);
@@ -64,37 +60,34 @@ public class EntityBattleSentry extends EntityDungeonMob
     /**
      * (abstract) Protected helper method to write subclass entity data to NBT.
      */
-    public void writeEntityToNBT(NBTTagCompound var1)
+    public void writeEntityToNBT(NBTTagCompound nbttagcompound)
     {
-        super.writeEntityToNBT(var1);
-        var1.setInteger("Size", this.size - 1);
-        var1.setBoolean("seen", this.isInView());
-        this.setHasBeenAttacked(var1.getBoolean("HasBeenAttacked"));
+        super.writeEntityToNBT(nbttagcompound);
+        nbttagcompound.setInteger("Size", this.size - 1);
+        nbttagcompound.setBoolean("seen", this.isInView());
+        this.setHasBeenAttacked(nbttagcompound.getBoolean("HasBeenAttacked"));
     }
 
     /**
      * (abstract) Protected helper method to read subclass entity data from NBT.
      */
-    public void readEntityFromNBT(NBTTagCompound var1)
+    public void readEntityFromNBT(NBTTagCompound nbttagcompound)
     {
-        super.readEntityFromNBT(var1);
-        this.size = var1.getInteger("Size") + 1;
-        this.setInView(var1.getBoolean("seen"));
-        var1.setBoolean("HasBeenAttacked", this.getHasBeenAttacked());
+        super.readEntityFromNBT(nbttagcompound);
+        this.size = nbttagcompound.getInteger("Size") + 1;
+        this.setInView(nbttagcompound.getBoolean("seen"));
+        nbttagcompound.setBoolean("HasBeenAttacked", this.getHasBeenAttacked());
     }
 
-    /**
-     * Called when the entity is attacked.
-     */
-    public boolean attackEntityFrom(DamageSource var1, int var2)
+    public boolean attackEntityFrom(DamageSource par1DamageSource, int par2)
     {
-        if (var1.getEntity() != null)
+        if (par1DamageSource.getEntity() != null)
         {
             this.setHasBeenAttacked(true);
             this.timeTilHide = 50;
         }
 
-        return super.attackEntityFrom(var1, var2);
+        return super.attackEntityFrom(par1DamageSource, par2);
     }
 
     /**
@@ -102,14 +95,14 @@ public class EntityBattleSentry extends EntityDungeonMob
      */
     public void onUpdate()
     {
-        boolean var1 = this.onGround;
+        boolean flag = this.onGround;
         super.onUpdate();
 
-        if (this.onGround && !var1)
+        if (this.onGround && !flag)
         {
             this.worldObj.playSoundAtEntity(this, "mob.slime.small", this.getSoundVolume(), ((this.rand.nextFloat() - this.rand.nextFloat()) * 0.2F + 1.0F) / 0.8F);
         }
-        else if (!this.onGround && var1)
+        else if (!this.onGround && flag)
         {
             this.motionX *= 3.0D;
             this.motionZ *= 3.0D;
@@ -145,67 +138,66 @@ public class EntityBattleSentry extends EntityDungeonMob
         }
     }
 
-    private boolean isInFieldOfVision(EntityPlayer var1, Entity var2)
+    private boolean isInFieldOfVision(EntityPlayer entityPlayer, Entity entity)
     {
-        float var3 = var1.rotationPitch;
-        float var4 = var1.rotationYaw;
-        var1.faceEntity(var2, 360.0F, 360.0F);
-        float var5 = var1.rotationPitch;
-        float var6 = var1.rotationYaw;
-        var1.rotationPitch = var3;
-        var1.rotationYaw = var4;
-        float var7 = 70.0F;
-        float var8 = 65.0F;
-        float var9 = var1.rotationPitch - var7;
-        float var10 = var1.rotationPitch + var7;
-        float var11 = var1.rotationYaw - var8;
-        float var12 = var1.rotationYaw + var8;
-        boolean var13 = this.GetFlag(var9, var10, var5, 0.0F, 360.0F);
-        boolean var14 = this.GetFlag(var11, var12, var6, -180.0F, 180.0F);
-        return var13 && var14;
+        float f = entityPlayer.rotationPitch;
+        float f1 = entityPlayer.rotationYaw;
+        ((IPlayerCoreCommon)entityPlayer).faceEntity(entity, 360.0F, 360.0F);
+        float f2 = entityPlayer.rotationPitch;
+        float f3 = entityPlayer.rotationYaw;
+        entityPlayer.rotationPitch = f;
+        entityPlayer.rotationYaw = f1;
+        float f4 = 70.0F;
+        float f5 = 65.0F;
+        float f6 = entityPlayer.rotationPitch - f4;
+        float f7 = entityPlayer.rotationPitch + f4;
+        float f8 = entityPlayer.rotationYaw - f5;
+        float f9 = entityPlayer.rotationYaw + f5;
+        boolean flag = this.GetFlag(f6, f7, f2, 0.0F, 360.0F);
+        boolean flag1 = this.GetFlag(f8, f9, f3, -180.0F, 180.0F);
+        return flag && flag1;
     }
 
-    public boolean GetFlag(float var1, float var2, float var3, float var4, float var5)
+    public boolean GetFlag(float f, float f1, float f2, float f3, float f4)
     {
-        if (var1 < var4)
+        if (f < f3)
         {
-            if (var3 >= var1 + var5)
+            if (f2 >= f + f4)
             {
                 return true;
             }
 
-            if (var3 <= var2)
+            if (f2 <= f1)
             {
                 return true;
             }
         }
 
-        if (var2 >= var5)
+        if (f1 >= f4)
         {
-            if (var3 <= var2 - var5)
+            if (f2 <= f1 - f4)
             {
                 return true;
             }
 
-            if (var3 >= var1)
+            if (f2 >= f)
             {
                 return true;
             }
         }
 
-        return var2 < var5 && var1 >= var4 ? var3 <= var2 && var3 > var1 : false;
+        return f1 < f4 && f >= f3 ? f2 <= f1 && f2 > f : false;
     }
 
     protected void updateEntityActionState()
     {
         super.updateEntityActionState();
-        EntityPlayer var1 = this.worldObj.getClosestPlayerToEntity(this, 8.0D);
+        EntityPlayer entityplayer = this.worldObj.getClosestPlayerToEntity(this, 8.0D);
 
-        if (var1 != null && this.canEntityBeSeen(var1) && !var1.capabilities.isCreativeMode)
+        if (entityplayer != null && this.canEntityBeSeen(entityplayer) && !entityplayer.capabilities.isCreativeMode)
         {
-            this.faceEntity(var1, 10.0F, 10.0F);
-            this.entityToAttack = var1;
-            this.texture = this.dir + "/mobs/sentry/sentry_lit.png";
+            this.faceEntity(entityplayer, 10.0F, 10.0F);
+            this.entityToAttack = entityplayer;
         }
 
         if (this.entityToAttack != null)
@@ -245,9 +237,9 @@ public class EntityBattleSentry extends EntityDungeonMob
     /**
      * Called by a player entity when they collide with an entity
      */
-    public void onCollideWithPlayer(EntityPlayer var1)
+    public void onCollideWithPlayer(EntityPlayer par1EntityPlayer)
     {
-        super.onCollideWithPlayer(var1);
+        super.onCollideWithPlayer(par1EntityPlayer);
 
         if (!this.getHasBeenAttacked())
         {
@@ -291,7 +283,7 @@ public class EntityBattleSentry extends EntityDungeonMob
     /**
      * Returns the amount of damage a mob should deal.
      */
-    public int getAttackStrength(Entity var1)
+    public int getAttackStrength(Entity par1Entity)
     {
         return 2;
     }
@@ -316,9 +308,9 @@ public class EntityBattleSentry extends EntityDungeonMob
         return this.dataWatcher.getWatchableObjectByte(16) == 0;
     }
 
-    public void setInView(boolean var1)
+    public void setInView(boolean awake)
     {
-        if (var1)
+        if (awake)
         {
             this.dataWatcher.updateObject(16, Byte.valueOf((byte)1));
         }
@@ -333,9 +325,9 @@ public class EntityBattleSentry extends EntityDungeonMob
         return this.dataWatcher.getWatchableObjectByte(17) == 1;
     }
 
-    public void setHasBeenAttacked(boolean var1)
+    public void setHasBeenAttacked(boolean attack)
     {
-        if (var1)
+        if (attack)
         {
             this.dataWatcher.updateObject(17, Byte.valueOf((byte)1));
         }
@@ -343,10 +335,5 @@ public class EntityBattleSentry extends EntityDungeonMob
         {
             this.dataWatcher.updateObject(17, Byte.valueOf((byte)0));
         }
-    }
-
-    public int getMaxHealth()
-    {
-        return 10;
     }
 }

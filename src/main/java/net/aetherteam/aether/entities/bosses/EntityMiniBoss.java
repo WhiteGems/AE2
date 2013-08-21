@@ -8,6 +8,7 @@ import net.aetherteam.aether.enums.EnumBossType;
 import net.aetherteam.aether.interfaces.IAetherBoss;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 
@@ -18,9 +19,11 @@ public class EntityMiniBoss extends EntityBossMob implements IAetherBoss
     private double spawnY;
     private double spawnZ;
 
-    public EntityMiniBoss(World var1)
+    public EntityMiniBoss(World par1World)
     {
-        super(var1);
+        super(par1World);
+        this.func_110148_a(SharedMonsterAttributes.field_111267_a).func_111128_a(200.0D);
+        this.setEntityHealth(200.0F);
     }
 
     /**
@@ -29,13 +32,13 @@ public class EntityMiniBoss extends EntityBossMob implements IAetherBoss
     public void onUpdate()
     {
         super.onUpdate();
-        Side var1 = FMLCommonHandler.instance().getEffectiveSide();
+        Side side = FMLCommonHandler.instance().getEffectiveSide();
 
-        if (var1.isServer())
+        if (side.isServer())
         {
-            Dungeon var2 = DungeonHandler.instance().getInstanceAt(MathHelper.floor_double(this.posX), MathHelper.floor_double(this.posY), MathHelper.floor_double(this.posZ));
+            Dungeon dungeon = DungeonHandler.instance().getInstanceAt(MathHelper.floor_double(this.posX), MathHelper.floor_double(this.posY), MathHelper.floor_double(this.posZ));
 
-            if (var2 != null && !var2.isActive() && !(this.boss instanceof EntityLabyrinthEye))
+            if (dungeon != null && !dungeon.isActive() && !(this.boss instanceof EntityLabyrinthEye))
             {
                 this.setDead();
             }
@@ -44,7 +47,7 @@ public class EntityMiniBoss extends EntityBossMob implements IAetherBoss
 
     public int getBossMaxHP()
     {
-        return this.getMaxHealth();
+        return 200;
     }
 
     public int getBossEntityID()
@@ -70,10 +73,5 @@ public class EntityMiniBoss extends EntityBossMob implements IAetherBoss
     public EnumBossType getBossType()
     {
         return EnumBossType.MINI;
-    }
-
-    public int getMaxHealth()
-    {
-        return 200;
     }
 }

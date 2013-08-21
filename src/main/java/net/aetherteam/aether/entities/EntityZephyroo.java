@@ -4,6 +4,7 @@ import java.util.Iterator;
 import java.util.List;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityAgeable;
+import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.world.World;
 
@@ -11,21 +12,13 @@ public class EntityZephyroo extends EntityAetherAnimal
 {
     private int timeTilJump = 10;
 
-    public EntityZephyroo(World var1)
+    public EntityZephyroo(World world)
     {
-        super(var1);
-        this.texture = this.dir + "/mobs/Zephyroo.png";
-        this.moveSpeed = 5.0F;
+        super(world);
+        this.func_110148_a(SharedMonsterAttributes.field_111263_d).func_111128_a(15.0D);
+        this.func_110148_a(SharedMonsterAttributes.field_111267_a).func_111128_a(40.0D);
+        this.setEntityHealth(40.0F);
         this.setSize(0.5F, 2.0F);
-    }
-
-    /**
-     * This method returns a value to be applied directly to entity speed, this factor is less than 1 when a slowdown
-     * potion effect is applied, more than 1 when a haste potion effect is applied and 2 for fleeing entities.
-     */
-    public float getSpeedModifier()
-    {
-        return 3.0F;
     }
 
     /**
@@ -34,25 +27,25 @@ public class EntityZephyroo extends EntityAetherAnimal
     public void onUpdate()
     {
         super.onUpdate();
-        List var1 = this.worldObj.getEntitiesWithinAABBExcludingEntity(this, this.boundingBox.expand(5.5D, 1.75D, 5.5D));
-        boolean var2 = false;
-        Iterator var3 = var1.iterator();
+        List entitiesAround = this.worldObj.getEntitiesWithinAABBExcludingEntity(this, this.boundingBox.expand(5.5D, 1.75D, 5.5D));
+        boolean foundPlayer = false;
+        Iterator i$ = entitiesAround.iterator();
 
-        while (var3.hasNext())
+        while (i$.hasNext())
         {
-            Entity var4 = (Entity)var3.next();
+            Entity entity = (Entity)i$.next();
 
-            if (var4 instanceof EntityPlayer)
+            if (entity instanceof EntityPlayer)
             {
-                EntityPlayer var5 = (EntityPlayer)var4;
+                EntityPlayer player = (EntityPlayer)entity;
 
-                if (var5.username.equalsIgnoreCase("ClashJTM"))
+                if (player.username.equalsIgnoreCase("ClashJTM"))
                 {
-                    var2 = true;
+                    foundPlayer = true;
                     this.makeLoveToClash(true);
                     this.inLove = 1;
-                    this.attackEntity(var5, 20.0F);
-                    this.faceEntity(var5, 5.5F, (float)this.getVerticalFaceSpeed());
+                    this.attackEntity(player, 20.0F);
+                    this.faceEntity(player, 5.5F, (float)this.getVerticalFaceSpeed());
                 }
                 else
                 {
@@ -63,7 +56,7 @@ public class EntityZephyroo extends EntityAetherAnimal
             }
         }
 
-        if (!var2)
+        if (!foundPlayer)
         {
             this.makeLoveToClash(false);
             this.inLove = 0;
@@ -74,24 +67,24 @@ public class EntityZephyroo extends EntityAetherAnimal
     /**
      * Basic mob attack. Default to touch of death in EntityCreature. Overridden by each mob to define their attack.
      */
-    protected void attackEntity(Entity var1, float var2)
+    protected void attackEntity(Entity par1Entity, float par2)
     {
-        if (var1 instanceof EntityPlayer)
+        if (par1Entity instanceof EntityPlayer)
         {
-            if (var2 < 3.0F)
+            if (par2 < 3.0F)
             {
-                double var3 = var1.posX - this.posX;
-                double var5 = var1.posZ - this.posZ;
-                this.rotationYaw = (float)(Math.atan2(var5, var3) * 180.0D / Math.PI) - 90.0F;
+                double entityplayer = par1Entity.posX - this.posX;
+                double d1 = par1Entity.posZ - this.posZ;
+                this.rotationYaw = (float)(Math.atan2(d1, entityplayer) * 180.0D / Math.PI) - 90.0F;
                 this.hasAttacked = true;
             }
 
-            EntityPlayer var7 = (EntityPlayer)var1;
-            this.entityToAttack = var1;
+            EntityPlayer entityplayer1 = (EntityPlayer)par1Entity;
+            this.entityToAttack = par1Entity;
         }
         else
         {
-            super.attackEntity(var1, var2);
+            super.attackEntity(par1Entity, par2);
         }
     }
 
@@ -107,19 +100,14 @@ public class EntityZephyroo extends EntityAetherAnimal
         return this.dataWatcher.getWatchableObjectByte(17) >= 1;
     }
 
-    public void makeLoveToClash(boolean var1)
+    public void makeLoveToClash(boolean love)
     {
-        this.dataWatcher.updateObject(17, Byte.valueOf((byte)(var1 ? 1 : 0)));
+        this.dataWatcher.updateObject(17, Byte.valueOf((byte)(love ? 1 : 0)));
     }
 
-    public EntityAgeable createChild(EntityAgeable var1)
+    public EntityAgeable createChild(EntityAgeable entityageable)
     {
         return new EntityZephyroo(this.worldObj);
-    }
-
-    public int getMaxHealth()
-    {
-        return 20;
     }
 
     protected void updateEntityActionState()

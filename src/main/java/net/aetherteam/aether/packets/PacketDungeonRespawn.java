@@ -16,29 +16,29 @@ import net.minecraft.network.packet.Packet250CustomPayload;
 
 public class PacketDungeonRespawn extends AetherPacket
 {
-    public PacketDungeonRespawn(int var1)
+    public PacketDungeonRespawn(int packetID)
     {
-        super(var1);
+        super(packetID);
     }
 
-    public void onPacketReceived(Packet250CustomPayload var1, Player var2)
+    public void onPacketReceived(Packet250CustomPayload packet, Player player)
     {
-        DataInputStream var3 = new DataInputStream(new ByteArrayInputStream(var1.data));
-        new BufferedReader(new InputStreamReader(var3));
+        DataInputStream dat = new DataInputStream(new ByteArrayInputStream(packet.data));
+        new BufferedReader(new InputStreamReader(dat));
 
         try
         {
-            byte var5 = var3.readByte();
-            int var6 = var3.readInt();
-            String var7 = var3.readUTF();
-            Side var8 = FMLCommonHandler.instance().getEffectiveSide();
+            byte ex = dat.readByte();
+            int dungeonID = dat.readInt();
+            String partyName = dat.readUTF();
+            Side side = FMLCommonHandler.instance().getEffectiveSide();
 
-            if (var8.isClient())
+            if (side.isClient())
             {
-                Party var9 = PartyController.instance().getParty(var7);
-                Dungeon var10 = DungeonHandler.instance().getDungeon(var6);
+                Party party = PartyController.instance().getParty(partyName);
+                Dungeon dungeon = DungeonHandler.instance().getDungeon(dungeonID);
 
-                if (var9 != null && var10 != null)
+                if (party != null && dungeon != null)
                 {
                     ClientNotificationHandler.openDialogueBox("You have respawned!");
                 }

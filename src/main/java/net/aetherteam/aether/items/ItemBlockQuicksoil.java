@@ -6,22 +6,22 @@ import net.minecraft.item.ItemStack;
 
 public class ItemBlockQuicksoil extends ItemBlock
 {
-    public ItemBlockQuicksoil(int var1)
+    public ItemBlockQuicksoil(int itemID)
     {
-        super(var1);
+        super(itemID);
         this.setHasSubtypes(true);
     }
 
-    public Item setIconName(String var1)
+    public Item setIconName(String name)
     {
-        return this.setUnlocalizedName("Aether:" + var1);
+        return this.setUnlocalizedName("aether:" + name);
     }
 
     /**
      * Returns the unlocalized name of this item. This version accepts an ItemStack so different stacks can have
      * different names based on their damage or NBT.
      */
-    public String getUnlocalizedName(ItemStack var1)
+    public String getUnlocalizedName(ItemStack itemstack)
     {
         return this.getUnlocalizedName();
     }
@@ -29,7 +29,7 @@ public class ItemBlockQuicksoil extends ItemBlock
     /**
      * Returns the metadata of the block which this Item (ItemBlock) can place
      */
-    public int getMetadata(int var1)
+    public int getMetadata(int damage)
     {
         return 1;
     }

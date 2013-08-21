@@ -4,32 +4,35 @@ import net.aetherteam.aether.entities.EntityCockatrice;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.entity.RenderLiving;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.util.MathHelper;
+import net.minecraft.util.ResourceLocation;
 import org.lwjgl.opengl.GL11;
 
 public class RenderCockatrice extends RenderLiving
 {
-    public RenderCockatrice(ModelBase var1, float var2)
+    private static final ResourceLocation TEXTURE = new ResourceLocation("aether", "textures/mobs/cockatrice/cockatrice.png");
+    private static final ResourceLocation TEXTURE_MARKINGS = new ResourceLocation("aether", "textures/mobs/cockatrice/markings.png");
+
+    public RenderCockatrice(ModelBase modelbase, float f)
     {
-        super(var1, var2);
-        this.setRenderPassModel(var1);
-        this.renderPassModel = var1;
+        super(modelbase, f);
+        this.setRenderPassModel(modelbase);
+        this.renderPassModel = modelbase;
     }
 
-    protected float getWingRotation(EntityCockatrice var1, float var2)
+    protected float getWingRotation(EntityCockatrice entitybadmoa, float f)
     {
-        float var3 = var1.field_756_e + (var1.field_752_b - var1.field_756_e) * var2;
-        float var4 = var1.field_757_d + (var1.destPos - var1.field_757_d) * var2;
-        return (MathHelper.sin(var3) + 1.0F) * var4;
+        float f1 = entitybadmoa.field_756_e + (entitybadmoa.field_752_b - entitybadmoa.field_756_e) * f;
+        float f2 = entitybadmoa.field_757_d + (entitybadmoa.destPos - entitybadmoa.field_757_d) * f;
+        return (MathHelper.sin(f1) + 1.0F) * f2;
     }
 
-    /**
-     * Defines what float the third param in setRotationAngles of ModelBase is
-     */
-    protected float handleRotationFloat(EntityLiving var1, float var2)
+    protected float handleRotationFloat(EntityLiving entityliving, float f)
     {
-        return this.getWingRotation((EntityCockatrice)var1, var2);
+        return this.getWingRotation((EntityCockatrice)entityliving, f);
     }
 
     protected void scalemoa()
@@ -41,25 +44,25 @@ public class RenderCockatrice extends RenderLiving
      * Allows the render to do any OpenGL state modifications necessary before the model is rendered. Args:
      * entityLiving, partialTickTime
      */
-    protected void preRenderCallback(EntityLiving var1, float var2)
+    protected void preRenderCallback(EntityLivingBase entityliving, float f)
     {
         this.scalemoa();
     }
 
-    protected int setMarkingBrightness(EntityCockatrice var1, int var2, float var3)
+    protected int setMarkingBrightness(EntityCockatrice cock, int i, float f)
     {
-        if (var2 != 0)
+        if (i != 0)
         {
             return -1;
         }
         else
         {
-            this.loadTexture("/net/aetherteam/aether/client/sprites/mobs/cockatrice/markings.png");
+            this.renderManager.renderEngine.func_110577_a(TEXTURE_MARKINGS);
             float var4 = 1.0F;
             GL11.glEnable(GL11.GL_BLEND);
             GL11.glBlendFunc(GL11.GL_ONE, GL11.GL_ONE);
 
-            if (!var1.getActivePotionEffects().isEmpty())
+            if (!cock.getActivePotionEffects().isEmpty())
             {
                 GL11.glDepthMask(false);
             }
@@ -81,8 +84,13 @@ public class RenderCockatrice extends RenderLiving
     /**
      * Queries whether should render the specified pass or not.
      */
-    protected int shouldRenderPass(EntityLiving var1, int var2, float var3)
+    protected int shouldRenderPass(EntityLivingBase entityliving, int i, float f)
     {
-        return this.setMarkingBrightness((EntityCockatrice)var1, var2, var3);
+        return this.setMarkingBrightness((EntityCockatrice)entityliving, i, f);
+    }
+
+    protected ResourceLocation func_110775_a(Entity entity)
+    {
+        return TEXTURE;
     }
 }

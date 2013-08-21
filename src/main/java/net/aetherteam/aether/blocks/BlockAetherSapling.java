@@ -14,49 +14,49 @@ public class BlockAetherSapling extends BlockAetherFlower implements IAetherBloc
     public static int sprGoldenOak = 13;
     private Object treeGenObject = null;
 
-    protected BlockAetherSapling(int var1, Object var2)
+    protected BlockAetherSapling(int blockID, Object treeGen)
     {
-        super(var1);
-        float var3 = 0.4F;
-        this.setBlockBounds(0.5F - var3, 0.0F, 0.5F - var3, 0.5F + var3, var3 * 2.0F, 0.5F + var3);
+        super(blockID);
+        float f = 0.4F;
+        this.setBlockBounds(0.5F - f, 0.0F, 0.5F - f, 0.5F + f, f * 2.0F, 0.5F + f);
         this.setHardness(0.0F);
         this.setStepSound(Block.soundGrassFootstep);
-        this.treeGenObject = var2;
+        this.treeGenObject = treeGen;
     }
 
     /**
      * Called upon block activation (right click on the block.)
      */
-    public boolean onBlockActivated(World var1, int var2, int var3, int var4, EntityPlayer var5, int var6, float var7, float var8, float var9)
+    public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer entityPlayer, int par6, float par7, float par8, float par9)
     {
-        if (var1.isRemote)
+        if (world.isRemote)
         {
             return false;
         }
-        else if (var5 == null)
+        else if (entityPlayer == null)
         {
             return false;
         }
         else
         {
-            ItemStack var10 = var5.getCurrentEquippedItem();
+            ItemStack itemStack = entityPlayer.getCurrentEquippedItem();
 
-            if (var10 == null)
+            if (itemStack == null)
             {
                 return false;
             }
-            else if (var10.itemID != Item.dyePowder.itemID)
+            else if (itemStack.itemID != Item.dyePowder.itemID)
             {
                 return false;
             }
-            else if (var10.getItemDamage() != 15)
+            else if (itemStack.getItemDamage() != 15)
             {
                 return false;
             }
             else
             {
-                this.growTree(var1, var2, var3, var4, var1.rand);
-                --var10.stackSize;
+                this.growTree(world, x, y, z, world.rand);
+                --itemStack.stackSize;
                 return true;
             }
         }
@@ -65,29 +65,29 @@ public class BlockAetherSapling extends BlockAetherFlower implements IAetherBloc
     /**
      * Checks to see if its valid to put this block at the specified coordinates. Args: world, x, y, z
      */
-    public boolean canPlaceBlockAt(World var1, int var2, int var3, int var4)
+    public boolean canPlaceBlockAt(World world, int i, int j, int k)
     {
-        return super.canPlaceBlockAt(var1, var2, var3, var4) && this.canThisPlantGrowOnThisBlockID(var1.getBlockId(var2, var3 - 1, var4));
+        return super.canPlaceBlockAt(world, i, j, k) && this.canThisPlantGrowOnThisBlockID(world.getBlockId(i, j - 1, k));
     }
 
     /**
      * Gets passed in the blockID of the block below and supposed to return true if its allowed to grow on the type of
      * blockID passed in. Args: blockID
      */
-    protected boolean canThisPlantGrowOnThisBlockID(int var1)
+    protected boolean canThisPlantGrowOnThisBlockID(int i)
     {
-        return var1 == AetherBlocks.AetherGrass.blockID || var1 == AetherBlocks.AetherDirt.blockID;
+        return i == AetherBlocks.AetherGrass.blockID || i == AetherBlocks.AetherDirt.blockID;
     }
 
-    public void growTree(World var1, int var2, int var3, int var4, Random var5)
+    public void growTree(World world, int i, int j, int k, Random random)
     {
-        if (!var1.isRemote)
+        if (!world.isRemote)
         {
-            var1.setBlock(var2, var3, var4, 0);
+            world.setBlock(i, j, k, 0);
 
-            if (((WorldGenerator)this.treeGenObject).generate(var1, var5, var2, var3, var4))
+            if (((WorldGenerator)this.treeGenObject).generate(world, random, i, j, k))
             {
-                var1.setBlock(var2, var3, var4, this.blockID);
+                world.setBlock(i, j, k, this.blockID);
             }
         }
     }
@@ -95,15 +95,15 @@ public class BlockAetherSapling extends BlockAetherFlower implements IAetherBloc
     /**
      * Ticks the block if it's been scheduled
      */
-    public void updateTick(World var1, int var2, int var3, int var4, Random var5)
+    public void updateTick(World world, int i, int j, int k, Random random)
     {
-        if (!var1.isRemote)
+        if (!world.isRemote)
         {
-            super.updateTick(var1, var2, var3, var4, var5);
+            super.updateTick(world, i, j, k, random);
 
-            if (var1.getBlockLightValue(var2, var3 + 1, var4) >= 9 && var5.nextInt(30) == 0)
+            if (world.getBlockLightValue(i, j + 1, k) >= 9 && random.nextInt(30) == 0)
             {
-                this.growTree(var1, var2, var3, var4, var5);
+                this.growTree(world, i, j, k, random);
             }
         }
     }

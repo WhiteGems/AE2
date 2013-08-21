@@ -8,29 +8,29 @@ import net.minecraft.world.World;
 
 public class ItemPoisonCure extends ItemFood
 {
-    public ItemPoisonCure(int var1, int var2, boolean var3)
+    public ItemPoisonCure(int i, int j, boolean flag)
     {
-        super(var1, var2, var3);
+        super(i, j, flag);
     }
 
-    public ItemFood setIconName(String var1)
+    public ItemFood setIconName(String name)
     {
-        this.setUnlocalizedName("Aether:" + var1);
-        return this;
+        this.field_111218_cA = "aether:" + name;
+        return (ItemFood)this.setUnlocalizedName("aether:" + name);
     }
 
-    public ItemStack onEaten(ItemStack var1, World var2, EntityPlayer var3)
+    public ItemStack onEaten(ItemStack itemstack, World world, EntityPlayer entityplayer)
     {
-        --var1.stackSize;
+        --itemstack.stackSize;
 
-        if (!var2.isRemote)
+        if (!world.isRemote)
         {
-            var3.curePotionEffects(new ItemStack(Item.bucketMilk));
+            entityplayer.curePotionEffects(new ItemStack(Item.bucketMilk));
         }
 
-        var3.getFoodStats().addStats(this);
-        var2.playSoundAtEntity(var3, "random.burp", 0.5F, var2.rand.nextFloat() * 0.1F + 0.9F);
-        this.onFoodEaten(var1, var2, var3);
-        return var1;
+        entityplayer.getFoodStats().addStats(this);
+        world.playSoundAtEntity(entityplayer, "random.burp", 0.5F, world.rand.nextFloat() * 0.1F + 0.9F);
+        this.onFoodEaten(itemstack, world, entityplayer);
+        return itemstack;
     }
 }

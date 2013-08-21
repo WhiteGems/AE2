@@ -1,14 +1,13 @@
 package net.aetherteam.aether.items;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-import net.aetherteam.aether.PlayerBaseAetherServer;
-import net.aetherteam.aether.client.PlayerBaseAetherClient;
+import net.aetherteam.aether.PlayerAetherServer;
+import net.aetherteam.aether.client.PlayerAetherClient;
 import net.aetherteam.aether.interfaces.IAetherAccessory;
 import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Icon;
+import net.minecraft.util.ResourceLocation;
 
 public class ItemAccessory extends ItemAether implements IAetherAccessory
 {
@@ -17,7 +16,7 @@ public class ItemAccessory extends ItemAether implements IAetherAccessory
     public final int armorType;
     public final int damageReduceAmount;
     public final int renderIndex;
-    public String texture;
+    public ResourceLocation texture;
     public boolean colouriseRender;
     public static Icon ringSlot;
     public static Icon pendantSlot;
@@ -28,89 +27,89 @@ public class ItemAccessory extends ItemAether implements IAetherAccessory
     private static final int[] damageReduceAmountArray = new int[] {3, 7, 5, 3, 0, 0, 0, 0, 0, 0, 0, 0};
     private static final int[] maxDamageArray = new int[] {11, 16, 15, 13, 10, 10, 8, 10, 10, 10, 10, 10};
 
-    protected ItemAccessory(int var1, int var2, int var3, int var4, int var5)
+    protected ItemAccessory(int i, int j, int k, int l, int col)
     {
-        super(var1);
+        super(i);
         this.itemColour = 16777215;
-        this.armorLevel = var2;
-        this.armorType = var4;
-        this.renderIndex = var3;
-        this.damageReduceAmount = damageReduceAmountArray[var4];
-        this.setMaxDamage(maxDamageArray[var4] * 3 << var2);
+        this.armorLevel = j;
+        this.armorType = l;
+        this.renderIndex = k;
+        this.damageReduceAmount = damageReduceAmountArray[l];
+        this.setMaxDamage(maxDamageArray[l] * 3 << j);
         this.maxStackSize = 1;
-        this.itemColour = var5;
+        this.itemColour = col;
         this.colouriseRender = true;
-        this.texture = "/armor/Accessories.png";
+        this.texture = new ResourceLocation("aether", "textures/armor/Accessories.png");
     }
 
-    public ItemAccessory(int var1, int var2, int var3, int var4)
+    public ItemAccessory(int i, int j, int k, int l)
     {
-        this(var1, var2, var3, var4, 16777215);
+        this(i, j, k, l, 16777215);
     }
 
-    public ItemAccessory(int var1, int var2, String var3, int var4)
+    public ItemAccessory(int i, int j, ResourceLocation path, int l)
     {
-        this(var1, var2, 0, var4);
-        this.texture = var3;
+        this(i, j, 0, l);
+        this.texture = path;
     }
 
-    public ItemAccessory(int var1, int var2, String var3, int var4, int var5)
+    public ItemAccessory(int i, int j, ResourceLocation path, int l, int m)
     {
-        this(var1, var2, 0, var4, var5);
-        this.texture = var3;
+        this(i, j, 0, l, m);
+        this.texture = path;
     }
 
-    public ItemAccessory(int var1, int var2, String var3, int var4, int var5, boolean var6)
+    public ItemAccessory(int i, int j, ResourceLocation path, int l, int m, boolean flag)
     {
-        this(var1, var2, var3, var4, var5);
-        this.colouriseRender = var6;
+        this(i, j, path, l, m);
+        this.colouriseRender = flag;
     }
 
-    public int getColorFromItemStack(ItemStack var1, int var2)
+    public int getColorFromItemStack(ItemStack par1ItemStack, int damage)
     {
         return this.itemColour;
     }
 
-    public void registerIcons(IconRegister var1)
+    public void registerIcons(IconRegister iconReg)
     {
-        ringSlot = var1.registerIcon("Aether:Ring Slot");
-        pendantSlot = var1.registerIcon("Aether:Pendant Slot");
-        capeSlot = var1.registerIcon("Aether:Cape Slot");
-        miscSlot = var1.registerIcon("Aether:Misc Slot");
-        shieldSlot = var1.registerIcon("Aether:Shield Slot");
-        gloveSlot = var1.registerIcon("Aether:Glove Slot");
-        super.registerIcons(var1);
+        ringSlot = iconReg.registerIcon("aether:Ring Slot");
+        pendantSlot = iconReg.registerIcon("aether:Pendant Slot");
+        capeSlot = iconReg.registerIcon("aether:Cape Slot");
+        miscSlot = iconReg.registerIcon("aether:Misc Slot");
+        shieldSlot = iconReg.registerIcon("aether:Shield Slot");
+        gloveSlot = iconReg.registerIcon("aether:Glove Slot");
+        super.registerIcons(iconReg);
     }
 
-    public boolean isTypeValid(int var1)
+    public boolean isTypeValid(int type)
     {
-        return var1 == this.armorType ? true : ((var1 == 8 || var1 == 9) && (this.armorType == 8 || this.armorType == 9) ? true : (var1 == 7 || var1 == 11) && (this.armorType == 7 || this.armorType == 11));
+        return type == this.armorType ? true : ((type == 8 || type == 9) && (this.armorType == 8 || this.armorType == 9) ? true : (type == 7 || type == 11) && (this.armorType == 7 || this.armorType == 11));
     }
 
     public int[] getSlotType()
     {
-        int[] var1 = new int[2];
+        int[] slots = new int[2];
 
         if (this.armorType != 8 && this.armorType != 9)
         {
             if (this.armorType != 7 && this.armorType != 11)
             {
-                var1[0] = this.armorType - 4;
-                var1[1] = this.armorType - 4;
+                slots[0] = this.armorType - 4;
+                slots[1] = this.armorType - 4;
             }
             else
             {
-                var1[0] = 3;
-                var1[1] = 7;
+                slots[0] = 3;
+                slots[1] = 7;
             }
         }
         else
         {
-            var1[0] = 4;
-            var1[1] = 5;
+            slots[0] = 4;
+            slots[1] = 5;
         }
 
-        return var1;
+        return slots;
     }
 
     public boolean damageType()
@@ -118,21 +117,20 @@ public class ItemAccessory extends ItemAether implements IAetherAccessory
         return this.damageType(this.armorType);
     }
 
-    public boolean damageType(int var1)
+    public boolean damageType(int i)
     {
-        return var1 < 4 || var1 == 6 || var1 == 10;
+        return i < 4 || i == 6 || i == 10;
     }
 
-    public void activatePassive(EntityPlayer var1) {}
+    public void activatePassive(EntityPlayer player) {}
 
-    public void activateServerPassive(EntityPlayer var1, PlayerBaseAetherServer var2)
+    public void activateServerPassive(EntityPlayer player, PlayerAetherServer playerBase)
     {
-        this.activatePassive(var1);
+        this.activatePassive(player);
     }
 
-    @SideOnly(Side.CLIENT)
-    public void activateClientPassive(EntityPlayer var1, PlayerBaseAetherClient var2)
+    public void activateClientPassive(EntityPlayer player, PlayerAetherClient playerBase)
     {
-        this.activatePassive(var1);
+        this.activatePassive(player);
     }
 }

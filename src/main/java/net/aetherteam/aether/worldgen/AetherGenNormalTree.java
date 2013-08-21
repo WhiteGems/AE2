@@ -12,101 +12,101 @@ public class AetherGenNormalTree extends WorldGenerator
     private int logBlock;
     private int logMetadata;
 
-    public AetherGenNormalTree(int var1, int var2, int var3)
+    public AetherGenNormalTree(int leafID, int logID, int logMeta)
     {
-        this.leafBlock = var1;
-        this.logBlock = var2;
-        this.logMetadata = var3;
+        this.leafBlock = leafID;
+        this.logBlock = logID;
+        this.logMetadata = logMeta;
     }
 
-    public boolean generate(World var1, Random var2, int var3, int var4, int var5)
+    public boolean generate(World world, Random random, int i, int j, int k)
     {
-        int var6 = var2.nextInt(3) + 4;
-        boolean var7 = true;
+        int l = random.nextInt(3) + 4;
+        boolean flag = true;
 
-        if (var4 >= 1 && var4 + var6 + 1 <= 128)
+        if (j >= 1 && j + l + 1 <= 128)
         {
-            int var8;
-            int var10;
-            int var11;
-            int var12;
+            int j1;
+            int k2;
+            int i3;
+            int k3;
 
-            for (var8 = var4; var8 <= var4 + 1 + var6; ++var8)
+            for (j1 = j; j1 <= j + 1 + l; ++j1)
             {
-                byte var9 = 1;
+                byte l1 = 1;
 
-                if (var8 == var4)
+                if (j1 == j)
                 {
-                    var9 = 0;
+                    l1 = 0;
                 }
 
-                if (var8 >= var4 + 1 + var6 - 2)
+                if (j1 >= j + 1 + l - 2)
                 {
-                    var9 = 2;
+                    l1 = 2;
                 }
 
-                for (var10 = var3 - var9; var10 <= var3 + var9 && var7; ++var10)
+                for (k2 = i - l1; k2 <= i + l1 && flag; ++k2)
                 {
-                    for (var11 = var5 - var9; var11 <= var5 + var9 && var7; ++var11)
+                    for (i3 = k - l1; i3 <= k + l1 && flag; ++i3)
                     {
-                        if (var8 >= 0 && var8 < 128)
+                        if (j1 >= 0 && j1 < 128)
                         {
-                            var12 = var1.getBlockId(var10, var8, var11);
+                            k3 = world.getBlockId(k2, j1, i3);
 
-                            if (var12 != 0 && var12 != this.leafBlock)
+                            if (k3 != 0 && k3 != this.leafBlock)
                             {
-                                var7 = false;
+                                flag = false;
                             }
                         }
                         else
                         {
-                            var7 = false;
+                            flag = false;
                         }
                     }
                 }
             }
 
-            if (!var7)
+            if (!flag)
             {
                 return false;
             }
             else
             {
-                var8 = var1.getBlockId(var3, var4 - 1, var5);
+                j1 = world.getBlockId(i, j - 1, k);
 
-                if ((var8 == AetherBlocks.AetherGrass.blockID || var8 == AetherBlocks.AetherDirt.blockID) && var4 < 128 - var6 - 1)
+                if ((j1 == AetherBlocks.AetherGrass.blockID || j1 == AetherBlocks.AetherDirt.blockID) && j < 128 - l - 1)
                 {
-                    var1.setBlock(var3, var4 - 1, var5, AetherBlocks.AetherDirt.blockID);
+                    world.setBlock(i, j - 1, k, AetherBlocks.AetherDirt.blockID);
                     int var16;
 
-                    for (var16 = var4 - 3 + var6; var16 <= var4 + var6; ++var16)
+                    for (var16 = j - 3 + l; var16 <= j + l; ++var16)
                     {
-                        var10 = var16 - (var4 + var6);
-                        var11 = 1 - var10 / 2;
+                        k2 = var16 - (j + l);
+                        i3 = 1 - k2 / 2;
 
-                        for (var12 = var3 - var11; var12 <= var3 + var11; ++var12)
+                        for (k3 = i - i3; k3 <= i + i3; ++k3)
                         {
-                            int var13 = var12 - var3;
+                            int l3 = k3 - i;
 
-                            for (int var14 = var5 - var11; var14 <= var5 + var11; ++var14)
+                            for (int i4 = k - i3; i4 <= k + i3; ++i4)
                             {
-                                int var15 = var14 - var5;
+                                int j4 = i4 - k;
 
-                                if ((Math.abs(var13) != var11 || Math.abs(var15) != var11 || var2.nextInt(2) != 0 && var10 != 0) && !Block.opaqueCubeLookup[var1.getBlockId(var12, var16, var14)])
+                                if ((Math.abs(l3) != i3 || Math.abs(j4) != i3 || random.nextInt(2) != 0 && k2 != 0) && !Block.opaqueCubeLookup[world.getBlockId(k3, var16, i4)])
                                 {
-                                    var1.setBlock(var12, var16, var14, this.leafBlock);
+                                    world.setBlock(k3, var16, i4, this.leafBlock);
                                 }
                             }
                         }
                     }
 
-                    for (var16 = 0; var16 < var6; ++var16)
+                    for (var16 = 0; var16 < l; ++var16)
                     {
-                        var10 = var1.getBlockId(var3, var4 + var16, var5);
+                        k2 = world.getBlockId(i, j + var16, k);
 
-                        if (var10 == 0 || var10 == this.leafBlock)
+                        if (k2 == 0 || k2 == this.leafBlock)
                         {
-                            var1.setBlock(var3, var4 + var16, var5, this.logBlock, this.logMetadata, ChunkProviderAether.placementFlagType);
+                            world.setBlock(i, j + var16, k, this.logBlock, this.logMetadata, ChunkProviderAether.placementFlagType);
                         }
                     }
 

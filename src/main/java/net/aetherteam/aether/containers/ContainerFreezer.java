@@ -18,25 +18,25 @@ public class ContainerFreezer extends Container
     private int burnTime = 0;
     private int itemBurnTime = 0;
 
-    public ContainerFreezer(InventoryPlayer var1, TileEntityFreezer var2)
+    public ContainerFreezer(InventoryPlayer inventoryplayer, TileEntityFreezer tileentityfreezer)
     {
-        this.freezer = var2;
-        this.addSlotToContainer(new Slot(var2, 0, 56, 17));
-        this.addSlotToContainer(new Slot(var2, 1, 56, 53));
-        this.addSlotToContainer(new SlotFurnace(var1.player, var2, 2, 116, 35));
-        int var3;
+        this.freezer = tileentityfreezer;
+        this.addSlotToContainer(new Slot(tileentityfreezer, 0, 56, 17));
+        this.addSlotToContainer(new Slot(tileentityfreezer, 1, 56, 53));
+        this.addSlotToContainer(new SlotFurnace(inventoryplayer.player, tileentityfreezer, 2, 116, 35));
+        int j;
 
-        for (var3 = 0; var3 < 3; ++var3)
+        for (j = 0; j < 3; ++j)
         {
-            for (int var4 = 0; var4 < 9; ++var4)
+            for (int k = 0; k < 9; ++k)
             {
-                this.addSlotToContainer(new Slot(var1, var4 + var3 * 9 + 9, 8 + var4 * 18, 84 + var3 * 18));
+                this.addSlotToContainer(new Slot(inventoryplayer, k + j * 9 + 9, 8 + k * 18, 84 + j * 18));
             }
         }
 
-        for (var3 = 0; var3 < 9; ++var3)
+        for (j = 0; j < 9; ++j)
         {
-            this.addSlotToContainer(new Slot(var1, var3, 8 + var3 * 18, 142));
+            this.addSlotToContainer(new Slot(inventoryplayer, j, 8 + j * 18, 142));
         }
     }
 
@@ -47,23 +47,23 @@ public class ContainerFreezer extends Container
     {
         super.detectAndSendChanges();
 
-        for (int var1 = 0; var1 < this.crafters.size(); ++var1)
+        for (int i = 0; i < this.crafters.size(); ++i)
         {
-            ICrafting var2 = (ICrafting)this.crafters.get(var1);
+            ICrafting icrafting = (ICrafting)this.crafters.get(i);
 
             if (this.cookTime != this.freezer.frozenTimeForItem)
             {
-                var2.sendProgressBarUpdate(this, 0, this.freezer.frozenTimeForItem);
+                icrafting.sendProgressBarUpdate(this, 0, this.freezer.frozenTimeForItem);
             }
 
             if (this.burnTime != this.freezer.frozenProgress)
             {
-                var2.sendProgressBarUpdate(this, 1, this.freezer.frozenProgress);
+                icrafting.sendProgressBarUpdate(this, 1, this.freezer.frozenProgress);
             }
 
             if (this.itemBurnTime != this.freezer.frozenPowerRemaining)
             {
-                var2.sendProgressBarUpdate(this, 2, this.freezer.frozenPowerRemaining);
+                icrafting.sendProgressBarUpdate(this, 2, this.freezer.frozenPowerRemaining);
             }
         }
 
@@ -73,84 +73,84 @@ public class ContainerFreezer extends Container
     }
 
     @SideOnly(Side.CLIENT)
-    public void updateProgressBar(int var1, int var2)
+    public void updateProgressBar(int i, int j)
     {
-        if (var1 == 0)
+        if (i == 0)
         {
-            this.freezer.frozenTimeForItem = var2;
+            this.freezer.frozenTimeForItem = j;
         }
 
-        if (var1 == 1)
+        if (i == 1)
         {
-            this.freezer.frozenProgress = var2;
+            this.freezer.frozenProgress = j;
         }
 
-        if (var1 == 2)
+        if (i == 2)
         {
-            this.freezer.frozenPowerRemaining = var2;
+            this.freezer.frozenPowerRemaining = j;
         }
     }
 
-    public boolean canInteractWith(EntityPlayer var1)
+    public boolean canInteractWith(EntityPlayer entityplayer)
     {
-        return this.freezer.isUseableByPlayer(var1);
+        return this.freezer.isUseableByPlayer(entityplayer);
     }
 
     /**
      * Called when a player shift-clicks on a slot. You must override this or you will crash when someone does that.
      */
-    public ItemStack transferStackInSlot(EntityPlayer var1, int var2)
+    public ItemStack transferStackInSlot(EntityPlayer entityplayer, int i)
     {
-        ItemStack var3 = null;
-        Slot var4 = (Slot)this.inventorySlots.get(var2);
+        ItemStack itemstack = null;
+        Slot slot = (Slot)this.inventorySlots.get(i);
 
-        if (var4 != null && var4.getHasStack())
+        if (slot != null && slot.getHasStack())
         {
-            ItemStack var5 = var4.getStack();
-            var3 = var5.copy();
+            ItemStack itemstack1 = slot.getStack();
+            itemstack = itemstack1.copy();
 
-            if (var2 == 2)
+            if (i == 2)
             {
-                if (!this.mergeItemStack(var5, 3, 39, true))
+                if (!this.mergeItemStack(itemstack1, 3, 39, true))
                 {
                     return null;
                 }
 
-                var4.onSlotChange(var5, var3);
+                slot.onSlotChange(itemstack1, itemstack);
             }
-            else if (var2 != 1 && var2 != 0)
+            else if (i != 1 && i != 0)
             {
-                if (var2 >= 3 && var2 < 30)
+                if (i >= 3 && i < 30)
                 {
-                    this.mergeItemStack(var5, 30, 39, false);
+                    this.mergeItemStack(itemstack1, 30, 39, false);
                 }
-                else if (var2 >= 30 && var2 < 39 && !this.mergeItemStack(var5, 3, 30, false))
+                else if (i >= 30 && i < 39 && !this.mergeItemStack(itemstack1, 3, 30, false))
                 {
-                    this.mergeItemStack(var5, 3, 30, false);
+                    this.mergeItemStack(itemstack1, 3, 30, false);
                 }
             }
-            else if (!this.mergeItemStack(var5, 3, 39, false))
+            else if (!this.mergeItemStack(itemstack1, 3, 39, false))
             {
                 return null;
             }
 
-            if (var5.stackSize == 0)
+            if (itemstack1.stackSize == 0)
             {
-                var4.putStack((ItemStack)null);
+                slot.putStack((ItemStack)null);
             }
             else
             {
-                var4.onSlotChanged();
+                slot.onSlotChanged();
             }
 
-            if (var5.stackSize == var3.stackSize)
+            if (itemstack1.stackSize == itemstack.stackSize)
             {
                 return null;
             }
 
-            var4.onPickupFromSlot(var1, var5);
+            slot.onPickupFromSlot(entityplayer, itemstack1);
         }
 
-        return var3;
+        return itemstack;
     }
 }
